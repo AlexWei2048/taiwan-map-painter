@@ -85,12 +85,8 @@ function drawLabels(group,items,t,font=15,interactive=false){
 function renderLabels(){const group=$('labels');group.replaceChildren();if(!state.labels||!view)return;drawLabels(group,currentItems(),geometryLayout(currentItems(),true),sceneSpec().font,true)}
 function insetDefinitions(){return[
  {name:'马祖',county:'连江县',box:[20,20,140,140],label:[80,30]},
- {name:'金门',county:'金门县',d:'M20,160H110V190H140V220H20Z',label:[65,169],box:[20,160,140,220]},
- {name:'乌坵',town:'乌坵乡',box:[110,160,140,190],label:[125,183]},
- {name:'澎湖',county:'澎湖县',box:[20,435,110,565],label:[65,445]},
- {name:'绿岛',town:'绿岛乡',box:[350,455,368,475]},
- {name:'兰屿',town:'兰屿乡',box:[354,558,386,596]},
- {name:'琉球',town:'琉球乡',box:[171,512,185,527]}
+ {name:'金门',county:'金门县',box:[20,160,140,220],label:[65,169]},
+ {name:'澎湖',county:'澎湖县',box:[20,435,110,565],label:[65,445]}
  ]}
 function drawInsetFrames(group,t,spec){group.replaceChildren();const frames=insetDefinitions().filter(q=>!state.county||q.county===state.county||data.towns.some(f=>f.name===q.town&&f.county===state.county));for(const q of frames){const b=q.box,g=svgEl('g',{'data-inset':q.name});const p=q.d?svgEl('path',{d:q.d,transform:transformOf(t),fill:'none',stroke:'#a3b5a8','stroke-width':.75,'vector-effect':'non-scaling-stroke'}):svgEl('rect',{x:b[0]*t.scale+t.tx,y:b[1]*t.scale+t.ty,width:(b[2]-b[0])*t.scale,height:(b[3]-b[1])*t.scale,rx:3,fill:'none',stroke:'#a3b5a8','stroke-width':.75,'vector-effect':'non-scaling-stroke'});g.append(p);if(q.label&&(state.level!=='counties'||q.town)){const name=svgEl('text',{x:q.label[0]*t.scale+t.tx,y:q.label[1]*t.scale+t.ty,'text-anchor':'middle','font-size':spec.font,fill:'#758c7c',stroke:'#fff','stroke-width':3,'paint-order':'stroke'});name.textContent=q.name;g.append(name)}group.append(g)}}
 function drawMapFurniture(group,t,spec){group.replaceChildren();const wide=isNationwide(),cx=spec.width-(wide?95:55),cy=wide?70:42,unit=wide?1.5:1;
