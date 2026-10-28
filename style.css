@@ -15,3 +15,7 @@
 .map-label:hover path,.map-label:hover circle{opacity:1;stroke:#557c68}.map-label:hover text{fill:#0d5f4c;stroke-width:5}
 
 .boundary-tier-label{font-size:10px;color:#6c8173;margin:13px 0 0;font-weight:550}.county-boundary-settings{border-top:1px dashed #dbe5da;margin-top:14px;padding-top:1px}#borders{pointer-events:none}
+
+.legend-title-label{display:block;font-size:10px;color:#7b8985;margin:0 0 5px}.palette-panel #legendTitle{display:block;width:100%;font-size:11px;background:#fff;border:1px solid #e2e8e2;border-radius:7px;padding:8px 10px;margin-bottom:11px}#progress:empty{display:none}#legend text{font-family:"Microsoft YaHei","PingFang SC",sans-serif}#legend>g:focus{outline:none}#legend>g:hover text,#legend>g:focus text{fill:#147d68}
+
+.canvas.county-mode{height:clamp(620px,calc(80vw - 304px),960px)}@media(max-width:700px){.canvas.county-mode{height:620px}}
