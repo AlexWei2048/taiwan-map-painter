@@ -51,3 +51,5 @@ dialog.prediction-dialog{width:min(720px,92vw)}dialog.prediction-dialog.show-est
 .local-tools .data-actions{display:grid!important;grid-template-columns:1fr;gap:6px;margin:8px 0}
 
 .ballot-audit-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:12px 0}.ballot-audit-bar p{flex-basis:100%;margin:0}.pending-number{color:#93652c}
+/* Override the small confirmation-dialog defaults for the local vote drawer. */
+dialog.local-dialog{max-width:none}.local-dialog>.prediction-table-wrap{display:block;margin-top:16px}.local-dialog>.prediction-preview{display:block}.local-table{min-width:660px}.local-table th{white-space:nowrap}.local-table td:nth-child(2){white-space:nowrap;min-width:130px}.local-table td:nth-child(3){min-width:150px}.local-dialog .local-total input{border:1px solid var(--line);border-radius:9px;padding:11px 12px;font-size:12px;background:#fff}

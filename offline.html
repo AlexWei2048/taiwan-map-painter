@@ -53,6 +53,8 @@ dialog.prediction-dialog{width:min(720px,92vw)}dialog.prediction-dialog.show-est
 .local-tools .data-actions{display:grid!important;grid-template-columns:1fr;gap:6px;margin:8px 0}
 
 .ballot-audit-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:12px 0}.ballot-audit-bar p{flex-basis:100%;margin:0}.pending-number{color:#93652c}
+/* Override the small confirmation-dialog defaults for the local vote drawer. */
+dialog.local-dialog{max-width:none}.local-dialog>.prediction-table-wrap{display:block;margin-top:16px}.local-dialog>.prediction-preview{display:block}.local-table{min-width:660px}.local-table th{white-space:nowrap}.local-table td:nth-child(2){white-space:nowrap;min-width:130px}.local-table td:nth-child(3){min-width:150px}.local-dialog .local-total input{border:1px solid var(--line);border-radius:9px;padding:11px 12px;font-size:12px;background:#fff}
 </style></head>
 <body>
 <header class="header"><a aria-label="台湾地图填色首页" class="brand" href="#"><span class="brand-icon">◈</span><div>岛屿调色盘<small>台湾地图 · 选举工作台</small></div></a><div class="header-right"><span class="save-status" id="saved">● 已自动保存</span><details class="header-menu"><summary>方案</summary><div class="menu-popover"><button id="saveProject">保存方案</button><button id="loadProject">打开方案</button><input accept=".json,application/json" hidden="" id="projectFile" type="file"/></div></details><details class="header-menu"><summary>导出</summary><div class="menu-popover"><button class="button primary" id="exportPng">↗ 导出图片</button><button class="button quiet" id="exportSvg">导出 SVG</button><button id="headerExportPredictions">预测表格 CSV</button></div></details></div></header>
