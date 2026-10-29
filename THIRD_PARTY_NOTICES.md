@@ -17,3 +17,5 @@
 ## 政党标志
 
 按用户指定的维基百科政党标示模板核对 27 份原始图档。各自的作者、原图链接、来源及许可全文说明见 `assets/LICENSE-party-logos.txt` 与 `sources/party-logos/manifest.json`。图档的原有许可不由代码的 MIT 许可取代。预设中的历史政党名称与标志不表示其当前登记状态。
+
+2026-10-30：社会民主党党徽使用用户上传的 `SDparty_logo.png`，作为政党识别图案。原图留存于源码包 `sources/party-logos/sdp.png`；权利归原权利人。本次补充的候选人号次参考用户指定的中文维基百科2026年议员及乡镇市区长选举列表，逐人来源与页面快照保存在 `sources/election-2026/wikipedia-20261030/`。

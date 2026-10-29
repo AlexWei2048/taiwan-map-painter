@@ -46,7 +46,7 @@
 
 ## 颜色、党徽和方案
 
-配色、党徽、名称、顺序统一在“配色与图例设置”管理；手动上色使用简洁政党画笔，劳动党在默认列表中位于无党籍前。内置27个核对过的政党标志，支持自定义名称、颜色、党徽上传和图例编辑；PNG/SVG内嵌党徽。第三方图资、文字转换和标志的许可见`THIRD_PARTY_NOTICES.md`及`dist/assets/LICENSE-*.txt`。
+配色、党徽、名称、顺序统一在“配色与图例设置”管理；手动上色使用简洁政党画笔，劳动党在默认列表中位于无党籍前。内置28个核对过的政党标志，支持自定义名称、颜色、党徽上传和图例编辑；PNG/SVG内嵌党徽。第三方图资、文字转换和标志的许可见`THIRD_PARTY_NOTICES.md`及`dist/assets/LICENSE-*.txt`。
 
 所有使用者方案只存当前浏览器，程序和源码包不含测试预测。JSON方案保留所有图层填色、得票、预测、身份筛选、配色、党徽和图例，兼容旧版方案。
 
@@ -60,6 +60,8 @@ python prepare_elections.py
 python test_boundary_geometry.py
 python build_candidate_directory.py
 python apply_ballot_audit.py sources/election-2026/ballot-research-20261029/east.json sources/election-2026/ballot-research-20261029/west.json
+python apply_wikipedia_ballots.py
+python build_party_logos.py
 python build_town_prediction_areas.py
 node --test test-election-core.cjs test-project-schema.cjs test-prediction-core.cjs test-workspace.cjs test-town-prediction.cjs
 python make-offline.py
@@ -79,3 +81,10 @@ python package-source.py
 - 旧方案可继续导入，新增任务模式与显示类型随方案保存；历史选举模块尚未启用。
 
 候选人默认按号次数值升序排列，覆盖查询、预测编辑、候选人载入和CSV；未确认号次排在末尾，同号保留来源顺序。号次排序不改变候选人ID或已有预测。离线版在全部内嵌脚本就绪后初始化地图。
+
+## 2026-10-30 号次与党徽补充
+
+社会民主党使用用户上传的SDparty_logo.png；在候选人查询、预测表、图例与导出图片中共用。
+按用户指定的两份2026维基列表，再补55名号次（议员1、乡镇市区长54）。议员1492名号次均已填写；乡镇市区长仍71名待核。未按行次推定空白号次。洪健興按维基精确姓名补9号并保留抽签表写作洪建興的差异；尖石乡楊士龍／楊仕龍仍待核。完整记录在 `sources/election-2026/ballot-number-audit-20261030.json`。
+
+另核实维基与官方相反的6人：田尾乡许淑美2、刘美兰1；元长乡陈中一2、李宗懋1；南澳乡游吉祥3、江子文1。均采用2026官方抽签号次，网页资料说明保留差异。
