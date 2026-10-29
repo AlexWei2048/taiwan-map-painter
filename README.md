@@ -12,6 +12,18 @@
 
 2026依公告妇保席次。单区排序纳入妇保，跨原住民选区妇保须按同县市、同身份整组绝对票数核对，不把合计数逐区重复套用。相关选罢法第67、68、70条：<https://law.cec.gov.tw/LawContent.aspx?id=GL000292>。
 
+## 乡镇市区预测
+
+县市长或议员预测中，将“预测层级”切换为“乡镇市区明细”，选择县市、选区与乡镇，或直接点击地图填写。
+
+- 县市长：标记各乡镇当地胜出者，或填写候选人当地票数/得票率；当地胜负与县市最终当选分别保存。
+- 议员：录入当前选区各候选人的当地票数/得票率；地图可显示当地第一高票、政党合计，或指定候选人。乡镇高票不表示独立分配席次。
+- 竹北市、新竹市东区与北区按既有选区边界显示“本选区部分”。原住民乡镇记录与区域选区记录独立。
+- 在“批量填写与汇总”下载含稳定选区、乡镇及候选人ID的模板；仅完整乡镇票数可明确操作汇总，百分比不直接相加。汇总保留原有当选人选择，需自行核对。
+- 方案JSON与自动保存包含乡镇记录，旧方案继续兼容。
+
+2026-10-29号次复核：325名待补中逐人补齐199名，仍有126名待核。候选人目录可“只看号次待补”并下载待核原因清单。洪健興/洪建興、楊士龍/楊仕龍存在登记与抽签姓名差异，未据此直接赋号。全部来源及逐人证据保存在源码包 `sources/election-2026/ballot-number-audit-20261029.json`。
+
 ## 地图与边界
 
 - 县市22、乡镇市区368、村里7731个历史快照图形。
@@ -47,7 +59,9 @@ python -m pip install -r requirements-build.txt
 python prepare_elections.py
 python test_boundary_geometry.py
 python build_candidate_directory.py
-node --test test-election-core.cjs test-project-schema.cjs test-prediction-core.cjs
+python apply_ballot_audit.py sources/election-2026/ballot-research-20261029/east.json sources/election-2026/ballot-research-20261029/west.json
+python build_town_prediction_areas.py
+node --test test-election-core.cjs test-project-schema.cjs test-prediction-core.cjs test-workspace.cjs test-town-prediction.cjs
 python make-offline.py
 python package-source.py
 ```
