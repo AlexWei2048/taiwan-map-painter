@@ -1,5 +1,11 @@
 # 第三方来源与许可
 
+## 选区定义与对应关系
+
+议员和立委选区定义来自中央选举委员会公开数据，依政府资料开放授权条款第 1 版使用： https://data.gov.tw/license 。议员公告： https://www.cec.gov.tw/central/article/63625 ；立委范围： https://data.gov.tw/dataset/170247 。边界版本分别为 2026 年区域议员选区和第 11 届（2024 年）区域立委选区。
+
+议员村里对应关系参考 kiang/db.cec.gov.tw，Copyright (c) 2021 Finjon Kiang，MIT 许可，许可原文保留在 assets/LICENSE-election-mapping.txt（源码包中位于 dist/assets/）。选区划分仍以官方公告为准；此对应关系不包含当前候选人、真实得票或预测结果。
+
 本项目原创网页代码采用 MIT 许可证。第三方资料与程序保留其原有许可，MIT 不取代第三方权利声明。
 
 - 地图：内政部国土测绘中心开放行政区边界，经 dkaoster/taiwan-atlas 转换、简化和投影。项目 https://github.com/dkaoster/taiwan-atlas ，MIT 许可文本见 dist/assets/LICENSE-taiwan-atlas.txt；原始政府数据的许可和说明以该项目列出的来源为准。
