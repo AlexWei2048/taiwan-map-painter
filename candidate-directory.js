@@ -7,7 +7,9 @@ const candidateById=new Map((candidateDatabase?.candidates||[]).map(c=>[c.id,c])
 const directoryDistrictById=new Map((candidateDatabase?.districts||[]).map(d=>[d.id,d]));
 const dirText=(tag,text,className)=>{const n=document.createElement(tag);n.textContent=text;if(className)n.className=className;return n};
 function shortDirectoryName(d){return d.name!==d.county&&d.name.startsWith(d.county)?d.name.slice(d.county.length):d.name}
-function directoryCandidates(d){return d.candidateIds.map(id=>candidateById.get(id)).filter(Boolean)}
+function candidateBallotNumber(c){const value=String(c.number??'').trim().replace(/[０-９]/g,ch=>String(ch.charCodeAt(0)-0xff10));const n=Number(value);return /^\d+$/.test(value)&&Number.isSafeInteger(n)&&n>0?n:Infinity}
+function compareCandidateBallots(a,b){const x=candidateBallotNumber(a),y=candidateBallotNumber(b);return x===y?0:x-y}
+function directoryCandidates(d){return d.candidateIds.map(id=>candidateById.get(id)).filter(Boolean).sort(compareCandidateBallots)}
 function candidateDisplayName(c){return c.nameSimplified||c.name}
 function orderedDistricts(){return [...candidateDatabase.districts].sort((a,b)=>COUNTY_ORDER.indexOf(a.county)-COUNTY_ORDER.indexOf(b.county))}
 function directoryFilteredDistricts(){const office=$('directoryOffice').value,county=$('directoryCounty').value,id=$('directoryDistrict').value,q=normalizePlace($('directorySearch').value.trim());return orderedDistricts().filter(d=>d.type===office&&(!county||d.county===county)&&(!id||d.id===id)&&(!q||normalizePlace(d.county+d.name+d.scope+directoryCandidates(d).map(c=>candidateDisplayName(c)+c.nameOriginal+c.party).join(' ')).includes(q)))}
