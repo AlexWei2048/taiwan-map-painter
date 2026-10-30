@@ -110,4 +110,11 @@ Published: runtime commit42958236aca0be8292f5704b560737bf6c05566f. GitHub Pages#
 Completed: official Judicial Reform Party emblem saved and bundled; official charter has no specified party color, so the site uses emblem-derived blue #549DBF with an explicit non-official-color notice. Default 15-party order matches the requested legend, with Judicial Reform Party after SDP and Other Parties before Nonpartisan. Manual list now owns drag/keyboard reorder, visible delete, preset add and custom add; duplicate ordering controls were removed from the legend dialog and party creation was removed from Appearance & Tools. 46 automated tests pass; browser QA verified initial ordering, fixed logo/color alignment, keyboard reorder, preset add, custom form and deduplicated legend controls. Offline HTML and source archive regenerated.
 In progress: stage tested runtime files for GitHub upload.
 Pending: request confirmation immediately before the assets and root commits, then verify Pages deployment and live UI.
-Latest source revision: 20261030-party-manager-v8.
+Latest source revision: 20261030-legend-cleanup-v9.
+
+## 2026-10-30 initial legend cleanup
+
+- Removed automatic insertion of every minor candidate party into the initial manual-color list and legend.
+- Minor parties are added only after a saved district or township prediction actually references one of their candidates.
+- Added a one-time palette migration that removes previously auto-injected, unused candidate parties while retaining default parties, user-added parties, custom parties, and linked colors.
+- Widened the exported/map legend to keep the default party names on one line.
