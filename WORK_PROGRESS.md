@@ -139,3 +139,16 @@ Latest source revision: 20261030-no-offline-v11.
 - Minor parties are added only after a saved district or township prediction actually references one of their candidates.
 - Added a one-time palette migration that removes previously auto-injected, unused candidate parties while retaining default parties, user-added parties, custom parties, and linked colors.
 - Widened the exported/map legend to keep the default party names on one line.
+
+## 2026-10-30 export controls, terminology and readability (v14)
+
+- Baseline preserved from public commit `d476f600d18fbb4ba41eaf06bb152ecf41707935`; no earlier runtime files were restored.
+- Exported PNG/SVG can include a prediction-winner table (enabled by default) and a user-entered annotation; both settings persist in saved projects. The winner table lists district, ballot number, candidate and party and adapts from one to four columns.
+- County/city mayor and township chief prediction legends show candidate name plus party. County/city mayor township-detail legends count municipalities and provincial cities by `区`, and counties by `乡镇市`.
+- Switching between candidate prediction and manual party coloring preserves `乡镇市区明细`; changing election office still returns to the district overview.
+- Map labels suppress `乌坵`; the geographic inset remains. Static and generated interface text uses `少数民族`, `立法机构民代` and `2026年` terminology.
+- Export labels are `导出图片 PNG` and `导出矢量图 SVG`. The page footer now shows `Developed by Alex Wei` and `更新日期：2026年10月30日`; source-download and MIT-license links are absent from the page.
+- Interface typography and export-menu spacing were enlarged with desktop/mobile wrapping safeguards. Dead offline functionality remains removed.
+- Validation: six JavaScript syntax checks and 55 automated regression tests pass. Local cloud-browser preview was unavailable because that browser cannot reach the workspace loopback server; final visual QA must be performed on the deployed GitHub Pages revision.
+- Latest runtime/cache revision: `20261030-export-options-v14`.
+- In progress: regenerate `source.zip`, stage only changed runtime files, publish to the original GitHub Pages repository, then verify the live layout and export controls.
