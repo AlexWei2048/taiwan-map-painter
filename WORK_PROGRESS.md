@@ -174,4 +174,21 @@ Latest source revision: 20261030-no-offline-v11.
 - Project migration preserves the three new legislative township fill stores and the selected council export scope; reset and party deletion also clean the new stores.
 - Validation: 58 automated tests pass. Browser preview verified 73 regional paths plus 368 township paths in each of the other three legislative panels, independent coloring and persistence after reload, a one-party shared legend, candidate-dialog scrolling, council single-map export, and successful 3× PNG download.
 - Latest runtime/cache revision: `20261030-export-layout-v15`.
-- In progress: refresh source archive, stage from the latest public commit, publish and verify GitHub Pages.
+- Published public commit: `2891d930dae8ce001971aded7413e15d328c74cd` (`Improve map exports and legislative coloring`).
+- GitHub Pages workflow run `41085276149` (#42) completed successfully.
+- Live QA passed: legislative free-color maps render regional (73 paths), party-list (368 township/district paths), plains minority (368) and mountain minority (368) as four independently colorable panels with one used-party legend; the page note contains no `全国` wording.
+- Council export menu passed live with all-three, regional-only, plains-minority-only and mountain-minority-only choices. Single-map SVG and 3× PNG exports completed successfully with the matching legend, scale bar and north arrow.
+- Candidate-directory sticky filters passed live with an opaque overscan header; scrolled candidate content no longer shows above the filter area.
+- Final screenshot: `/workspace/scratch/taiwan-map-v15-live.jpg`.
+- In progress: none. Pending: none for this request.
+
+## 2026-10-31 mayor party legends and complete winner tables (v16)
+
+- Baseline: deployed public commit `2891d930dae8ce001971aded7413e15d328c74cd`; retained v15 export scopes, map furniture, three-times PNG rendering, and independent legislative fills.
+- County/city mayor legends aggregate parties and seats in district overview, including vote-gradient displays; township-detail legends retain the correct `区` / `乡镇市` unit. Township-chief candidate/party legends remain available.
+- Exported winner rows include district, ballot number, candidate name, gender, party with embedded emblem, and tri-state incumbent status (`是` / `否` / `待核`).
+- Column widths depend on the actual contents, centered short fields have fixed widths, and long names/party names wrap completely without ellipses. Latin words stay together where possible. Multiple-block large tables expand the export canvas rather than shrinking text.
+- Forecast legends also retain represented parties missing from an imported project's palette, without adding unused parties to the initial palette.
+- Validation: browser PNG exports succeeded for 22 county/city mayors (3600 × 5801) and 61 Taipei council seats (3600 × 5661); embedded emblems, all six columns, wrapped names and shared map furniture were visually checked. Behavioral regressions cover full field preservation, tri-state incumbency, unfinished-district exclusion, layouts up to 910 winner rows, mayor legend units and imported-party completeness.
+- Latest runtime/cache revision: `20261031-complete-winners-v16`.
+- In progress: final source packaging and publication to the original GitHub Pages site; then verify deployed revision.
