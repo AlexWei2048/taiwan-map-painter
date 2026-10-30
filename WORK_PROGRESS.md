@@ -110,7 +110,18 @@ Published: runtime commit42958236aca0be8292f5704b560737bf6c05566f. GitHub Pages#
 Completed: official Judicial Reform Party emblem saved and bundled; official charter has no specified party color, so the site uses emblem-derived blue #549DBF with an explicit non-official-color notice. Default 15-party order matches the requested legend, with Judicial Reform Party after SDP and Other Parties before Nonpartisan. Manual list now owns drag/keyboard reorder, visible delete, preset add and custom add; duplicate ordering controls were removed from the legend dialog and party creation was removed from Appearance & Tools. 46 automated tests pass; browser QA verified initial ordering, fixed logo/color alignment, keyboard reorder, preset add, custom form and deduplicated legend controls. Offline HTML and source archive regenerated.
 In progress: stage tested runtime files for GitHub upload.
 Pending: request confirmation immediately before the assets and root commits, then verify Pages deployment and live UI.
-Latest source revision: 20261030-legend-cleanup-v9.
+Latest source revision: 20261030-no-offline-v11.
+
+## 2026-10-30 offline feature removal
+
+- Removed the “下载离线版” entry from the export menu.
+- Removed `offline.html` and its generator from the distributable project.
+- Source packaging and regeneration instructions no longer include the offline build step.
+
+## 2026-10-30 prediction legend filtering
+
+- Prediction maps now always restrict the legend to parties represented by the current prediction display.
+- Parties with no predicted winner or current displayed prediction result no longer occupy legend rows, independently of the general “only used” legend preference.
 
 ## 2026-10-30 initial legend cleanup
 

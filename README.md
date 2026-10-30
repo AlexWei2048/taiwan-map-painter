@@ -50,13 +50,13 @@
 
 初始图例依序为中国国民党、民主进步党、台湾民众党、时代力量、台湾基进、亲民党、新党、小民参政欧巴桑联盟、台湾绿党、台联党、劳动党、社会民主党、司法改革党、其他政党、无党籍。内置29个核对过的政党标志。司法改革党章程未指定官方代表色，网页从该党官网标章选用主蓝色 `#549DBF` 作为地图识别色；来源与权利说明见`THIRD_PARTY_NOTICES.md`及`dist/assets/LICENSE-*.txt`。
 
-2026候选人名册中的其他政党不会自动加入初始列表；只有实际用于预测结果时才会加入图例。地图图例已加宽，默认政党名称保持单行显示。
+2026候选人名册中的其他政党不会自动加入初始列表；只有实际用于预测结果时才会加入配色。预测地图的图例只显示当前地图已有预测结果的政党，没有预测当选人或当前显示结果的政党不会占用图例行。地图图例已加宽，默认政党名称保持单行显示。
 
 所有使用者方案只存当前浏览器，程序和源码包不含测试预测。JSON方案保留所有图层填色、得票、预测、身份筛选、配色、党徽和图例，兼容旧版方案。
 
-## 离线与再生成
+## 部署与再生成
 
-`dist/`可部署到静态托管。`dist/offline.html`是无需联网的单文件，内置地图、名单、程序和党徽。
+`dist/`可直接部署到静态托管；网站不再提供或生成单文件离线版。
 
 ```sh
 python -m pip install -r requirements-build.txt
@@ -68,7 +68,6 @@ python apply_wikipedia_ballots.py
 python build_party_logos.py
 python build_town_prediction_areas.py
 node --test test-election-core.cjs test-project-schema.cjs test-prediction-core.cjs test-workspace.cjs test-town-prediction.cjs
-python make-offline.py
 python package-source.py
 ```
 
@@ -84,7 +83,7 @@ python package-source.py
 - 候选人查询跟随当前预测选区，查询和预测使用同一名册；默认折叠边界高级设置，缩放编辑与完整文字导出分开。
 - 旧方案可继续导入，新增任务模式与显示类型随方案保存；历史选举模块尚未启用。
 
-候选人默认按号次数值升序排列，覆盖查询、预测编辑、候选人载入和CSV；未确认号次排在末尾，同号保留来源顺序。号次排序不改变候选人ID或已有预测。离线版在全部内嵌脚本就绪后初始化地图。
+候选人默认按号次数值升序排列，覆盖查询、预测编辑、候选人载入和CSV；未确认号次排在末尾，同号保留来源顺序。号次排序不改变候选人ID或已有预测。
 
 ## 2026-10-30 号次与党徽补充
 
