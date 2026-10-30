@@ -152,3 +152,14 @@ Latest source revision: 20261030-no-offline-v11.
 - Validation: six JavaScript syntax checks and 55 automated regression tests pass. Local cloud-browser preview was unavailable because that browser cannot reach the workspace loopback server; final visual QA must be performed on the deployed GitHub Pages revision.
 - Latest runtime/cache revision: `20261030-export-options-v14`.
 - In progress: regenerate `source.zip`, stage only changed runtime files, publish to the original GitHub Pages repository, then verify the live layout and export controls.
+
+### Final v14 publication state
+
+- Published public commit: `5df32fb37e059716a2f1748d9df8b1870d2a8c3f` (`Improve prediction exports and terminology`). All 11 uploaded files match the tested staging hashes.
+- GitHub Pages workflow run `41045604674` (#40) completed successfully in 29 seconds.
+- Live QA passed: enlarged desktop layout has no visible overlap; export menu shows the default-on winner-table option, annotation field, PNG label and SVG-vector label; signature/date and normalized terminology are visible; `乌坵` is not rendered on the map.
+- Detail preservation passed live: switching from `乡镇市区明细` to manual party coloring and back retained the detail level and Taipei scope.
+- Candidate legends passed live: Taipei mayor local prediction displayed `蒋万安 · 中国国民党（1区）`; district prediction displayed `蒋万安 · 中国国民党`.
+- Export passed live: annotated SVG contained the prediction table and all four requested fields; disabling the table removed it while retaining the annotation; PNG rendered at 2400×2398 with the annotation, map, candidate-party legend and one-row winner table without overlap.
+- Final screenshot: `/workspace/scratch/taiwan-map-v14-live-1793358649084.jpg`.
+- In progress: none. Pending: none for this request. Historical election visualization remains a future module.
