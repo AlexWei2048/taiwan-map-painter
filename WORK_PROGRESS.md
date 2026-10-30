@@ -163,3 +163,15 @@ Latest source revision: 20261030-no-offline-v11.
 - Export passed live: annotated SVG contained the prediction table and all four requested fields; disabling the table removed it while retaining the annotation; PNG rendered at 2400×2398 with the annotation, map, candidate-party legend and one-row winner table without overlap.
 - Final screenshot: `/workspace/scratch/taiwan-map-v14-live-1793358649084.jpg`.
 - In progress: none. Pending: none for this request. Historical election visualization remains a future module.
+
+## 2026-10-30 export clarity, council export layouts and four legislative categories (v15)
+
+- PNG export rasterization increased from 2× to 3× (3600 px base width) with high-quality smoothing; SVG remains the editable vector option.
+- Council exports now offer four scopes: all three maps, regional only, plains minority only, or mountain minority only. Export rendering temporarily forces the matching used-party legend and always includes the scale bar and north arrow without changing the user's on-screen legend setting.
+- Free-color legislative maps now show four categories: regional, party-list, plains minority and mountain minority. The latter three use independent township/district fill stores, so the same township can be colored differently in each category; all four panels share one used-party legend.
+- Removed “全国” from the legislative map note and updated the scope explanation and reference note.
+- Candidate-directory sticky filters now use an opaque overscan header at the top of the scrolling dialog, preventing candidate rows from peeking through above the filters.
+- Project migration preserves the three new legislative township fill stores and the selected council export scope; reset and party deletion also clean the new stores.
+- Validation: 58 automated tests pass. Browser preview verified 73 regional paths plus 368 township paths in each of the other three legislative panels, independent coloring and persistence after reload, a one-party shared legend, candidate-dialog scrolling, council single-map export, and successful 3× PNG download.
+- Latest runtime/cache revision: `20261030-export-layout-v15`.
+- In progress: refresh source archive, stage from the latest public commit, publish and verify GitHub Pages.
