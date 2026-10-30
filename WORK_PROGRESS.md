@@ -118,6 +118,16 @@ Latest source revision: 20261030-no-offline-v11.
 - Removed `offline.html` and its generator from the distributable project.
 - Source packaging and regeneration instructions no longer include the offline build step.
 
+## 2026-10-30 combined electorate panels and used-only legends
+
+- Runtime revision: `20261030-combined-electorates-v12`.
+- Prediction and free-color legends now always include only parties actually represented in the current map; the redundant “优先显示已使用类别” control was removed.
+- Council and legislative district maps render regional, plains Indigenous and mountain Indigenous electorates as three side-by-side panels inside one SVG, at the same geographic scale and with one shared legend.
+- Panel titles, district counts, complete county/town boundary overlays, interactions, prediction fills and SVG/PNG export are preserved across all three panels. Empty county-specific identity panels state that the current scope has no such district.
+- The former electorate switch is hidden but its saved state remains accepted for backward-compatible project imports.
+- Validation: 52 automated checks pass; browser QA verified the nationwide council three-panel layout and a free-color map whose shared legend contained only the one party actually used.
+- In progress: refresh `source.zip`, publish the tested runtime files, verify the Pages deployment and live page.
+
 ## 2026-10-30 prediction legend filtering
 
 - Prediction maps now always restrict the legend to parties represented by the current prediction display.
