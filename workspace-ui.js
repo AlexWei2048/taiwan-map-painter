@@ -94,7 +94,8 @@ function predictionCandidateLegendEntries(){
  // Use the party's color and emblem, including when several candidates share a party.
  if(state.county&&state.predictionOffice==='mayor')return countyMayorCandidateLegendEntries();
  const used=counts();
- const unit=state.predictionOffice==='mayor'?mayorLegendUnit():predictionUsesVoteDisplay()?(typeof localPredictionActive==='function'&&localPredictionActive()&&typeof predictionLegendCountUnit==='function'?predictionLegendCountUnit():'区'):(typeof predictionLegendCountUnit==='function'?predictionLegendCountUnit():'席');
+ const fallbackUnit=predictionUsesVoteDisplay()?(typeof localPredictionActive==='function'&&localPredictionActive()&&typeof predictionLegendCountUnit==='function'?predictionLegendCountUnit():'区'):(typeof predictionLegendCountUnit==='function'?predictionLegendCountUnit():'席');
+ const unit=state.predictionOffice==='mayor'?mayorLegendUnit():predictionUsesVoteDisplay()?fallbackUnit:state.county?'席':fallbackUnit;
  return legendVisiblePalette().filter(p=>used[p.id]).map(p=>({...p,legendSuffix:'（'+used[p.id]+unit+'）'}));
 }
 function predictionDistrictLabel(d){return (d.county===d.name?d.county:shortDirectoryName(d))+(d.type==='council'?' · '+DistrictCore.identityName(d):'')}
