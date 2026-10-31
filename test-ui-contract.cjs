@@ -93,8 +93,8 @@ test('Blank candidate inputs display zero without saving artificial forecast dat
  assert.match(app,/if\(key==='share'\)input\.max='100'/);
 });
 test('Rate gradient fields show 100 percent as default maximum',()=>{
- assert.match(read('workspace-ui.js'),/predictionRangeMax'\)\.value=state\.gradient\.max\?\?\(predictionIsVotes\(\)\?'':100\)/);
- assert.match(read('workspace-ui.js'),/state\.gradient\.max=predictionUsesGradient\(\)\?100:null/);
+ assert.match(read('workspace-ui.js'),/predictionMarginMode\(\)\?\(state\.gradient\.marginManual===true\?state\.gradient\.max:''\)/);
+ assert.match(read('workspace-ui.js'),/state\.gradient\.max=predictionMarginMode\(\)\?null:predictionUsesGradient\(\)\?100:null/);
  assert.match(app,/gradientMax'\)\.value=state\.gradient\.max===null\?\(state\.gradient\.metric==='share'\?100:''\)/);
  assert.match(app,/state\.gradient\.max=state\.gradient\.metric==='share'\?100:null/);
 });
@@ -155,7 +155,7 @@ test('Merged vote display calculates highest candidate from votes or shares',()=
  const townPartial=t.summary(cs,{estimates:{b:{share:44.5}}},'topVote','',true);
  assert.equal(townPartial.status,'winner');
  assert.equal(townPartial.candidate.id,'b');
- assert.equal(townPartial.value,44.5);
+ assert.equal(townPartial.value,0,'Without a runner-up the margin is unknown and maps use the palest color');
  assert.equal(townPartial.partial,true);
  const local=t.summary(cs,{leaderId:'a',estimates:{a:{votes:280},b:{votes:500},c:{votes:220}}},'topVote','',true);
  assert.equal(local.status,'winner');assert.equal(local.candidate.id,'b');assert.equal(local.share,50);
