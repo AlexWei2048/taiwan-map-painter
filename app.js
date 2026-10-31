@@ -34,7 +34,7 @@ const electorateName=id=>({regional:'区域',party:'不分区政党',plains:'平
 const featureElectorate=f=>f.electorate||'regional';
 let exportPanelFilter='';
 function legislativeFourPanelsActive(){return state.level==='legislative'&&state.workspaceMode==='free'&&state.fillMode==='solid'}
-function identityPanelsActive(){return ['council','legislative'].includes(state.level)&&!(typeof localPredictionActive==='function'&&localPredictionActive())}
+function identityPanelsActive(){return ['council','legislative'].includes(state.level)&&!(typeof localPredictionActive==='function'&&localPredictionActive()&&!!state.county)}
 function legislativeTownItems(identity){return(data?.towns||[]).filter(f=>!state.county||f.county===state.county).map(f=>({...f,id:identity+':'+f.id,sourceId:f.id,electorate:identity,legislativeTown:true}))}
 function activeLayerItems(){if(legislativeFourPanelsActive())return[...allLayerItems().filter(f=>featureElectorate(f)==='regional'),...LEGISLATIVE_FREE_ORDER.slice(1).flatMap(legislativeTownItems)];if(identityPanelsActive())return allLayerItems().filter(f=>!exportPanelFilter||state.level!=='council'||featureElectorate(f)===exportPanelFilter);return['council','legislative'].includes(state.level)?allLayerItems().filter(f=>featureElectorate(f)===activeElectorate()):data[state.level]}
 const currentItems=()=>typeof localPredictionActive==='function'&&localPredictionActive()?localPredictionItems():activeLayerItems().flatMap(f=>f.statewide&&state.county?[f.byCounty[state.county]].filter(Boolean):(!state.county||f.county===state.county)?[f]:[]).filter(f=>state.level!=='villages'||!state.villageTown||f.townId===state.villageTown);
@@ -275,8 +275,8 @@ function drawLegend(group,spec,interactive=false){
 function syncElectionControls(){
  $('solidMode').classList.toggle('active',state.fillMode==='solid');$('gradientMode').classList.toggle('active',state.fillMode==='gradient');$('solidMode').setAttribute('aria-pressed',state.fillMode==='solid');$('gradientMode').setAttribute('aria-pressed',state.fillMode==='gradient');$('gradientControls').hidden=state.fillMode!=='gradient';if(typeof syncPredictionControls==='function')syncPredictionControls();syncElectorateControls();
  $('gradientGroup').value=state.gradient.groupBy;$('gradientMetric').value=state.gradient.metric;$('gradientMin').value=state.gradient.min;$('gradientMax').value=state.gradient.max===null?'':state.gradient.max;$('gradientUnit').textContent=state.gradient.metric==='share'?'%':'票';
- $('mapVersionNote').textContent=state.level==='council'?'2026 年议员选区 · 区域161区／平地少数民族23区／山地少数民族37区 · 三类并列显示':state.level==='legislative'?'第11届（2024 年）立法机构民代选区 · 区域73区／不分区政党／平地少数民族／山地少数民族 · 四类显示；后三类可按乡镇市区填色':'';
- if(state.level==='villages')$('mapVersionNote').textContent='7,731 个村里图形 · taiwan-atlas 1.0.2 快照，非实时行政区划；放大或筛选乡镇查看名称。';syncVillageControls();$('electionScopeNote').hidden=!['council','legislative'].includes(state.level);
+ $('mapVersionNote').textContent='';$('mapVersionNote').hidden=true;
+ if(state.level==='villages')$('mapVersionNote').textContent='7,731 个村里图形 · taiwan-atlas 1.0.2 快照，非实时行政区划；放大或筛选乡镇查看名称。';syncVillageControls();$('electionScopeNote').hidden=true;
  if(!data)return;const select=$('dataRegion'),previous=select.value;select.replaceChildren();for(const f of currentItems()){const o=document.createElement('option');o.value=f.id;o.textContent=f.county+(f.name===f.county?'':' · '+(f.town||'')+f.name);select.append(o)}if(currentItems().some(f=>f.id===previous))select.value=previous;
  const usable=currentItems().filter(f=>regionResult(f).status==='winner').length;$('dataCoverage').textContent=state.fillMode==='gradient'?`当前视图 ${usable} / ${currentItems().length} 个区域有可用渐变数据`:'';
 }
