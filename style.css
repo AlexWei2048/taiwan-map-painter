@@ -94,3 +94,7 @@ body{font-size:15px}.sidebar .label,.settings-panel summary,#freeMapTools>summar
 /* 2022 historical election explorer */
 .workspace-switch{flex-wrap:wrap}.workspace-switch #workspaceHistory{flex:1 1 100%;margin-top:7px;border:1px solid #96ada2;border-radius:9px;background:#ecf4ef;color:#36594a;font-weight:650;min-height:39px}.workspace-switch #workspaceHistory.active{background:#147d68;color:#fff;border-color:#147d68}
 #historyControls .history-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}#historyControls .history-actions button{flex:1 1 130px;white-space:normal}#historyControls #historyStatus{line-height:1.65;overflow-wrap:anywhere;margin:10px 0}#historySummary{font-size:12px;font-weight:600;margin:12px 0;color:#385747}.history-results{max-height:380px;overflow:auto;border:1px solid #dce6dd;border-radius:9px;background:#fff}.history-entry{display:flex;gap:7px;align-items:center;padding:9px 8px;border-bottom:1px solid #e8eee8;font-size:11px;line-height:1.45}.history-entry:last-child{border-bottom:0}.history-entry span:nth-child(2){flex:1;min-width:0}.history-entry strong{font-size:10px;white-space:nowrap;font-weight:650}.history-party{width:9px;height:9px;min-width:9px;border-radius:50%}
+
+/* Historical results are read-only: hide prediction painting and clearing tools. */
+body.history-mode #predictionPanel,body.history-mode .regions-panel,body.history-mode .project-actions{display:none!important}
+body.history-mode #workspaceFree,body.history-mode #workspacePrediction{opacity:.8}
