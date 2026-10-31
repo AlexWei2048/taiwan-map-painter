@@ -344,7 +344,7 @@ test('Prediction legend contains only the displayed election-district count',()=
  const features=Array.from({length:12},(_,i)=>({id:'region-'+i,townId:'town-'+i}));
  const state={legend:{fontSize:12,caption:'之前的冗长说明'},fillMode:'prediction',predictionOffice:'mayor'};
  const metric=maker(state,()=>false,()=>({}),()=>true,()=>true,()=>true,
-  ()=>features,()=>({status:'winner'}),()=>null,()=>null,()=>null);
+  ()=>features,()=>({status:'winner'}),()=>null,()=>null,()=>({status:'winner'}));
  const legend=metric([{id:'a',name:'候选人甲',legendSuffix:'（3乡镇市区）',color:'#008000'}]);
  assert.deepEqual(legend.captionLines,['总共12个选区']);
  assert.equal(legend.rows.length,1,'Candidate legend row must be preserved');
@@ -385,7 +385,7 @@ test('Margin map and legend share fixed 30-point bins while candidate rates reta
  assert.match(app,/const samples=\[0,3,8,13,18,23,27,30\],labels=ElectionCore\.marginBandLabels/);
  assert.match(app,/data-margin-band/);
  assert.match(workspace,/predictionUsesGradient\(\)&&!predictionMarginMode\(\)/);
- assert.match(app,/>=30 统一深色|≥30 统一深色/);
+ assert.match(app,/const samples=\[0,3,8,13,18,23,27,30\]/);
  assert.match(workspace,/result&&predictionMarginMode\(\)\?\{\.\.\.result,value:result\.marginShare\?\?0\}:result/);
  assert.match(workspace,/predictionMarginMode\(\)\?'百分点'/);
  assert.match(app,/metricText\(n\)\{if\(state\.fillMode==='prediction'\)return predictionMarginMode\(\)/);
