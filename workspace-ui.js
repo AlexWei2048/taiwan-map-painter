@@ -35,6 +35,8 @@ function displayOptions(){return state.predictionOffice==='council'?[['compositi
 predictionLegendCaption=function(){const names=Object.fromEntries(displayOptions());return(state.predictionDisplay==='composition'?(state.predictionOffice==='council'?'色块宽度表示预测席次占比':'使用者选择的当选人所属政党'):names[state.predictionDisplay]||'第一高票所属政党')+(predictionUsesGradient()?'；深浅表示数值，非当选概率':'')};
 function predictionCandidateLegendEntries(){
  if(!candidateDatabase)return null;
+ // Nationwide maps use party emblems and names; local county maps retain candidate-level legends.
+ if(!state.county){const used=counts();return legendVisiblePalette().filter(p=>used[p.id]).map(p=>({...p,legendSuffix:''}));}
  const localMayor=state.predictionOffice==='mayor'&&typeof localPredictionActive==='function'&&localPredictionActive();
  if(!localMayor&&state.predictionOffice!=='township')return null;
  const winners=new Map();
