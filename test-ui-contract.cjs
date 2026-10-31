@@ -583,7 +583,7 @@ test('Existing party logos are displayed as circles in every HTML view',()=>{
  assert.match(app,/customLogo=await readLogo\(e\.target\.files\[0\]\)/);
 });
 test('Smart labels prioritize counties nationwide, then local districts on zoom',()=>{
- const start=app.indexOf('const MAP_LABEL_FONT_SIZE=20;'),end=app.indexOf('\nfunction drawIdentityPanelLabels(',start);
+ const start=app.indexOf('const MAP_LABEL_FONT_SIZE=12;'),end=app.indexOf('\nfunction drawIdentityPanelLabels(',start);
  const source=app.slice(start,end);
  const county={id:'C',name:'甲县',center:[10,10],box:[0,0,20,20]};
  const town={id:'T',name:'乙乡',center:[3,3],box:[0,0,10,10]};
@@ -607,7 +607,7 @@ test('Smart labels prioritize counties nationwide, then local districts on zoom'
  assert.equal(group.children.length,0);
 });
 test('Smart labels remove collisions while All retains labels and all fonts match',()=>{
- const source=app.slice(app.indexOf('const MAP_LABEL_FONT_SIZE=20;'),app.indexOf('\nfunction drawIdentityPanelLabels('));
+ const source=app.slice(app.indexOf('const MAP_LABEL_FONT_SIZE=12;'),app.indexOf('\nfunction drawIdentityPanelLabels('));
  const feature=(id,name,box,center)=>({id,name,box,center});
  const f1=feature('a','大区域',[0,0,20,20],[10,10]);
  const f2=feature('b','小区域',[8,8,12,12],[10,10]);
@@ -623,27 +623,37 @@ test('Smart labels remove collisions while All retains labels and all fonts matc
  assert.equal(group.children[0].children[0].textContent,'大区域');
  state.labelMode='all';funcs.drawLabels(group,[f1,f2],{scale:1,tx:0,ty:0});
  assert.equal(group.children.length,2);
- assert.deepEqual(group.children.map(g=>g.children[0].attrs['font-size']),[20,20]);
+ assert.deepEqual(group.children.map(g=>g.children[0].attrs['font-size']),[12,12]);
  assert.deepEqual(group.children.map(g=>g.children[0].attrs['data-placement']),['inside','inside']);
  assert.doesNotMatch(source,/outside\.push|forcedOutside|svgEl\('path'/);
 });
-test('Physical label font stays at twenty pixels across large SVG viewBoxes',()=>{
- const begin=app.indexOf('const MAP_LABEL_FONT_SIZE=20;'),end=app.indexOf('function mapLabelName(',begin);
+test('Reference-scale labels retain physical size across large SVG viewBoxes',()=>{
+ const begin=app.indexOf('const MAP_LABEL_FONT_SIZE=12;'),end=app.indexOf('function mapLabelName(',begin);
  assert.ok(begin>=0&&end>begin);
  const factory=new Function('$','state','view','baseView','fittedView',app.slice(begin,end)+';return mapLabelFont');
  for(const [w,h] of [[1800,2400],[1200,1030],[900,1200]]){
   const rectangle={width:700,height:580};
-  const font=factory(()=>({getBoundingClientRect:()=>rectangle}),{labelFontPx:20},{w,h},{w:1800,h:2400},()=>({w,h}))();
+  const font=factory(()=>({getBoundingClientRect:()=>rectangle}),{labelFontPx:12},{w,h},{w:1800,h:2400},()=>({w,h}))();
   const physical=font*Math.min(rectangle.width/w,rectangle.height/h);
-  assert.ok(Math.abs(physical-20)<.01,'font displayed '+physical+' pixels');
+  assert.ok(Math.abs(physical-12)<.01,'font displayed '+physical+' pixels');
  }
  assert.match(app,/exportMapLabelFont=\(state.labelFontPx\|\|MAP_LABEL_FONT_SIZE\)\*sceneSpec\(\)\.width/);
  assert.match(app,/finally\{exportMapLabelFont=oldExportFont/);
  assert.match(index,/id="labelFontRange"/);
- assert.match(app,/out.labelFontPx=Number.isFinite/);
+ assert.match(app,/out.labelFontPx=s.labelFontRevision===2&&Number.isFinite/);
+});
+test('Reference screenshot typography becomes the default for existing and new maps',()=>{
+ assert.match(app,/labelFontPx:12,labelFontRevision:2/);
+ assert.match(app,/out.labelFontRevision=2/);
+ assert.match(app,/out.labelFontPx=s.labelFontRevision===2[^;]+:12;/);
+ assert.match(index,/id="labelFontRange" type="range" min="10" max="22" step="1" value="12"/);
+ assert.match(index,/id="labelFontValue" for="labelFontRange">12 px/);
+ assert.match(app,/'font-size':mapLabelFont\(\),fill:'#758c7c'/);
+ assert.ok(Math.abs(12*2048/1200-20.48)<.1);
+ assert.match(app,/exportMapLabelFont=\(state.labelFontPx\|\|MAP_LABEL_FONT_SIZE\)\*sceneSpec\(\)\.width/);
 });
 test('Irregular region labels use their interior anchor near the geographic center',()=>{
- const source=app.slice(app.indexOf('const MAP_LABEL_FONT_SIZE=20;'),app.indexOf('\nfunction drawIdentityPanelLabels('));
+ const source=app.slice(app.indexOf('const MAP_LABEL_FONT_SIZE=12;'),app.indexOf('\nfunction drawIdentityPanelLabels('));
  const fn=new Function('regionContains',source+';return regionLabelCenter')((f,x,y)=>x>=20&&x<=35&&y>=20&&y<=35);
  const f={id:'inlet',name:'不规则区',center:[15,15],labelAnchor:[28,28],box:[10,10,40,40]};
  assert.deepEqual(fn(f,{scale:1,tx:0,ty:0}),{x:28,y:28});
@@ -657,7 +667,7 @@ test('Village names and all exports use the same smart label modes',()=>{
  assert.match(source,/drawLabels\(group,visible,t,MAP_LABEL_FONT_SIZE,interactive\)/);
  assert.match(app,/drawLabels\(g,currentItems\(\),geometryLayout\(currentItems\(\),true\),sceneSpec\(\)\.font,false\)/);
  assert.match(index,/id="labelMode"/);
- assert.match(index,/app\.js\?v=20261031-readable-labels-v55/);
+ assert.match(index,/app\.js\?v=20261031-reference-labels-v56/);
  assert.match(app,/if\(state.labels&&q.label&&q.name!=='乌坵'/);
  assert.match(read('workspace-ui.js'),/All maps share the zoom-aware label renderer/);
  assert.match(app,/out.labelMode=\['smart','all','hide'\]/);
