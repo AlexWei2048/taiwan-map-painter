@@ -56,7 +56,7 @@ function localDistrictItems(d=localParentDistrict()){
 }
 function localRecord(d,f){return state.localPredictions[d.id]?.[f.townId]||{estimates:{},leaderId:'',totalVotes:null}}
 function localMapResult(f){const d=directoryDistrictById.get(f.parentDistrictId);return d?TownPredictionCore.summary(directoryCandidates(d),localRecord(d,f),state.predictionDisplay,state.localDisplayCandidate,d.type==='mayor'):{status:'missing',message:'没有对应选区'}}
-function predictionMapResult(f){return localPredictionActive()?localMapResult(f):predictionDisplayResult(predictionDistrictFor(f))}
+function predictionMapResult(f){const result=localPredictionActive()?localMapResult(f):predictionDisplayResult(predictionDistrictFor(f));return result??{status:'missing',message:'该选区尚无可用的预测数据'}}
 function localDisplayOptions(){
  const options=localParentDistrict()?.type==='mayor'
  ?[['composition','手动指定胜出者'],['topVote','最高票者（得票数/得票率）'],['candidateVote','指定候选人（得票数/得票率）']]
