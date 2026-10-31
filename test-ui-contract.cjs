@@ -110,3 +110,11 @@ test('Historical district mismatch is not silently colored',()=>{
 test('Main UI language avoids restricted expression',()=>{
  for(const file of ['index.html','app.js','workspace-ui.js','history-2022.js','candidate-directory.js'])assert.equal(read(file).includes('\u5168\u56fd'),false,file);
 });
+
+test('2022 council districts use independent historical boundaries and reconcile to 910 seats',()=>{
+ const d=JSON.parse(read('assets/history-council-districts-2022.json'));
+ assert.equal(d.year,2022);assert.equal(d.districtCount,215);assert.equal(d.rows.length,215);
+ assert.equal(d.rows.reduce((n,x)=>n+x.seats,0),910);
+ assert.equal(d.winnerCorrections.length,4);assert.equal(d.correctedElectedTotal,910);
+ assert.ok(d.rows.every(x=>x.scopeTowns.length>0&&x.seats>0));
+});
