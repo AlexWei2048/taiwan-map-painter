@@ -46,7 +46,7 @@ test('Coastlines are excluded while all actual shared administrative borders rem
  assert.equal(calculate([{...polygons[0]}, {...polygons[1],id:'a'}]).all,'');
  assert.match(app,/appendSharedBorders\(districtGroup,state.level/);
  assert.match(app,/appendSharedBorders\(borderGroup,'counties'\)/);
- assert.match(app,/appendSharedBorders\(group,'towns'\)/);
+ assert.match(app,/appendSharedBorders\(group,'towns','regional',state.level==='villages'\)/);
  assert.match(app,/\['#regions path','none',0\]/);
  assert.doesNotMatch(app,/for\(const f of countyOutlines\)/);
  assert.match(read('style.css'),/#regions path,#regions path:hover/);
@@ -84,7 +84,7 @@ test('Map coastline switches with scope for counties, towns and islands',()=>{
  assert.equal(group.children[0].d,'M1,0L1,1');
  state.county='乙县';
  group=makeGroup();helper.appendSharedBorders(group,'towns');
- assert.match(group.children[0].d,/M2,0L2,1/);
+ assert.match(group.children[0].d,/L2,0L2,1/);
 });
 test('All runtime JavaScript parses cleanly',()=>{
  for(const name of ['app.js','town-prediction-ui.js','town-prediction-core.js','workspace-ui.js','prediction-ui.js','prediction-core.js','candidate-directory.js','election-core.js','district-core.js','district-details.js'])assert.doesNotThrow(()=>new Function(read(name)),name);
@@ -128,7 +128,7 @@ test('The map uses lazy electoral and village geometry',()=>{
  assert.match(app,/assets\/map-council\.json/);
  assert.match(app,/assets\/map-legislative\.json/);
  assert.match(app,/function sharedBoundaryGeometry\(features,includeCoast=false\)/);
- assert.match(app,/appendSharedBorders\(group,'towns'\)/);
+ assert.match(app,/appendSharedBorders\(group,'towns','regional',state.level==='villages'\)/);
  assert.match(app,/map-villages-/);
 });
 
