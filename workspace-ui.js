@@ -58,7 +58,7 @@ function predictionMetricLabel(record){
 predictionLegendCaption=function(){
  const names=Object.fromEntries(displayOptions()),selected=state.predictionDisplay==='candidateVote'?candidateById.get(state.localDisplayCandidate):null;
  const label=state.predictionDisplay==='composition'?(state.predictionOffice==='council'?'色块宽度表示预测席次占比':'使用者选择的当选人所属政党'):names[state.predictionDisplay]||'最高票者所属政党';
- return label+(selected?'：'+candidateDisplayName(selected):'')+(predictionMarginMode()?'；领先差距（百分点）：第一名减第二名，深色差距大；非当选概率':predictionUsesGradient()?'；深浅表示得票率，非当选概率':'');
+ return (predictionMarginMode()?(state.predictionDisplay==='partyTop'?'最高票政党':'最高票者'):label)+(selected?'：'+candidateDisplayName(selected):'')+(predictionMarginMode()?'；领先差距（百分点）：第一名减第二名，深色差距大；非当选概率':predictionUsesGradient()?'；深浅表示得票率，非当选概率':'');
 };
 function countyMayorCandidateLegendEntries(){
  const districts=candidateDatabase.districts.filter(d=>d.type==='mayor'&&d.county===state.county);
