@@ -68,6 +68,20 @@ function renderLegend(){const spec=sceneSpec();drawLegend($('legend'),spec,true)
 function updateProgress(){syncCountyChoices();const items=currentItems();$('scopeTitle').textContent=(state.level==='villages'&&state.villageTown?(data.towns.find(f=>f.id===state.villageTown)?.name||''):state.county||'全台')+levelLabel(state.level)+(state.fillMode==='prediction'?' · 用户预测':'');if(state.fillMode==='prediction')$('scopeTitle').textContent=(state.county||'全台')+' · 2026 '+({mayor:'县市长',council:'议员',township:'乡镇市区长'})[state.predictionOffice]+'预测';$('progress').textContent='';$('regionCount').textContent=items.length;$('islandNote').textContent='离岛采用移位示意，非实际相对位置';syncElectionControls()}
 function renderList(){const root=$('regionList');root.replaceChildren();const q=simplify($('search').value.trim()),items=currentItems().filter(f=>(f.county+(f.town||'')+f.name).includes(q));if(!items.length){root.innerHTML='<p class="empty-search">没有找到匹配的区域</p>';return}items.slice(0,300).forEach(f=>{const b=document.createElement('button');b.className='region-item';const dot=document.createElement('span');dot.className='region-dot';dot.style.background=fillColor(f);const t=document.createElement('span');t.textContent=f.name;const sub=document.createElement('small');sub.textContent=state.level!=='counties'?f.county+(f.town?' · '+f.town:''):'';b.append(dot,t,sub);b.title=`点击为${f.county}${f.name}填色`;b.onclick=()=>paint(f);root.append(b)});if(items.length>300){const more=document.createElement('p');more.className='data-help';more.textContent='显示前 300 个结果，请筛选县市、乡镇或输入名称查找。';root.append(more)}}
 function svgEl(tag,attrs){const el=document.createElementNS(NS,tag);for(const [k,v]of Object.entries(attrs||{}))el.setAttribute(k,v);return el}
+// Shared party-logo renderer for live SVG, exported maps and winner tables.
+// A local clipPath gives every emblem the same circular silhouette and size.
+let circularPartyLogoSequence=0;
+function appendCircularPartyLogo(group,href,x,y,size,attributes={}){
+ if(!href)return null;
+ const id='party-logo-circle-'+(++circularPartyLogoSequence);
+ const defs=svgEl('defs'),clip=svgEl('clipPath',{id,clipPathUnits:'userSpaceOnUse'});
+ clip.append(svgEl('circle',{cx:x+size/2,cy:y+size/2,r:size/2}));
+ defs.append(clip);
+ const logo=svgEl('image',{href,x,y,width:size,height:size,preserveAspectRatio:'xMidYMid slice',
+  'clip-path':'url(#'+id+')',...attributes});
+ group.append(defs,logo);
+ return logo;
+}
 function bounds(items){return [Math.min(...items.map(x=>x.box[0])),Math.min(...items.map(x=>x.box[1])),Math.max(...items.map(x=>x.box[2])),Math.max(...items.map(x=>x.box[3]))]}
 const isNationwide=()=>!state.county&&['towns','council','legislative'].includes(state.level)&&state.labels;
 function councilVisibleIdentity(){return exportPanelFilter||(state.level==='council'&&state.workspaceMode==='prediction'&&state.fillMode==='prediction'?state.councilViewScope:'all')}
@@ -263,7 +277,7 @@ function appendExportPredictionTable(root,rows,y){
   layout.headers.forEach((label,i)=>{const text=svgEl('text',{x:xs[i]+widths[i]/2,y:bodyY+layout.rowHeight/2+layout.font*.35,'font-size':layout.font,'font-weight':600,fill:'#466253','text-anchor':'middle'});text.textContent=label;card.append(text)});
   let rowY=bodyY+layout.rowHeight;for(const [index,{row,cells,height}]of block.entries()){const group=svgEl('g',{'data-export-winner-row':'true'});card.append(group);if(index%2)group.append(svgEl('rect',{x:x+.5,y:rowY,width:layout.blockWidth-1,height,fill:'#f8fbf9'}));group.append(svgEl('line',{x1:x,y1:rowY,x2:x+layout.blockWidth,y2:rowY,stroke:'#e7eee9','stroke-width':.7}));
    cells.forEach((lines,i)=>{const tx=xs[i]+widths[i]/2+(i===4?12:0),text=svgEl('text',{x:tx,y:rowY+height/2-(lines.length-1)*layout.lineHeight/2+layout.font*.35,'font-size':layout.font,fill:i===2?'#294a3a':'#536d5f','font-weight':i===2?600:400,'text-anchor':'middle'});for(const [lineIndex,line]of lines.entries()){const span=svgEl('tspan',{x:tx,dy:lineIndex?layout.lineHeight:0});span.textContent=line;text.append(span)}group.append(text)});
-   group.append(svgEl('rect',{x:xs[4]+9,y:rowY+height/2-7,width:3,height:14,rx:1.5,fill:row.color}));if(row.logo)group.append(svgEl('image',{href:row.logo,x:xs[4]+15,y:rowY+height/2-8,width:16,height:16,preserveAspectRatio:'xMidYMid meet','data-export-party-logo':'true'}));rowY+=height
+   group.append(svgEl('rect',{x:xs[4]+9,y:rowY+height/2-7,width:3,height:14,rx:1.5,fill:row.color}));if(row.logo)appendCircularPartyLogo(group,row.logo,xs[4]+15,rowY+height/2-8,16,{'data-export-party-logo':'true'});rowY+=height
   }
   for(let i=1;i<widths.length;i++)card.append(svgEl('line',{x1:xs[i],y1:bodyY,x2:xs[i],y2:bodyY+blockHeight,stroke:'#e7eee9','stroke-width':.7}))
  }
@@ -414,7 +428,7 @@ function drawLegend(group,spec,interactive=false){
  group.append(svgEl('line',{x1:x+18,y1:y+m.headerHeight-10,x2:x+m.width-18,y2:y+m.headerHeight-10,stroke:'#e5ece6'}));
  let rowY=y+m.headerHeight;
  for(const row of m.rows){const g=svgEl('g',{'data-legend-party':row.p.id});g.append(svgEl('rect',{x:x+18,y:rowY+4,width:m.font,height:m.font,rx:3,fill:row.p.color}));
-  const emblem=logoFor(row.p);if(emblem)g.append(svgEl('image',{href:emblem,x:x+36,y:rowY,width:m.font*1.6,height:m.font*1.6,preserveAspectRatio:'xMidYMid meet','data-party-logo':row.p.id}));const txt=svgEl('text',{x:x+m.labelX,y:rowY+m.font+2,'font-size':m.font,fill:'#466253'});row.lines.forEach((line,i)=>{const t=svgEl('tspan',{x:x+m.labelX,dy:i?m.font*1.4:0});t.textContent=line;txt.append(t)});g.append(txt);
+  const emblem=logoFor(row.p);if(emblem)appendCircularPartyLogo(g,emblem,x+36,rowY,m.font*1.6,{'data-party-logo':row.p.id});const txt=svgEl('text',{x:x+m.labelX,y:rowY+m.font+2,'font-size':m.font,fill:'#466253'});row.lines.forEach((line,i)=>{const t=svgEl('tspan',{x:x+m.labelX,dy:i?m.font*1.4:0});t.textContent=line;txt.append(t)});g.append(txt);
   if(m.gradient){
   const gy=rowY+row.lines.length*m.font*1.4+7,barHeight=m.font*1.4,barWidth=m.width-36;
   if(state.fillMode==='prediction'&&predictionMarginMode()){
@@ -504,7 +518,13 @@ $('cancelLegendEdit').onclick=()=>$('legendDialog').close();$('saveLegendEdit').
 let villageLabelFrame=0,customLogo='';
 function cleanLogo(value){if(value==='')return'';if(typeof value!=='string'||value.length>180000||!/^data:image\/(?:png|jpeg|webp);base64,[A-Za-z0-9+/]+=*$/.test(value))throw Error('党徽必须是内置的 PNG、JPG 或 WebP 图片');return value}
 function logoFor(p){if(Object.hasOwn(p,'logo'))return p.logo;const id=PARTY_PRESETS.find(x=>x.id===p.id||'party-'+x.id===p.id)?.id||partyMatch(p.name)?.id;return typeof PARTY_LOGOS!=='undefined'?PARTY_LOGOS[id]||'':''}
-async function readLogo(file){if(!file)throw Error('请选择图片');if(file.size>2*1024*1024)throw Error('党徽图片不能超过 2 MB');if(!['image/png','image/jpeg','image/webp','image/svg+xml'].includes(file.type))throw Error('请选择 PNG、JPG、WebP 或 SVG 图片');const url=URL.createObjectURL(file);try{const image=new Image();await new Promise((ok,no)=>{image.onload=ok;image.onerror=()=>no(Error('图片无法读取，请换一张图片'));image.src=url});if(image.naturalWidth>4096||image.naturalHeight>4096||!image.naturalWidth)throw Error('图片尺寸须在 4096 × 4096 以内');const c=document.createElement('canvas');c.width=c.height=128;const scale=Math.min(112/image.naturalWidth,112/image.naturalHeight);c.getContext('2d').drawImage(image,(128-image.naturalWidth*scale)/2,(128-image.naturalHeight*scale)/2,image.naturalWidth*scale,image.naturalHeight*scale);return cleanLogo(c.toDataURL('image/png'))}catch(e){throw Error(e.message||'无法转换党徽图片')}finally{URL.revokeObjectURL(url)}}
+async function readLogo(file){if(!file)throw Error('请选择图片');if(file.size>2*1024*1024)throw Error('党徽图片不能超过 2 MB');if(!['image/png','image/jpeg','image/webp','image/svg+xml'].includes(file.type))throw Error('请选择 PNG、JPG、WebP 或 SVG 图片');const url=URL.createObjectURL(file);try{const image=new Image();await new Promise((ok,no)=>{image.onload=ok;image.onerror=()=>no(Error('图片无法读取，请换一张图片'));image.src=url});if(image.naturalWidth>4096||image.naturalHeight>4096||!image.naturalWidth)throw Error('图片尺寸须在 4096 × 4096 以内');const c=document.createElement('canvas');c.width=c.height=128;
+ const ctx=c.getContext('2d');if(!ctx)throw Error('浏览器不支持党徽裁剪');
+ const scale=Math.max(128/image.naturalWidth,128/image.naturalHeight);
+ ctx.clearRect(0,0,128,128);
+ ctx.beginPath();ctx.arc(64,64,64,0,Math.PI*2);ctx.closePath();ctx.clip();
+ ctx.drawImage(image,(128-image.naturalWidth*scale)/2,(128-image.naturalHeight*scale)/2,image.naturalWidth*scale,image.naturalHeight*scale);
+ return cleanLogo(c.toDataURL('image/png'))}catch(e){throw Error(e.message||'无法转换党徽图片')}finally{URL.revokeObjectURL(url)}}
 function renderCustomLogo(){$('customLogoPreview').hidden=!customLogo;$('customLogoImage').src=customLogo||''}
 $('customPartyLogo').onchange=async e=>{try{customLogo=await readLogo(e.target.files[0]);$('customPartyError').textContent='';renderCustomLogo()}catch(err){e.target.value='';$('customPartyError').textContent=err.message}};
 $('removeCustomLogo').onclick=()=>{customLogo='';$('customPartyLogo').value='';renderCustomLogo()};
