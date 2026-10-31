@@ -109,7 +109,7 @@ function syncWorkspace(){
  if(syncingWorkspace)return;syncingWorkspace=true;const task=state.workspaceMode==='prediction',manual=state.fillMode==='solid';
  $('workspacePrediction').classList.toggle('active',task);$('workspacePrediction').setAttribute('aria-pressed',task);$('workspaceFree').classList.toggle('active',!task);$('workspaceFree').setAttribute('aria-pressed',!task);
  $('predictionOffice').hidden=!task;document.querySelector('label[for="predictionOffice"]').hidden=!task;
- $('councilViewScopeBox').hidden=!(task&&state.fillMode==='prediction'&&state.predictionOffice==='council'&&!state.county);$('councilViewScope').value=state.councilViewScope||'all';
+ $('councilViewScopeBox').hidden=!(task&&state.fillMode==='prediction'&&state.predictionOffice==='council');$('councilViewScope').value=state.councilViewScope||'all';
  $('freeMapTools').open=!task;$('freeMapTools').hidden=task;$('manualBrushTools').hidden=!manual;$('predictionDisplayBox').hidden=!task||manual;
  $('predictionMode').hidden=!task;$('legacyDataTools').hidden=task;$('solidMode').textContent=task?'按政党手动上色':'直接给地图上色';
  $('predictionPanel').querySelector('h2').textContent=task?'填写预测':'地图上色';$('mapSettings').querySelector('h2').textContent=task?'选举与范围':'地图与范围';
