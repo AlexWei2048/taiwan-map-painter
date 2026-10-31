@@ -154,7 +154,7 @@ updatePredictionPreview=function(){oldUpdatePredictionPreview();const d=director
  let result=null,error='';
  try{result=candidateMode?PredictionCore.candidateVoteResult(directoryCandidates(d),predictionDraft,state.localDisplayCandidate):PredictionCore.voteResult(directoryCandidates(d),predictionDraft,partyMode)}catch(e){error=e.message}
  const label=candidateMode?'指定候选人：'+(candidateById.get(state.localDisplayCandidate)?candidateDisplayName(candidateById.get(state.localDisplayCandidate)):'未选候选人'):partyMode?'最高票政党：'+(result?.party||''):result?'最高票者：'+candidateDisplayName(result.candidate):'';
- $('predictionPreview').prepend(dirText('p',error||(result?label+' · '+predictionMetricLabel(result)+(result.partial?'（数据未填齐）':''):(candidateMode?'请为指定候选人输入得票数或得票率':'填写候选人的得票数或得票率，即可显示当前最高票者')),'seat-counter'));return
+ $('predictionPreview').prepend(dirText('p',error||(result?label+' · '+predictionMetricLabel(result)+(predictionMarginMode()?' · '+predictionMarginLabel(result):result.partial?'（数据未填齐）':''):(candidateMode?'请为指定候选人输入得票数或得票率':'填写候选人的得票数或得票率，即可显示当前最高票者')),'seat-counter'));return
  }
  const picked=directoryCandidates(d).filter(c=>predictionDraft.winners.includes(c.id));$('predictionPreview').prepend(dirText('p',`已选 ${picked.length} / 应选 ${d.seats} 席 · 已选女性 ${picked.filter(c=>c.gender==='女').length} 人 · 公告妇保 ${d.womenReservedLabel}`,'seat-counter'))};
 // Manual painting keeps ordering, removal and creation together in one place.
@@ -211,7 +211,7 @@ $('predictionOffice').onchange=()=>enterPrediction($('predictionOffice').value);
 $('onlyIncomplete').onchange=()=>syncPredictionControls();$('predictionRegion').onchange=()=>{const d=directoryDistrictById.get($('predictionRegion').value);if(d)openPredictionDistrict(d)};
 $('showPredictionEstimates').onchange=()=>{
  const numeric=$('showPredictionEstimates').checked;
- pushHistory();state.predictionDisplay=numeric?'topVote':'composition';state.gradient.min=0;state.gradient.max=numeric?null:null;state.gradient.marginManual=false;
+ pushHistory();state.predictionDisplay=numeric?'topVote':'composition';state.gradient.min=0;state.gradient.max=null;state.gradient.marginManual=false;
  applyEstimateVisibility();renderPredictionRows();render();persist()
 };$('closePrediction').onclick=()=>$('predictionDialog').close();
 $('headerExportPredictions').onclick=()=>exportPredictionCSV(false);$('districtTableSearch').oninput=()=>renderDistrictTable();
@@ -219,7 +219,7 @@ $('councilViewScope').onchange=()=>{state.councilViewScope=$('councilViewScope')
 $('downloadDistrictTable').onclick=()=>{const rows=[['县市','选区','类别','包含区域或选民范围','应选名额','妇保名额','妇保说明'],...districtTableRows().map(d=>[d.county,d.name,DistrictCore.identityName(d),mainlandTerms(d.scope),d.seats,d.womenReservedLabel,mainlandTerms(d.womenReservedNote)])];download(new Blob(['\uFEFF'+rows.map(r=>r.map(csvCell).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}),(state.county||'全台')+(state.level==='council'?'议员':'立法机构民代')+'选区范围与名额.csv')};
 // Keep legacy standalone data available without presenting a second prediction-data store.
 const range=document.createElement('div');range.id='predictionGradientRange';range.innerHTML='<p class="data-help">颜色表示政党，深浅表示数值；不代表当选概率。</p><div class="gradient-range"><label>下限<input id="predictionRangeMin" aria-label="预测着色下限" inputmode="decimal"></label><label>上限<input id="predictionRangeMax" aria-label="预测着色上限" inputmode="decimal" placeholder="票数自动"></label><span id="predictionRangeUnit">%</span></div><button id="applyPredictionRange" class="small-action">应用着色范围</button>';$('predictionDisplayBox').append(range);
-$('applyPredictionRange').onclick=()=>{const min=Number($('predictionRangeMin').value||0),raw=$('predictionRangeMax').value,max=raw===''?(predictionMarginMode()||predictionIsVotes()?null:100):Number(raw);if(!Number.isFinite(min)||min<0||max!==null&&(!Number.isFinite(max)||max<=min)||!predictionIsVotes()&&(min>=100||max>100))return toast('请填写有效范围；得票率须在0—100%之间');pushHistory();state.gradient.min=min;state.gradient.max=max;state.gradient.marginManual=predictionMarginMode()&&max!==null;render();persist()};
+$('applyPredictionRange').onclick=()=>{const min=Number($('predictionRangeMin').value||0),raw=$('predictionRangeMax').value,max=raw===''?(predictionMarginMode()||predictionIsVotes()?null:100):Number(raw);if(!Number.isFinite(min)||min<0||max!==null&&(!Number.isFinite(max)||max<=min)||!predictionIsVotes()&&(min>=100||max>100))return toast(predictionMarginMode()?'请填写有效范围；领先差距应在0—100个百分点之间':'请填写有效范围；得票率须在0—100%之间');pushHistory();state.gradient.min=min;state.gradient.max=max;state.gradient.marginManual=predictionMarginMode()&&max!==null;render();persist()};
 $('predictionDisplay').onchange=()=>{pushHistory();state.predictionDisplay=$('predictionDisplay').value;state.gradient.min=0;state.gradient.max=predictionMarginMode()?null:predictionUsesGradient()?100:null;state.gradient.marginManual=false;render();persist()};
 // Map and directory can both lead into the same candidate drawer.
 const scopeLabel=dirText('span','','eyebrow');scopeLabel.id='predictionScopeLabel';document.querySelector('.map-topbar .eyebrow').replaceWith(scopeLabel);
