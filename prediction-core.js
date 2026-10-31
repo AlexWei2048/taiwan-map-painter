@@ -31,13 +31,18 @@ function voteResult(candidates,record,byParty=false){
  const groups=new Map();
  for(const row of entered){
   const share=useVotes?row.votes/total*100:row.share,key=byParty?row.candidate.party:row.candidate.id;
-  if(!groups.has(key))groups.set(key,{candidate:row.candidate,party:row.candidate.party,share:0,votes:useVotes?0:null});
+  if(!groups.has(key))groups.set(key,{candidate:row.candidate,party:row.candidate.party,share:0,votes:allVotes?0:null});
   const group=groups.get(key);group.share+=share;
-  if(useVotes)group.votes+=row.votes;
+  if(allVotes)group.votes+=row.votes;
  }
  const ranked=[...groups.values()].sort((a,b)=>b.share-a.share);
  if(!ranked[0]||ranked[0].share<=0||ranked.length>1&&Math.abs(ranked[0].share-ranked[1].share)<1e-8)return null;
- return{...ranked[0],value:ranked[0].share,partial:entered.length<candidates.length,recorded:entered.length,totalCandidates:candidates.length,inputMetric:useVotes?'votes':'share'};
+ const runnerUp=ranked[1]||null;
+ const marginShare=runnerUp?Math.max(0,ranked[0].share-runnerUp.share):null;
+ const marginVotes=runnerUp&&ranked[0].votes!==null&&runnerUp.votes!==null?ranked[0].votes-runnerUp.votes:null;
+ return{...ranked[0],value:ranked[0].share,runnerUp,marginShare,marginVotes,
+  partial:entered.length<candidates.length,recorded:entered.length,
+  totalCandidates:candidates.length,inputMetric:useVotes?'votes':'share'};
 }
 function candidateVoteResult(candidates,record,candidateId){
  if(!record||!candidateId)return null;
