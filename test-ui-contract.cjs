@@ -17,7 +17,7 @@ test('Town geography loads only for the corresponding election view',()=>{
  assert.match(town,/if\(active&&state\.predictionOffice==='council'\)ensureTownPredictionAreas\(\)/);
 });
 test('Avoid comparing one candidate against unrelated national districts',()=>{
- assert.match(town,/options\.filter\(\(\[mode\]\)=>!mode\.startsWith\('candidate'\)\)/);
+ assert.match(town,/options\.filter\(\(\[mode\]\)=>mode!=='candidateVote'\)/);
  assert.match(town,/function localDistrictItems\(/);
 });
 test('Autobackup and export preserve existing behavior',()=>{
@@ -94,7 +94,7 @@ test('Blank candidate inputs display zero without saving artificial forecast dat
 });
 test('Rate gradient fields show 100 percent as default maximum',()=>{
  assert.match(read('workspace-ui.js'),/predictionRangeMax'\)\.value=state\.gradient\.max\?\?\(predictionIsVotes\(\)\?'':100\)/);
- assert.match(read('workspace-ui.js'),/state\.gradient\.max=predictionIsVotes\(\)\?null:100/);
+ assert.match(read('workspace-ui.js'),/state\.gradient\.max=predictionUsesGradient\(\)\?100:null/);
  assert.match(app,/gradientMax'\)\.value=state\.gradient\.max===null\?\(state\.gradient\.metric==='share'\?100:''\)/);
  assert.match(app,/state\.gradient\.max=state\.gradient\.metric==='share'\?100:null/);
 });
