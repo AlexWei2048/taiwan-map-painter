@@ -211,6 +211,48 @@ test('Candidate mode selection visible and survives saved projects',()=>{
  assert.match(app,/\['composition','leader'.*'topVote','partyTop','candidateVote'\]/);
  assert.match(read('prediction-ui.js'),/PredictionCore\.candidateVoteResult\(directoryCandidates\(d\),r,state\.localDisplayCandidate\)/);
 });
+test('Single-county mayor legends show candidates with their own party emblems',()=>{
+ const start=workspace.indexOf('function countyMayorCandidateLegendEntries(){');
+ const end=workspace.indexOf('\nfunction predictionCandidateLegendEntries(){',start);
+ assert.ok(start>=0&&end>start,'Candidate legend builder must be defined');
+ const source=workspace.slice(start,end);
+ const maker=new Function('state','candidateDatabase','directoryCandidates','predictionParty',
+  'candidateDisplayName','logoFor','predictionUsesVoteDisplay','predictionDisplayResult',
+  'localPredictionActive','localPredictionItems','localMapResult',source+';return countyMayorCandidateLegendEntries');
+ const candidates=[
+  {id:'candidate-a',name:'甲一',party:'甲'},
+  {id:'candidate-b',name:'甲二',party:'甲'},
+  {id:'candidate-c',name:'乙三',party:'乙'}
+ ];
+ const districts=[{id:'mayor:1',type:'mayor',county:'台北市'},{id:'mayor:2',type:'mayor',county:'新北市'}];
+ const party=name=>name==='甲'?{id:'party-a',name,color:'#4466aa'}:{id:'party-b',name,color:'#33aa66'};
+ const state={county:'台北市',predictionOffice:'mayor',legend:{hidden:[]},predictions:{'mayor:1':{winners:['candidate-b']}}};
+ const build=(town,features=[])=>maker(state,{districts},d=>d.id==='mayor:1'?candidates:[],
+  party,c=>c.name,p=>'logo-'+p.id,()=>false,()=>null,()=>town,()=>features,
+  f=>({status:'winner',candidate:candidates.find(c=>c.id===f.candidateId)}));
+ let rows=build(false)();
+ assert.equal(rows.length,3);
+ assert.deepEqual(rows.map(r=>r.name),['甲一','甲二','乙三']);
+ assert.equal(new Set(rows.map(r=>r.id)).size,3,'Candidate rows must use unique identifiers');
+ assert.equal(rows[0].color,rows[1].color,'Same-party candidates share the party color');
+ assert.equal(rows[0].logo,rows[1].logo,'Same-party candidates share the party emblem');
+ assert.notEqual(rows[0].color,rows[2].color);
+ assert.equal(rows[1].legendSuffix,'（预测胜出）');
+ assert.equal(rows[0].legendSuffix,'');
+ rows=build(true,[{county:'台北市',candidateId:'candidate-a'},{county:'台北市',candidateId:'candidate-a'},
+  {county:'台北市',candidateId:'candidate-c'},{county:'新北市',candidateId:'candidate-b'}])();
+ assert.equal(rows[0].legendSuffix,'（2区）');
+ assert.equal(rows[1].legendSuffix,'');
+ assert.equal(rows[2].legendSuffix,'（1区）');
+ state.legend.hidden=['party-a'];
+ assert.deepEqual(build(false)().map(r=>r.name),['乙三'],'Hidden-party choice should remain respected');
+ state.legend.hidden=[];
+ state.county='新北市';
+ assert.deepEqual(build(false)().map(r=>r.name),[],'Do not include candidates from unrelated counties');
+ assert.match(workspace,/if\(state\.county&&state\.predictionOffice==='mayor'\)return countyMayorCandidateLegendEntries\(\)/);
+ assert.match(app,/if\(Object\.hasOwn\(p,'logo'\)\)return p\.logo/);
+ assert.match(app,/const emblem=logoFor\(row\.p\)/);
+});
 function isolatedExportGuard(env){
  const start=app.indexOf('async function ensureExportMapReady(){');
  const end=app.indexOf('const mapPromise=',start);
