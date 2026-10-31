@@ -17,15 +17,8 @@
   const rows=cs.map(c=>({candidate:c,party:c.party,votes:r.estimates[c.id]?.votes??null,share:r.estimates[c.id]?.share??null}));for(const row of rows)if(row.share===null&&row.votes!==null&&r.denominator>0)row.share=row.votes/r.denominator*100;
   if(['topVote','partyTop','candidateVote'].includes(mode)){
    if(mode==='candidateVote'){
-    const row=rows.find(x=>x.candidate.id===candidateId);
-    if(!row||row.votes===null&&row.share===null)return{status:'missing',message:'请选择候选人并填写得票数据'};
-    const entered=rows.filter(x=>x.votes!==null||x.share!==null);
-    const allVotes=entered.every(x=>x.votes!==null),allShares=entered.every(x=>x.share!==null);
-    if(!allVotes&&!allShares)return{status:'missing',message:'请在同一乡镇使用同一种得票指标'};
-    const total=entered.reduce((n,x)=>n+(x.votes??0),0);
-    const share=allShares?row.share:total>0?row.votes/total*100:null;
-    if(share===null)return{status:'missing',message:'请填写有效得票数据'};
-    return{status:'winner',...row,votes:allVotes?row.votes:null,share,value:share,partial:entered.length<cs.length,record:r}
+    const selected=P.candidateVoteResult(cs,{estimates:r.estimates},candidateId);
+    return selected?{status:'winner',...selected,record:r}:{status:'missing',message:'请指定候选人并填写其得票数或得票率'}
    }
    const leading=P.voteResult(cs,{estimates:r.estimates},mode==='partyTop');
    if(!leading)return{status:'missing',message:'尚未录入可比较的得票数据，或存在并列最高票'};
