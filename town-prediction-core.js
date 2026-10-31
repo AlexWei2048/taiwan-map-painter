@@ -22,7 +22,7 @@
    }
    const leading=P.voteResult(cs,{estimates:r.estimates},mode==='partyTop');
    if(!leading)return{status:'missing',message:'尚未录入可比较的得票数据，或存在并列最高票'};
-   return{status:'winner',...leading,record:r};
+   return{status:'winner',...leading,value:leading.marginShare??0,record:r};
   }
   const votesMode=mode.endsWith('Votes')||mode==='votes',key=votesMode?'votes':'share';
   if(mode.startsWith('candidate')){const row=rows.find(x=>x.candidate.id===candidateId);if(!row||row[key]===null)return{status:'missing',message:'尚未填写该候选人的'+(votesMode?'票数':'得票率')};return{status:'winner',...row,value:row[key],record:r}}
