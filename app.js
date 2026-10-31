@@ -416,25 +416,40 @@ function drawLegend(group,spec,interactive=false){
  let rowY=y+m.headerHeight;
  for(const row of m.rows){const g=svgEl('g',{'data-legend-party':row.p.id});g.append(svgEl('rect',{x:x+18,y:rowY+4,width:m.font,height:m.font,rx:3,fill:row.p.color}));
   const emblem=logoFor(row.p);if(emblem)g.append(svgEl('image',{href:emblem,x:x+36,y:rowY,width:m.font*1.6,height:m.font*1.6,preserveAspectRatio:'xMidYMid meet','data-party-logo':row.p.id}));const txt=svgEl('text',{x:x+m.labelX,y:rowY+m.font+2,'font-size':m.font,fill:'#466253'});row.lines.forEach((line,i)=>{const t=svgEl('tspan',{x:x+m.labelX,dy:i?m.font*1.4:0});t.textContent=line;txt.append(t)});g.append(txt);
-  if(m.gradient){const gy=rowY+row.lines.length*m.font*1.4+7,id='gradient-'+row.p.id.replace(/[^a-z0-9_-]/gi,'_'),defs=svgEl('defs'),grad=svgEl('linearGradient',{id,x1:'0%',x2:'100%',y1:'0%',y2:'0%'});// Sample the actual (nonlinear) map color scale, not a misleading two-stop linear blend.
-  for(let step=0;step<=10;step++){
-   const fraction=step/10,value=domain.min+(domain.max-domain.min)*fraction;
-   grad.append(svgEl('stop',{offset:(fraction*100)+'%','stop-color':ElectionCore.shade(row.p.color,value,domain.min,domain.max)}));
-  }
-  defs.append(grad);
-  const barHeight=m.font*1.4,barWidth=m.width-36;
-  g.append(defs,svgEl('rect',{x:x+18,y:gy,width:barWidth,height:barHeight,rx:4,fill:`url(#${id})`,'data-gradient-bar':row.p.id}));
-  const voteMetric=state.fillMode==='prediction'?predictionIsVotes():state.gradient.metric==='votes';
-  const stops=voteMetric?[0,.5,1]:[0,.25,.5,.75,1];
-  for(const fraction of stops){
-   const value=domain.min+(domain.max-domain.min)*fraction,tx=x+18+barWidth*fraction;
-   if(fraction>0&&fraction<1)g.append(svgEl('line',{x1:tx,x2:tx,y1:gy+1,y2:gy+barHeight-1,stroke:'#526355','stroke-width':1,opacity:.33}));
-   const label=svgEl('text',{x:tx,y:gy+m.font*2.55,'font-size':m.font*.72,fill:'#597467','text-anchor':fraction===0?'start':fraction===1?'end':'middle'});
-   label.textContent=metricText(value);g.append(label);
+  if(m.gradient){
+  const gy=rowY+row.lines.length*m.font*1.4+7,barHeight=m.font*1.4,barWidth=m.width-36;
+  if(state.fillMode==='prediction'&&predictionMarginMode()){
+   // Match the actual fixed-band colors used by the map, instead of a 0-100% gradient.
+   const samples=[0,3,8,13,18,23,27,30],labels=ElectionCore.marginBandLabels;
+   for(let i=0;i<samples.length;i++){
+    const x0=x+18+barWidth*i/samples.length,w=barWidth/samples.length;
+    g.append(svgEl('rect',{x:x0,y:gy,width:w,height:barHeight,
+     fill:ElectionCore.marginShade(row.p.color,samples[i]),stroke:'#ffffff','stroke-width':.5,
+     'data-margin-band':labels[i],'data-margin-party':row.p.id}));
+    const text=svgEl('text',{x:x0+w/2,y:gy+m.font*2.55,'font-size':m.font*.64,fill:'#597467','text-anchor':'middle'});
+    text.textContent=labels[i];g.append(text);
+   }
+  }else{
+   const id='gradient-'+row.p.id.replace(/[^a-z0-9_-]/gi,'_'),defs=svgEl('defs'),grad=svgEl('linearGradient',{id,x1:'0%',x2:'100%',y1:'0%',y2:'0%'});
+   // Sample the exact nonlinear map color scale instead of linearly blending its endpoints.
+   for(let step=0;step<=10;step++){
+    const fraction=step/10,value=domain.min+(domain.max-domain.min)*fraction;
+    grad.append(svgEl('stop',{offset:(fraction*100)+'%','stop-color':ElectionCore.shade(row.p.color,value,domain.min,domain.max)}));
+   }
+   defs.append(grad);
+   g.append(defs,svgEl('rect',{x:x+18,y:gy,width:barWidth,height:barHeight,rx:4,fill:`url(#${id})`,'data-gradient-bar':row.p.id}));
+   const voteMetric=state.fillMode==='prediction'?predictionIsVotes():state.gradient.metric==='votes';
+   const stops=voteMetric?[0,.5,1]:[0,.25,.5,.75,1];
+   for(const fraction of stops){
+    const value=domain.min+(domain.max-domain.min)*fraction,tx=x+18+barWidth*fraction;
+    if(fraction>0&&fraction<1)g.append(svgEl('line',{x1:tx,x2:tx,y1:gy+1,y2:gy+barHeight-1,stroke:'#526355','stroke-width':1,opacity:.33}));
+    const label=svgEl('text',{x:tx,y:gy+m.font*2.55,'font-size':m.font*.72,fill:'#597467','text-anchor':fraction===0?'start':fraction===1?'end':'middle'});
+    label.textContent=metricText(value);g.append(label);
+   }
   }}
   if(interactive&&state.fillMode==='solid'){g.setAttribute('role','button');g.setAttribute('tabindex','0');g.setAttribute('aria-label','选择'+row.p.name+'画笔');g.style.cursor='pointer';g.onclick=()=>setBrush(row.p.id);g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();setBrush(row.p.id)}}}group.append(g);rowY+=row.height;
  }
- if(m.gradient){for(const [show,color,label]of [[m.tie,'#aebdb4','并列最高'],[m.missing,'#edf1e9','缺少可用数据']]){if(!show)continue;group.append(svgEl('rect',{x:x+18,y:rowY+2,width:m.font*.8,height:m.font*.8,rx:2,fill:color,stroke:'#b5c3b8','stroke-width':.5}));const t=svgEl('text',{x:x+35,y:rowY+m.font*.8,'font-size':m.font*.8,fill:'#718376'});t.textContent=label;group.append(t);rowY+=m.font*1.7}const t=svgEl('text',{x:x+18,y:rowY+m.font*.75,'font-size':m.font*.72,fill:'#8a9a8e'});t.textContent=state.fillMode==='prediction'&&predictionMarginMode()?'浅色 → 深色：领先差距由小到大':'浅色 → 深色：数值由低到高';group.append(t)}
+ if(m.gradient){for(const [show,color,label]of [[m.tie,'#aebdb4','并列最高'],[m.missing,'#edf1e9','缺少可用数据']]){if(!show)continue;group.append(svgEl('rect',{x:x+18,y:rowY+2,width:m.font*.8,height:m.font*.8,rx:2,fill:color,stroke:'#b5c3b8','stroke-width':.5}));const t=svgEl('text',{x:x+35,y:rowY+m.font*.8,'font-size':m.font*.8,fill:'#718376'});t.textContent=label;group.append(t);rowY+=m.font*1.7}const t=svgEl('text',{x:x+18,y:rowY+m.font*.75,'font-size':m.font*.72,fill:'#8a9a8e'});t.textContent=state.fillMode==='prediction'&&predictionMarginMode()?'领先差距（百分点），≥30 统一深色':'浅色 → 深色：数值由低到高';group.append(t)}
 }
 function syncElectionControls(){
  $('solidMode').classList.toggle('active',state.fillMode==='solid');$('gradientMode').classList.toggle('active',state.fillMode==='gradient');$('solidMode').setAttribute('aria-pressed',state.fillMode==='solid');$('gradientMode').setAttribute('aria-pressed',state.fillMode==='gradient');$('gradientControls').hidden=state.fillMode!=='gradient';if(typeof syncPredictionControls==='function')syncPredictionControls();syncElectorateControls();
