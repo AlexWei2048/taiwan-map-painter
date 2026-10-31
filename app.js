@@ -148,13 +148,16 @@ function labelLayout(items,t,font=15){
   // Every displayed name stays anchored inside its own polygon. Very small
   // polygons use a compact two-line label rather than an external leader.
   if(!chosen){
-   const q=centers.find(p=>insideArea([p.x,p.y,p.x,p.y]))||centers[0];
    const lines=characters.length>3?[characters.slice(0,Math.ceil(characters.length/2)).join(''),characters.slice(Math.ceil(characters.length/2)).join('')]:[title];
-   const size=Math.max(4,Math.min(minFont,Math.floor(Math.min(
-    (box[2]-box[0])/(Math.max(...lines.map(line=>Array.from(line).length))||1),
-    (box[3]-box[1])/(lines.length*1.2)
-   ))));
-   const width=Math.max(...lines.map(line=>Array.from(line).length))*size*.98+2,height=lines.length*size*1.2+2;
+   const longest=Math.max(...lines.map(line=>Array.from(line).length));
+   const availableWidth=Math.max(0,box[2]-box[0]-2),availableHeight=Math.max(0,box[3]-box[1]-2);
+   const fitSize=Math.floor(Math.min(availableWidth/(longest*.98||1),availableHeight/(lines.length*1.2)));
+   const size=Math.max(3,Math.min(minFont,fitSize));
+   const width=longest*size*.98+2,height=lines.length*size*1.2+2;
+   // Keep the compact fallback as far as possible from the polygon's bounds.
+   const q=centers.filter(p=>insideArea([p.x-width/2,p.y-height/2,p.x+width/2,p.y+height/2]))
+    .sort((a,b)=>Math.min(b.x-box[0],box[2]-b.x,b.y-box[1],box[3]-b.y)-
+                  Math.min(a.x-box[0],box[2]-a.x,a.y-box[1],box[3]-a.y))[0]||centers[0];
    chosen={f,x:q.x,y:q.y,font:size,lines,bounds:[q.x-width/2,q.y-height/2,q.x+width/2,q.y+height/2]};
   }
   placed.push(chosen.bounds);result.push(chosen);
@@ -603,7 +606,7 @@ function regionDetail(f){
  const r=regionResult(f);if(r.status!=='winner')return r.message;
  const p=paletteById(r.leader.partyId);return(state.gradient.groupBy==='party'?p?.name:r.leader.name+' · '+p?.name)+' · '+metricText(r.value);
 }
-function shownLabel(f){if(f.name==='乌坵'||f.name==='乌坵乡')return'';const identity=identityPanelsActive()?featureElectorate(f):activeElectorate();if(['council','legislative'].includes(state.level)&&identity!=='regional')return state.county?f.name:f.county==='\u5168\u56fd'?f.name:f.county+f.name.replace(/^第/, '第');if(state.level==='legislative'&&data.legislative.filter(x=>x.county===f.county).length===1)return f.county;return !state.county&&['council','legislative'].includes(state.level)?f.county+f.number:f.name}
+function shownLabel(f){const identity=identityPanelsActive()?featureElectorate(f):activeElectorate();if(['council','legislative'].includes(state.level)&&identity!=='regional')return state.county?f.name:f.county==='\u5168\u56fd'?f.name:f.county+f.name.replace(/^第/, '第');if(state.level==='legislative'&&data.legislative.filter(x=>x.county===f.county).length===1)return f.county;return !state.county&&['council','legislative'].includes(state.level)?f.county+f.number:f.name}
 function legendReserveEntries(){return legendEntries()}
 function legendVisiblePalette(){const palette=[...state.palette];if(state.fillMode==='prediction'&&typeof predictionPartyNamesInUse==='function')for(const name of predictionPartyNamesInUse()){const party=predictionParty(name);if(!palette.some(p=>p.id===party.id))palette.push(party)}return palette.filter(p=>!state.legend.hidden.includes(p.id))}
 function legendEntries(){if(state.fillMode==='prediction'&&typeof predictionCandidateLegendEntries==='function'){const entries=predictionCandidateLegendEntries();if(entries)return entries}const c=counts();return legendVisiblePalette().filter(p=>c[p.id])}

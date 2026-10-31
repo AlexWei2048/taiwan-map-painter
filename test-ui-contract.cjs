@@ -631,6 +631,7 @@ test('Placement uses polygon interiors, adapts font, and splits long names',()=>
  assert.ok(result[0].font<12);
  assert.equal(result[0].lines.length,2);
  assert.equal(result[0].out,undefined);
+ assert.ok(result[0].bounds[0]>=0&&result[0].bounds[1]>=0&&result[0].bounds[2]<=24&&result[0].bounds[3]<=12,'compact multiline label stays inside the area');
  assert.doesNotMatch(app.slice(start,end),/leftLabelEdge|forcedOutside|insetLabels|outside\.push/);
 });
 test('Map fetch retries bypass corrupt caches and report persistent network errors',async()=>{
