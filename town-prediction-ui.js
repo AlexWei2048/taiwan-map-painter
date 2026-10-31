@@ -17,7 +17,12 @@ function localPredictionItems(){
  });
 }
 // The editor and CSV records still operate on the selected electoral district.
-function localDistrictItems(d=localParentDistrict()){return d?localPredictionItems().filter(f=>f.parentDistrictId===d.id):[]}
+function localDistrictItems(d=localParentDistrict()){
+ if(!data||!d)return[];
+ if(d.type==='council')return TOWN_PREDICTION_AREAS[d.id]||[];
+ if(!localMayorFeatureCache.has(d.id))localMayorFeatureCache.set(d.id,data.towns.filter(f=>f.county===d.county).map(f=>({...f,townId:f.id,parentDistrictId:d.id,scope:f.name,partial:false})));
+ return localMayorFeatureCache.get(d.id);
+}
 function localRecord(d,f){return state.localPredictions[d.id]?.[f.townId]||{estimates:{},leaderId:'',totalVotes:null}}
 function localMapResult(f){const d=directoryDistrictById.get(f.parentDistrictId);return d?TownPredictionCore.summary(directoryCandidates(d),localRecord(d,f),state.predictionDisplay,state.localDisplayCandidate,d.type==='mayor'):{status:'missing',message:'没有对应选区'}}
 function predictionMapResult(f){return localPredictionActive()?localMapResult(f):predictionDisplayResult(predictionDistrictFor(f))}
