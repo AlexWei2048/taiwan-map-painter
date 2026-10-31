@@ -6,7 +6,7 @@
  const norm=x=>simplify(String(x||'')).trim();
  const normalizeParty=name=>{let s=norm(name||'无党籍');if(s.includes('无党籍及未经政党推荐')||s==='无党籍及未经政党推薦')s='无党籍';return s};
  const partyColor=p=>partyMatch(p)?.color||'#8a9892';
- const tone=(color,share)=>metric==='share'?ElectionCore.shade(color,share,0,100):color;
+ const tone=(color,share,range)=>{if(metric!=='share')return color;const t=Math.max(0,Math.min(1,(share-range.min)/Math.max(1,range.max-range.min)));const rgb=color.match(/[a-f\\d]{2}/gi)?.map(x=>parseInt(x,16))||[100,120,105];const mix=(from,to,p)=>Math.round(from+(to-from)*p);const light=rgb.map(c=>mix(255,c,.20)),dark=rgb.map(c=>mix(c,0,.25));return 'rgb('+light.map((v,i)=>mix(v,dark[i],Math.pow(t,.85))).join(',')+')'};
  const electionKey=r=>[r.type,r.electorate,r.level,r.county,r.town,r.village,r.district,r.number,r.name].join('|');
  const dbIds=new Set();
  const addRows=rows=>{let added=0;for(const src of rows){
@@ -95,8 +95,12 @@
    regions.set(key,{party,leaders:chosen,top:leading,share:total?winnerVotes/total*100:0,votes:total,seatCount:winners.length,tie:dominant.length>1&&dominant[0][1]===dominant[1][1]});
    for(const r of entries)r._share=total?r.votes/total*100:0;
   }
+  const values=[...regions.values()].filter(r=>r.party&&!r.tie).map(r=>r.share).sort((a,b)=>a-b);
+  const percentile=q=>values.length?values[Math.min(values.length-1,Math.floor(q*(values.length-1)))]:0;
+  let min=Math.floor(percentile(.05)/5)*5,max=Math.ceil(percentile(.95)/5)*5;
+  if(max-min<15){const mid=(min+max)/2;min=Math.max(0,Math.floor((mid-10)/5)*5);max=Math.min(100,Math.ceil((mid+10)/5)*5)}
   lastResult=rows;
-  return{rows,regions,partySeats,areas:groups.size}
+  return{rows,regions,partySeats,areas:groups.size,range:{min,max}}
  }
  function featureKey(feature){
   if(kind==='mayor')return county?feature.county+'|'+feature.name:feature.county;
@@ -109,16 +113,23 @@
   root.replaceChildren();
   const entries=[...result.partySeats].sort((a,b)=>b[1]-a[1]);
   if(!entries.length)return;
-  const spec=sceneSpec(),wide=spec.width>1700,font=wide?16:13,rowH=font*2,width=wide?360:320,height=90+entries.length*rowH;
+  const spec=sceneSpec(),wide=spec.width>1700,font=wide?16:13,rowH=font*2,width=wide?360:320,height=(metric==='share'?168:90)+entries.length*rowH;
   const x=spec.width-width-25,y=spec.height-furnitureFooterHeight()+20;
   const svg=(tag,attrs)=>{const node=document.createElementNS(NS,tag);for(const [k,v]of Object.entries(attrs||{}))node.setAttribute(k,v);return node};
   root.append(svg('rect',{x,y,width,height,rx:10,fill:'#fff',stroke:'#dce5df'}));
   const heading=svg('text',{x:x+16,y:y+28,'font-size':font+1,'font-weight':600,fill:'#294a3a'});
   heading.textContent='2022实际结果 · '+[...result.partySeats.values()].reduce((a,b)=>a+b,0)+(kind==='mayor'&&county?'个领先地区':'席');root.append(heading);
   const subtitle=svg('text',{x:x+16,y:y+48,'font-size':font*.78,fill:'#63756a'});subtitle.textContent=kind==='council'?'多席次选区：主色表示席次最多政党':kind==='mayor'&&county?'仅代表当地得票领先，不代表当选':'按实际当选人统计';root.append(subtitle);
+  if(metric==='share'){
+   const yBar=y+68,barWidth=width-38;
+   const title=svg('text',{x:x+16,y:yBar-7,'font-size':font*.82,fill:'#526c60'});title.textContent='得票率色阶 · '+result.range.min+'%—'+result.range.max+'%（超出范围按端点显示）';root.append(title);
+   for(let i=0;i<40;i++){const v=result.range.min+(result.range.max-result.range.min)*(i+.5)/40;root.append(svg('rect',{x:x+18+i*barWidth/40,y:yBar,width:barWidth/40+1,height:13,fill:tone('#177d68',v,result.range)}))}
+   for(const [offset,text] of [[0,result.range.min+'%'],[.5,((result.range.min+result.range.max)/2).toFixed(0)+'%'],[1,result.range.max+'%']]){const tick=svg('text',{x:x+18+offset*barWidth,y:yBar+31,'text-anchor':offset===0?'start':offset===1?'middle':'end','font-size':font*.78,fill:'#526c60'});tick.textContent=text;root.append(tick)}
+   const note=svg('text',{x:x+16,y:yBar+50,'font-size':font*.76,fill:'#63756a'});note.textContent='各党保留本色相，浅色得票率低，深色得票率高';root.append(note);
+  }
   for(const [i,[party,count]]of entries.entries()){
-   const py=y+73+i*rowH;
-   root.append(svg('rect',{x:x+16,y:py-10,width:font,height:font,rx:3,fill:partyColor(party)}));
+   const py=y+(metric==='share'?153:73)+i*rowH;
+   root.append(svg('rect',{x:x+16,y:py-10,width:font,height:font,rx:3,fill:metric==='share'?tone(partyColor(party),(result.range.min+result.range.max)/2,result.range):partyColor(party)}));
    const label=svg('text',{x:x+font+26,y:py+2,'font-size':font,fill:'#426052'});label.textContent=party+'（'+count+(kind==='mayor'&&county?'个地区':'席')+'）';root.append(label);
   }
  }
@@ -128,7 +139,7 @@
   for(const path of document.querySelectorAll('#regions path[data-region]')){
    const f=byId.get(path.dataset.region);if(!f)continue;
    const region=result.regions.get(featureKey(f));
-   path.setAttribute('fill',!region?'#edf1e9':region.tie?'#aebdb4':region.party?tone(partyColor(region.party),region.share):'#edf1e9');
+   path.setAttribute('fill',!region?'#edf1e9':region.tie?'#aebdb4':region.party?tone(partyColor(region.party),region.share,result.range):'#edf1e9');
    path.style.pointerEvents='none';
   }
   el('scopeTitle').textContent='2022 '+titles[kind]+'实际投票结果 · '+(county||'全台');
@@ -194,7 +205,7 @@
  const defaultFooter=furnitureFooterHeight;furnitureFooterHeight=function(){
   if(!active)return defaultFooter();
   const number=Math.min(30,new Set(recordsInView().filter(r=>r.elected).map(r=>r.party)).size);
-  return Math.max(defaultFooter(),270,120+number*33)
+  return Math.max(defaultFooter(),metric==='share'?355:270,(metric==='share'?200:120)+number*33)
  };
  const defaultPreparedExport=preparedExportSvg;preparedExportSvg=function(){
   if(!active)return defaultPreparedExport();
