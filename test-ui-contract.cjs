@@ -212,7 +212,7 @@ test('Candidate mode selection visible and survives saved projects',()=>{
  assert.match(read('prediction-ui.js'),/PredictionCore\.candidateVoteResult\(directoryCandidates\(d\),r,state\.localDisplayCandidate\)/);
 });
 test('County mayor legend contains only candidates actually represented by the map',()=>{
- const start=workspace.indexOf('function countyMayorCandidateLegendEntries(){');
+ const start=workspace.indexOf('function mayorLegendUnit(){');
  const end=workspace.indexOf('\nfunction predictionCandidateLegendEntries(){',start);
  assert.ok(start>=0&&end>start,'Candidate legend builder must be defined');
  const source=workspace.slice(start,end);
@@ -236,7 +236,7 @@ test('County mayor legend contains only candidates actually represented by the m
  // District map: one winner appears; other filed candidates are not drawn or listed.
  let rows=build(false)();
  assert.deepEqual(rows.map(r=>r.name),['甲二']);
- assert.equal(rows[0].legendSuffix,'（预测胜出）');
+ assert.equal(rows[0].legendSuffix,'（1县市）');
  assert.equal(rows[0].color,'#4466aa');
  assert.equal(rows[0].logo,'logo-party-a');
  assert.deepEqual(build(false,[],false,false)(),[],'Unfinished winners do not paint or appear');
@@ -253,7 +253,7 @@ test('County mayor legend contains only candidates actually represented by the m
  assert.equal(rows[0].color,rows[1].color,'Same-party candidates share their color');
  assert.equal(rows[0].logo,rows[1].logo,'Same-party candidates share their emblem');
  assert.notEqual(rows[0].color,rows[2].color);
- assert.deepEqual(rows.map(r=>r.legendSuffix),['（2乡镇市区）','（1乡镇市区）','（1乡镇市区）']);
+ assert.deepEqual(rows.map(r=>r.legendSuffix),['（2区）','（1区）','（1区）']);
  state.legend.hidden=['party-a'];
  assert.deepEqual(build(true,[{county:'台北市',candidateId:'candidate-a'},
   {county:'台北市',candidateId:'candidate-c'}])().map(r=>r.name),['乙三'],
@@ -263,8 +263,8 @@ test('County mayor legend contains only candidates actually represented by the m
  assert.deepEqual(build(false)(),[],'No painted candidate means no candidate rows');
  state.county='新北市';
  assert.deepEqual(build(false)(),[],'Candidates from other counties are not listed');
- assert.match(workspace,/const unit=townView\?'乡镇市区':''/);
- assert.match(town,/function predictionLegendCountUnit\(\)\{if\(localPredictionActive\(\)\)return'乡镇市区'/);
+ assert.match(workspace,/const unit=mayorLegendUnit\(\)/);
+ assert.match(town,/function predictionLegendCountUnit\(\)\{if\(state\.predictionOffice==='mayor'\)return mayorLegendUnit\(\)/);
  assert.match(workspace,/return candidates\.filter\(c=>shown\.has\(c\.id\)\)\.map/);
  assert.match(workspace,/if\(state\.county&&state\.predictionOffice==='mayor'\)return countyMayorCandidateLegendEntries\(\)/);
  assert.match(app,/if\(Object\.hasOwn\(p,'logo'\)\)return p\.logo/);
@@ -339,19 +339,37 @@ test('Prediction legend contains only the displayed election-district count',()=
  assert.ok(start>=0&&end>start);
  const maker=new Function('state','isNationwide','counts','predictionUsesVoteDisplay',
   'predictionUsesGradient','predictionMarginMode','currentItems','predictionMapResult',
-  'predictionDisplayResult','predictionDistrictFor','regionResult',
+  'predictionDisplayResult','predictionDistrictFor','regionResult','mayorLegendUnit',
   app.slice(start,end)+';return legendMetrics');
  const features=Array.from({length:12},(_,i)=>({id:'region-'+i,townId:'town-'+i}));
- const state={legend:{fontSize:12,caption:'之前的冗长说明'},fillMode:'prediction',predictionOffice:'mayor'};
+ const state={county:'',legend:{fontSize:12,caption:'之前的冗长说明'},fillMode:'prediction',predictionOffice:'mayor'};
+ const root=workspace.indexOf('function mayorLegendUnit(){');
+ const stop=workspace.indexOf('\nfunction countyMayorCandidateLegendEntries(){',root);
+ assert.ok(root>=0&&stop>root);
+ let townMode=false;
+ const mayorUnit=new Function('state','localPredictionActive',
+  workspace.slice(root,stop)+';return mayorLegendUnit')(state,()=>townMode);
  const metric=maker(state,()=>false,()=>({}),()=>true,()=>true,()=>true,
-  ()=>features,()=>({status:'winner'}),()=>null,()=>null,()=>({status:'winner'}));
- const legend=metric([{id:'a',name:'候选人甲',legendSuffix:'（3乡镇市区）',color:'#008000'}]);
- assert.deepEqual(legend.captionLines,['总共12个选区']);
+  ()=>features,()=>({status:'winner'}),()=>null,()=>null,()=>({status:'winner'}),mayorUnit);
+ const legend=metric([{id:'a',name:'候选人甲',legendSuffix:'（3县市）',color:'#008000'}]);
+ assert.deepEqual(legend.captionLines,['总共12县市']);
  assert.equal(legend.rows.length,1,'Candidate legend row must be preserved');
  assert.equal(legend.showGradientHint,false,'Do not show redundant leading-margin footer');
  assert.equal(legend.footerHeight,0);
  features.push({id:'other',townId:'town-0'});
- assert.deepEqual(metric([]).captionLines,['总共12个选区'],'Repeated election area must not inflate total');
+ assert.deepEqual(metric([]).captionLines,['总共12县市'],'Repeated electoral unit must not inflate total');
+ townMode=true;
+ assert.deepEqual(metric([]).captionLines,['总共12乡镇市区'],'Nationwide township unit');
+ state.county='台北市';
+ assert.deepEqual(metric([]).captionLines,['总共12区'],'Municipality district unit');
+ state.county='嘉义市';
+ assert.deepEqual(metric([]).captionLines,['总共12区'],'Provincial city district unit');
+ state.county='彰化县';
+ assert.deepEqual(metric([]).captionLines,['总共12乡镇市'],'County township unit');
+ townMode=false;
+ assert.deepEqual(metric([]).captionLines,['总共12县市'],'County mayor map shows county units');
+ state.predictionOffice='council';
+ assert.deepEqual(metric([]).captionLines,['总共12个选区'],'Councillor legend remains unchanged');
  state.fillMode='gradient';
  const manual=metric([]);
  assert.deepEqual(manual.captionLines,['之前的冗长说明'],'Free-map captions must remain untouched');
