@@ -160,5 +160,7 @@ applyView=function(){originalApplyView();if(state.level!=='villages'&&data)reque
 const planMenu=document.querySelector('.header-menu .menu-popover');
 const templateAction=dirText('button','下载预测名单模板');templateAction.onclick=()=>exportPredictionCSV(true);
 const importAction=dirText('button','导入预测表格 CSV');importAction.onclick=()=>$('predictionCsvFile').click();planMenu.append(templateAction,importAction);
-// Close toolbar menus after an action, and never reset user data when switching task or identity.
-for(const menu of document.querySelectorAll('.header-menu'))menu.addEventListener('click',e=>{if(e.target.closest('button,a'))menu.open=false});
+// Close toolbar menus after an action or a click anywhere outside; opening one menu closes the other.
+const headerMenus=[...document.querySelectorAll('.header-menu')];
+for(const menu of headerMenus)menu.addEventListener('click',e=>{if(e.target.closest('button,a'))menu.open=false});
+document.addEventListener('click',e=>{for(const menu of headerMenus)if(menu.open&&!menu.contains(e.target))menu.open=false});
