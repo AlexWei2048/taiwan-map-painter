@@ -76,3 +76,10 @@ dialog.local-dialog{max-width:none}.local-dialog>.prediction-table-wrap{display:
 body{font-size:15px}.sidebar .label,.settings-panel summary,#freeMapTools>summary{font-size:12px}.sidebar select,.sidebar input[type=text],.sidebar input[type=search]{font-size:13px}.section-label h2{font-size:14px}.intro p{font-size:13px}.fill-mode button,.workspace-switch button{font-size:12px}.prediction-step,.sidebar .data-help{font-size:11.5px}.map-version-note,.scope-explanation{font-size:11px}.canvas-info{font-size:12px;line-height:1.5}.canvas-bottom{font-size:11px}.reference-table{font-size:13px}.reference-table thead th{font-size:12px}.reference-heading p,.reference-search{font-size:13px}.candidate-table td{font-size:13px}.candidate-table th{font-size:11px}.prediction-table td,.prediction-table input[type=text]{font-size:13px}.prediction-table th{font-size:12px}.prediction-preview,.local-table{font-size:13px}.fill-mode button,.layer-options button,.menu-popover button{overflow-wrap:anywhere;white-space:normal}
 @media(min-width:1001px){.workspace{grid-template-columns:360px minmax(0,1fr)}}
 @media(max-width:700px){body{font-size:14px}.export-menu .menu-popover{position:fixed;right:10px;top:68px;width:min(330px,calc(100vw - 20px));min-width:0}.canvas-info{font-size:11px}.canvas-bottom{font-size:10px}.sidebar-footer{font-size:10px}}
+
+/* National map scope selection, reliable progress, readable status. */
+#councilViewScopeBox{margin:13px 0 0}#councilViewScopeBox .label{display:block;margin-bottom:7px}
+#predictionProgressBar{display:block;appearance:auto;width:100%;height:12px;margin:8px 0 2px;accent-color:#1f7459;border-radius:12px}
+#predictionProgressText{font-size:12px;line-height:1.55;margin:3px 0 10px;color:#426958}
+#saved{font-size:12px;white-space:nowrap}
+@media(max-width:700px){#predictionProgressText{font-size:12px}#saved{font-size:11px}}
