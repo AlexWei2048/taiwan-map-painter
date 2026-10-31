@@ -29,7 +29,7 @@
   if(loading)return loading;
   loading=(async()=>{
    try{
-    const [resp,metaResp]=await Promise.all([fetch('assets/history-2022.json?v=20261031-national-2022-v1',{cache:'default'}),fetch('assets/history-council-districts-2022.json?v=20261031-districts-v1',{cache:'default'})]);
+    const [resp,metaResp]=await Promise.all([fetch('assets/history-2022.json?v=20261031-national-2022-v1',{cache:'default'}),fetch('assets/history-council-districts-2022.json?v=20261031-districts-v2',{cache:'default'})]);
     if(!resp.ok)throw Error('历史投票数据 HTTP '+resp.status);if(!metaResp.ok)throw Error('2022议员选区资料 HTTP '+metaResp.status);
     const obj=await resp.json(),meta=await metaResp.json();
     if(meta.year!==2022||meta.districtCount!==215||!Array.isArray(meta.rows)||meta.rows.reduce((n,x)=>n+x.seats,0)!==910)throw Error('2022议员选区资料未通过完整性核验');
@@ -220,7 +220,7 @@
    }
    table.append(tbody);wrap.append(table);details.append(wrap);root.append(details)
   }
-  el('districtReferenceSource').textContent='资料来源：中选会111年8月18日中选务字第1113150255号公告及2022年选举结果。官方公告PDF：https://web.cec.gov.tw/api/file/1dc2a749-cd2a-4ce0-a2ba-0a5b8d7c0eab.pdf';
+  const source=el('districtReferenceSource');source.replaceChildren(document.createTextNode('资料来源：中选会111年8月18日中选务字第1113150255号公告及2022年选举结果。'));const officialLink=document.createElement('a');officialLink.href='https://web.cec.gov.tw/api/file/1dc2a749-cd2a-4ce0-a2ba-0a5b8d7c0eab.pdf';officialLink.target='_blank';officialLink.rel='noopener';officialLink.textContent='查看中选会2022选区划分公告';source.append(officialLink);
  }
  function update(){if(!active||!data)return;const result=analyze();showRows(result);paint(result);renderHistoryDistrictReference()}
  function switchMode(){
