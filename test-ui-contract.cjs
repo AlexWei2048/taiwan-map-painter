@@ -20,7 +20,7 @@ test('Map display choices and candidate directory follow the election scope, bef
 });
 
 test('Coastlines are excluded while all actual shared administrative borders remain',()=>{
- const start=app.indexOf('function sharedBoundaryGeometry(features){'),end=app.indexOf('\nconst sharedBorderCache=',start);
+ const start=app.indexOf('function sharedBoundaryGeometry(features,includeCoast=false){'),end=app.indexOf('\nconst EMPTY_SHARED_BORDER_FEATURES=',start);
  assert.ok(start>=0&&end>start);
  const calculate=new Function(app.slice(start,end)+';return sharedBoundaryGeometry')();
  const polygons=[
@@ -37,6 +37,12 @@ test('Coastlines are excluded while all actual shared administrative borders rem
  assert.match(app,/appendSharedBorders\(group,'towns','regional',state.level==='villages'\)/);
  assert.equal(result.byCounty['离岛'],undefined);
  assert.equal(calculate(polygons.slice(0,1)).all,'');
+ const complete=calculate(polygons,true);
+ assert.ok(complete.all.length>result.all.length);
+ assert.ok(complete.byCounty['县甲'].includes('M0,0L1,0'),'selected county restores shoreline');
+ assert.ok(complete.byCounty['离岛'].includes('M4,4L5,4'),'island coastline must be present when selected');
+ assert.match(app,/sharedMapBorders\(level,identity,!!state\.county\)/);
+ assert.match(app,/includeCoast\?'complete':'internal'/);
  assert.equal(calculate([{...polygons[0]}, {...polygons[1],id:'a'}]).all,'');
  assert.match(app,/appendSharedBorders\(districtGroup,state.level/);
  assert.match(app,/appendSharedBorders\(borderGroup,'counties'\)/);
@@ -44,9 +50,42 @@ test('Coastlines are excluded while all actual shared administrative borders rem
  assert.match(app,/\['#regions path','none',0\]/);
  assert.doesNotMatch(app,/for\(const f of countyOutlines\)/);
  assert.match(read('style.css'),/#regions path,#regions path:hover/);
- assert.match(index,/app\.js\?v=20261031-shared-borders-v48/);
+ assert.match(index,/app\.js\?v=20261031-scope-coastline-v49/);
 });
 
+test('Map coastline switches with scope for counties, towns and islands',()=>{
+ const start=app.indexOf('function sharedBoundaryGeometry(features,includeCoast=false){');
+ const end=app.indexOf('\nfunction render(){',start);
+ const src=app.slice(start,end);
+ const features=[
+  {id:'a',name:'甲县',county:'甲县',d:'M0,0L1,0L1,1L0,1Z'},
+  {id:'b',name:'乙县',county:'乙县',d:'M1,0L2,0L2,1L1,1Z'},
+  {id:'island',name:'离岛县',county:'离岛县',d:'M4,4L5,4L5,5L4,5Z'}
+ ];
+ const data={counties:features,towns:features};
+ const state={county:'',villageTown:''};
+ const helper=new Function('data','state','featureElectorate','svgEl',src+';return {sharedMapBorders,appendSharedBorders}')(
+  data,state,()=> 'regional',(tag,attrs)=>({tag,...attrs}));
+ const makeGroup=()=>({children:[],append(item){this.children.push(item)}});
+ let group=makeGroup();
+ helper.appendSharedBorders(group,'counties');
+ assert.equal(group.children.length,1);
+ assert.equal(group.children[0].d,'M1,0L1,1');
+ state.county='甲县';
+ group=makeGroup();helper.appendSharedBorders(group,'counties');
+ assert.equal(group.children.length,1);
+ assert.match(group.children[0].d,/M0,0L1,0/);
+ state.county='离岛县';
+ group=makeGroup();helper.appendSharedBorders(group,'counties');
+ assert.equal(group.children.length,1);
+ assert.match(group.children[0].d,/M4,4L5,4/);
+ state.county='';
+ group=makeGroup();helper.appendSharedBorders(group,'towns');
+ assert.equal(group.children[0].d,'M1,0L1,1');
+ state.county='乙县';
+ group=makeGroup();helper.appendSharedBorders(group,'towns');
+ assert.match(group.children[0].d,/M2,0L2,1/);
+});
 test('All runtime JavaScript parses cleanly',()=>{
  for(const name of ['app.js','town-prediction-ui.js','town-prediction-core.js','workspace-ui.js','prediction-ui.js','prediction-core.js','candidate-directory.js','election-core.js','district-core.js','district-details.js'])assert.doesNotThrow(()=>new Function(read(name)),name);
 });
@@ -88,7 +127,7 @@ test('The map uses lazy electoral and village geometry',()=>{
  assert.match(app,/function ensureMapDetails\(\)/);
  assert.match(app,/assets\/map-council\.json/);
  assert.match(app,/assets\/map-legislative\.json/);
- assert.match(app,/function sharedBoundaryGeometry\(features\)/);
+ assert.match(app,/function sharedBoundaryGeometry\(features,includeCoast=false\)/);
  assert.match(app,/appendSharedBorders\(group,'towns'\)/);
  assert.match(app,/map-villages-/);
 });

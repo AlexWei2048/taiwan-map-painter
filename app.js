@@ -155,9 +155,9 @@ function renderMapFurniture(){const spec=sceneSpec(),t=identityPanelsActive()?id
 
 function regionPath(f){const identity=identityPanelsActive()?' · '+electorateName(featureElectorate(f)):'';const p=svgEl('path',{d:f.d,fill:fillColor(f),stroke:'none','stroke-width':0,'vector-effect':'non-scaling-stroke','fill-rule':'evenodd','data-region':f.id,'data-electorate':featureElectorate(f),tabindex:0,role:'button','aria-label':`${f.county}${f.name===f.county?'':f.name}${identity}，${regionDetail(f)}`});const title=svgEl('title');title.textContent=f.county+(f.name===f.county?'':f.name)+identity;p.append(title);p.addEventListener('click',()=>{if(!moved)paint(f)});p.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();paint(f)}};p.onpointermove=e=>{if(drag)return;const tip=$('tooltip'),r=$('canvas').getBoundingClientRect();tip.replaceChildren();const label=document.createElement('span');label.textContent=f.name;const sub=document.createElement('small');sub.textContent=f.county+(f.town?' · '+f.town:'')+identity+' · '+regionDetail(f);tip.append(label,sub);tip.hidden=false;tip.style.left=Math.min(e.clientX-r.left+15,r.width-165)+'px';tip.style.top=Math.max(45,e.clientY-r.top-48)+'px'};p.onpointerleave=()=>$('tooltip').hidden=true;return p}
 
-// Shared administrative boundaries use the topology of two different regions.
-// Single-owner polygon edges (coastlines and isolated island outlines) are excluded.
-function sharedBoundaryGeometry(features){
+// Nationwide views show shared internal borders only; county views restore
+// complete polygon outlines, including coastal and isolated-island edges.
+function sharedBoundaryGeometry(features,includeCoast=false){
  const edges=new Map();
  const rounded=n=>{const v=Math.round(n*100)/100;return Object.is(v,-0)?0:v};
  const point=(x,y)=>[rounded(x),rounded(y)];
@@ -203,14 +203,14 @@ function sharedBoundaryGeometry(features){
  const all=[],byCounty=Object.create(null),byTown=Object.create(null);
  const write=(arr,a,b)=>{if(arr.last===a)arr.push('L'+b);else arr.push('M'+a+'L'+b);arr.last=b};
  for(const edge of edges.values()){
-  if(!edge.other)continue;
+  if(!edge.other&&!includeCoast)continue;
   write(all,edge.a,edge.b);
-  for(const county of new Set([edge.county,edge.other.county])){
+  for(const county of new Set([edge.county,edge.other?.county])){
    if(!county)continue;
    const arr=byCounty[county]||(byCounty[county]=[]);
    write(arr,edge.a,edge.b);
   }
-  for(const town of new Set([edge.town,edge.other.town])){
+  for(const town of new Set([edge.town,edge.other?.town])){
    if(!town)continue;
    const arr=byTown[town]||(byTown[town]=[]);
    write(arr,edge.a,edge.b);
@@ -220,17 +220,17 @@ function sharedBoundaryGeometry(features){
 }
 const EMPTY_SHARED_BORDER_FEATURES=[];
 const sharedBorderCache=new Map();
-function sharedMapBorders(level,identity='regional'){
+function sharedMapBorders(level,identity='regional',includeCoast=false){
  const regional=data[level]||[],indigenous=['council','legislative'].includes(level)?data[level+'Indigenous']||EMPTY_SHARED_BORDER_FEATURES:null;
- const key=level+':'+identity,prior=sharedBorderCache.get(key);
+ const key=level+':'+identity+':'+(includeCoast?'complete':'internal'),prior=sharedBorderCache.get(key);
  if(prior&&prior.regional===regional&&prior.indigenous===indigenous)return prior.mesh;
  const features=indigenous?.length?[...regional,...indigenous].filter(f=>featureElectorate(f)===identity):regional;
- const mesh=sharedBoundaryGeometry(features);
+ const mesh=sharedBoundaryGeometry(features,includeCoast);
  sharedBorderCache.set(key,{regional,indigenous,mesh});
  return mesh;
 }
 function appendSharedBorders(group,level,identity='regional',filterTown=false){
- const mesh=sharedMapBorders(level,identity);
+ const mesh=sharedMapBorders(level,identity,!!state.county);
  const d=filterTown&&state.villageTown?mesh.byTown[state.villageTown]||'':state.county?mesh.byCounty[state.county]||'':mesh.all;
  if(d)group.append(svgEl('path',{d,fill:'none','vector-effect':'non-scaling-stroke','data-shared-boundary':level}));
 }
