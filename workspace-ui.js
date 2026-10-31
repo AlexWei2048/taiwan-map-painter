@@ -54,7 +54,7 @@ function countyMayorCandidateLegendEntries(){
    for(const id of ids)if(id)shown.set(id,(shown.get(id)||0)+1);
   }
  }
- const unit=townView?(state.county.endsWith('市')?'区':'乡镇市'):'';
+ const unit=townView?'乡镇市区':'';
  return candidates.filter(c=>shown.has(c.id)).map(c=>{
   const party=predictionParty(c.party),count=shown.get(c.id)||0;
   return{
