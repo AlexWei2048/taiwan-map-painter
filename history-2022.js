@@ -129,7 +129,7 @@
   }
   for(const [i,[party,count]]of entries.entries()){
    const py=y+(metric==='share'?153:73)+i*rowH;
-   root.append(svg('rect',{x:x+16,y:py-10,width:font,height:font,rx:3,fill:metric==='share'?tone(partyColor(party),(result.range.min+result.range.max)/2,result.range):partyColor(party)}));
+   for(let step=0;step<(metric==='share'?3:1);step++){const steps=metric==='share'?3:1;const v=result.range.min+(result.range.max-result.range.min)*(step+.5)/steps;root.append(svg('rect',{x:x+16+step*font/steps,y:py-10,width:font/steps+.4,height:font,rx:step===0?2:0,fill:metric==='share'?tone(partyColor(party),v,result.range):partyColor(party)}))}
    const label=svg('text',{x:x+font+26,y:py+2,'font-size':font,fill:'#426052'});label.textContent=party+'（'+count+(kind==='mayor'&&county?'个地区':'席')+'）';root.append(label);
   }
  }
