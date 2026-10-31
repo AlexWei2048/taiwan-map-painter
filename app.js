@@ -396,7 +396,7 @@ function legendMetrics(entries=legendEntries()){
  // Prediction legends show only the count of currently displayed electoral areas.
  // Keep the candidates, party emblems and color-bin labels, but omit explanatory prose.
  const captionText=state.fillMode==='prediction'
-  ?'总共'+new Set(currentItems().map(f=>f.townId||f.sourceId||f.id)).size+'个选区'
+  ?'总共'+new Set(currentItems().map(f=>f.townId||f.sourceId||f.id)).size+(state.predictionOffice==='mayor'&&typeof mayorLegendUnit==='function'?mayorLegendUnit():'个选区')
   :state.legend.caption||'';
  const caption=Array.from(captionText),captionLines=[],captionLimit=Math.max(5,Math.floor((width-36)/(font*.8)));for(let i=0;i<caption.length;i+=captionLimit)captionLines.push(caption.slice(i,i+captionLimit).join(''));
  const headerHeight=Math.max(48,titleLines.length*(font+1)*1.3+22)+captionLines.length*font*1.25;
