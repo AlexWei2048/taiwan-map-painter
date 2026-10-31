@@ -36,7 +36,7 @@
     districtMetadata=meta.rows;
     if(obj.year!==2022||!Array.isArray(obj.rows)||obj.rows.length<8000)throw Error('历史快照内容不完整');
     const count=addRows(obj.rows);loaded=true;
-    el('historyStatus').textContent='已载入2022历史选举数据：'+obj.files+'份来源CSV，'+count.toLocaleString('zh-CN')+'条得票记录；议员选区215个、应选910席。';
+    const genderRows=obj.rows.filter(x=>x.gender).length;el('historyStatus').textContent='已载入2022历史选举数据：'+obj.files+'份来源CSV，'+count.toLocaleString('zh-CN')+'条得票记录；议员选区215个、应选910席。'+(genderRows?'候选人性别字段已载入。':'当前历史快照未收录性别字段，候选人表格以“—”表示。');
     return true
    }catch(error){
     el('historyStatus').textContent='历史数据自动载入失败（'+error.message+'）。可从资料来源页面下载CSV后手动导入。';return false
