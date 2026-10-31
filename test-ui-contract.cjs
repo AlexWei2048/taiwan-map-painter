@@ -2,6 +2,22 @@
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs');
 const read=p=>fs.readFileSync(p,'utf8');
 const app=read('app.js'),town=read('town-prediction-ui.js'),workspace=read('workspace-ui.js'),index=read('index.html');
+test('Map display choices and candidate directory follow the election scope, before editing',()=>{
+ const sectionStart=index.indexOf('<section class="panel" id="mapSettings">'),sectionEnd=index.indexOf('</section>',sectionStart);
+ const scope=index.slice(sectionStart,sectionEnd),editor=index.slice(sectionEnd,index.indexOf('id="manualBrushTools"'));
+ assert.ok(sectionStart>=0&&sectionEnd>sectionStart);
+ for(const id of ['scopeDisplayTools','predictionDisplayBox','predictionDisplay','localCandidateControl','localForecastHelp','allCandidates']){
+  assert.equal((index.match(new RegExp('id="'+id+'"','g'))||[]).length,1,id+' duplicated');
+  assert.ok(scope.includes('id="'+id+'"'),id+' must be in election scope');
+ }
+ assert.ok(scope.indexOf('id="predictionDisplayBox"')>scope.indexOf('id="county"'));
+ assert.ok(scope.indexOf('id="allCandidates"')>scope.indexOf('id="predictionDisplayBox"'));
+ assert.doesNotMatch(editor,/id="predictionDisplayBox"/);
+ assert.match(workspace,/\$\('scopeDisplayTools'\)\.hidden=!task\|\|manual/);
+ assert.match(workspace,/\$\('directoryCounty'\)\.value=state\.county\|\|''/);
+ assert.match(workspace,/allCandidates\.onclick=\(\)=>openDirectory\(true\)/);
+ assert.match(read('style.css'),/#scopeDisplayTools \.display-settings/);
+});
 test('All runtime JavaScript parses cleanly',()=>{
  for(const name of ['app.js','town-prediction-ui.js','town-prediction-core.js','workspace-ui.js','prediction-ui.js','prediction-core.js','candidate-directory.js','election-core.js','district-core.js','district-details.js'])assert.doesNotThrow(()=>new Function(read(name)),name);
 });

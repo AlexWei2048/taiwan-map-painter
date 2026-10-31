@@ -113,3 +113,9 @@ body.history-mode #workspaceFree,body.history-mode #workspacePrediction{opacity:
 
 /* 2022 historical tables share the 2026 reference-table visual language. */
 .history-table-wrap{max-height:430px;overflow:auto;border:1px solid #dce6dd;border-radius:9px;background:#fff}.history-candidate-table{width:100%;border-collapse:separate;border-spacing:0;font-size:11px;white-space:nowrap}.history-candidate-table th{position:sticky;top:0;z-index:1;background:#f1f6f1;color:#496355;font-weight:650;text-align:center;padding:9px 8px;border-bottom:1px solid #dce6dd}.history-candidate-table td{padding:8px;border-bottom:1px solid #edf1ed;text-align:center;color:#425c4e}.history-candidate-table tbody tr:hover{background:#f7faf7}.history-candidate-table td:nth-child(4){font-weight:650;text-align:left}.history-party-cell{display:flex;align-items:center;justify-content:center;gap:6px}.history-party-cell img{width:17px;height:17px;object-fit:contain}.history-number{font-variant-numeric:tabular-nums}.history-winner{color:#147b60!important;font-weight:700}.history-loser{color:#829087}.history-map-match{color:#16805f;font-weight:650}.history-map-mismatch{color:#a36b27;font-weight:650}
+
+/* Map presentation belongs to election and range selection, not data entry. */
+#scopeDisplayTools{border-top:1px solid #dce6db;margin-top:18px;padding-top:14px}
+#scopeDisplayTools .display-settings{border-top:0;margin:0;padding:0}
+#scopeDisplayTools .scope-display-note{margin:10px 0 8px;line-height:1.7}
+#scopeDisplayTools #allCandidates{width:100%;margin:10px 0 0}
