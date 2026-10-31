@@ -98,3 +98,15 @@ body{font-size:15px}.sidebar .label,.settings-panel summary,#freeMapTools>summar
 /* Historical results are read-only: hide prediction painting and clearing tools. */
 body.history-mode #predictionPanel,body.history-mode .regions-panel,body.history-mode .project-actions{display:none!important}
 body.history-mode #workspaceFree,body.history-mode #workspacePrediction{opacity:.8}
+
+/* Group election tools by future predictions and historical results. */
+.workspace-categories{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;background:#eaf0ea;border:1px solid #dce8df;border-radius:11px;margin:17px 0 9px}
+.workspace-categories button{min-height:43px;border:0;border-radius:8px;background:transparent;color:#587064;font-size:14px;font-weight:650;cursor:pointer}
+.workspace-categories button.active{background:#216b54;color:#fff;box-shadow:0 2px 6px #244a3e22}
+.workspace-categories button:focus-visible{outline:3px solid #7fc9b4;outline-offset:2px}
+#futureModes,#historyModes{display:flex;gap:7px;padding:6px;background:#f4f7f3;border-radius:10px;margin-bottom:16px}
+#futureModes[hidden],#historyModes[hidden]{display:none!important}
+#futureModes button,#historyModes button{flex:1 1 0;min-height:40px;font-size:12px;font-weight:600;border:1px solid transparent;border-radius:8px;background:transparent;color:#476453}
+#futureModes button.active,#historyModes button.active{color:#16664e;background:#fff;border-color:#c9dfd1;box-shadow:0 1px 4px #284e3920}
+#historyModes #workspaceHistory{margin:0;width:100%;flex:1;background:transparent;border:1px solid transparent;color:#476453}
+#historyModes #workspaceHistory.active{background:#fff;color:#16664e;border-color:#c9dfd1}
