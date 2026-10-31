@@ -498,6 +498,40 @@ test('Existing party logos are displayed as circles in every HTML view',()=>{
  assert.match(app,/p\.logo=await readLogo\(file\.files\[0\]\)/);
  assert.match(app,/customLogo=await readLogo\(e\.target\.files\[0\]\)/);
 });
+test('Nationwide township maps always label only counties regardless of zoom or SVG export',()=>{
+ const start=app.indexOf('function drawLabels(group,items,t,font=15,interactive=false){');
+ const end=app.indexOf('\nfunction drawIdentityPanelLabels(',start);
+ assert.ok(start>=0&&end>start,'Shared map label renderer must be found');
+ const towns=[{id:'town-1',name:'中正区'},{id:'town-2',name:'大安区'}];
+ const counties=[{id:'county-1',name:'台北市'},{id:'county-2',name:'新北市'}];
+ const state={level:'towns',county:'',districtLeaders:true};
+ const data={counties};let passedItems,passedFont,rendered=[];
+ const el=(tag,attrs)=>({tag,attrs:attrs||{},children:[],style:{},append(...nodes){this.children.push(...nodes)}});
+ const layout=(items,t,font)=>{passedItems=items;passedFont=font;
+  return items.map(f=>({f,x:12,y:25,ax:10,ay:23,out:true,side:'left',elbow:8,font}))};
+ const draw=new Function('state','data','labelLayout','shownLabel','svgEl','isNationwide','paint',
+  app.slice(start,end)+';return drawLabels')(state,data,layout,f=>f.name,el,()=>true,()=>{});
+ const group=()=>({children:[],replaceChildren(){this.children=[]},append(node){this.children.push(node)}});
+ let g=group();draw(g,towns,{},12,true);
+ assert.deepEqual(passedItems,counties,'Zoomed-in town geography must use county labels');
+ assert.equal(passedFont,19,'Use prominent, consistent county label size');
+ assert.deepEqual(g.children.map(x=>x.children.map(child=>child.tag)),[['text'],['text']],
+  'No township leader lines or dots may remain');
+ assert.deepEqual(g.children.map(x=>x.children[0].textContent),['台北市','新北市']);
+ assert.deepEqual(g.children.map(x=>x.children[0].attrs['data-label']),['county-1','county-2']);
+ // Export path also calls drawLabels directly, so it must use the same rule.
+ g=group();draw(g,towns,{},10,false);
+ assert.deepEqual(g.children.map(x=>x.children[0].textContent),['台北市','新北市']);
+ assert.match(app,/drawLabels\(g,currentItems\(\),geometryLayout\(currentItems\(\),true\),sceneSpec\(\)\.font,false\)/);
+ // Selecting a county restores township names and their normal leader behavior.
+ state.county='台北市';g=group();draw(g,towns,{},12,true);
+ assert.deepEqual(passedItems,towns);
+ assert.deepEqual(g.children.map(x=>x.children.at(-1).textContent),['中正区','大安区']);
+ assert.deepEqual(g.children[0].children.map(c=>c.tag),['path','circle','text']);
+ // This condition must not affect any other map level.
+ state.county='';state.level='counties';g=group();draw(g,towns,{},12,true);
+ assert.deepEqual(passedItems,towns);
+});
 function isolatedExportGuard(env){
  const start=app.indexOf('async function ensureExportMapReady(){');
  const end=app.indexOf('const mapPromise=',start);
