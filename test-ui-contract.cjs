@@ -333,6 +333,32 @@ test('Highest-vote gradient uses leading margin not the winner own percentage',(
  assert.equal(townSingle.status,'winner');assert.equal(townSingle.value,0);
  assert.equal(townSingle.marginShare,null);
 });
+test('Prediction legend contains only the displayed election-district count',()=>{
+ const start=app.indexOf('function legendMetrics(entries=legendEntries()){');
+ const end=app.indexOf('\nfunction legendBox(spec)',start);
+ assert.ok(start>=0&&end>start);
+ const maker=new Function('state','isNationwide','counts','predictionUsesVoteDisplay',
+  'predictionUsesGradient','predictionMarginMode','currentItems','predictionMapResult',
+  'predictionDisplayResult','predictionDistrictFor','regionResult',
+  app.slice(start,end)+';return legendMetrics');
+ const features=Array.from({length:12},(_,i)=>({id:'region-'+i,townId:'town-'+i}));
+ const state={legend:{fontSize:12,caption:'之前的冗长说明'},fillMode:'prediction',predictionOffice:'mayor'};
+ const metric=maker(state,()=>false,()=>({}),()=>true,()=>true,()=>true,
+  ()=>features,()=>({status:'winner'}),()=>null,()=>null,()=>null);
+ const legend=metric([{id:'a',name:'候选人甲',legendSuffix:'（3乡镇市区）',color:'#008000'}]);
+ assert.deepEqual(legend.captionLines,['总共12个选区']);
+ assert.equal(legend.rows.length,1,'Candidate legend row must be preserved');
+ assert.equal(legend.showGradientHint,false,'Do not show redundant leading-margin footer');
+ assert.equal(legend.footerHeight,0);
+ features.push({id:'other',townId:'town-0'});
+ assert.deepEqual(metric([]).captionLines,['总共12个选区'],'Repeated election area must not inflate total');
+ state.fillMode='gradient';
+ const manual=metric([]);
+ assert.deepEqual(manual.captionLines,['之前的冗长说明'],'Free-map captions must remain untouched');
+ assert.equal(manual.showGradientHint,true,'Free-map gradient note must remain');
+ assert.match(app,/if\(m\.showGradientHint\)\{const t=svgEl\('text'/);
+ assert.match(app,/data-margin-band/,'Leading-margin color keys must remain');
+});
 test('Fixed reference-style margin classes use narrow competitive ranges',()=>{
  const c=require('./election-core.js');
  const ranges=[0,.9,1,1.001,5,5.001,10,10.001,15,15.001,20,20.001,25,25.001,29.99,30,30.001,60,100];
