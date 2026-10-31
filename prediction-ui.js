@@ -12,7 +12,7 @@ function predictionRegionDetail(f){
  const d=predictionDistrictFor(f);if(!d)return'此地图没有对应的2026预测选区';
  if(predictionUsesVoteDisplay()){
   const r=predictionDisplayResult(d);
-  return r?(state.predictionDisplay==='partyTop'?r.party:candidateDisplayName(r.candidate)+' · '+r.party)+' · '+predictionMetricLabel(r)+(r.partial?' · 仅根据已填写候选人':''):'尚未录入可比较的得票数据，或最高票并列';
+  return r?(state.predictionDisplay==='partyTop'?r.party:candidateDisplayName(r.candidate)+' · '+r.party)+' · '+predictionMetricLabel(r)+(predictionMarginMode()?' · '+predictionMarginLabel(r):r.partial?' · 仅根据已填写候选人':''):'尚未录入可比较的得票数据，或最高票并列';
  }
  const s=predictionSummary(d);return s.message+(s.parties.length?' · '+s.parties.map(p=>p.name+p.seats+'席').join('、'):'')
 }
