@@ -4,17 +4,39 @@ normalizeStaticUiTerms();
 // Task context is independent from the chosen map display. Candidate estimates remain the single prediction data source.
 function predictionUsesVoteDisplay(){return !['composition','seats'].includes(state.predictionDisplay)}
 function predictionUsesGradient(){return ['topVote','partyTop','candidateVote','share','votes','partyShare','partyVotes','winnerShare','winnerVotes'].includes(state.predictionDisplay)}
+function predictionMarginMode(){return ['topVote','partyTop'].includes(state.predictionDisplay)}
+function predictionMarginLabel(result){
+ if(result?.marginShare===null||result?.marginShare===undefined)return '领先差距待补（尚缺次高票数据）';
+ const gap=Number(result.marginShare.toFixed(2))+' 个百分点';
+ return '领先差距 '+(result.marginVotes!==null&&result.marginVotes!==undefined?result.marginVotes.toLocaleString('zh-CN')+' 票 / ':'')+gap+(result.partial?'（仅按已填写候选人计算）':'');
+}
+function predictionMarginAutoMax(values){
+ const observed=values.filter(v=>Number.isFinite(v)&&v>=0);
+ const peak=observed.length?Math.max(...observed):0;
+ return Math.min(100,Math.max(5,Math.ceil(peak*1.25/5)*5));
+}
 function predictionIsVotes(){return ['votes','partyVotes','winnerVotes'].includes(state.predictionDisplay)}
 function predictionDisplayResult(d){
  if(!d)return null;
  try{
   const cs=directoryCandidates(d),record=state.predictions[d.id];
-  return state.predictionDisplay==='candidateVote'
+  const result=state.predictionDisplay==='candidateVote'
    ?PredictionCore.candidateVoteResult(cs,record,state.localDisplayCandidate)
-   :PredictionCore.voteResult(cs,record,state.predictionDisplay==='partyTop')
+   :PredictionCore.voteResult(cs,record,state.predictionDisplay==='partyTop');
+  return result&&predictionMarginMode()?{...result,value:result.marginShare??0}:result
  }catch(e){return null}
 }
-function predictionDomain(){const min=Number(state.gradient.min)||0,auto=predictionIsVotes()?Math.max(1,...currentItems().map(f=>predictionDisplayResult(predictionDistrictFor(f))?.value||0)):100;return{min,max:state.gradient.max===null?Math.max(min+1,auto):state.gradient.max}}
+function predictionDomain(){
+ const min=Number(state.gradient.min)||0;
+ if(predictionMarginMode()){
+  const gaps=currentItems().map(f=>predictionDisplayResult(predictionDistrictFor(f))?.marginShare).filter(v=>v!==null&&v!==undefined);
+  const auto=predictionMarginAutoMax(gaps);
+  const max=state.gradient.marginManual===true&&state.gradient.max!==null?state.gradient.max:auto;
+  return{min,max:Math.max(min+.01,max)};
+ }
+ const auto=predictionIsVotes()?Math.max(1,...currentItems().map(f=>predictionDisplayResult(predictionDistrictFor(f))?.value||0)):100;
+ return{min,max:state.gradient.max===null?Math.max(min+1,auto):state.gradient.max};
+}
 // The county list includes all three identities; only the geographic layer is filtered by identity.
 predictionDistricts=function(){return orderedDistricts().filter(d=>d.type===state.predictionOffice&&(!state.county||d.county===state.county))};
 predictionFill=function(f){const d=predictionDistrictFor(f);if(!d)return'#edf1e9';if(predictionUsesVoteDisplay()){const lead=predictionDisplayResult(d);if(!lead)return'#edf1e9';const p=predictionParty(lead.party),domain=predictionDomain();return predictionUsesGradient()?ElectionCore.shade(p.color,lead.value,domain.min,domain.max):p.color}const result=predictionSummary(d);if(result.status!=='complete')return'#edf1e9';if(state.predictionDisplay==='seats')return result.leadingParties.length===1?predictionParty(result.leadingParties[0].name).color:'#aebdb4';return result.parties.length===1?predictionParty(result.parties[0].name).color:`url(#${predictionPatternId(d)})`};
@@ -33,7 +55,11 @@ function predictionMetricLabel(record){
  const rate=record.share==null?'':Number(Number(record.share).toFixed(2))+'%';
  return record.votes!==null&&record.votes!==undefined?record.votes.toLocaleString('zh-CN')+' 票'+(rate?' · '+rate:''):rate;
 }
-predictionLegendCaption=function(){const names=Object.fromEntries(displayOptions()),selected=state.predictionDisplay==='candidateVote'?candidateById.get(state.localDisplayCandidate):null;return(state.predictionDisplay==='composition'?(state.predictionOffice==='council'?'色块宽度表示预测席次占比':'使用者选择的当选人所属政党'):names[state.predictionDisplay]||'最高票者所属政党')+(selected?'：'+candidateDisplayName(selected):'')+(predictionUsesGradient()?'；深浅表示数值，非当选概率':'')};
+predictionLegendCaption=function(){
+ const names=Object.fromEntries(displayOptions()),selected=state.predictionDisplay==='candidateVote'?candidateById.get(state.localDisplayCandidate):null;
+ const label=state.predictionDisplay==='composition'?(state.predictionOffice==='council'?'色块宽度表示预测席次占比':'使用者选择的当选人所属政党'):names[state.predictionDisplay]||'最高票者所属政党';
+ return label+(selected?'：'+candidateDisplayName(selected):'')+(predictionMarginMode()?'；领先差距（百分点）：第一名减第二名，深色差距大；非当选概率':predictionUsesGradient()?'；深浅表示得票率，非当选概率':'');
+};
 function countyMayorCandidateLegendEntries(){
  const districts=candidateDatabase.districts.filter(d=>d.type==='mayor'&&d.county===state.county);
  const candidates=[],seen=new Set(),shown=new Map();
@@ -155,7 +181,7 @@ function syncWorkspace(){
  $('predictionPanel').querySelector('h2').textContent=task?'填写预测':'地图上色';$('mapSettings').querySelector('h2').textContent=task?'选举与范围':'地图与范围';
  $('predictionScopeLabel').textContent=task?'2026 用户预测':'自由填色 · 自行录入数据';
  $('predictionGradientRange').hidden=!(task&&state.fillMode==='prediction'&&predictionUsesGradient());
- if(task&&predictionUsesGradient()){$('predictionRangeMin').value=state.gradient.min;$('predictionRangeMax').value=state.gradient.max??(predictionIsVotes()?'':100);$('predictionRangeUnit').textContent=predictionIsVotes()?'票':'%'}
+ if(task&&predictionUsesGradient()){$('predictionRangeMin').value=state.gradient.min;$('predictionRangeMax').value=predictionMarginMode()?(state.gradient.marginManual===true?state.gradient.max:''):state.gradient.max??(predictionIsVotes()?'':100);$('predictionRangeMax').placeholder=predictionMarginMode()?'自动（领先差距）':predictionIsVotes()?'票数自动':'100';$('predictionRangeUnit').textContent=predictionMarginMode()?'百分点':predictionIsVotes()?'票':'%'}
  $('openElectionDirectory').textContent='查看所选区候选人';
  syncingWorkspace=false;
 }
@@ -185,7 +211,7 @@ $('predictionOffice').onchange=()=>enterPrediction($('predictionOffice').value);
 $('onlyIncomplete').onchange=()=>syncPredictionControls();$('predictionRegion').onchange=()=>{const d=directoryDistrictById.get($('predictionRegion').value);if(d)openPredictionDistrict(d)};
 $('showPredictionEstimates').onchange=()=>{
  const numeric=$('showPredictionEstimates').checked;
- pushHistory();state.predictionDisplay=numeric?'topVote':'composition';state.gradient.min=0;state.gradient.max=numeric?100:null;
+ pushHistory();state.predictionDisplay=numeric?'topVote':'composition';state.gradient.min=0;state.gradient.max=numeric?null:null;state.gradient.marginManual=false;
  applyEstimateVisibility();renderPredictionRows();render();persist()
 };$('closePrediction').onclick=()=>$('predictionDialog').close();
 $('headerExportPredictions').onclick=()=>exportPredictionCSV(false);$('districtTableSearch').oninput=()=>renderDistrictTable();
@@ -193,8 +219,8 @@ $('councilViewScope').onchange=()=>{state.councilViewScope=$('councilViewScope')
 $('downloadDistrictTable').onclick=()=>{const rows=[['县市','选区','类别','包含区域或选民范围','应选名额','妇保名额','妇保说明'],...districtTableRows().map(d=>[d.county,d.name,DistrictCore.identityName(d),mainlandTerms(d.scope),d.seats,d.womenReservedLabel,mainlandTerms(d.womenReservedNote)])];download(new Blob(['\uFEFF'+rows.map(r=>r.map(csvCell).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}),(state.county||'全台')+(state.level==='council'?'议员':'立法机构民代')+'选区范围与名额.csv')};
 // Keep legacy standalone data available without presenting a second prediction-data store.
 const range=document.createElement('div');range.id='predictionGradientRange';range.innerHTML='<p class="data-help">颜色表示政党，深浅表示数值；不代表当选概率。</p><div class="gradient-range"><label>下限<input id="predictionRangeMin" aria-label="预测着色下限" inputmode="decimal"></label><label>上限<input id="predictionRangeMax" aria-label="预测着色上限" inputmode="decimal" placeholder="票数自动"></label><span id="predictionRangeUnit">%</span></div><button id="applyPredictionRange" class="small-action">应用着色范围</button>';$('predictionDisplayBox').append(range);
-$('applyPredictionRange').onclick=()=>{const min=Number($('predictionRangeMin').value||0),raw=$('predictionRangeMax').value,max=raw===''?(predictionIsVotes()?null:100):Number(raw);if(!Number.isFinite(min)||min<0||max!==null&&(!Number.isFinite(max)||max<=min)||!predictionIsVotes()&&(min>=100||max>100))return toast('请填写有效范围；得票率须在0—100%之间');pushHistory();state.gradient.min=min;state.gradient.max=max;render();persist()};
-$('predictionDisplay').onchange=()=>{pushHistory();state.predictionDisplay=$('predictionDisplay').value;state.gradient.min=0;state.gradient.max=predictionUsesGradient()?100:null;render();persist()};
+$('applyPredictionRange').onclick=()=>{const min=Number($('predictionRangeMin').value||0),raw=$('predictionRangeMax').value,max=raw===''?(predictionMarginMode()||predictionIsVotes()?null:100):Number(raw);if(!Number.isFinite(min)||min<0||max!==null&&(!Number.isFinite(max)||max<=min)||!predictionIsVotes()&&(min>=100||max>100))return toast('请填写有效范围；得票率须在0—100%之间');pushHistory();state.gradient.min=min;state.gradient.max=max;state.gradient.marginManual=predictionMarginMode()&&max!==null;render();persist()};
+$('predictionDisplay').onchange=()=>{pushHistory();state.predictionDisplay=$('predictionDisplay').value;state.gradient.min=0;state.gradient.max=predictionMarginMode()?null:predictionUsesGradient()?100:null;state.gradient.marginManual=false;render();persist()};
 // Map and directory can both lead into the same candidate drawer.
 const scopeLabel=dirText('span','','eyebrow');scopeLabel.id='predictionScopeLabel';document.querySelector('.map-topbar .eyebrow').replaceWith(scopeLabel);
 const allCandidates=dirText('button','查看全部候选人','full-action');allCandidates.id='allCandidates';allCandidates.onclick=()=>openDirectory(true);$('predictionControls').append(allCandidates);
