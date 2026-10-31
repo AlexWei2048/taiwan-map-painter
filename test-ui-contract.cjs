@@ -582,57 +582,71 @@ test('Existing party logos are displayed as circles in every HTML view',()=>{
  assert.match(app,/p\.logo=await readLogo\(file\.files\[0\]\)/);
  assert.match(app,/customLogo=await readLogo\(e\.target\.files\[0\]\)/);
 });
-test('All region and district names use the same font and geographic center without leaders',()=>{
- const a=app.indexOf('const MAP_LABEL_FONT_SIZE=12;');
- const b=app.indexOf('\nfunction drawIdentityPanelLabels(',a);
- assert.ok(a>=0&&b>a);
- const source=app.slice(a,b);
- const features=[{id:'x',name:'短名称',box:[0,0,20,20],center:[10,10],labelAnchor:[5,5]},
-  {id:'y',name:'更长的区域名称',box:[0,0,10,20],center:[5,10],labelAnchor:[2,3]}];
- const data={counties:features};
- const state={level:'counties',county:''};
- const el=(tag,attrs)=>({tag,attrs:attrs||{},children:[],style:{},append(...nodes){this.children.push(...nodes)}});
- const renderer=new Function('state','data','shownLabel','regionContains','svgEl','paint',source+';return {labelLayout,drawLabels}')(
-  state,data,f=>f.name,(f,x,y)=>x>=f.box[0]&&x<=f.box[2]&&y>=f.box[1]&&y<=f.box[3],el,()=>{});
- const t={scale:1,tx:0,ty:0};
- const placements=renderer.labelLayout(features,t,99);
- assert.deepEqual(placements.map(p=>[p.x,p.y]),[[10,10],[5,10]]);
- assert.deepEqual(placements.map(p=>p.font),[99,99]);
+test('Smart labels prioritize counties nationwide, then local districts on zoom',()=>{
+ const start=app.indexOf('const MAP_LABEL_FONT_SIZE=12;'),end=app.indexOf('\nfunction drawIdentityPanelLabels(',start);
+ const source=app.slice(start,end);
+ const county={id:'C',name:'甲县',center:[10,10],box:[0,0,20,20]};
+ const town={id:'T',name:'乙乡',center:[3,3],box:[0,0,10,10]};
+ const data={counties:[county],towns:[town]};
+ const state={labelMode:'smart',labels:true,county:'',level:'towns'};
+ const viewport={x:0,y:0,w:100,h:100};
+ const baseView={w:100};
+ const el=(tag,attrs)=>({tag,attrs:attrs||{},children:[],style:{},append(v){this.children.push(v)}});
+ const helper=new Function('state','data','baseView','view','sceneSpec','shownLabel','regionContains','svgEl','paint',
+   source+';return {drawLabels,labelCandidatesForMap,mapLabelFont,selectSmartMapLabels}')(
+   state,data,baseView,viewport,()=>({width:100}),f=>f.name,()=>true,el,()=>{});
+ assert.deepEqual(helper.labelCandidatesForMap([town]),[county]);
  const group={children:[],replaceChildren(){this.children=[]},append(x){this.children.push(x)}};
- renderer.drawLabels(group,features,t,22,true);
- const labels=group.children.map(g=>g.children[0]);
- assert.deepEqual(labels.map(x=>x.attrs['font-size']),[12,12]);
- assert.deepEqual(labels.map(x=>[x.attrs.x,x.attrs.y]),[[10,10],[5,10]]);
- assert.deepEqual(labels.map(x=>x.attrs['data-placement']),['inside','inside']);
- assert.deepEqual(group.children.map(g=>g.children.map(x=>x.tag)),[['text'],['text']]);
- assert.equal(labels[1].children.length,2,'long text may wrap but never changes font');
- state.level='towns';renderer.drawLabels(group,[],t,30,false);
+ helper.drawLabels(group,[town],{scale:1,tx:0,ty:0});
+ assert.deepEqual(group.children.map(x=>x.children[0].textContent),['甲县']);
+ state.county='甲县';helper.drawLabels(group,[town],{scale:1,tx:0,ty:0});
+ assert.deepEqual(group.children.map(x=>x.children[0].textContent),['乙乡']);
+ state.labelMode='all';state.county='';helper.drawLabels(group,[town],{scale:1,tx:0,ty:0});
+ assert.deepEqual(group.children.map(x=>x.children[0].textContent),['乙乡']);
+ state.labelMode='hide';helper.drawLabels(group,[town],{scale:1,tx:0,ty:0});
+ assert.equal(group.children.length,0);
+});
+test('Smart labels remove collisions while All retains labels and all fonts match',()=>{
+ const source=app.slice(app.indexOf('const MAP_LABEL_FONT_SIZE=12;'),app.indexOf('\nfunction drawIdentityPanelLabels('));
+ const feature=(id,name,box,center)=>({id,name,box,center});
+ const f1=feature('a','大区域',[0,0,20,20],[10,10]);
+ const f2=feature('b','小区域',[8,8,12,12],[10,10]);
+ const data={counties:[]},state={level:'towns',county:'甲县',labels:true,labelMode:'smart'};
+ const v={x:0,y:0,w:100,h:100};
+ const el=(tag,attrs)=>({tag,attrs:attrs||{},children:[],style:{},append(x){this.children.push(x)}});
+ const funcs=new Function('state','data','baseView','view','sceneSpec','shownLabel','regionContains','svgEl','paint',
+  source+';return {drawLabels,selectSmartMapLabels,mapLabelFont}')(
+  state,data,{w:100},v,()=>({width:100}),f=>f.name,()=>true,el,()=>{});
+ const group={children:[],replaceChildren(){this.children=[]},append(x){this.children.push(x)}};
+ funcs.drawLabels(group,[f1,f2],{scale:1,tx:0,ty:0});
+ assert.equal(group.children.length,1);
+ assert.equal(group.children[0].children[0].textContent,'大区域');
+ state.labelMode='all';funcs.drawLabels(group,[f1,f2],{scale:1,tx:0,ty:0});
+ assert.equal(group.children.length,2);
  assert.deepEqual(group.children.map(g=>g.children[0].attrs['font-size']),[12,12]);
- assert.deepEqual(group.children.map(g=>g.children[0].attrs.x),[10,5]);
- assert.doesNotMatch(source,/outside\.push|forcedOutside|Math\.min\(minFont|for\(let size=font/);
- assert.match(app,/drawLabels\(g,currentItems\(\),geometryLayout\(currentItems\(\),true\),sceneSpec\(\)\.font,false\)/);
+ assert.deepEqual(group.children.map(g=>g.children[0].attrs['data-placement']),['inside','inside']);
+ assert.doesNotMatch(source,/outside\.push|forcedOutside|svgEl\('path'/);
 });
-test('Irregular regions fall back to their interior label anchor near the center',()=>{
- const start=app.indexOf('const MAP_LABEL_FONT_SIZE=12;');
- const end=app.indexOf('\nfunction drawIdentityPanelLabels(',start);
- const helpers=new Function('shownLabel','regionContains',app.slice(start,end)+';return {regionLabelCenter,labelLayout}')(
-  f=>f.name,(f,x,y)=>x>=20&&x<=35&&y>=20&&y<=35);
+test('Irregular region labels use their interior anchor near the geographic center',()=>{
+ const source=app.slice(app.indexOf('const MAP_LABEL_FONT_SIZE=12;'),app.indexOf('\nfunction drawIdentityPanelLabels('));
+ const fn=new Function('regionContains',source+';return regionLabelCenter')((f,x,y)=>x>=20&&x<=35&&y>=20&&y<=35);
  const f={id:'inlet',name:'不规则区',center:[15,15],labelAnchor:[28,28],box:[10,10,40,40]};
- assert.deepEqual(helpers.regionLabelCenter(f,{scale:1,tx:0,ty:0}),{x:28,y:28});
- assert.deepEqual(helpers.labelLayout([f],{scale:1,tx:0,ty:0}).map(x=>[x.x,x.y,x.font]),[[28,28,12]]);
+ assert.deepEqual(fn(f,{scale:1,tx:0,ty:0}),{x:28,y:28});
 });
-test('Village labels also use the fixed font and geographic centers',()=>{
+test('Village names and all exports use the same smart label modes',()=>{
  const start=app.indexOf('function drawVillageLabels(group,items,t,v,interactive=false){');
  const end=app.indexOf('\nfunction moveParty(',start);
- assert.ok(start>=0&&end>start);
  const source=app.slice(start,end);
- assert.match(source,/const font=MAP_LABEL_FONT_SIZE/);
- assert.match(source,/const center=regionLabelCenter\(f,t\)/);
- assert.doesNotMatch(source,/v\.w\/pixelWidth\*\d+/);
- assert.match(source,/'font-size':font/);
- assert.match(index,/app\.js\?v=20261031-labels-centered-v52/);
+ assert.match(source,/if\(state.labelMode==='all'\)return drawLabels/);
+ assert.match(source,/labelCandidatesForMap\(items\)/);
+ assert.match(source,/drawLabels\(group,visible,t,MAP_LABEL_FONT_SIZE,interactive\)/);
+ assert.match(app,/drawLabels\(g,currentItems\(\),geometryLayout\(currentItems\(\),true\),sceneSpec\(\)\.font,false\)/);
+ assert.match(index,/id="labelMode"/);
+ assert.match(index,/app\.js\?v=20261031-smart-labels-v53/);
+ assert.match(read('workspace-ui.js'),/All maps share the zoom-aware label renderer/);
+ assert.match(app,/out.labelMode=\['smart','all','hide'\]/);
+ assert.match(app,/state.labelMode=\$\('labelMode'\)\.value/);
 });
-
 test('Map fetch retries bypass corrupt caches and report persistent network errors',async()=>{
  const start=app.indexOf('async function fetchMapJson(url,label,attempts=3){');
  const end=app.indexOf('// Load only the map layers',start);

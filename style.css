@@ -122,3 +122,7 @@ body.history-mode #workspaceFree,body.history-mode #workspacePrediction{opacity:
 
 /* Land fills have no polygon-outline stroke: only shared inland borders are drawn. */
 #regions path,#regions path:hover,#regions path:focus,.atlas-card path[role=button]:hover{stroke:none!important;stroke-width:0!important}
+
+/* Compact three-mode map name display. */
+.map-label-mode{margin:8px 0 12px}.map-label-mode select{width:100%;max-width:100%}
+.map-label-mode .data-help{margin:8px 0 0;line-height:1.55}
