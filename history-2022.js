@@ -25,7 +25,7 @@
     const obj=await resp.json();
     if(obj.year!==2022||!Array.isArray(obj.rows)||obj.rows.length<8000)throw Error('历史快照内容不完整');
     const count=addRows(obj.rows);loaded=true;
-    el('historyStatus').textContent='已载入全国2022历史选举数据：'+obj.files+'份官方来源CSV，'+count.toLocaleString('zh-CN')+'条汇总记录。';
+    el('historyStatus').textContent='已载入全台2022历史选举数据：'+obj.files+'份官方来源CSV，'+count.toLocaleString('zh-CN')+'条汇总记录。';
     return true
    }catch(error){
     el('historyStatus').textContent='历史数据自动载入失败（'+error.message+'）。可从资料来源页面下载CSV后手动导入。';return false
@@ -181,7 +181,7 @@
   for(const file of el('historyFiles').files)try{count+=importCsv(await file.text(),file.name)}catch(error){errors.push(file.name+': '+error.message)}
   el('historyStatus').textContent='已导入'+count+'条新记录。'+errors.join('；');update();el('historyFiles').value=''
  };
- el('historyLoad').onclick=async()=>{el('historyStatus').textContent='正在载入全国2022选举结果…';await snapshot();update()};
+ el('historyLoad').onclick=async()=>{el('historyStatus').textContent='正在载入全台2022选举结果…';await snapshot();update()};
  const defaultRender=render;render=function(){defaultRender();if(active){update();for(const id of ['workspacePrediction','workspaceFree']){el(id).classList.remove('active');el(id).setAttribute('aria-pressed','false')}}};
  const defaultFooter=furnitureFooterHeight;furnitureFooterHeight=function(){
   if(!active)return defaultFooter();
