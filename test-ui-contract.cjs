@@ -293,7 +293,7 @@ test('Gradient legend matches map shading with intermediate rate markers',()=>{
  assert.match(app,/ElectionCore\.shade\(row\.p\.color,value,domain\.min,domain\.max\)/);
  assert.match(app,/const stops=voteMetric\?\[0,\.5,1\]:\[0,\.25,\.5,\.75,1\]/);
  assert.match(app,/barHeight=m\.font\*1\.4/);
- assert.match(app,/\.gradient'&&predictionUsesGradient\(\)/);
+ assert.match(app,/state\.fillMode==='prediction'&&predictionUsesGradient\(\)/);
  assert.match(workspace,/ElectionCore\.shade\(p\.color,lead\.value,domain\.min,domain\.max\)/);
  assert.match(town,/ElectionCore\.shade\(p\.color,r\.value,predictionDomain\(\)\.min,predictionDomain\(\)\.max\)/);
 });
