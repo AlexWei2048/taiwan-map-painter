@@ -104,86 +104,58 @@ function identityPanelFor(f){return identityPanelLayouts().find(p=>p.identity===
 function transformOf(t){return `translate(${t.tx} ${t.ty}) scale(${t.scale})`}
 const labelCanvas=document.createElement('canvas').getContext('2d'),labelPaths=new WeakMap();
 function regionContains(f,x,y,t){let path=labelPaths.get(f);if(!path){path=new Path2D(f.d);labelPaths.set(f,path)}return labelCanvas.isPointInPath(path,(x-t.tx)/t.scale,(y-t.ty)/t.scale,'evenodd')}
-function labelLayout(items,t,font=15){
- const placed=[],result=[],spec=sceneSpec(),reserve=legendBox(spec),area=t.area||contentArea(spec);
- const insideArea=r=>r[0]>=area.left&&r[2]<=area.right&&r[1]>=area.top&&r[3]<=area.bottom
-  &&!(r[2]>reserve.x-10&&r[3]>reserve.y-12);
- const intersects=r=>placed.some(p=>r[0]<p[2]&&r[2]>p[0]&&r[1]<p[3]&&r[3]>p[1]);
- const boxArea=f=>(f.box[2]-f.box[0])*(f.box[3]-f.box[1]);
- for(const f of [...items].sort((a,b)=>boxArea(a)-boxArea(b))){
-  const title=shownLabel(f);if(!title)continue;
-  const anchor=f.labelAnchor||f.center;
-  const ax=anchor[0]*t.scale+t.tx,ay=anchor[1]*t.scale+t.ty;
-  const box=[f.box[0]*t.scale+t.tx,f.box[1]*t.scale+t.ty,f.box[2]*t.scale+t.tx,f.box[3]*t.scale+t.ty];
-  const positions=[{x:ax,y:ay}];
-  if(f.center)positions.push({x:f.center[0]*t.scale+t.tx,y:f.center[1]*t.scale+t.ty});
-  // Search within the actual polygon, not beside it, including narrow and irregular districts.
-  for(let iy=1;iy<=11;iy++)for(let ix=1;ix<=11;ix++)
-   positions.push({x:box[0]+(box[2]-box[0])*ix/12,y:box[1]+(box[3]-box[1])*iy/12});
-  positions.sort((a,b)=>Math.hypot(a.x-ax,a.y-ay)-Math.hypot(b.x-ax,b.y-ay));
-  const centers=positions.filter(q=>regionContains(f,q.x,q.y,t));
-  if(!centers.length)continue;
-  const characters=Array.from(title);
-  const variants=[characters];
-  if(characters.length>3)variants.push([characters.slice(0,Math.ceil(characters.length/2)),characters.slice(Math.ceil(characters.length/2))]);
-  const minFont=Math.max(4,Math.min(font,Math.floor(font*.55)));
-  let chosen=null;
-  for(let size=font;size>=minFont&&!chosen;size--){
-   for(const split of variants){
-    const lines=Array.isArray(split[0])?split.map(line=>line.join('')):[title];
-    const width=Math.max(...lines.map(line=>Array.from(line).length))*size*.98+2;
-    const height=lines.length*size*1.2+2;
-    if(width>box[2]-box[0]||height>box[3]-box[1])continue;
-    for(const q of centers){
-     const bounds=[q.x-width/2,q.y-height/2,q.x+width/2,q.y+height/2];
-     if(!insideArea(bounds)||intersects(bounds))continue;
-     let fits=true;
-     for(const dx of [-.5,0,.5])for(const dy of [-.5,0,.5])
-      if(!regionContains(f,q.x+width*dx,q.y+height*dy,t))fits=false;
-     if(fits){chosen={f,x:q.x,y:q.y,font:size,lines,bounds};break}
-    }
-    if(chosen)break;
-   }
-  }
-  // Every displayed name stays anchored inside its own polygon. Very small
-  // polygons use a compact two-line label rather than an external leader.
-  if(!chosen){
-   const lines=characters.length>3?[characters.slice(0,Math.ceil(characters.length/2)).join(''),characters.slice(Math.ceil(characters.length/2)).join('')]:[title];
-   const longest=Math.max(...lines.map(line=>Array.from(line).length));
-   const availableWidth=Math.max(0,box[2]-box[0]-2),availableHeight=Math.max(0,box[3]-box[1]-2);
-   const fitSize=Math.floor(Math.min(availableWidth/(longest*.98||1),availableHeight/(lines.length*1.2)));
-   const size=Math.max(3,Math.min(minFont,fitSize));
-   const width=longest*size*.98+2,height=lines.length*size*1.2+2;
-   // Keep the compact fallback as far as possible from the polygon's bounds.
-   const q=centers.filter(p=>insideArea([p.x-width/2,p.y-height/2,p.x+width/2,p.y+height/2]))
-    .sort((a,b)=>Math.min(b.x-box[0],box[2]-b.x,b.y-box[1],box[3]-b.y)-
-                  Math.min(a.x-box[0],box[2]-a.x,a.y-box[1],box[3]-a.y))[0]||centers[0];
-   chosen={f,x:q.x,y:q.y,font:size,lines,bounds:[q.x-width/2,q.y-height/2,q.x+width/2,q.y+height/2]};
-  }
-  placed.push(chosen.bounds);result.push(chosen);
+const MAP_LABEL_FONT_SIZE=12;
+// Use the geographic center when it lies on land. For concave or fragmented
+// regions, fall back to the precomputed interior anchor closest to the center.
+function regionLabelCenter(f,t){
+ const center=f.center||f.labelAnchor;
+ const inside=p=>p&&regionContains(f,p[0]*t.scale+t.tx,p[1]*t.scale+t.ty,t);
+ const anchor=inside(center)?center:inside(f.labelAnchor)?f.labelAnchor:null;
+ if(anchor)return{x:anchor[0]*t.scale+t.tx,y:anchor[1]*t.scale+t.ty};
+ const target=center||[(f.box[0]+f.box[2])/2,(f.box[1]+f.box[3])/2];
+ let best=null,score=Infinity;
+ for(let i=1;i<=19;i++)for(let j=1;j<=19;j++){
+  const x=f.box[0]+(f.box[2]-f.box[0])*i/20;
+  const y=f.box[1]+(f.box[3]-f.box[1])*j/20;
+  if(!inside([x,y]))continue;
+  const dist=(x-target[0])**2+(y-target[1])**2;
+  if(dist<score){score=dist;best=[x,y]}
+ }
+ return best?{x:best[0]*t.scale+t.tx,y:best[1]*t.scale+t.ty}:null;
+}
+function labelLayout(items,t,font=MAP_LABEL_FONT_SIZE){
+ const result=[];
+ for(const f of items){
+  const name=shownLabel(f);
+  if(!name)continue;
+  const point=regionLabelCenter(f,t);
+  if(!point)continue;
+  const chars=Array.from(name);
+  const width=(f.box[2]-f.box[0])*t.scale;
+  const twoLines=chars.length>3&&chars.length*font*.98>width;
+  const lines=twoLines?[chars.slice(0,Math.ceil(chars.length/2)).join(''),chars.slice(Math.ceil(chars.length/2)).join('')]:[name];
+  result.push({f,x:point.x,y:point.y,font,lines});
  }
  return result;
 }
-
-function drawLabels(group,items,t,font=15,interactive=false){
- // The nationwide township view keeps its county-level summary, at a smaller font.
+function drawLabels(group,items,t,font=MAP_LABEL_FONT_SIZE,interactive=false){
+ // A single fixed size applies to every region label, including nationwide
+ // county summaries, indigenous districts and image exports.
  const nationwideTownLabels=state.level==='towns'&&!state.county;
  const labelItems=nationwideTownLabels?(data?.counties||[]):items;
- if(nationwideTownLabels){font=19;interactive=false}
- const labelFont=Math.max(4,font-1);
+ if(nationwideTownLabels)interactive=false;
  group.replaceChildren();
- for(const q of labelLayout(labelItems.filter(f=>shownLabel(f)),t,labelFont)){
+ for(const q of labelLayout(labelItems.filter(f=>shownLabel(f)),t,MAP_LABEL_FONT_SIZE)){
   const target=svgEl('g',{'class':'map-label'});group.append(target);
-  const text=svgEl('text',{x:q.x,y:q.y,'font-size':q.font,'data-label':q.f.id,
+  const text=svgEl('text',{x:q.x,y:q.y,'font-size':MAP_LABEL_FONT_SIZE,'data-label':q.f.id,
    'data-placement':'inside','text-anchor':'middle','dominant-baseline':'middle',
-   fill:'#2c493b',stroke:'#ffffffed','stroke-width':Math.max(.6,q.font*.18),
+   fill:'#2c493b',stroke:'#ffffffed','stroke-width':MAP_LABEL_FONT_SIZE*.18,
    'paint-order':'stroke','stroke-linejoin':'round'});
-  text.style.strokeWidth=Math.max(.6,q.font*.18);
-  const lines=q.lines||[shownLabel(q.f)];
-  if(lines.length===1)text.textContent=lines[0];
-  else for(let i=0;i<lines.length;i++){
-   const span=svgEl('tspan',{x:q.x,dy:i? q.font*1.15:-q.font*.55});
-   span.textContent=lines[i];text.append(span);
+  text.style.strokeWidth=MAP_LABEL_FONT_SIZE*.18;
+  if(q.lines.length===1)text.textContent=q.lines[0];
+  else for(let i=0;i<q.lines.length;i++){
+   const span=svgEl('tspan',{x:q.x,dy:i?MAP_LABEL_FONT_SIZE*1.15:-MAP_LABEL_FONT_SIZE*.55});
+   span.textContent=q.lines[i];text.append(span);
   }
   if(interactive){text.style.pointerEvents='auto';text.style.cursor='pointer';text.onclick=()=>paint(q.f)}
   target.append(text);
@@ -748,8 +720,35 @@ $('removeCustomLogo').onclick=()=>{customLogo='';$('customPartyLogo').value='';r
 function syncVillageControls(){if(!data)return;$('villageTownControls').hidden=state.level!=='villages';$('districtLeaderControls').hidden=true;$('districtLeaders').checked=state.districtLeaders;const select=$('villageTown');select.replaceChildren();const all=document.createElement('option');all.value='';all.textContent='全部乡镇市区';select.append(all);for(const f of data.towns.filter(f=>!state.county||f.county===state.county)){const o=document.createElement('option');o.value=f.id;o.textContent=(state.county?'':f.county+' · ')+f.name;select.append(o)}if(![...select.options].some(o=>o.value===state.villageTown))state.villageTown='';select.value=state.villageTown}
 $('villageTown').onchange=()=>{state.villageTown=$('villageTown').value;render();persist()};
 $('districtLeaders').onchange=()=>{state.districtLeaders=$('districtLeaders').checked;renderLabels();persist()};
-function drawVillageLabels(group,items,t,v,interactive=false){group.replaceChildren();if(items.length<=120){drawLabels(group,items,t,8,interactive);return}const pixelWidth=Math.max(500,$('map').getBoundingClientRect().width),font=interactive?Math.max(4,v.w/pixelWidth*10):8,occupied=[],reserve=legendBox(sceneSpec()),area=contentArea(sceneSpec());const visible=items.filter(f=>{const b=f.box.map((n,i)=>n*t.scale+(i%2?t.ty:t.tx));return b[2]>v.x&&b[0]<v.x+v.w&&b[3]>v.y&&b[1]<v.y+v.h&&b[2]-b[0]>f.name.length*font&&b[3]-b[1]>font*1.5}).sort((a,b)=>(b.box[2]-b.box[0])*(b.box[3]-b.box[1])-(a.box[2]-a.box[0])*(a.box[3]-a.box[1]));for(const f of visible){if(occupied.length>=500)break;const x=f.center[0]*t.scale+t.tx,y=f.center[1]*t.scale+t.ty,w=f.name.length*font,h=font*1.45,r=[x-w/2,y-h/2,x+w/2,y+h/2];if(r[0]<area.left||r[2]>area.right||r[1]<area.top||r[3]>area.bottom||x>reserve.x-10&&y>reserve.y-10||occupied.some(b=>r[0]<b[2]&&r[2]>b[0]&&r[1]<b[3]&&r[3]>b[1])||![-.5,0,.5].every(dx=>[-.5,0,.5].every(dy=>regionContains(f,x+w*dx,y+h*dy,t))))continue;occupied.push(r);const text=svgEl('text',{x,y,'font-size':font,'data-label':f.id,'data-placement':'inside','text-anchor':'middle','dominant-baseline':'middle',fill:'#2c493b',stroke:'#fff','stroke-width':font*.22,'paint-order':'stroke'});text.style.strokeWidth=font*.22;text.textContent=f.name;if(interactive){text.style.pointerEvents='auto';text.style.cursor='pointer';text.onclick=()=>paint(f)}group.append(text)}}
-
+function drawVillageLabels(group,items,t,v,interactive=false){
+ group.replaceChildren();
+ if(items.length<=120){drawLabels(group,items,t,MAP_LABEL_FONT_SIZE,interactive);return}
+ // Keep a fixed font in dense village layers. Do not reposition names or
+ // scale text per village; omit collisions until users zoom in.
+ const font=MAP_LABEL_FONT_SIZE;
+ const pixelWidth=Math.max(500,$('map').getBoundingClientRect().width);
+ const occupied=[],area=contentArea(sceneSpec());
+ const visible=items.filter(f=>{
+  const b=[f.box[0]*t.scale+t.tx,f.box[1]*t.scale+t.ty,f.box[2]*t.scale+t.tx,f.box[3]*t.scale+t.ty];
+  return b[2]>v.x&&b[0]<v.x+v.w&&b[3]>v.y&&b[1]<v.y+v.h&&
+   b[2]-b[0]>=f.name.length*font&&b[3]-b[1]>=font*1.5;
+ }).sort((a,b)=>(b.box[2]-b.box[0])*(b.box[3]-b.box[1])-(a.box[2]-a.box[0])*(a.box[3]-a.box[1]));
+ for(const f of visible){
+  if(occupied.length>=500)break;
+  const center=regionLabelCenter(f,t);if(!center)continue;
+  const {x,y}=center,w=Array.from(f.name).length*font,h=font*1.45;
+  const r=[x-w/2,y-h/2,x+w/2,y+h/2];
+  if(r[0]<area.left||r[2]>area.right||r[1]<area.top||r[3]>area.bottom||
+   occupied.some(b=>r[0]<b[2]&&r[2]>b[0]&&r[1]<b[3]&&r[3]>b[1]))continue;
+  occupied.push(r);
+  const label=svgEl('text',{x,y,'font-size':font,'data-label':f.id,'data-placement':'inside',
+   'text-anchor':'middle','dominant-baseline':'middle',fill:'#2c493b',stroke:'#fff',
+   'stroke-width':font*.18,'paint-order':'stroke'});
+  label.style.strokeWidth=font*.18;label.textContent=f.name;
+  if(interactive){label.style.pointerEvents='auto';label.style.cursor='pointer';label.onclick=()=>paint(f)}
+  group.append(label);
+ }
+}
 function moveParty(id,direction){const index=state.palette.findIndex(p=>p.id===id),next=index+direction;if(index<0||next<0||next>=state.palette.length)return;pushHistory();const scroll=$('palette').scrollTop;[state.palette[index],state.palette[next]]=[state.palette[next],state.palette[index]];renderPalette();renderLegend();persist();$('palette').scrollTop=scroll;[...$('palette').children].find(row=>row.dataset.party===id)?.querySelector('.party-drag-handle')?.focus({preventScroll:true})}
 
 function renderTownBorders(){

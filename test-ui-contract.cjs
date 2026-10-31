@@ -582,58 +582,57 @@ test('Existing party logos are displayed as circles in every HTML view',()=>{
  assert.match(app,/p\.logo=await readLogo\(file\.files\[0\]\)/);
  assert.match(app,/customLogo=await readLogo\(e\.target\.files\[0\]\)/);
 });
-test('All map name labels are region-anchored and never create outside leader lines',()=>{
- const start=app.indexOf('function drawLabels(group,items,t,font=15,interactive=false){');
- const end=app.indexOf('\nfunction drawIdentityPanelLabels(',start);
- assert.ok(start>=0&&end>start);
- const towns=[{id:'town-1',name:'中正区'},{id:'town-2',name:'大安区'}];
- const counties=[{id:'county-1',name:'台北市'},{id:'county-2',name:'新北市'}];
- const state={level:'towns',county:''},data={counties};
- let passedItems,passedFont;
+test('All region and district names use the same font and geographic center without leaders',()=>{
+ const a=app.indexOf('const MAP_LABEL_FONT_SIZE=12;');
+ const b=app.indexOf('\nfunction drawIdentityPanelLabels(',a);
+ assert.ok(a>=0&&b>a);
+ const source=app.slice(a,b);
+ const features=[{id:'x',name:'短名称',box:[0,0,20,20],center:[10,10],labelAnchor:[5,5]},
+  {id:'y',name:'更长的区域名称',box:[0,0,10,20],center:[5,10],labelAnchor:[2,3]}];
+ const data={counties:features};
+ const state={level:'counties',county:''};
  const el=(tag,attrs)=>({tag,attrs:attrs||{},children:[],style:{},append(...nodes){this.children.push(...nodes)}});
- const layout=(items,t,font)=>{passedItems=items;passedFont=font;return items.map(f=>({f,x:12,y:25,font,lines:[f.name]}))};
- const draw=new Function('state','data','labelLayout','shownLabel','svgEl','paint',
-  app.slice(start,end)+';return drawLabels')(state,data,layout,f=>f.name,el,()=>{});
- const group=()=>({children:[],replaceChildren(){this.children=[]},append(node){this.children.push(node)}});
- let g=group();draw(g,towns,{},12,true);
- assert.deepEqual(passedItems,counties);
- assert.equal(passedFont,18,'Nationwide county summary size drops one step');
- assert.deepEqual(g.children.map(x=>x.children.map(child=>child.tag)),[['text'],['text']]);
- assert.deepEqual(g.children.map(x=>x.children[0].attrs['data-placement']),['inside','inside']);
- assert.deepEqual(g.children.map(x=>x.children[0].textContent),['台北市','新北市']);
- g=group();draw(g,towns,{},10,false);
- assert.deepEqual(g.children.map(x=>x.children[0].textContent),['台北市','新北市']);
- state.county='台北市';g=group();draw(g,towns,{},12,true);
- assert.deepEqual(passedItems,towns);
- assert.equal(passedFont,11);
- assert.deepEqual(g.children.map(x=>x.children[0].attrs['data-placement']),['inside','inside']);
- assert.deepEqual(g.children.map(x=>x.children[0].textContent),['中正区','大安区']);
- state.county='';state.level='counties';g=group();draw(g,towns,{},12,true);
- assert.deepEqual(passedItems,towns);
- assert.doesNotMatch(app.slice(start,end),/svgEl\('path'|svgEl\('circle'/);
- assert.match(app,/\$\('districtLeaderControls'\)\.hidden=true/);
+ const renderer=new Function('state','data','shownLabel','regionContains','svgEl','paint',source+';return {labelLayout,drawLabels}')(
+  state,data,f=>f.name,(f,x,y)=>x>=f.box[0]&&x<=f.box[2]&&y>=f.box[1]&&y<=f.box[3],el,()=>{});
+ const t={scale:1,tx:0,ty:0};
+ const placements=renderer.labelLayout(features,t,99);
+ assert.deepEqual(placements.map(p=>[p.x,p.y]),[[10,10],[5,10]]);
+ assert.deepEqual(placements.map(p=>p.font),[99,99]);
+ const group={children:[],replaceChildren(){this.children=[]},append(x){this.children.push(x)}};
+ renderer.drawLabels(group,features,t,22,true);
+ const labels=group.children.map(g=>g.children[0]);
+ assert.deepEqual(labels.map(x=>x.attrs['font-size']),[12,12]);
+ assert.deepEqual(labels.map(x=>[x.attrs.x,x.attrs.y]),[[10,10],[5,10]]);
+ assert.deepEqual(labels.map(x=>x.attrs['data-placement']),['inside','inside']);
+ assert.deepEqual(group.children.map(g=>g.children.map(x=>x.tag)),[['text'],['text']]);
+ assert.equal(labels[1].children.length,2,'long text may wrap but never changes font');
+ state.level='towns';renderer.drawLabels(group,[],t,30,false);
+ assert.deepEqual(group.children.map(g=>g.children[0].attrs['font-size']),[12,12]);
+ assert.deepEqual(group.children.map(g=>g.children[0].attrs.x),[10,5]);
+ assert.doesNotMatch(source,/outside\.push|forcedOutside|Math\.min\(minFont|for\(let size=font/);
  assert.match(app,/drawLabels\(g,currentItems\(\),geometryLayout\(currentItems\(\),true\),sceneSpec\(\)\.font,false\)/);
 });
-test('Placement uses polygon interiors, adapts font, and splits long names',()=>{
- const start=app.indexOf('function labelLayout(items,t,font=15){'),end=app.indexOf('\nfunction drawLabels(',start);
- assert.ok(start>=0&&end>start);
- const state={level:'counties',county:''},feature={
-  id:'tiny',name:'非常长的选举区域',box:[0,0,24,12],center:[12,6],labelAnchor:[12,6]
- };
- const result=new Function('sceneSpec','legendBox','contentArea','state','shownLabel','regionContains',
-  app.slice(start,end)+';return labelLayout')(
-  ()=>({}),()=>({x:1000,y:1000}),()=>({left:0,right:500,top:0,bottom:500}),state,f=>f.name,
-  (f,x,y)=>x>=0&&x<=24&&y>=0&&y<=12)([feature],{scale:1,tx:0,ty:0},12);
- assert.equal(result.length,1);
- assert.equal(result[0].f.id,'tiny');
- assert.ok(result[0].x>=0&&result[0].x<=24);
- assert.ok(result[0].y>=0&&result[0].y<=12);
- assert.ok(result[0].font<12);
- assert.equal(result[0].lines.length,2);
- assert.equal(result[0].out,undefined);
- assert.ok(result[0].bounds[0]>=0&&result[0].bounds[1]>=0&&result[0].bounds[2]<=24&&result[0].bounds[3]<=12,'compact multiline label stays inside the area');
- assert.doesNotMatch(app.slice(start,end),/leftLabelEdge|forcedOutside|insetLabels|outside\.push/);
+test('Irregular regions fall back to their interior label anchor near the center',()=>{
+ const start=app.indexOf('const MAP_LABEL_FONT_SIZE=12;');
+ const end=app.indexOf('\nfunction drawIdentityPanelLabels(',start);
+ const helpers=new Function('shownLabel','regionContains',app.slice(start,end)+';return {regionLabelCenter,labelLayout}')(
+  f=>f.name,(f,x,y)=>x>=20&&x<=35&&y>=20&&y<=35);
+ const f={id:'inlet',name:'不规则区',center:[15,15],labelAnchor:[28,28],box:[10,10,40,40]};
+ assert.deepEqual(helpers.regionLabelCenter(f,{scale:1,tx:0,ty:0}),{x:28,y:28});
+ assert.deepEqual(helpers.labelLayout([f],{scale:1,tx:0,ty:0}).map(x=>[x.x,x.y,x.font]),[[28,28,12]]);
 });
+test('Village labels also use the fixed font and geographic centers',()=>{
+ const start=app.indexOf('function drawVillageLabels(group,items,t,v,interactive=false){');
+ const end=app.indexOf('\nfunction moveParty(',start);
+ assert.ok(start>=0&&end>start);
+ const source=app.slice(start,end);
+ assert.match(source,/const font=MAP_LABEL_FONT_SIZE/);
+ assert.match(source,/const center=regionLabelCenter\(f,t\)/);
+ assert.doesNotMatch(source,/v\.w\/pixelWidth\*\d+/);
+ assert.match(source,/'font-size':font/);
+ assert.match(index,/app\.js\?v=20261031-labels-centered-v52/);
+});
+
 test('Map fetch retries bypass corrupt caches and report persistent network errors',async()=>{
  const start=app.indexOf('async function fetchMapJson(url,label,attempts=3){');
  const end=app.indexOf('// Load only the map layers',start);
