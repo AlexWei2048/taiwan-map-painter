@@ -50,7 +50,12 @@ function syncCountyChoices(){
  const el=$('county');if(!el||!data?.counties)return;
  const township=state.workspaceMode==='prediction'&&state.fillMode==='prediction'&&state.predictionOffice==='township';
  const supported=township&&typeof candidateDatabase!=='undefined'&&candidateDatabase?.districts?new Set(candidateDatabase.districts.filter(d=>d.type==='township').map(d=>d.county)):null;
- for(const option of [...el.options]){if(!option.value)continue;option.disabled=!!supported&&!supported.has(option.value);option.hidden=option.disabled;}
+ const allowed=data.counties.map(f=>f.name).filter(name=>!supported||supported.has(name));
+ const expected=['',...COUNTY_ORDER.filter(name=>allowed.includes(name))];
+ const actual=[...el.options].map(option=>option.value);
+ if(actual.length!==expected.length||actual.some((value,i)=>value!==expected[i])){
+  el.replaceChildren(new Option('全台 · 含离岛',''),...expected.slice(1).map(name=>new Option(name,name)));
+ }
  if(state.county&&supported&&!supported.has(state.county))state.county='';
 }
 function syncInputs(){syncCountyChoices();$('county').value=state.county;syncBorderControls();$('showLabels').checked=state.labels;$('mapTitle').value=state.title;$('legendTitle').value=state.legendTitle;if($('exportWinnerTable'))$('exportWinnerTable').checked=state.exportSettings.winnerTable;if($('exportNote'))$('exportNote').value=state.exportSettings.note;if($('councilExportScope'))$('councilExportScope').value=state.exportSettings.councilScope;if($('councilExportScopeBox'))$('councilExportScopeBox').hidden=state.level!=='council';$('townLevel').classList.toggle('active',state.level==='towns');$('countyLevel').classList.toggle('active',state.level==='counties');$('townLevel').setAttribute('aria-pressed',state.level==='towns');$('countyLevel').setAttribute('aria-pressed',state.level==='counties');for(const [id,level]of [['councilLevel','council'],['legislativeLevel','legislative'],['villageLevel','villages']]){$(id).classList.toggle('active',state.level===level);$(id).setAttribute('aria-pressed',state.level===level)}syncVillageControls();syncElectorateControls();syncElectionControls();updateHistory()}
