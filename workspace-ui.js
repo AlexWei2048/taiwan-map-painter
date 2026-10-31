@@ -36,7 +36,7 @@ predictionLegendCaption=function(){const names=Object.fromEntries(displayOptions
 function predictionCandidateLegendEntries(){
  if(!candidateDatabase)return null;
  // Nationwide maps use party emblems and names; local county maps retain candidate-level legends.
- if(!state.county){const used=counts();return legendVisiblePalette().filter(p=>used[p.id]).map(p=>({...p,legendSuffix:''}));}
+ if(!state.county){const used=counts();return legendVisiblePalette().filter(p=>used[p.id]).map(p=>({...p,legendSuffix:'（'+used[p.id]+(state.predictionOffice==='mayor'?'席':predictionLegendCountUnit())+'）'}));}
  const localMayor=state.predictionOffice==='mayor'&&typeof localPredictionActive==='function'&&localPredictionActive();
  if(!localMayor&&state.predictionOffice!=='township')return null;
  const winners=new Map();
