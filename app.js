@@ -104,6 +104,43 @@ function identityPanelFor(f){return identityPanelLayouts().find(p=>p.identity===
 function transformOf(t){return `translate(${t.tx} ${t.ty}) scale(${t.scale})`}
 const labelCanvas=document.createElement('canvas').getContext('2d'),labelPaths=new WeakMap();
 function regionContains(f,x,y,t){let path=labelPaths.get(f);if(!path){path=new Path2D(f.d);labelPaths.set(f,path)}return labelCanvas.isPointInPath(path,(x-t.tx)/t.scale,(y-t.ty)/t.scale,'evenodd')}
+
+function leaderFrames(t,pad=6){if(!t||!Number.isFinite(t.scale))return[];
+ return activeInsetDefinitions().map(q=>[q.box[0]*t.scale+t.tx-pad,q.box[1]*t.scale+t.ty-pad,
+ q.box[2]*t.scale+t.tx+pad,q.box[3]*t.scale+t.ty+pad]);}
+function leaderIn(x,y,b){return x>=b[0]&&x<=b[2]&&y>=b[1]&&y<=b[3]}
+function leaderOverlap(a,b){return a[0]<b[2]&&a[2]>b[0]&&a[1]<b[3]&&a[3]>b[1]}
+function leaderCross(x,y,xx,yy,b){
+ if(leaderIn(x,y,b)&&leaderIn(xx,yy,b))return false;
+ let lo=0,hi=1;const dx=xx-x,dy=yy-y;
+ for(const [p,q] of [[-dx,x-b[0]],[dx,b[2]-x],[-dy,y-b[1]],[dy,b[3]-y]]){
+  if(!p){if(q<0)return false}else{const z=q/p;if(p<0){if(z>hi)return false;lo=Math.max(lo,z)}else{if(z<lo)return false;hi=Math.min(hi,z)}}
+ }
+ return lo<=hi;
+}
+function shortLeader(q,t,occupied){
+ const frames=leaderFrames(t),island=frames.find(b=>leaderIn(q.ax,q.ay,b));
+ const area=t.area||contentArea(sceneSpec()),font=q.font,width=Array.from(shownLabel(q.f)).length*font*1.04+8;
+ const preferred=q.side==='left'?-1:1;let best;
+ for(const sign of [preferred,-preferred])
+ for(const gap of [Math.max(37,font*2.8),Math.max(58,font*4),95,145])
+ for(const y of [q.ay,q.y,q.ay+font*1.7,q.ay-font*1.7,q.ay+font*3,q.ay-font*3]){
+  const x=q.ax+sign*gap,end=x+(sign<0?6:-6),r=sign<0?[x-width,y-font,x,y+font]:[x,y-font,x+width,y+font];
+  if(r[0]<area.left||r[2]>area.right||r[1]<area.top||r[3]>area.bottom)continue;
+  if(occupied.some(b=>leaderOverlap(r,b)))continue;
+  if(island&&!leaderIn(x,y,island))continue;
+  if(!island&&frames.some(b=>leaderOverlap(r,b)))continue;
+  if(frames.some(b=>leaderCross(q.ax,q.ay,end,y,b)))continue;
+  const score=Math.hypot(end-q.ax,y-q.ay)+(sign===preferred?0:35);
+  if(!best||score<best.score)best={x,y,side:sign<0?'left':'right',rect:r,score,leader:'M'+q.ax+','+q.ay+'L'+end+','+y};
+ }
+ if(!best){
+  const sign=preferred,space=island?Math.max(2,Math.min(font,island[sign<0?0:2]-(sign<0?0:q.ax),sign<0?q.ax-island[0]:island[2]-q.ax)):font*1.5;
+  const x=q.ax+sign*space,y=q.ay,end=x+(sign<0?1:-1);
+  best={x,y,side:sign<0?'left':'right',rect:sign<0?[x-width,y-font,x,y+font]:[x,y-font,x+width,y+font],leader:'M'+q.ax+','+q.ay+'L'+end+','+y};
+ }
+ occupied.push(best.rect);Object.assign(q,{x:best.x,y:best.y,side:best.side,leader:best.leader});return q;
+}
 function labelLayout(items,t,font=15){
  const placed=[],outside=[],result=[],spec=sceneSpec(),reserve=legendBox(spec),area=t.area||contentArea(spec),forcedOutside=new Set(['台北市','基隆市','新竹市','嘉义市']),insetLabels={'连江县':[80,130],'金门县':[65,210],'澎湖县':[65,555]},leftLabelEdge=t.labelLeft;
  for(const f of [...items].sort((a,b)=>(a.box[2]-a.box[0])*(a.box[3]-a.box[1])-(b.box[2]-b.box[0])*(b.box[3]-b.box[1]))){
@@ -120,7 +157,7 @@ function labelLayout(items,t,font=15){
  }
  const sorted=[...outside].sort((a,b)=>a.ax-b.ax),gap=Math.max(font*1.65,state.level==='villages'?14:25),top=area.top+font,bottom=area.bottom-font,capacity=Math.floor((bottom-top)/gap)+1,columns=identityPanelsActive()?1:isNationwide()?2:1,sideCapacity=capacity*columns;let middle=sorted.filter(q=>q.ax<(area.left+area.right)/2).length;const rightCapacity=Math.max(1,Math.floor((bottom-top)/gap)+1)*columns;middle=Math.max(sorted.length-rightCapacity,Math.min(sideCapacity,middle));
  const sides=state.level==='counties'?[['left',sorted.filter(q=>q.side==='left'||(!q.side&&q.ax<(area.left+area.right)/2))],['right',sorted.filter(q=>q.side==='right'||(!q.side&&q.ax>=(area.left+area.right)/2))]]:[['left',sorted.slice(0,middle)],['right',sorted.slice(middle)]];
- for(const [side,list]of sides){const endY=side==='right'?bottom:bottom,cap=Math.max(1,Math.floor((endY-top)/gap)+1);list.sort((a,b)=>a.ay-b.ay);const cols=Math.max(1,Math.ceil(list.length/cap)),chunkSize=Math.ceil(list.length/cols);for(let col=0;col<cols;col++){const chunk=list.slice(col*chunkSize,(col+1)*chunkSize);for(let i=0;i<chunk.length;i++)chunk[i].y=Math.max(i?chunk[i-1].y+gap:top,chunk[i].ay);if(chunk.length&&chunk.at(-1).y>endY){chunk.at(-1).y=endY;for(let i=chunk.length-2;i>=0;i--)chunk[i].y=Math.min(chunk[i].y,chunk[i+1].y-gap)}for(const q of chunk){q.x=side==='left'?leftLabelEdge-col*120:t.labelRight+col*120;q.elbow=side==='left'?q.x+18:q.x-18;q.side=side;q.out=true;result.push(q)}}}return result;
+ for(const [side,list]of sides){const endY=side==='right'?bottom:bottom,cap=Math.max(1,Math.floor((endY-top)/gap)+1);list.sort((a,b)=>a.ay-b.ay);const cols=Math.max(1,Math.ceil(list.length/cap)),chunkSize=Math.ceil(list.length/cols);for(let col=0;col<cols;col++){const chunk=list.slice(col*chunkSize,(col+1)*chunkSize);for(let i=0;i<chunk.length;i++)chunk[i].y=Math.max(i?chunk[i-1].y+gap:top,chunk[i].ay);if(chunk.length&&chunk.at(-1).y>endY){chunk.at(-1).y=endY;for(let i=chunk.length-2;i>=0;i--)chunk[i].y=Math.min(chunk[i].y,chunk[i+1].y-gap)}for(const q of chunk){q.x=side==='left'?leftLabelEdge-col*120:t.labelRight+col*120;q.elbow=side==='left'?q.x+18:q.x-18;q.side=side;q.out=true;result.push(q)}}}const occupied=[...placed];for(const q of result)if(q.out)shortLeader(q,t,occupied);return result;
 }
 
 function drawLabels(group,items,t,font=15,interactive=false){
@@ -131,7 +168,7 @@ function drawLabels(group,items,t,font=15,interactive=false){
  if(nationwideTownLabels){font=19;interactive=false}
  group.replaceChildren();for(const q of labelLayout(labelItems.filter(f=>shownLabel(f)),t,font)){
  const target=svgEl('g',{'class':'map-label'});group.append(target);
- if(!nationwideTownLabels&&q.out&&(!['council','legislative'].includes(state.level)||state.districtLeaders)){const end=q.side==='left'?q.x+9:q.x-9,elbow=q.elbow;target.append(svgEl('path',{d:`M${q.ax},${q.ay}L${elbow},${q.y}L${end},${q.y}`,fill:'none',stroke:'#92a49b','stroke-width':.55,opacity:isNationwide()?.18:.65,'vector-effect':'non-scaling-stroke'}));target.append(svgEl('circle',{cx:q.ax,cy:q.ay,'data-leader-region':q.f.id,r:2,fill:'#6d8879',opacity:isNationwide()?.35:1}))}
+ if(q.out){const end=q.side==='left'?q.x+6:q.x-6;target.append(svgEl('path',{d:q.leader||('M'+q.ax+','+q.ay+'L'+end+','+q.y),fill:'none',stroke:'#92a49b','stroke-width':.65,opacity:.78,'vector-effect':'non-scaling-stroke','data-leader-line':q.f.id}));target.append(svgEl('circle',{cx:q.ax,cy:q.ay,'data-leader-region':q.f.id,r:1.5,fill:'#6d8879',opacity:.8}))}
  const text=svgEl('text',{x:q.x,y:q.y,'font-size':q.font,'data-label':q.f.id,'data-placement':q.inset?'inset':q.out?'outside':'inside','text-anchor':q.out?(q.side==='left'?'end':'start'):'middle','dominant-baseline':'middle',fill:'#2c493b',stroke:'#ffffffed','stroke-width':4,'paint-order':'stroke','stroke-linejoin':'round'});text.style.strokeWidth=state.level==='counties'?2:2.4;text.style.textAnchor=q.out?(q.side==='left'?'end':'start'):'middle';text.textContent=shownLabel(q.f);if(interactive){text.style.pointerEvents='auto';text.style.cursor='pointer';text.onclick=()=>paint(q.f)}target.append(text);
  }
 }
@@ -144,11 +181,11 @@ function insetDefinitions(){return[
  {name:'澎湖',county:'澎湖县',box:[20,435,110,565],label:[65,445]}
  ]}
 function activeInsetDefinitions(){const town=state.level==='villages'&&state.villageTown?data.towns.find(f=>f.id===state.villageTown):null,county=state.county||town?.county||'';return insetDefinitions().filter(q=>{if(town?.name==='乌坵乡')return q.town==='乌坵乡';if(town&&q.town==='乌坵乡')return false;return !county||q.county===county||data.towns.some(f=>f.name===q.town&&f.county===county)})}
-function appendInsetFrames(group,t,spec,prefix=''){for(const q of activeInsetDefinitions()){const b=q.box,g=svgEl('g',{'data-inset':prefix+q.name});const p=q.d?svgEl('path',{d:q.d,transform:transformOf(t),fill:'none',stroke:'#a3b5a8','stroke-width':.75,'vector-effect':'non-scaling-stroke'}):svgEl('rect',{x:b[0]*t.scale+t.tx,y:b[1]*t.scale+t.ty,width:(b[2]-b[0])*t.scale,height:(b[3]-b[1])*t.scale,rx:3,fill:'none',stroke:'#a3b5a8','stroke-width':.75,'vector-effect':'non-scaling-stroke'});g.append(p);if(q.label&&q.name!=='乌坵'&&(state.level!=='counties'||q.town)){const name=svgEl('text',{x:q.label[0]*t.scale+t.tx,y:q.label[1]*t.scale+t.ty,'text-anchor':'middle','font-size':spec.font,fill:'#758c7c',stroke:'#fff','stroke-width':3,'paint-order':'stroke'});name.textContent=q.name;g.append(name)}group.append(g)}}
+function appendInsetFrames(group,t,spec,prefix=''){for(const q of activeInsetDefinitions()){const b=q.box,g=svgEl('g',{'data-inset':prefix+q.name});const p=q.d?svgEl('path',{d:q.d,transform:transformOf(t),fill:'none',stroke:'#a3b5a8','stroke-width':.75,'vector-effect':'non-scaling-stroke'}):svgEl('rect',{x:b[0]*t.scale+t.tx,y:b[1]*t.scale+t.ty,width:(b[2]-b[0])*t.scale,height:(b[3]-b[1])*t.scale,rx:3,fill:'none',stroke:'#a3b5a8','stroke-width':.75,'vector-effect':'non-scaling-stroke'});g.append(p);group.append(g)}}
 function drawInsetFrames(group,t,spec){group.replaceChildren();if(identityPanelsActive()){for(const panel of identityPanelLayouts()){const {area}=panel;group.append(svgEl('rect',{x:area.left,y:area.top-52,width:area.right-area.left,height:area.bottom-area.top+52,rx:16,fill:'#fbfdfb',stroke:'#d7e2d9','stroke-width':1.4}));const title=svgEl('text',{x:(area.left+area.right)/2,y:area.top-18,'text-anchor':'middle','font-size':30,'font-weight':600,fill:'#294a3a'});title.textContent=panel.label;group.append(title);const note=svgEl('text',{x:(area.left+area.right)/2,y:area.top+13,'text-anchor':'middle','font-size':16,fill:'#74877a'});note.textContent=panel.items.length?panel.items.length+(panel.townLevel?' 个乡镇市区':' 个选区'):'当前范围没有此类选区';group.append(note);appendInsetFrames(group,panel.t,spec,panel.identity+'-')}return}appendInsetFrames(group,t,spec)}
-function drawMapFurniture(group,t,spec){group.replaceChildren();const wide=isNationwide(),area=contentArea(spec),cx=spec.width-75,cy=85,unit=wide?1.3:1,footerTop=spec.height-furnitureFooterHeight();
+function drawMapFurniture(group,t,spec){group.replaceChildren();const wide=isNationwide(),area=contentArea(spec),footerTop=spec.height-furnitureFooterHeight(),unit=wide?1.3:1,nx=spec.width-138,ny=wide?125:110,okNorth=decorationClear([nx-20,ny-12,nx+20,ny+57]),cx=okNorth?nx:spec.width-75,cy=okNorth?ny:85;
  const north=svgEl('g',{'data-decoration':'north-arrow',transform:`translate(${cx},${cy}) scale(${unit})`});north.append(svgEl('path',{d:'M0,8L-10,42L0,34L10,42Z',fill:'#365d49'}));north.append(svgEl('path',{d:'M0,8L0,34L10,42Z',fill:'#fff',stroke:'#365d49','stroke-width':.8}));const n=svgEl('text',{x:0,y:0,'font-size':13,'font-weight':600,'text-anchor':'middle',fill:'#365d49'});n.textContent='N';north.append(n);group.append(north);
- const pixelsPerKm=t.scale*10000/6371.0088,target=Math.min(wide?220:140,area.right-area.left-120),km=[.01,.02,.05,.1,.2,.5,1,2,5,10,20,50,100,200].reduce((a,b)=>Math.abs(b*pixelsPerKm-target)<Math.abs(a*pixelsPerKm-target)?b:a),length=km*pixelsPerKm,x=area.left+20,y=footerTop+15,font=wide?15:10,bar=svgEl('g',{'data-decoration':'scale-bar','data-distance-km':km,'data-length':length});
+ const pixelsPerKm=t.scale*10000/6371.0088,target=Math.min(wide?220:140,area.right-area.left-120),km=[.01,.02,.05,.1,.2,.5,1,2,5,10,20,50,100,200].reduce((a,b)=>Math.abs(b*pixelsPerKm-target)<Math.abs(a*pixelsPerKm-target)?b:a),length=km*pixelsPerKm,sx=area.left+70,sy=footerTop-8,okScale=decorationClear([sx-15,sy-30,sx+length+72,sy+32]),x=okScale?sx:area.left+20,y=okScale?sy:footerTop+15,font=wide?15:10,bar=svgEl('g',{'data-decoration':'scale-bar','data-distance-km':km,'data-length':length});
  bar.append(svgEl('rect',{x:x-12,y:y-24,width:length+70,height:52,rx:6,fill:'#ffffffed'}));for(let i=0;i<2;i++)bar.append(svgEl('rect',{x:x+i*length/2,y,width:length/2,height:6,fill:i?'#fff':'#365d49',stroke:'#365d49','stroke-width':.8}));for(let i=0;i<3;i++){const text=svgEl('text',{x:x+i*length/2,y:y-7,'font-size':font,'text-anchor':'middle',fill:'#466253'});text.textContent=Number(((km<1?km*1000:km)*i/2).toFixed(2))+(i===2?(km<1?' m':' km'):'');bar.append(text)}group.append(bar);
 }
 function renderMapFurniture(){const spec=sceneSpec(),t=identityPanelsActive()?identityPanelLayouts()[0]?.t:geometryLayout(currentItems(),state.labels);if(!t)return;drawInsetFrames($('insetFrames'),t,spec);drawMapFurniture($('mapFurniture'),t,spec)}
@@ -580,7 +617,27 @@ function legendMetrics(entries=legendEntries()){
  const statuses=gradient?currentItems().map(f=>state.fillMode==='prediction'?(typeof predictionMapResult==='function'?predictionMapResult(f):{status:typeof predictionDisplayResult==='function'&&predictionDisplayResult(predictionDistrictFor(f))?'winner':'missing'}):regionResult(f)):[],tie=statuses.some(r=>r?.status==='tie'),missing=statuses.some(r=>!['winner','tie'].includes(r?.status)),showGradientHint=gradient&&state.fillMode!=='prediction',footerHeight=(tie?font*1.7:0)+(missing?font*1.7:0)+(showGradientHint?font*1.4:0);
  return{font,width,labelX,rows,titleLines,captionLines,headerHeight,gradient,tie,missing,showGradientHint,footerHeight,height:headerHeight+rows.reduce((n,r)=>n+r.height,0)+footerHeight};
 }
-function legendBox(spec){if(!state.legend.show)return{x:spec.width,y:spec.height,width:0,height:0};const m=legendMetrics(legendReserveEntries());return{x:spec.width-m.width-30,y:spec.height-furnitureFooterHeight()-6,...m}}
+
+function decorationClear(rect){
+ if(!data)return true;
+ const layers=identityPanelsActive()?identityPanelLayouts().map(p=>({items:p.items,t:p.t}))
+  :[{items:currentItems(),t:geometryLayout(currentItems(),state.labels)}];
+ for(const layer of layers){
+  const t=layer.t;
+  for(const f of layer.items){const b=f.box,r=[b[0]*t.scale+t.tx,b[1]*t.scale+t.ty,b[2]*t.scale+t.tx,b[3]*t.scale+t.ty];if(leaderOverlap(rect,r))return false}
+  if(leaderFrames(t,8).some(r=>leaderOverlap(rect,r)))return false;
+ }
+ return true;
+}
+function legendBox(spec){
+ if(!state.legend.show)return{x:spec.width,y:spec.height,width:0,height:0};
+ const m=legendMetrics(legendReserveEntries()),x0=spec.width-m.width-30,y0=spec.height-furnitureFooterHeight()-6;
+ for(const [up,left] of (isNationwide()?[[85,20],[48,16],[20,8],[0,0]]:[[48,20],[28,10],[12,4],[0,0]])){
+  const x=x0-left,y=y0-up;
+  if(y>=72&&decorationClear([x-12,y-12,x+m.width+8,y+m.height+8]))return{x,y,...m};
+ }
+ return{x:x0,y:y0,...m};
+ }
 function drawLegend(group,spec,interactive=false){
  group.replaceChildren();if(!state.legend.show)return;
  const m=legendMetrics(),box=legendBox(spec),x=box.x,y=box.y,domain=m.gradient?(state.fillMode==='prediction'?predictionDomain():gradientDomain()):{min:0,max:100};
@@ -691,7 +748,7 @@ async function readLogo(file){if(!file)throw Error('请选择图片');if(file.si
 function renderCustomLogo(){$('customLogoPreview').hidden=!customLogo;$('customLogoImage').src=customLogo||''}
 $('customPartyLogo').onchange=async e=>{try{customLogo=await readLogo(e.target.files[0]);$('customPartyError').textContent='';renderCustomLogo()}catch(err){e.target.value='';$('customPartyError').textContent=err.message}};
 $('removeCustomLogo').onclick=()=>{customLogo='';$('customPartyLogo').value='';renderCustomLogo()};
-function syncVillageControls(){if(!data)return;$('villageTownControls').hidden=state.level!=='villages';$('districtLeaderControls').hidden=!['council','legislative'].includes(state.level);$('districtLeaders').checked=state.districtLeaders;const select=$('villageTown');select.replaceChildren();const all=document.createElement('option');all.value='';all.textContent='全部乡镇市区';select.append(all);for(const f of data.towns.filter(f=>!state.county||f.county===state.county)){const o=document.createElement('option');o.value=f.id;o.textContent=(state.county?'':f.county+' · ')+f.name;select.append(o)}if(![...select.options].some(o=>o.value===state.villageTown))state.villageTown='';select.value=state.villageTown}
+function syncVillageControls(){if(!data)return;$('villageTownControls').hidden=state.level!=='villages';$('districtLeaderControls').hidden=true;$('districtLeaders').checked=state.districtLeaders;const select=$('villageTown');select.replaceChildren();const all=document.createElement('option');all.value='';all.textContent='全部乡镇市区';select.append(all);for(const f of data.towns.filter(f=>!state.county||f.county===state.county)){const o=document.createElement('option');o.value=f.id;o.textContent=(state.county?'':f.county+' · ')+f.name;select.append(o)}if(![...select.options].some(o=>o.value===state.villageTown))state.villageTown='';select.value=state.villageTown}
 $('villageTown').onchange=()=>{state.villageTown=$('villageTown').value;render();persist()};
 $('districtLeaders').onchange=()=>{state.districtLeaders=$('districtLeaders').checked;renderLabels();persist()};
 function drawVillageLabels(group,items,t,v,interactive=false){group.replaceChildren();if(items.length<=120){drawLabels(group,items,t,8,interactive);return}const pixelWidth=Math.max(500,$('map').getBoundingClientRect().width),font=interactive?Math.max(1,v.w/pixelWidth*11):9,occupied=[],reserve=legendBox(sceneSpec()),area=contentArea(sceneSpec());const visible=items.filter(f=>{const b=f.box.map((n,i)=>n*t.scale+(i%2?t.ty:t.tx));return b[2]>v.x&&b[0]<v.x+v.w&&b[3]>v.y&&b[1]<v.y+v.h&&b[2]-b[0]>f.name.length*font&&b[3]-b[1]>font*1.5}).sort((a,b)=>(b.box[2]-b.box[0])*(b.box[3]-b.box[1])-(a.box[2]-a.box[0])*(a.box[3]-a.box[1]));for(const f of visible){if(occupied.length>=350)break;const x=f.center[0]*t.scale+t.tx,y=f.center[1]*t.scale+t.ty,w=f.name.length*font,h=font*1.45,r=[x-w/2,y-h/2,x+w/2,y+h/2];if(r[0]<area.left||r[2]>area.right||r[1]<area.top||r[3]>area.bottom||x>reserve.x-10&&y>reserve.y-10||occupied.some(b=>r[0]<b[2]&&r[2]>b[0]&&r[1]<b[3]&&r[3]>b[1])||![-.5,0,.5].every(dx=>[-.5,0,.5].every(dy=>regionContains(f,x+w*dx,y+h*dy,t))))continue;occupied.push(r);const text=svgEl('text',{x,y,'font-size':font,'data-label':f.id,'data-placement':'inside','text-anchor':'middle','dominant-baseline':'middle',fill:'#2c493b',stroke:'#fff','stroke-width':font*.22,'paint-order':'stroke'});text.style.strokeWidth=font*.22;text.textContent=f.name;if(interactive){text.style.pointerEvents='auto';text.style.cursor='pointer';text.onclick=()=>paint(f)}group.append(text)}}
