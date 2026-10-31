@@ -438,6 +438,66 @@ test('Margin map and legend share fixed 30-point bins while candidate rates reta
  assert.match(town,/ElectionCore\.shade\(p\.color,r\.value,predictionDomain\(\)\.min,predictionDomain\(\)\.max\)/);
 });
 
+
+test('SVG party emblems have identical circular clipping in legend and export',()=>{
+ const start=app.indexOf('function svgEl(tag,attrs){'),end=app.indexOf('function bounds(',start);
+ assert.ok(start>=0&&end>start,'SVG logo helper must be found');
+ const node=tag=>({tag,attributes:{},children:[],setAttribute(k,v){this.attributes[k]=String(v)},append(...items){this.children.push(...items)}});
+ const document={createElementNS:(_ns,tag)=>node(tag)};
+ const logo=new Function('document','NS',app.slice(start,end)+';return appendCircularPartyLogo')(document,'http://www.w3.org/2000/svg');
+ const g=node('g'),first=logo(g,'data:image/png;base64,YWJj',10,15,22,{'data-party-logo':'blue'});
+ assert.equal(g.children.length,2);
+ assert.equal(g.children[0].tag,'defs');
+ assert.equal(g.children[0].children[0].tag,'clipPath');
+ const circle=g.children[0].children[0].children[0];
+ assert.equal(circle.tag,'circle');
+ assert.equal(circle.attributes.cx,'21');assert.equal(circle.attributes.cy,'26');assert.equal(circle.attributes.r,'11');
+ assert.equal(first.tag,'image');assert.equal(first.attributes.width,'22');assert.equal(first.attributes.height,'22');
+ assert.equal(first.attributes.preserveAspectRatio,'xMidYMid slice');
+ assert.equal(first.attributes['data-party-logo'],'blue');
+ assert.equal(first.attributes['clip-path'],'url(#'+g.children[0].children[0].attributes.id+')');
+ const second=logo(g,'data:image/png;base64,ZGVm',25,26,22,{'data-party-logo':'green'});
+ assert.notEqual(first.attributes['clip-path'],second.attributes['clip-path'],'Clipping IDs must be unique');
+ assert.match(app,/appendCircularPartyLogo\(g,emblem,x\+36,rowY,m\.font\*1\.6/);
+ assert.match(app,/appendCircularPartyLogo\(group,row\.logo,xs\[4\]\+15,rowY\+height\/2-8,16/);
+});
+test('Uploaded party logos crop to a transparent circular 128px PNG',async()=>{
+ const start=app.indexOf('async function readLogo(file){'),end=app.indexOf('function renderCustomLogo()',start);
+ assert.ok(start>=0&&end>start,'Party-logo upload function must be found');
+ const calls=[];
+ const canvas={width:0,height:0,getContext:()=>({
+  clearRect:(...a)=>calls.push(['clear',...a]),
+  beginPath:()=>calls.push(['begin']),arc:(...a)=>calls.push(['arc',...a]),
+  closePath:()=>calls.push(['close']),clip:()=>calls.push(['clip']),
+  drawImage:(...a)=>calls.push(['draw',...a])
+ }),toDataURL:kind=>{calls.push(['export',kind]);return'data:image/png;base64,YWJj'}};
+ const document={createElement:tag=>{assert.equal(tag,'canvas');return canvas}};
+ class MockImage{naturalWidth=300;naturalHeight=150;set src(value){this.source=value;this.onload()}}
+ const url={createObjectURL:()=> 'blob:party-logo',revokeObjectURL:value=>calls.push(['revoke',value])};
+ const reader=new Function('document','Image','URL','cleanLogo',app.slice(start,end)+';return readLogo')(
+  document,MockImage,url,value=>value);
+ const output=await reader({size:1000,type:'image/png'});
+ assert.equal(output,'data:image/png;base64,YWJj');
+ assert.equal(canvas.width,128);assert.equal(canvas.height,128);
+ assert.deepEqual(calls.find(a=>a[0]==='arc'),['arc',64,64,64,0,Math.PI*2]);
+ assert.ok(calls.findIndex(a=>a[0]==='clip')<calls.findIndex(a=>a[0]==='draw'));
+ const paint=calls.find(a=>a[0]==='draw');
+ assert.ok(paint[2]<0,'Wide images must crop off both sides instead of letterboxing');
+ assert.ok(Math.abs(paint[4]-256)<.001,'Image must fill the circle diameter');
+ assert.deepEqual(calls.at(-1),['revoke','blob:party-logo']);
+ await assert.rejects(reader({size:3*1024*1024,type:'image/png'}),/2 MB/);
+});
+test('Existing party logos are displayed as circles in every HTML view',()=>{
+ const css=read('style.css');
+ assert.match(css,/\.party-logo\{[^}]*object-fit:cover;[^}]*border-radius:50%/);
+ assert.match(css,/\.custom-logo-preview img\{[^}]*object-fit:cover;[^}]*border-radius:50%/);
+ assert.match(css,/\.legend-logo-edit img\{[^}]*object-fit:cover;[^}]*border-radius:50%/);
+ assert.match(css,/\.candidate-party img\{[^}]*object-fit:cover;[^}]*border-radius:50%/);
+ assert.match(css,/\.party-brush-logo \.party-logo\{[^}]*border-radius:50%/);
+ assert.match(index,/上传后自动裁剪为圆形/);
+ assert.match(app,/p\.logo=await readLogo\(file\.files\[0\]\)/);
+ assert.match(app,/customLogo=await readLogo\(e\.target\.files\[0\]\)/);
+});
 function isolatedExportGuard(env){
  const start=app.indexOf('async function ensureExportMapReady(){');
  const end=app.indexOf('const mapPromise=',start);
