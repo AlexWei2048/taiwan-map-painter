@@ -8,7 +8,30 @@ function councilTownAreas(){return typeof TOWN_PREDICTION_AREAS==='undefined'?{}
 function ensureTownPredictionAreas(){
  if(typeof TOWN_PREDICTION_AREAS!=='undefined')return Promise.resolve(true);
  if(loadingTownAreas)return loadingTownAreas;
- loadingTownAreas=new Promise((resolve,reject)=>{const script=document.createElement('script');script.src='town-areas.js?v=20261031-complete-winners-v16';script.onload=()=>{nationwideCouncilLocalFeatures=null;resolve(true);if(data&&localPredictionActive()&&state.predictionOffice==='council')render()};script.onerror=()=>reject(new Error('议员乡镇地图资料载入失败，请检查网络后刷新'));document.body.append(script)}).catch(e=>{loadingTownAreas=null;toast(e.message);return false});
+ const loadScript=attempt=>new Promise((resolve,reject)=>{
+  const script=document.createElement('script');
+  script.src='town-areas.js?v=20261031-complete-winners-v16'+(attempt?'&retry='+Date.now()+'-'+attempt:'');
+  script.onload=()=>{
+   if(typeof TOWN_PREDICTION_AREAS==='undefined')return reject(Error('议员乡镇地图脚本没有提供地图资料'));
+   nationwideCouncilLocalFeatures=null;
+   resolve(true);
+   if(data&&localPredictionActive()&&state.predictionOffice==='council'){
+    try{render()}catch(error){console.error('议员乡镇地图渲染失败',error)}
+   }
+  };
+  script.onerror=()=>{script.remove();reject(Error('议员乡镇地图脚本下载失败'))};
+  document.body.append(script);
+ });
+ loadingTownAreas=(async()=>{
+  let lastError;
+  for(let attempt=0;attempt<3;attempt++){
+   try{return await loadScript(attempt)}catch(error){
+    lastError=error;console.warn('议员乡镇地图载入尝试 '+(attempt+1)+'/3 失败',error);
+    if(attempt<2)await new Promise(resolve=>setTimeout(resolve,400*(attempt+1)));
+   }
+  }
+  throw Error('议员乡镇地图载入失败（已重试3次）：'+(lastError?.message||'网络连接异常'));
+ })().catch(error=>{loadingTownAreas=null;toast(error.message);return false});
  return loadingTownAreas;
 }
 function fullCouncilLocalFeatures(){if(!nationwideCouncilLocalFeatures)nationwideCouncilLocalFeatures=Object.values(councilTownAreas()).flat();return nationwideCouncilLocalFeatures}
