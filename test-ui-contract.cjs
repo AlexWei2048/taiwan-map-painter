@@ -582,41 +582,57 @@ test('Existing party logos are displayed as circles in every HTML view',()=>{
  assert.match(app,/p\.logo=await readLogo\(file\.files\[0\]\)/);
  assert.match(app,/customLogo=await readLogo\(e\.target\.files\[0\]\)/);
 });
-test('Nationwide township maps always label only counties regardless of zoom or SVG export',()=>{
+test('All map name labels are region-anchored and never create outside leader lines',()=>{
  const start=app.indexOf('function drawLabels(group,items,t,font=15,interactive=false){');
  const end=app.indexOf('\nfunction drawIdentityPanelLabels(',start);
- assert.ok(start>=0&&end>start,'Shared map label renderer must be found');
+ assert.ok(start>=0&&end>start);
  const towns=[{id:'town-1',name:'中正区'},{id:'town-2',name:'大安区'}];
  const counties=[{id:'county-1',name:'台北市'},{id:'county-2',name:'新北市'}];
- const state={level:'towns',county:'',districtLeaders:true};
- const data={counties};let passedItems,passedFont,rendered=[];
+ const state={level:'towns',county:''},data={counties};
+ let passedItems,passedFont;
  const el=(tag,attrs)=>({tag,attrs:attrs||{},children:[],style:{},append(...nodes){this.children.push(...nodes)}});
- const layout=(items,t,font)=>{passedItems=items;passedFont=font;
-  return items.map(f=>({f,x:12,y:25,ax:10,ay:23,out:true,side:'left',elbow:8,font}))};
- const draw=new Function('state','data','labelLayout','shownLabel','svgEl','isNationwide','paint',
-  app.slice(start,end)+';return drawLabels')(state,data,layout,f=>f.name,el,()=>true,()=>{});
+ const layout=(items,t,font)=>{passedItems=items;passedFont=font;return items.map(f=>({f,x:12,y:25,font,lines:[f.name]}))};
+ const draw=new Function('state','data','labelLayout','shownLabel','svgEl','paint',
+  app.slice(start,end)+';return drawLabels')(state,data,layout,f=>f.name,el,()=>{});
  const group=()=>({children:[],replaceChildren(){this.children=[]},append(node){this.children.push(node)}});
  let g=group();draw(g,towns,{},12,true);
- assert.deepEqual(passedItems,counties,'Zoomed-in town geography must use county labels');
- assert.equal(passedFont,19,'Use prominent, consistent county label size');
- assert.deepEqual(g.children.map(x=>x.children.map(child=>child.tag)),[['text'],['text']],
-  'No township leader lines or dots may remain');
+ assert.deepEqual(passedItems,counties);
+ assert.equal(passedFont,18,'Nationwide county summary size drops one step');
+ assert.deepEqual(g.children.map(x=>x.children.map(child=>child.tag)),[['text'],['text']]);
+ assert.deepEqual(g.children.map(x=>x.children[0].attrs['data-placement']),['inside','inside']);
  assert.deepEqual(g.children.map(x=>x.children[0].textContent),['台北市','新北市']);
- assert.deepEqual(g.children.map(x=>x.children[0].attrs['data-label']),['county-1','county-2']);
- // Export path also calls drawLabels directly, so it must use the same rule.
  g=group();draw(g,towns,{},10,false);
  assert.deepEqual(g.children.map(x=>x.children[0].textContent),['台北市','新北市']);
- assert.match(app,/drawLabels\(g,currentItems\(\),geometryLayout\(currentItems\(\),true\),sceneSpec\(\)\.font,false\)/);
- // Selecting a county restores township names and their normal leader behavior.
  state.county='台北市';g=group();draw(g,towns,{},12,true);
  assert.deepEqual(passedItems,towns);
- assert.deepEqual(g.children.map(x=>x.children.at(-1).textContent),['中正区','大安区']);
- assert.deepEqual(g.children[0].children.map(c=>c.tag),['path','circle','text']);
- // This condition must not affect any other map level.
+ assert.equal(passedFont,11);
+ assert.deepEqual(g.children.map(x=>x.children[0].attrs['data-placement']),['inside','inside']);
+ assert.deepEqual(g.children.map(x=>x.children[0].textContent),['中正区','大安区']);
  state.county='';state.level='counties';g=group();draw(g,towns,{},12,true);
  assert.deepEqual(passedItems,towns);
+ assert.doesNotMatch(app.slice(start,end),/svgEl\('path'|svgEl\('circle'/);
+ assert.match(app,/\$\('districtLeaderControls'\)\.hidden=true/);
+ assert.match(app,/drawLabels\(g,currentItems\(\),geometryLayout\(currentItems\(\),true\),sceneSpec\(\)\.font,false\)/);
 });
-
+test('Placement uses polygon interiors, adapts font, and splits long names',()=>{
+ const start=app.indexOf('function labelLayout(items,t,font=15){'),end=app.indexOf('\nfunction drawLabels(',start);
+ assert.ok(start>=0&&end>start);
+ const state={level:'counties',county:''},feature={
+  id:'tiny',name:'非常长的选举区域',box:[0,0,24,12],center:[12,6],labelAnchor:[12,6]
+ };
+ const result=new Function('sceneSpec','legendBox','contentArea','state','shownLabel','regionContains',
+  app.slice(start,end)+';return labelLayout')(
+  ()=>({}),()=>({x:1000,y:1000}),()=>({left:0,right:500,top:0,bottom:500}),state,f=>f.name,
+  (f,x,y)=>x>=0&&x<=24&&y>=0&&y<=12)([feature],{scale:1,tx:0,ty:0},12);
+ assert.equal(result.length,1);
+ assert.equal(result[0].f.id,'tiny');
+ assert.ok(result[0].x>=0&&result[0].x<=24);
+ assert.ok(result[0].y>=0&&result[0].y<=12);
+ assert.ok(result[0].font<12);
+ assert.equal(result[0].lines.length,2);
+ assert.equal(result[0].out,undefined);
+ assert.doesNotMatch(app.slice(start,end),/leftLabelEdge|forcedOutside|insetLabels|outside\.push/);
+});
 test('Map fetch retries bypass corrupt caches and report persistent network errors',async()=>{
  const start=app.indexOf('async function fetchMapJson(url,label,attempts=3){');
  const end=app.indexOf('// Load only the map layers',start);
