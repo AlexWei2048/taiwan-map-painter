@@ -124,9 +124,14 @@ function labelLayout(items,t,font=15){
 }
 
 function drawLabels(group,items,t,font=15,interactive=false){
- group.replaceChildren();for(const q of labelLayout(items.filter(f=>shownLabel(f)),t,font)){
+ // Nationwide township maps always label the 22 counties/cities, even when zoomed in.
+ // Keep town geometry and color fills intact; only replace the text layer.
+ const nationwideTownLabels=state.level==='towns'&&!state.county;
+ const labelItems=nationwideTownLabels?(data?.counties||[]):items;
+ if(nationwideTownLabels){font=19;interactive=false}
+ group.replaceChildren();for(const q of labelLayout(labelItems.filter(f=>shownLabel(f)),t,font)){
  const target=svgEl('g',{'class':'map-label'});group.append(target);
- if(q.out&&(!['council','legislative'].includes(state.level)||state.districtLeaders)){const end=q.side==='left'?q.x+9:q.x-9,elbow=q.elbow;target.append(svgEl('path',{d:`M${q.ax},${q.ay}L${elbow},${q.y}L${end},${q.y}`,fill:'none',stroke:'#92a49b','stroke-width':.55,opacity:isNationwide()?.18:.65,'vector-effect':'non-scaling-stroke'}));target.append(svgEl('circle',{cx:q.ax,cy:q.ay,'data-leader-region':q.f.id,r:2,fill:'#6d8879',opacity:isNationwide()?.35:1}))}
+ if(!nationwideTownLabels&&q.out&&(!['council','legislative'].includes(state.level)||state.districtLeaders)){const end=q.side==='left'?q.x+9:q.x-9,elbow=q.elbow;target.append(svgEl('path',{d:`M${q.ax},${q.ay}L${elbow},${q.y}L${end},${q.y}`,fill:'none',stroke:'#92a49b','stroke-width':.55,opacity:isNationwide()?.18:.65,'vector-effect':'non-scaling-stroke'}));target.append(svgEl('circle',{cx:q.ax,cy:q.ay,'data-leader-region':q.f.id,r:2,fill:'#6d8879',opacity:isNationwide()?.35:1}))}
  const text=svgEl('text',{x:q.x,y:q.y,'font-size':q.font,'data-label':q.f.id,'data-placement':q.inset?'inset':q.out?'outside':'inside','text-anchor':q.out?(q.side==='left'?'end':'start'):'middle','dominant-baseline':'middle',fill:'#2c493b',stroke:'#ffffffed','stroke-width':4,'paint-order':'stroke','stroke-linejoin':'round'});text.style.strokeWidth=state.level==='counties'?2:2.4;text.style.textAnchor=q.out?(q.side==='left'?'end':'start'):'middle';text.textContent=shownLabel(q.f);if(interactive){text.style.pointerEvents='auto';text.style.cursor='pointer';text.onclick=()=>paint(q.f)}target.append(text);
  }
 }
