@@ -127,6 +127,36 @@ test('Both election editors compute read-only totals, no manual total required',
  assert.match(app,/PredictionCore\.tallyVotes\(voteDraft\.map/);
  assert.match(read('prediction-ui.js'),/PredictionCore\.tallyVotes\(candidates\.map/);
 });
+
+test('Merged vote display calculates highest candidate from votes or shares',()=>{
+ const core=require('./prediction-core.js');
+ const cs=[{id:'a',party:'甲'},{id:'b',party:'乙'},{id:'c',party:'甲'}];
+ const votes=core.voteResult(cs,{winners:[],estimates:{a:{votes:280},b:{votes:500},c:{votes:220}}});
+ const shares=core.voteResult(cs,{winners:[],estimates:{a:{share:28},b:{share:50},c:{share:22}}});
+ assert.equal(votes.candidate.id,'b');assert.equal(shares.candidate.id,'b');
+ assert.equal(votes.votes,500);assert.equal(votes.share,50);assert.equal(shares.votes,null);
+ assert.equal(shares.share,50);
+ const group=core.voteResult(cs,{estimates:{a:{share:28},b:{share:50},c:{share:22}}},true);
+ assert.equal(group,null,'Equal highest party shares must not silently choose a winner');
+ assert.equal(core.voteResult(cs,{estimates:{a:{votes:100},b:{votes:200}}}),null,'Partial entries cannot establish highest candidate');
+ const t=require('./town-prediction-core.js');
+ const local=t.summary(cs,{leaderId:'a',estimates:{a:{votes:280},b:{votes:500},c:{votes:220}}},'topVote','',true);
+ assert.equal(local.status,'winner');assert.equal(local.candidate.id,'b');assert.equal(local.share,50);
+ const percentageOnly=t.summary(cs,{estimates:{a:{share:28},b:{share:50},c:{share:22}}},'topVote','',true);
+ assert.equal(percentageOnly.status,'winner');assert.equal(percentageOnly.candidate.id,'b');
+ assert.equal(percentageOnly.votes,null);
+});
+test('Numeric mode does not require manual predicted winners',()=>{
+ assert.match(workspace,/\['topVote','最高票者得票（票数／得票率）'\]/);
+ assert.match(town,/\['topVote','最高票者得票（票数／得票率）'\]/);
+ assert.match(read('prediction-ui.js'),/if\(predictionUsesVoteDisplay\(\)\)\{r\.winners=\[\]/);
+ assert.match(town,/if\(state\.predictionDisplay!=='composition'\)draft\.leaderId=''/);
+ assert.match(index,/id="localUseVoteData"/);
+ assert.match(read('style.css'),/\.prediction-dialog\.numeric-entry \.prediction-table th:first-child/);
+ assert.match(read('style.css'),/\.local-dialog\.numeric-entry \.local-table th:first-child/);
+ assert.match(app,/predictionUsesVoteDisplay\(\)\|\|typeof predictionDistricts/);
+ assert.match(workspace,/complete=d=>predictionUsesVoteDisplay\(\)\?!!predictionDisplayResult\(d\)/);
+});
 function isolatedExportGuard(env){
  const start=app.indexOf('async function ensureExportMapReady(){');
  const end=app.indexOf('const mapPromise=',start);
