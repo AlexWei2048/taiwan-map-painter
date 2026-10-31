@@ -18,22 +18,26 @@ function tallyVotes(values){
 function voteResult(candidates,record,byParty=false){
  if(!record)return null;
  const rows=candidates.map(candidate=>{const e=record.estimates?.[candidate.id]||{};return{candidate,votes:number(e.votes),share:number(e.share,true)}});
- if(!rows.length)return null;
- const allVotes=rows.every(r=>r.votes!==null),allShares=rows.every(r=>r.share!==null);
+ const entered=rows.filter(r=>r.votes!==null||r.share!==null);
+ if(!entered.length)return null;
+ const allVotes=entered.every(r=>r.votes!==null),allShares=entered.every(r=>r.share!==null);
+ // A candidate's unedited, visually displayed zero is not a recorded vote.
+ // Compare whatever is actually entered, but never mix incomparable metrics.
  if(!allVotes&&!allShares)return null;
- const total=allVotes?rows.reduce((n,r)=>n+r.votes,0):null;
- if(allVotes&&(!Number.isSafeInteger(total)||total<=0))return null;
- if(allShares&&rows.reduce((n,r)=>n+r.share,0)>100.1)throw Error('得票率合计不能超过100%');
+ const useVotes=allVotes&&!allShares;
+ const total=useVotes?entered.reduce((n,r)=>n+r.votes,0):null;
+ if(useVotes&&(!Number.isSafeInteger(total)||total<=0))return null;
+ if(allShares&&entered.reduce((n,r)=>n+r.share,0)>100.1)throw Error('得票率合计不能超过100%');
  const groups=new Map();
- for(const row of rows){
-  const share=allVotes?row.votes/total*100:row.share,key=byParty?row.candidate.party:row.candidate.id;
-  if(!groups.has(key))groups.set(key,{candidate:row.candidate,party:row.candidate.party,share:0,votes:allVotes?0:null});
+ for(const row of entered){
+  const share=useVotes?row.votes/total*100:row.share,key=byParty?row.candidate.party:row.candidate.id;
+  if(!groups.has(key))groups.set(key,{candidate:row.candidate,party:row.candidate.party,share:0,votes:useVotes?0:null});
   const group=groups.get(key);group.share+=share;
-  if(allVotes)group.votes+=row.votes;
+  if(useVotes)group.votes+=row.votes;
  }
  const ranked=[...groups.values()].sort((a,b)=>b.share-a.share);
  if(!ranked[0]||ranked[0].share<=0||ranked.length>1&&Math.abs(ranked[0].share-ranked[1].share)<1e-8)return null;
- return{...ranked[0],value:ranked[0].share};
+ return{...ranked[0],value:ranked[0].share,partial:entered.length<candidates.length,recorded:entered.length,totalCandidates:candidates.length,inputMetric:useVotes?'votes':'share'};
 }
 function validate(d,cs,r={}){const ids=new Set(cs.map(c=>c.id)),winners=[...new Set(r.winners||[])];if(winners.some(id=>!ids.has(id)))throw Error('预测引用了不在本选区名单中的候选人');if(winners.length>d.seats)throw Error('预测当选人数不能超过应选席次');const estimates={};for(const [id,e]of Object.entries(r.estimates||{})){if(!ids.has(id))throw Error('预测值引用了未知候选人');const votes=number(e.votes),share=number(e.share,true);if(votes!==null||share!==null)estimates[id]={votes,share}}if(Object.values(estimates).reduce((n,e)=>n+(e.share||0),0)>100.1)throw Error('预测得票率合计不能超过100%');const all=cs.map(c=>estimates[c.id]||{});if(all.length&&all.every(e=>e.votes!==null&&e.votes!==undefined&&e.share!==null&&e.share!==undefined)){const total=all.reduce((n,e)=>n+e.votes,0);if(all.some(e=>Math.abs(e.share-(total?e.votes/total*100:0))>.11))throw Error('预测票数与得票率不一致，请修正或仅填一种指标')}return{winners,estimates,note:String(r.note||'').slice(0,300),method:r.method==='ranking'?'ranking':'manual',updatedAt:r.updatedAt||''}}
 function rank(d,cs,estimates,metric='votes'){if(cs.length<=d.seats)throw Error('同额或不足额选举涉及法定得票门槛，请手动做出预测');if(d.womenReserved>0&&d.womenReservedNote)throw Error('此组选区有跨区妇保席次，请先按完整组选区票数核对，再手动选择当选者');const scored=cs.map(c=>({c,n:number(estimates[c.id]?.[metric],metric==='share')}));if(scored.some(x=>x.n===null))throw Error('请填写本选区全部候选人的同一种预测值');if(!scored.some(x=>x.n>0))throw Error('所有预测值均为0，无法生成排序');scored.sort((a,b)=>b.n-a.n);const seats=Math.min(d.seats,cs.length);if(scored[seats]&&scored[seats-1].n===scored[seats].n)throw Error('末席出现同票，请手动选择，不自动决定当选人');let chosen=scored.slice(0,seats);const quota=Math.min(Number(d.womenReserved)||0,cs.filter(c=>c.gender==='女').length);while(chosen.filter(x=>x.c.gender==='女').length<quota){const females=scored.filter(x=>x.c.gender==='女'&&!chosen.includes(x));if(!females.length)break;const take=females[0];if(females[1]?.n===take.n)throw Error('妇保递补女性出现同票，请手动核对');const men=[...chosen].reverse().filter(x=>x.c.gender!=='女');if(men.length>1&&men[0].n===men[1].n)throw Error('被调整的末位男性出现同票，请手动核对');chosen=chosen.filter(x=>x!==men[0]);chosen.push(take)}return chosen.map(x=>x.c.id)}
