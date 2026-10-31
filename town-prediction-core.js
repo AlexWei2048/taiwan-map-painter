@@ -7,7 +7,7 @@
   const totalVotes=P.number(record.totalVotes),leaderId=String(record.leaderId||'');if(leaderId&&(!allowLeader||!ids.has(leaderId)))throw Error('预测胜出者不在当前候选人名单中');
   const rows=cs.map(c=>({c,...(estimates[c.id]||{})})),allVotes=rows.length>0&&rows.every(r=>present(r.votes)),allShares=rows.length>0&&rows.every(r=>present(r.share));const voteSum=rows.reduce((n,r)=>n+(r.votes||0),0),shareSum=rows.reduce((n,r)=>n+(r.share||0),0);
   if(!Number.isSafeInteger(voteSum))throw Error('乡镇票数合计超出安全范围');if(shareSum>100.1)throw Error('乡镇得票率合计不能超过100%');if(totalVotes!==null&&voteSum>totalVotes)throw Error('已录入票数不能超过乡镇有效票总数');if(allVotes&&totalVotes!==null&&voteSum!==totalVotes)throw Error('完整候选人票数合计应等于乡镇有效票总数');
-  const denominator=totalVotes??(allVotes?voteSum:null);if(denominator>0)for(const r of rows)if(present(r.votes)&&present(r.share)&&Math.abs(r.share-r.votes/denominator*100)>.11)throw Error('乡镇票数与得票率不一致，请修正或只填写一种指标');
+  const denominator=allVotes?(totalVotes??voteSum):(totalVotes!==null&&totalVotes>voteSum?totalVotes:null);if(denominator>0)for(const r of rows)if(present(r.votes)&&present(r.share)&&Math.abs(r.share-r.votes/denominator*100)>.11)throw Error('乡镇票数与得票率不一致，请修正或只填写一种指标');
   const completeVotes=allVotes&&voteSum>0,completeShares=allShares&&Math.abs(shareSum-100)<=.11;
   if(leaderId&&(completeVotes||completeShares)){const metric=completeVotes?'votes':'share',max=Math.max(...rows.map(r=>r[metric]));if(rows.find(r=>r.c.id===leaderId)[metric]<max)throw Error('预测胜出者与完整得票排名不一致，请核对选择或数值')}
   return{leaderId,estimates,totalVotes,note:String(record.note||'').slice(0,300),updatedAt:String(record.updatedAt||'').slice(0,40),completeVotes,completeShares,denominator};
