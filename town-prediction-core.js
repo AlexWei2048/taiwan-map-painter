@@ -13,8 +13,19 @@
   return{leaderId,estimates,totalVotes,note:String(record.note||'').slice(0,300),updatedAt:String(record.updatedAt||'').slice(0,40),completeVotes,completeShares,denominator};
  }
  function summary(cs,record={},mode='leader',candidateId='',allowLeader=false){
-  let r;try{r=validate(cs,record,allowLeader)}catch(e){return{status:'invalid',message:e.message}}
+  let r;try{r=validate(cs,['topVote','partyTop','candidateVote'].includes(mode)?{...record,leaderId:''}:record,allowLeader)}catch(e){return{status:'invalid',message:e.message}}
   const rows=cs.map(c=>({candidate:c,party:c.party,votes:r.estimates[c.id]?.votes??null,share:r.estimates[c.id]?.share??null}));for(const row of rows)if(row.share===null&&row.votes!==null&&r.denominator>0)row.share=row.votes/r.denominator*100;
+  if(['topVote','partyTop','candidateVote'].includes(mode)){
+   if(!r.completeVotes&&!r.completeShares)return{status:'missing',message:'请填写全部候选人的得票数或得票率'};
+   if(mode==='candidateVote'){const row=rows.find(x=>x.candidate.id===candidateId);return row&&row.share!==null?{status:'winner',...row,value:row.share,record:r}:{status:'missing',message:'请选择候选人并填写得票数据'}}
+   if(mode==='partyTop'){
+    const grouped=new Map();for(const row of rows){const group=grouped.get(row.party)||{party:row.party,candidate:row.candidate,votes:r.completeVotes?0:null,share:0};group.share+=row.share??0;if(r.completeVotes)group.votes+=row.votes;grouped.set(row.party,group)}
+    const ranked=[...grouped.values()].sort((a,b)=>b.share-a.share);if(!ranked[0]||ranked[0].share<=0)return{status:'missing',message:'尚未录入有效得票'};if(ranked[1]&&Math.abs(ranked[0].share-ranked[1].share)<1e-8)return{status:'tie',message:'政党得票并列最高'};
+    return{status:'winner',...ranked[0],value:ranked[0].share,record:r}
+   }
+   const ranked=[...rows].sort((a,b)=>b.share-a.share);if(!ranked[0]||ranked[0].share<=0)return{status:'missing',message:'尚未录入有效得票'};if(ranked[1]&&Math.abs(ranked[0].share-ranked[1].share)<1e-8)return{status:'tie',message:'候选人并列最高'};
+   return{status:'winner',...ranked[0],value:ranked[0].share,record:r}
+  }
   const votesMode=mode.endsWith('Votes')||mode==='votes',key=votesMode?'votes':'share';
   if(mode.startsWith('candidate')){const row=rows.find(x=>x.candidate.id===candidateId);if(!row||row[key]===null)return{status:'missing',message:'尚未填写该候选人的'+(votesMode?'票数':'得票率')};return{status:'winner',...row,value:row[key],record:r}}
   if(mode.startsWith('party')){if(!r.completeVotes&&!r.completeShares)return{status:'missing',message:'请填写该乡镇全部候选人的同一种得票指标'};if(votesMode&&!r.completeVotes)return{status:'missing',message:'仅有得票率，不能生成票数'};const groups=new Map();for(const row of rows){const old=groups.get(row.party)||{party:row.party,value:0,candidate:row.candidate};old.value+=row[key]??0;groups.set(row.party,old)}const ranked=[...groups.values()].sort((a,b)=>b.value-a.value);if(ranked[1]?.value===ranked[0]?.value)return{status:'tie',message:'政党得票并列最高'};return{status:'winner',...ranked[0],record:r}}
