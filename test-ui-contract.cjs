@@ -33,6 +33,8 @@ test('Coastlines are excluded while all actual shared administrative borders rem
  assert.equal(result.byCounty['县甲'],'M1,0L1,1');
  assert.equal(result.byCounty['县乙'],'M1,0L1,1');
  assert.equal(result.byTown['镇甲'],'M1,0L1,1');
+ assert.equal(result.byTown['镇乙'],'M1,0L1,1');
+ assert.match(app,/appendSharedBorders\(group,'towns','regional',state.level==='villages'\)/);
  assert.equal(result.byCounty['离岛'],undefined);
  assert.equal(calculate(polygons.slice(0,1)).all,'');
  assert.equal(calculate([{...polygons[0]}, {...polygons[1],id:'a'}]).all,'');
@@ -42,7 +44,7 @@ test('Coastlines are excluded while all actual shared administrative borders rem
  assert.match(app,/\['#regions path','none',0\]/);
  assert.doesNotMatch(app,/for\(const f of countyOutlines\)/);
  assert.match(read('style.css'),/#regions path,#regions path:hover/);
- assert.match(index,/app\.js\?v=20261031-shared-borders-v47/);
+ assert.match(index,/app\.js\?v=20261031-shared-borders-v48/);
 });
 
 test('All runtime JavaScript parses cleanly',()=>{

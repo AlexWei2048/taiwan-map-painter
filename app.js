@@ -174,8 +174,8 @@ function sharedBoundaryGeometry(features){
    if(x===y)return;
    const key=x<y?x+'|'+y:y+'|'+x;
    const entry=edges.get(key);
-   if(!entry){edges.set(key,{a:x,b:y,owner,county:feature.county||feature.name||'',town:feature.townId||'',other:null});return}
-   if(entry.owner!==owner&&!entry.other)entry.other={owner,county:feature.county||feature.name||'',town:feature.townId||''};
+   if(!entry){edges.set(key,{a:x,b:y,owner,county:feature.county||feature.name||'',town:feature.townId||feature.id||'',other:null});return}
+   if(entry.owner!==owner&&!entry.other)entry.other={owner,county:feature.county||feature.name||'',town:feature.townId||feature.id||''};
   };
   while(cursor<tokens.length){
    if(/^[MmLlHhVvZz]$/.test(tokens[cursor])){
@@ -708,7 +708,7 @@ function renderTownBorders(){
    appendSharedBorders(layer,'towns');
    group.append(layer);
   }
- }else appendSharedBorders(group,'towns');
+ }else appendSharedBorders(group,'towns','regional',state.level==='villages');
 }
 $('showTownBoundaries').onchange=()=>{pushHistory();state.showTownBoundaries=$('showTownBoundaries').checked;applyBorders();persist()};
 
