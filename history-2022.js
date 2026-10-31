@@ -6,7 +6,15 @@
  const norm=x=>simplify(String(x||'')).trim();
  const normalizeParty=name=>{let s=norm(name||'无党籍');if(s.includes('无党籍及未经政党推荐')||s==='无党籍及未经政党推薦')s='无党籍';return s};
  const partyColor=p=>partyMatch(p)?.color||'#8a9892';
- const tone=(color,share,range)=>{if(metric!=='share')return color;const t=Math.max(0,Math.min(1,(share-range.min)/Math.max(1,range.max-range.min)));const rgb=color.match(/[a-f\\d]{2}/gi)?.map(x=>parseInt(x,16))||[100,120,105];const mix=(from,to,p)=>Math.round(from+(to-from)*p);const light=rgb.map(c=>mix(255,c,.20)),dark=rgb.map(c=>mix(c,0,.25));return 'rgb('+light.map((v,i)=>mix(v,dark[i],Math.pow(t,.85))).join(',')+')'};
+ const tone=(color,share,range)=>{
+  if(metric!=='share')return color;
+  // Preserve the party's exact base color at the high end. Only mix with white for lower shares.
+  const hex=/^#[0-9a-f]{6}$/i.test(color)?color:'#8a9892';
+  const rgb=[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16));
+  const t=Math.max(0,Math.min(1,(share-range.min)/Math.max(1,range.max-range.min)));
+  const strength=.28+.72*Math.pow(t,.8);
+  return '#'+rgb.map(channel=>Math.round(255+(channel-255)*strength).toString(16).padStart(2,'0')).join('');
+ };
  const electionKey=r=>[r.type,r.electorate,r.level,r.county,r.town,r.village,r.district,r.number,r.name].join('|');
  const dbIds=new Set();
  const addRows=rows=>{let added=0;for(const src of rows){
