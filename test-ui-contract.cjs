@@ -82,6 +82,26 @@ test('Current reset is scoped to visible features and full reset restores the de
  assert.match(clear,/pruneUnusedAutoPredictionPalette\(state\)/);
  assert.match(app,/undo\.length=0;redo\.length=0/);
 });
+
+test('Blank candidate inputs display zero without saving artificial forecast data',()=>{
+ assert.match(read('prediction-ui.js'),/input\.value=predictionDraft\.estimates\[c\.id\]\?\.\[key\]\?\?'0'/);
+ assert.match(read('town-prediction-ui.js'),/input\.value=localDraft\.estimates\?\.\[c\.id\]\?\.\[key\]\?\?'0'/);
+ assert.match(app,/input\.value=r\[key\]\?\?\(\['votes','share'\]\.includes\(key\)\?'0':'\'\)/);
+ assert.match(read('prediction-ui.js'),/if\(key==='share'\)input\.max='100'/);
+ assert.match(read('town-prediction-ui.js'),/if\(key==='share'\)input\.max='100'/);
+ assert.match(app,/if\(key==='share'\)input\.max='100'/);
+});
+test('Rate gradient fields show 100 percent as default maximum',()=>{
+ assert.match(read('workspace-ui.js'),/predictionRangeMax'\)\.value=state\.gradient\.max\?\?\(predictionIsVotes\(\)\?'':100\)/);
+ assert.match(read('workspace-ui.js'),/state\.gradient\.max=predictionIsVotes\(\)\?null:100/);
+ assert.match(app,/gradientMax'\)\.value=state\.gradient\.max===null\?\(state\.gradient\.metric==='share'\?100:''\)/);
+ assert.match(app,/state\.gradient\.max=state\.gradient\.metric==='share'\?100:null/);
+});
+test('Township forecast labels omit local filler words while accepting earlier CSV headers',()=>{
+ for(const p of ['index.html','town-prediction-core.js'])assert.doesNotMatch(read(p),/本地|当地/);
+ assert.match(read('town-prediction-ui.js'),/ix\('预测胜出'\)>=0\?ix\('预测胜出'\):ix\('当地胜出'\)/);
+ assert.match(index,/预测胜出/);
+});
 function isolatedExportGuard(env){
  const start=app.indexOf('async function ensureExportMapReady(){');
  const end=app.indexOf('const mapPromise=',start);
