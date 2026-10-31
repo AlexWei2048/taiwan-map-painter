@@ -297,11 +297,36 @@ function exportSvg(){
 function preparedExportSvg(){const oldFilter=exportPanelFilter,oldLegend=state.legend.show,oldCouncilView=state.councilViewScope;state.councilViewScope='all';exportPanelFilter=state.level==='council'&&state.exportSettings.councilScope!=='all'?state.exportSettings.councilScope:'';state.legend.show=true;render();try{return exportSvg()}finally{exportPanelFilter=oldFilter;state.legend.show=oldLegend;state.councilViewScope=oldCouncilView;render()}}
 function exportFilename(){const suffix=state.level==='council'&&state.exportSettings.councilScope!=='all'?'_'+electorateName(state.exportSettings.councilScope):'';return filename()+suffix}
 $('exportWinnerTable').onchange=()=>{state.exportSettings.winnerTable=$('exportWinnerTable').checked;persist()};$('exportNote').oninput=()=>{state.exportSettings.note=simplify($('exportNote').value).trim().slice(0,500);persist()};$('councilExportScope').onchange=()=>{state.exportSettings.councilScope=$('councilExportScope').value;persist()};$('exportSvg').onclick=async()=>{try{await ensureExportMapReady();download(new Blob([preparedExportSvg()],{type:'image/svg+xml;charset=utf-8'}),exportFilename()+'.svg');toast('SVG 矢量图已导出，包含比例尺、指北针和对应图例')}catch(e){toast(e.message||'SVG 导出失败')}};$('exportPng').onclick=async()=>{const b=$('exportPng');b.disabled=true;const old=b.textContent;b.textContent='正在导出…';let url;try{await ensureExportMapReady();const source=preparedExportSvg(),doc=new DOMParser().parseFromString(source,'image/svg+xml'),height=Number(doc.documentElement.getAttribute('height')),width=Number(doc.documentElement.getAttribute('width'));if(!width||!height)throw Error('图片尺寸无效');const scale=Math.min(3,Math.floor(16000/Math.max(width,height)),Math.floor(Math.sqrt(55000000/(width*height))));if(scale<1)throw Error('图片过大，请取消当选名单表格，或使用 SVG 矢量图完整导出');url=URL.createObjectURL(new Blob([source],{type:'image/svg+xml;charset=utf-8'}));const img=new Image();img.src=url;await new Promise((ok,no)=>{img.onload=ok;img.onerror=no});const c=document.createElement('canvas');c.width=width*scale;c.height=height*scale;const ctx=c.getContext('2d');if(!ctx)throw Error('设备无法创建图片画布，请改用 SVG');ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(img,0,0,c.width,c.height);const blob=await new Promise(ok=>c.toBlob(ok,'image/png'));if(!blob)throw Error('图片生成失败，请改用 SVG');download(blob,exportFilename()+'.png');toast(scale===3?'已导出 3 倍清晰度 PNG 图片':'大图已自动调整为 '+scale+' 倍清晰度 PNG')}catch(e){toast(e.message||'导出失败，请尝试导出 SVG 矢量图')}finally{if(url)URL.revokeObjectURL(url);b.disabled=false;b.textContent=old}};
+// Retry large static map downloads without losing locally saved election projects.
+// The retry URL bypasses stale/corrupt intermediary caches while remaining same-origin.
+async function fetchMapJson(url,label,attempts=3){
+ let lastError;
+ for(let attempt=0;attempt<attempts;attempt++){
+  try{
+   const requestUrl=attempt?url+(url.includes('?')?'&':'?')+'retry='+Date.now()+'-'+attempt:url;
+   const response=await fetch(requestUrl,{cache:attempt?'reload':'default'});
+   if(!response.ok)throw Error('HTTP '+response.status);
+   const result=await response.json();
+   if(!result||typeof result!=='object')throw Error('地图文件内容无效');
+   return result;
+  }catch(error){
+   lastError=error;
+   console.warn(label+'载入尝试 '+(attempt+1)+'/'+attempts+' 失败',error);
+   if(attempt+1<attempts)await new Promise(resolve=>setTimeout(resolve,400*(attempt+1)));
+  }
+ }
+ throw Error(label+'载入失败（已重试'+attempts+'次）：'+(lastError?.message||'网络连接异常'));
+}
 // Load only the map layers the current user actually opens.
 const detailRequests=Object.create(null);
 function loadMapDetail(name,url,apply){
  if(detailRequests[name])return detailRequests[name];
- detailRequests[name]=fetch(url).then(r=>{if(!r.ok)throw Error('地图资料下载失败：'+name);return r.json()}).then(value=>{apply(value);render();return true}).catch(e=>{delete detailRequests[name];toast(e.message||'地图数据载入失败，请刷新页面');return false});
+ detailRequests[name]=fetchMapJson(url,name).then(value=>{apply(value);render();return true}).catch(e=>{
+  delete detailRequests[name];
+  console.error('地图图层载入失败：'+name,e);
+  toast(e.message||'地图数据载入失败，请重新选择地图层级');
+  return false
+ });
  return detailRequests[name];
 }
 function ensureMapDetails(){
@@ -312,7 +337,7 @@ function ensureMapDetails(){
  if(['council','legislative'].includes(layer)&&!Object.keys(data.districtBorders).length)loadMapDetail('选区边界','assets/map-district-borders.json?v=20261031-split-v25',part=>{if(!part.council||!part.legislative)throw Error('选区边界数据不完整');data.districtBorders=part;});
  if(['council','legislative','villages'].includes(layer)&&!data.townBorders.all.length)loadMapDetail('乡镇边界','assets/map-town-borders.json?v=20261031-split-v25',part=>{if(!Array.isArray(part)||part.length!==22)throw Error('乡镇边界数据不完整');data.townBorders={all:part};});
  if(layer==='villages'&&!data.villages.length&&!detailRequests.villages){
-  detailRequests.villages=Promise.all([1,2,3,4,5].map(n=>fetch('assets/map-villages-'+n+'.json?v=20261031-split-v25').then(r=>{if(!r.ok)throw Error('村里地图资料下载失败');return r.json()}))).then(parts=>{const rows=parts.flat();if(rows.length!==data.villageMetadata.count)throw Error('村里边界数据不完整');data.villages=rows;render();return true}).catch(e=>{delete detailRequests.villages;toast(e.message||'村里地图载入失败');return false});
+  detailRequests.villages=Promise.all([1,2,3,4,5].map(n=>fetchMapJson('assets/map-villages-'+n+'.json?v=20261031-split-v25','村里地图第'+n+'部分'))).then(parts=>{const rows=parts.flat();if(rows.length!==data.villageMetadata.count)throw Error('村里边界数据不完整');data.villages=rows;render();return true}).catch(e=>{delete detailRequests.villages;toast(e.message||'村里地图载入失败');return false});
  }
 }
 // Export never uses an incomplete lazy-loaded layer or a blank initial map.
@@ -333,8 +358,50 @@ async function ensureExportMapReady(){
  if(['council','legislative'].includes(state.level)&&!Object.keys(data.districtBorders).length)throw Error('选区边界资料尚未完整载入');
  if(!currentItems().length)throw Error('当前地图没有可导出的地理区域');
 }
-const mapPromise=$('embeddedMap')?new Promise(resolve=>{const ready=()=>resolve(JSON.parse($('embeddedMap').textContent));if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ready,{once:true});else ready()}):fetch('assets/map-base.json?v=20261031-split-v25').then(r=>{if(!r.ok)throw Error('地图未找到');return r.json()});
-mapPromise.then(d=>{data=d;for(const f of d.legislative)if(d.legislative.filter(x=>x.county===f.county).length===1)f.name=f.county;for(const f of [...d.counties].sort((a,b)=>COUNTY_ORDER.indexOf(a.name)-COUNTY_ORDER.indexOf(b.name))){const o=document.createElement('option');o.value=f.name;o.textContent=f.name;$('county').append(o)}if(state.county&&!d.counties.some(f=>f.name===state.county))state.county='';syncInputs();render()}).catch(e=>{$('loadError').hidden=false;$('progress').textContent='地图载入失败';console.error(e)});
+let mapPromise,mapLoadSequence=0;
+function showMapLoadError(error,phase='下载'){
+ const message=error?.message||String(error)||'未知错误';
+ $('loadError').hidden=false;
+ $('loadErrorMessage').textContent=phase==='渲染'?'地图渲染出现问题：'+message:'地图资料载入失败：'+message;
+ $('progress').textContent='地图载入失败（可以重试）';
+ console.error('地图'+phase+'失败',error);
+}
+function finishMapInitialization(d){
+ if(!d||!Array.isArray(d.counties)||d.counties.length!==22||!Array.isArray(d.towns)||!Array.isArray(d.legislative)){
+  throw Error('基础地图资料不完整，请重新下载');
+ }
+ data=d;
+ for(const f of d.legislative)if(d.legislative.filter(x=>x.county===f.county).length===1)f.name=f.county;
+ for(const f of [...d.counties].sort((a,b)=>COUNTY_ORDER.indexOf(a.name)-COUNTY_ORDER.indexOf(b.name))){
+  const o=document.createElement('option');o.value=f.name;o.textContent=f.name;$('county').append(o)
+ }
+ if(state.county&&!d.counties.some(f=>f.name===state.county))state.county='';
+ syncInputs();render();
+ $('loadError').hidden=true;
+}
+function startMapLoad(){
+ const sequence=++mapLoadSequence;
+ $('loadError').hidden=true;
+ $('progress').textContent='正在载入地图…';
+ const embedded=$('embeddedMap');
+ mapPromise=embedded?new Promise((resolve,reject)=>{
+  const ready=()=>{try{resolve(JSON.parse(embedded.textContent))}catch(error){reject(error)}};
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ready,{once:true});else ready()
+ }):fetchMapJson('assets/map-base.json?v=20261031-split-v25','基础地图');
+ mapPromise.then(d=>{
+  if(sequence!==mapLoadSequence)return;
+  try{finishMapInitialization(d)}catch(error){showMapLoadError(error,'渲染')}
+ }).catch(error=>{if(sequence===mapLoadSequence)showMapLoadError(error)});
+ return mapPromise;
+}
+$('retryMapLoad').onclick=()=>{
+ if(data){
+  try{syncInputs();render();$('loadError').hidden=true;return}
+  catch(error){showMapLoadError(error,'渲染');return}
+ }
+ startMapLoad();
+};
+startMapLoad();
 
 for(const p of PARTY_PRESETS){const o=document.createElement('option');o.value=p.id;o.textContent=p.name;$('partyPreset').append(o)}
 $('partyPreset').onchange=()=>{const preset=PARTY_PRESETS.find(p=>p.id===$('partyPreset').value);if(!preset)return;const found=state.palette.find(p=>partyMatch(p.name)?.id===preset.id);if(found){setBrush(found.id);toast('已选择'+preset.name)}else{pushHistory();const id='party-'+preset.id;state.palette.push({id,name:preset.name,color:preset.color});setBrush(id);renderLegend();persist();toast('已添加'+preset.name)}$('partyPreset').value=''};
