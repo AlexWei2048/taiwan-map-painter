@@ -95,7 +95,7 @@ function syncWorkspace(){
  $('predictionPanel').querySelector('h2').textContent=task?'填写预测':'地图上色';$('mapSettings').querySelector('h2').textContent=task?'选举与范围':'地图与范围';
  $('predictionScopeLabel').textContent=task?'2026 用户预测':'自由填色 · 自行录入数据';
  $('predictionGradientRange').hidden=!(task&&state.fillMode==='prediction'&&predictionUsesGradient());
- if(task&&predictionUsesGradient()){$('predictionRangeMin').value=state.gradient.min;$('predictionRangeMax').value=state.gradient.max??'';$('predictionRangeUnit').textContent=predictionIsVotes()?'票':'%'}
+ if(task&&predictionUsesGradient()){$('predictionRangeMin').value=state.gradient.min;$('predictionRangeMax').value=state.gradient.max??(predictionIsVotes()?'':100);$('predictionRangeUnit').textContent=predictionIsVotes()?'票':'%'}
  $('openElectionDirectory').textContent='查看所选区候选人';
  syncingWorkspace=false;
 }
@@ -128,9 +128,9 @@ $('headerExportPredictions').onclick=()=>exportPredictionCSV(false);$('districtT
 $('councilViewScope').onchange=()=>{state.councilViewScope=$('councilViewScope').value;render();persist()};
 $('downloadDistrictTable').onclick=()=>{const rows=[['县市','选区','类别','包含区域或选民范围','应选名额','妇保名额','妇保说明'],...districtTableRows().map(d=>[d.county,d.name,DistrictCore.identityName(d),mainlandTerms(d.scope),d.seats,d.womenReservedLabel,mainlandTerms(d.womenReservedNote)])];download(new Blob(['\uFEFF'+rows.map(r=>r.map(csvCell).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}),(state.county||'全台')+(state.level==='council'?'议员':'立法机构民代')+'选区范围与名额.csv')};
 // Keep legacy standalone data available without presenting a second prediction-data store.
-const range=document.createElement('div');range.id='predictionGradientRange';range.innerHTML='<p class="data-help">颜色表示政党，深浅表示数值；不代表当选概率。</p><div class="gradient-range"><label>下限<input id="predictionRangeMin" aria-label="预测着色下限" inputmode="decimal"></label><label>上限<input id="predictionRangeMax" aria-label="预测着色上限" inputmode="decimal" placeholder="自动"></label><span id="predictionRangeUnit">%</span></div><button id="applyPredictionRange" class="small-action">应用着色范围</button>';$('predictionDisplayBox').append(range);
-$('applyPredictionRange').onclick=()=>{const min=Number($('predictionRangeMin').value||0),raw=$('predictionRangeMax').value,max=raw===''?null:Number(raw);if(!Number.isFinite(min)||min<0||max!==null&&(!Number.isFinite(max)||max<=min)||!predictionIsVotes()&&(min>=100||max>100))return toast('请填写有效范围；得票率须在0—100%之间');pushHistory();state.gradient.min=min;state.gradient.max=max;render();persist()};
-$('predictionDisplay').onchange=()=>{pushHistory();state.predictionDisplay=$('predictionDisplay').value;state.gradient.min=0;state.gradient.max=null;render();persist()};
+const range=document.createElement('div');range.id='predictionGradientRange';range.innerHTML='<p class="data-help">颜色表示政党，深浅表示数值；不代表当选概率。</p><div class="gradient-range"><label>下限<input id="predictionRangeMin" aria-label="预测着色下限" inputmode="decimal"></label><label>上限<input id="predictionRangeMax" aria-label="预测着色上限" inputmode="decimal" placeholder="票数自动"></label><span id="predictionRangeUnit">%</span></div><button id="applyPredictionRange" class="small-action">应用着色范围</button>';$('predictionDisplayBox').append(range);
+$('applyPredictionRange').onclick=()=>{const min=Number($('predictionRangeMin').value||0),raw=$('predictionRangeMax').value,max=raw===''?(predictionIsVotes()?null:100):Number(raw);if(!Number.isFinite(min)||min<0||max!==null&&(!Number.isFinite(max)||max<=min)||!predictionIsVotes()&&(min>=100||max>100))return toast('请填写有效范围；得票率须在0—100%之间');pushHistory();state.gradient.min=min;state.gradient.max=max;render();persist()};
+$('predictionDisplay').onchange=()=>{pushHistory();state.predictionDisplay=$('predictionDisplay').value;state.gradient.min=0;state.gradient.max=predictionIsVotes()?null:100;render();persist()};
 // Map and directory can both lead into the same candidate drawer.
 const scopeLabel=dirText('span','','eyebrow');scopeLabel.id='predictionScopeLabel';document.querySelector('.map-topbar .eyebrow').replaceWith(scopeLabel);
 const allCandidates=dirText('button','查看全部候选人','full-action');allCandidates.id='allCandidates';allCandidates.onclick=()=>openDirectory(true);$('predictionControls').append(allCandidates);
