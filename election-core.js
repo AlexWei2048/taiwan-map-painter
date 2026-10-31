@@ -56,12 +56,29 @@
    return Math.round(255+(rich-255)*amount).toString(16).padStart(2,'0');
   }).join('');
  }
+ // Leading-margin colors use fixed bands, independent of the map's current vote spread.
+ // Bands follow the 1/5/10/15/20/25/30+ percentage-point thresholds used
+ // in reference election maps. The final band includes 30 and above.
+ const marginBandLabels=Object.freeze(['≤1','5','10','15','20','25','<30','≥30']);
+ const marginBandLimits=Object.freeze([1,5,10,15,20,25,30]);
+ function marginBandIndex(value){
+  if(!Number.isFinite(value)||value<=1)return 0;
+  if(value>=30)return 7;
+  for(let i=1;i<marginBandLimits.length;i++)if(value<=marginBandLimits[i])return i;
+  return 6;
+ }
+ function marginShade(hex,value){
+  const i=marginBandIndex(value);
+  // Use evenly distinguishable shades with stronger steps at narrow margins.
+  const t=Math.pow(i/7,.78);
+  return shade(hex,t*30,0,30);
+ }
  function csv(text){
   const rows=[];let row=[],value='',quoted=false;
   text=String(text).replace(/^\uFEFF/,'');
   for(let i=0;i<text.length;i++){const c=text[i];if(c==='"'){if(quoted&&text[i+1]==='"'){value+='"';i++}else if(!quoted&&value!=='')throw Error('CSV 引号位置不正确');else quoted=!quoted;}else if(c===','&&!quoted){row.push(value);value='';}else if((c==='\r'||c==='\n')&&!quoted){if(c==='\r'&&text[i+1]==='\n')i++;row.push(value);if(row.some(x=>x.trim()))rows.push(row);row=[];value='';}else value+=c;}
   if(quoted)throw Error('CSV 引号未闭合');row.push(value);if(row.some(x=>x.trim()))rows.push(row);return rows;
  }
- const api={number,validate,summarize,shade,csv};
+ const api={number,validate,summarize,shade,marginShade,marginBandIndex,marginBandLabels,csv};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.ElectionCore=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
