@@ -122,3 +122,19 @@ body.history-mode #workspaceFree,body.history-mode #workspacePrediction{opacity:
 
 /* Land fills have no polygon-outline stroke: only shared inland borders are drawn. */
 #regions path,#regions path:hover,#regions path:focus,.atlas-card path[role=button]:hover{stroke:none!important;stroke-width:0!important}
+
+/* Map-side number directory; moves below the map on smaller screens. */
+.map-view-with-keys{display:block;min-width:0}
+.map-view-with-keys.has-number-key{display:grid;grid-template-columns:minmax(0,1fr) minmax(180px,225px);align-items:start;gap:12px}
+.map-view-with-keys>.canvas{min-width:0;width:100%;box-sizing:border-box}
+.map-number-key{min-width:0;box-sizing:border-box;background:#fff;border:1px solid #dce5df;border-radius:12px;padding:13px 11px;box-shadow:0 4px 18px #273b2812}
+.map-number-key-heading{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.map-number-key h3{font-size:15px;margin:0;color:#294a3a;font-weight:650}
+.map-number-key-heading span{font-size:11px;color:#768b80}
+.map-number-key-note{font-size:11px;color:#718578;margin:8px 0 10px}
+.map-number-key-scroll{max-height:clamp(320px,55vh,720px);overflow:auto;overscroll-behavior:contain}
+.map-number-key table{border-collapse:collapse;width:100%;font-size:12px;text-align:left}
+.map-number-key th,.map-number-key td{padding:6px 5px;border-bottom:1px solid #edf1ed;vertical-align:top}
+.map-number-key .number-key-number{width:30px;color:#235443;white-space:nowrap;font-weight:700}
+.map-number-key .number-key-group{font-weight:650;font-size:11px;background:#f2f6f1;color:#657c6d;padding:8px 6px}
+@media(max-width:1100px){.map-view-with-keys.has-number-key{display:flex;flex-direction:column}.map-number-key{width:100%}.map-number-key-scroll{max-height:260px}}

@@ -582,97 +582,53 @@ test('Existing party logos are displayed as circles in every HTML view',()=>{
  assert.match(app,/p\.logo=await readLogo\(file\.files\[0\]\)/);
  assert.match(app,/customLogo=await readLogo\(e\.target\.files\[0\]\)/);
 });
-test('Nationwide township maps always label only counties regardless of zoom or SVG export',()=>{
- const start=app.indexOf('function drawLabels(group,items,t,font=15,interactive=false){');
- const end=app.indexOf('\nfunction drawIdentityPanelLabels(',start);
- assert.ok(start>=0&&end>start,'Shared map label renderer must be found');
- const towns=[{id:'town-1',name:'中正区'},{id:'town-2',name:'大安区'}];
- const counties=[{id:'county-1',name:'台北市'},{id:'county-2',name:'新北市'}];
- const state={level:'towns',county:'',districtLeaders:true};
- const data={counties};let passedItems,passedFont,rendered=[];
- const el=(tag,attrs)=>({tag,attrs:attrs||{},children:[],style:{},append(...nodes){this.children.push(...nodes)}});
- const layout=(items,t,font)=>{passedItems=items;passedFont=font;
-  return items.map(f=>({f,x:12,y:25,ax:10,ay:23,out:true,side:'left',elbow:8,font}))};
- const draw=new Function('state','data','labelLayout','shownLabel','svgEl','isNationwide','paint',
-  app.slice(start,end)+';return drawLabels')(state,data,layout,f=>f.name,el,()=>true,()=>{});
- const group=()=>({children:[],replaceChildren(){this.children=[]},append(node){this.children.push(node)}});
- let g=group();draw(g,towns,{},12,true);
- assert.deepEqual(passedItems,counties,'Zoomed-in town geography must use county labels');
- assert.equal(passedFont,19,'Use prominent, consistent county label size');
- assert.deepEqual(g.children.map(x=>x.children.map(child=>child.tag)),[['path','circle','text'],['path','circle','text']],
-  'Outside names now always include the matching leader line');
- assert.deepEqual(g.children.map(x=>x.children.at(-1).textContent),['台北市','新北市']);
- assert.deepEqual(g.children.map(x=>x.children.at(-1).attrs['data-label']),['county-1','county-2']);
- // Export path also calls drawLabels directly, so it must use the same rule.
- g=group();draw(g,towns,{},10,false);
- assert.deepEqual(g.children.map(x=>x.children.at(-1).textContent),['台北市','新北市']);
- assert.match(app,/drawLabels\(g,currentItems\(\),geometryLayout\(currentItems\(\),true\),sceneSpec\(\)\.font,false\)/);
- // Selecting a county restores township names and their normal leader behavior.
- state.county='台北市';g=group();draw(g,towns,{},12,true);
- assert.deepEqual(passedItems,towns);
- assert.deepEqual(g.children.map(x=>x.children.at(-1).textContent),['中正区','大安区']);
- assert.deepEqual(g.children[0].children.map(c=>c.tag),['path','circle','text']);
- // This condition must not affect any other map level.
- state.county='';state.level='counties';g=group();draw(g,towns,{},12,true);
- assert.deepEqual(passedItems,towns);
+test('Map labels never use external leader lines and council names show numeric district codes',()=>{
+ const src=app.slice(app.indexOf('let mapNumberRows=[]'),app.indexOf('\nfunction insetDefinitions(){'));
+ assert.ok(src.includes('function labelLayout('));
+ assert.doesNotMatch(src,/svgEl\('path'|data-leader-line|data-leader-region/);
+ const state={level:'council',county:'台北市',labels:true,legend:{show:false}};
+ const data={counties:[]};
+ const feature={id:'c5',name:'第5选区',number:5,county:'台北市',box:[0,0,100,100],center:[50,50]};
+ const el=(tag,attrs)=>({tag,attrs:attrs||{},style:{},children:[],setAttribute(key,v){this.attrs[key]=v},append(...items){this.children.push(...items)}});
+ const $=()=>null;
+ const logic=new Function('state','data','featureElectorate','shownLabel','regionContains','leaderOverlap',
+  'contentArea','sceneSpec','legendBox','svgEl','paint','$','identityPanelsActive','view',
+  src+';return {labelLayout,drawLabels,getRows:()=>mapNumberRows}')(
+  state,data,()=> 'regional',f=>f.name,()=>true,(a,b)=>a[0]<b[2]&&a[2]>b[0]&&a[1]<b[3]&&a[3]>b[1],
+  ()=>({left:0,right:120,top:0,bottom:120}),()=>({}),()=>({}),el,()=>{},$,()=>false,{});
+ const markers=logic.labelLayout([feature],{scale:1,tx:0,ty:0},14);
+ assert.equal(markers.length,1);
+ assert.equal(markers[0].text,'5');
+ assert.equal(markers[0].numeric,true);
+ assert.ok(markers[0].x>0&&markers[0].x<100);
+ const g={children:[],replaceChildren(){this.children=[]},append(node){this.children.push(node)}};
+ logic.drawLabels(g,[feature],{scale:1,tx:0,ty:0},14);
+ assert.deepEqual(g.children.map(node=>node.children.map(child=>child.tag)),[['text']]);
+ assert.equal(g.children[0].children[0].textContent,'5');
+ assert.equal(g.children[0].children[0].attrs['data-number-key'],'5');
+ assert.deepEqual(logic.getRows().map(row=>[row.number,row.name,row.group]),[['5','第5选区','台北市']]);
+ state.level='towns';
+ const wide={...feature,id:'large',name:'中正区',box:[0,0,100,100]};
+ assert.equal(logic.labelLayout([wide],{scale:1,tx:0,ty:0},14)[0].text,'中正区');
+ const narrow={...feature,id:'tiny',name:'狭小区域',box:[0,0,15,15],center:[7,7]};
+ const small=logic.labelLayout([narrow],{scale:1,tx:0,ty:0},14)[0];
+ assert.equal(small.numeric,true);
+ assert.equal(small.text,'1');
 });
-
-
-test('Every external label carries a line automatically on all levels',()=>{
- const start=app.indexOf('function drawLabels(group,items,t,font=15,interactive=false){');
- const end=app.indexOf('\nfunction drawIdentityPanelLabels(',start);
- const mk=(tag,attrs)=>({tag,attrs:attrs||{},children:[],style:{},append(...a){this.children.push(...a)}});
- const state={level:'counties',county:'台北市',districtLeaders:false},data={counties:[]};
- const layout=(items,t,font)=>items.map(f=>({f,x:65,y:40,ax:40,ay:40,out:true,side:'right',font,leader:'M40,40L59,40'}));
- const draw=new Function('state','data','labelLayout','shownLabel','svgEl','isNationwide','paint',
-  app.slice(start,end)+';return drawLabels')(state,data,layout,f=>f.name,mk,()=>false,()=>{});
- const group={children:[],replaceChildren(){this.children=[]},append(v){this.children.push(v)}};
- for(const level of ['counties','towns','council','legislative']){
-  state.level=level;draw(group,[{id:'a',name:'第1选区'}],{},14);
-  assert.deepEqual(group.children[0].children.map(v=>v.tag),['path','circle','text']);
-  assert.equal(group.children[0].children[0].attrs['data-leader-line'],'a');
-  assert.equal(group.children[0].children[2].textContent,'第1选区');
- }
- assert.match(app,/\$\('districtLeaderControls'\)\.hidden=true/);
- assert.match(app,/if\(!state.labels\|\|!view\)return/);
-});
-test('Short outside leaders avoid inset rectangles',()=>{
- const s=app.indexOf('function leaderFrames('),e=app.indexOf('\nfunction labelLayout(',s);
- assert.ok(s>=0&&e>s);
- const h=new Function('activeInsetDefinitions','shownLabel','contentArea','sceneSpec',app.slice(s,e)+';return{shortLeader,leaderCross}')(
-  ()=>[{box:[200,200,350,350]}],f=>f.name,()=>({left:0,right:900,top:0,bottom:900}),()=>({}));
- const q={f:{name:'新竹市'},x:80,y:270,ax:480,ay:270,side:'left',font:14,out:true};
- h.shortLeader(q,{scale:1,tx:0,ty:0,area:{left:0,right:900,top:0,bottom:900}},[]);
- const m=q.leader.match(/-?\d+(?:\.\d+)?/g).map(Number);
- assert.equal(h.leaderCross(...m,[194,194,356,356]),false);
- assert.ok(Math.hypot(m[2]-m[0],m[3]-m[1])<130,'Leader must be short');
- assert.ok(q.x>350,'Label must remain on the mainland side of inset frame');
- const islandLabel={f:{name:'东引乡'},x:170,y:270,ax:205,ay:270,side:'left',font:14,out:true};
- h.shortLeader(islandLabel,{scale:1,tx:0,ty:0,area:{left:0,right:900,top:0,bottom:900}},[]);
- const line=islandLabel.leader.match(/-?\d+(?:\.\d+)?/g).map(Number);
- assert.equal(h.leaderCross(...line,[194,194,356,356]),false,'the island leader must not exit its frame');
-});
-test('Inset island names removed without deleting island frames',()=>{
- const s=app.indexOf('function appendInsetFrames('),e=app.indexOf('function drawInsetFrames(',s);
- assert.ok(s>=0&&e>s);
- const source=app.slice(s,e);
- assert.doesNotMatch(source,/name.textContent=q.name/);
- assert.match(source,/group.append\(g\)/);
- assert.match(source,/data-inset/);
-});
-test('Map furniture shifts closer when land and island frames do not collide',()=>{
- const s=app.indexOf('function legendBox(spec){'),e=app.indexOf('function drawLegend(',s);
- assert.ok(s>=0&&e>s);
- const make=new Function('state','isNationwide','legendMetrics','legendReserveEntries','furnitureFooterHeight','decorationClear',
-  app.slice(s,e)+';return legendBox');
- const visible=make({legend:{show:true}},()=>true,()=>({width:300,height:120}),()=>[],()=>180,()=>true)({width:1800,height:2400});
- assert.equal(visible.x,1800-300-30-20);
- assert.equal(visible.y,2400-180-6-85);
- const blocked=make({legend:{show:true}},()=>true,()=>({width:300,height:120}),()=>[],()=>180,()=>false)({width:1800,height:2400});
- assert.equal(blocked.y,2400-180-6);
- assert.match(app,/okNorth=decorationClear/);
- assert.match(app,/okScale=decorationClear/);
- assert.match(index,/app\.js\?v=20261031-leaders-decor-v51/);
+test('Number key exports and table are backed by the map numbers',()=>{
+ assert.match(index,/id="mapWithKey"/);
+ assert.match(index,/id="mapNumberKey"/);
+ assert.match(index,/id="mapNumberKeyRows"/);
+ assert.match(index,/app\.js\?v=20261031-numeric-labels-v52/);
+ assert.match(read('style.css'),/\.map-view-with-keys\.has-number-key/);
+ assert.match(read('workspace-ui.js'),/The main renderer now synchronizes region numbers and their adjacent table/);
+ assert.match(app,/exportNumberRows=\[\]/);
+ assert.match(app,/appendNumberTableExport\(root,exportNumberRows/);
+ assert.match(app,/actualWidth=keyHeight\?exportWidth:coreWidth/);
+ assert.match(app,/appendExportPredictionTable\(root,winnerRows,tableY\)/);
+ assert.match(app,/numberLabelRegister|mapNumberRecord/);
+ assert.match(app,/if\(state.labels&&view\)/);
+ assert.doesNotMatch(app.slice(app.indexOf('function drawLabels('),app.indexOf('function drawIdentityPanelLabels(')),/svgEl\('path'/);
 });
 
 test('Map fetch retries bypass corrupt caches and report persistent network errors',async()=>{

@@ -144,39 +144,125 @@ function shortLeader(q,t,occupied,reserve){
  }
  occupied.push(best.rect);Object.assign(q,{x:best.x,y:best.y,side:best.side,leader:best.leader});return q;
 }
-function labelLayout(items,t,font=15){
- const placed=[],outside=[],result=[],spec=sceneSpec(),reserve=legendBox(spec),area=t.area||contentArea(spec),forcedOutside=new Set(['台北市','基隆市','新竹市','嘉义市']),insetLabels={'连江县':[80,130],'金门县':[65,210],'澎湖县':[65,555]},leftLabelEdge=t.labelLeft;
- for(const f of [...items].sort((a,b)=>(a.box[2]-a.box[0])*(a.box[3]-a.box[1])-(b.box[2]-b.box[0])*(b.box[3]-b.box[1]))){
- const anchor=f.labelAnchor||f.center,ax=anchor[0]*t.scale+t.tx,ay=anchor[1]*t.scale+t.ty,box=[f.box[0]*t.scale+t.tx,f.box[1]*t.scale+t.ty,f.box[2]*t.scale+t.tx,f.box[3]*t.scale+t.ty];
- const candidates=[{x:ax,y:ay}];for(let iy=1;iy<=11;iy++)for(let ix=1;ix<=11;ix++)candidates.push({x:box[0]+(box[2]-box[0])*ix/12,y:box[1]+(box[3]-box[1])*iy/12});candidates.sort((a,b)=>Math.hypot(a.x-ax,a.y-ay)-Math.hypot(b.x-ax,b.y-ay));
- const insidePoint=candidates.find(q=>regionContains(f,q.x,q.y,t))||{x:ax,y:ay};let chosen=null;
- if(state.level==='counties'&&!state.county&&insetLabels[f.name]){const q=insetLabels[f.name];result.push({f,x:q[0]*t.scale+t.tx,y:q[1]*t.scale+t.ty,ax,ay,out:false,font,inset:true});continue;}
- const forceOut=state.level==='counties'&&forcedOutside.has(f.name);
- const w=shownLabel(f).length*font*1.04+4,h=font*1.5+3;
- if(!forceOut&&box[2]-box[0]>=w&&box[3]-box[1]>=h){
- for(const q of candidates){const r=[q.x-w/2,q.y-h/2,q.x+w/2,q.y+h/2];if(r[0]<area.left||r[2]>area.right||r[1]<area.top||r[3]>area.bottom||(r[2]>reserve.x-10&&r[3]>reserve.y-12)||placed.some(p=>r[0]<p[2]&&r[2]>p[0]&&r[1]<p[3]&&r[3]>p[1]))continue;let fits=true;for(const dx of [-.5,-.25,0,.25,.5]){for(const dy of [-.5,0,.5])if(!regionContains(f,q.x+w*dx,q.y+h*dy,t)){fits=false;break}if(!fits)break}if(fits){chosen={...q,box:r,font};break}}
- }
- if(chosen){placed.push(chosen.box);result.push({f,x:chosen.x,y:chosen.y,ax:insidePoint.x,ay:insidePoint.y,out:false,font:chosen.font})}else outside.push({f,ax,ay,font,side:forceOut?(['新竹市','嘉义市'].includes(f.name)?'left':'right'):null});
- }
- const sorted=[...outside].sort((a,b)=>a.ax-b.ax),gap=Math.max(font*1.65,state.level==='villages'?14:25),top=area.top+font,bottom=area.bottom-font,capacity=Math.floor((bottom-top)/gap)+1,columns=identityPanelsActive()?1:isNationwide()?2:1,sideCapacity=capacity*columns;let middle=sorted.filter(q=>q.ax<(area.left+area.right)/2).length;const rightCapacity=Math.max(1,Math.floor((bottom-top)/gap)+1)*columns;middle=Math.max(sorted.length-rightCapacity,Math.min(sideCapacity,middle));
- const sides=state.level==='counties'?[['left',sorted.filter(q=>q.side==='left'||(!q.side&&q.ax<(area.left+area.right)/2))],['right',sorted.filter(q=>q.side==='right'||(!q.side&&q.ax>=(area.left+area.right)/2))]]:[['left',sorted.slice(0,middle)],['right',sorted.slice(middle)]];
- for(const [side,list]of sides){const endY=side==='right'?bottom:bottom,cap=Math.max(1,Math.floor((endY-top)/gap)+1);list.sort((a,b)=>a.ay-b.ay);const cols=Math.max(1,Math.ceil(list.length/cap)),chunkSize=Math.ceil(list.length/cols);for(let col=0;col<cols;col++){const chunk=list.slice(col*chunkSize,(col+1)*chunkSize);for(let i=0;i<chunk.length;i++)chunk[i].y=Math.max(i?chunk[i-1].y+gap:top,chunk[i].ay);if(chunk.length&&chunk.at(-1).y>endY){chunk.at(-1).y=endY;for(let i=chunk.length-2;i>=0;i--)chunk[i].y=Math.min(chunk[i].y,chunk[i+1].y-gap)}for(const q of chunk){q.x=side==='left'?leftLabelEdge-col*120:t.labelRight+col*120;q.elbow=side==='left'?q.x+18:q.x-18;q.side=side;q.out=true;result.push(q)}}}const occupied=[...placed];for(const q of result)if(q.out)shortLeader(q,t,occupied,reserve);return result;
-}
 
-function drawLabels(group,items,t,font=15,interactive=false){
- // Nationwide township maps always label the 22 counties/cities, even when zoomed in.
- // Keep town geometry and color fills intact; only replace the text layer.
- const nationwideTownLabels=state.level==='towns'&&!state.county;
- const labelItems=nationwideTownLabels?(data?.counties||[]):items;
- if(nationwideTownLabels){font=19;interactive=false}
- group.replaceChildren();for(const q of labelLayout(labelItems.filter(f=>shownLabel(f)),t,font)){
- const target=svgEl('g',{'class':'map-label'});group.append(target);
- if(q.out){const end=q.side==='left'?q.x+6:q.x-6;target.append(svgEl('path',{d:q.leader||('M'+q.ax+','+q.ay+'L'+end+','+q.y),fill:'none',stroke:'#92a49b','stroke-width':.65,opacity:.78,'vector-effect':'non-scaling-stroke','data-leader-line':q.f.id}));target.append(svgEl('circle',{cx:q.ax,cy:q.ay,'data-leader-region':q.f.id,r:1.5,fill:'#6d8879',opacity:.8}))}
- const text=svgEl('text',{x:q.x,y:q.y,'font-size':q.font,'data-label':q.f.id,'data-placement':q.inset?'inset':q.out?'outside':'inside','text-anchor':q.out?(q.side==='left'?'end':'start'):'middle','dominant-baseline':'middle',fill:'#2c493b',stroke:'#ffffffed','stroke-width':4,'paint-order':'stroke','stroke-linejoin':'round'});text.style.strokeWidth=state.level==='counties'?2:2.4;text.style.textAnchor=q.out?(q.side==='left'?'end':'start'):'middle';text.textContent=shownLabel(q.f);if(interactive){text.style.pointerEvents='auto';text.style.cursor='pointer';text.onclick=()=>paint(q.f)}target.append(text);
+let mapNumberRows=[],exportNumberRows=null;
+function mapNumberValue(f,ordinal){
+ if(state.level!=='council')return String(ordinal);
+ const raw=String(f.number||'')+' '+String(f.name||'');
+ const hit=raw.match(/(?:^|\D)(\d+)(?=\D|$)/);
+ return hit?String(+hit[1]):String(ordinal);
+}
+function mapNumberGroup(f){
+ const identity=['council','legislative'].includes(state.level)?featureElectorate(f):'regional';
+ const type=identity&&identity!=='regional'?' · '+({plains:'平地原住民',mountain:'山地原住民'}[identity]||identity):'';
+ return (f.county||'全台')+type;
+}
+function mapNumberRecord(f,number){
+ const record={number:String(number),id:String(f.id),name:f.name,group:mapNumberGroup(f)};
+ const dest=exportNumberRows===null?mapNumberRows:exportNumberRows;
+ if(!dest.some(r=>r.id===record.id&&r.group===record.group))dest.push(record);
+}
+function mapNumberSorted(rows){return [...rows].sort((a,b)=>a.group.localeCompare(b.group,'zh')||(+a.number)-(+b.number)||a.name.localeCompare(b.name,'zh'))}
+function renderMapNumberTable(){
+ const panel=$('mapNumberKey'),layout=$('mapWithKey'),body=$('mapNumberKeyRows');
+ if(!panel||!layout||!body)return;
+ const rows=state.labels?mapNumberSorted(mapNumberRows):[];
+ panel.hidden=!rows.length;layout.classList.toggle('has-number-key',!!rows.length);body.replaceChildren();
+ $('mapNumberKeyCount').textContent=rows.length+'项';
+ let section='';
+ for(const row of rows){
+  if(section!==row.group){
+   section=row.group;const tr=document.createElement('tr'),th=document.createElement('th');th.colSpan=2;th.className='number-key-group';th.textContent=section;tr.append(th);body.append(tr);
+  }
+  const tr=document.createElement('tr'),code=document.createElement('th'),name=document.createElement('td');
+  code.scope='row';code.className='number-key-number';code.textContent=row.number;
+  name.textContent=row.name;tr.append(code,name);body.append(tr);
  }
 }
-function drawIdentityPanelLabels(group,interactive=false,exportAll=false){group.replaceChildren();const condensed=!state.county&&!exportAll&&view&&view.w>=sceneSpec().width*.72;for(const panel of identityPanelLayouts()){const layer=svgEl('g',{'data-electorate-labels':panel.identity});group.append(layer);const items=condensed?data.counties.map(f=>({...f,number:''})):panel.items;if(items.length)drawLabels(layer,items,panel.t,condensed?17:sceneSpec().font,interactive&&!condensed)}}
-function renderLabels(){const group=$('labels');group.replaceChildren();if(!state.labels||!view)return;if(identityPanelsActive())return drawIdentityPanelLabels(group,true,false);if(state.level==='villages')drawVillageLabels(group,currentItems(),geometryLayout(currentItems(),true),view,true);else drawLabels(group,currentItems(),geometryLayout(currentItems(),true),sceneSpec().font,true)}
+function mapLabelCandidatePoints(f,t){
+ const points=[f.center,f.labelAnchor].filter(Boolean).map(p=>({x:p[0]*t.scale+t.tx,y:p[1]*t.scale+t.ty}));
+ const b=f.box;for(const i of [5,6,4,7,3,8,2,9])for(const j of [5,6,4,7,3,8,2,9])
+  points.push({x:(b[0]+(b[2]-b[0])*i/12)*t.scale+t.tx,y:(b[1]+(b[3]-b[1])*j/12)*t.scale+t.ty});
+ return points;
+}
+function mapLabelFit(f,t,width,height,used,area,reserve){
+ const b=f.box;
+ if((b[2]-b[0])*t.scale<width||(b[3]-b[1])*t.scale<height)return null;
+ for(const p of mapLabelCandidatePoints(f,t)){
+  const r=[p.x-width/2,p.y-height/2,p.x+width/2,p.y+height/2];
+  if(r[0]<area.left||r[2]>area.right||r[1]<area.top||r[3]>area.bottom)continue;
+  if(reserve&&leaderOverlap(r,[reserve.x,reserve.y,reserve.x+reserve.width,reserve.y+reserve.height]))continue;
+  if(used.some(other=>leaderOverlap(r,other)))continue;
+  if(![-.45,0,.45].every(dx=>[-.45,0,.45].every(dy=>regionContains(f,p.x+dx*width,p.y+dy*height,t))))continue;
+  return{x:p.x,y:p.y,rect:r};
+ }
+ return null;
+}
+function mapLabelAnchor(f,t){
+ for(const p of mapLabelCandidatePoints(f,t)){
+  if(regionContains(f,p.x,p.y,t))return{x:p.x,y:p.y};
+ }
+ return null;
+}
+function labelLayout(items,t,font=15){
+ const area=t.area||contentArea(sceneSpec()),reserve=state.legend.show?legendBox(sceneSpec()):null;
+ const sizes=f=>(f.box[2]-f.box[0])*(f.box[3]-f.box[1]);
+ const sorted=[...items].sort((a,b)=>sizes(b)-sizes(a)),used=[],labels=[],needsNumber=[];
+ const ids=[...items].sort((a,b)=>String(a.county).localeCompare(String(b.county),'zh')||
+  String(a.name).localeCompare(String(b.name),'zh')||String(a.id).localeCompare(String(b.id)));
+ const ordinal=new Map(ids.map((f,i)=>[f.id,i+1]));
+ for(const f of sorted){
+  const name=shownLabel(f);if(!name)continue;
+  const width=Array.from(name).length*font*1.04+4,height=font*1.5+3;
+  const pos=state.level==='council'?null:mapLabelFit(f,t,width,height,used,area,reserve);
+  if(pos){used.push(pos.rect);labels.push({f,x:pos.x,y:pos.y,font,text:name,numeric:false})}
+  else needsNumber.push(f);
+ }
+ for(const f of needsNumber){
+  const value=mapNumberValue(f,ordinal.get(f.id)||1);
+  const width=Math.max(font*.82,Array.from(value).length*font*.7+4),height=font*1.3;
+  const pos=mapLabelFit(f,t,width,height,used,area,reserve)||mapLabelAnchor(f,t);
+  if(!pos)continue;
+  used.push(pos.rect||[pos.x-width/2,pos.y-height/2,pos.x+width/2,pos.y+height/2]);
+  labels.push({f,x:pos.x,y:pos.y,font,text:value,numeric:true,number:value});
+ }
+ return labels;
+}
+function drawLabels(group,items,t,font=15,interactive=false){
+ const overview=state.level==='towns'&&!state.county;
+ const rendered=overview?(data?.counties||[]):items;
+ if(overview){font=19;interactive=false}
+ group.replaceChildren();
+ for(const q of labelLayout(rendered.filter(f=>shownLabel(f)),t,font)){
+  const g=svgEl('g',{'class':'map-label'});group.append(g);
+  const label=svgEl('text',{x:q.x,y:q.y,'font-size':font,'data-label':q.f.id,
+   'data-placement':'inside','text-anchor':'middle','dominant-baseline':'middle',
+   'font-weight':q.numeric?700:500,fill:'#2c493b',stroke:'#ffffffed',
+   'stroke-width':q.numeric?3:2.4,'paint-order':'stroke','stroke-linejoin':'round'});
+  label.style.strokeWidth=q.numeric?2.6:2.4;label.textContent=q.text;
+  if(q.numeric){label.setAttribute('data-number-key',q.number);mapNumberRecord(q.f,q.number)}
+  if(interactive){label.style.pointerEvents='auto';label.style.cursor='pointer';label.onclick=()=>paint(q.f)}
+  g.append(label);
+ }
+}
+function drawIdentityPanelLabels(group,interactive=false,exportAll=false){
+ group.replaceChildren();
+ const condensed=state.level!=='council'&&!state.county&&!exportAll&&view&&view.w>=sceneSpec().width*.72;
+ for(const panel of identityPanelLayouts()){
+  const layer=svgEl('g',{'data-electorate-labels':panel.identity});group.append(layer);
+  const items=condensed?data.counties.map(f=>({...f,number:''})):panel.items;
+  if(items.length)drawLabels(layer,items,panel.t,condensed?17:sceneSpec().font,interactive&&!condensed)
+ }
+}
+function renderLabels(){
+ const group=$('labels');group.replaceChildren();mapNumberRows=[];
+ if(state.labels&&view){
+  if(identityPanelsActive())drawIdentityPanelLabels(group,true,false);
+  else if(state.level==='villages')drawVillageLabels(group,currentItems(),geometryLayout(currentItems(),true),view,true);
+  else drawLabels(group,currentItems(),geometryLayout(currentItems(),true),sceneSpec().font,true);
+ }
+ renderMapNumberTable();
+}
 function insetDefinitions(){return[
  {name:'马祖',county:'连江县',box:[20,20,140,140],label:[80,30]},
  {name:'金门',county:'金门县',d:'M20,160H110V190H140V220H20Z',label:[65,169],box:[20,160,140,220]},
@@ -423,12 +509,56 @@ function appendExportPredictionTable(root,rows,y){
  }
  return layout.height
 }
-function exportSvg(){
- const spec=sceneSpec(),winnerRows=exportPredictionWinnerRows(),tableLayout=winnerRows.length?exportPredictionTableLayout(winnerRows):null,exportWidth=tableLayout?tableLayout.width+80:1200,contentWidth=exportWidth-80,contentHeight=Math.round(contentWidth*spec.height/spec.width),annotationLines=String(state.exportSettings.note||'').trim()?wrapExportText(state.exportSettings.note.trim()):[],noteHeight=annotationLines.length?26+annotationLines.length*19:0,mapY=annotationLines.length?88+noteHeight:78,tableY=mapY+contentHeight+40,height=winnerRows.length?tableY+tableLayout.height+32:mapY+contentHeight+72,root=svgEl('svg',{xmlns:NS,width:exportWidth,height,viewBox:`0 0 ${exportWidth} ${height}`});root.append(svgEl('rect',{width:exportWidth,height,fill:'#ffffff'}));const style=svgEl('style');style.textContent='path{stroke-linejoin:round}text{font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif}';root.append(style);
- const title=svgEl('text',{x:60,y:54,fill:'#294a3a','font-size':26,'font-weight':500});title.textContent=state.title||(state.fillMode==='prediction'?'2026 '+directoryOfficeName[state.predictionOffice]+'预测地图':$('scopeTitle').textContent);root.append(title);
- if(annotationLines.length)appendExportNote(root,annotationLines,72);const map=svgEl('svg',{x:40,y:mapY,width:contentWidth,height:contentHeight,viewBox:`0 0 ${spec.width} ${spec.height}`,preserveAspectRatio:'xMidYMid meet'});for(const id of ['predictionPatterns','insetFrames','regions','townBorders','districtBorders','borders','labels','mapFurniture','legend']){if(id==='labels'&&!state.labels)continue;if(!$(id))continue;const g=$(id).cloneNode(true);g.removeAttribute('id');if(id==='labels'&&identityPanelsActive())drawIdentityPanelLabels(g,false,true);else if(id==='labels'&&state.level!=='villages')drawLabels(g,currentItems(),geometryLayout(currentItems(),true),sceneSpec().font,false);else if(id==='labels'&&state.level==='villages')drawVillageLabels(g,currentItems(),geometryLayout(currentItems(),true),fittedView(),false);map.append(g)}root.append(map);if(winnerRows.length)appendExportPredictionTable(root,winnerRows,tableY);
- return new XMLSerializer().serializeToString(root)
+
+function appendNumberTableExport(root,entries,x,y,width){
+ const rows=mapNumberSorted(entries);if(!rows.length)return 0;
+ let height=64,group='';
+ for(const row of rows){if(row.group!==group){group=row.group;height+=26}height+=19}
+ root.append(svgEl('rect',{x,y,width,height,rx:11,fill:'#fff',stroke:'#dce5df','stroke-width':1}));
+ const heading=svgEl('text',{x:x+14,y:y+27,'font-size':16,'font-weight':650,fill:'#294a3a'});
+ heading.textContent='数字对照表';root.append(heading);
+ let yy=y+52;group='';
+ for(const row of rows){
+  if(row.group!==group){group=row.group;const sub=svgEl('text',{x:x+13,y:yy+6,'font-size':11,'font-weight':600,fill:'#718579'});sub.textContent=group;root.append(sub);yy+=26}
+  const number=svgEl('text',{x:x+15,y:yy+3,'font-size':12,'font-weight':700,fill:'#294a3a'});number.textContent=row.number;root.append(number);
+  const name=svgEl('text',{x:x+47,y:yy+3,'font-size':12,fill:'#365344'});name.textContent=row.name;root.append(name);yy+=19;
+ }
+ return height;
 }
+function exportSvg(){
+ const spec=sceneSpec(),winnerRows=exportPredictionWinnerRows(),tableLayout=winnerRows.length?exportPredictionTableLayout(winnerRows):null;
+ const coreWidth=tableLayout?tableLayout.width+80:1200,contentWidth=coreWidth-80,contentHeight=Math.round(contentWidth*spec.height/spec.width);
+ const notes=String(state.exportSettings.note||'').trim(),annotationLines=notes?wrapExportText(notes):[];
+ const noteHeight=annotationLines.length?26+annotationLines.length*19:0,mapY=annotationLines.length?88+noteHeight:78;
+ const keyWidth=state.labels?260:0,exportWidth=coreWidth+keyWidth,root=svgEl('svg',{xmlns:NS,width:exportWidth,height:1,viewBox:'0 0 '+exportWidth+' 1'});
+ root.append(svgEl('rect',{width:exportWidth,height:1,fill:'#fff'}));
+ const style=svgEl('style');style.textContent='path{stroke-linejoin:round}text{font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif}';root.append(style);
+ const title=svgEl('text',{x:60,y:54,fill:'#294a3a','font-size':26,'font-weight':500});
+ title.textContent=state.title||(state.fillMode==='prediction'?'2026 '+directoryOfficeName[state.predictionOffice]+'预测地图':$('scopeTitle').textContent);root.append(title);
+ if(annotationLines.length)appendExportNote(root,annotationLines,72);
+ const map=svgEl('svg',{x:40,y:mapY,width:contentWidth,height:contentHeight,viewBox:'0 0 '+spec.width+' '+spec.height,preserveAspectRatio:'xMidYMid meet'});
+ exportNumberRows=[];
+ try{
+  for(const id of ['predictionPatterns','insetFrames','regions','townBorders','districtBorders','borders','labels','mapFurniture','legend']){
+   if(id==='labels'&&!state.labels)continue;if(!$(id))continue;
+   const g=$(id).cloneNode(true);g.removeAttribute('id');
+   if(id==='labels'&&identityPanelsActive())drawIdentityPanelLabels(g,false,true);
+   else if(id==='labels'&&state.level!=='villages')drawLabels(g,currentItems(),geometryLayout(currentItems(),true),sceneSpec().font,false);
+   else if(id==='labels'&&state.level==='villages')drawVillageLabels(g,currentItems(),geometryLayout(currentItems(),true),fittedView(),false);
+   map.append(g);
+  }
+  root.append(map);
+  const keyHeight=exportNumberRows.length?appendNumberTableExport(root,exportNumberRows,coreWidth-22,mapY+8,keyWidth-22):0;
+  const tableY=Math.max(mapY+contentHeight+40,mapY+keyHeight+35);
+  if(winnerRows.length)appendExportPredictionTable(root,winnerRows,tableY);
+  const height=Math.max(mapY+contentHeight+72,mapY+keyHeight+40,winnerRows.length?tableY+tableLayout.height+32:0);
+  const actualWidth=keyHeight?exportWidth:coreWidth;
+  root.setAttribute('width',actualWidth);root.setAttribute('height',height);root.setAttribute('viewBox','0 0 '+actualWidth+' '+height);
+  root.firstChild?.setAttribute('width',actualWidth);root.firstChild?.setAttribute('height',height);
+  return new XMLSerializer().serializeToString(root);
+ }finally{exportNumberRows=null}
+}
+
 function preparedExportSvg(){const oldFilter=exportPanelFilter,oldLegend=state.legend.show,oldCouncilView=state.councilViewScope;state.councilViewScope='all';exportPanelFilter=state.level==='council'&&state.exportSettings.councilScope!=='all'?state.exportSettings.councilScope:'';state.legend.show=true;render();try{return exportSvg()}finally{exportPanelFilter=oldFilter;state.legend.show=oldLegend;state.councilViewScope=oldCouncilView;render()}}
 function exportFilename(){const suffix=state.level==='council'&&state.exportSettings.councilScope!=='all'?'_'+electorateName(state.exportSettings.councilScope):'';return filename()+suffix}
 $('exportWinnerTable').onchange=()=>{state.exportSettings.winnerTable=$('exportWinnerTable').checked;persist()};$('exportNote').oninput=()=>{state.exportSettings.note=simplify($('exportNote').value).trim().slice(0,500);persist()};$('councilExportScope').onchange=()=>{state.exportSettings.councilScope=$('councilExportScope').value;persist()};$('exportSvg').onclick=async()=>{try{await ensureExportMapReady();download(new Blob([preparedExportSvg()],{type:'image/svg+xml;charset=utf-8'}),exportFilename()+'.svg');toast('SVG 矢量图已导出，包含比例尺、指北针和对应图例')}catch(e){toast(e.message||'SVG 导出失败')}};$('exportPng').onclick=async()=>{const b=$('exportPng');b.disabled=true;const old=b.textContent;b.textContent='正在导出…';let url;try{await ensureExportMapReady();const source=preparedExportSvg(),doc=new DOMParser().parseFromString(source,'image/svg+xml'),height=Number(doc.documentElement.getAttribute('height')),width=Number(doc.documentElement.getAttribute('width'));if(!width||!height)throw Error('图片尺寸无效');const scale=Math.min(3,Math.floor(16000/Math.max(width,height)),Math.floor(Math.sqrt(55000000/(width*height))));if(scale<1)throw Error('图片过大，请取消当选名单表格，或使用 SVG 矢量图完整导出');url=URL.createObjectURL(new Blob([source],{type:'image/svg+xml;charset=utf-8'}));const img=new Image();img.src=url;await new Promise((ok,no)=>{img.onload=ok;img.onerror=no});const c=document.createElement('canvas');c.width=width*scale;c.height=height*scale;const ctx=c.getContext('2d');if(!ctx)throw Error('设备无法创建图片画布，请改用 SVG');ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(img,0,0,c.width,c.height);const blob=await new Promise(ok=>c.toBlob(ok,'image/png'));if(!blob)throw Error('图片生成失败，请改用 SVG');download(blob,exportFilename()+'.png');toast(scale===3?'已导出 3 倍清晰度 PNG 图片':'大图已自动调整为 '+scale+' 倍清晰度 PNG')}catch(e){toast(e.message||'导出失败，请尝试导出 SVG 矢量图')}finally{if(url)URL.revokeObjectURL(url);b.disabled=false;b.textContent=old}};
@@ -754,8 +884,17 @@ $('removeCustomLogo').onclick=()=>{customLogo='';$('customPartyLogo').value='';r
 function syncVillageControls(){if(!data)return;$('villageTownControls').hidden=state.level!=='villages';$('districtLeaderControls').hidden=true;$('districtLeaders').checked=state.districtLeaders;const select=$('villageTown');select.replaceChildren();const all=document.createElement('option');all.value='';all.textContent='全部乡镇市区';select.append(all);for(const f of data.towns.filter(f=>!state.county||f.county===state.county)){const o=document.createElement('option');o.value=f.id;o.textContent=(state.county?'':f.county+' · ')+f.name;select.append(o)}if(![...select.options].some(o=>o.value===state.villageTown))state.villageTown='';select.value=state.villageTown}
 $('villageTown').onchange=()=>{state.villageTown=$('villageTown').value;render();persist()};
 $('districtLeaders').onchange=()=>{state.districtLeaders=$('districtLeaders').checked;renderLabels();persist()};
-function drawVillageLabels(group,items,t,v,interactive=false){group.replaceChildren();if(items.length<=120){drawLabels(group,items,t,8,interactive);return}const pixelWidth=Math.max(500,$('map').getBoundingClientRect().width),font=interactive?Math.max(1,v.w/pixelWidth*11):9,occupied=[],reserve=legendBox(sceneSpec()),area=contentArea(sceneSpec());const visible=items.filter(f=>{const b=f.box.map((n,i)=>n*t.scale+(i%2?t.ty:t.tx));return b[2]>v.x&&b[0]<v.x+v.w&&b[3]>v.y&&b[1]<v.y+v.h&&b[2]-b[0]>f.name.length*font&&b[3]-b[1]>font*1.5}).sort((a,b)=>(b.box[2]-b.box[0])*(b.box[3]-b.box[1])-(a.box[2]-a.box[0])*(a.box[3]-a.box[1]));for(const f of visible){if(occupied.length>=350)break;const x=f.center[0]*t.scale+t.tx,y=f.center[1]*t.scale+t.ty,w=f.name.length*font,h=font*1.45,r=[x-w/2,y-h/2,x+w/2,y+h/2];if(r[0]<area.left||r[2]>area.right||r[1]<area.top||r[3]>area.bottom||x>reserve.x-10&&y>reserve.y-10||occupied.some(b=>r[0]<b[2]&&r[2]>b[0]&&r[1]<b[3]&&r[3]>b[1])||![-.5,0,.5].every(dx=>[-.5,0,.5].every(dy=>regionContains(f,x+w*dx,y+h*dy,t))))continue;occupied.push(r);const text=svgEl('text',{x,y,'font-size':font,'data-label':f.id,'data-placement':'inside','text-anchor':'middle','dominant-baseline':'middle',fill:'#2c493b',stroke:'#fff','stroke-width':font*.22,'paint-order':'stroke'});text.style.strokeWidth=font*.22;text.textContent=f.name;if(interactive){text.style.pointerEvents='auto';text.style.cursor='pointer';text.onclick=()=>paint(f)}group.append(text)}}
-
+function drawVillageLabels(group,items,t,v,interactive=false){
+ group.replaceChildren();
+ if(!items.length)return;
+ if(items.length<=120)return drawLabels(group,items,t,8,interactive);
+ const font=interactive?Math.max(7,v.w/Math.max(500,$('map').getBoundingClientRect().width)*11):9;
+ const visible=items.filter(f=>f.box[2]*t.scale+t.tx>v.x&&f.box[0]*t.scale+t.tx<v.x+v.w&&
+  f.box[3]*t.scale+t.ty>v.y&&f.box[1]*t.scale+t.ty<v.y+v.h);
+ const chosen=visible.length>450?[...visible].sort((a,b)=>
+  (b.box[2]-b.box[0])*(b.box[3]-b.box[1])-(a.box[2]-a.box[0])*(a.box[3]-a.box[1])).slice(0,450):visible;
+ drawLabels(group,chosen,t,font,interactive);
+}
 function moveParty(id,direction){const index=state.palette.findIndex(p=>p.id===id),next=index+direction;if(index<0||next<0||next>=state.palette.length)return;pushHistory();const scroll=$('palette').scrollTop;[state.palette[index],state.palette[next]]=[state.palette[next],state.palette[index]];renderPalette();renderLegend();persist();$('palette').scrollTop=scroll;[...$('palette').children].find(row=>row.dataset.party===id)?.querySelector('.party-drag-handle')?.focus({preventScroll:true})}
 
 function renderTownBorders(){
