@@ -83,3 +83,10 @@ body{font-size:15px}.sidebar .label,.settings-panel summary,#freeMapTools>summar
 #predictionProgressText{font-size:12px;line-height:1.55;margin:3px 0 10px;color:#426958}
 #saved{font-size:12px;white-space:nowrap}
 @media(max-width:700px){#predictionProgressText{font-size:12px}#saved{font-size:11px}}
+
+/* Primary workspace reset action: visible without scrolling and clearly destructive. */
+.sidebar .project-actions{display:flex;flex-direction:column;align-items:stretch;gap:6px;margin-top:16px;padding:0;border:0}
+.sidebar .project-actions #reset{display:flex;justify-content:center;align-items:center;gap:8px;width:100%;min-height:44px;margin:0;padding:11px 14px;border:1.5px solid #c44949;border-radius:10px;background:#fff2f1;color:#a82d2d;font-size:14px;font-weight:700;line-height:1.4;box-shadow:0 1px 3px rgba(127,30,30,.08);transition:background .15s,box-shadow .15s}
+.sidebar .project-actions #reset:hover{background:#ffe2df;box-shadow:0 2px 8px rgba(127,30,30,.14);text-decoration:none}
+.sidebar .project-actions #reset:focus-visible{outline:3px solid #e99d90;outline-offset:2px}
+.sidebar .project-actions p{margin:0;text-align:center;color:#986b68;font-size:11px;line-height:1.5}
