@@ -122,13 +122,3 @@ body.history-mode #workspaceFree,body.history-mode #workspacePrediction{opacity:
 
 /* Land fills have no polygon-outline stroke: only shared inland borders are drawn. */
 #regions path,#regions path:hover,#regions path:focus,.atlas-card path[role=button]:hover{stroke:none!important;stroke-width:0!important}
-
-/* Compact three-mode map name display. */
-.map-label-mode{margin:8px 0 12px}.map-label-mode select{width:100%;max-width:100%}
-.map-label-mode .data-help{margin:8px 0 0;line-height:1.55}
-
-/* Readable screen-space geographic names on responsive SVG maps. */
-#labels .map-label text{font-weight:650;paint-order:stroke}
-.map-label-font-row{display:flex;align-items:center;gap:10px;margin:8px 0 12px}
-.map-label-font-row input[type=range]{min-width:0;flex:1;accent-color:#25836c}
-.map-label-font-row output{min-width:47px;text-align:right;font-weight:600;color:#294a3a;font-variant-numeric:tabular-nums}

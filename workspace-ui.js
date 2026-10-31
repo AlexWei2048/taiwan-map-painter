@@ -225,7 +225,9 @@ const scopeLabel=dirText('span','','eyebrow');scopeLabel.id='predictionScopeLabe
 const allCandidates=$('allCandidates');allCandidates.onclick=()=>openDirectory(true);
 if(!localStorage.getItem(KEY)){state.workspaceMode='prediction';state.fillMode='prediction';state.level='counties'}
 syncInputs();syncWorkspace();if(data)render();
-// All maps share the zoom-aware label renderer in app.js.
+// Keep dense edit labels readable. Exports continue to draw every enabled label.
+const originalRenderLabels=renderLabels;
+renderLabels=function(){if(!data||!view||!state.labels)return originalRenderLabels();if(identityPanelsActive())return originalRenderLabels();if(!state.county&&['towns','council','legislative'].includes(state.level)&&view.w>=sceneSpec().width*.72){drawLabels($('labels'),data.counties,geometryLayout(currentItems(),true),19,false);return}originalRenderLabels()};
 const originalApplyView=applyView;
 applyView=function(){originalApplyView();if(state.level!=='villages'&&data)requestAnimationFrame(renderLabels)};
 // CSV tools stay together in the top Export/Plan menus instead of repeating beside the map.
