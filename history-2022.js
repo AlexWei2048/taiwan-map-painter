@@ -2,7 +2,7 @@
 /* 2022 election history. Source: CEC open data, assembled by taiwanvotes.tw. */
 (()=>{
  const el=id=>document.getElementById(id), db={mayor:[],council:[],township:[]},titles={mayor:'县市长',council:'议员',township:'乡镇市区长'};
- let active=false,kind='mayor',county='',metric='party',loaded=false,loading=null,lastResult=[];
+ let active=false,kind='mayor',county='',metric='party',loaded=false,loading=null,lastResult=[],savedMapScope=null;
  const norm=x=>simplify(String(x||'')).trim();
  const normalizeParty=name=>{let s=norm(name||'无党籍');if(s.includes('无党籍及未经政党推荐')||s==='无党籍及未经政党推薦')s='无党籍';return s};
  const partyColor=p=>partyMatch(p)?.color||'#8a9892';
@@ -148,6 +148,7 @@
   if(kind==='council')state.councilViewScope='all';
  }
  function activate(){
+  if(!active)savedMapScope={county:state.county,councilViewScope:state.councilViewScope};
   active=true;document.body.classList.add('history-mode');
   el('historyControls').hidden=false;el('mapSettings').hidden=true;
   el('workspaceHistory').classList.add('active');el('workspaceHistory').setAttribute('aria-pressed','true');
@@ -156,8 +157,9 @@
  }
  function deactivate(){
   active=false;document.body.classList.remove('history-mode');
+  if(savedMapScope){state.county=savedMapScope.county;state.councilViewScope=savedMapScope.councilViewScope;savedMapScope=null;}
   el('historyControls').hidden=true;el('mapSettings').hidden=false;
-  el('workspaceHistory').classList.remove('active');el('workspaceHistory').setAttribute('aria-pressed','false');if(data)render()
+  el('workspaceHistory').classList.remove('active');el('workspaceHistory').setAttribute('aria-pressed','false');if(data){syncInputs();render();persist()}
  }
  function downloadCSV(){
   const rows=analyze().rows,heads=['县市','乡镇市区','选区','类别','号次','候选人','政党','得票数','得票率','是否当选'];
