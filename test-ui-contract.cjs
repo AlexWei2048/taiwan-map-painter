@@ -17,7 +17,7 @@ test('Town geography loads only for the corresponding election view',()=>{
  assert.match(town,/if\(active&&state\.predictionOffice==='council'\)ensureTownPredictionAreas\(\)/);
 });
 test('Avoid comparing one candidate against unrelated national districts',()=>{
- assert.match(town,/options\.filter\(\(\[mode\]\)=>mode!=='candidateVote'\)/);
+ assert.match(town,/return options/);
  assert.match(town,/function localDistrictItems\(/);
 });
 test('Autobackup and export preserve existing behavior',()=>{
@@ -164,15 +164,52 @@ test('Merged vote display calculates highest candidate from votes or shares',()=
  assert.equal(percentageOnly.votes,null);
 });
 test('Numeric mode does not require manual predicted winners',()=>{
- assert.match(workspace,/\['topVote','最高票者得票（票数／得票率）'\]/);
- assert.match(town,/\['topVote','最高票者得票（票数／得票率）'\]/);
+ assert.match(workspace,/\['topVote','最高票者（得票数\/得票率）'\]/);
+ assert.match(town,/\['topVote','最高票者（得票数\/得票率）'\]/);
  assert.match(read('prediction-ui.js'),/if\(predictionUsesVoteDisplay\(\)\)\{r\.winners=\[\]/);
  assert.match(town,/if\(state\.predictionDisplay!=='composition'\)draft\.leaderId=''/);
  assert.match(index,/id="localUseVoteData"/);
  assert.match(read('style.css'),/\.prediction-dialog\.numeric-entry \.prediction-table th:first-child/);
  assert.match(read('style.css'),/\.local-dialog\.numeric-entry \.local-table th:first-child/);
  assert.match(app,/predictionUsesVoteDisplay\(\)\|\|typeof predictionDistricts/);
- assert.match(workspace,/const result=predictionDisplayResult\(d\);return !!result&&!result\.partial/);
+ assert.match(workspace,/state\.predictionDisplay==='candidateVote'\|\|!result\.partial/);
+});
+
+test('Specified candidate shows own votes even when another candidate leads',()=>{
+ const p=require('./prediction-core.js');
+ const candidates=[{id:'A',party:'甲'},{id:'B',party:'乙'},{id:'C',party:'丙'}];
+ const record={estimates:{A:{votes:500,share:50},B:{votes:350,share:35},C:{votes:150,share:15}}};
+ const selected=p.candidateVoteResult(candidates,record,'B');
+ assert.equal(selected.candidate.id,'B');assert.equal(selected.party,'乙');
+ assert.equal(selected.votes,350);assert.equal(selected.share,35);assert.equal(selected.value,35);
+ assert.equal(selected.partial,false);
+ assert.equal(p.candidateVoteResult(candidates,record,'unknown'),null);
+ assert.equal(p.candidateVoteResult(candidates,record,'C').votes,150);
+ const partial=p.candidateVoteResult(candidates,{estimates:{B:{share:27.5}}},'B');
+ assert.equal(partial.value,27.5);assert.equal(partial.votes,null);assert.equal(partial.partial,true);
+ assert.equal(p.candidateVoteResult(candidates,{estimates:{A:{share:40}}},'B'),null);
+ const fromVotes=p.candidateVoteResult(candidates,{estimates:{B:{votes:40},C:{votes:60}}},'B');
+ assert.equal(fromVotes.votes,40);assert.equal(fromVotes.value,40);assert.equal(fromVotes.partial,true);
+ const townCore=require('./town-prediction-core.js');
+ const t=townCore.summary(candidates,{estimates:{B:{share:27.5}}},'candidateVote','B',true);
+ assert.equal(t.status,'winner');assert.equal(t.candidate.id,'B');assert.equal(t.value,27.5);
+ assert.equal(t.partial,true);
+ const missing=townCore.summary(candidates,{estimates:{B:{share:27.5}}},'candidateVote','C',true);
+ assert.equal(missing.status,'missing');
+});
+test('Candidate mode selection visible and survives saved projects',()=>{
+ assert.match(index,/地图层级<\/label>/);
+ assert.doesNotMatch(index,/地图按什么区域显示/);
+ assert.match(index,/指定候选人（得票数\/得票率）/);
+ assert.match(index,/最高票者（得票数\/得票率）/);
+ assert.match(workspace,/function syncDistrictCandidatePicker\(\)/);
+ assert.match(workspace,/PredictionCore\.candidateVoteResult\(cs,record,state\.localDisplayCandidate\)/);
+ assert.match(workspace,/syncDistrictCandidatePicker\(\)/);
+ assert.match(town,/\$\('localCandidateControl'\)\.hidden=state\.predictionDisplay!=='candidateVote'/);
+ assert.match(town,/\$\('localCandidate'\)\.onchange=\(\)=>\{state\.localDisplayCandidate=/);
+ assert.match(app,/\['composition','seats'.*'topVote','partyTop','candidateVote'\]/);
+ assert.match(app,/\['composition','leader'.*'topVote','partyTop','candidateVote'\]/);
+ assert.match(read('prediction-ui.js'),/PredictionCore\.candidateVoteResult\(directoryCandidates\(d\),r,state\.localDisplayCandidate\)/);
 });
 function isolatedExportGuard(env){
  const start=app.indexOf('async function ensureExportMapReady(){');
