@@ -642,7 +642,8 @@ test('Village names and all exports use the same smart label modes',()=>{
  assert.match(source,/drawLabels\(group,visible,t,MAP_LABEL_FONT_SIZE,interactive\)/);
  assert.match(app,/drawLabels\(g,currentItems\(\),geometryLayout\(currentItems\(\),true\),sceneSpec\(\)\.font,false\)/);
  assert.match(index,/id="labelMode"/);
- assert.match(index,/app\.js\?v=20261031-smart-labels-v53/);
+ assert.match(index,/app\.js\?v=20261031-smart-labels-v54/);
+ assert.match(app,/if\(state.labels&&q.label&&q.name!=='乌坵'/);
  assert.match(read('workspace-ui.js'),/All maps share the zoom-aware label renderer/);
  assert.match(app,/out.labelMode=\['smart','all','hide'\]/);
  assert.match(app,/state.labelMode=\$\('labelMode'\)\.value/);
