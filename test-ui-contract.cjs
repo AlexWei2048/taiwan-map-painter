@@ -92,3 +92,21 @@ test('Township or mayor maps export without unrelated council dependencies',asyn
  const env={data:{towns:[{}]},state:{level:'towns'},detailRequests:{}};
  await assert.doesNotReject(isolatedExportGuard(env)());
 });
+
+const history=read('history-2022.js');
+test('2022 history remains isolated from saved 2026 state',()=>{
+ assert.match(index,/id="workspaceHistory"/);
+ assert.match(history,/savedMapScope=clone\(state\)/);
+ assert.match(history,/state=clone\(savedMapScope\)/);
+ assert.match(history,/capture:true/);
+ assert.match(history,/if\(!recordsInView\(\)\.length\)throw Error/);
+});
+test('Historical district mismatch is not silently colored',()=>{
+ assert.match(history,/unmatchedDistricts\.add\(key\)/);
+ assert.match(history,/__2022_unmatched__/);
+ assert.match(history,/已暂不着色/);
+ assert.match(history,/多席次选区：主色表示席次最多政党/);
+});
+test('Main UI language avoids restricted expression',()=>{
+ for(const file of ['index.html','app.js','workspace-ui.js','history-2022.js','candidate-directory.js'])assert.equal(read(file).includes('\u5168\u56fd'),false,file);
+});
