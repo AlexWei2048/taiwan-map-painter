@@ -191,7 +191,15 @@ function clearCurrentMapData(){
 function currentResetScopeLabel(){
  const office=state.workspaceMode==='prediction'?({mayor:'县市长',council:'议员',township:'乡镇市区长'})[state.predictionOffice]||'2026预测':'自由填色';
  const layer=typeof localPredictionActive==='function'&&localPredictionActive()?'乡镇市区':levelLabel(state.level);
- const identity=state.level==='council'&&state.councilViewScope&&state.councilViewScope!=='all'?({regional:'区域选区',plains:'平地少数民族选区',mountain:'山地少数民族选区'})[state.councilViewScope]||'':state.level==='legislative'&&state.workspaceMode==='free'&&activeElectorate()!=='regional'?({party:'不分区政党',plains:'平地少数民族选区',mountain:'山地少数民族选区'})[activeElectorate()]||'':'';
+ let identity='';
+ if(state.level==='council'){
+  const visible=typeof localPredictionActive==='function'&&localPredictionActive()&&state.county?'all':typeof councilVisibleIdentity==='function'?councilVisibleIdentity():'all';
+  if(visible!=='all')identity=({regional:'区域选区',plains:'平地少数民族选区',mountain:'山地少数民族选区'})[visible]||'';
+ }
+ if(state.level==='legislative'&&!(typeof legislativeFourPanelsActive==='function'&&legislativeFourPanelsActive())){
+  const visible=activeElectorate();
+  if(visible!=='regional')identity=({party:'不分区政党',plains:'平地少数民族选区',mountain:'山地少数民族选区'})[visible]||'';
+ }
  return[state.county||'全台',office,layer,identity].filter(Boolean).join(' · ');
 }
 let resetScope='';
@@ -215,6 +223,7 @@ $('confirmReset').onclick=()=>{
  const scope=resetScope;resetScope='';$('confirmDialog').close();
  if(scope==='all'){
   state=defaults();undo.length=0;redo.length=0;view=null;baseView=null;erase=false;electionResultCache.clear();
+  if(typeof customLogo!=='undefined'){customLogo='';$('customPartyLogo').value='';renderCustomLogo();$('customPartyForm').hidden=true;$('customPartyError').textContent=''}
   syncInputs();render();persist();toast('已恢复地图初始状态；内置候选人与历史资料保留');return;
  }
  if(scope!=='current')return;
