@@ -333,6 +333,26 @@ test('Highest-vote gradient uses leading margin not the winner own percentage',(
  assert.equal(townSingle.status,'winner');assert.equal(townSingle.value,0);
  assert.equal(townSingle.marginShare,null);
 });
+test('Nationwide mayor party legend counts use county or township units, not seats',()=>{
+ const start=workspace.indexOf('function predictionCandidateLegendEntries(){');
+ const end=workspace.indexOf('\nfunction predictionDistrictLabel(d)',start);
+ assert.ok(start>=0&&end>start);
+ const source=workspace.slice(start,end);
+ const state={county:'',predictionOffice:'mayor'};
+ let townMode=false;
+ const unit=()=>townMode?'乡镇市区':'县市';
+ const maker=new Function('state','candidateDatabase','counts','predictionUsesVoteDisplay',
+  'localPredictionActive','predictionLegendCountUnit','legendVisiblePalette','mayorLegendUnit',
+  source+';return predictionCandidateLegendEntries');
+ const rows=maker(state,{districts:[]},()=>({'blue':8,'green':4}),()=>false,()=>townMode,()=>townMode?'乡镇市区':'席',
+  ()=>[{id:'blue',name:'甲党',color:'#112266'},{id:'green',name:'乙党',color:'#229955'}],unit);
+ assert.deepEqual(rows().map(r=>r.legendSuffix),['（8县市）','（4县市）']);
+ townMode=true;
+ assert.deepEqual(rows().map(r=>r.legendSuffix),['（8乡镇市区）','（4乡镇市区）']);
+ state.predictionOffice='council';
+ assert.deepEqual(rows().map(r=>r.legendSuffix),['（8乡镇市区）','（4乡镇市区）'],
+  'Existing councillor township-unit behavior should remain unchanged');
+});
 test('Prediction legend contains only the displayed election-district count',()=>{
  const start=app.indexOf('function legendMetrics(entries=legendEntries()){');
  const end=app.indexOf('\nfunction legendBox(spec)',start);
