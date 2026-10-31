@@ -119,3 +119,6 @@ body.history-mode #workspaceFree,body.history-mode #workspacePrediction{opacity:
 #scopeDisplayTools .display-settings{border-top:0;margin:0;padding:0}
 #scopeDisplayTools .scope-display-note{margin:10px 0 8px;line-height:1.7}
 #scopeDisplayTools #allCandidates{width:100%;margin:10px 0 0}
+
+/* Land fills have no polygon-outline stroke: only shared inland borders are drawn. */
+#regions path,#regions path:hover,#regions path:focus,.atlas-card path[role=button]:hover{stroke:none!important;stroke-width:0!important}

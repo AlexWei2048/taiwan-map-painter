@@ -153,17 +153,111 @@ function drawMapFurniture(group,t,spec){group.replaceChildren();const wide=isNat
 }
 function renderMapFurniture(){const spec=sceneSpec(),t=identityPanelsActive()?identityPanelLayouts()[0]?.t:geometryLayout(currentItems(),state.labels);if(!t)return;drawInsetFrames($('insetFrames'),t,spec);drawMapFurniture($('mapFurniture'),t,spec)}
 
-function regionPath(f){const identity=identityPanelsActive()?' · '+electorateName(featureElectorate(f)):'';const p=svgEl('path',{d:f.d,fill:fillColor(f),stroke:'#80978d','stroke-width':.55,'vector-effect':'non-scaling-stroke','fill-rule':'evenodd','data-region':f.id,'data-electorate':featureElectorate(f),tabindex:0,role:'button','aria-label':`${f.county}${f.name===f.county?'':f.name}${identity}，${regionDetail(f)}`});const title=svgEl('title');title.textContent=f.county+(f.name===f.county?'':f.name)+identity;p.append(title);p.addEventListener('click',()=>{if(!moved)paint(f)});p.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();paint(f)}};p.onpointermove=e=>{if(drag)return;const tip=$('tooltip'),r=$('canvas').getBoundingClientRect();tip.replaceChildren();const label=document.createElement('span');label.textContent=f.name;const sub=document.createElement('small');sub.textContent=f.county+(f.town?' · '+f.town:'')+identity+' · '+regionDetail(f);tip.append(label,sub);tip.hidden=false;tip.style.left=Math.min(e.clientX-r.left+15,r.width-165)+'px';tip.style.top=Math.max(45,e.clientY-r.top-48)+'px'};p.onpointerleave=()=>$('tooltip').hidden=true;return p}
+function regionPath(f){const identity=identityPanelsActive()?' · '+electorateName(featureElectorate(f)):'';const p=svgEl('path',{d:f.d,fill:fillColor(f),stroke:'none','stroke-width':0,'vector-effect':'non-scaling-stroke','fill-rule':'evenodd','data-region':f.id,'data-electorate':featureElectorate(f),tabindex:0,role:'button','aria-label':`${f.county}${f.name===f.county?'':f.name}${identity}，${regionDetail(f)}`});const title=svgEl('title');title.textContent=f.county+(f.name===f.county?'':f.name)+identity;p.append(title);p.addEventListener('click',()=>{if(!moved)paint(f)});p.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();paint(f)}};p.onpointermove=e=>{if(drag)return;const tip=$('tooltip'),r=$('canvas').getBoundingClientRect();tip.replaceChildren();const label=document.createElement('span');label.textContent=f.name;const sub=document.createElement('small');sub.textContent=f.county+(f.town?' · '+f.town:'')+identity+' · '+regionDetail(f);tip.append(label,sub);tip.hidden=false;tip.style.left=Math.min(e.clientX-r.left+15,r.width-165)+'px';tip.style.top=Math.max(45,e.clientY-r.top-48)+'px'};p.onpointerleave=()=>$('tooltip').hidden=true;return p}
+
+// Shared administrative boundaries use the topology of two different regions.
+// Single-owner polygon edges (coastlines and isolated island outlines) are excluded.
+function sharedBoundaryGeometry(features){
+ const edges=new Map();
+ const rounded=n=>{const v=Math.round(n*100)/100;return Object.is(v,-0)?0:v};
+ const point=(x,y)=>[rounded(x),rounded(y)];
+ const vertex=p=>p[0]+','+p[1];
+ for(let index=0;index<features.length;index++){
+  const feature=features[index];
+  if(!feature||typeof feature.d!=='string'||!feature.d)continue;
+  const owner=String(feature.id??index);
+  const tokens=feature.d.match(/[MmLlHhVvZz]|[-+]?(?:\d*\.?\d+)(?:[eE][-+]?\d+)?/g)||[];
+  let cursor=0,command='',previous=null,first=null;
+  const add=(a,b)=>{
+   if(!a||!b)return;
+   const x=vertex(a),y=vertex(b);
+   if(x===y)return;
+   const key=x<y?x+'|'+y:y+'|'+x;
+   const entry=edges.get(key);
+   if(!entry){edges.set(key,{a:x,b:y,owner,county:feature.county||feature.name||'',town:feature.townId||'',other:null});return}
+   if(entry.owner!==owner&&!entry.other)entry.other={owner,county:feature.county||feature.name||'',town:feature.townId||''};
+  };
+  while(cursor<tokens.length){
+   if(/^[MmLlHhVvZz]$/.test(tokens[cursor])){
+    command=tokens[cursor++];
+    if(command.toUpperCase()==='Z'){add(previous,first);previous=first;first=null;continue}
+   }
+   const kind=command.toUpperCase();
+   if(!['M','L','H','V'].includes(kind)){cursor++;continue}
+   if(cursor>=tokens.length||/^[MmLlHhVvZz]$/.test(tokens[cursor]))continue;
+   const x=Number(tokens[cursor++]);
+   let next;
+   if(kind==='H')next=point((command==='h'&&previous?previous[0]:0)+x,previous?.[1]||0);
+   else if(kind==='V')next=point(previous?.[0]||0,(command==='v'&&previous?previous[1]:0)+x);
+   else{
+    if(cursor>=tokens.length||/^[MmLlHhVvZz]$/.test(tokens[cursor]))break;
+    const y=Number(tokens[cursor++]);
+    next=point((command===command.toLowerCase()&&previous?previous[0]:0)+x,(command===command.toLowerCase()&&previous?previous[1]:0)+y);
+   }
+   if(!Number.isFinite(next[0])||!Number.isFinite(next[1]))continue;
+   if(kind==='M'){first=next;command=command==='m'?'l':'L'}
+   else add(previous,next);
+   previous=next;
+  }
+ }
+ const all=[],byCounty=Object.create(null),byTown=Object.create(null);
+ const write=(arr,a,b)=>{if(arr.last===a)arr.push('L'+b);else arr.push('M'+a+'L'+b);arr.last=b};
+ for(const edge of edges.values()){
+  if(!edge.other)continue;
+  write(all,edge.a,edge.b);
+  for(const county of new Set([edge.county,edge.other.county])){
+   if(!county)continue;
+   const arr=byCounty[county]||(byCounty[county]=[]);
+   write(arr,edge.a,edge.b);
+  }
+  for(const town of new Set([edge.town,edge.other.town])){
+   if(!town)continue;
+   const arr=byTown[town]||(byTown[town]=[]);
+   write(arr,edge.a,edge.b);
+  }
+ }
+ return {all:all.join(''),byCounty:Object.fromEntries(Object.entries(byCounty).map(([k,v])=>[k,v.join('')])),byTown:Object.fromEntries(Object.entries(byTown).map(([k,v])=>[k,v.join('')]))};
+}
+const sharedBorderCache=new Map();
+function sharedMapBorders(level,identity='regional'){
+ const regional=data[level]||[],indigenous=['council','legislative'].includes(level)?data[level+'Indigenous']||[]:[];
+ const key=level+':'+identity,prior=sharedBorderCache.get(key);
+ if(prior&&prior.regional===regional&&prior.indigenous===indigenous)return prior.mesh;
+ const features=indigenous.length?[...regional,...indigenous].filter(f=>featureElectorate(f)===identity):regional;
+ const mesh=sharedBoundaryGeometry(features);
+ sharedBorderCache.set(key,{regional,indigenous,mesh});
+ return mesh;
+}
+function appendSharedBorders(group,level,identity='regional',filterTown=false){
+ const mesh=sharedMapBorders(level,identity);
+ const d=filterTown&&state.villageTown?mesh.byTown[state.villageTown]||'':state.county?mesh.byCounty[state.county]||'':mesh.all;
+ if(d)group.append(svgEl('path',{d,fill:'none','vector-effect':'non-scaling-stroke','data-shared-boundary':level}));
+}
+
+
 function render(){
  if(!data)return;ensureMapDetails();$('canvas').classList.toggle('nationwide-mode',isNationwide());$('canvas').classList.toggle('county-mode',state.level==='counties');
- const regionGroup=$('regions'),borderGroup=$('borders'),districtGroup=$('districtBorders'),townGroup=$('townBorders');regionGroup.replaceChildren();borderGroup.replaceChildren();districtGroup.replaceChildren();for(const group of [regionGroup,borderGroup,districtGroup,townGroup])group.removeAttribute('transform');
- const countyOutlines=data.counties.filter(f=>(!state.county||f.name===state.county)&&!(state.level==='villages'&&state.villageTown));
+ const regionGroup=$('regions'),borderGroup=$('borders'),districtGroup=$('districtBorders'),townGroup=$('townBorders');
+ for(const group of [regionGroup,borderGroup,districtGroup,townGroup]){group.replaceChildren();group.removeAttribute('transform')}
  if(identityPanelsActive()){
-  renderTownBorders();for(const panel of identityPanelLayouts()){const transform=transformOf(panel.t),regions=svgEl('g',{'data-electorate':panel.identity,transform}),districts=svgEl('g',{'data-electorate':panel.identity,transform}),counties=svgEl('g',{'data-electorate':panel.identity,transform});for(const f of panel.items)regions.append(regionPath(f));if(!panel.townLevel)for(const edge of (data.districtBorders[borderKeyForElectorate(panel.identity)]||[]).filter(f=>!state.county||f.county===state.county))districts.append(svgEl('path',{d:edge.d,fill:'none','vector-effect':'non-scaling-stroke','data-district-county':edge.county}));for(const f of countyOutlines)counties.append(svgEl('path',{d:f.d,fill:'none',stroke:state.countyBorderColor,'stroke-width':state.countyBorderWidth,'vector-effect':'non-scaling-stroke','data-county':f.id,'pointer-events':'none'}));regionGroup.append(regions);districtGroup.append(districts);borderGroup.append(counties)}
+  renderTownBorders();
+  for(const panel of identityPanelLayouts()){
+   const transform=transformOf(panel.t),regions=svgEl('g',{'data-electorate':panel.identity,transform}),districts=svgEl('g',{'data-electorate':panel.identity,transform}),counties=svgEl('g',{'data-electorate':panel.identity,transform});
+   for(const f of panel.items)regions.append(regionPath(f));
+   appendSharedBorders(districts,panel.townLevel?'towns':state.level,panel.identity);
+   appendSharedBorders(counties,'counties');
+   regionGroup.append(regions);districtGroup.append(districts);borderGroup.append(counties);
+  }
  }else{
-  const transform=transformOf(geometryLayout(currentItems(),state.labels));for(const group of [regionGroup,borderGroup,districtGroup,townGroup])group.setAttribute('transform',transform);renderTownBorders();if(['council','legislative'].includes(state.level))for(const edge of (data.districtBorders[activeBorderKey()]||[]).filter(f=>!state.county||f.county===state.county))districtGroup.append(svgEl('path',{d:edge.d,fill:'none','vector-effect':'non-scaling-stroke','data-district-county':edge.county}));for(const f of currentItems())regionGroup.append(regionPath(f));if(state.level!=='counties')for(const f of countyOutlines)borderGroup.append(svgEl('path',{d:f.d,fill:'none',stroke:state.countyBorderColor,'stroke-width':state.countyBorderWidth,'vector-effect':'non-scaling-stroke','data-county':f.id,'pointer-events':'none'}))
+  const transform=transformOf(geometryLayout(currentItems(),state.labels));
+  for(const group of [regionGroup,borderGroup,districtGroup,townGroup])group.setAttribute('transform',transform);
+  renderTownBorders();
+  appendSharedBorders(districtGroup,state.level,'regional',state.level==='villages');
+  for(const f of currentItems())regionGroup.append(regionPath(f));
+  if(state.level!=='counties'&&!(state.level==='villages'&&state.villageTown))appendSharedBorders(borderGroup,'counties');
  }
- fit();renderPalette();renderLegend();renderList();updateProgress();updateHistory();applyBorders();renderMapFurniture();if(typeof renderPredictionDecorations==='function')renderPredictionDecorations()
+ fit();renderPalette();renderLegend();renderList();updateProgress();updateHistory();applyBorders();renderMapFurniture();
+ if(typeof renderPredictionDecorations==='function')renderPredictionDecorations()
 }
 function recolor(){if(state.fillMode==='prediction'){render();return}if(state.fillMode==='gradient'){for(const p of $('regions').querySelectorAll('path')){const f=currentItems().find(f=>f.id===p.dataset.region);if(!f)continue;p.setAttribute('fill',fillColor(f));p.setAttribute('aria-label',f.county+(f.name===f.county?'':f.name)+'，'+regionDetail(f));}return;}for(const p of $('regions').querySelectorAll('path')){const f=currentItems().find(x=>x.id===p.dataset.region);if(!f)continue;const pal=paletteById(featureFillId(f));p.setAttribute('fill',pal?.color||'#edf1e9');p.setAttribute('aria-label',f.county+(f.name===f.county?'':f.name)+'，'+(pal?.name||'未填色'))}}
 function paint(f){if(state.fillMode==='prediction'&&typeof openPredictionRegion==='function'){openPredictionRegion(f);return}if(typeof inspectCandidateRegion==='function'&&inspectCandidateRegion(f))return;if(state.fillMode==='gradient'){if(erase){pushHistory();delete state.elections[state.level][f.id];afterElectionEdit();return;}openVoteEditor(f);return;}const id=erase?undefined:state.selected,store=f.legislativeTown?state.legislativeTownFills[featureElectorate(f)]:state.fills[state.level],key=f.legislativeTown?f.sourceId:f.id;if(store[key]===id)return;pushHistory();if(id)store[key]=id;else delete store[key];recolor();renderPalette();renderLegend();renderList();updateProgress();persist()}
@@ -334,8 +428,6 @@ function ensureMapDetails(){
  const layer=state.level;
  if(layer==='council'&&!data.council.length)loadMapDetail('议员选区','assets/map-council.json?v=20261031-split-v25',part=>{if(!Array.isArray(part.council)||part.council.length!==161||!Array.isArray(part.councilIndigenous)||part.councilIndigenous.length!==60)throw Error('议员选区数据不完整');data.council=part.council;data.councilIndigenous=part.councilIndigenous;});
  if(layer==='legislative'&&!data.legislative.length)loadMapDetail('立法机构民代选区','assets/map-legislative.json?v=20261031-split-v25',part=>{if(!Array.isArray(part.legislative)||part.legislative.length!==73||!Array.isArray(part.legislativeIndigenous))throw Error('立法机构民代数据不完整');data.legislative=part.legislative;data.legislativeIndigenous=part.legislativeIndigenous;for(const f of data.legislative)if(data.legislative.filter(x=>x.county===f.county).length===1)f.name=f.county;});
- if(['council','legislative'].includes(layer)&&!Object.keys(data.districtBorders).length)loadMapDetail('选区边界','assets/map-district-borders.json?v=20261031-split-v25',part=>{if(!part.council||!part.legislative)throw Error('选区边界数据不完整');data.districtBorders=part;});
- if(['council','legislative','villages'].includes(layer)&&!data.townBorders.all.length)loadMapDetail('乡镇边界','assets/map-town-borders.json?v=20261031-split-v25',part=>{if(!Array.isArray(part)||part.length!==22)throw Error('乡镇边界数据不完整');data.townBorders={all:part};});
  if(layer==='villages'&&!data.villages.length&&!detailRequests.villages){
   detailRequests.villages=Promise.all([1,2,3,4,5].map(n=>fetchMapJson('assets/map-villages-'+n+'.json?v=20261031-split-v25','村里地图第'+n+'部分'))).then(parts=>{const rows=parts.flat();if(rows.length!==data.villageMetadata.count)throw Error('村里边界数据不完整');data.villages=rows;render();return true}).catch(e=>{delete detailRequests.villages;toast(e.message||'村里地图载入失败');return false});
  }
@@ -348,14 +440,12 @@ async function ensureExportMapReady(){
   if(!await ensureTownPredictionAreas())throw Error('议员乡镇地图资料未能载入');
  }
  ensureMapDetails();
- const required=state.level==='council'?['议员选区','选区边界','乡镇边界']:state.level==='legislative'?['立法机构民代选区','选区边界','乡镇边界']:state.level==='villages'?['villages','乡镇边界']:[];
+ const required=state.level==='council'?['议员选区']:state.level==='legislative'?['立法机构民代选区']:state.level==='villages'?['villages']:[];
  const finished=await Promise.all(required.map(n=>detailRequests[n]||Promise.resolve(true)));
  if(finished.some(ok=>ok!==true))throw Error('地图边界资料载入失败，请重试或刷新页面');
  if(state.level==='council'&&(data.council.length!==161||data.councilIndigenous.length!==60))throw Error('议员选区资料尚未完整载入');
  if(state.level==='legislative'&&(data.legislative.length!==73||data.legislativeIndigenous.length!==2))throw Error('立法机构民代选区资料尚未完整载入');
  if(state.level==='villages'&&data.villages.length!==data.villageMetadata.count)throw Error('村里地图资料尚未完整载入');
- if(['council','legislative','villages'].includes(state.level)&&data.townBorders.all.length!==22)throw Error('乡镇边界资料尚未完整载入');
- if(['council','legislative'].includes(state.level)&&!Object.keys(data.districtBorders).length)throw Error('选区边界资料尚未完整载入');
  if(!currentItems().length)throw Error('当前地图没有可导出的地理区域');
 }
 let mapPromise,mapLoadSequence=0;
@@ -416,7 +506,7 @@ function syncBorderControls(){
  $('countyBoundaryWidthValue').value=Number(state.countyBorderWidth).toFixed(1)+' px';$('townBoundaryWidthValue').value=Number(state.townBorderWidth).toFixed(1)+' px';
 }
 function applyBorders(){
- for(const [selector,color,width]of [['#regions path',['council','legislative'].includes(state.level)?'none':state.borderColor,state.borderWidth],['#districtBorders path',state.borderColor,state.borderWidth],['#borders path',state.countyBorderColor,state.countyBorderWidth],['#townBorders path',state.townBorderColor,state.townBorderWidth]])
+ for(const [selector,color,width]of [['#regions path','none',0],['#districtBorders path',state.borderColor,state.borderWidth],['#borders path',state.countyBorderColor,state.countyBorderWidth],['#townBorders path',state.townBorderColor,state.townBorderWidth]])
  for(const p of document.querySelectorAll(selector)){p.setAttribute('stroke',color);p.setAttribute('stroke-width',width);p.style.stroke=color;p.style.strokeWidth=width;}
  $('townBorders').style.display=state.showTownBoundaries?'':'none';syncBorderControls();
 }
@@ -607,7 +697,18 @@ function drawVillageLabels(group,items,t,v,interactive=false){group.replaceChild
 
 function moveParty(id,direction){const index=state.palette.findIndex(p=>p.id===id),next=index+direction;if(index<0||next<0||next>=state.palette.length)return;pushHistory();const scroll=$('palette').scrollTop;[state.palette[index],state.palette[next]]=[state.palette[next],state.palette[index]];renderPalette();renderLegend();persist();$('palette').scrollTop=scroll;[...$('palette').children].find(row=>row.dataset.party===id)?.querySelector('.party-drag-handle')?.focus({preventScroll:true})}
 
-function renderTownBorders(){const group=$('townBorders');group.replaceChildren();if(!['legislative','council','villages'].includes(state.level))return;const town=state.level==='villages'&&state.villageTown?data.towns.find(f=>f.id===state.villageTown):null;if(town){group.append(svgEl('path',{d:town.d,fill:'none','vector-effect':'non-scaling-stroke','data-town':town.id}));return}const mesh=data.townBorders.all.filter(f=>!state.county||f.county===state.county);if(identityPanelsActive()){for(const panel of identityPanelLayouts()){const layer=svgEl('g',{'data-electorate':panel.identity,transform:transformOf(panel.t)});for(const edge of mesh)layer.append(svgEl('path',{d:edge.d,fill:'none','vector-effect':'non-scaling-stroke','data-town-county':edge.county}));group.append(layer)}return}for(const edge of mesh)group.append(svgEl('path',{d:edge.d,fill:'none','vector-effect':'non-scaling-stroke','data-town-county':edge.county}))}
+function renderTownBorders(){
+ const group=$('townBorders');group.replaceChildren();
+ if(!['legislative','council','villages'].includes(state.level))return;
+ if(identityPanelsActive()){
+  for(const panel of identityPanelLayouts()){
+   if(panel.townLevel)continue;
+   const layer=svgEl('g',{'data-electorate':panel.identity,transform:transformOf(panel.t)});
+   appendSharedBorders(layer,'towns');
+   group.append(layer);
+  }
+ }else appendSharedBorders(group,'towns');
+}
 $('showTownBoundaries').onchange=()=>{pushHistory();state.showTownBoundaries=$('showTownBoundaries').checked;applyBorders();persist()};
 
 $('electorate').onchange=()=>{pushHistory();state.electorate[state.level]=$('electorate').value;syncInputs();render();persist()};
