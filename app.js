@@ -393,16 +393,15 @@ function legendMetrics(entries=legendEntries()){
  const wide=isNationwide(),font=state.legend.fontSize*(wide?1.4:1),width=wide?350:280,labelX=Math.max(63,44+font*1.6),limit=Math.max(4,Math.floor((width-labelX-18)/font)),gradient=state.fillMode==='gradient'||state.fillMode==='prediction'&&predictionUsesGradient();
  const rows=entries.map(p=>{const predictionLabel=Object.hasOwn(p,'legendSuffix')?p.name+p.legendSuffix:p.name+'（'+(counts()[p.id]||0)+(typeof predictionLegendCountUnit==='function'?predictionLegendCountUnit():predictionUsesVoteDisplay()?'区':'席')+'）',chars=Array.from(state.fillMode==='prediction'?predictionLabel:p.name),lines=[];for(let i=0;i<chars.length;i+=limit)lines.push(chars.slice(i,i+limit).join(''));return{p,lines,height:Math.max(font*1.85,lines.length*font*1.4+10)+(gradient?font*3.4:0)}});
  const title=Array.from(state.legendTitle||'图例'),titleLimit=Math.max(4,Math.floor((width-36)/(font+1))),titleLines=[];for(let i=0;i<title.length;i+=titleLimit)titleLines.push(title.slice(i,i+titleLimit).join(''));
- const automatic=state.fillMode==='prediction'?(typeof predictionLegendCaption==='function'?predictionLegendCaption():''):gradient?(state.gradient.groupBy==='party'?'最高票政党':'最高票候选人所属政党')+' · '+(state.gradient.metric==='share'?'得票率':'得票数'):'';
- const totalSeats=legendTotalSeats();
- const scopeUnits=state.county&&state.fillMode==='prediction'&&(state.predictionOffice==='mayor'||state.predictionOffice==='council')?(state.predictionScale==='town'&&typeof localPredictionActive==='function'&&localPredictionActive()?currentItems():state.predictionOffice==='mayor'?(data?.towns||[]).filter(f=>f.county===state.county):currentItems()):null;
- const scopeCount=scopeUnits?new Set(scopeUnits.map(f=>f.townId||f.sourceId||f.id)).size:null;
- const scopeUnit=state.predictionOffice==='mayor'?(state.county?.endsWith('市')?'区':'乡镇市'):'选区';
- const captionText=[scopeCount!==null?'总共'+scopeCount+'个'+scopeUnit:totalSeats!==null?'总席次：'+totalSeats+'席':'',state.legend.caption||automatic].filter(Boolean).join(' · ');
+ // Prediction legends show only the count of currently displayed electoral areas.
+ // Keep the candidates, party emblems and color-bin labels, but omit explanatory prose.
+ const captionText=state.fillMode==='prediction'
+  ?'总共'+new Set(currentItems().map(f=>f.townId||f.sourceId||f.id)).size+'个选区'
+  :state.legend.caption||'';
  const caption=Array.from(captionText),captionLines=[],captionLimit=Math.max(5,Math.floor((width-36)/(font*.8)));for(let i=0;i<caption.length;i+=captionLimit)captionLines.push(caption.slice(i,i+captionLimit).join(''));
  const headerHeight=Math.max(48,titleLines.length*(font+1)*1.3+22)+captionLines.length*font*1.25;
- const statuses=gradient?currentItems().map(f=>state.fillMode==='prediction'?(typeof predictionMapResult==='function'?predictionMapResult(f):{status:typeof predictionDisplayResult==='function'&&predictionDisplayResult(predictionDistrictFor(f))?'winner':'missing'}):regionResult(f)):[],tie=statuses.some(r=>r.status==='tie'),missing=statuses.some(r=>!['winner','tie'].includes(r.status)),footerHeight=(tie?font*1.7:0)+(missing?font*1.7:0)+(gradient?font*1.4:0);
- return{font,width,labelX,rows,titleLines,captionLines,headerHeight,gradient,tie,missing,footerHeight,height:headerHeight+rows.reduce((n,r)=>n+r.height,0)+footerHeight};
+ const statuses=gradient?currentItems().map(f=>state.fillMode==='prediction'?(typeof predictionMapResult==='function'?predictionMapResult(f):{status:typeof predictionDisplayResult==='function'&&predictionDisplayResult(predictionDistrictFor(f))?'winner':'missing'}):regionResult(f)):[],tie=statuses.some(r=>r.status==='tie'),missing=statuses.some(r=>!['winner','tie'].includes(r.status)),showGradientHint=gradient&&state.fillMode!=='prediction',footerHeight=(tie?font*1.7:0)+(missing?font*1.7:0)+(showGradientHint?font*1.4:0);
+ return{font,width,labelX,rows,titleLines,captionLines,headerHeight,gradient,tie,missing,showGradientHint,footerHeight,height:headerHeight+rows.reduce((n,r)=>n+r.height,0)+footerHeight};
 }
 function legendBox(spec){if(!state.legend.show)return{x:spec.width,y:spec.height,width:0,height:0};const m=legendMetrics(legendReserveEntries());return{x:spec.width-m.width-30,y:spec.height-furnitureFooterHeight()-6,...m}}
 function drawLegend(group,spec,interactive=false){
@@ -449,7 +448,7 @@ function drawLegend(group,spec,interactive=false){
   }}
   if(interactive&&state.fillMode==='solid'){g.setAttribute('role','button');g.setAttribute('tabindex','0');g.setAttribute('aria-label','选择'+row.p.name+'画笔');g.style.cursor='pointer';g.onclick=()=>setBrush(row.p.id);g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();setBrush(row.p.id)}}}group.append(g);rowY+=row.height;
  }
- if(m.gradient){for(const [show,color,label]of [[m.tie,'#aebdb4','并列最高'],[m.missing,'#edf1e9','缺少可用数据']]){if(!show)continue;group.append(svgEl('rect',{x:x+18,y:rowY+2,width:m.font*.8,height:m.font*.8,rx:2,fill:color,stroke:'#b5c3b8','stroke-width':.5}));const t=svgEl('text',{x:x+35,y:rowY+m.font*.8,'font-size':m.font*.8,fill:'#718376'});t.textContent=label;group.append(t);rowY+=m.font*1.7}const t=svgEl('text',{x:x+18,y:rowY+m.font*.75,'font-size':m.font*.72,fill:'#8a9a8e'});t.textContent=state.fillMode==='prediction'&&predictionMarginMode()?'领先差距（百分点），≥30 统一深色':'浅色 → 深色：数值由低到高';group.append(t)}
+ if(m.gradient){for(const [show,color,label]of [[m.tie,'#aebdb4','并列最高'],[m.missing,'#edf1e9','缺少可用数据']]){if(!show)continue;group.append(svgEl('rect',{x:x+18,y:rowY+2,width:m.font*.8,height:m.font*.8,rx:2,fill:color,stroke:'#b5c3b8','stroke-width':.5}));const t=svgEl('text',{x:x+35,y:rowY+m.font*.8,'font-size':m.font*.8,fill:'#718376'});t.textContent=label;group.append(t);rowY+=m.font*1.7}if(m.showGradientHint){const t=svgEl('text',{x:x+18,y:rowY+m.font*.75,'font-size':m.font*.72,fill:'#8a9a8e'});t.textContent='浅色 → 深色：数值由低到高';group.append(t)}}
 }
 function syncElectionControls(){
  $('solidMode').classList.toggle('active',state.fillMode==='solid');$('gradientMode').classList.toggle('active',state.fillMode==='gradient');$('solidMode').setAttribute('aria-pressed',state.fillMode==='solid');$('gradientMode').setAttribute('aria-pressed',state.fillMode==='gradient');$('gradientControls').hidden=state.fillMode!=='gradient';if(typeof syncPredictionControls==='function')syncPredictionControls();syncElectorateControls();
