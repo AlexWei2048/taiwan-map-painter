@@ -46,3 +46,12 @@ test('The map uses lazy electoral and village geometry',()=>{
  assert.match(app,/assets\/map-town-borders\.json/);
  assert.match(app,/map-villages-/);
 });
+
+test('Map export waits for all relevant lazy layers',()=>{
+ assert.match(app,/async function ensureExportMapReady\(\)/);
+ assert.match(app,/await ensureExportMapReady\(\);download\(new Blob/);
+ assert.match(app,/await ensureExportMapReady\(\);const source=preparedExportSvg/);
+ assert.match(app,/data\.villages\.length!==data\.villageMetadata\.count/);
+ assert.match(app,/delete detailRequests\[name\]/);
+ assert.match(app,/delete detailRequests\.villages/);
+});
