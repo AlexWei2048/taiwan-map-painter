@@ -63,7 +63,7 @@ syncPredictionControls=function(){
  if(select.dataset.office!==state.predictionOffice){select.replaceChildren(...options.map(([v,l])=>new Option(l,v)));select.dataset.office=state.predictionOffice}select.value=state.predictionDisplay;
  if(!active||!candidateDatabase||!data){$('localCandidateControl').hidden=true;return}
  syncDistrictCandidatePicker();
- const ds=predictionDistricts(),picker=$('predictionRegion'),old=state.predictionRegion||picker.value,complete=d=>{if(predictionUsesVoteDisplay()){const result=predictionDisplayResult(d);return !!result&&!result.partial}return predictionSummary(d).status==='complete'},visible=$('onlyIncomplete').checked?ds.filter(d=>!complete(d)):ds;picker.replaceChildren();
+ const ds=predictionDistricts(),picker=$('predictionRegion'),old=state.predictionRegion||picker.value,complete=d=>{if(predictionUsesVoteDisplay()){const result=predictionDisplayResult(d);return !!result&&(state.predictionDisplay==='candidateVote'||!result.partial)}return predictionSummary(d).status==='complete'},visible=$('onlyIncomplete').checked?ds.filter(d=>!complete(d)):ds;picker.replaceChildren();
  for(const county of COUNTY_ORDER){const local=visible.filter(d=>d.county===county);if(!local.length)continue;const group=document.createElement('optgroup');group.label=county;for(const d of local)group.append(new Option(predictionDistrictLabel(d),d.id));picker.append(group)}
  if(visible.some(d=>d.id===old))picker.value=old;$('editPrediction').disabled=!visible.length;$('nextPrediction').disabled=!ds.length;
  const done=ds.filter(complete),seats=predictionUsesVoteDisplay()?0:done.reduce((n,d)=>n+predictionSummary(d).winners.length,0);
@@ -95,7 +95,7 @@ updatePredictionPreview=function(){oldUpdatePredictionPreview();const d=director
  const candidateMode=state.predictionDisplay==='candidateVote',partyMode=state.predictionDisplay==='partyTop';
  let result=null,error='';
  try{result=candidateMode?PredictionCore.candidateVoteResult(directoryCandidates(d),predictionDraft,state.localDisplayCandidate):PredictionCore.voteResult(directoryCandidates(d),predictionDraft,partyMode)}catch(e){error=e.message}
- const label=candidateMode?'指定候选人：'+(result?candidateDisplayName(result.candidate):candidateDisplayName(candidateById.get(state.localDisplayCandidate)||{name:'未选候选人'})):partyMode?'最高票政党：'+(result?.party||''):result?'最高票者：'+candidateDisplayName(result.candidate):'';
+ const label=candidateMode?'指定候选人：'+(candidateById.get(state.localDisplayCandidate)?candidateDisplayName(candidateById.get(state.localDisplayCandidate)):'未选候选人'):partyMode?'最高票政党：'+(result?.party||''):result?'最高票者：'+candidateDisplayName(result.candidate):'';
  $('predictionPreview').prepend(dirText('p',error||(result?label+' · '+predictionMetricLabel(result)+(result.partial?'（数据未填齐）':''):(candidateMode?'请为指定候选人输入得票数或得票率':'填写候选人的得票数或得票率，即可显示当前最高票者')),'seat-counter'));return
  }
  const picked=directoryCandidates(d).filter(c=>predictionDraft.winners.includes(c.id));$('predictionPreview').prepend(dirText('p',`已选 ${picked.length} / 应选 ${d.seats} 席 · 已选女性 ${picked.filter(c=>c.gender==='女').length} 人 · 公告妇保 ${d.womenReservedLabel}`,'seat-counter'))};
