@@ -271,6 +271,32 @@ test('County mayor legend contains only candidates actually represented by the m
  assert.match(app,/const emblem=logoFor\(row\.p\)/);
 });
 
+test('Vote-share gradient has stronger and monotonic color differences',()=>{
+ const core=require('./election-core.js');
+ const colors=['#3664A8','#178565','#E2BF38','#B1445D','#777777'];
+ const rgb=color=>[1,3,5].map(i=>parseInt(color.slice(i,i+2),16));
+ const distance=(c1,c2)=>rgb(c1).reduce((sum,v,i)=>sum+Math.abs(v-rgb(c2)[i]),0);
+ for(const color of colors){
+  const previous=v=>{const t=.13+.87*v/100;return '#'+rgb(color).map(c=>Math.round(255+(c-255)*t).toString(16).padStart(2,'0')).join('')};
+  const values=[0,10,20,30,35,40,45,50,55,60,70,80,90,100].map(v=>core.shade(color,v,0,100));
+  const luminance=c=>{const [r,g,b]=rgb(c);return .2126*r+.7152*g+.0722*b};
+  for(let i=1;i<values.length;i++)assert.ok(luminance(values[i])<luminance(values[i-1]),'Value must darken monotonically: '+color);
+  const contrast=distance(core.shade(color,35,0,100),core.shade(color,55,0,100));
+  assert.ok(contrast>=distance(previous(35),previous(55))*1.4,'Typical vote shares must have stronger contrast: '+color);
+  assert.equal(core.shade(color,-1,0,100),values[0]);
+  assert.equal(core.shade(color,110,0,100),values[values.length-1]);
+ }
+ assert.throws(()=>core.shade('#3664A8',45,100,100),/上限/);
+});
+test('Gradient legend matches map shading with intermediate rate markers',()=>{
+ assert.match(app,/for\(let step=0;step<=10;step\+\+\)/);
+ assert.match(app,/ElectionCore\.shade\(row\.p\.color,value,domain\.min,domain\.max\)/);
+ assert.match(app,/const stops=voteMetric\?\[0,\.5,1\]:\[0,\.25,\.5,\.75,1\]/);
+ assert.match(app,/barHeight=m\.font\*1\.4/);
+ assert.match(app,/\.gradient'&&predictionUsesGradient\(\)/);
+ assert.match(workspace,/ElectionCore\.shade\(p\.color,lead\.value,domain\.min,domain\.max\)/);
+ assert.match(town,/ElectionCore\.shade\(p\.color,r\.value,predictionDomain\(\)\.min,predictionDomain\(\)\.max\)/);
+});
 function isolatedExportGuard(env){
  const start=app.indexOf('async function ensureExportMapReady(){');
  const end=app.indexOf('const mapPromise=',start);
