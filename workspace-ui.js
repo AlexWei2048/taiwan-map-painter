@@ -50,12 +50,12 @@ function countyMayorCandidateLegendEntries(){
   }
  }else{
   for(const d of districts){
-   const ids=predictionUsesVoteDisplay()?[predictionDisplayResult(d)?.candidate?.id]:(state.predictions[d.id]?.winners||[]);
+   const ids=predictionUsesVoteDisplay()?[predictionDisplayResult(d)?.candidate?.id]:(predictionSummary(d).status==='complete'?state.predictions[d.id]?.winners||[]:[]);
    for(const id of ids)if(id)shown.set(id,(shown.get(id)||0)+1);
   }
  }
  const unit=townView?(state.county.endsWith('市')?'区':'乡镇市'):'';
- return candidates.map(c=>{
+ return candidates.filter(c=>shown.has(c.id)).map(c=>{
   const party=predictionParty(c.party),count=shown.get(c.id)||0;
   return{
    id:'candidate-'+c.id,candidateId:c.id,partyId:party.id,
