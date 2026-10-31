@@ -34,9 +34,41 @@ function predictionMetricLabel(record){
  return record.votes!==null&&record.votes!==undefined?record.votes.toLocaleString('zh-CN')+' 票'+(rate?' · '+rate:''):rate;
 }
 predictionLegendCaption=function(){const names=Object.fromEntries(displayOptions()),selected=state.predictionDisplay==='candidateVote'?candidateById.get(state.localDisplayCandidate):null;return(state.predictionDisplay==='composition'?(state.predictionOffice==='council'?'色块宽度表示预测席次占比':'使用者选择的当选人所属政党'):names[state.predictionDisplay]||'最高票者所属政党')+(selected?'：'+candidateDisplayName(selected):'')+(predictionUsesGradient()?'；深浅表示数值，非当选概率':'')};
+function countyMayorCandidateLegendEntries(){
+ const districts=candidateDatabase.districts.filter(d=>d.type==='mayor'&&d.county===state.county);
+ const candidates=[],seen=new Set(),shown=new Map();
+ for(const d of districts)for(const c of directoryCandidates(d)){
+  if(!seen.has(c.id)){seen.add(c.id);candidates.push(c)}
+ }
+ const townView=typeof localPredictionActive==='function'&&localPredictionActive();
+ if(townView){
+  for(const f of localPredictionItems()){
+   if(f.county!==state.county)continue;
+   const result=localMapResult(f);
+   if(result.status!=='winner'||!result.candidate?.id)continue;
+   shown.set(result.candidate.id,(shown.get(result.candidate.id)||0)+1);
+  }
+ }else{
+  for(const d of districts){
+   const ids=predictionUsesVoteDisplay()?[predictionDisplayResult(d)?.candidate?.id]:(state.predictions[d.id]?.winners||[]);
+   for(const id of ids)if(id)shown.set(id,(shown.get(id)||0)+1);
+  }
+ }
+ const unit=townView?(state.county.endsWith('市')?'区':'乡镇市'):'';
+ return candidates.map(c=>{
+  const party=predictionParty(c.party),count=shown.get(c.id)||0;
+  return{
+   id:'candidate-'+c.id,candidateId:c.id,partyId:party.id,
+   name:candidateDisplayName(c),color:party.color,logo:logoFor(party),
+   legendSuffix:count?(townView?'（'+count+unit+'）':predictionUsesVoteDisplay()?'（已显示）':'（预测胜出）'):''
+  };
+ }).filter(row=>!state.legend.hidden.includes(row.partyId));
+}
 function predictionCandidateLegendEntries(){
  if(!candidateDatabase)return null;
- // All county-scoped legends summarize by political party, not individual candidate.
+ // In an individual county mayoral race, each candidate gets a separate row.
+ // Use the party's color and emblem, including when several candidates share a party.
+ if(state.county&&state.predictionOffice==='mayor')return countyMayorCandidateLegendEntries();
  const used=counts();
  const unit=predictionUsesVoteDisplay()?(typeof localPredictionActive==='function'&&localPredictionActive()&&typeof predictionLegendCountUnit==='function'?predictionLegendCountUnit():'区'):(typeof predictionLegendCountUnit==='function'?predictionLegendCountUnit():'席');
  return legendVisiblePalette().filter(p=>used[p.id]).map(p=>({...p,legendSuffix:'（'+used[p.id]+(predictionUsesVoteDisplay()?unit:state.county?'席':unit)+'）'}));
