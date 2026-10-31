@@ -56,6 +56,32 @@ test('Map export waits for all relevant lazy layers',()=>{
  assert.match(app,/delete detailRequests\.villages/);
 });
 
+test('Future reset offers a visible-scope clear and a full initial-state reset',()=>{
+ assert.match(index,/id="resetChoiceDialog"/);
+ assert.match(index,/id="chooseCurrentReset"/);
+ assert.match(index,/id="chooseAllReset"/);
+ assert.match(index,/清空当前界面地图数据/);
+ assert.match(index,/清空所有地图数据（恢复初始状态）/);
+ assert.match(app,/function clearCurrentMapData\(\)/);
+ assert.match(app,/const items=currentItems\(\)/);
+ assert.match(app,/localPredictionActive\(\)/);
+ assert.match(app,/predictionDistrictFor\(f\)/);
+ assert.match(app,/state\.localPredictions\?\.\[districtId\]/);
+ assert.match(app,/state=defaults\(\);undo\.length=0;redo\.length=0/);
+ assert.match(app,/网站内置候选人名单、2022历史选举结果和地图底图不会被删除/);
+});
+test('Current reset is scoped to visible features and full reset restores the defaults',()=>{
+ const clear=app.slice(app.indexOf('function clearCurrentMapData()'),app.indexOf('function currentResetScopeLabel()'));
+ assert.match(clear,/currentItems\(\)/);
+ assert.match(clear,/predictionDistrictFor\(f\)/);
+ assert.match(clear,/state\.localPredictions/);
+ assert.match(clear,/state\.fills\?\.\[level\]/);
+ assert.match(clear,/state\.elections\?\.\[level\]/);
+ assert.match(clear,/state\.legislativeTownFills/);
+ assert.match(clear,/pushHistory\(\)/);
+ assert.match(clear,/pruneUnusedAutoPredictionPalette\(state\)/);
+ assert.match(app,/undo\.length=0;redo\.length=0/);
+});
 function isolatedExportGuard(env){
  const start=app.indexOf('async function ensureExportMapReady(){');
  const end=app.indexOf('const mapPromise=',start);
