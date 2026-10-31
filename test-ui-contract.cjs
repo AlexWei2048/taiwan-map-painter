@@ -138,8 +138,26 @@ test('Merged vote display calculates highest candidate from votes or shares',()=
  assert.equal(shares.share,50);
  const group=core.voteResult(cs,{estimates:{a:{share:28},b:{share:50},c:{share:22}}},true);
  assert.equal(group,null,'Equal highest party shares must not silently choose a winner');
- assert.equal(core.voteResult(cs,{estimates:{a:{votes:100},b:{votes:200}}}),null,'Partial entries cannot establish highest candidate');
+ const partial=core.voteResult(cs,{estimates:{a:{votes:100},b:{votes:200}}});
+ assert.equal(partial.candidate.id,'b');
+ assert.equal(partial.partial,true);
+ assert.equal(partial.recorded,2);
+ assert.equal(partial.share,200/300*100);
+ const onlyRate=core.voteResult(cs,{estimates:{b:{share:44.5}}});
+ assert.equal(onlyRate.candidate.id,'b');
+ assert.equal(onlyRate.value,44.5);
+ assert.equal(onlyRate.partial,true);
+ assert.equal(onlyRate.recorded,1);
+ assert.equal(onlyRate.votes,null);
+ assert.equal(core.voteResult(cs,{estimates:{a:{share:52},b:{share:52}}}),null,'Highest vote tie must remain unresolved');
+ assert.equal(core.voteResult(cs,{estimates:{a:{share:35},b:{votes:120}}}),null,'Do not mix incomparable candidate measures');
+ const townPartial=t.summary(cs,{estimates:{b:{share:44.5}}},'topVote','',true);
+ assert.equal(townPartial.status,'winner');
+ assert.equal(townPartial.candidate.id,'b');
+ assert.equal(townPartial.value,44.5);
+ assert.equal(townPartial.partial,true);
  const t=require('./town-prediction-core.js');
+
  const local=t.summary(cs,{leaderId:'a',estimates:{a:{votes:280},b:{votes:500},c:{votes:220}}},'topVote','',true);
  assert.equal(local.status,'winner');assert.equal(local.candidate.id,'b');assert.equal(local.share,50);
  const percentageOnly=t.summary(cs,{estimates:{a:{share:28},b:{share:50},c:{share:22}}},'topVote','',true);
