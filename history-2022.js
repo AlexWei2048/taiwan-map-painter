@@ -198,7 +198,7 @@
   const seats=rows.reduce((n,d)=>n+d.seats,0);
   el('districtReferenceTitle').textContent=(county||'全台')+'2022议员选区范围与名额';
   el('districtReferenceSummary').textContent=rows.length+'个历史选区 · '+seats+'个应选席次'+(county?'':' · 全台215个选区、910席');
-  el('districtReferenceNote').textContent='此表使用2022年独立选区资料，不沿用2026年席次。范围依据2022年乡镇市区得票记录整理；地图仅对照现有边界后完全一致的选区着色，范围不同的选区不会套用2026边界。妇女保障名额按2022选区名额列示。';
+  el('districtReferenceNote').textContent='此表使用2022年独立选区资料，不沿用2026年席次。范围依据2022年乡镇市区层级得票记录整理，作为选区范围核对辅助；法定范围以中选会2022年公告为准。地图仅对照现有边界后范围完全一致的选区着色，范围不同的选区不会套用2026边界。妇女保障名额按2022年各选区应选名额列示。';
   const root=el('districtTableGroups');root.replaceChildren();
   const groups=new Map();for(const d of rows){if(!groups.has(d.county))groups.set(d.county,[]);groups.get(d.county).push(d)}
   for(const [name,list]of groups){
@@ -268,7 +268,7 @@
  const defaultFooter=furnitureFooterHeight;furnitureFooterHeight=function(){
   if(!active)return defaultFooter();
   const number=Math.min(30,new Set(recordsInView().filter(r=>r.elected).map(r=>r.party)).size);
-  return Math.max(defaultFooter(),metric==='share'?390:300,(metric==='share'?210:130)+number*35)
+  return Math.max(defaultFooter(),metric==='share'?180:100,(metric==='share'?180:100)+number*29)
  };
  const defaultPreparedExport=preparedExportSvg;preparedExportSvg=function(){
   if(!active)return defaultPreparedExport();
