@@ -2,8 +2,20 @@
 (function(root){'use strict';
 const blank=x=>x===null||x===undefined||String(x).trim()==='';
 function number(v,share=false){if(blank(v))return null;const s=String(v).trim().replace(/,/g,'').replace(share?/%$/:/^$/,'');if(!/^\d+(\.\d+)?$/.test(s))throw Error('预测值必须为非负数字');const n=Number(s);if(!Number.isFinite(n)||n<0||(share?n>100:!Number.isSafeInteger(n)))throw Error(share?'预测得票率应在0—100%之间':'预测票数必须为非负整数');return n}
+
+// Sum entered votes without treating the form's displayed zero defaults as actual entries.
+function tallyVotes(values){
+ let total=0,count=0;
+ for(const value of values){
+  if(blank(value))continue;
+  total+=number(value);
+  if(!Number.isSafeInteger(total))throw Error('得票数合计超出安全范围');
+  count++;
+ }
+ return{total:count?total:null,count,complete:count>0&&count===values.length};
+}
 function validate(d,cs,r={}){const ids=new Set(cs.map(c=>c.id)),winners=[...new Set(r.winners||[])];if(winners.some(id=>!ids.has(id)))throw Error('预测引用了不在本选区名单中的候选人');if(winners.length>d.seats)throw Error('预测当选人数不能超过应选席次');const estimates={};for(const [id,e]of Object.entries(r.estimates||{})){if(!ids.has(id))throw Error('预测值引用了未知候选人');const votes=number(e.votes),share=number(e.share,true);if(votes!==null||share!==null)estimates[id]={votes,share}}if(Object.values(estimates).reduce((n,e)=>n+(e.share||0),0)>100.1)throw Error('预测得票率合计不能超过100%');const all=cs.map(c=>estimates[c.id]||{});if(all.length&&all.every(e=>e.votes!==null&&e.votes!==undefined&&e.share!==null&&e.share!==undefined)){const total=all.reduce((n,e)=>n+e.votes,0);if(all.some(e=>Math.abs(e.share-(total?e.votes/total*100:0))>.11))throw Error('预测票数与得票率不一致，请修正或仅填一种指标')}return{winners,estimates,note:String(r.note||'').slice(0,300),method:r.method==='ranking'?'ranking':'manual',updatedAt:r.updatedAt||''}}
 function rank(d,cs,estimates,metric='votes'){if(cs.length<=d.seats)throw Error('同额或不足额选举涉及法定得票门槛，请手动做出预测');if(d.womenReserved>0&&d.womenReservedNote)throw Error('此组选区有跨区妇保席次，请先按完整组选区票数核对，再手动选择当选者');const scored=cs.map(c=>({c,n:number(estimates[c.id]?.[metric],metric==='share')}));if(scored.some(x=>x.n===null))throw Error('请填写本选区全部候选人的同一种预测值');if(!scored.some(x=>x.n>0))throw Error('所有预测值均为0，无法生成排序');scored.sort((a,b)=>b.n-a.n);const seats=Math.min(d.seats,cs.length);if(scored[seats]&&scored[seats-1].n===scored[seats].n)throw Error('末席出现同票，请手动选择，不自动决定当选人');let chosen=scored.slice(0,seats);const quota=Math.min(Number(d.womenReserved)||0,cs.filter(c=>c.gender==='女').length);while(chosen.filter(x=>x.c.gender==='女').length<quota){const females=scored.filter(x=>x.c.gender==='女'&&!chosen.includes(x));if(!females.length)break;const take=females[0];if(females[1]?.n===take.n)throw Error('妇保递补女性出现同票，请手动核对');const men=[...chosen].reverse().filter(x=>x.c.gender!=='女');if(men.length>1&&men[0].n===men[1].n)throw Error('被调整的末位男性出现同票，请手动核对');chosen=chosen.filter(x=>x!==men[0]);chosen.push(take)}return chosen.map(x=>x.c.id)}
 function summary(d,cs,record){let r;try{r=validate(d,cs,record||{})}catch(e){return{status:'invalid',message:e.message,winners:[],parties:[]}}const winners=cs.filter(c=>r.winners.includes(c.id)),parties=[];for(const c of winners){let p=parties.find(x=>x.name===c.party);if(!p){p={name:c.party,seats:0};parties.push(p)}p.seats++}parties.sort((a,b)=>b.seats-a.seats||a.name.localeCompare(b.name,'zh-Hans'));const complete=winners.length===Math.min(d.seats,cs.length),localQuota=!(d.womenReservedNote)&&Number(d.womenReserved)>0?Math.min(d.womenReserved,cs.filter(c=>c.gender==='女').length):0,badQuota=complete&&winners.filter(c=>c.gender==='女').length<localQuota;return{status:badQuota?'quota':complete?'complete':winners.length?'partial':'missing',message:badQuota?'预测未满足本选区妇保席次':complete?'预测已完成':winners.length?`已选${winners.length}/${d.seats}席`:'尚未预测',winners,parties,record:r,crossQuota:!!d.womenReservedNote&&d.womenReserved>0,leadingParties:parties.length?parties.filter(p=>p.seats===parties[0].seats):[]}}
-const api={number,validate,rank,summary};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.PredictionCore=api;
+const api={number,tallyVotes,validate,rank,summary};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.PredictionCore=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
