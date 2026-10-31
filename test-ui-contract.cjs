@@ -36,3 +36,13 @@ test('Confirmed incumbents retain their visible label without marking others',()
  assert.match(read('candidate-directory.js'),/incumbent===true\)inc\.append\(dirText\('span','现任'/);
  assert.match(read('prediction-ui.js'),/incumbent===true\?'现任':'',r\?\.winners/);
 });
+
+test('The map uses lazy electoral and village geometry',()=>{
+ assert.match(app,/assets\/map-base\.json/);
+ assert.match(app,/function ensureMapDetails\(\)/);
+ assert.match(app,/assets\/map-council\.json/);
+ assert.match(app,/assets\/map-legislative\.json/);
+ assert.match(app,/assets\/map-district-borders\.json/);
+ assert.match(app,/assets\/map-town-borders\.json/);
+ assert.match(app,/map-villages-/);
+});
