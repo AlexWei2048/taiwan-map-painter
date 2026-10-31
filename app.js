@@ -154,7 +154,74 @@ $('map').addEventListener('wheel',e=>{if(!view)return;e.preventDefault();const p
 $('map').addEventListener('pointerdown',e=>{if(e.button!==0)return;moved=false;drag={x:e.clientX,y:e.clientY,v:{...view},pointer:e.pointerId,matrix:$('map').getScreenCTM()?.inverse()}});
 window.addEventListener('pointermove',e=>{if(!drag||!drag.matrix)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.hypot(dx,dy)>5){moved=true;$('tooltip').hidden=true;const p1=new DOMPoint(drag.x,drag.y).matrixTransform(drag.matrix),p2=new DOMPoint(e.clientX,e.clientY).matrixTransform(drag.matrix);view={...drag.v,x:drag.v.x-(p2.x-p1.x),y:drag.v.y-(p2.y-p1.y)};applyView()}});window.addEventListener('pointerup',()=>drag=null);window.addEventListener('pointercancel',()=>{drag=null;moved=true});
 window.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))return;if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'){e.preventDefault();restore(e.shiftKey?'redo':'undo')}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='y'){e.preventDefault();restore('redo')}});
-$('reset').onclick=()=>$('confirmDialog').showModal();$('cancelReset').onclick=()=>$('confirmDialog').close();$('confirmReset').onclick=()=>{pushHistory();state.fills=Object.fromEntries(LEVELS.map(level=>[level,{}]));state.legislativeTownFills={party:{},plains:{},mountain:{}};state.elections=Object.fromEntries(LEVELS.map(level=>[level,{}]));state.predictions={};state.localPredictions={};$('confirmDialog').close();recolor();renderPalette();renderLegend();renderList();updateProgress();persist();toast('已清空填色，可点击撤销恢复')};
+function clearCurrentMapData(){
+ const items=currentItems(),deletes=[],queued=new Set(),touchedLocal=new Set();
+ const queue=(store,key,token)=>{if(store&&key!==undefined&&key!==null&&Object.hasOwn(store,key)&&!queued.has(token)){queued.add(token);deletes.push([store,key])}};
+ if(state.workspaceMode==='prediction'&&state.fillMode==='prediction'){
+  if(typeof localPredictionActive==='function'&&localPredictionActive()){
+   const targets=items.length?items:(typeof localDistrictItems==='function'?localDistrictItems():[]);
+   for(const f of targets){
+    const districtId=f.parentDistrictId,townId=f.townId;
+    if(!districtId||!townId)continue;
+    queue(state.localPredictions?.[districtId],townId,'local:'+districtId+':'+townId);
+    touchedLocal.add(districtId);
+   }
+  }else{
+   for(const f of items){
+    const district=typeof predictionDistrictFor==='function'?predictionDistrictFor(f):null;
+    if(district?.id)queue(state.predictions,district.id,'prediction:'+district.id);
+   }
+  }
+ }else{
+  const level=state.level,fills=state.fills?.[level],votes=state.elections?.[level];
+  for(const f of items){
+   if(f.legislativeTown)queue(state.legislativeTownFills?.[featureElectorate(f)],f.sourceId,'town-fill:'+featureElectorate(f)+':'+f.sourceId);
+   else queue(fills,f.id,'fill:'+level+':'+f.id);
+   queue(votes,f.id,'vote:'+level+':'+f.id);
+  }
+ }
+ if(!deletes.length)return 0;
+ pushHistory();
+ for(const [store,key] of deletes)delete store[key];
+ for(const id of touchedLocal)if(state.localPredictions[id]&&!Object.keys(state.localPredictions[id]).length)delete state.localPredictions[id];
+ pruneUnusedAutoPredictionPalette(state);
+ electionResultCache.clear();
+ return deletes.length;
+}
+function currentResetScopeLabel(){
+ const office=state.workspaceMode==='prediction'?({mayor:'县市长',council:'议员',township:'乡镇市区长'})[state.predictionOffice]||'2026预测':'自由填色';
+ const layer=typeof localPredictionActive==='function'&&localPredictionActive()?'乡镇市区':levelLabel(state.level);
+ const identity=state.level==='council'&&state.councilViewScope&&state.councilViewScope!=='all'?({regional:'区域选区',plains:'平地少数民族选区',mountain:'山地少数民族选区'})[state.councilViewScope]||'':state.level==='legislative'&&state.workspaceMode==='free'&&activeElectorate()!=='regional'?({party:'不分区政党',plains:'平地少数民族选区',mountain:'山地少数民族选区'})[activeElectorate()]||'':'';
+ return[state.county||'全台',office,layer,identity].filter(Boolean).join(' · ');
+}
+let resetScope='';
+function requestResetConfirmation(scope){
+ resetScope=scope;
+ const all=scope==='all';
+ $('confirmResetTitle').textContent=all?'恢复地图初始状态？':'清空当前界面地图数据？';
+ $('confirmResetMessage').textContent=all
+  ?'将清除本机保存的全部预测、乡镇预测、手动填色、投票记录、自定义政党与党徽、图例调整及地图显示设置，并恢复默认视图。此操作不可撤销。网站内置候选人名单、2022历史选举结果和地图底图不会被删除。'
+  :'将清除「'+currentResetScopeLabel()+'」当前可见范围内的预测记录，或当前图层的填色与投票数据。其他县市、选举类别、选区类型及未显示图层的数据会保留；此操作可通过撤销恢复。';
+ $('confirmReset').textContent=all?'确认恢复初始状态':'确认清空当前范围';
+ $('resetChoiceDialog').close();
+ $('confirmDialog').showModal();
+}
+$('reset').onclick=()=>$('resetChoiceDialog').showModal();
+$('cancelResetChoice').onclick=()=>$('resetChoiceDialog').close();
+$('chooseCurrentReset').onclick=()=>requestResetConfirmation('current');
+$('chooseAllReset').onclick=()=>requestResetConfirmation('all');
+$('cancelReset').onclick=()=>{$('confirmDialog').close();resetScope=''};
+$('confirmReset').onclick=()=>{
+ const scope=resetScope;resetScope='';$('confirmDialog').close();
+ if(scope==='all'){
+  state=defaults();undo.length=0;redo.length=0;view=null;baseView=null;erase=false;electionResultCache.clear();
+  syncInputs();render();persist();toast('已恢复地图初始状态；内置候选人与历史资料保留');return;
+ }
+ if(scope!=='current')return;
+ const removed=clearCurrentMapData();
+ if(!removed){toast('当前界面没有可清空的数据');return}
+ erase=false;syncInputs();render();persist();toast('已清空当前界面数据，共移除 '+removed+' 项；可点击撤销恢复')
+};
 function download(blob,name){const a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download=name;a.style.display='none';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),10000)}
 const filename=()=>((state.title||((state.county||'全台')+'地图填色')).replace(/[\\/:*?"<>|]/g,'_').slice(0,80));
 $('saveProject').onclick=()=>{download(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),filename()+'.json');toast('方案已保存，可在其他设备打开')};$('loadProject').onclick=()=>$('projectFile').click();$('projectFile').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{if(file.size>10000000)throw Error('方案文件过大');const next=cleanProject(JSON.parse(await file.text()));if(next.county&&!data.counties.some(f=>f.name===next.county))throw Error('方案中的县市未找到');pushHistory();state=next;erase=false;syncInputs();render();persist();toast('已打开地图方案')}catch(err){toast(err.message||'无法读取方案')}finally{e.target.value=''}};
