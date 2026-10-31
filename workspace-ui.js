@@ -50,6 +50,14 @@ predictionLegendCaption=function(){
  const label=state.predictionDisplay==='composition'?(state.predictionOffice==='council'?'色块宽度表示预测席次占比':'使用者选择的当选人所属政党'):names[state.predictionDisplay]||'最高票者所属政党';
  return (predictionMarginMode()?(state.predictionDisplay==='partyTop'?'最高票政党':'最高票者'):label)+(selected?'：'+candidateDisplayName(selected):'')+(predictionMarginMode()?'；领先差距（百分点）：第一名减第二名，按1、5、10、15、20、25、30以上分档；非当选概率':predictionUsesGradient()?'；深浅表示得票率，非当选概率':'');
 };
+function mayorLegendUnit(){
+ if(state.predictionOffice!=='mayor')return null;
+ if(typeof localPredictionActive==='function'&&localPredictionActive()){
+  if(!state.county)return'乡镇市区';
+  return state.county.endsWith('市')?'区':'乡镇市';
+ }
+ return'县市';
+}
 function countyMayorCandidateLegendEntries(){
  const districts=candidateDatabase.districts.filter(d=>d.type==='mayor'&&d.county===state.county);
  const candidates=[],seen=new Set(),shown=new Map();
@@ -70,13 +78,13 @@ function countyMayorCandidateLegendEntries(){
    for(const id of ids)if(id)shown.set(id,(shown.get(id)||0)+1);
   }
  }
- const unit=townView?'乡镇市区':'';
+ const unit=mayorLegendUnit();
  return candidates.filter(c=>shown.has(c.id)).map(c=>{
   const party=predictionParty(c.party),count=shown.get(c.id)||0;
   return{
    id:'candidate-'+c.id,candidateId:c.id,partyId:party.id,
    name:candidateDisplayName(c),color:party.color,logo:logoFor(party),
-   legendSuffix:count?(townView?'（'+count+unit+'）':predictionUsesVoteDisplay()?'（已显示）':'（预测胜出）'):''
+   legendSuffix:count?'（'+count+unit+'）':''
   };
  }).filter(row=>!state.legend.hidden.includes(row.partyId));
 }
@@ -86,8 +94,8 @@ function predictionCandidateLegendEntries(){
  // Use the party's color and emblem, including when several candidates share a party.
  if(state.county&&state.predictionOffice==='mayor')return countyMayorCandidateLegendEntries();
  const used=counts();
- const unit=predictionUsesVoteDisplay()?(typeof localPredictionActive==='function'&&localPredictionActive()&&typeof predictionLegendCountUnit==='function'?predictionLegendCountUnit():'区'):(typeof predictionLegendCountUnit==='function'?predictionLegendCountUnit():'席');
- return legendVisiblePalette().filter(p=>used[p.id]).map(p=>({...p,legendSuffix:'（'+used[p.id]+(predictionUsesVoteDisplay()?unit:state.county?'席':unit)+'）'}));
+ const unit=state.predictionOffice==='mayor'?mayorLegendUnit():predictionUsesVoteDisplay()?(typeof localPredictionActive==='function'&&localPredictionActive()&&typeof predictionLegendCountUnit==='function'?predictionLegendCountUnit():'区'):(typeof predictionLegendCountUnit==='function'?predictionLegendCountUnit():'席');
+ return legendVisiblePalette().filter(p=>used[p.id]).map(p=>({...p,legendSuffix:'（'+used[p.id]+unit+'）'}));
 }
 function predictionDistrictLabel(d){return (d.county===d.name?d.county:shortDirectoryName(d))+(d.type==='council'?' · '+DistrictCore.identityName(d):'')}
 function syncDistrictCandidatePicker(){
