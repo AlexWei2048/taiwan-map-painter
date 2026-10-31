@@ -647,6 +647,10 @@ test('Short outside leaders avoid inset rectangles',()=>{
  assert.equal(h.leaderCross(...m,[194,194,356,356]),false);
  assert.ok(Math.hypot(m[2]-m[0],m[3]-m[1])<130,'Leader must be short');
  assert.ok(q.x>350,'Label must remain on the mainland side of inset frame');
+ const islandLabel={f:{name:'东引乡'},x:170,y:270,ax:205,ay:270,side:'left',font:14,out:true};
+ h.shortLeader(islandLabel,{scale:1,tx:0,ty:0,area:{left:0,right:900,top:0,bottom:900}},[]);
+ const line=islandLabel.leader.match(/-?\d+(?:\.\d+)?/g).map(Number);
+ assert.equal(h.leaderCross(...line,[194,194,356,356]),false,'the island leader must not exit its frame');
 });
 test('Inset island names removed without deleting island frames',()=>{
  const s=app.indexOf('function appendInsetFrames('),e=app.indexOf('function drawInsetFrames(',s);
@@ -668,7 +672,7 @@ test('Map furniture shifts closer when land and island frames do not collide',()
  assert.equal(blocked.y,2400-180-6);
  assert.match(app,/okNorth=decorationClear/);
  assert.match(app,/okScale=decorationClear/);
- assert.match(index,/app\.js\?v=20261031-leaders-decor-v50/);
+ assert.match(index,/app\.js\?v=20261031-leaders-decor-v51/);
 });
 
 test('Map fetch retries bypass corrupt caches and report persistent network errors',async()=>{

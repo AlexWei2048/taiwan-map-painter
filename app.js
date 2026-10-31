@@ -118,25 +118,28 @@ function leaderCross(x,y,xx,yy,b){
  }
  return lo<=hi;
 }
-function shortLeader(q,t,occupied){
+function shortLeader(q,t,occupied,reserve){
  const frames=leaderFrames(t),island=frames.find(b=>leaderIn(q.ax,q.ay,b));
  const area=t.area||contentArea(sceneSpec()),font=q.font,width=Array.from(shownLabel(q.f)).length*font*1.04+8;
- const preferred=q.side==='left'?-1:1;let best;
+ const preferred=q.side==='left'?-1:1,legendReserved=reserve?.width?[reserve.x-5,reserve.y-5,reserve.x+reserve.width+5,reserve.y+reserve.height+5]:null;let best;
  for(const sign of [preferred,-preferred])
  for(const gap of [Math.max(37,font*2.8),Math.max(58,font*4),95,145])
  for(const y of [q.ay,q.y,q.ay+font*1.7,q.ay-font*1.7,q.ay+font*3,q.ay-font*3]){
   const x=q.ax+sign*gap,end=x+(sign<0?6:-6),r=sign<0?[x-width,y-font,x,y+font]:[x,y-font,x+width,y+font];
   if(r[0]<area.left||r[2]>area.right||r[1]<area.top||r[3]>area.bottom)continue;
-  if(occupied.some(b=>leaderOverlap(r,b)))continue;
-  if(island&&!leaderIn(x,y,island))continue;
+  if(occupied.some(b=>leaderOverlap(r,b))||legendReserved&&leaderOverlap(r,legendReserved))continue;
+  if(island&&(r[0]<island[0]||r[2]>island[2]||r[1]<island[1]||r[3]>island[3]))continue;
   if(!island&&frames.some(b=>leaderOverlap(r,b)))continue;
   if(frames.some(b=>leaderCross(q.ax,q.ay,end,y,b)))continue;
   const score=Math.hypot(end-q.ax,y-q.ay)+(sign===preferred?0:35);
   if(!best||score<best.score)best={x,y,side:sign<0?'left':'right',rect:r,score,leader:'M'+q.ax+','+q.ay+'L'+end+','+y};
  }
  if(!best){
-  const sign=preferred,space=island?Math.max(2,Math.min(font,island[sign<0?0:2]-(sign<0?0:q.ax),sign<0?q.ax-island[0]:island[2]-q.ax)):font*1.5;
-  const x=q.ax+sign*space,y=q.ay,end=x+(sign<0?1:-1);
+  let sign=preferred;
+  if(island&&((sign<0&&q.ax-island[0]<12)||(sign>0&&island[2]-q.ax<12)))sign=-sign;
+  const available=island?Math.max(0,(sign<0?q.ax-island[0]:island[2]-q.ax)-8):font*1.5;
+  const space=island?Math.min(font,available):available;
+  const x=q.ax+sign*space,y=q.ay,end=q.ax+sign*Math.max(0,space-1);
   best={x,y,side:sign<0?'left':'right',rect:sign<0?[x-width,y-font,x,y+font]:[x,y-font,x+width,y+font],leader:'M'+q.ax+','+q.ay+'L'+end+','+y};
  }
  occupied.push(best.rect);Object.assign(q,{x:best.x,y:best.y,side:best.side,leader:best.leader});return q;
@@ -157,7 +160,7 @@ function labelLayout(items,t,font=15){
  }
  const sorted=[...outside].sort((a,b)=>a.ax-b.ax),gap=Math.max(font*1.65,state.level==='villages'?14:25),top=area.top+font,bottom=area.bottom-font,capacity=Math.floor((bottom-top)/gap)+1,columns=identityPanelsActive()?1:isNationwide()?2:1,sideCapacity=capacity*columns;let middle=sorted.filter(q=>q.ax<(area.left+area.right)/2).length;const rightCapacity=Math.max(1,Math.floor((bottom-top)/gap)+1)*columns;middle=Math.max(sorted.length-rightCapacity,Math.min(sideCapacity,middle));
  const sides=state.level==='counties'?[['left',sorted.filter(q=>q.side==='left'||(!q.side&&q.ax<(area.left+area.right)/2))],['right',sorted.filter(q=>q.side==='right'||(!q.side&&q.ax>=(area.left+area.right)/2))]]:[['left',sorted.slice(0,middle)],['right',sorted.slice(middle)]];
- for(const [side,list]of sides){const endY=side==='right'?bottom:bottom,cap=Math.max(1,Math.floor((endY-top)/gap)+1);list.sort((a,b)=>a.ay-b.ay);const cols=Math.max(1,Math.ceil(list.length/cap)),chunkSize=Math.ceil(list.length/cols);for(let col=0;col<cols;col++){const chunk=list.slice(col*chunkSize,(col+1)*chunkSize);for(let i=0;i<chunk.length;i++)chunk[i].y=Math.max(i?chunk[i-1].y+gap:top,chunk[i].ay);if(chunk.length&&chunk.at(-1).y>endY){chunk.at(-1).y=endY;for(let i=chunk.length-2;i>=0;i--)chunk[i].y=Math.min(chunk[i].y,chunk[i+1].y-gap)}for(const q of chunk){q.x=side==='left'?leftLabelEdge-col*120:t.labelRight+col*120;q.elbow=side==='left'?q.x+18:q.x-18;q.side=side;q.out=true;result.push(q)}}}const occupied=[...placed];for(const q of result)if(q.out)shortLeader(q,t,occupied);return result;
+ for(const [side,list]of sides){const endY=side==='right'?bottom:bottom,cap=Math.max(1,Math.floor((endY-top)/gap)+1);list.sort((a,b)=>a.ay-b.ay);const cols=Math.max(1,Math.ceil(list.length/cap)),chunkSize=Math.ceil(list.length/cols);for(let col=0;col<cols;col++){const chunk=list.slice(col*chunkSize,(col+1)*chunkSize);for(let i=0;i<chunk.length;i++)chunk[i].y=Math.max(i?chunk[i-1].y+gap:top,chunk[i].ay);if(chunk.length&&chunk.at(-1).y>endY){chunk.at(-1).y=endY;for(let i=chunk.length-2;i>=0;i--)chunk[i].y=Math.min(chunk[i].y,chunk[i+1].y-gap)}for(const q of chunk){q.x=side==='left'?leftLabelEdge-col*120:t.labelRight+col*120;q.elbow=side==='left'?q.x+18:q.x-18;q.side=side;q.out=true;result.push(q)}}}const occupied=[...placed];for(const q of result)if(q.out)shortLeader(q,t,occupied,reserve);return result;
 }
 
 function drawLabels(group,items,t,font=15,interactive=false){
