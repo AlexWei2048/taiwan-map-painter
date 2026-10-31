@@ -333,26 +333,44 @@ test('Highest-vote gradient uses leading margin not the winner own percentage',(
  assert.equal(townSingle.status,'winner');assert.equal(townSingle.value,0);
  assert.equal(townSingle.marginShare,null);
 });
-test('Margin maps automatically widen contrast without disguising input metrics',()=>{
- const start=workspace.indexOf('function predictionMarginAutoMax(');
- const end=workspace.indexOf('\nfunction predictionIsVotes()',start);
- assert.ok(start>=0&&end>start);
- const auto=new Function(workspace.slice(start,end)+';return predictionMarginAutoMax')();
- assert.equal(auto([]),5);
- assert.equal(auto([4,6]),10);
- assert.equal(auto([24]),30);
- assert.equal(auto([90]),100);
+test('Fixed reference-style margin classes use narrow competitive ranges',()=>{
+ const c=require('./election-core.js');
+ const ranges=[0,.9,1,1.001,5,5.001,10,10.001,15,15.001,20,20.001,25,25.001,29.99,30,30.001,60,100];
+ const expected=[0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,7,7];
+ assert.deepEqual(ranges.map(v=>c.marginBandIndex(v)),expected);
+ assert.deepEqual(c.marginBandLabels,['≤1','5','10','15','20','25','<30','≥30']);
+ const colors=['#3664A8','#178565','#E2BF38','#B1445D','#777777'];
+ for(const color of colors){
+  const bandColors=[0,3,8,13,18,23,27,30].map(v=>c.marginShade(color,v));
+  assert.equal(new Set(bandColors).size,8,'Every margin band must be visually distinct');
+  assert.equal(c.marginShade(color,30),c.marginShade(color,99));
+  assert.equal(c.marginShade(color,0),c.marginShade(color,1));
+  assert.equal(c.marginShade(color,3),c.marginShade(color,5));
+  const lum=hex=>{const rgb=[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16));return .2126*rgb[0]+.7152*rgb[1]+.0722*rgb[2]};
+  for(let i=1;i<bandColors.length;i++)assert.ok(lum(bandColors[i])<lum(bandColors[i-1]),'More margin must produce darker color');
+ }
+});
+test('Margin map and legend share fixed 30-point bins while candidate rates retain percentage shading',()=>{
+ assert.match(workspace,/if\(predictionMarginMode\(\)\)return\{min:0,max:30\}/);
+ assert.match(town,/if\(predictionMarginMode\(\)\)return\{min:0,max:30\}/);
+ assert.match(workspace,/ElectionCore\.marginShade\(p\.color,lead\.marginShare\?\?0\)/);
+ assert.match(town,/ElectionCore\.marginShade\(p\.color,r\.marginShare\?\?0\)/);
+ assert.match(app,/ElectionCore\.marginShade\(row\.p\.color,samples\[i\]\)/);
+ assert.match(app,/const samples=\[0,3,8,13,18,23,27,30\],labels=ElectionCore\.marginBandLabels/);
+ assert.match(app,/data-margin-band/);
+ assert.match(workspace,/predictionUsesGradient\(\)&&!predictionMarginMode\(\)/);
+ assert.match(app,/>=30 统一深色|≥30 统一深色/);
  assert.match(workspace,/result&&predictionMarginMode\(\)\?\{\.\.\.result,value:result\.marginShare\?\?0\}:result/);
- assert.match(workspace,/state\.gradient\.marginManual===true&&state\.gradient\.max!==null/);
- assert.match(town,/state\.gradient\.marginManual===true&&state\.gradient\.max!==null/);
  assert.match(workspace,/predictionMarginMode\(\)\?'百分点'/);
  assert.match(app,/metricText\(n\)\{if\(state\.fillMode==='prediction'\)return predictionMarginMode\(\)/);
- assert.match(app,/marginManual:s\.gradient\?\.marginManual===true/);
- assert.match(workspace,/领先差距（百分点）：第一名减第二名/);
- assert.match(town,/领先差距（百分点），深色表示领先优势更大/);
+ assert.match(workspace,/第一名减第二名，按1、5、10、15、20、25、30以上分档/);
+ assert.match(town,/按1、5、10、15、20、25、30以上分档/);
  assert.match(read('prediction-ui.js'),/predictionMarginLabel\(r\)/);
  assert.match(town,/predictionMarginLabel\(r\)/);
+ assert.match(workspace,/ElectionCore\.shade\(p\.color,lead\.value,domain\.min,domain\.max\)/);
+ assert.match(town,/ElectionCore\.shade\(p\.color,r\.value,predictionDomain\(\)\.min,predictionDomain\(\)\.max\)/);
 });
+
 function isolatedExportGuard(env){
  const start=app.indexOf('async function ensureExportMapReady(){');
  const end=app.indexOf('const mapPromise=',start);
