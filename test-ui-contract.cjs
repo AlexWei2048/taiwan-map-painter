@@ -532,9 +532,72 @@ test('Nationwide township maps always label only counties regardless of zoom or 
  state.county='';state.level='counties';g=group();draw(g,towns,{},12,true);
  assert.deepEqual(passedItems,towns);
 });
+
+test('Map fetch retries bypass corrupt caches and report persistent network errors',async()=>{
+ const start=app.indexOf('async function fetchMapJson(url,label,attempts=3){');
+ const end=app.indexOf('// Load only the map layers',start);
+ assert.ok(start>=0&&end>start);
+ const calls=[],paused=[];
+ const responses=[
+  ()=>Promise.reject(Error('connection lost')),
+  ()=>Promise.resolve({ok:true,json:()=>Promise.reject(Error('bad JSON'))}),
+  ()=>Promise.resolve({ok:true,json:()=>Promise.resolve({counties:[1,2,3]})})
+ ];
+ const fetch=(url,options)=>{calls.push({url,cache:options.cache});return responses[calls.length-1]()};
+ const loader=new Function('fetch','setTimeout','console',app.slice(start,end)+';return fetchMapJson')(
+  fetch,callback=>{paused.push(true);callback()},{warn(){}});
+ assert.deepEqual(await loader('assets/map-base.json?v=1','基础地图'),{counties:[1,2,3]});
+ assert.equal(calls.length,3);
+ assert.equal(calls[0].cache,'default');
+ assert.equal(calls[1].cache,'reload');
+ assert.match(calls[1].url,/&retry=/);
+ assert.match(calls[2].url,/&retry=/);
+ assert.equal(paused.length,2);
+ let attempts=0;
+ const fail=new Function('fetch','setTimeout','console',app.slice(start,end)+';return fetchMapJson')(
+  async()=>{attempts++;return{ok:false,status:503}},callback=>callback(),{warn(){}});
+ await assert.rejects(fail('assets/map-base.json?v=1','基础地图'),/基础地图载入失败（已重试3次）：HTTP 503/);
+ assert.equal(attempts,3);
+});
+test('Map recovery retries without reloading the page or clearing user prediction state',async()=>{
+ assert.match(index,/id="retryMapLoad"/);
+ assert.match(index,/id="loadErrorMessage"/);
+ assert.doesNotMatch(index,/onclick="location\.reload\(\)"/);
+ const start=app.indexOf('let mapPromise,mapLoadSequence=0;');
+ const end=app.indexOf('\nfor(const p of PARTY_PRESETS)',start);
+ assert.ok(start>=0&&end>start);
+ const nodes=Object.fromEntries(['loadError','loadErrorMessage','progress','retryMapLoad','county'].map(k=>[k,{
+  hidden:true,textContent:'',children:[],append(child){this.children.push(child)}
+ }]));
+ const lookup=id=>nodes[id]||null;
+ const valid=()=>({counties:Array.from({length:22},(_,i)=>({name:'县市'+i})),towns:[],legislative:[]});
+ let downloads=0,renders=0;
+ const state={county:'',fillMode:'solid'};
+ const boot=new Function('$','fetchMapJson','document','state','data','COUNTY_ORDER','syncInputs','render','console',
+  app.slice(start,end)+';return {retry:()=>$("retryMapLoad").onclick(),value:()=>data,promise:()=>mapPromise}')(
+  lookup,async()=>{downloads++;return valid()},{createElement:()=>({})},state,null,[],()=>{},()=>{renders++},{error(){}});
+ await boot.promise();await Promise.resolve();
+ assert.equal(nodes.loadError.hidden,true);
+ assert.equal(renders,1);
+ assert.equal(boot.value().counties.length,22);
+ boot.retry();
+ assert.equal(renders,2);
+ assert.equal(downloads,1);
+ assert.equal(state.county,'');
+ assert.match(app,/地图渲染出现问题/);
+ assert.match(app,/地图资料载入失败/);
+});
+test('Lazy geometry and council township script retry without clearing saved predictions',()=>{
+ assert.match(app,/detailRequests\[name\]=fetchMapJson\(url,name\)/);
+ assert.match(app,/fetchMapJson\('assets\/map-villages-'\+n/);
+ assert.match(town,/for\(let attempt=0;attempt<3;attempt\+\+\)/);
+ assert.match(town,/script\.src='town-areas\.js[^;]+retry=/);
+ assert.match(town,/script\.onerror=\(\)=>\{script\.remove\(\)/);
+ assert.match(read('style.css'),/#loadError\{position:absolute;left:50%;top:50%/);
+});
 function isolatedExportGuard(env){
  const start=app.indexOf('async function ensureExportMapReady(){');
- const end=app.indexOf('const mapPromise=',start);
+ const end=app.indexOf('let mapPromise,mapLoadSequence=0;',start);
  assert.ok(start>=0&&end>start);
  const code=app.slice(start,end)+';return ensureExportMapReady;';
  return new Function('data','mapPromise','state','detailRequests','ensureMapDetails','localPredictionActive','ensureTownPredictionAreas','currentItems',code)(
