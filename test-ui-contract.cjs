@@ -587,6 +587,29 @@ test('Map recovery retries without reloading the page or clearing user predictio
  assert.match(app,/地图渲染出现问题/);
  assert.match(app,/地图资料载入失败/);
 });
+test('Missing election results never crash gradient map legends',()=>{
+ const mapStart=town.indexOf('function predictionMapResult(f){');
+ const mapEnd=town.indexOf('\nfunction localDisplayOptions()',mapStart);
+ assert.ok(mapStart>=0&&mapEnd>mapStart);
+ const makeResult=(isLocal,localResult,displayResult)=>new Function('localPredictionActive','localMapResult','predictionDisplayResult','predictionDistrictFor',
+  town.slice(mapStart,mapEnd)+';return predictionMapResult')(()=>isLocal,()=>localResult,()=>displayResult,()=>null);
+ const region={id:'not-yet-predicted'};
+ assert.equal(makeResult(false,null,null)(region).status,'missing');
+ assert.equal(makeResult(true,null,null)(region).status,'missing');
+ assert.equal(makeResult(false,null,{status:'winner'})(region).status,'winner');
+ const start=app.indexOf('function legendMetrics('),end=app.indexOf('\nfunction legendBox(',start);
+ assert.ok(start>=0&&end>start);
+ const legendCode=app.slice(start,end)+';return legendMetrics';
+ const legend=new Function('state','isNationwide','currentItems','predictionUsesGradient','predictionMapResult',
+  'legendEntries','predictionUsesVoteDisplay','predictionLegendCountUnit','counts','mayorLegendUnit',legendCode)(
+   {fillMode:'prediction',predictionOffice:'mayor',predictionDisplay:'topVote',legendTitle:'图例',gradient:{metric:'share'},legend:{fontSize:12,caption:''}},
+   ()=>true,()=>[{id:'county-with-no-votes'}],()=>true,()=>null,()=>[],()=>true,()=> '区',()=>({}),()=> '区');
+ const metrics=legend();
+ assert.equal(metrics.gradient,true);
+ assert.equal(metrics.missing,true);
+ assert.equal(metrics.tie,false);
+ assert.ok(metrics.height>0);
+});
 test('Lazy geometry and council township script retry without clearing saved predictions',()=>{
  assert.match(app,/detailRequests\[name\]=fetchMapJson\(url,name\)/);
  assert.match(app,/fetchMapJson\('assets\/map-villages-'\+n/);
