@@ -25,7 +25,7 @@ PREFIX = {
 FIELDS = {
     "county": "縣市", "town": "鄉鎮市區", "village": "村里",
     "district": "選區", "number": "號次", "name": "候選人",
-    "party": "政黨", "votes": "得票數", "elected": "當選註記",
+    "party": "政黨", "gender": "性別", "votes": "得票數", "elected": "當選註記",
 }
 session = requests.Session()
 session.headers["User-Agent"] = "Taiwan-map-painter/2022 historical election visualization (open data research)"
@@ -71,7 +71,7 @@ def compact(rows, office, electorate):
         base = [
             row.get("縣市", "").strip(), row.get("鄉鎮市區", "").strip(),
             row.get("選區", "").strip(), row.get("號次", "").strip(),
-            row.get("候選人", "").strip(), row.get("政黨", "").strip(),
+            row.get("候選人", "").strip(), row.get("政黨", "").strip(), row.get("性別", "").strip(),
         ]
         if office == "mayor":
             levels = ["county", "town"]
@@ -81,16 +81,16 @@ def compact(rows, office, electorate):
             levels = ["town"]
         for level in levels:
             # All villages belonging to the same electoral district are summed.
-            county, town, district, number, name, party = base
+            county, town, district, number, name, party, gender = base
             key = (office, electorate, level, county,
                    "" if level in ("county", "district") else town,
                    "" if level == "county" else district,
-                   number, name, party)
+                   number, name, party, gender)
             total[key] += votes
-            annotations[key] |= "＊" in row.get("當選註記", "") or "*" in row.get("當選註記", "")
+            annotations[key] |= "＊" in row.get("當選註記", "") or "*" in row.get("當選註記", "") or "婦保" in row.get("備註", "")
     return [
         dict(zip(("type", "electorate", "level", "county", "town", "district",
-                  "number", "name", "party"), key),
+                  "number", "name", "party", "gender"), key),
              votes=value, elected=annotations[key])
         for key, value in total.items()
     ]
