@@ -218,12 +218,13 @@ function sharedBoundaryGeometry(features){
  }
  return {all:all.join(''),byCounty:Object.fromEntries(Object.entries(byCounty).map(([k,v])=>[k,v.join('')])),byTown:Object.fromEntries(Object.entries(byTown).map(([k,v])=>[k,v.join('')]))};
 }
+const EMPTY_SHARED_BORDER_FEATURES=[];
 const sharedBorderCache=new Map();
 function sharedMapBorders(level,identity='regional'){
- const regional=data[level]||[],indigenous=['council','legislative'].includes(level)?data[level+'Indigenous']||[]:[];
+ const regional=data[level]||[],indigenous=['council','legislative'].includes(level)?data[level+'Indigenous']||EMPTY_SHARED_BORDER_FEATURES:null;
  const key=level+':'+identity,prior=sharedBorderCache.get(key);
  if(prior&&prior.regional===regional&&prior.indigenous===indigenous)return prior.mesh;
- const features=indigenous.length?[...regional,...indigenous].filter(f=>featureElectorate(f)===identity):regional;
+ const features=indigenous?.length?[...regional,...indigenous].filter(f=>featureElectorate(f)===identity):regional;
  const mesh=sharedBoundaryGeometry(features);
  sharedBorderCache.set(key,{regional,indigenous,mesh});
  return mesh;
