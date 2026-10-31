@@ -34,9 +34,29 @@ predictionPartyCounts=function(){const result={},seen=new Set();for(const f of c
 function displayOptions(){return state.predictionOffice==='council'?[['composition','预测席次分布'],['seats','席次最多的政党'],['leader','第一高票所属政党'],['share','按得票高低着色 · 第一高票得票率'],['votes','按得票高低着色 · 第一高票得票数'],['partyShare','按得票高低着色 · 政党合计得票率'],['partyVotes','按得票高低着色 · 政党合计得票数']]:[['composition','预测胜选政党'],['winnerShare','按得票高低着色 · 当选人得票率'],['winnerVotes','按得票高低着色 · 当选人得票数']]}
 predictionLegendCaption=function(){const names=Object.fromEntries(displayOptions());return(state.predictionDisplay==='composition'?(state.predictionOffice==='council'?'色块宽度表示预测席次占比':'使用者选择的当选人所属政党'):names[state.predictionDisplay]||'第一高票所属政党')+(predictionUsesGradient()?'；深浅表示数值，非当选概率':'')};
 function predictionCandidateLegendEntries(){
- if(state.predictionOffice!=='township'||!candidateDatabase)return null;const winners=new Map();
- for(const d of predictionDistricts()){if(predictionSummary(d).status!=='complete')continue;for(const id of state.predictions[d.id]?.winners||[]){const candidate=candidateById.get(id);if(candidate)winners.set(id,candidate)}}
- return[...winners.values()].flatMap(candidate=>{const party=predictionParty(candidate.party);if(state.legend.hidden.includes(party.id))return[];return[{id:'legend-candidate-'+candidate.id,name:candidateDisplayName(candidate)+' · '+candidate.party,color:party.color,logo:logoFor(party),legendSuffix:''}]})
+ if(!candidateDatabase)return null;
+ const localMayor=state.predictionOffice==='mayor'&&typeof localPredictionActive==='function'&&localPredictionActive();
+ if(!localMayor&&state.predictionOffice!=='township')return null;
+ const winners=new Map();
+ if(localMayor){
+  for(const feature of localPredictionItems()){
+   const result=localMapResult(feature);
+   if(result.status==='winner'&&result.candidate)winners.set(result.candidate.id,result.candidate);
+  }
+ }else{
+  for(const d of predictionDistricts()){
+   if(predictionSummary(d).status!=='complete')continue;
+   for(const id of state.predictions[d.id]?.winners||[]){
+    const candidate=candidateById.get(id);
+    if(candidate)winners.set(id,candidate);
+   }
+  }
+ }
+ return[...winners.values()].flatMap(candidate=>{
+  const party=predictionParty(candidate.party);
+  if(state.legend.hidden.includes(party.id))return[];
+  return[{id:'legend-candidate-'+candidate.id,name:candidateDisplayName(candidate)+(localMayor?'':' · '+candidate.party),color:party.color,logo:logoFor(party),legendSuffix:''}];
+ });
 }
 function predictionDistrictLabel(d){return (d.county===d.name?d.county:shortDirectoryName(d))+(d.type==='council'?' · '+DistrictCore.identityName(d):'')}
 let syncingWorkspace=false;
