@@ -103,6 +103,30 @@ test('Township forecast labels omit local filler words while accepting earlier C
  assert.match(read('town-prediction-ui.js'),/ix\('预测胜出'\)>=0\?ix\('预测胜出'\):ix\('当地胜出'\)/);
  assert.match(index,/预测胜出/);
 });
+
+test('Vote totals auto-sum only explicitly entered candidate votes',()=>{
+ const core=require('./prediction-core.js');
+ assert.deepEqual(core.tallyVotes([null,'','']),{total:null,count:0,complete:false});
+ assert.deepEqual(core.tallyVotes(['0',null,'']),{total:0,count:1,complete:false});
+ assert.deepEqual(core.tallyVotes(['123','77','0']),{total:200,count:3,complete:true});
+ assert.throws(()=>core.tallyVotes(['1.5']),/整数/);
+ const model=require('./town-prediction-core.js');
+ const cs=[{id:'a',party:'甲'},{id:'b',party:'乙'}];
+ const voteOnly=model.validate(cs,{estimates:{a:{votes:80},b:{votes:20}},totalVotes:100},true);
+ assert.equal(voteOnly.completeVotes,true);
+ const rateOnly=model.validate(cs,{estimates:{a:{share:70},b:{share:30}},totalVotes:null},true);
+ assert.equal(rateOnly.completeShares,true);
+ assert.equal(rateOnly.totalVotes,null);
+ assert.equal(model.summary(cs,{estimates:{a:{votes:80}},totalVotes:80},'candidateShare','a',true).status,'missing');
+});
+test('Both election editors compute read-only totals, no manual total required',()=>{
+ assert.match(index,/id="localTotalVotes"[^>]*readonly/);
+ assert.match(index,/id="validVoteTotal"[^>]*readonly/);
+ assert.match(index,/id="predictionAutoTotalValue"/);
+ assert.match(town,/PredictionCore\.tallyVotes\(cs\.map/);
+ assert.match(app,/PredictionCore\.tallyVotes\(voteDraft\.map/);
+ assert.match(read('prediction-ui.js'),/PredictionCore\.tallyVotes\(candidates\.map/);
+});
 function isolatedExportGuard(env){
  const start=app.indexOf('async function ensureExportMapReady(){');
  const end=app.indexOf('const mapPromise=',start);
