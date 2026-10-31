@@ -74,8 +74,9 @@ function applyEstimateVisibility(){
 }
 const oldUpdatePredictionPreview=updatePredictionPreview;
 updatePredictionPreview=function(){oldUpdatePredictionPreview();const d=directoryDistrictById.get(predictionEditId);if(!d)return;if(predictionUsesVoteDisplay()){
- const partyMode=state.predictionDisplay==='partyTop',result=PredictionCore.voteResult(directoryCandidates(d),predictionDraft,partyMode);
- $('predictionPreview').prepend(dirText('p',result?(partyMode?'最高票政党：'+result.party:'最高票者：'+candidateDisplayName(result.candidate))+' · '+predictionMetricLabel(result):'请填写本区全部候选人的得票数或得票率（两项任选一种）','seat-counter'));return
+ const partyMode=state.predictionDisplay==='partyTop';let result=null,error='';
+ try{result=PredictionCore.voteResult(directoryCandidates(d),predictionDraft,partyMode)}catch(e){error=e.message}
+ $('predictionPreview').prepend(dirText('p',error|| (result?(partyMode?'最高票政党：'+result.party:'最高票者：'+candidateDisplayName(result.candidate))+' · '+predictionMetricLabel(result)+(result.partial?'（仅按已填写候选人计算）':''):'填写候选人的得票数或得票率，即可显示当前最高票者'),'seat-counter'));return
  }
  const picked=directoryCandidates(d).filter(c=>predictionDraft.winners.includes(c.id));$('predictionPreview').prepend(dirText('p',`已选 ${picked.length} / 应选 ${d.seats} 席 · 已选女性 ${picked.filter(c=>c.gender==='女').length} 人 · 公告妇保 ${d.womenReservedLabel}`,'seat-counter'))};
 // Manual painting keeps ordering, removal and creation together in one place.
