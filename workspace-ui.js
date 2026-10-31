@@ -39,25 +39,28 @@ function predictionCandidateLegendEntries(){
  if(!state.county){const used=counts();return legendVisiblePalette().filter(p=>used[p.id]).map(p=>({...p,legendSuffix:'（'+used[p.id]+(state.predictionOffice==='mayor'?'席':predictionLegendCountUnit())+'）'}));}
  const localMayor=state.predictionOffice==='mayor'&&typeof localPredictionActive==='function'&&localPredictionActive();
  if(!localMayor&&state.predictionOffice!=='township')return null;
- const winners=new Map();
+ const winners=new Map(),wins=new Map();
  if(localMayor){
+  const observed=new Set();
   for(const feature of localPredictionItems()){
+   const key=feature.townId||feature.sourceId||feature.id;
+   if(observed.has(key))continue;observed.add(key);
    const result=localMapResult(feature);
-   if(result.status==='winner'&&result.candidate)winners.set(result.candidate.id,result.candidate);
+   if(result.status==='winner'&&result.candidate){winners.set(result.candidate.id,result.candidate);wins.set(result.candidate.id,(wins.get(result.candidate.id)||0)+1);}
   }
  }else{
   for(const d of predictionDistricts()){
    if(predictionSummary(d).status!=='complete')continue;
    for(const id of state.predictions[d.id]?.winners||[]){
     const candidate=candidateById.get(id);
-    if(candidate)winners.set(id,candidate);
+    if(candidate){winners.set(id,candidate);wins.set(id,(wins.get(id)||0)+1);}
    }
   }
  }
  return[...winners.values()].flatMap(candidate=>{
   const party=predictionParty(candidate.party);
   if(state.legend.hidden.includes(party.id))return[];
-  return[{id:'legend-candidate-'+candidate.id,name:candidateDisplayName(candidate)+(localMayor?'':' · '+candidate.party),color:party.color,logo:logoFor(party),legendSuffix:''}];
+  return[{id:'legend-candidate-'+candidate.id,name:candidateDisplayName(candidate)+(localMayor?'':' · '+candidate.party),color:party.color,logo:logoFor(party),legendSuffix:'（赢得'+(wins.get(candidate.id)||0)+(localMayor?(state.county.endsWith('市')?'个区':'个乡镇市'):'个乡镇市区')+'）'}];
  });
 }
 function predictionDistrictLabel(d){return (d.county===d.name?d.county:shortDirectoryName(d))+(d.type==='council'?' · '+DistrictCore.identityName(d):'')}
