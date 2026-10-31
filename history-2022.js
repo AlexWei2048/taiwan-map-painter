@@ -157,7 +157,7 @@
  function deactivate(){
   active=false;document.body.classList.remove('history-mode');
   el('historyControls').hidden=true;el('mapSettings').hidden=false;
-  el('workspaceHistory').classList.remove('active');el('workspaceHistory').setAttribute('aria-pressed','false')
+  el('workspaceHistory').classList.remove('active');el('workspaceHistory').setAttribute('aria-pressed','false');if(data)render()
  }
  function downloadCSV(){
   const rows=analyze().rows,heads=['县市','乡镇市区','选区','类别','号次','候选人','政党','得票数','得票率','是否当选'];
@@ -180,7 +180,7 @@
   el('historyStatus').textContent='已导入'+count+'条新记录。'+errors.join('；');update();el('historyFiles').value=''
  };
  el('historyLoad').onclick=async()=>{el('historyStatus').textContent='正在载入全国2022选举结果…';await snapshot();update()};
- const defaultRender=render;render=function(){defaultRender();if(active)update()};
+ const defaultRender=render;render=function(){defaultRender();if(active){update();for(const id of ['workspacePrediction','workspaceFree']){el(id).classList.remove('active');el(id).setAttribute('aria-pressed','false')}}};
  const defaultFooter=furnitureFooterHeight;furnitureFooterHeight=function(){
   if(!active)return defaultFooter();
   const number=Math.min(30,new Set(recordsInView().filter(r=>r.elected).map(r=>r.party)).size);
