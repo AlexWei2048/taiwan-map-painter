@@ -75,6 +75,7 @@ syncPredictionControls=function(){
  const numeric=ds.filter(d=>directoryCandidates(d).some(c=>{const e=state.predictions[d.id]?.estimates?.[c.id];return e&&(e.votes!==null&&e.votes!==undefined||e.share!==null&&e.share!==undefined)})).length;
  const marks=ds.filter(d=>state.fills[{mayor:'counties',council:'council',township:'towns'}[d.type]][d.mapRegionId]).length;
  $('predictionCoverage').textContent=`已选当选人 ${done.length}/${ds.length} 区 · 已预测 ${seats} 席 · 已填得票 ${numeric} 区 · 手动标色 ${marks} 区`;
+ $('predictionProgressBar').value=ds.length?Math.round(100*done.length/ds.length):0;$('predictionProgressText').textContent=`当前范围已完成 ${done.length}/${ds.length} 个选区（${$('predictionProgressBar').value}%）`;
  const summary=$('predictionSeatSummary');summary.replaceChildren();const counts={};for(const d of done)for(const row of predictionSummary(d).parties)counts[row.name]=(counts[row.name]||0)+row.seats;
  for(const [name,n]of Object.entries(counts)){const item=dirText('span',name+' '+n+'席');item.style.borderLeft='4px solid '+predictionParty(name).color;summary.append(item)}
  if(task&&!syncingWorkspace)syncWorkspace();
@@ -108,6 +109,7 @@ function syncWorkspace(){
  if(syncingWorkspace)return;syncingWorkspace=true;const task=state.workspaceMode==='prediction',manual=state.fillMode==='solid';
  $('workspacePrediction').classList.toggle('active',task);$('workspacePrediction').setAttribute('aria-pressed',task);$('workspaceFree').classList.toggle('active',!task);$('workspaceFree').setAttribute('aria-pressed',!task);
  $('predictionOffice').hidden=!task;document.querySelector('label[for="predictionOffice"]').hidden=!task;
+ $('councilViewScopeBox').hidden=!(task&&state.fillMode==='prediction'&&state.predictionOffice==='council'&&!state.county);$('councilViewScope').value=state.councilViewScope||'all';
  $('freeMapTools').open=!task;$('freeMapTools').hidden=task;$('manualBrushTools').hidden=!manual;$('predictionDisplayBox').hidden=!task||manual;
  $('predictionMode').hidden=!task;$('legacyDataTools').hidden=task;$('solidMode').textContent=task?'按政党手动上色':'直接给地图上色';
  $('predictionPanel').querySelector('h2').textContent=task?'填写预测':'地图上色';$('mapSettings').querySelector('h2').textContent=task?'选举与范围':'地图与范围';
@@ -143,6 +145,7 @@ $('predictionOffice').onchange=()=>enterPrediction($('predictionOffice').value);
 $('onlyIncomplete').onchange=()=>syncPredictionControls();$('predictionRegion').onchange=()=>{const d=directoryDistrictById.get($('predictionRegion').value);if(d)openPredictionDistrict(d)};
 $('showPredictionEstimates').onchange=applyEstimateVisibility;$('closePrediction').onclick=()=>$('predictionDialog').close();
 $('headerExportPredictions').onclick=()=>exportPredictionCSV(false);$('districtTableSearch').oninput=()=>renderDistrictTable();
+$('councilViewScope').onchange=()=>{state.councilViewScope=$('councilViewScope').value;render();persist()};
 $('downloadDistrictTable').onclick=()=>{const rows=[['县市','选区','类别','包含区域或选民范围','应选名额','妇保名额','妇保说明'],...districtTableRows().map(d=>[d.county,d.name,DistrictCore.identityName(d),mainlandTerms(d.scope),d.seats,d.womenReservedLabel,mainlandTerms(d.womenReservedNote)])];download(new Blob(['\uFEFF'+rows.map(r=>r.map(csvCell).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}),(state.county||'全台')+(state.level==='council'?'议员':'立法机构民代')+'选区范围与名额.csv')};
 // Keep legacy standalone data available without presenting a second prediction-data store.
 const range=document.createElement('div');range.id='predictionGradientRange';range.innerHTML='<p class="data-help">颜色表示政党，深浅表示数值；不代表当选概率。</p><div class="gradient-range"><label>下限<input id="predictionRangeMin" aria-label="预测着色下限" inputmode="decimal"></label><label>上限<input id="predictionRangeMax" aria-label="预测着色上限" inputmode="decimal" placeholder="自动"></label><span id="predictionRangeUnit">%</span></div><button id="applyPredictionRange" class="small-action">应用着色范围</button>';$('predictionDisplayBox').append(range);
