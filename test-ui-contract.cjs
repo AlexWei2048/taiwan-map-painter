@@ -253,7 +253,7 @@ test('County mayor legend contains only candidates actually represented by the m
  assert.equal(rows[0].color,rows[1].color,'Same-party candidates share their color');
  assert.equal(rows[0].logo,rows[1].logo,'Same-party candidates share their emblem');
  assert.notEqual(rows[0].color,rows[2].color);
- assert.deepEqual(rows.map(r=>r.legendSuffix),['（2区）','（1区）','（1区）']);
+ assert.deepEqual(rows.map(r=>r.legendSuffix),['（2乡镇市区）','（1乡镇市区）','（1乡镇市区）']);
  state.legend.hidden=['party-a'];
  assert.deepEqual(build(true,[{county:'台北市',candidateId:'candidate-a'},
   {county:'台北市',candidateId:'candidate-c'}])().map(r=>r.name),['乙三'],
@@ -263,6 +263,8 @@ test('County mayor legend contains only candidates actually represented by the m
  assert.deepEqual(build(false)(),[],'No painted candidate means no candidate rows');
  state.county='新北市';
  assert.deepEqual(build(false)(),[],'Candidates from other counties are not listed');
+ assert.match(workspace,/const unit=townView\?'乡镇市区':''/);
+ assert.match(town,/function predictionLegendCountUnit\(\)\{if\(localPredictionActive\(\)\)return'乡镇市区'/);
  assert.match(workspace,/return candidates\.filter\(c=>shown\.has\(c\.id\)\)\.map/);
  assert.match(workspace,/if\(state\.county&&state\.predictionOffice==='mayor'\)return countyMayorCandidateLegendEntries\(\)/);
  assert.match(app,/if\(Object\.hasOwn\(p,'logo'\)\)return p\.logo/);
