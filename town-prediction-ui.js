@@ -46,21 +46,16 @@ const districtUsesGradient=predictionUsesGradient;predictionUsesGradient=functio
 const districtIsVotes=predictionIsVotes;predictionIsVotes=function(){return localPredictionActive()?false:districtIsVotes()};
 function predictionLegendCountUnit(){if(localPredictionActive())return'乡镇市区';return state.predictionOffice==='mayor'?'席':predictionUsesVoteDisplay()?'区':'席'}
 const districtForMap=predictionDistrictFor;predictionDistrictFor=function(f){return localPredictionActive()?directoryDistrictById.get(f.parentDistrictId):districtForMap(f)};
-const districtMapFill=predictionFill;predictionFill=function(f){if(!localPredictionActive())return districtMapFill(f);const r=localMapResult(f);if(r.status==='tie')return'#aebdb4';if(r.status!=='winner')return'#edf1e9';const p=predictionParty(r.party);return predictionUsesGradient()?ElectionCore.shade(p.color,r.value,predictionDomain().min,predictionDomain().max):p.color};
+const districtMapFill=predictionFill;predictionFill=function(f){if(!localPredictionActive())return districtMapFill(f);const r=localMapResult(f);if(r.status==='tie')return'#aebdb4';if(r.status!=='winner')return'#edf1e9';const p=predictionParty(r.party);return predictionMarginMode()?ElectionCore.marginShade(p.color,r.marginShare??0):predictionUsesGradient()?ElectionCore.shade(p.color,r.value,predictionDomain().min,predictionDomain().max):p.color};
 const districtPartyCounts=predictionPartyCounts;predictionPartyCounts=function(){if(!localPredictionActive())return districtPartyCounts();const counts={};for(const f of localPredictionItems()){const r=localMapResult(f);if(r.status==='winner'){const p=predictionParty(r.party);counts[p.id]=(counts[p.id]||0)+1}}return counts};
 const districtDomain=predictionDomain;predictionDomain=function(){
  if(!localPredictionActive())return districtDomain();
+ if(predictionMarginMode())return{min:0,max:30};
  const min=Number(state.gradient.min)||0;
- if(predictionMarginMode()){
-  const gaps=localPredictionItems().map(f=>{const r=localMapResult(f);return r.status==='winner'?r.marginShare:null}).filter(v=>v!==null);
-  const auto=predictionMarginAutoMax(gaps);
-  const max=state.gradient.marginManual===true&&state.gradient.max!==null?state.gradient.max:auto;
-  return{min,max:Math.max(min+.01,max)};
- }
  const auto=predictionIsVotes()?Math.max(1,...localPredictionItems().map(f=>{const r=localMapResult(f);return r.status==='winner'?r.value:0})):100;
  return{min,max:state.gradient.max===null?Math.max(min+1,auto):state.gradient.max};
 };
-const districtLegendCaption=predictionLegendCaption;predictionLegendCaption=function(){if(!localPredictionActive())return districtLegendCaption();const d=localParentDistrict(),name=Object.fromEntries(localDisplayOptions())[state.predictionDisplay],c=candidateById.get(state.localDisplayCandidate);return (predictionMarginMode()?(state.predictionDisplay==='partyTop'?'最高票政党':'最高票者'):name)+(state.predictionDisplay==='candidateVote'&&c?'：'+candidateDisplayName(c):'')+(predictionMarginMode()?'；领先差距（百分点），深色表示领先优势更大':'')+(d?.type==='council'?'；乡镇市区得票不表示独立当选席次':'；乡镇胜负不等同县市最终当选')};
+const districtLegendCaption=predictionLegendCaption;predictionLegendCaption=function(){if(!localPredictionActive())return districtLegendCaption();const d=localParentDistrict(),name=Object.fromEntries(localDisplayOptions())[state.predictionDisplay],c=candidateById.get(state.localDisplayCandidate);return (predictionMarginMode()?(state.predictionDisplay==='partyTop'?'最高票政党':'最高票者'):name)+(state.predictionDisplay==='candidateVote'&&c?'：'+candidateDisplayName(c):'')+(predictionMarginMode()?'；领先差距（百分点），按1、5、10、15、20、25、30以上分档':'')+(d?.type==='council'?'；乡镇市区得票不表示独立当选席次':'；乡镇胜负不等同县市最终当选')};
 const districtRegionDetail=predictionRegionDetail;predictionRegionDetail=function(f){if(!localPredictionActive())return districtRegionDetail(f);const r=localMapResult(f);return(r.status==='winner'?(r.candidate?candidateDisplayName(r.candidate)+' · ':'')+r.party+(predictionUsesGradient()?' · '+predictionMetricLabel(r)+(predictionMarginMode()?' · '+predictionMarginLabel(r):r.partial?' · 仅根据已填写候选人':''):' · 预测胜出'):r.message)+(f.partial?' · 仅本选区覆盖部分':'')};
 const districtDecorations=renderPredictionDecorations;renderPredictionDecorations=function(){if(localPredictionActive())$('predictionPatterns').replaceChildren();else districtDecorations()};
 const districtUpdateBrush=updateBrush;updateBrush=function(){if(localPredictionActive())$('brushName').textContent='乡镇市区预测 · 点击地区填写'+(state.predictionOffice==='mayor'?'胜负与得票':'本选区候选人的得票');else districtUpdateBrush()};
