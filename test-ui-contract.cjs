@@ -352,6 +352,9 @@ test('Nationwide mayor party legend counts use county or township units, not sea
  state.predictionOffice='council';
  assert.deepEqual(rows().map(r=>r.legendSuffix),['（8乡镇市区）','（4乡镇市区）'],
   'Existing councillor township-unit behavior should remain unchanged');
+ state.county='彰化县';
+ assert.deepEqual(rows().map(r=>r.legendSuffix),['（8席）','（4席）'],
+  'County-scoped councillor seat mode retains its existing seat unit');
 });
 test('Prediction legend contains only the displayed election-district count',()=>{
  const start=app.indexOf('function legendMetrics(entries=legendEntries()){');
