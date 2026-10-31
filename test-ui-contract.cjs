@@ -149,7 +149,7 @@ test('Merged vote display calculates highest candidate from votes or shares',()=
  assert.equal(onlyRate.partial,true);
  assert.equal(onlyRate.recorded,1);
  assert.equal(onlyRate.votes,null);
- assert.equal(core.voteResult(cs,{estimates:{a:{share:52},b:{share:52}}}),null,'Highest vote tie must remain unresolved');
+ assert.equal(core.voteResult(cs,{estimates:{a:{share:50},b:{share:50}}}),null,'Highest vote tie must remain unresolved');
  assert.equal(core.voteResult(cs,{estimates:{a:{share:35},b:{votes:120}}}),null,'Do not mix incomparable candidate measures');
  const t=require('./town-prediction-core.js');
  const townPartial=t.summary(cs,{estimates:{b:{share:44.5}}},'topVote','',true);
@@ -172,7 +172,7 @@ test('Numeric mode does not require manual predicted winners',()=>{
  assert.match(read('style.css'),/\.prediction-dialog\.numeric-entry \.prediction-table th:first-child/);
  assert.match(read('style.css'),/\.local-dialog\.numeric-entry \.local-table th:first-child/);
  assert.match(app,/predictionUsesVoteDisplay\(\)\|\|typeof predictionDistricts/);
- assert.match(workspace,/complete=d=>predictionUsesVoteDisplay\(\)\?!!predictionDisplayResult\(d\)/);
+ assert.match(workspace,/const result=predictionDisplayResult\(d\);return !!result&&!result\.partial/);
 });
 function isolatedExportGuard(env){
  const start=app.indexOf('async function ensureExportMapReady(){');
