@@ -30,7 +30,8 @@ test('Autobackup and export preserve existing behavior',()=>{
 test('Progress and nationwide party-only legends are retained',()=>{
  assert.match(index,/id="predictionProgressBar"/);
  assert.match(workspace,/predictionProgressBar'\)\.value/);
- assert.match(workspace,/if\(!state\.county\)\{const used=counts\(\)/);
+ assert.match(workspace,/const used=counts\(\)/);
+ assert.match(workspace,/legendVisiblePalette\(\)\.filter\(p=>used\[p\.id\]\)/);
 });
 test('Confirmed incumbents retain their visible label without marking others',()=>{
  assert.match(read('candidate-directory.js'),/incumbent===true\)inc\.append\(dirText\('span','现任'/);
@@ -148,10 +149,10 @@ test('2022 history remains isolated from saved 2026 state',()=>{
  assert.match(history,/if\(!recordsInView\(\)\.length\)throw Error/);
 });
 test('Historical district mismatch is not silently colored',()=>{
- assert.match(history,/unmatchedDistricts\.add\(key\)/);
+ assert.match(history,/unmatchedDistricts\.add\(norm\(h\.county\)/);
  assert.match(history,/__2022_unmatched__/);
  assert.match(history,/已暂不着色/);
- assert.match(history,/多席次选区：主色表示席次最多政党/);
+ assert.match(history,/多席次选区按各党实际当选人数统计/);
 });
 test('Main UI language avoids restricted expression',()=>{
  for(const file of ['index.html','app.js','workspace-ui.js','history-2022.js','candidate-directory.js'])assert.equal(read(file).includes('\u5168\u56fd'),false,file);
