@@ -55,3 +55,40 @@ test('Map export waits for all relevant lazy layers',()=>{
  assert.match(app,/delete detailRequests\[name\]/);
  assert.match(app,/delete detailRequests\.villages/);
 });
+
+function isolatedExportGuard(env){
+ const start=app.indexOf('async function ensureExportMapReady(){');
+ const end=app.indexOf('const mapPromise=',start);
+ assert.ok(start>=0&&end>start);
+ const code=app.slice(start,end)+';return ensureExportMapReady;';
+ return new Function('data','mapPromise','state','detailRequests','ensureMapDetails','localPredictionActive','ensureTownPredictionAreas','currentItems',code)(
+  env.data,Promise.resolve(env.data),env.state,env.detailRequests||{},env.ensureMapDetails||(()=>{}),env.localPredictionActive||(()=>false),env.ensureTownPredictionAreas||(()=>Promise.resolve(true)),env.currentItems||(()=>[{}])
+ );
+}
+test('Export guard pauses for geometry promises, then succeeds after completion',async()=>{
+ let finish,done=false;
+ const pending=new Promise(resolve=>finish=resolve);
+ const env={data:{council:Array(161),councilIndigenous:Array(60),districtBorders:{council:[{}]},townBorders:{all:Array(22)}},state:{level:'council'},detailRequests:{'议员选区':pending,'选区边界':Promise.resolve(true),'乡镇边界':Promise.resolve(true)}};
+ const guard=isolatedExportGuard(env);
+ const task=guard().then(()=>{done=true});
+ await Promise.resolve();
+ assert.equal(done,false,'Must not export before geometry finishes');
+ finish(true);
+ await task;
+ assert.equal(done,true);
+});
+test('Export guard refuses missing or failed map geometry',async()=>{
+ const data={council:Array(161),councilIndigenous:Array(60),districtBorders:{council:[{}]},townBorders:{all:Array(22)}};
+ const env={data,state:{level:'council'},detailRequests:{'议员选区':Promise.resolve(false),'选区边界':Promise.resolve(true),'乡镇边界':Promise.resolve(true)}};
+ await assert.rejects(isolatedExportGuard(env)(),/载入失败/);
+ env.detailRequests['议员选区']=Promise.resolve(true);env.data={...data,council:[]};
+ await assert.rejects(isolatedExportGuard(env)(),/尚未完整载入/);
+});
+test('Export guard validates village map before exporting',async()=>{
+ const env={data:{villages:[{}],villageMetadata:{count:7731},townBorders:{all:Array(22)}},state:{level:'villages'},detailRequests:{villages:Promise.resolve(true),'乡镇边界':Promise.resolve(true)}};
+ await assert.rejects(isolatedExportGuard(env)(),/村里地图资料尚未完整载入/);
+});
+test('Township or mayor maps export without unrelated council dependencies',async()=>{
+ const env={data:{towns:[{}]},state:{level:'towns'},detailRequests:{}};
+ await assert.doesNotReject(isolatedExportGuard(env)());
+});
