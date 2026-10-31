@@ -34,7 +34,7 @@ function predictionCandidateLegendEntries(){
  if(!candidateDatabase)return null;
  // All county-scoped legends summarize by political party, not individual candidate.
  const used=counts();
- const unit=predictionUsesVoteDisplay()?'区':(typeof predictionLegendCountUnit==='function'?predictionLegendCountUnit():'席');
+ const unit=predictionUsesVoteDisplay()?(typeof localPredictionActive==='function'&&localPredictionActive()&&typeof predictionLegendCountUnit==='function'?predictionLegendCountUnit():'区'):(typeof predictionLegendCountUnit==='function'?predictionLegendCountUnit():'席');
  return legendVisiblePalette().filter(p=>used[p.id]).map(p=>({...p,legendSuffix:'（'+used[p.id]+(predictionUsesVoteDisplay()?unit:state.county?'席':unit)+'）'}));
 }
 function predictionDistrictLabel(d){return (d.county===d.name?d.county:shortDirectoryName(d))+(d.type==='council'?' · '+DistrictCore.identityName(d):'')}
