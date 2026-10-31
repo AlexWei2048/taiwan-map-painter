@@ -105,7 +105,7 @@ function renderDistrictTable(){
  const active=['council','legislative'].includes(state.level);$('districtReference').hidden=!active;if(!active)return;
  const key=[state.level,state.county,$('districtTableSearch').value,state.fillMode].join('/');if(key===districtTableKey)return;districtTableKey=key;
  const rows=districtTableRows(),groups=DistrictCore.groups(rows,COUNTY_ORDER);$('districtReferenceTitle').textContent=(state.county||'全台')+(state.level==='council'?'议员':'立法机构民代')+'选区范围与名额';
- $('districtReferenceSummary').textContent=state.level==='council'?`${rows.length} 个选区，含区域及少数民族选区，按县市合并列示`:`${rows.filter(d=>d.county!=='全台').length} 个区域选区 + ${rows.filter(d=>d.county==='全台').length} 个全台少数民族选区`;
+ $('districtReferenceSummary').textContent=state.level==='council'?`${rows.length} 个选区，含区域及少数民族选区，按县市合并列示`:`${rows.filter(d=>d.county!=='\u5168\u56fd').length} 个区域选区 + ${rows.filter(d=>d.county==='\u5168\u56fd').length} 个全台少数民族选区`;
  $('districtReferenceNote').textContent=state.level==='council'?'表格包含本范围全部身份选区；地图将区域、平地少数民族、山地少数民族三类并列显示。妇保中的跨区合计按公告原文列示，不能逐区累加。':'立法机构民代范围采用第11届（2024年）资料。自由填色地图分区域、不分区政党、平地少数民族、山地少数民族四类显示并共用图例；后三类可按乡镇市区分别填色。';
  const root=$('districtTableGroups');const open=new Set([...root.querySelectorAll('details[open]')].map(d=>d.dataset.county));root.replaceChildren();
  for(const group of groups){const details=document.createElement('details');details.className='county-district-group';details.dataset.county=group.county;details.open=!!state.county||open.has(group.county)||(!open.size&&group.county===groups[0]?.county);details.append(dirText('summary',group.county+' · '+group.districts.length+'个选区'));
@@ -114,7 +114,7 @@ function renderDistrictTable(){
  }
  const source=$('districtReferenceSource');source.replaceChildren();const link=dirText('a',state.level==='council'?'资料依据：中选会2026年8月20日选区公告 ↗':'资料依据：中选会第11届立法机构民代选区范围 ↗');link.href=state.level==='council'?'https://www.cec.gov.tw/central/article/63625':'https://www.cec.gov.tw/central/article/39952';link.target='_blank';link.rel='noopener';source.append(link);
 }
-function focusReferenceDistrict(d){pushHistory();if(d.county!=='全台')state.county=d.county;syncInputs();render();persist();$('canvas').scrollIntoView({behavior:'smooth',block:'center'});requestAnimationFrame(()=>{const path=[...$('regions').querySelectorAll('path')].find(p=>p.dataset.region===(d.mapRegionId||d.id)&&p.dataset.electorate===DistrictCore.identity(d));path?.focus({preventScroll:true})})}
+function focusReferenceDistrict(d){pushHistory();if(d.county!=='\u5168\u56fd')state.county=d.county;syncInputs();render();persist();$('canvas').scrollIntoView({behavior:'smooth',block:'center'});requestAnimationFrame(()=>{const path=[...$('regions').querySelectorAll('path')].find(p=>p.dataset.region===(d.mapRegionId||d.id)&&p.dataset.electorate===DistrictCore.identity(d));path?.focus({preventScroll:true})})}
 const originalRender=render;
 render=function(){originalRender();syncWorkspace();renderDistrictTable()};
 const originalSyncElectionControls=syncElectionControls;
