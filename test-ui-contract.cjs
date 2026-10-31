@@ -599,13 +599,13 @@ test('Nationwide township maps always label only counties regardless of zoom or 
  let g=group();draw(g,towns,{},12,true);
  assert.deepEqual(passedItems,counties,'Zoomed-in town geography must use county labels');
  assert.equal(passedFont,19,'Use prominent, consistent county label size');
- assert.deepEqual(g.children.map(x=>x.children.map(child=>child.tag)),[['text'],['text']],
-  'No township leader lines or dots may remain');
- assert.deepEqual(g.children.map(x=>x.children[0].textContent),['台北市','新北市']);
- assert.deepEqual(g.children.map(x=>x.children[0].attrs['data-label']),['county-1','county-2']);
+ assert.deepEqual(g.children.map(x=>x.children.map(child=>child.tag)),[['path','circle','text'],['path','circle','text']],
+  'Outside names now always include the matching leader line');
+ assert.deepEqual(g.children.map(x=>x.children.at(-1).textContent),['台北市','新北市']);
+ assert.deepEqual(g.children.map(x=>x.children.at(-1).attrs['data-label']),['county-1','county-2']);
  // Export path also calls drawLabels directly, so it must use the same rule.
  g=group();draw(g,towns,{},10,false);
- assert.deepEqual(g.children.map(x=>x.children[0].textContent),['台北市','新北市']);
+ assert.deepEqual(g.children.map(x=>x.children.at(-1).textContent),['台北市','新北市']);
  assert.match(app,/drawLabels\(g,currentItems\(\),geometryLayout\(currentItems\(\),true\),sceneSpec\(\)\.font,false\)/);
  // Selecting a county restores township names and their normal leader behavior.
  state.county='台北市';g=group();draw(g,towns,{},12,true);
@@ -615,6 +615,60 @@ test('Nationwide township maps always label only counties regardless of zoom or 
  // This condition must not affect any other map level.
  state.county='';state.level='counties';g=group();draw(g,towns,{},12,true);
  assert.deepEqual(passedItems,towns);
+});
+
+
+test('Every external label carries a line automatically on all levels',()=>{
+ const start=app.indexOf('function drawLabels(group,items,t,font=15,interactive=false){');
+ const end=app.indexOf('\nfunction drawIdentityPanelLabels(',start);
+ const mk=(tag,attrs)=>({tag,attrs:attrs||{},children:[],style:{},append(...a){this.children.push(...a)}});
+ const state={level:'counties',county:'台北市',districtLeaders:false},data={counties:[]};
+ const layout=(items,t,font)=>items.map(f=>({f,x:65,y:40,ax:40,ay:40,out:true,side:'right',font,leader:'M40,40L59,40'}));
+ const draw=new Function('state','data','labelLayout','shownLabel','svgEl','isNationwide','paint',
+  app.slice(start,end)+';return drawLabels')(state,data,layout,f=>f.name,mk,()=>false,()=>{});
+ const group={children:[],replaceChildren(){this.children=[]},append(v){this.children.push(v)}};
+ for(const level of ['counties','towns','council','legislative']){
+  state.level=level;draw(group,[{id:'a',name:'第1选区'}],{},14);
+  assert.deepEqual(group.children[0].children.map(v=>v.tag),['path','circle','text']);
+  assert.equal(group.children[0].children[0].attrs['data-leader-line'],'a');
+  assert.equal(group.children[0].children[2].textContent,'第1选区');
+ }
+ assert.match(app,/\$\('districtLeaderControls'\)\.hidden=true/);
+ assert.match(app,/if\(!state.labels\|\|!view\)return/);
+});
+test('Short outside leaders avoid inset rectangles',()=>{
+ const s=app.indexOf('function leaderFrames('),e=app.indexOf('\nfunction labelLayout(',s);
+ assert.ok(s>=0&&e>s);
+ const h=new Function('activeInsetDefinitions','shownLabel','contentArea','sceneSpec',app.slice(s,e)+';return{shortLeader,leaderCross}')(
+  ()=>[{box:[200,200,350,350]}],f=>f.name,()=>({left:0,right:900,top:0,bottom:900}),()=>({}));
+ const q={f:{name:'新竹市'},x:80,y:270,ax:480,ay:270,side:'left',font:14,out:true};
+ h.shortLeader(q,{scale:1,tx:0,ty:0,area:{left:0,right:900,top:0,bottom:900}},[]);
+ const m=q.leader.match(/-?\d+(?:\.\d+)?/g).map(Number);
+ assert.equal(h.leaderCross(...m,[194,194,356,356]),false);
+ assert.ok(Math.hypot(m[2]-m[0],m[3]-m[1])<130,'Leader must be short');
+ assert.ok(q.x>350,'Label must remain on the mainland side of inset frame');
+});
+test('Inset island names removed without deleting island frames',()=>{
+ const s=app.indexOf('function appendInsetFrames('),e=app.indexOf('function drawInsetFrames(',s);
+ assert.ok(s>=0&&e>s);
+ const source=app.slice(s,e);
+ assert.doesNotMatch(source,/name.textContent=q.name/);
+ assert.match(source,/group.append\(g\)/);
+ assert.match(source,/data-inset/);
+});
+test('Map furniture shifts closer when land and island frames do not collide',()=>{
+ const s=app.indexOf('function legendBox(spec){'),e=app.indexOf('function drawLegend(',s);
+ assert.ok(s>=0&&e>s);
+ const make=new Function('state','isNationwide','legendMetrics','legendReserveEntries','furnitureFooterHeight','decorationClear',
+  app.slice(s,e)+';return legendBox');
+ const visible=make({legend:{show:true}},()=>true,()=>({width:300,height:120}),()=>[],()=>180,()=>true)({width:1800,height:2400});
+ assert.equal(visible.x,1800-300-30-20);
+ assert.equal(visible.y,2400-180-6-85);
+ const blocked=make({legend:{show:true}},()=>true,()=>({width:300,height:120}),()=>[],()=>180,()=>false)({width:1800,height:2400});
+ assert.equal(blocked.y,2400-180-6);
+ assert.match(app,/okNorth=decorationClear/);
+ assert.match(app,/okScale=decorationClear/);
+ assert.match(index,/app\.js\?v=20261031-leaders-decor-v50/);
 });
 
 test('Map fetch retries bypass corrupt caches and report persistent network errors',async()=>{
