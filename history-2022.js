@@ -20,5 +20,24 @@ for(const n of COUNTY_ORDER)H('historyCounty').add(new Option(n,n));
 H('historyImport').onclick=()=>H('historyFiles').click();
 H('historyFiles').onchange=async()=>{let n=0;const errors=[];for(const file of H('historyFiles').files)try{n+=ingest(await file.text(),file.name)}catch(e){errors.push(file.name+': '+e.message)}H('historyStatus').textContent='导入 '+n+' 条候选人记录。'+errors.join('；');display();H('historyFiles').value=''};
 H('historyLoad').onclick=async()=>{const county=place||'台北市',traditional=x=>String(x).replaceAll('台','臺').replaceAll('县','縣').replaceAll('区','區').replaceAll('乡','鄉').replaceAll('镇','鎮').replaceAll('云','雲').replaceAll('东','東').replaceAll('门','門').replaceAll('连','連').replaceAll('兰','蘭'),prefix={mayor:'縣市長',council:'區域議員',township:'鄉鎮市長'}[kind],url='https://www.taiwanvotes.tw/data/csv/'+encodeURIComponent(prefix+'_2022_'+traditional(county)+'.csv')+'?v=20260803111705';H('historyStatus').textContent='正在读取 '+county+'…';try{const r=await fetch(url);if(!r.ok)throw Error('HTTP '+r.status);const n=ingest(await r.text(),url,kind);H('historyStatus').textContent='已读取 '+county+' · '+n+' 条记录';display()}catch(e){H('historyStatus').textContent='浏览器无法直接读取公开资料（'+e.message+'）。请从下方资料链接下载对应2022 CSV，然后使用“导入2022 CSV”。'}};
-const prev=render;render=function(){prev();if(active)paint()};
+const originalPaint=paint;
+function updateHistoryLegend(){
+ if(!active)return;
+ const rows=aggregated(),seen=new Set(),parties=new Map();
+ for(const r of rows.filter(r=>r.elected)){
+  const identity=[r.county,r.town,r.district,r.name].join('|');
+  if(seen.has(identity))continue;seen.add(identity);
+  parties.set(r.party,(parties.get(r.party)||0)+1);
+ }
+ const g=H('legend');if(!g)return;g.replaceChildren();
+ const svg=(tag,attrs)=>{const el=document.createElementNS(NS,tag);for(const [k,v]of Object.entries(attrs))el.setAttribute(k,v);return el};
+ const items=[...parties.entries()].sort((a,b)=>b[1]-a[1]);
+ if(!items.length)return;
+ const width=280,line=28,height=56+items.length*line,x=sceneSpec().width-width-26,y=sceneSpec().height-furnitureFooterHeight()-height;
+ g.append(svg('rect',{x,y,width,height,rx:11,fill:'#fff',stroke:'#dce5df'}));
+ const head=svg('text',{x:x+14,y:y+24,'font-size':14,'font-weight':600,fill:'#294a3a'});head.textContent='2022实际当选 · '+seen.size+'席';g.append(head);
+ items.forEach(([party,seats],i)=>{g.append(svg('rect',{x:x+14,y:y+43+i*line,width:13,height:13,rx:2,fill:color(party)}));const t=svg('text',{x:x+36,y:y+55+i*line,'font-size':12,fill:'#385747'});t.textContent=party+'（'+seats+'席）';g.append(t)})
+}
+const prev=render;render=function(){prev();if(active){originalPaint();updateHistoryLegend()}};
+
 })();
