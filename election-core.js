@@ -40,11 +40,21 @@
   if(value===null||!Number.isFinite(value))return{status:'missing',message:metric==='votes'?'仅有得票率，缺少得票数':'无法计算得票率'};
   return{status:'winner',leader,value,derivedTotal:valid.derivedTotal,totalVotes:valid.denominator};
  }
- function shade(hex,value,min,max,lightness=.13){
+ function shade(hex,value,min,max,lightness=.10){
   if(!/^#[\da-f]{6}$/i.test(hex))hex='#147d68';
   if(![value,min,max].every(Number.isFinite)||max<=min)throw Error('渐变上限必须大于下限');
-  const t=lightness+(1-lightness)*Math.max(0,Math.min(1,(value-min)/(max-min)));
-  return '#'+[1,3,5].map(i=>Math.round(255+(parseInt(hex.slice(i,i+2),16)-255)*t).toString(16).padStart(2,'0')).join('');
+  const ratio=Math.max(0,Math.min(1,(value-min)/(max-min)));
+  // A stronger mid-range slope makes typical 30-70% vote shares visibly different.
+  // Keep each party's hue: near-white at the low end, rich party color at the high end.
+  const eased=ratio*ratio*ratio*(ratio*(ratio*6-15)+10);
+  const amount=lightness+(1-lightness)*eased;
+  const channels=[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16));
+  const brightness=(channels[0]*.2126+channels[1]*.7152+channels[2]*.0722)/255;
+  const darkLimit=.14+.18*Math.max(0,Math.min(1,(brightness-.55)/.45));
+  return '#'+channels.map(channel=>{
+   const rich=channel*(1-darkLimit*eased);
+   return Math.round(255+(rich-255)*amount).toString(16).padStart(2,'0');
+  }).join('');
  }
  function csv(text){
   const rows=[];let row=[],value='',quoted=false;
