@@ -7,11 +7,11 @@
  const normalizeParty=name=>{let s=norm(name||'无党籍');if(s.includes('无党籍及未经政党推荐')||s==='无党籍及未经政党推薦')s='无党籍';return s};
  const partyColor=p=>partyMatch(p)?.color||'#8a9892';
  const tone=(color,share)=>metric==='share'?ElectionCore.shade(color,share,0,100):color;
- const electionKey=r=>[r.type,r.electorate,r.level,r.county,r.town,r.district,r.number,r.name].join('|');
+ const electionKey=r=>[r.type,r.electorate,r.level,r.county,r.town,r.village,r.district,r.number,r.name].join('|');
  const dbIds=new Set();
  const addRows=rows=>{let added=0;for(const src of rows){
   if(!['mayor','council','township'].includes(src.type))continue;
-  const r={type:src.type,electorate:src.electorate||'regional',level:src.level||'raw',county:norm(src.county),town:norm(src.town),district:norm(src.district),number:String(src.number||''),name:norm(src.name),party:normalizeParty(src.party),votes:Number(src.votes),elected:src.elected===true||src.elected==='true'};
+  const r={type:src.type,electorate:src.electorate||'regional',level:src.level||'raw',county:norm(src.county),town:norm(src.town),village:norm(src.village),district:norm(src.district),number:String(src.number||''),name:norm(src.name),party:normalizeParty(src.party),votes:Number(src.votes),elected:src.elected===true||src.elected==='true'};
   if(!r.county||!r.name||!Number.isFinite(r.votes)||r.votes<0)continue;
   const key=electionKey(r);if(dbIds.has(key))continue;dbIds.add(key);db[r.type].push(r);added++;
  }return added};
@@ -52,7 +52,7 @@
   if(!rows.length)throw Error('文件不包含CSV记录');
   const type=/議員|议员/.test(filename)?'council':/鄉鎮市長|原住民區長|乡镇市长|少数民族区长/.test(filename)?'township':/縣市長|县市长/.test(filename)?'mayor':kind;
   const electorate=/平地原住民|平地少数民族/.test(filename)?'plains':/山地原住民|山地少数民族/.test(filename)?'mountain':'regional';
-  const records=rows.map(row=>({type,electorate,level:'raw',county:field(row,['縣市','县市']),town:field(row,['鄉鎮市區','乡镇市区']),district:field(row,['選區','选区']),number:field(row,['號次','号次']),name:field(row,['候選人','候选人']),party:field(row,['政黨','政党']),votes:Number(String(field(row,['得票數','得票数'])).replace(/,/g,'')),elected:/[＊*]/.test(field(row,['當選註記','当选注记']))}));
+  const records=rows.map(row=>({type,electorate,level:'raw',county:field(row,['縣市','县市']),town:field(row,['鄉鎮市區','乡镇市区']),village:field(row,['村里']),district:field(row,['選區','选区']),number:field(row,['號次','号次']),name:field(row,['候選人','候选人']),party:field(row,['政黨','政党']),votes:Number(String(field(row,['得票數','得票数'])).replace(/,/g,'')),elected:/[＊*]/.test(field(row,['當選註記','当选注记']))}));
   const n=addRows(records);
   if(!n)throw Error('未识别到新的候选人得票记录');
   return n
