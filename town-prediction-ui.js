@@ -36,9 +36,9 @@ function localMapResult(f){const d=directoryDistrictById.get(f.parentDistrictId)
 function predictionMapResult(f){return localPredictionActive()?localMapResult(f):predictionDisplayResult(predictionDistrictFor(f))}
 function localDisplayOptions(){
  const options=localParentDistrict()?.type==='mayor'
- ?[['composition','手动指定胜出者'],['topVote','最高票者得票（票数／得票率）'],['candidateVote','指定候选人得票']]
- :[['topVote','最高票者得票（票数／得票率）'],['partyTop','最高票政党合计得票'],['candidateVote','指定候选人得票']];
- return !state.county?options.filter(([mode])=>mode!=='candidateVote'):options
+ ?[['composition','手动指定胜出者'],['topVote','最高票者（得票数/得票率）'],['candidateVote','指定候选人（得票数/得票率）']]
+ :[['topVote','最高票者（得票数/得票率）'],['partyTop','最高票政党合计得票'],['candidateVote','指定候选人（得票数/得票率）']];
+ return options
 }
 const districtDisplayOptions=displayOptions;displayOptions=function(){return localPredictionActive()?localDisplayOptions():districtDisplayOptions()};
 const districtUsesVoteDisplay=predictionUsesVoteDisplay;predictionUsesVoteDisplay=function(){return localPredictionActive()||districtUsesVoteDisplay()};
