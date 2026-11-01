@@ -482,9 +482,91 @@ function countyMayorLabelLayout(items,t,font,area,reserve){
  return labels;
 }
 
+// Full names instead of lookup numbers for county-scoped township forecast maps.
+function directTownNameLabels(){
+ return state.level==='towns'&&!!state.county&&
+  state.workspaceMode==='prediction'&&state.fillMode==='prediction'&&
+  (state.predictionOffice==='township'||
+   state.predictionOffice==='mayor'&&state.predictionScale==='overlay');
+}
+function townNameLabelLayout(items,t,font,area,reserve){
+ const sorted=[...items].filter(f=>shownLabel(f)).sort((a,b)=>
+  (b.box[2]-b.box[0])*(b.box[3]-b.box[1])-(a.box[2]-a.box[0])*(a.box[3]-a.box[1]));
+ const labels=[],used=[],pending=[],textWidth=name=>Array.from(name).length*font*1.04+8;
+ const height=font*1.5+5;
+ // Try the centre and progressively more detailed interior representative
+ // points first; never put a label outside a polygon without an anchor line.
+ for(const f of sorted){
+  const text=shownLabel(f),width=textWidth(text);
+  const pos=mapLabelFit(f,t,width,height,used,area,reserve);
+  if(pos){used.push(pos.rect);labels.push({f,...pos,text,font,numeric:false})}
+  else pending.push({f,text,font,anchor:mapLabelAnchor(f,t)});
+ }
+ if(!pending.length)return labels;
+ // Place the remaining complete names in balanced columns outside the county
+ // silhouette. Each slot is collision-tested against every interior label.
+ const nameWidth=Math.max(...pending.map(q=>textWidth(q.text)));
+ const leftEdge=Math.min(...items.map(f=>f.box[0]*t.scale+t.tx));
+ const rightEdge=Math.max(...items.map(f=>f.box[2]*t.scale+t.tx));
+ const sideX={
+  left:Math.max(area.left+nameWidth/2+5,leftEdge-nameWidth/2-17),
+  right:Math.min(area.right-nameWidth/2-5,rightEdge+nameWidth/2+17)
+ };
+ const reserved=reserve?[reserve.x,reserve.y,reserve.x+reserve.width,reserve.y+reserve.height]:null;
+ const frames=leaderFrames(t,5);
+ const valid=(rect,anchor)=>{
+  if(rect[0]<area.left||rect[2]>area.right||rect[1]<area.top||rect[3]>area.bottom)return false;
+  if(reserved&&leaderOverlap(rect,reserved)||used.some(r=>leaderOverlap(rect,r)))return false;
+  // Labels for mainland towns must stay out of the offshore inset frames.
+  if(anchor&&!frames.some(r=>leaderIn(anchor.x,anchor.y,r))&&frames.some(r=>leaderOverlap(rect,r)))return false;
+  return true;
+ };
+ // Northernmost first gives the tightly packed metropolitan towns their
+ // own ordered rows instead of hundreds of crossing leader lines.
+ pending.sort((a,b)=>(a.anchor?.y??0)-(b.anchor?.y??0)||
+  (a.anchor?.x??0)-(b.anchor?.x??0)||String(a.f.id).localeCompare(String(b.f.id)));
+ for(const q of pending){
+  const anchor=q.anchor||{x:(q.f.box[0]+q.f.box[2])/2*t.scale+t.tx,
+   y:(q.f.box[1]+q.f.box[3])/2*t.scale+t.ty};
+  const width=textWidth(q.text);
+  let best=null;
+  for(const side of ['left','right']){
+   const x=sideX[side],bias=side==='left'?Math.abs(anchor.x-leftEdge):Math.abs(rightEdge-anchor.x);
+   // Search around the actual latitude; use a consistent baseline spacing.
+   for(let i=0;i<=Math.ceil((area.bottom-area.top)/(height+5));i++){
+    for(const direction of i===0?[0]:[-1,1]){
+     const y=Math.max(area.top+height/2+2,
+      Math.min(area.bottom-height/2-2,anchor.y+direction*i*(height+5)));
+     const rect=[x-width/2-3,y-height/2-2,x+width/2+3,y+height/2+2];
+     if(!valid(rect,anchor))continue;
+     const score=Math.abs(y-anchor.y)*1.8+Math.abs(x-anchor.x)*.19+bias*.08;
+     if(!best||score<best.score)best={x,y,rect,side,score};
+    }
+    if(best&&i>4&&i*(height+5)>best.score)break;
+   }
+  }
+  // Small offshore shapes may need a nearby callout instead of a mainland
+  // margin column; preserve the complete name in all cases.
+  if(!best){
+   const pos=mapOutsideLabelFit(q.f,t,q.text,font,used,area,reserve,items);
+   if(pos)best={...pos,side:pos.x<anchor.x?'left':'right'};
+  }
+  if(!best)continue;
+  const side=best.side,sign=side==='left'?-1:1;
+  const end=best.x-sign*(width/2+4);
+  const rail=anchor.x+sign*Math.min(14,Math.max(5,Math.abs(end-anchor.x)*.18));
+  const leaderPath=best.leaderPath||'M'+anchor.x+','+anchor.y+'L'+rail+','+anchor.y+'L'+end+','+best.y;
+  used.push(best.rect);
+  labels.push({f:q.f,x:best.x,y:best.y,rect:best.rect,text:q.text,font,
+   numeric:false,leaderAnchor:anchor,leaderPath,column:side});
+ }
+ return labels;
+}
+
 function labelLayout(items,t,font=15){
  const area=t.area||contentArea(sceneSpec()),reserve=state.legend.show?legendBox(sceneSpec()):null;
  if(countyMayorOverview())return countyMayorLabelLayout(items,t,font,area,reserve);
+ if(directTownNameLabels())return townNameLabelLayout(items,t,font,area,reserve);
  const sizes=f=>(f.box[2]-f.box[0])*(f.box[3]-f.box[1]);
  const sorted=[...items].sort((a,b)=>sizes(b)-sizes(a)),used=[],labels=[],needsNumber=[],outside=[];
  for(const f of sorted){
@@ -535,26 +617,28 @@ function drawLabels(group,items,t,font=15,interactive=false){
  for(const q of labelLayout(rendered.filter(f=>shownLabel(f)),t,font)){
   const g=svgEl('g',{'class':'map-label'});group.append(g);
   const cityCallout=!!q.leaderAnchor&&countyMayorOverview()&&COUNTY_CITY_CALLOUTS.has(q.f.name);
+  const townCallout=!!q.leaderAnchor&&directTownNameLabels();
+  const strongCallout=cityCallout||townCallout;
   if(q.leaderAnchor){
    const end=q.x+(q.x<q.leaderAnchor.x?1:-1)*(q.text.length*q.font*.34+5);
    const leaderPath=q.leaderPath||`M${q.leaderAnchor.x},${q.leaderAnchor.y}L${end},${q.y}`;
    // A white underlay protects the dark leader against either party fill.
    // Inline SVG styles deliberately outrank the generic #labels path CSS.
-   if(cityCallout)g.append(svgEl('path',{d:leaderPath,fill:'none',
+   if(strongCallout)g.append(svgEl('path',{d:leaderPath,fill:'none',
     style:'fill:none;stroke:#fff;stroke-width:3.8px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.96',
     'vector-effect':'non-scaling-stroke','pointer-events':'none','data-label-leader-halo':q.f.id}));
-   const line=svgEl('path',{d:leaderPath,fill:'none',stroke:cityCallout?'#214e40':'#718b7c',
-    'stroke-width':cityCallout?1.55:.85,'stroke-opacity':cityCallout?1:.8,
+   const line=svgEl('path',{d:leaderPath,fill:'none',stroke:strongCallout?'#214e40':'#718b7c',
+    'stroke-width':strongCallout?1.55:.85,'stroke-opacity':strongCallout?1:.8,
     'vector-effect':'non-scaling-stroke','data-label-leader':q.f.id,'data-label-column':q.column||'local'});
-   if(cityCallout){
+   if(strongCallout){
     line.style.stroke='#214e40';line.style.strokeWidth='1.55px';line.style.strokeOpacity='1';
     line.style.strokeLinecap='round';line.style.strokeLinejoin='round';
     line.setAttribute('data-prominent-leader','true');
    }
    g.append(line);
-   const dot=svgEl('circle',{cx:q.leaderAnchor.x,cy:q.leaderAnchor.y,r:(cityCallout?2.8:1.7)*zoomRatio,
-    fill:cityCallout?'#214e40':'#718b7c','data-label-anchor':q.f.id});
-   if(cityCallout){dot.style.stroke='#fff';dot.style.strokeWidth='1.1px'}
+   const dot=svgEl('circle',{cx:q.leaderAnchor.x,cy:q.leaderAnchor.y,r:(strongCallout?2.8:1.7)*zoomRatio,
+    fill:strongCallout?'#214e40':'#718b7c','data-label-anchor':q.f.id});
+   if(strongCallout){dot.style.stroke='#fff';dot.style.strokeWidth='1.1px'}
    g.append(dot);
   }
   const label=svgEl('text',{x:q.x,y:q.y,'font-size':q.font,'data-label':q.f.id,
@@ -564,7 +648,7 @@ function drawLabels(group,items,t,font=15,interactive=false){
   label.style.strokeWidth=(q.numeric?2.6:2.4)*zoomRatio;
   // CSS resets SVG text-anchor; enforce the measured centre for this overview.
   if(countyMayorOverview())label.style.textAnchor='middle';
-  // Callout labels share the same font size, weight, color and outline as other counties.
+  // Callout labels retain the same typography as the labels placed inside districts.
   label.textContent=q.text;
   if(q.numeric){label.setAttribute('data-number-key',q.number);mapNumberRecord(q.f,q.number)}
   if(interactive){label.style.pointerEvents='auto';label.style.cursor='pointer';label.onclick=()=>paint(q.f)}
