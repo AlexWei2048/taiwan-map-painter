@@ -744,6 +744,12 @@ test('All 22 scoped mayoral township maps display complete township names withou
    });
    console.log('Town callout distribution',county,JSON.stringify(metrics));
    assert.equal(metrics.inside+metrics.outside,result.total);
+   const minimumInside={'新北市':17,'台中市':5,'高雄市':10,'嘉义县':16};
+   const minimumNearSide={'新北市':.85,'台中市':.75,'高雄市':.60,'嘉义县':.85};
+   assert.ok(metrics.inside>=minimumInside[county],
+    county+' lost readable names that previously fitted inside their own polygons');
+   assert.ok(metrics.ratio>=minimumNearSide[county],
+    county+' callout sides too often contradict the source geography');
   }
   // Perimeter names must have a real air gap, not just non-overlapping glyphs.
   const breathing=await page.evaluate(()=>{
