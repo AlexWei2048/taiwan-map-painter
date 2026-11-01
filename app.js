@@ -133,7 +133,7 @@ function leaderCross(x,y,xx,yy,b){
 function mapLeaderSegments(points){
  return points.slice(1).map((end,i)=>[points[i],end]);
 }
-function mapLeaderSegmentConflict(a,b,pad=2.6){
+function mapLeaderSegmentConflict(a,b,pad=1.0){
  const [[x1,y1],[x2,y2]]=a,[[u1,v1],[u2,v2]]=b;
  const ah=Math.abs(y1-y2)<.01,bh=Math.abs(v1-v2)<.01;
  const between=(v,p,q)=>v>=Math.min(p,q)-pad&&v<=Math.max(p,q)+pad;
@@ -144,7 +144,7 @@ function mapLeaderSegmentConflict(a,b,pad=2.6){
  return between(vert[0][0],h[0][0],h[1][0])&&between(h[0][1],vert[0][1],vert[1][1]);
 }
 function mapLeaderRectIsClear(rect,leaders){
- const box=[rect[0]-2,rect[1]-2,rect[2]+2,rect[3]+2];
+ const box=[rect[0]-.75,rect[1]-.75,rect[2]+.75,rect[3]+.75];
  return leaders.every(points=>mapLeaderSegments(points).every(([a,b])=>
   !leaderIn(a[0],a[1],box)&&!leaderIn(b[0],b[1],box)&&
   !leaderCross(a[0],a[1],b[0],b[1],box)));
@@ -154,7 +154,7 @@ function mapLeaderClear(points,leaders,occupied,frames=[]){
  for(const segment of segments){
   if(Math.hypot(segment[1][0]-segment[0][0],segment[1][1]-segment[0][1])<.01)continue;
   for(const rect of occupied){
-   const padded=[rect[0]-1.5,rect[1]-1.5,rect[2]+1.5,rect[3]+1.5];
+   const padded=[rect[0]-.75,rect[1]-.75,rect[2]+.75,rect[3]+.75];
    if(leaderIn(segment[0][0],segment[0][1],padded)||
     leaderIn(segment[1][0],segment[1][1],padded)||
     leaderCross(segment[0][0],segment[0][1],segment[1][0],segment[1][1],padded))return false;
@@ -722,14 +722,14 @@ function townNameLabelLayout(items,t,font,area,reserve,attempt=0){
  // and use an orthogonal elbow rather than a diagonal through other towns.
  for(const q of remaining){
   const anchor=q.anchor||townVisualCenter(q.f,t),width=labelWidth(q.text);
-  const xs=[12,22,35,48,64,86,115,155,205].flatMap(gap=>
+  const xs=[12,30,55,95,155].flatMap(gap=>
    [anchor.x+width/2+gap,anchor.x-width/2-gap]).concat([colX.left,colX.right]);
   let pos=null;
   for(const x0 of xs){
    const x=Math.max(area.left+width/2+8,
     Math.min(area.right-width/2-8,x0));
    const side=x<anchor.x?'left':'right',coast=anchor.x;
-   for(let n=0;n<Math.ceil((area.bottom-area.top)/(height*.6+4))&&!pos;n++){
+   for(let n=0;n<Math.min(16,Math.ceil((area.bottom-area.top)/(height*.6+4)))&&!pos;n++){
     for(const k of n?[n,-n]:[0]){
      const y=anchor.y+k*(height*.6+4);
      const rect=[x-width/2-4,y-height/2-3,x+width/2+4,y+height/2+3];
@@ -747,7 +747,7 @@ function townNameLabelLayout(items,t,font,area,reserve,attempt=0){
  }
  if(attempt===0&&labels.length<sorted.length){
   let best=labels;
-  for(const retry of [1,2,3]){
+  for(const retry of [1]){
    const alternate=townNameLabelLayout(items,t,font,area,reserve,retry);
    if(alternate.length>best.length)best=alternate;
    if(best.length===sorted.length)break;
