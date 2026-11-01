@@ -719,6 +719,29 @@ test('All 22 scoped mayoral township maps display complete township names withou
    county+' has a diagonal or trans-map fan: '+JSON.stringify(quality.routes.filter(d=>!/^M[-\d.,]+(?:[HV][-\d.]+){1,7}$/.test(d)).slice(0,4)));
   assert.equal(quality.underText,true,county+' leaders may cover names');
   assert.equal(quality.textCount,result.total);
+  if(['新北市','台中市','高雄市','嘉义县'].includes(county)){
+   const metrics=await page.evaluate(()=>{
+    const items=currentItems(),bounds=items.reduce((b,f)=>[
+     Math.min(b[0],f.box[0]),Math.max(b[1],f.box[2])],[Infinity,-Infinity]);
+    const t=geometryLayout(items,true);
+    const mid=(bounds[0]+bounds[1])/2*t.scale+t.tx,half=(bounds[1]-bounds[0])/2*t.scale;
+    let inside=0,outside=0,far=0,nearSide=0;
+    for(const el of document.querySelectorAll('#labels text[data-label]')){
+     if(el.dataset.placement==='inside'){inside++;continue}
+     outside++;
+     const f=items.find(item=>String(item.id)===el.dataset.label);
+     if(!f)continue;
+     const anchor=townVisualCenter(f,t),normalized=Math.abs(anchor.x-mid)/Math.max(1,half);
+     if(normalized<.32)continue;
+     far++;
+     const side=document.querySelector('#labels path[data-label-leader="'+el.dataset.label+'"]')?.dataset.labelColumn;
+     if(side===(anchor.x<mid?'left':'right'))nearSide++;
+    }
+    return{inside,outside,far,nearSide,ratio:far?Number((nearSide/far).toFixed(2)):1};
+   });
+   console.log('Town callout distribution',county,JSON.stringify(metrics));
+   assert.equal(metrics.inside+metrics.outside,result.total);
+  }
   // Perimeter names must have a real air gap, not just non-overlapping glyphs.
   const breathing=await page.evaluate(()=>{
    const names=[...document.querySelectorAll('#labels text[data-callout-lane="perimeter"]')]
