@@ -353,7 +353,7 @@ dialog.floating-prediction-dialog > .floating-dialog-scroll{
 }
 .floating-prediction-dialog .floating-dialog-scroll > .dialog-actions .button{
  display:inline-flex;align-items:center;justify-content:center;
- flex:0 0 auto;min-height:40px;width:auto;white-space:nowrap;
+ flex:0 0 auto;min-width:110px;min-height:40px;width:auto;white-space:nowrap;
  font-size:12px;padding:9px 14px;line-height:1.35;
 }
 .floating-prediction-dialog .floating-dialog-scroll > .dialog-actions .button.primary{
