@@ -539,6 +539,19 @@ test('Kaohsiung county mayor townships use all 38 complete names, inside labels 
  assert.equal(result.numbers,0);
  assert.deepEqual(new Set(result.labels),new Set(towns.map(f=>f.name)));
  assert.ok(result.leaders>0);
+ // No diagonal fan: every external township leader uses orthogonal elbows.
+ const paths=await page.locator('#labels [data-label-leader]').evaluateAll(els=>els.map(el=>({
+  id:el.dataset.label,d:el.getAttribute('d'),width:getComputedStyle(el).strokeWidth
+ })));
+ assert.ok(paths.every(p=>/^M[-\\d.,]+H[-\\d.]+V[-\\d.]+H[-\\d.]+$/.test(p.d)),
+  'All township leaders must use perimeter-style orthogonal elbows');
+ assert.ok(paths.every(p=>parseFloat(p.width)<=1.1),'Township leaders must be delicate');
+ assert.equal(await page.locator('#labels [data-town-leader-layer]').count(),1);
+ assert.ok(await page.evaluate(()=>{
+  const labels=document.querySelector('#labels');
+  return labels.firstElementChild?.hasAttribute('data-town-leader-layer')&&
+   [...labels.querySelectorAll('text[data-label]')].every(el=>!el.parentElement.querySelector('[data-label-leader]'));
+ }), 'All lines must be painted behind every township name');
 });
 
 test('All 22 scoped mayoral township maps display complete township names without number keys',async t=>{
@@ -561,6 +574,19 @@ test('All 22 scoped mayoral township maps display complete township names withou
   assert.equal(result.labelled,result.total,county+' township names missing: '+JSON.stringify(result.missing)+'; frames='+JSON.stringify(result.frameDefinitions));
   assert.equal(result.numbers,0,county+' uses numbered labels');
   assert.equal(result.visibleKey,false,county+' still shows a number key');
+  // Full 22-county map sweep, also check that leader routes do not fan
+  // diagonally through the map or cross over the text rendering layer.
+  const quality=await page.evaluate(()=>{
+   const labels=document.querySelector('#labels');
+   const leaders=[...labels.querySelectorAll('[data-label-leader]')];
+   return{routes:leaders.map(el=>el.getAttribute('d')),
+    underText:labels.firstElementChild?.hasAttribute('data-town-leader-layer'),
+    textCount:labels.querySelectorAll('text[data-label]').length};
+  });
+  assert.ok(quality.routes.every(d=>/^M[-\\d.,]+H[-\\d.]+V[-\\d.]+H[-\\d.]+$/.test(d)),
+   county+' has a diagonal or trans-map fan');
+  assert.equal(quality.underText,true,county+' leaders may cover names');
+  assert.equal(quality.textCount,result.total);
  }
 });
 
