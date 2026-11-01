@@ -582,9 +582,9 @@ test('Existing party logos are displayed as circles in every HTML view',()=>{
  assert.match(app,/p\.logo=await readLogo\(file\.files\[0\]\)/);
  assert.match(app,/customLogo=await readLogo\(e\.target\.files\[0\]\)/);
 });
-test('Map labels show full names whenever they fit, number only overflow labels from 1, and keep island names below their insets',()=>{
+test('Electoral districts display their own numbers without numeric lookup entries; administrative areas use overflow numbering',()=>{
  const src=app.slice(app.indexOf('let mapNumberRows=[]'),app.indexOf('\nfunction activeInsetDefinitions(){'));
- assert.ok(src.includes('function labelLayout('));
+ assert.ok(src.includes('function districtMapNumber('));
  assert.doesNotMatch(src,/svgEl\('path'|data-leader-line|data-leader-region/);
  const state={level:'council',county:'台北市',labels:true,legend:{show:false}};
  const data={counties:[]};
@@ -592,50 +592,67 @@ test('Map labels show full names whenever they fit, number only overflow labels 
  const $=()=>null;
  const logic=new Function('state','data','featureElectorate','shownLabel','regionContains','leaderOverlap',
   'contentArea','sceneSpec','legendBox','svgEl','paint','$','identityPanelsActive','view',
-  src+';return {labelLayout,drawLabels,getRows:()=>mapNumberRows,resetRows:()=>{mapNumberRows=[]}}')(
+  src+';return {labelLayout,drawLabels,mapNumberDisplayName,getRows:()=>mapNumberRows,resetRows:()=>{mapNumberRows=[]}}')(
   state,data,()=> 'regional',f=>f.name,()=>true,(a,b)=>a[0]<b[2]&&a[2]>b[0]&&a[1]<b[3]&&a[3]>b[1],
   ()=>({left:0,right:1200,top:0,bottom:700}),()=>({height:900}),()=>({}),el,()=>{},$,()=>false,{});
- const wide={id:'wide',name:'第5选区',county:'台北市',box:[0,0,100,100],center:[50,50]};
+ const fifth={id:'c5',name:'第5选区',number:5,county:'台北市',box:[0,0,100,100],center:[50,50]};
+ const eighth={id:'c8',name:'第8选区',number:'第8選舉區',county:'台北市',box:[120,0,220,100],center:[170,50]};
+ const g={children:[],replaceChildren(){this.children=[]},append(node){this.children.push(node)}};
+ logic.drawLabels(g,[fifth,eighth],{scale:1,tx:0,ty:0,area:{left:0,right:1200,top:0,bottom:700}},14);
+ const districts=Object.fromEntries(g.children.map(n=>[n.children[0].attrs['data-label'],n.children[0]]));
+ assert.equal(districts.c5.textContent,'5');
+ assert.equal(districts.c8.textContent,'8');
+ assert.equal(districts.c5.attrs['data-number-key'],undefined);
+ assert.equal(districts.c8.attrs['data-placement'],'district-number');
+ assert.deepEqual(logic.getRows(),[]);
+ state.level='legislative';
+ assert.equal(logic.labelLayout([{...fifth,id:'l2',number:2,name:'第2选举区'}],{scale:1,tx:0,ty:0,area:{left:0,right:1200,top:0,bottom:700}},14)[0].text,'2');
+ assert.deepEqual(logic.getRows(),[]);
+ state.level='towns';logic.resetRows();
+ const county={id:'county',name:'基隆市',county:'基隆市',box:[0,0,100,100],center:[50,50]};
  const narrowA={id:'tiny-a',name:'狭小区域甲',county:'台北市',box:[0,0,10,10],center:[5,5]};
  const narrowB={id:'tiny-b',name:'狭小区域乙',county:'台北市',box:[20,20,30,30],center:[25,25]};
- const g={children:[],replaceChildren(){this.children=[]},append(node){this.children.push(node)}};
- logic.drawLabels(g,[wide,narrowA,narrowB],{scale:1,tx:0,ty:0,area:{left:0,right:1200,top:0,bottom:700}},14);
- const labels=Object.fromEntries(g.children.map(node=>[node.children[0].attrs['data-label'],node.children[0]]));
- assert.equal(labels.wide.textContent,'第5选区');
- assert.equal(labels.wide.attrs['data-number-key'],undefined);
- assert.equal(labels['tiny-a'].textContent,'1');
- assert.equal(labels['tiny-b'].textContent,'2');
- assert.deepEqual(logic.getRows().map(row=>[row.number,row.name,row.group]),[
-  ['1','狭小区域甲','台北市'],['2','狭小区域乙','台北市']
- ]);
- state.level='towns';logic.resetRows();
+ logic.drawLabels(g,[county,narrowA,narrowB],{scale:1,tx:0,ty:0,area:{left:0,right:1200,top:0,bottom:700}},14);
+ const admins=Object.fromEntries(g.children.map(n=>[n.children[0].attrs['data-label'],n.children[0]]));
+ assert.equal(admins.county.textContent,'基隆市');
+ assert.equal(admins.county.attrs['data-number-key'],undefined);
+ assert.equal(admins['tiny-a'].textContent,'1');
+ assert.equal(admins['tiny-b'].textContent,'2');
+ assert.deepEqual(logic.getRows().map(row=>[row.number,row.name]),[['1','狭小区域甲'],['2','狭小区域乙']]);
+ assert.equal(logic.mapNumberDisplayName({name:'基隆市',group:'基隆市'},[{name:'基隆市',group:'基隆市'}]),'基隆市');
+ assert.equal(logic.mapNumberDisplayName({name:'中正区',group:'台北市'},[
+  {name:'中正区',group:'台北市'},{name:'中正区',group:'基隆市'}]),'台北市 · 中正区');
+ state.level='counties';logic.resetRows();
  const island={id:'penghu',name:'澎湖县',county:'澎湖县',box:[20,435,110,565],center:[65,500]};
  const islandLabel=logic.labelLayout([island],{scale:1,tx:0,ty:0,area:{left:0,right:1200,top:0,bottom:700}},14)[0];
  assert.equal(islandLabel.text,'澎湖县');
  assert.equal(islandLabel.numeric,false);
  assert.ok(islandLabel.y>island.center[1]);
- const islandTown={id:'magong',name:'马公市',county:'澎湖县',box:[30,480,55,520],center:[42,500]};
- const townLabel=logic.labelLayout([islandTown],{scale:1,tx:0,ty:0,area:{left:0,right:1200,top:0,bottom:700}},14)[0];
- assert.equal(townLabel.text,'马公市');
- assert.equal(townLabel.numeric,false);
- assert.ok(townLabel.y>islandTown.box[3]);
 });
-
-test('Number key exports and table are backed by the map numbers',()=>{
+test('Administrative lookup is embedded in the map and exported inside the SVG map whenever it fits',()=>{
  assert.match(index,/id="mapWithKey"/);
  assert.match(index,/id="mapNumberKey"/);
  assert.match(index,/id="mapNumberKeyRows"/);
- assert.match(index,/app\.js\?v=20261101-conditional-island-labels-v53/);
- assert.match(read('style.css'),/\.map-view-with-keys\.has-number-key/);
- assert.match(read('workspace-ui.js'),/The main renderer now synchronizes region numbers and their adjacent table/);
- assert.match(app,/exportNumberRows=\[\]/);
- assert.match(app,/appendNumberTableExport\(root,exportNumberRows/);
- assert.match(app,/actualWidth=keyHeight\?exportWidth:coreWidth/);
+ assert.match(index,/app\.js\?v=20261101-district-labels-v54/);
+ assert.match(index,/style\.css\?v=20261101-map-internal-directory-v35/);
+ const canvasStart=index.indexOf('<div class="canvas" id="canvas">');
+ const key=index.indexOf('<aside class="map-number-key"',canvasStart);
+ const canvasEnd=index.indexOf('</div></div>\n<section aria-labelledby="districtReferenceTitle"',canvasStart);
+ assert.ok(canvasStart>=0&&key>canvasStart&&key<canvasEnd,'Map key must be inside canvas');
+ const css=read('style.css');
+ assert.match(css,/\.canvas>\.map-number-key\{/);
+ assert.doesNotMatch(css,/grid-template-columns:minmax\(0,1fr\) minmax\(180px,225px\)/);
+ assert.match(app,/function mapNumberDisplayName\(/);
+ const table=app.slice(app.indexOf('function renderMapNumberTable(){'),app.indexOf('\nfunction mapLabelCandidatePoints('));
+ assert.doesNotMatch(table,/number-key-group|th\.colSpan/);
+ assert.match(table,/state\.labels&&!\\['council','legislative'\\]\.includes\(state\.level\)/);
+ assert.match(app,/appendNumberTableExport\(map,keyRows,22,72,inlineColumns\)/);
+ assert.match(app,/actualWidth=coreWidth/);
  assert.match(app,/appendExportPredictionTable\(root,winnerRows,tableY\)/);
- assert.match(app,/numberLabelRegister|mapNumberRecord/);
- assert.match(app,/if\(state.labels&&view\)/);
- assert.doesNotMatch(app.slice(app.indexOf('function drawLabels('),app.indexOf('function drawIdentityPanelLabels(')),/svgEl\('path'/);
+ assert.match(app,/if\(state\.labels&&view\)/);
+ assert.match(read('workspace-ui.js'),/The main renderer now synchronizes region numbers and their adjacent table/);
 });
+
 
 test('Map fetch retries bypass corrupt caches and report persistent network errors',async()=>{
  const start=app.indexOf('async function fetchMapJson(url,label,attempts=3){');
