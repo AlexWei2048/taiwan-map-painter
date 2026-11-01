@@ -570,6 +570,27 @@ function townNameLabelLayout(items,t,font,area,reserve){
    const pos=mapOutsideLabelFit(q.f,t,q.text,font,used,area,reserve,items);
    if(pos)best={...pos,side:pos.x<anchor.x?'left':'right'};
   }
+  // An isolated island or highly unusual county extent can leave no valid
+  // map-margin column. Place the complete name near the actual feature anchor
+  // in any available, non-overlapping local slot instead of dropping it.
+  if(!best){
+   const clampX=x=>Math.max(area.left+width/2+6,Math.min(area.right-width/2-6,x));
+   const range=Math.ceil((area.bottom-area.top)/(height+5));
+   for(const x of [clampX(anchor.x+width+22),clampX(anchor.x-width-22),
+     clampX(anchor.x),clampX(sideX.left),clampX(sideX.right)]){
+    for(let i=0;i<=range&&!best;i++){
+     for(const delta of i===0?[0]:[-i,i]){
+      const y=Math.max(area.top+height/2+4,
+       Math.min(area.bottom-height/2-4,anchor.y+delta*(height+5)));
+      const rect=[x-width/2-3,y-height/2-2,x+width/2+3,y+height/2+2];
+      if(rect[0]<area.left||rect[2]>area.right||rect[1]<area.top||rect[3]>area.bottom)continue;
+      if(reserved&&leaderOverlap(rect,reserved)||used.some(other=>leaderOverlap(rect,other)))continue;
+      best={x,y,rect,side:x<anchor.x?'left':'right'};break;
+     }
+    }
+    if(best)break;
+   }
+  }
   if(!best)continue;
   const side=best.side,sign=side==='left'?-1:1;
   const end=best.x-sign*(width/2+4);
