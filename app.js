@@ -166,7 +166,7 @@ function renderMapNumberTable(){
  let section='';
  for(const row of rows){
   if(section!==row.group){
-   section=row.group;const tr=document.createElement('tr'),th=document.createElement('th');th.colSpan=2;th.className='number-key-group';th.textContent=section;tr.append(tr);body.append(tr);
+   section=row.group;const tr=document.createElement('tr'),th=document.createElement('th');th.colSpan=2;th.className='number-key-group';th.textContent=section;tr.append(th);body.append(tr);
   }
   const tr=document.createElement('tr'),code=document.createElement('th'),name=document.createElement('td');
   code.scope='row';code.className='number-key-number';code.textContent=row.number;
