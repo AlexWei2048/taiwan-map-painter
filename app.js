@@ -235,6 +235,17 @@ function districtMapNumber(f){
  const embedded=String(f.name||'').match(/第\s*(\d+)\s*(?:选|選)(?:举|舉)?区?/);
  return embedded?String(Number(embedded[1])):'';
 }
+// Prefer collision-free labels. Never fall back to an unchecked anchor:
+ // any label that still cannot fit is included in the export's required coverage panel.
+function mapAdaptiveLabel(f,t,text,font,used,area,reserve){
+ for(const ratio of [1,.86,.72]){
+  const size=Math.max(7,font*ratio);
+  const width=Array.from(text).length*size*.95+9,height=size*1.65+5;
+  const pos=mapLabelFit(f,t,width,height,used,area,reserve);
+  if(pos)return{...pos,font:size};
+ }
+ return null;
+}
 function labelLayout(items,t,font=15){
  const area=t.area||contentArea(sceneSpec()),reserve=state.legend.show?legendBox(sceneSpec()):null;
  const sizes=f=>(f.box[2]-f.box[0])*(f.box[3]-f.box[1]);
@@ -243,11 +254,10 @@ function labelLayout(items,t,font=15){
   const name=shownLabel(f);if(!name)continue;
   if(['council','legislative'].includes(state.level)){
    const districtNumber=districtMapNumber(f),text=districtNumber||name;
-   const width=Math.max(font*.82,Array.from(text).length*font*.82+4),height=font*1.3;
-   const pos=mapLabelFit(f,t,width,height,used,area,reserve)||mapLabelAnchor(f,t);
+   const pos=mapAdaptiveLabel(f,t,text,font,used,area,reserve);
    if(pos){
-    used.push(pos.rect||[pos.x-width/2,pos.y-height/2,pos.x+width/2,pos.y+height/2]);
-    labels.push({f,x:pos.x,y:pos.y,font,text,numeric:false,districtNumber:!!districtNumber});
+    used.push(pos.rect);
+    labels.push({f,x:pos.x,y:pos.y,font:pos.font,text,numeric:false,districtNumber:!!districtNumber});
    }
    continue;
   }
@@ -267,11 +277,10 @@ function labelLayout(items,t,font=15){
  let nextNumber=numberRows.length+1;
  for(const f of needsNumber){
   const value=String(nextNumber);
-  const width=Math.max(font*.82,Array.from(value).length*font*.7+4),height=font*1.3;
-  const pos=mapLabelFit(f,t,width,height,used,area,reserve)||mapLabelAnchor(f,t);
+  const pos=mapAdaptiveLabel(f,t,value,font,used,area,reserve);
   if(!pos)continue;
-  used.push(pos.rect||[pos.x-width/2,pos.y-height/2,pos.x+width/2,pos.y+height/2]);
-  labels.push({f,x:pos.x,y:pos.y,font,text:value,numeric:true,number:value});
+  used.push(pos.rect);
+  labels.push({f,x:pos.x,y:pos.y,font:pos.font,text:value,numeric:true,number:value});
   nextNumber++;
  }
  return labels;
@@ -284,7 +293,7 @@ function drawLabels(group,items,t,font=15,interactive=false){
  group.replaceChildren();
  for(const q of labelLayout(rendered.filter(f=>shownLabel(f)),t,font)){
   const g=svgEl('g',{'class':'map-label'});group.append(g);
-  const label=svgEl('text',{x:q.x,y:q.y,'font-size':font,'data-label':q.f.id,
+  const label=svgEl('text',{x:q.x,y:q.y,'font-size':q.font,'data-label':q.f.id,
    'data-placement':q.districtNumber?'district-number':q.island?'below-island':'inside','text-anchor':'middle','dominant-baseline':'middle',
    'font-weight':q.numeric||q.districtNumber?700:500,fill:'#2c493b',stroke:'#ffffffed',
    'stroke-width':q.numeric?3:2.4,'paint-order':'stroke','stroke-linejoin':'round'});
@@ -584,6 +593,66 @@ function appendNumberTableExport(root,entries,x,y,columns=1){
  root.append(panel);return m.height;
 }
 
+// Every administrative area or electoral district must be identified somewhere
+// in the FINAL exported figure, even when its polygon cannot hold a legible label.
+function exportLabelCoverage(items,map){
+ const labelled=new Set();
+ for(const el of map.querySelectorAll('[data-label]')){
+  if(el.hasAttribute('data-number-key'))continue; // mapped admin number belongs to the paired number key
+  labelled.add(String(el.getAttribute('data-label')));
+ }
+ const keyed=new Set(exportNumberRows.map(row=>row.id));
+ const rows=[],seen=new Set();
+ for(const f of items){
+  const id=String(f.id),token=[id,featureElectorate(f)].join('/');
+  if(seen.has(token))continue;seen.add(token);
+  if(labelled.has(id)||!['council','legislative'].includes(state.level)&&keyed.has(id))continue;
+  const scope=[f.county,f.town].filter(Boolean).join(' · ');
+  const district=['council','legislative'].includes(state.level);
+  const number=districtMapNumber(f);
+  const value=district?(number?'第'+number+'选区'+(f.name&&!/^(?:第)?\d+(?:选区)?$/.test(f.name)?' · '+f.name:''):f.name):f.name;
+  rows.push({id,scope,value:value||f.name||id});
+ }
+ return rows.sort((a,b)=>a.scope.localeCompare(b.scope,'zh')||a.value.localeCompare(b.value,'zh'));
+}
+function exportLabelCoverageLayout(rows,width){
+ const columns=Math.max(1,Math.min(3,Math.floor((width-40)/300))),
+  gap=14,margin=20,blockWidth=(width-margin*2-gap*(columns-1))/columns;
+ const chunks=Array.from({length:columns},(_,i)=>rows.slice(i*Math.ceil(rows.length/columns),(i+1)*Math.ceil(rows.length/columns)));
+ const maxChars=Math.max(6,(blockWidth-35)/13);
+ const prepared=chunks.map(chunk=>chunk.map(row=>{
+  const text=[row.scope,row.value].filter(Boolean).join(' · ');
+  const lines=wrapExportText(text,maxChars);
+  return{lines,height:Math.max(30,12+lines.length*17)};
+ }));
+ const height=78+Math.max(0,...prepared.map(chunk=>chunk.reduce((sum,row)=>sum+row.height,0)))+16;
+ return{columns,gap,margin,blockWidth,prepared,height};
+}
+function appendExportLabelCoverage(root,rows,x,y,width){
+ if(!rows.length)return 0;
+ const m=exportLabelCoverageLayout(rows,width),g=svgEl('g',{'data-export-label-coverage':'true'});
+ g.append(svgEl('rect',{x,y,width,height:m.height,rx:12,fill:'#fff',stroke:'#dbe6dc','stroke-width':1.1}));
+ const h=svgEl('text',{x:x+20,y:y+30,'font-size':18,'font-weight':700,fill:'#294a3a'});
+ h.textContent='密集区域完整标注';g.append(h);
+ const count=svgEl('text',{x:x+width-20,y:y+29,'font-size':12,'text-anchor':'end',fill:'#647b6e'});
+ count.textContent=rows.length+'项';g.append(count);
+ const note=svgEl('text',{x:x+20,y:y+52,'font-size':11.5,fill:'#698075'});
+ note.textContent='主地图空间不足的行政区名称或选区号次在此完整显示，避免相互遮挡';g.append(note);
+ m.prepared.forEach((chunk,i)=>{
+  const colX=x+m.margin+i*(m.blockWidth+m.gap);
+  let rowY=y+65;
+  chunk.forEach((record,j)=>{
+   if(j%2===0)g.append(svgEl('rect',{x:colX,y:rowY,width:m.blockWidth,height:record.height,rx:3,fill:'#f6f9f6'}));
+   const tx=svgEl('text',{x:colX+8,y:rowY+18,'font-size':12.4,fill:'#335748'});
+   record.lines.forEach((line,k)=>{
+    const span=svgEl('tspan',{x:colX+8,dy:k?17:0});span.textContent=line;tx.append(span);
+   });
+   g.append(tx);rowY+=record.height;
+  });
+ });
+ root.append(g);return m.height;
+}
+
 function exportSvg(){
  const spec=sceneSpec(),winnerRows=exportPredictionWinnerRows(),tableLayout=winnerRows.length?exportPredictionTableLayout(winnerRows):null;
  const coreWidth=tableLayout?tableLayout.width+80:1200,contentWidth=coreWidth-80,contentHeight=Math.round(contentWidth*spec.height/spec.width);
@@ -618,9 +687,12 @@ function exportSvg(){
    const appendixColumns=Math.min(Math.max(1,Math.floor((contentWidth-30)/210)),Math.ceil(keyRows.length/30));
    appendixHeight=appendNumberTableExport(root,keyRows,40,mapY+contentHeight+12,appendixColumns);
   }
-  const tableY=mapY+contentHeight+Math.max(40,appendixHeight+24);
+  const coverageRows=exportLabelCoverage(currentItems(),map);
+  const coverageY=mapY+contentHeight+(appendixHeight?appendixHeight+24:14);
+  const coverageHeight=appendExportLabelCoverage(root,coverageRows,40,coverageY,contentWidth);
+  const tableY=Math.max(mapY+contentHeight+40,coverageY+coverageHeight+30);
   if(winnerRows.length)appendExportPredictionTable(root,winnerRows,tableY);
-  const height=Math.max(mapY+contentHeight+72,appendixHeight?mapY+contentHeight+appendixHeight+35:0,winnerRows.length?tableY+tableLayout.height+32:0);
+  const height=Math.max(mapY+contentHeight+72,coverageY+coverageHeight+32,winnerRows.length?tableY+tableLayout.height+32:0);
   const actualWidth=coreWidth;
   root.setAttribute('width',actualWidth);root.setAttribute('height',height);root.setAttribute('viewBox','0 0 '+actualWidth+' '+height);
   root.firstChild?.setAttribute('width',actualWidth);root.firstChild?.setAttribute('height',height);
@@ -628,7 +700,7 @@ function exportSvg(){
  }finally{exportNumberRows=null}
 }
 
-function preparedExportSvg(){const oldFilter=exportPanelFilter,oldLegend=state.legend.show,oldCouncilView=state.councilViewScope;state.councilViewScope='all';exportPanelFilter=state.level==='council'&&state.exportSettings.councilScope!=='all'?state.exportSettings.councilScope:'';state.legend.show=true;render();try{return exportSvg()}finally{exportPanelFilter=oldFilter;state.legend.show=oldLegend;state.councilViewScope=oldCouncilView;render()}}
+function preparedExportSvg(){const oldFilter=exportPanelFilter,oldLegend=state.legend.show,oldCouncilView=state.councilViewScope,oldLabels=state.labels;state.councilViewScope='all';exportPanelFilter=state.level==='council'&&state.exportSettings.councilScope!=='all'?state.exportSettings.councilScope:'';state.legend.show=true;state.labels=true;render();try{return exportSvg()}finally{exportPanelFilter=oldFilter;state.legend.show=oldLegend;state.councilViewScope=oldCouncilView;state.labels=oldLabels;render()}}
 function exportFilename(){const suffix=state.level==='council'&&state.exportSettings.councilScope!=='all'?'_'+electorateName(state.exportSettings.councilScope):'';return filename()+suffix}
 $('exportWinnerTable').onchange=()=>{state.exportSettings.winnerTable=$('exportWinnerTable').checked;persist()};$('exportNote').oninput=()=>{state.exportSettings.note=simplify($('exportNote').value).trim().slice(0,500);persist()};$('councilExportScope').onchange=()=>{state.exportSettings.councilScope=$('councilExportScope').value;persist()};$('exportSvg').onclick=async()=>{try{await ensureExportMapReady();download(new Blob([preparedExportSvg()],{type:'image/svg+xml;charset=utf-8'}),exportFilename()+'.svg');toast('SVG 矢量图已导出，包含比例尺、指北针和对应图例')}catch(e){toast(e.message||'SVG 导出失败')}};$('exportPng').onclick=async()=>{const b=$('exportPng');b.disabled=true;const old=b.textContent;b.textContent='正在导出…';let url;try{await ensureExportMapReady();const source=preparedExportSvg(),doc=new DOMParser().parseFromString(source,'image/svg+xml'),height=Number(doc.documentElement.getAttribute('height')),width=Number(doc.documentElement.getAttribute('width'));if(!width||!height)throw Error('图片尺寸无效');const scale=Math.min(3,Math.floor(16000/Math.max(width,height)),Math.floor(Math.sqrt(55000000/(width*height))));if(scale<1)throw Error('图片过大，请取消当选名单表格，或使用 SVG 矢量图完整导出');url=URL.createObjectURL(new Blob([source],{type:'image/svg+xml;charset=utf-8'}));const img=new Image();img.src=url;await new Promise((ok,no)=>{img.onload=ok;img.onerror=no});const c=document.createElement('canvas');c.width=width*scale;c.height=height*scale;const ctx=c.getContext('2d');if(!ctx)throw Error('设备无法创建图片画布，请改用 SVG');ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(img,0,0,c.width,c.height);const blob=await new Promise(ok=>c.toBlob(ok,'image/png'));if(!blob)throw Error('图片生成失败，请改用 SVG');download(blob,exportFilename()+'.png');toast(scale===3?'已导出 3 倍清晰度 PNG 图片':'大图已自动调整为 '+scale+' 倍清晰度 PNG')}catch(e){toast(e.message||'导出失败，请尝试导出 SVG 矢量图')}finally{if(url)URL.revokeObjectURL(url);b.disabled=false;b.textContent=old}};
 // Retry large static map downloads without losing locally saved election projects.
