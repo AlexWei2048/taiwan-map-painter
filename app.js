@@ -97,8 +97,24 @@ function furnitureFooterHeight(){return Math.max(126,state.legend.show?legendMet
 function sceneSpec(){const panels=identityPanelsActive()?panelIdentities().length:0,base=panels===1?(state.county?{width:1200,height:900,pad:140,font:15}:{width:1800,height:2400,pad:250,font:10}):panels===4?(state.county?{width:2800,height:1500,pad:130,font:26}:{width:3200,height:2300,pad:180,font:28}):identityPanelsActive()?(state.county?{width:2400,height:1050,pad:120,font:26}:{width:3000,height:2100,pad:180,font:28}):isNationwide()?{width:1800,height:2400,pad:250,font:10}:{width:1200,height:900,pad:140,font:15};const n=data&&state.level==='villages'?currentItems().length:0;const mapHeight=Math.max(base.height,n&&n<=120?n*8+220:0);return{...base,height:mapHeight+furnitureFooterHeight()}}
 function contentArea(spec){return{left:45,right:spec.width-115,top:145,bottom:spec.height-furnitureFooterHeight()-28}}
 function fittedView(){const s=sceneSpec();return{x:0,y:0,w:s.width,h:s.height}}
-function applyView(){if(view){$('map').setAttribute('viewBox',`${view.x} ${view.y} ${view.w} ${view.h}`);if(state.level==='villages'){cancelAnimationFrame(villageLabelFrame);villageLabelFrame=requestAnimationFrame(renderLabels)}}}
-function fit(){view=fittedView();baseView={...view};applyView();renderLabels()}
+// Keep geometry movement cheap; expensive collision/leader layout runs only
+// after navigation settles. Ordinary county/town labels move with the SVG.
+let viewFrame=0,navigationLabelTimer=0;
+function flushView(){
+ if(viewFrame){cancelAnimationFrame(viewFrame);viewFrame=0}
+ if(view)$('map').setAttribute('viewBox',`${view.x} ${view.y} ${view.w} ${view.h}`);
+}
+function scheduleNavigationLabels(){
+ clearTimeout(navigationLabelTimer);
+ navigationLabelTimer=setTimeout(()=>{navigationLabelTimer=0;renderLabels()},160);
+}
+function applyView(){
+ if(!view)return;
+ if(!viewFrame)viewFrame=requestAnimationFrame(()=>{viewFrame=0;flushView()});
+ if(state.labels&&state.level==='villages')scheduleNavigationLabels();
+}
+function fit(){view=fittedView();baseView={...view};flushView();renderLabels()}
+
 function geometryLayout(items,labels=true){if(!items.length)items=data.counties.filter(f=>!state.county||f.name===state.county);const spec=sceneSpec(),area=contentArea(spec),b=bounds(items);const visibleOutlines=state.level==='villages'&&state.villageTown?data.towns.filter(f=>f.id===state.villageTown):state.level!=='counties'?data.counties.filter(f=>!state.county||f.name===state.county):[];for(const outline of visibleOutlines){b[0]=Math.min(b[0],outline.box[0]);b[1]=Math.min(b[1],outline.box[1]);b[2]=Math.max(b[2],outline.box[2]);b[3]=Math.max(b[3],outline.box[3])}for(const q of activeInsetDefinitions()){b[0]=Math.min(b[0],q.box[0]);b[1]=Math.min(b[1],q.box[1]);b[2]=Math.max(b[2],q.box[2]);b[3]=Math.max(b[3],q.box[3])}const gutter=labels?(isNationwide()?250:state.level==='villages'?95:state.level==='counties'||mayorTownBoundaryOverlay()?100:140):20,left=area.left+gutter,right=area.right-gutter,w=right-left,h=area.bottom-area.top,scale=Math.min(w/Math.max(.0001,b[2]-b[0]),h/Math.max(.0001,b[3]-b[1]));return{scale,tx:(left+right)/2-(b[0]+b[2])/2*scale,ty:(area.top+area.bottom)/2-(b[1]+b[3])/2*scale,labelLeft:left-22,labelRight:right+22,area}}
 function identityPanelLayouts(){
  if(!identityPanelsActive()||!data)return[];
@@ -527,6 +543,36 @@ function mapOutsideLabelColumns(pending,t,used,area,reserve,items){
   const pos=mapOutsideLabelFit(q.f,t,q.text,q.font,used,area,reserve,items);
   if(pos){used.push(pos.rect);placed.push({...q,...pos})}
  }
+ // A nationwide panel can exhaust a cluster's local margin. Allocate the
+ // remaining numbers in the panel's outer gutters, preserving latitude order.
+ // Unlike the local fallback, these slots are not rejected by distant polygon
+ // bounding boxes (which cover large empty sea areas in concave counties).
+ const complete=new Set(placed.map(q=>q.f.id));
+ const missing=pending.filter(q=>!complete.has(q.f.id)).map(q=>({...q,anchor:mapLabelAnchor(q.f,t)}))
+  .filter(q=>q.anchor).sort((a,b)=>a.anchor.y-b.anchor.y||a.anchor.x-b.anchor.x||String(a.f.id).localeCompare(String(b.f.id)));
+ const reserved=reserve?[reserve.x,reserve.y,reserve.x+reserve.width,reserve.y+reserve.height]:null;
+ for(const q of missing){
+  const width=Array.from(q.text).length*q.font*.68+12,height=q.font*1.2+6,gap=height+7;
+  const sides=q.anchor.x<(area.left+area.right)/2?['left','right']:['right','left'];
+  let best=null;
+  for(const side of sides){
+   for(let column=0;column<3;column++){
+    const x=side==='left'?area.left+width/2+6+column*(width+10):area.right-width/2-6-column*(width+10);
+    for(let y=area.top+height/2+4;y<=area.bottom-height/2-4;y+=gap){
+     const rect=[x-width/2,y-height/2,x+width/2,y+height/2];
+     if(used.some(r=>leaderOverlap(rect,r))||reserved&&leaderOverlap(rect,reserved)||frames.some(r=>leaderOverlap(rect,r)))continue;
+     if(items.some(f=>x>=f.box[0]*t.scale+t.tx&&x<=f.box[2]*t.scale+t.tx&&y>=f.box[1]*t.scale+t.ty&&y<=f.box[3]*t.scale+t.ty&&regionContains(f,x,y,t)))continue;
+     const score=Math.abs(y-q.anchor.y)+Math.abs(x-q.anchor.x)*.12+column*gap;
+     if(!best||score<best.score)best={x,y,rect,score,side};
+    }
+   }
+  }
+  if(!best)continue;
+  const {x,y,rect,side}=best,end=x+(side==='left'?width/2+3:-width/2-3);
+  const rail=side==='left'?end+8:end-8;
+  used.push(rect);placed.push({...q,x,y,rect,leaderAnchor:q.anchor,
+   leaderPath:`M${q.anchor.x},${q.anchor.y}H${rail}V${y}H${end}`,column:side});
+ }
  return placed;
 }
 
@@ -837,7 +883,25 @@ function townNameLabelLayout(items,t,font,area,reserve,attempt=0){
 function labelLayout(items,t,font=15){
  const area=t.area||contentArea(sceneSpec()),reserve=state.legend.show?legendBox(sceneSpec()):null;
  if(countyMayorOverview())return countyMayorLabelLayout(items,t,font,area,reserve);
- if(directTownNameLabels())return townNameLabelLayout(items,t,font,area,reserve);
+ if(directTownNameLabels()){
+  const labels=townNameLabelLayout(items,t,font,area,reserve);
+  const done=new Set(labels.map(q=>q.f.id)),used=labels.map(q=>q.rect);
+  const pending=items.filter(f=>shownLabel(f)&&!done.has(f.id))
+   .map(f=>({f,font,text:shownLabel(f),numeric:false}));
+  const leaders=labels.filter(q=>q.leaderPoints).map(q=>q.leaderPoints);
+  for(const q of mapOutsideLabelColumns(pending,t,used,area,reserve,items)){
+   const anchor=townVisualCenter(q.f,t),width=Array.from(q.text).length*font*1.04+8;
+   const side=q.x<anchor.x?'left':'right',frames=leaderFrames(t,3);
+   const occupied=labels.map(row=>row.rect);
+   const route=mapOrthogonalLeader(anchor,side,q.x,q.y,width,anchor.x,leaders,occupied,area,frames)||
+    mapGridLeaderRoute(anchor,side,q.x,q.y,width,leaders,occupied,area,frames);
+   const end=q.x+(side==='left'?width/2+6:-width/2-6),rail=end+(side==='left'?8:-8);
+   labels.push({...q,...route,leaderAnchor:anchor,
+    leaderPath:route?.leaderPath||`M${anchor.x},${anchor.y}H${rail}V${q.y}H${end}`});
+   if(route)leaders.push(route.leaderPoints);
+  }
+  return labels;
+ }
  const sizes=f=>(f.box[2]-f.box[0])*(f.box[3]-f.box[1]);
  const sorted=[...items].sort((a,b)=>sizes(b)-sizes(a)),used=[],labels=[],needsNumber=[],outside=[];
  for(const f of sorted){
@@ -953,6 +1017,7 @@ function drawIdentityPanelLabels(group,interactive=false,exportAll=false){
  }
 }
 function renderLabels(){
+ clearTimeout(navigationLabelTimer);navigationLabelTimer=0;
  const group=$('labels');group.replaceChildren();mapNumberRows=[];
  if(state.labels&&view){
   if(identityPanelsActive())drawIdentityPanelLabels(group,true,false);
@@ -1086,9 +1151,9 @@ function render(){
 }
 function recolor(){if(state.fillMode==='prediction'){render();return}if(state.fillMode==='gradient'){for(const p of $('regions').querySelectorAll('path')){const f=currentItems().find(f=>f.id===p.dataset.region);if(!f)continue;p.setAttribute('fill',fillColor(f));p.setAttribute('aria-label',f.county+(f.name===f.county?'':f.name)+'，'+regionDetail(f));}return;}for(const p of $('regions').querySelectorAll('path')){const f=currentItems().find(x=>x.id===p.dataset.region);if(!f)continue;const pal=paletteById(featureFillId(f));p.setAttribute('fill',pal?.color||'#edf1e9');p.setAttribute('aria-label',f.county+(f.name===f.county?'':f.name)+'，'+(pal?.name||'未填色'))}}
 function paint(f){if(state.fillMode==='prediction'&&typeof openPredictionRegion==='function'){openPredictionRegion(f);return}if(typeof inspectCandidateRegion==='function'&&inspectCandidateRegion(f))return;if(state.fillMode==='gradient'){if(erase){pushHistory();delete state.elections[state.level][f.id];afterElectionEdit();return;}openVoteEditor(f);return;}const id=erase?undefined:state.selected,store=f.legislativeTown?state.legislativeTownFills[featureElectorate(f)]:state.fills[state.level],key=f.legislativeTown?f.sourceId:f.id;if(store[key]===id)return;pushHistory();if(id)store[key]=id;else delete store[key];recolor();renderPalette();renderLegend();renderList();updateProgress();persist()}
-function zoom(factor,anchor){if(!view)return;const next=view.w*factor;if(next<baseView.w/16||next>baseView.w*2)return;const a=anchor||[.5,.5];view={x:view.x+view.w*a[0]*(1-factor),y:view.y+view.h*a[1]*(1-factor),w:next,h:view.h*factor};applyView();if(state.level!=='villages')renderLabels()}
+function zoom(factor,anchor){if(!view)return;const next=view.w*factor;if(next<baseView.w/16||next>baseView.w*2)return;const a=anchor||[.5,.5];view={x:view.x+view.w*a[0]*(1-factor),y:view.y+view.h*a[1]*(1-factor),w:next,h:view.h*factor};applyView();if(state.labels&&['council','legislative'].includes(state.level))scheduleNavigationLabels()}
 $('county').onchange=()=>{state.county=$('county').value;state.villageTown='';syncVillageControls();render();persist()};for(const [id,level]of [['townLevel','towns'],['countyLevel','counties'],['councilLevel','council'],['legislativeLevel','legislative'],['villageLevel','villages']])$(id).onclick=()=>{if(state.level===level)return;state.level=level;if(state.fillMode==='prediction'&&state.predictionOffice==='mayor'&&state.predictionScale==='town'&&['towns','counties'].includes(level))state.predictionScale='district';if(typeof predictionLevelChanged==='function')predictionLevelChanged(level);syncInputs();render();persist();toast('各地图图层的填色和数据分别保存')};$('showLabels').onchange=()=>{state.labels=$('showLabels').checked;render();persist()};$('search').oninput=renderList;for(const [id,key]of [['mapTitle','title'],['legendTitle','legendTitle']]){let editing=false;$(id).onfocus=()=>editing=false;$(id).oninput=()=>{if(!editing){pushHistory();editing=true}state[key]=simplify($(id).value);if(key==='legendTitle')renderLegend();persist()};}$('eraser').onclick=()=>{erase=!erase;renderPalette();updateBrush()};$('undo').onclick=()=>restore('undo');$('redo').onclick=()=>restore('redo');$('zoomIn').onclick=()=>zoom(.8);$('zoomOut').onclick=()=>zoom(1.25);$('fit').onclick=fit;
-$('map').addEventListener('wheel',e=>{if(!view)return;e.preventDefault();const p=new DOMPoint(e.clientX,e.clientY).matrixTransform($('map').getScreenCTM().inverse());zoom(e.deltaY>0?1.1:1/1.1,[(p.x-view.x)/view.w,(p.y-view.y)/view.h])},{passive:false});
+$('map').addEventListener('wheel',e=>{if(!view)return;e.preventDefault();flushView();const p=new DOMPoint(e.clientX,e.clientY).matrixTransform($('map').getScreenCTM().inverse());zoom(e.deltaY>0?1.1:1/1.1,[(p.x-view.x)/view.w,(p.y-view.y)/view.h])},{passive:false});
 $('map').addEventListener('pointerdown',e=>{if(e.button!==0)return;moved=false;drag={x:e.clientX,y:e.clientY,v:{...view},pointer:e.pointerId,matrix:$('map').getScreenCTM()?.inverse()}});
 window.addEventListener('pointermove',e=>{if(!drag||!drag.matrix)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.hypot(dx,dy)>5){moved=true;$('tooltip').hidden=true;const p1=new DOMPoint(drag.x,drag.y).matrixTransform(drag.matrix),p2=new DOMPoint(e.clientX,e.clientY).matrixTransform(drag.matrix);view={...drag.v,x:drag.v.x-(p2.x-p1.x),y:drag.v.y-(p2.y-p1.y)};applyView()}});window.addEventListener('pointerup',()=>drag=null);window.addEventListener('pointercancel',()=>{drag=null;moved=true});
 window.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))return;if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'){e.preventDefault();restore(e.shiftKey?'redo':'undo')}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='y'){e.preventDefault();restore('redo')}});
@@ -1847,7 +1912,7 @@ $('editLegend').onclick=()=>{legendDraft=state.palette.map(p=>({...p,hidden:stat
 $('cancelLegendEdit').onclick=()=>$('legendDialog').close();$('saveLegendEdit').onclick=()=>{if(legendDraft.some(p=>!p.name.trim()))return toast('图例名称不能为空');if(new Set(legendDraft.map(p=>normalizePlace(p.name))).size!==legendDraft.length)return toast('图例名称不能重复');pushHistory();state.palette=legendDraft.map(({hidden,...p})=>({...p,name:simplify(p.name.trim())}));state.legend={show:$('legendDisplay').checked,onlyUsed:true,fontSize:Math.max(9,Math.min(22,Number($('legendFont').value)||12)),caption:simplify($('legendCaption').value).slice(0,80),hidden:legendDraft.filter(p=>p.hidden).map(p=>p.id)};state.legendTitle=simplify($('legendDialogTitle').value)||'图例';$('legendDialog').close();syncInputs();render();persist();toast('图例已更新，导出图片将使用相同图例')};
 
 // Village detail level and locally embedded party emblems.
-let villageLabelFrame=0,customLogo='';
+let customLogo='';
 function cleanLogo(value){if(value==='')return'';if(typeof value!=='string'||value.length>180000||!/^data:image\/(?:png|jpeg|webp);base64,[A-Za-z0-9+/]+=*$/.test(value))throw Error('党徽必须是内置的 PNG、JPG 或 WebP 图片');return value}
 function logoFor(p){if(Object.hasOwn(p,'logo'))return p.logo;const id=PARTY_PRESETS.find(x=>x.id===p.id||'party-'+x.id===p.id)?.id||partyMatch(p.name)?.id;return typeof PARTY_LOGOS!=='undefined'?PARTY_LOGOS[id]||'':''}
 async function readLogo(file){if(!file)throw Error('请选择图片');if(file.size>2*1024*1024)throw Error('党徽图片不能超过 2 MB');if(!['image/png','image/jpeg','image/webp','image/svg+xml'].includes(file.type))throw Error('请选择 PNG、JPG、WebP 或 SVG 图片');const url=URL.createObjectURL(file);try{const image=new Image();await new Promise((ok,no)=>{image.onload=ok;image.onerror=()=>no(Error('图片无法读取，请换一张图片'));image.src=url});if(image.naturalWidth>4096||image.naturalHeight>4096||!image.naturalWidth)throw Error('图片尺寸须在 4096 × 4096 以内');const c=document.createElement('canvas');c.width=c.height=128;

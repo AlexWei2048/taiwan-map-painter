@@ -227,8 +227,7 @@ if(!localStorage.getItem(KEY)){state.workspaceMode='prediction';state.fillMode='
 syncInputs();syncWorkspace();if(data)render();
 // Keep dense edit labels readable. Exports continue to draw every enabled label.
 // The main renderer now synchronizes region numbers and their adjacent table; do not override it.
-const originalApplyView=applyView;
-applyView=function(){originalApplyView();if(state.level!=='villages'&&data)requestAnimationFrame(renderLabels)};
+// Navigation label refresh is owned by app.js and coalesced after input settles.
 // CSV tools stay together in the top Export/Plan menus instead of repeating beside the map.
 const planMenu=document.querySelector('.header-menu .menu-popover');
 const templateAction=dirText('button','下载预测名单模板');templateAction.onclick=()=>exportPredictionCSV(true);
