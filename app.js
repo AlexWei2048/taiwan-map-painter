@@ -1359,7 +1359,7 @@ function appendExportPolishedWinnerTable(root,rows,y,layout){
   stroke:'#d9e5dd','stroke-width':1.3}));
  card.append(svgEl('rect',{x:outerX,y:y+18,width:4,height:28,rx:2,fill:'#3f8562'}));
  const heading=svgEl('text',{x:63,y:y+38,'font-size':21,'font-weight':700,fill:'#274d3b'});
- heading.textContent=rows.some(row=>row.local)?'乡镇预测胜出候选人':'预测当选候选人';card.append(heading);
+ heading.textContent=rows.some(row=>row.local)?'乡镇市区预测胜出候选人':'预测当选候选人';card.append(heading);
  const headerY=y+layout.headingHeight,headerH=layout.tableHeaderHeight,bodyY=headerY+headerH;
  const slotX=i=>innerX+i*(layout.slotWidth+layout.gap);
  for(let i=0;i<2;i++){
@@ -1433,7 +1433,7 @@ function appendExportPolishedWinnerTable(root,rows,y,layout){
 function appendExportPredictionTable(root,rows,y){
  if(!rows.length)return 0;const layout=exportPredictionTableLayout(rows);
  if(layout.polished)return appendExportPolishedWinnerTable(root,rows,y,layout);
- const card=svgEl('g',{'data-export-winner-table':'true'});root.append(card);card.append(svgEl('rect',{x:40,y,width:layout.width,height:layout.height,rx:14,fill:'#fff',stroke:'#dce5df','stroke-width':1.2}));const heading=svgEl('text',{x:60,y:y+31,'font-size':19,'font-weight':600,fill:'#294a3a'});heading.textContent=layout.specified?'指定候选人得票预测':rows.some(row=>row.estimated)?'预测得票候选人':rows.some(row=>row.local)?'乡镇预测胜出候选人':'预测当选候选人';card.append(heading);card.append(svgEl('line',{x1:60,y1:y+46,x2:layout.width+20,y2:y+46,stroke:'#e5ece6'}));
+ const card=svgEl('g',{'data-export-winner-table':'true'});root.append(card);card.append(svgEl('rect',{x:40,y,width:layout.width,height:layout.height,rx:14,fill:'#fff',stroke:'#dce5df','stroke-width':1.2}));const heading=svgEl('text',{x:60,y:y+31,'font-size':19,'font-weight':600,fill:'#294a3a'});heading.textContent=layout.specified?'指定候选人得票预测':rows.some(row=>row.estimated)?'预测得票候选人':rows.some(row=>row.local)?'乡镇市区预测胜出候选人':'预测当选候选人';card.append(heading);card.append(svgEl('line',{x1:60,y1:y+46,x2:layout.width+20,y2:y+46,stroke:'#e5ece6'}));
  const bodyY=y+59,{widths}=layout;for(let column=0;column<layout.columns;column++){const block=layout.blocks[column];if(!block.length)continue;const x=60+column*(layout.blockWidth+layout.gap),xs=[x],blockHeight=layout.rowHeight+block.reduce((n,r)=>n+r.height,0);for(const w of widths)xs.push(xs.at(-1)+w);card.append(svgEl('rect',{x,y:bodyY,width:layout.blockWidth,height:blockHeight,rx:7,fill:'#fff',stroke:'#dfe8e1','stroke-width':1}));card.append(svgEl('path',{d:`M${x},${bodyY+7}Q${x},${bodyY} ${x+7},${bodyY}H${x+layout.blockWidth-7}Q${x+layout.blockWidth},${bodyY} ${x+layout.blockWidth},${bodyY+7}V${bodyY+layout.rowHeight}H${x}Z`,fill:'#edf5f0'}));
   layout.headers.forEach((label,i)=>{const text=svgEl('text',{x:xs[i]+widths[i]/2,y:bodyY+layout.rowHeight/2+layout.font*.35,'font-size':layout.font,'font-weight':600,fill:'#466253','text-anchor':'middle'});text.textContent=label;card.append(text)});
   let rowY=bodyY+layout.rowHeight;for(const [index,{row,cells,height}]of block.entries()){const group=svgEl('g',{'data-export-winner-row':'true'});card.append(group);if(index%2)group.append(svgEl('rect',{x:x+.5,y:rowY,width:layout.blockWidth-1,height,fill:'#f8fbf9'}));group.append(svgEl('line',{x1:x,y1:rowY,x2:x+layout.blockWidth,y2:rowY,stroke:'#e7eee9','stroke-width':.7}));
