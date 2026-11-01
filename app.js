@@ -715,8 +715,7 @@ function townNameLabelLayout(items,t,font,area,reserve,attempt=0){
  const reserved=reserve?[reserve.x,reserve.y,reserve.x+reserve.width,reserve.y+reserve.height]:null;
  const valid=(rect)=>rect[0]>=area.left+2&&rect[2]<=area.right-2&&
   rect[1]>=area.top+2&&rect[3]<=area.bottom-2&&
-  !(reserved&&leaderOverlap(rect,reserved))&&!used.some(other=>leaderOverlap(rect,other))&&
-  mapLeaderRectIsClear(rect,leaders);
+  !(reserved&&leaderOverlap(rect,reserved))&&!used.some(other=>leaderOverlap(rect,other));
  // Keep one fixed font across interior names and external callouts.
  // A narrow region moves outside instead of silently shrinking its type.
  for(const f of sorted){
@@ -825,7 +824,7 @@ function townNameLabelLayout(items,t,font,area,reserve,attempt=0){
  }
  if(attempt===0&&labels.length<sorted.length){
   let best=labels;
-  for(const retry of [1]){
+  for(const retry of [1,2]){
    const alternate=townNameLabelLayout(items,t,font,area,reserve,retry);
    if(alternate.length>best.length)best=alternate;
    if(best.length===sorted.length)break;
