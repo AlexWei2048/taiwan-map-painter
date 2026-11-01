@@ -879,7 +879,7 @@ function townNameLabelLayout(items,t,font,area,reserve,attempt=0){
    if(!chosen){remaining.push(q);continue}
    used.push(chosen.rect);leaderText.push(chosen.rect);leaders.push(chosen.leaderPoints);
    labels.push({f:q.f,x,y:chosen.y,rect:chosen.rect,text:q.text,font,
-    numeric:false,leaderAnchor:q.anchor,leaderPath:chosen.leaderPath,
+    numeric:false,calloutLane:'perimeter',leaderAnchor:q.anchor,leaderPath:chosen.leaderPath,
     leaderPoints:chosen.leaderPoints,column:side});
   }
  }
@@ -1028,7 +1028,7 @@ function drawLabels(group,items,t,font=15,interactive=false){
     'pointer-events':'none','data-label-anchor':q.f.id}));
   }
   const label=svgEl('text',{x:q.x,y:q.y,'font-size':q.font,'data-label':q.f.id,
-   'data-placement':q.leaderAnchor?'outside':q.districtNumber?'district-number':q.island?(q.insetBottom?'inset-bottom':'below-island'):'inside','text-anchor':'middle','dominant-baseline':'middle',
+   'data-placement':q.leaderAnchor?'outside':q.districtNumber?'district-number':q.island?(q.insetBottom?'inset-bottom':'below-island'):'inside','data-callout-lane':q.calloutLane||'','text-anchor':'middle','dominant-baseline':'middle',
    'font-weight':q.numeric||q.districtNumber?700:500,fill:'#2c493b',stroke:'#ffffffed',
    'stroke-width':q.numeric?3:2.4,'paint-order':'stroke','stroke-linejoin':'round'});
   label.style.strokeWidth=(q.numeric?2.6:2.4)*zoomRatio;
