@@ -107,7 +107,7 @@ test('Published-site update time uses the last successful Pages deployment, minu
 test('Independent-candidate emblem is bundled for sidebar, legend and standalone SVG',async t=>{
  const page=await pageFor(t);
  const shared=await page.evaluate(()=>({gray:PARTY_LOGOS.gray,primary:logoFor({id:'gray',name:'无党籍'}),traditional:logoFor({id:'custom',name:'無黨籍'})}));
- assert.match(shared.gray,/^data:image\\/png;base64,/);
+ assert.ok(shared.gray.startsWith('data:image/png;base64,'));
  assert.equal(shared.primary,shared.gray);
  assert.equal(shared.traditional,shared.gray);
  await page.locator('#workspaceFree').click();
@@ -120,7 +120,7 @@ test('Independent-candidate emblem is bundled for sidebar, legend and standalone
  assert.equal(await emblem.count(),1);
  const svg=await exportSvg(page);
  assert.match(svg,/data-party-logo="gray"/);
- assert.match(svg,/data:image\\/png;base64,/);
+ assert.ok(svg.includes('data:image/png;base64,'));
 });
 test('Recording votes retains chosen winners and exports a complete vote table',async t=>{
  const page=await pageFor(t);await selectMayor(page);await enterRates(page);
