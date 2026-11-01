@@ -369,9 +369,7 @@ function mapOutsideLabelColumns(pending,t,used,area,reserve,items){
 }
 
 function countyMayorOverview(){
- // County-level nationwide labels must stay stable across restored projects,
- // prediction presentation switches and free/2022 map modes.
- return state.level==='counties'&&!state.county;
+ return state.level==='counties'&&!state.county&&state.fillMode==='prediction'&&state.predictionOffice==='mayor';
 }
 const COUNTY_CITY_CALLOUTS=new Set(['台北市','基隆市','新竹市','嘉义市']);
 // All 25 perimeter probes must be inside the county: a central point alone
