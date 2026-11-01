@@ -73,9 +73,36 @@ test('Nationwide mayor map uses 22 full names, safe city leaders and framed offs
  }
  assert.deepEqual(result.mainlandOutside,[],'All remaining county names remain within their own polygon');
  assert.equal(await page.locator('#mapNumberKey').isVisible(),false);
+ for(const name of ['台北市','基隆市','新竹市','嘉义市']){
+  const id=await page.locator('#labels [data-label]').filter({hasText:name}).getAttribute('data-label');
+  const line=page.locator('#labels [data-label-leader="'+id+'"]');
+  assert.equal(await line.getAttribute('data-prominent-leader'),'true');
+  assert.ok(await line.evaluate(el=>parseFloat(getComputedStyle(el).strokeWidth)>=2),'City callout must be visibly thicker');
+  assert.equal(await page.locator('#labels [data-label-leader-halo="'+id+'"]').count(),1);
+  assert.ok(await page.locator('#labels [data-label="'+id+'"]').evaluate(el=>Number.parseInt(getComputedStyle(el).fontWeight,10)>=600),'Full city name must be bold');
+ }
  const svg=await exportSvg(page);
  for(const name of result.names)assert.ok(svg.includes(name),'Export includes '+name);
  assert.equal((svg.match(/data-placement="inset-bottom"/g)||[]).length,3);
+});
+test('Published-site update time uses the last successful Pages deployment, minute-precision Taipei time',async t=>{
+ const context=await browser.newContext();t.after(()=>context.close());
+ const page=await context.newPage();
+ await page.route('https://api.github.com/repos/AlexWei2048/taiwan-map-painter/actions/runs?**',route=>route.fulfill({
+  status:200,contentType:'application/json',body:JSON.stringify({workflow_runs:[
+   {name:'Website regression checks',conclusion:'success',head_branch:'main',updated_at:'2026-11-01T09:59:10Z'},
+   {name:'pages build and deployment',conclusion:'success',head_branch:'main',updated_at:'2026-11-01T09:17:33Z'}
+  ]})
+ }));
+ await page.route('**/index.html?_site_updated=*',route=>route.fulfill({status:200,headers:{
+  'Last-Modified':'Sat, 31 Oct 2026 09:00:00 GMT'
+ }}));
+ await page.goto(base);
+ await page.waitForFunction(()=>document.querySelector('#siteUpdatedAt')?.dataset.source==='github-pages');
+ const stamp=page.locator('#siteUpdatedAt');
+ assert.equal(await stamp.textContent(),'更新时间：2026年11月1日 17:17（台北时间）');
+ assert.equal(await stamp.getAttribute('datetime'),'2026-11-01T09:17:33.000Z');
+ assert.match(await stamp.getAttribute('title'),/成功部署/);
 });
 test('Recording votes retains chosen winners and exports a complete vote table',async t=>{
  const page=await pageFor(t);await selectMayor(page);await enterRates(page);
