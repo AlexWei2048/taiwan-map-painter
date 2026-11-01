@@ -677,7 +677,7 @@ test('Administrative lookup is embedded in the map and exported inside the SVG m
  assert.match(index,/id="mapWithKey"/);
  assert.match(index,/id="mapNumberKey"/);
  assert.match(index,/id="mapNumberKeyRows"/);
- assert.match(index,/app\.js\?v=20261101-district-labels-v54/);
+ assert.match(index,/app\.js\?v=20261101-export-complete-labels-v55/);
  assert.match(index,/style\.css\?v=20261101-map-internal-directory-v35/);
  const canvasStart=index.indexOf('<div class="canvas" id="canvas">');
  const key=index.indexOf('<aside class="map-number-key"',canvasStart);
