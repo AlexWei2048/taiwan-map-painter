@@ -82,6 +82,66 @@ test('Candidate prediction and township dialogs drag freely and resize from all 
  assert.equal(await page.evaluate(()=>state.predictionOffice),'mayor');
  assert.equal(await page.locator('#county').inputValue(),'台北市');
 });
+test('Floating candidate dialogs have full-width readable layout and top-right close controls',async t=>{
+ const page=await pageFor(t,{width:1024,height:820});
+ await page.locator('#county').selectOption({label:'台北市'});
+ await page.locator('#editPrediction').click();
+ const modal=page.locator('#predictionDialog');
+ const layout=await page.evaluate(id=>{
+  const el=document.getElementById(id),r=el.getBoundingClientRect();
+  const scroll=el.querySelector('.floating-dialog-scroll');
+  const bar=el.querySelector('.floating-dialog-drag');
+  const close=bar.querySelector('.dialog-close');
+  const table=scroll.querySelector('.prediction-table-wrap');
+  const heading=scroll.querySelector('.prediction-dialog-heading');
+  const actions=scroll.querySelector('.dialog-actions');
+  const buttons=[...actions.querySelectorAll('button')];
+  const rect=node=>{const a=node.getBoundingClientRect();return{x:a.x,y:a.y,w:a.width,h:a.height,right:a.right,bottom:a.bottom}};
+  return{r:rect(el),scroll:rect(scroll),bar:rect(bar),close:rect(close),
+   table:rect(table),heading:rect(heading),actions:rect(actions),
+   computed:{scroll:getComputedStyle(scroll).display,margin:getComputedStyle(scroll).marginTop,
+    table:getComputedStyle(table).display,actions:getComputedStyle(actions).display},
+   buttons:buttons.map(rect),closeInHeader:close.parentElement===bar};
+ },'predictionDialog');
+ assert.equal(layout.computed.scroll,'block');
+ assert.equal(layout.computed.margin,'0px');
+ assert.equal(layout.computed.table,'block');
+ assert.equal(layout.computed.actions,'flex');
+ assert.ok(layout.heading.w>650,'Heading is full-width instead of a thin vertical strip');
+ assert.ok(layout.table.w>650,'Candidate table spans usable dialog width');
+ assert.ok(layout.actions.w>650,'Action buttons span dialog width');
+ assert.ok(layout.buttons.every(b=>b.w>=95&&b.h<=65),'Action buttons remain readable');
+ assert.equal(layout.closeInHeader,true);
+ assert.ok(layout.close.right<=layout.r.right&&layout.close.right>=layout.r.right-95,
+  'Close button must be in upper-right corner');
+ assert.ok(layout.close.y-layout.r.y<12,'Close button must be at top');
+ await page.locator('#predictionDialog .floating-dialog-drag > .dialog-close').click();
+ assert.equal(await modal.isVisible(),false);
+ await page.locator('#predictionScale').selectOption('overlay');
+ const region=await page.locator('#regions path[data-region]').first().getAttribute('data-region');
+ await page.locator('#regions path[data-region="'+region+'"]').dispatchEvent('click');
+ const local=page.locator('#localDialog');
+ const localLayout=await page.evaluate(()=>{
+  const el=document.getElementById('localDialog'),bar=el.querySelector('.floating-dialog-drag');
+  const scroll=el.querySelector('.floating-dialog-scroll');
+  const close=bar.querySelector('.dialog-close');
+  const table=scroll.querySelector('.prediction-table-wrap');
+  const actions=scroll.querySelector('.dialog-actions');
+  const r=el.getBoundingClientRect(),t=table.getBoundingClientRect(),a=actions.getBoundingClientRect(),b=close.getBoundingClientRect();
+  return{scroll:getComputedStyle(scroll).display,tableWidth:t.width,actionWidth:a.width,
+   buttonWidths:[...actions.querySelectorAll('button')].map(x=>x.getBoundingClientRect().width),
+   closeRight:r.right-b.right,closeTop:b.top-r.top,headingWidth:scroll.querySelector('#localDialogTitle').getBoundingClientRect().width};
+ });
+ assert.equal(localLayout.scroll,'block');
+ assert.ok(localLayout.tableWidth>600);
+ assert.ok(localLayout.actionWidth>600);
+ assert.ok(localLayout.buttonWidths.every(x=>x>90));
+ assert.ok(localLayout.closeRight>=0&&localLayout.closeRight<=95);
+ assert.ok(localLayout.closeTop<12);
+ assert.ok(localLayout.headingWidth>600);
+ await local.locator('.floating-dialog-drag > .dialog-close').click();
+ assert.equal(await local.isVisible(),false);
+});
 test('Nationwide mayor map uses 22 full names, safe city leaders and framed offshore labels',async t=>{
  const page=await pageFor(t);assert.equal(await page.locator('#mapBuildVersion').count(),0,'No build/version marker should appear in the map');await page.waitForFunction(()=>document.querySelectorAll('#labels [data-label]').length===22);
  const result=await page.evaluate(()=>{

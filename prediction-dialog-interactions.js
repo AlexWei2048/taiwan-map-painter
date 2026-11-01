@@ -17,6 +17,10 @@
   bar.setAttribute('role','button');
   bar.setAttribute('aria-label','拖动移动预测窗口，方向键也可移动');
   bar.innerHTML='<span class="floating-dialog-grip" aria-hidden="true">⠿</span><span>按住此处移动窗口</span>';
+  // The close button belongs in the fixed header, never in the scrolling form.
+  // Moving the existing DOM node retains its application close handler.
+  const close=scroll.querySelector(':scope > .dialog-close');
+  if(close)bar.append(close);
   dialog.append(bar,scroll);
   const handles={};
   for(const corner of ['nw','ne','sw','se']){
@@ -76,6 +80,8 @@
   function pointerStart(event,mode,corner){
    if(pending||(event.pointerType==='mouse'&&event.button!==0))return;
    if(!dialog.open)return;
+   // Clicking the close control must not start a drag or cancel its click.
+   if(event.target.closest('button, a, input, select, textarea'))return;
    event.preventDefault();
    const target=event.currentTarget,pointerId=event.pointerId;
    const origin={...frame},x=event.clientX,y=event.clientY;
@@ -105,13 +111,14 @@
    });
   }
   bar.addEventListener('keydown',e=>{
+   if(e.target!==bar)return;
    const keys={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]};
    if(!keys[e.key])return;
    e.preventDefault();
    const step=e.shiftKey?30:10,[dx,dy]=keys[e.key];
    paint({...frame,x:frame.x+dx*step,y:frame.y+dy*step});
   });
-  bar.addEventListener('dblclick',()=>paint(initial()));
+  bar.addEventListener('dblclick',e=>{if(!e.target.closest('button'))paint(initial())});
   window.addEventListener('resize',()=>paint(frame||initial()));
   dialog.addEventListener('close',stop);
  }

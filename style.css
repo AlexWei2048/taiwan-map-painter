@@ -253,3 +253,135 @@ dialog.local-dialog.floating-prediction-dialog .dialog-actions{bottom:-24px}
  .floating-dialog-scroll{height:calc(100% - 40px)}
  .floating-dialog-scroll>.dialog-actions{bottom:-18px}
 }
+
+
+/* Floating candidate prediction dialogs: restore a full-width, vertical form.
+ * The global "dialog>div" flex row caused the v68 dialog contents to collapse
+ * into extremely narrow columns; both direct children need explicit overrides. */
+dialog.floating-prediction-dialog > .floating-dialog-drag,
+dialog.floating-prediction-dialog > .floating-dialog-scroll{
+ margin:0;min-width:0;max-width:100%;box-sizing:border-box;
+}
+dialog.floating-prediction-dialog > .floating-dialog-drag{
+ display:flex;flex-flow:row nowrap;align-items:center;justify-content:flex-start;
+ gap:9px;width:100%;height:48px;min-height:48px;
+ padding:0 37px 0 20px;flex:none;
+}
+dialog.floating-prediction-dialog > .floating-dialog-scroll{
+ display:block;width:100%;height:calc(100% - 48px);min-height:0;
+ padding:19px 24px 22px;overflow:auto;overflow-x:hidden;
+}
+.floating-dialog-drag > .dialog-close{
+ position:relative;float:none;top:auto;right:auto;left:auto;bottom:auto;
+ margin:0 0 0 auto;flex:0 0 34px;width:34px;height:34px;
+ display:grid;place-items:center;border-radius:9px;
+ border:1px solid #caddce;background:#fff;color:#335e4c;
+ font-size:24px;line-height:1;cursor:pointer;
+}
+.floating-dialog-drag > .dialog-close:hover{background:#e3eee6;color:#15563e}
+.floating-dialog-drag > .dialog-close:focus-visible{outline:2px solid #23866a;outline-offset:2px}
+.floating-prediction-dialog .floating-dialog-scroll > *{
+ box-sizing:border-box;max-width:100%;
+}
+.floating-prediction-dialog .floating-dialog-scroll > .prediction-dialog-heading{
+ display:block;width:100%;margin:0 0 14px;padding:0 0 13px;
+ border-bottom:1px solid #e1ebe2;
+}
+.floating-prediction-dialog .floating-dialog-scroll > .prediction-dialog-heading h2,
+.floating-prediction-dialog .floating-dialog-scroll > #localDialogTitle{
+ margin:7px 0 6px;font-size:21px;font-weight:680;line-height:1.35;
+ letter-spacing:.1px;color:#234d3b;
+}
+.floating-prediction-dialog .floating-dialog-scroll > .prediction-dialog-heading p,
+.floating-prediction-dialog .floating-dialog-scroll > #localDialogScope{
+ margin:5px 0;font-size:12px;line-height:1.6;color:#718478;
+}
+.floating-prediction-dialog .floating-dialog-scroll > .data-help{
+ display:block;width:100%;font-size:12px;line-height:1.7;
+ margin:9px 0 12px;color:#637b6b;
+}
+.floating-prediction-dialog .floating-dialog-scroll > .estimate-toggle,
+.floating-prediction-dialog .floating-dialog-scroll > .local-entry-toggle{
+ display:flex;width:100%;align-items:center;gap:9px;
+ padding:10px 13px;margin:13px 0 11px;
+ border-radius:9px;background:#f0f6f0;
+ font-size:12px;line-height:1.6;white-space:normal;
+}
+.floating-prediction-dialog .floating-dialog-scroll > .prediction-method{
+ display:flex;width:100%;align-items:end;justify-content:flex-start;
+ flex-wrap:wrap;gap:10px;margin:12px 0;
+}
+.floating-prediction-dialog .floating-dialog-scroll > .prediction-table-wrap{
+ display:block;width:100%;max-width:100%;min-width:0;
+ overflow-x:auto;overflow-y:auto;max-height:min(47dvh,460px);
+ border:1px solid #e0e9e1;border-radius:10px;margin:15px 0 14px;
+ background:#fff;
+}
+.floating-prediction-dialog .floating-dialog-scroll > .prediction-table-wrap table{
+ table-layout:auto;border-collapse:collapse;min-width:650px;
+ width:100%;font-size:13px;
+}
+.floating-prediction-dialog .floating-dialog-scroll > .prediction-table-wrap th,
+.floating-prediction-dialog .floating-dialog-scroll > .prediction-table-wrap td{
+ padding:11px 10px;line-height:1.6;vertical-align:middle;
+ overflow-wrap:normal;word-break:normal;white-space:nowrap;
+}
+.floating-prediction-dialog .floating-dialog-scroll > .prediction-table-wrap th{
+ color:#4b6c57;font-weight:650;background:#ebf3eb;
+}
+.floating-prediction-dialog .floating-dialog-scroll > .prediction-table-wrap td{
+ font-size:13px;color:#345744;
+}
+.floating-prediction-dialog .floating-dialog-scroll > .prediction-preview{
+ display:block;width:100%;position:static;bottom:auto;
+ padding:12px 14px;margin:10px 0;background:#f2f8f0;
+ border:1px solid #e0eddd;border-radius:9px;box-shadow:none;
+ font-size:12px;line-height:1.7;
+}
+.floating-prediction-dialog .floating-dialog-scroll > .prediction-note{
+ display:block;margin:15px 0 0;width:100%;font-size:12px;
+}
+.floating-prediction-dialog .floating-dialog-scroll > .prediction-note input{
+ display:block;width:100%;margin-top:7px;
+}
+.floating-prediction-dialog .floating-dialog-scroll > .dialog-actions{
+ display:flex;position:sticky;bottom:-22px;z-index:4;
+ width:100%;margin:18px 0 -22px;padding:14px 0 16px;
+ gap:9px;justify-content:flex-end;align-items:center;flex-wrap:wrap;
+ border-top:1px solid #dfe9e1;background:#fbfcf8;
+ box-shadow:0 -5px 12px #173b2910;
+}
+.floating-prediction-dialog .floating-dialog-scroll > .dialog-actions .button{
+ display:inline-flex;align-items:center;justify-content:center;
+ flex:0 0 auto;min-width:110px;min-height:40px;width:auto;white-space:nowrap;
+ font-size:12px;padding:9px 14px;line-height:1.35;
+}
+.floating-prediction-dialog .floating-dialog-scroll > .dialog-actions .button.primary{
+ background:#147d68;color:#fff;
+}
+.floating-prediction-dialog .floating-dialog-scroll > .dialog-actions #clearLocal{
+ margin-right:auto;
+}
+.floating-prediction-dialog .floating-dialog-scroll > .local-total{
+ display:block;width:100%;margin:12px 0;font-size:12px;
+}
+.floating-prediction-dialog .floating-dialog-scroll > .local-total input{
+ display:block;width:min(100%,300px);margin:7px 0 0;
+}
+@media(max-width:650px){
+ dialog.floating-prediction-dialog > .floating-dialog-drag{
+  height:42px;min-height:42px;padding:0 32px 0 14px;font-size:11px;
+ }
+ dialog.floating-prediction-dialog > .floating-dialog-scroll{
+  height:calc(100% - 42px);padding:13px 14px 17px;
+ }
+ .floating-prediction-dialog .floating-dialog-scroll > .dialog-actions{
+  bottom:-17px;margin-bottom:-17px;padding:11px 0 14px;gap:7px;
+ }
+ .floating-prediction-dialog .floating-dialog-scroll > .dialog-actions .button{
+  flex:1 1 130px;white-space:normal;min-height:38px;padding:8px 10px;
+ }
+ .floating-prediction-dialog .floating-dialog-scroll > .prediction-table-wrap table{
+  min-width:610px;
+ }
+}
