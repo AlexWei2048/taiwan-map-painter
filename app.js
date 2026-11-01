@@ -296,10 +296,10 @@ function drawLabels(group,items,t,font=15,interactive=false){
 }
 function drawIdentityPanelLabels(group,interactive=false,exportAll=false){
  group.replaceChildren();
- const condensed=state.level!=='council'&&!state.county&&!exportAll&&view&&view.w>=sceneSpec().width*.72;
+ const condensed=state.level==='legislative'&&!state.county&&!exportAll&&view&&view.w>=sceneSpec().width*.72;
  for(const panel of identityPanelLayouts()){
   const layer=svgEl('g',{'data-electorate-labels':panel.identity});group.append(layer);
-  const items=condensed?data.counties.map(f=>({...f,number:''})):panel.items;
+  const items=condensed&&panel.identity!=='regional'?data.counties.map(f=>({...f,number:''})):panel.items;
   if(items.length)drawLabels(layer,items,panel.t,condensed?17:sceneSpec().font,interactive&&!condensed)
  }
 }
