@@ -51,7 +51,16 @@ test('Nationwide mayor map uses 22 full names, safe city leaders and framed offs
   }));
   return{count:labels.length,unique:new Set(labels.map(e=>e.dataset.label)).size,
    numbered:labels.some(e=>e.dataset.numberKey),names:labels.map(e=>e.textContent),
-   mainlandOutside:labels.filter(e=>!cityNames.includes(e.textContent)&&!islandFrames[e.textContent]).filter(e=>!insideCounty(e)).map(e=>e.textContent),cities,islands};
+   mainlandOutside:labels.filter(e=>!cityNames.includes(e.textContent)&&!islandFrames[e.textContent]).filter(e=>!insideCounty(e)).map(e=>{
+    const r=box(e),p=document.querySelector('#regions [data-region="'+e.dataset.label+'"]'),root=document.querySelector('#map');
+    const center=new DOMPoint((r.left+r.right)/2,(r.top+r.bottom)/2);
+    const local=center.matrixTransform(root.getScreenCTM().inverse());
+    const pf=center.matrixTransform(p.getScreenCTM().inverse());
+    const f=data.counties.find(x=>x.id===e.dataset.label);
+    const t=geometryLayout(currentItems(),true);
+    return{name:e.textContent,w:r.width,h:r.height,centerOnPolygon:p.isPointInFill(pf),
+     centerCanvas:regionContains(f,local.x,local.y,t),box:[r.left,r.top,r.right,r.bottom].map(n=>Math.round(n))};
+   }),cities,islands};
  });
  assert.equal(result.count,22);assert.equal(result.unique,22);assert.equal(result.numbered,false);
  for(const name of ['台北市','基隆市','新竹市','嘉义市']){
