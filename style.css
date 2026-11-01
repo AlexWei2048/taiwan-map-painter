@@ -417,3 +417,6 @@ dialog.floating-prediction-dialog > .floating-dialog-scroll{
 
 /* Council township victory means a locally selected leader, not a council seat. */
 .local-dialog.council-local:not(.numeric-entry) .local-leader-cell{display:table-cell!important}
+
+/* Specified candidate vote entry shows no other candidate rows. */
+.prediction-dialog .prediction-table tbody tr[hidden],.local-dialog .local-table tbody tr[hidden]{display:none!important}
