@@ -645,7 +645,7 @@ test('Administrative lookup is embedded in the map and exported inside the SVG m
  assert.match(app,/function mapNumberDisplayName\(/);
  const table=app.slice(app.indexOf('function renderMapNumberTable(){'),app.indexOf('\nfunction mapLabelCandidatePoints('));
  assert.doesNotMatch(table,/number-key-group|th\.colSpan/);
- assert.match(table,/state\.labels&&!\\['council','legislative'\\]\.includes\(state\.level\)/);
+ assert.ok(table.includes("state.labels&&!['council','legislative'].includes(state.level)"));
  assert.match(app,/appendNumberTableExport\(map,keyRows,22,72,inlineColumns\)/);
  assert.match(app,/actualWidth=coreWidth/);
  assert.match(app,/appendExportPredictionTable\(root,winnerRows,tableY\)/);
