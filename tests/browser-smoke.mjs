@@ -104,6 +104,26 @@ test('Published-site update time uses the last successful Pages deployment, minu
  assert.equal(await stamp.getAttribute('datetime'),'2026-11-01T09:17:33.000Z');
  assert.match(await stamp.getAttribute('title'),/成功部署/);
 });
+test('Independent-candidate emblem is bundled for sidebar, legend and standalone SVG',async t=>{
+ const page=await pageFor(t);
+ const shared=await page.evaluate(()=>({gray:PARTY_LOGOS.gray,primary:logoFor({id:'gray',name:'无党籍'}),traditional:logoFor({id:'custom',name:'無黨籍'})}));
+ assert.ok(shared.gray.startsWith('data:image/png;base64,'));
+ assert.equal(shared.primary,shared.gray);
+ assert.equal(shared.traditional,shared.gray);
+ await page.locator('#workspaceFree').click();
+ const logo=page.locator('.palette-manage-row[data-party="gray"] img.party-logo');
+ assert.equal(await logo.count(),1);
+ assert.ok((await logo.getAttribute('src')).startsWith('data:image/png;base64,'));
+ await page.locator('.palette-manage-row[data-party="gray"] button.party-brush').click();
+ // The small SVG coastline is not reliably pointer-hittable at default zoom;
+ // dispatch the existing click handler instead of changing map geometry.
+ await page.locator('#regions path[data-region]').first().dispatchEvent('click');
+ const emblem=page.locator('#legend [data-party-logo="gray"]');
+ assert.equal(await emblem.count(),1);
+ const svg=await exportSvg(page);
+ assert.match(svg,/data-party-logo="gray"/);
+ assert.ok(svg.includes('data:image/png;base64,'));
+});
 test('Recording votes retains chosen winners and exports a complete vote table',async t=>{
  const page=await pageFor(t);await selectMayor(page);await enterRates(page);
  const svg=await exportSvg(page);assert.match(svg,/预测得票候选人/);assert.match(svg,/预测得票率/);assert.match(svg,/data-export-party-logo/);
