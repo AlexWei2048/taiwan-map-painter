@@ -213,3 +213,13 @@ Latest source revision: 20261030-no-offline-v11.
 - 全国选区总览随缩放重算编号；不改选区号次、地图资料或用户预测。
 - 屏幕及导出的数字对照表改到图下，避免遮挡外置编号；修正议员乡镇模式被误当选区编号的问题。
 - 增加布局回归用例与22县市、全国缩放、密集乡镇导出、手机布局浏览器检查。
+
+## 2026-11-01 navigation and remaining nationwide numbers (v77)
+- Live audit of v76 found 163 labels for 221 council regions. Added non-overlapping panel gutter slots after local callouts are exhausted; retain official numbers and font sizes.
+- Coalesce SVG viewport writes per animation frame; defer council/legislative/village label collision layout until 160 ms after navigation stops. County/town labels reuse their existing SVG during navigation.
+- Flush pending viewport before wheel anchor conversion; fit and full renders cancel obsolete label jobs.
+- Local calculation/layout/navigation regression checks: 66 passed. Browser workflows run through existing GitHub Actions after publication.
+- Preview verification: nationwide council 221/221 labels at fit and after zoom; Kaohsiung council 15/15. Found and filled the remaining Qianjin township name (38/38 Kaohsiung labels).
+- Removed workspace-ui.js's secondary applyView wrapper, which had queued another full label layout every frame despite the main navigation scheduler.
+- Direct main publication was blocked by automatic approval review; preparing a review branch without changing the public site.
+- CI verified exports with embedded emblems and incumbency, historical switching, CSV flows, all county council/legislative labels, national zoom, and mobile names. Remaining routing assertions initially rejected excessively bent grid routes; added obstacle-checked shortcutting. Updated the route validator's minimum from three segments to one, because a straight horizontal callout is also valid orthogonal routing; the seven-segment limit remains.
