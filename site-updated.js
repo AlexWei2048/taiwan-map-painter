@@ -14,7 +14,7 @@
   if(!Number.isFinite(date.getTime())||rank<priority)return;
   priority=rank;
   const parts=Object.fromEntries(format.formatToParts(date).map(p=>[p.type,p.value]));
-  target.textContent=`更新时间：${parts.year}年${Number(parts.month)}月${Number(parts.day)}日 ${parts.hour}:${parts.minute}（台北时间）`;
+  target.textContent=`更新时间：${parts.year}年${Number(parts.month)}月${Number(parts.day)}日 ${parts.hour}:${parts.minute}（GMT+8）`;
   target.dateTime=date.toISOString();
   target.title=source;
   target.dataset.source=rank===2?'github-pages':'site-header';

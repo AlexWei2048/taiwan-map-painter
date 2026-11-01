@@ -100,7 +100,7 @@ test('Published-site update time uses the last successful Pages deployment, minu
  await page.goto(base);
  await page.waitForFunction(()=>document.querySelector('#siteUpdatedAt')?.dataset.source==='github-pages');
  const stamp=page.locator('#siteUpdatedAt');
- assert.equal(await stamp.textContent(),'更新时间：2026年11月1日 17:17（台北时间）');
+ assert.equal(await stamp.textContent(),'更新时间：2026年11月1日 17:17（GMT+8）');
  assert.equal(await stamp.getAttribute('datetime'),'2026-11-01T09:17:33.000Z');
  assert.match(await stamp.getAttribute('title'),/成功部署/);
 });
