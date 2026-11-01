@@ -1267,19 +1267,27 @@ function exportPredictionWinnerRows(){
  if(mayorTownBoundaryOverlay())return[]; // Nationwide overview is navigation, not county winners.
  if(!state.exportSettings.winnerTable||state.fillMode!=='prediction'||typeof predictionDistricts!=='function'||typeof directoryCandidates!=='function')return[];
  const rows=[],numeric=predictionUsesVoteDisplay()&&!(typeof localPredictionActive==='function'&&localPredictionActive()&&state.predictionOffice==='mayor'&&state.predictionDisplay==='composition');
+ const candidateMode=state.predictionDisplay==='candidateVote',selectedCandidateId=candidateMode?state.localDisplayCandidate:'';
  function add(d,record,district,local=false){
   const candidates=directoryCandidates(d),ids=new Set(local?[record.leaderId].filter(Boolean):record.winners||[]);
   const complete=local?!!record.leaderId:predictionSummary(d).status==='complete';
   if(!numeric&&!complete)return;
-  let leading=null;try{leading=PredictionCore.voteResult(candidates,record)}catch(e){}
+  let leading=null;if(!candidateMode)try{leading=PredictionCore.voteResult(candidates,record)}catch(e){}
   for(const c of candidates){
    const estimate=record.estimates?.[c.id],selected=ids.has(c.id);
-   if(numeric?!estimate&&!selected:!selected)continue;
+   const hasVotes=estimate?.votes!==null&&estimate?.votes!==undefined&&String(estimate.votes).trim()!=='';
+   const hasShare=estimate?.share!==null&&estimate?.share!==undefined&&String(estimate.share).trim()!=='';
+   // Specified-candidate exports use the same chosen ID as the map, not every entered estimate.
+   if(candidateMode){
+    if(c.id!==selectedCandidateId||(!hasVotes&&!hasShare))continue;
+   }else if(numeric?!estimate&&!selected:!selected)continue;
    const party=predictionParty(c.party);let result=null;
-   try{result=PredictionCore.candidateVoteResult(candidates,record,c.id)}catch(e){}
+   if(!candidateMode)try{result=PredictionCore.candidateVoteResult(candidates,record,c.id)}catch(e){}
    const status=selected?(local?'手选胜出':'手选当选'):leading?.candidate.id===c.id?(leading.partial?'暂时领先':d.type==='council'?'第一高票':'预测领先'):'已录入';
    rows.push({district,number:c.number||'待补',name:candidateDisplayName(c),gender:c.gender||'待补',party:c.party,color:party.color,logo:logoFor(party),incumbent:c.incumbent===true?'现任':'',
-    ...(numeric?{estimated:true,votes:result?.votes==null?'—':result.votes.toLocaleString('zh-CN'),share:result?.share==null?'—':Number(result.share.toFixed(2))+'%'+(result.partial?'*':''),status}:{}),local});
+    ...(numeric?{estimated:true,specified:candidateMode,hasVotes,hasShare,
+     votes:candidateMode?(hasVotes?Number(estimate.votes).toLocaleString('zh-CN'):'—'):result?.votes==null?'—':result.votes.toLocaleString('zh-CN'),
+     share:candidateMode?(hasShare?Number(Number(estimate.share).toFixed(2))+'%':'—'):result?.share==null?'—':Number(result.share.toFixed(2))+'%'+(result.partial?'*':''),status}:{}),local});
   }
  }
  if(typeof localPredictionActive==='function'&&localPredictionActive()){
@@ -1327,18 +1335,21 @@ function exportPredictionTableLayout(rows){
  // larger names, aligned party logos and a compact incumbent-status chip.
  if(rows.length&&rows.length<=28&&!rows.some(row=>row.estimated))return polishedPredictionTableLayout(rows);
  const columns=rows.length<=28?1:rows.length<=90?2:rows.length<=260?3:4,font=columns===1?12.5:11.5,lineHeight=font*1.45,rowHeight=34,gap=20;
- const width=Math.max(1120,columns*(rows.some(row=>row.estimated)?940:570)+gap*(columns-1)+40),blockWidth=(width-40-gap*(columns-1))/columns,chunk=Math.ceil(rows.length/columns),headers=['选区','号次','姓名','性别','政党','是否现任'],estimated=rows.some(row=>row.estimated);
- if(estimated)headers.push('预测得票数','预测得票率','标记');
+ const specified=rows.length>0&&rows.every(row=>row.specified),estimated=rows.some(row=>row.estimated);
+ const width=Math.max(1120,columns*(estimated?940:570)+gap*(columns-1)+40),blockWidth=(width-40-gap*(columns-1))/columns,chunk=Math.ceil(rows.length/columns),headers=['选区','号次','姓名','性别','政党','是否现任'];
+ const metricFields=estimated?(specified?['votes','share'].filter(field=>rows.some(row=>field==='votes'?row.hasVotes:row.hasShare)):['votes','share','status']):[];
+ const metricHeaders={votes:'预测得票数',share:'预测得票率',status:'标记'},metricWidths={votes:100,share:85,status:95};
+ headers.push(...metricFields.map(field=>metricHeaders[field]));
  const longest=key=>Math.max(0,...rows.map(row=>exportTextWidth(row?.[key])));
- const fixed=[52,47,65],flexWidth=blockWidth-fixed.reduce((n,v)=>n+v,0)-(estimated?280:0),desired=[Math.max(120,Math.min(215,longest('district')*font+24)),Math.max(110,Math.min(185,longest('name')*font+24)),Math.max(170,Math.min(260,longest('party')*font+52))],sum=desired.reduce((n,v)=>n+v,0);
- const widths=[flexWidth*desired[0]/sum,fixed[0],flexWidth*desired[1]/sum,fixed[1],flexWidth*desired[2]/sum,fixed[2]];if(estimated)widths.push(100,85,95);
+ const fixed=[52,47,65],flexWidth=blockWidth-fixed.reduce((n,v)=>n+v,0)-metricFields.reduce((n,field)=>n+metricWidths[field],0),desired=[Math.max(120,Math.min(215,longest('district')*font+24)),Math.max(110,Math.min(185,longest('name')*font+24)),Math.max(170,Math.min(260,longest('party')*font+52))],sum=desired.reduce((n,v)=>n+v,0);
+ const widths=[flexWidth*desired[0]/sum,fixed[0],flexWidth*desired[1]/sum,fixed[1],flexWidth*desired[2]/sum,fixed[2]];widths.push(...metricFields.map(field=>metricWidths[field]));
  const blocks=Array.from({length:columns},(_,column)=>rows.slice(column*chunk,(column+1)*chunk).map(row=>{
-  const values=[row?.district,row?.number,row?.name,row?.gender,row?.party,row?.incumbent];if(estimated)values.push(row?.votes||'—',row?.share||'—',row?.status||'手选当选');
+  const values=[row?.district,row?.number,row?.name,row?.gender,row?.party,row?.incumbent];for(const field of metricFields)values.push(row?.[field]|| (field==='status'?'手选当选':'—'));
   const cells=values.map((value,i)=>wrapExportText(value,Math.max(1,(widths[i]-(i===4?55:16))/font)));
   const height=Math.max(rowHeight,Math.max(...cells.map(lines=>lines.length))*lineHeight+18);
   return{row,cells,height};
  })),bodyHeight=Math.max(rowHeight,...blocks.map(block=>rowHeight+block.reduce((n,r)=>n+r.height,0))),height=bodyHeight+79;
- return{columns,rowHeight,font,lineHeight,gap,width,blockWidth,widths,chunk,headers,blocks,height};
+ return{columns,rowHeight,font,lineHeight,gap,width,blockWidth,widths,chunk,headers,blocks,height,specified};
 }
 function appendExportPolishedWinnerTable(root,rows,y,layout){
  const card=svgEl('g',{'data-export-winner-table':'true','data-export-table-style':'two-up'});
@@ -1422,7 +1433,7 @@ function appendExportPolishedWinnerTable(root,rows,y,layout){
 function appendExportPredictionTable(root,rows,y){
  if(!rows.length)return 0;const layout=exportPredictionTableLayout(rows);
  if(layout.polished)return appendExportPolishedWinnerTable(root,rows,y,layout);
- const card=svgEl('g',{'data-export-winner-table':'true'});root.append(card);card.append(svgEl('rect',{x:40,y,width:layout.width,height:layout.height,rx:14,fill:'#fff',stroke:'#dce5df','stroke-width':1.2}));const heading=svgEl('text',{x:60,y:y+31,'font-size':19,'font-weight':600,fill:'#294a3a'});heading.textContent=rows.some(row=>row.estimated)?'预测得票候选人':rows.some(row=>row.local)?'乡镇预测胜出候选人':'预测当选候选人';card.append(heading);card.append(svgEl('line',{x1:60,y1:y+46,x2:layout.width+20,y2:y+46,stroke:'#e5ece6'}));
+ const card=svgEl('g',{'data-export-winner-table':'true'});root.append(card);card.append(svgEl('rect',{x:40,y,width:layout.width,height:layout.height,rx:14,fill:'#fff',stroke:'#dce5df','stroke-width':1.2}));const heading=svgEl('text',{x:60,y:y+31,'font-size':19,'font-weight':600,fill:'#294a3a'});heading.textContent=layout.specified?'指定候选人得票预测':rows.some(row=>row.estimated)?'预测得票候选人':rows.some(row=>row.local)?'乡镇预测胜出候选人':'预测当选候选人';card.append(heading);card.append(svgEl('line',{x1:60,y1:y+46,x2:layout.width+20,y2:y+46,stroke:'#e5ece6'}));
  const bodyY=y+59,{widths}=layout;for(let column=0;column<layout.columns;column++){const block=layout.blocks[column];if(!block.length)continue;const x=60+column*(layout.blockWidth+layout.gap),xs=[x],blockHeight=layout.rowHeight+block.reduce((n,r)=>n+r.height,0);for(const w of widths)xs.push(xs.at(-1)+w);card.append(svgEl('rect',{x,y:bodyY,width:layout.blockWidth,height:blockHeight,rx:7,fill:'#fff',stroke:'#dfe8e1','stroke-width':1}));card.append(svgEl('path',{d:`M${x},${bodyY+7}Q${x},${bodyY} ${x+7},${bodyY}H${x+layout.blockWidth-7}Q${x+layout.blockWidth},${bodyY} ${x+layout.blockWidth},${bodyY+7}V${bodyY+layout.rowHeight}H${x}Z`,fill:'#edf5f0'}));
   layout.headers.forEach((label,i)=>{const text=svgEl('text',{x:xs[i]+widths[i]/2,y:bodyY+layout.rowHeight/2+layout.font*.35,'font-size':layout.font,'font-weight':600,fill:'#466253','text-anchor':'middle'});text.textContent=label;card.append(text)});
   let rowY=bodyY+layout.rowHeight;for(const [index,{row,cells,height}]of block.entries()){const group=svgEl('g',{'data-export-winner-row':'true'});card.append(group);if(index%2)group.append(svgEl('rect',{x:x+.5,y:rowY,width:layout.blockWidth-1,height,fill:'#f8fbf9'}));group.append(svgEl('line',{x1:x,y1:rowY,x2:x+layout.blockWidth,y2:rowY,stroke:'#e7eee9','stroke-width':.7}));
