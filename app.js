@@ -146,12 +146,6 @@ function shortLeader(q,t,occupied,reserve){
 }
 
 let mapNumberRows=[],exportNumberRows=null;
-function mapNumberValue(f,ordinal){
- if(state.level!=='council')return String(ordinal);
- const raw=String(f.number||'')+' '+String(f.name||'');
- const hit=raw.match(/(?:^|\D)(\d+)(?=\D|$)/);
- return hit?String(+hit[1]):String(ordinal);
-}
 function mapNumberGroup(f){
  const identity=['council','legislative'].includes(state.level)?featureElectorate(f):'regional';
  const type=identity&&identity!=='regional'?' · '+({plains:'平地原住民',mountain:'山地原住民'}[identity]||identity):'';
@@ -172,7 +166,7 @@ function renderMapNumberTable(){
  let section='';
  for(const row of rows){
   if(section!==row.group){
-   section=row.group;const tr=document.createElement('tr'),th=document.createElement('th');th.colSpan=2;th.className='number-key-group';th.textContent=section;tr.append(th);body.append(tr);
+   section=row.group;const tr=document.createElement('tr'),th=document.createElement('th');th.colSpan=2;th.className='number-key-group';th.textContent=section;tr.append(tr);body.append(tr);
   }
   const tr=document.createElement('tr'),code=document.createElement('th'),name=document.createElement('td');
   code.scope='row';code.className='number-key-number';code.textContent=row.number;
@@ -204,27 +198,62 @@ function mapLabelAnchor(f,t){
  }
  return null;
 }
+function insetDefinitionForFeature(f){
+ const definitions=insetDefinitions();
+ return definitions.find(q=>q.town&&(q.town===f.name||q.town===f.town))||
+  definitions.find(q=>q.county===f.name)||
+  definitions.find(q=>q.county===f.county)||null;
+}
+function isInsetIslandFeature(f){return !!insetDefinitionForFeature(f)}
+function mapInsetLabelFit(f,t,width,height,used,area,reserve){
+ const definition=insetDefinitionForFeature(f);if(!definition)return null;
+ const insetTitle=f.name===definition.county||f.name===definition.town;
+ const xMap=insetTitle?definition.label[0]:(f.box[0]+f.box[2])/2;
+ const frameBottom=definition.box[3]*t.scale+t.ty,featureBottom=f.box[3]*t.scale+t.ty;
+ const x0=xMap*t.scale+t.tx;
+ const y0=insetTitle?frameBottom-height/2-3:
+  Math.min(featureBottom+height/2+3,frameBottom-height/2-3);
+ const minX=area.left+width/2,maxX=area.right-width/2;
+ const clampX=x=>Math.max(minX,Math.min(maxX,x));
+ const fallback={x:clampX(x0),y:y0,rect:[clampX(x0)-width/2,y0-height/2,clampX(x0)+width/2,y0+height/2]};
+ for(const dy of [0,height*.8,height*1.6])
+ for(const dx of [0,-width*.3,width*.3,-width*.6,width*.6]){
+  const x=clampX(x0+dx),y=y0+dy,r=[x-width/2,y-height/2,x+width/2,y+height/2];
+  if(r[0]<area.left||r[2]>area.right||r[1]<area.top||r[3]>sceneSpec().height-8)continue;
+  if(reserve&&leaderOverlap(r,[reserve.x,reserve.y,reserve.x+reserve.width,reserve.y+reserve.height]))continue;
+  if(used.some(other=>leaderOverlap(r,other)))continue;
+  return{x,y,rect:r};
+ }
+ return fallback;
+}
 function labelLayout(items,t,font=15){
  const area=t.area||contentArea(sceneSpec()),reserve=state.legend.show?legendBox(sceneSpec()):null;
  const sizes=f=>(f.box[2]-f.box[0])*(f.box[3]-f.box[1]);
  const sorted=[...items].sort((a,b)=>sizes(b)-sizes(a)),used=[],labels=[],needsNumber=[];
- const ids=[...items].sort((a,b)=>String(a.county).localeCompare(String(b.county),'zh')||
-  String(a.name).localeCompare(String(b.name),'zh')||String(a.id).localeCompare(String(b.id)));
- const ordinal=new Map(ids.map((f,i)=>[f.id,i+1]));
  for(const f of sorted){
   const name=shownLabel(f);if(!name)continue;
   const width=Array.from(name).length*font*1.04+4,height=font*1.5+3;
-  const pos=state.level==='council'?null:mapLabelFit(f,t,width,height,used,area,reserve);
+  if(isInsetIslandFeature(f)){
+   const pos=mapInsetLabelFit(f,t,width,height,used,area,reserve);
+   used.push(pos.rect);labels.push({f,x:pos.x,y:pos.y,font,text:name,numeric:false,island:true});
+   continue;
+  }
+  const pos=mapLabelFit(f,t,width,height,used,area,reserve);
   if(pos){used.push(pos.rect);labels.push({f,x:pos.x,y:pos.y,font,text:name,numeric:false})}
   else needsNumber.push(f);
  }
+ needsNumber.sort((a,b)=>String(a.county).localeCompare(String(b.county),'zh')||
+  String(a.name).localeCompare(String(b.name),'zh')||String(a.id).localeCompare(String(b.id)));
+ const numberRows=exportNumberRows===null?mapNumberRows:exportNumberRows;
+ let nextNumber=numberRows.length+1;
  for(const f of needsNumber){
-  const value=mapNumberValue(f,ordinal.get(f.id)||1);
+  const value=String(nextNumber);
   const width=Math.max(font*.82,Array.from(value).length*font*.7+4),height=font*1.3;
   const pos=mapLabelFit(f,t,width,height,used,area,reserve)||mapLabelAnchor(f,t);
   if(!pos)continue;
   used.push(pos.rect||[pos.x-width/2,pos.y-height/2,pos.x+width/2,pos.y+height/2]);
   labels.push({f,x:pos.x,y:pos.y,font,text:value,numeric:true,number:value});
+  nextNumber++;
  }
  return labels;
 }
@@ -236,7 +265,7 @@ function drawLabels(group,items,t,font=15,interactive=false){
  for(const q of labelLayout(rendered.filter(f=>shownLabel(f)),t,font)){
   const g=svgEl('g',{'class':'map-label'});group.append(g);
   const label=svgEl('text',{x:q.x,y:q.y,'font-size':font,'data-label':q.f.id,
-   'data-placement':'inside','text-anchor':'middle','dominant-baseline':'middle',
+   'data-placement':q.island?'below-island':'inside','text-anchor':'middle','dominant-baseline':'middle',
    'font-weight':q.numeric?700:500,fill:'#2c493b',stroke:'#ffffffed',
    'stroke-width':q.numeric?3:2.4,'paint-order':'stroke','stroke-linejoin':'round'});
   label.style.strokeWidth=q.numeric?2.6:2.4;label.textContent=q.text;
