@@ -2,10 +2,10 @@
 /* 2022 election history. Source: CEC open data, assembled by taiwanvotes.tw. */
 (()=>{
  const el=id=>document.getElementById(id), db={mayor:[],council:[],township:[]},titles={mayor:'县市长',council:'议员',township:'乡镇市区长'};
- let active=false,kind='mayor',county='',metric='party',loaded=false,loading=null,lastResult=[],savedMapScope=null,unmatchedDistricts=new Set(),districtMetadata=[];
+ let active=false,kind='mayor',county='',metric='party',loaded=false,loading=null,lastResult=[],savedMapScope=null,unmatchedDistricts=new Set(),districtMetadata=[],currentResult=null;
  const norm=x=>simplify(String(x||'')).trim();
  const normalizeParty=name=>{let s=norm(name||'无党籍');if(s.includes('无党籍及未经政党推荐')||s==='无党籍及未经政党推薦')s='无党籍';return s};
- const partyColor=p=>partyMatch(p)?.color||'#8a9892';
+ const partyColor=p=>predictionParty(p).color;
  const tone=(color,share,range)=>{
   if(metric!=='share')return color;
   // Preserve the party's exact base color at the high end. Only mix with white for lower shares.
@@ -20,7 +20,7 @@
  const officialWinnerCorrections=new Set(['臺南市|regional|臺南市第01選舉區|沈家鳳','新竹縣|regional|新竹縣第02選舉區|吳菊花','苗栗縣|regional|苗栗縣第05選舉區|蕭詠萱','金門縣|regional|金門縣第01選舉區|唐麗輝']);
  const addRows=rows=>{let added=0;for(const src of rows){
   if(!['mayor','council','township'].includes(src.type))continue;
-  const r={type:src.type,electorate:src.electorate||'regional',level:src.level||'raw',county:norm(src.county),town:norm(src.town),village:norm(src.village),district:norm(src.district),number:String(src.number||''),name:norm(src.name),gender:norm(src.gender),party:normalizeParty(src.party),votes:Number(src.votes),elected:src.elected===true||src.elected==='true'||officialWinnerCorrections.has([src.county,src.electorate||'regional',src.district,src.name].join('|'))};
+  const r={type:src.type,electorate:HistoryCore.identity(src.electorate),level:src.level||'raw',county:norm(src.county),town:norm(src.town),village:norm(src.village),district:norm(src.district),number:String(src.number||''),name:norm(src.name),gender:norm(src.gender),party:normalizeParty(src.party),votes:Number(src.votes),elected:src.elected===true||src.elected==='true'||officialWinnerCorrections.has([src.county,src.electorate||'regional',src.district,src.name].join('|'))};
   if(!r.county||!r.name||!Number.isFinite(r.votes)||r.votes<0)continue;
   const key=electionKey(r);if(dbIds.has(key))continue;dbIds.add(key);db[r.type].push(r);added++;
  }return added};
@@ -84,18 +84,16 @@
   return [...totals.values()]
  }
  const areaKey=r=>kind==='mayor'?(county?r.county+'|'+r.town:r.county):kind==='township'?r.county+'|'+r.town:r.county+'|'+r.electorate+'|'+districtNumber(r.district);
- function districtNumber(s){const match=String(s||'').match(/第\s*0*(\d+)\s*(?:选举区|選舉區)/);return match?String(Number(match[1])):''}
+ function districtNumber(s){return HistoryCore.districtNumber(s)}
  function analyze(){
   unmatchedDistricts=new Set();
   if(kind==='council'&&data&&districtMetadata.length&&typeof DISTRICT_DETAILS!=='undefined'){
    const current=DISTRICT_DETAILS.council||[];
    for(const h of districtMetadata.filter(x=>!county||norm(x.county)===county)){
-    const identity=h.electorate==='plains'?'plainsIndigenous':h.electorate==='mountain'?'mountainIndigenous':'regional';
-    const match=current.find(c=>norm(c.county)===norm(h.county)&&c.electorate===identity&&Number(c.number)===Number(h.number));
-    const historical=[...(h.scopeTowns||[])].map(norm).sort();
-    const present=match?String(match.scope||'').split(/[、,，]/).map(norm).filter(Boolean).sort():[];
-    const same=historical.length===present.length&&historical.every((v,i)=>v===present[i]);
-    if(!same)unmatchedDistricts.add(norm(h.county)+'|'+h.electorate+'|'+h.number);
+    const identity=HistoryCore.identity(h.electorate);
+    const match=current.find(c=>norm(c.county)===norm(h.county)&&HistoryCore.identity(c.electorate)===identity&&Number(c.number)===Number(h.number));
+    const feature=[...(data.council||[]),...(data.councilIndigenous||[])].find(f=>norm(f.county)===norm(h.county)&&HistoryCore.identity(f.electorate)===identity&&Number(f.number)===Number(h.number));
+    if(!HistoryCore.sameScope(h,match,feature,data.towns,norm))unmatchedDistricts.add(HistoryCore.key(h.county,identity,h.number,norm));
    }
   }
   const rows=recordsInView(),groups=new Map(),partySeats=new Map(),regions=new Map();
@@ -122,13 +120,13 @@
  function featureKey(feature){
   if(kind==='mayor')return county?feature.county+'|'+feature.name:feature.county;
   if(kind==='township')return feature.county+'|'+feature.name;
-  const identity=featureElectorate(feature),number=districtNumber(feature.name);if(unmatchedDistricts.has(norm(feature.county)+'|'+identity+'|'+number))return '__2022_unmatched__';
+  const identity=featureElectorate(feature),number=districtNumber(feature.number||feature.name);if(unmatchedDistricts.has(norm(feature.county)+'|'+identity+'|'+number))return '__2022_unmatched__';
   return feature.county+'|'+identity+'|'+number;
  }
  function drawLegend(result){
   const root=el('legend');if(!root)return;root.replaceChildren();
   const entries=[...result.partySeats].sort((a,b)=>b[1]-a[1]);if(!entries.length)return;
-  const spec=sceneSpec(),font=spec.width>1700?16:13,rowH=font*2.05,width=spec.width>1700?370:330;
+  const spec=sceneSpec(),font=spec.width>1700?26:14,rowH=font*2.05,width=spec.width>1700?550:330;
   const gradient=metric==='share',height=(gradient?162:86)+entries.length*rowH,x=spec.width-width-25,y=spec.height-furnitureFooterHeight()+20;
   const svg=(tag,attrs)=>{const node=document.createElementNS(NS,tag);for(const [k,v]of Object.entries(attrs||{}))node.setAttribute(k,v);return node};
   root.append(svg('rect',{x,y,width,height,rx:12,fill:'#fff',stroke:'#dce5df','stroke-width':1}));
@@ -144,20 +142,18 @@
   }
   let rowY=y+(gradient?130:67);
   for(const [party,count]of entries){
-   const p=partyMatch(party)||{name:party,color:partyColor(party)},logo=logoFor(p);
+   const p=predictionParty(party),logo=logoFor(p);
    root.append(svg('rect',{x:x+18,y:rowY+3,width:font,height:font,rx:3,fill:partyColor(party)}));
    if(logo)root.append(svg('image',{href:logo,x:x+38,y:rowY,width:font*1.55,height:font*1.55,preserveAspectRatio:'xMidYMid meet'}));
    const label=svg('text',{x:x+font+48,y:rowY+font+1,'font-size':font,fill:'#426052'});label.textContent=party+'（'+count+(kind==='mayor'&&county?'个地区':'席')+'）';root.append(label);rowY+=rowH;
   }
  }
- function paint(result){
+ function paintHistory(result){
   if(!active||!data)return;
   const features=currentItems(),byId=new Map(features.map(f=>[f.id,f]));
   for(const path of document.querySelectorAll('#regions path[data-region]')){
    const f=byId.get(path.dataset.region);if(!f)continue;
-   const region=result.regions.get(featureKey(f));
-   path.setAttribute('fill',!region?'#edf1e9':region.tie?'#aebdb4':region.party?tone(partyColor(region.party),region.share,result.range):'#edf1e9');
-   path.style.pointerEvents='none';
+   path.setAttribute('fill',fillColor(f));path.setAttribute('aria-label',f.county+f.name+'，'+regionDetail(f));
   }
   el('scopeTitle').textContent='2022 '+titles[kind]+'实际投票结果 · '+(county||'全台');
   drawLegend(result);
@@ -178,7 +174,7 @@
    const values=[r.county,kind==='mayor'&&county?r.town:kind==='council'?r.district:kind==='township'?r.town:(r.district||''),r.number||'—',r.name,r.gender||'—'];
    for(const value of values){const td=document.createElement('td');td.textContent=value||'—';tr.append(td)}
    const partyCell=document.createElement('td');partyCell.className='history-party-cell';
-   const party=partyMatch(r.party)||{name:r.party,color:partyColor(r.party)},logo=logoFor(party);
+   const party=predictionParty(r.party),logo=logoFor(party);
    if(logo){const img=document.createElement('img');img.src=logo;img.alt='';img.loading='lazy';partyCell.append(img)}
    const partyName=document.createElement('span');partyName.textContent=r.party;partyCell.append(partyName);tr.append(partyCell);
    const votes=document.createElement('td');votes.className='history-number';votes.textContent=r.votes.toLocaleString('zh-CN');tr.append(votes);
@@ -203,26 +199,26 @@
   const groups=new Map();for(const d of rows){if(!groups.has(d.county))groups.set(d.county,[]);groups.get(d.county).push(d)}
   for(const [name,list]of groups){
    const details=document.createElement('details');details.className='county-district-group';details.open=!!county||name===rows[0]?.county;
-   const summary=document.createElement('summary');summary.textContent=name+' · '+list.length+'个选区 · '+list.reduce((n,d)=>n+d.seats,0)+'席';details.append(summary);
+   const summary=document.createElement('summary');summary.textContent=norm(name)+' · '+list.length+'个选区 · '+list.reduce((n,d)=>n+d.seats,0)+'席';details.append(summary);
    const wrap=document.createElement('div');wrap.className='reference-table-wrap';const table=document.createElement('table');table.className='reference-table';
-   const caption=document.createElement('caption');caption.textContent=name+'（2022年）议员选区范围与名额';table.append(caption);
+   const caption=document.createElement('caption');caption.textContent=norm(name)+'（2022年）议员选区范围与名额';table.append(caption);
    const thead=document.createElement('thead'),trh=document.createElement('tr');
    for(const label of ['选区','类别','选区范围','应选名额','妇保名额','地图边界']){const th=document.createElement('th');th.scope='col';th.textContent=label;trh.append(th)}
    thead.append(trh);table.append(thead);const tbody=document.createElement('tbody');
    for(const d of list.sort((a,b)=>a.number-b.number)){
     const tr=document.createElement('tr'),th=document.createElement('th');th.scope='row';th.textContent=d.name;tr.append(th);
     const cat=document.createElement('td');cat.textContent=DistrictCore.identityName(d);tr.append(cat);
-    const scope=document.createElement('td');scope.className='reference-scope';scope.textContent=d.scope||'无乡镇市区得票记录';tr.append(scope);
+    const scope=document.createElement('td');scope.className='reference-scope';scope.textContent=mainlandTerms(norm(d.scope))||'无乡镇市区得票记录';tr.append(scope);
     const seat=document.createElement('td');seat.className='reference-number';seat.textContent=d.seats+'席';tr.append(seat);
     const women=document.createElement('td');women.className='reference-number';women.textContent=d.womenReserved+'席';tr.append(women);
-    const map=document.createElement('td');const matchKey=norm(d.county)+'|'+d.electorate+'|'+d.number;map.textContent=unmatchedDistricts.has(matchKey)?'范围不同，未着色':'范围一致，可着色';map.className=unmatchedDistricts.has(matchKey)?'history-map-mismatch':'history-map-match';tr.append(map);
+    const map=document.createElement('td');const matchKey=HistoryCore.key(d.county,d.electorate,d.number,norm);map.textContent=unmatchedDistricts.has(matchKey)?'范围不同，未着色':'范围一致，可着色';map.className=unmatchedDistricts.has(matchKey)?'history-map-mismatch':'history-map-match';tr.append(map);
     tbody.append(tr)
    }
    table.append(tbody);wrap.append(table);details.append(wrap);root.append(details)
   }
   const source=el('districtReferenceSource');source.replaceChildren(document.createTextNode('资料来源：中选会111年8月18日中选务字第1113150255号公告及2022年选举结果。'));const officialLink=document.createElement('a');officialLink.href='https://web.cec.gov.tw/api/file/1dc2a749-cd2a-4ce0-a2ba-0a5b8d7c0eab.pdf';officialLink.target='_blank';officialLink.rel='noopener';officialLink.textContent='查看中选会2022选区划分公告';source.append(officialLink);
  }
- function update(){if(!active||!data)return;const result=analyze();showRows(result);paint(result);renderHistoryDistrictReference()}
+ function update(){if(!active||!data)return;const result=analyze();currentResult=result;showRows(result);paintHistory(result);renderHistoryDistrictReference();el('predictionScopeLabel').textContent='2022 历史选举结果';el('brushName').textContent='历史结果 · 只读浏览';el('headerExportPredictions').hidden=true}
  function switchMode(){
   state.workspaceMode='history';state.fillMode='solid';state.level=kind==='mayor'?(county?'towns':'counties'):kind==='council'?'council':'towns';state.county=county;
   if(kind==='council')state.councilViewScope='all';
@@ -237,13 +233,13 @@
  }
  function deactivate(){
   active=false;document.body.classList.remove('history-mode');
-  if(savedMapScope){state=clone(savedMapScope);savedMapScope=null;}
+  if(savedMapScope){state=clone(savedMapScope);savedMapScope=null;}currentResult=null;districtTableKey='';el('headerExportPredictions').hidden=false;
   el('historyControls').hidden=true;el('mapSettings').hidden=false;
   el('workspaceHistory').classList.remove('active');el('workspaceHistory').setAttribute('aria-pressed','false');if(data){syncInputs();render()}
  }
  function downloadCSV(){
   const rows=analyze().rows,heads=['县市','乡镇市区','选区','类别','号次','候选人','政党','得票数','得票率','是否当选'];
-  const safe=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+  const safe=csvCell;
   const dataRows=[heads,...rows.map(r=>[r.county,r.town,r.district,r.electorate,r.number,r.name,r.party,r.votes,(r._share||0).toFixed(3),r.elected?'是':''])];
   const blob=new Blob(['\uFEFF'+dataRows.map(row=>row.map(safe).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'});
   const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='2022_'+titles[kind]+'_'+(county||'全台')+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)
@@ -255,8 +251,10 @@
  el('historyMetric').onchange=()=>{metric=el('historyMetric').value;update()};
  for(const n of COUNTY_ORDER)el('historyCounty').add(new Option(n,n));
  el('historyCsvExport').onclick=downloadCSV;
- el('districtTableSearch').oninput=()=>{if(active&&kind==='council')renderHistoryDistrictReference()};
- el('downloadDistrictTable').onclick=()=>{if(!active||kind!=='council')return;const lines=[['县市','选区','类别','选区范围','应选名额','妇保名额','地图匹配'],...districtMetadata.filter(d=>(!county||norm(d.county)===county)).map(d=>[norm(d.county),d.name,DistrictCore.identityName(d),norm(d.scope),d.seats,d.womenReserved,unmatchedDistricts.has(norm(d.county)+'|'+d.electorate+'|'+d.number)?'未匹配':'已匹配'])];const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';const blob=new Blob(['\\uFEFF'+lines.map(row=>row.map(q).join(',')).join('\\r\\n')],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='2022议员选区范围与名额.csv';a.click();URL.revokeObjectURL(url)};
+ const defaultDistrictSearch=el('districtTableSearch').oninput;
+ el('districtTableSearch').oninput=event=>{if(active&&kind==='council')renderHistoryDistrictReference();else defaultDistrictSearch?.(event)};
+ const defaultDistrictDownload=el('downloadDistrictTable').onclick;
+ el('downloadDistrictTable').onclick=event=>{if(!active||kind!=='council')return defaultDistrictDownload?.(event);const lines=[['县市','选区','类别','选区范围','应选名额','妇保名额','地图匹配'],...districtMetadata.filter(d=>(!county||norm(d.county)===county)).map(d=>[norm(d.county),d.name,DistrictCore.identityName(d),norm(d.scope),d.seats,d.womenReserved,unmatchedDistricts.has(norm(d.county)+'|'+d.electorate+'|'+d.number)?'未匹配':'已匹配'])];const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';const blob=new Blob([HistoryCore.csv(lines)],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='2022议员选区范围与名额.csv';a.click();URL.revokeObjectURL(url)};
  el('historyImport').onclick=()=>el('historyFiles').click();
  el('historyFiles').onchange=async()=>{
   let count=0;const errors=[];
@@ -264,11 +262,19 @@
   el('historyStatus').textContent='已导入'+count+'条新记录。'+errors.join('；');update();el('historyFiles').value=''
  };
  el('historyLoad').onclick=async()=>{el('historyStatus').textContent='正在载入全台2022选举结果…';await snapshot();update()};
+ const defaultColor=fillColor;fillColor=function(feature){
+  if(!active)return defaultColor(feature);
+  const region=currentResult?.regions.get(featureKey(feature));
+  return !region?'#edf1e9':region.tie?'#aebdb4':region.party?tone(partyColor(region.party),region.share,currentResult.range):'#edf1e9';
+ };
+ const defaultDetail=regionDetail;regionDetail=function(feature){if(!active)return defaultDetail(feature);const region=currentResult?.regions.get(featureKey(feature));return !region?'历史数据未匹配':region.tie?'各党当选席次并列':region.party+' · '+region.seatCount+'席'};
+ const defaultPaint=paint;paint=function(feature){if(!active)return defaultPaint(feature)};
+ const defaultSaveState=projectStateForSave;projectStateForSave=function(){return active&&savedMapScope?savedMapScope:defaultSaveState()};
  const defaultRender=render;render=function(){defaultRender();if(active){update();for(const id of ['workspacePrediction','workspaceFree']){el(id).classList.remove('active');el(id).setAttribute('aria-pressed','false')}}};
  const defaultFooter=furnitureFooterHeight;furnitureFooterHeight=function(){
   if(!active)return defaultFooter();
   const number=Math.min(30,new Set(recordsInView().filter(r=>r.elected).map(r=>r.party)).size);
-  return Math.max(defaultFooter(),metric==='share'?180:100,(metric==='share'?180:100)+number*29)
+  const font=identityPanelsActive()||isNationwide()?26:14;return Math.max(defaultFooter(),(metric==='share'?162:86)+number*font*2.05+50)
  };
  const defaultPreparedExport=preparedExportSvg;preparedExportSvg=function(){
   if(!active)return defaultPreparedExport();

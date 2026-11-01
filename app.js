@@ -10,7 +10,7 @@ function pruneUnusedAutoPredictionPalette(project){const linked=new Set();for(co
 const COUNTY_ORDER=['台北市','新北市','桃园市','台中市','台南市','高雄市','基隆市','宜兰县','新竹县','新竹市','苗栗县','彰化县','南投县','云林县','嘉义县','嘉义市','屏东县','花莲县','台东县','澎湖县','金门县','连江县'];
 const LEVELS=['towns','counties','council','legislative','villages'];
 const levelLabel=level=>({villages:'村里',towns:'乡镇市区',counties:'县市',council:'议员选区',legislative:'立法机构民代选区'})[level];
-const defaults=()=>({version:1,title:'',legendTitle:'图例',county:'',villageTown:'',districtLeaders:false,level:'counties',workspaceMode:'prediction',electorate:{council:'regional',legislative:'regional'},predictionOffice:'mayor',predictionDisplay:'composition',predictionScale:'district',councilViewScope:'all',localPredictions:{},localPredictionDisplay:'',localDisplayCandidate:'',localTown:'',predictions:{},labels:true,borderColor:'#80978d',borderWidth:0.6,countyBorderColor:'#385d4b',countyBorderWidth:1.5,townBorderColor:'#b6c4ba',townBorderWidth:0.4,showTownBoundaries:true,selected:'blue',palette:presetPalette(),settingsRevision:2,paletteRevision:3,fills:{towns:{},counties:{},council:{},legislative:{},villages:{}},legislativeTownFills:{party:{},plains:{},mountain:{}},fillMode:'prediction',gradient:{groupBy:'candidate',metric:'share',min:0,max:null,marginManual:false},legend:{show:true,onlyUsed:false,fontSize:12,caption:'',hidden:[]},exportSettings:{winnerTable:true,note:'',councilScope:'all'},elections:{towns:{},counties:{},council:{},legislative:{},villages:{}}});
+const defaults=()=>({version:1,title:'',legendTitle:'图例',county:'',villageTown:'',districtLeaders:false,level:'counties',workspaceMode:'prediction',electorate:{council:'regional',legislative:'regional'},predictionOffice:'mayor',predictionDisplay:'composition',predictionScale:'district',councilViewScope:'all',localPredictions:{},localPredictionDisplay:'',localDisplayCandidate:'',localTown:'',predictions:{},labels:true,borderColor:'#80978d',borderWidth:0.6,countyBorderColor:'#385d4b',countyBorderWidth:1.5,townBorderColor:'#b6c4ba',townBorderWidth:0.4,showTownBoundaries:true,selected:'blue',palette:presetPalette(),settingsRevision:2,paletteRevision:3,fills:{towns:{},counties:{},council:{},legislative:{},villages:{}},legislativeTownFills:{party:{},plains:{},mountain:{}},fillMode:'prediction',gradient:{groupBy:'candidate',metric:'share',min:0,max:null,marginManual:false},legend:{show:true,onlyUsed:false,fontSize:12,caption:'',hidden:[]},exportSettings:{winnerTable:true,note:'',councilScope:'all',layout:'complete'},elections:{towns:{},counties:{},council:{},legislative:{},villages:{}}});
 let state=defaults(),data=null,undo=[],redo=[],view=null,baseView=null,erase=false,drag=null,moved=false,toastTimer,persistTimer;
 const clone=x=>JSON.parse(JSON.stringify(x));
 function cleanProject(s){
@@ -21,8 +21,9 @@ function cleanProject(s){
  out.title=simplify(String(s.title||'')).slice(0,80);out.legendTitle=simplify(String(s.legendTitle||'图例')).slice(0,40);out.county=simplify(String(s.county||''));out.level=LEVELS.includes(s.level)?s.level:'towns';out.labels=s.labels!==false;out.selected=ids.has(s.selected)?s.selected:out.palette[0].id;if(s.settingsRevision!==2){for(const p of out.palette){const preset=partyMatch(p.name)||PARTY_PRESETS.find(x=>x.id===p.id&&['blue','green','aqua','gray','red'].includes(x.id));if(preset){p.name=preset.name;p.color=preset.color}}for(const p of presetPalette())if(!out.palette.some(x=>partyMatch(x.name)?.id===p.id))out.palette.push(p);out.labels=true;}out.settingsRevision=2;if(![2,3].includes(Number(s.paletteRevision)))out.palette=upgradeDefaultPalette(out.palette);out.paletteRevision=Number(s.paletteRevision)===3?3:2;out.borderColor=/^#[\da-f]{6}$/i.test(s.borderColor)?s.borderColor:'#80978d';out.borderWidth=Number.isFinite(s.borderWidth)?Math.max(0,Math.min(3,s.borderWidth)):0.6;out.countyBorderColor=/^#[\da-f]{6}$/i.test(s.countyBorderColor)?s.countyBorderColor:'#385d4b';out.countyBorderWidth=Number.isFinite(s.countyBorderWidth)?Math.max(0,Math.min(5,s.countyBorderWidth)):1.5;out.townBorderColor=/^#[\da-f]{6}$/i.test(s.townBorderColor)?s.townBorderColor:'#b6c4ba';out.townBorderWidth=Number.isFinite(s.townBorderWidth)?Math.max(0,Math.min(3,s.townBorderWidth)):0.4;out.showTownBoundaries=s.showTownBoundaries!==false;out.villageTown=String(s.villageTown||'').slice(0,11);out.districtLeaders=s.districtLeaders===true;const cleaned=sanitizeElectionState(out,s);if(cleaned.paletteRevision!==3){pruneUnusedAutoPredictionPalette(cleaned);cleaned.paletteRevision=3}return cleaned;
 }
 try{const s=localStorage.getItem(KEY);if(s)state=cleanProject(JSON.parse(s))}catch(e){console.warn('浏览器保存的方案未载入',e.message)}
-function persist(){clearTimeout(persistTimer);persistTimer=setTimeout(()=>{try{localStorage.setItem(KEY,JSON.stringify(state));const when=new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});$('saved').textContent='● 已保存 '+when;$('saved').title='只保存在本机（'+when+'），请定期下载备份';}catch(e){$('saved').textContent='自动保存失败，请下载方案';$('saved').title='浏览器存储可能不足';}},140)}
-window.addEventListener('pagehide',()=>{clearTimeout(persistTimer);try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){/* browser storage unavailable */}});
+function projectStateForSave(){return state}
+function persist(){clearTimeout(persistTimer);persistTimer=setTimeout(()=>{try{localStorage.setItem(KEY,JSON.stringify(projectStateForSave()));const when=new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});$('saved').textContent='● 已保存 '+when;$('saved').title='只保存在本机（'+when+'），请定期下载备份';}catch(e){$('saved').textContent='自动保存失败，请下载方案';$('saved').title='浏览器存储可能不足';}},140)}
+window.addEventListener('pagehide',()=>{clearTimeout(persistTimer);try{localStorage.setItem(KEY,JSON.stringify(projectStateForSave()))}catch(e){/* browser storage unavailable */}});
 function toast(s){$('toast').textContent=s;$('toast').classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('visible'),2600)}
 function pushHistory(){undo.push(clone(state));if(undo.length>100)undo.shift();redo=[];updateHistory()}
 function updateHistory(){$('undo').disabled=!undo.length;$('redo').disabled=!redo.length}
@@ -44,7 +45,7 @@ function borderKeyForElectorate(id){return state.level+(id==='regional'?'':id===
 function syncElectorateControls(){$('electorateControls').hidden=true;$('electorate').value=activeElectorate();$('electorateNote').textContent=legislativeFourPanelsActive()?'区域、不分区政党、平地少数民族与山地少数民族四类在同一张图中显示。':'区域、平地少数民族与山地少数民族选区在同一张图中并列显示。'}
 
 function featureFillId(f){return f.legislativeTown?state.legislativeTownFills[featureElectorate(f)]?.[f.sourceId]:state.fills[state.level][f.id]}
-const fillColor=f=>{if(state.fillMode==='prediction'&&typeof predictionFill==='function')return predictionFill(f);if(state.fillMode!=='gradient')return paletteById(featureFillId(f))?.color||'#edf1e9';const r=regionResult(f);if(r.status==='tie')return'#aebdb4';if(r.status!=='winner')return'#edf1e9';const p=paletteById(r.leader.partyId),d=gradientDomain();return p?ElectionCore.shade(p.color,r.value,d.min,d.max):'#edf1e9'};
+let fillColor=f=>{if(state.fillMode==='prediction'&&typeof predictionFill==='function')return predictionFill(f);if(state.fillMode!=='gradient')return paletteById(featureFillId(f))?.color||'#edf1e9';const r=regionResult(f);if(r.status==='tie')return'#aebdb4';if(r.status!=='winner')return'#edf1e9';const p=paletteById(r.leader.partyId),d=gradientDomain();return p?ElectionCore.shade(p.color,r.value,d.min,d.max):'#edf1e9'};
 function counts(){if(state.fillMode==='prediction'&&typeof predictionPartyCounts==='function')return predictionPartyCounts();const c={};currentItems().forEach(f=>{const r=state.fillMode==='gradient'?regionResult(f):null,id=r?.status==='winner'?r.leader.partyId:state.fillMode==='solid'?featureFillId(f):null;if(id)c[id]=(c[id]||0)+1});return c}
 function syncCountyChoices(){
  const el=$('county');if(!el||!data?.counties)return;
@@ -87,7 +88,7 @@ const isNationwide=()=>!state.county&&['towns','council','legislative'].includes
 function councilVisibleIdentity(){return exportPanelFilter||(state.level==='council'&&state.workspaceMode==='prediction'&&state.fillMode==='prediction'?state.councilViewScope:'all')}
 function panelIdentities(){const order=legislativeFourPanelsActive()?LEGISLATIVE_FREE_ORDER:ELECTORATE_ORDER,selected=state.level==='council'?councilVisibleIdentity():'all';return selected&&selected!=='all'?[selected]:order}
 function furnitureFooterHeight(){return Math.max(126,state.legend.show?legendMetrics(legendReserveEntries()).height+48:0)}
-function sceneSpec(){const panels=identityPanelsActive()?panelIdentities().length:0,base=panels===1?(state.county?{width:1200,height:900,pad:140,font:15}:{width:1800,height:2400,pad:250,font:10}):panels===4?(state.county?{width:2800,height:1500,pad:130,font:12}:{width:3200,height:2300,pad:180,font:11}):identityPanelsActive()?(state.county?{width:2400,height:1050,pad:120,font:13}:{width:3000,height:2100,pad:180,font:12}):isNationwide()?{width:1800,height:2400,pad:250,font:10}:{width:1200,height:900,pad:140,font:state.level==='counties'?11:15};const n=data&&state.level==='villages'?currentItems().length:0;const mapHeight=Math.max(base.height,n&&n<=120?n*8+220:0);return{...base,height:mapHeight+furnitureFooterHeight()}}
+function sceneSpec(){const panels=identityPanelsActive()?panelIdentities().length:0,base=panels===1?(state.county?{width:1200,height:900,pad:140,font:15}:{width:1800,height:2400,pad:250,font:10}):panels===4?(state.county?{width:2800,height:1500,pad:130,font:26}:{width:3200,height:2300,pad:180,font:28}):identityPanelsActive()?(state.county?{width:2400,height:1050,pad:120,font:26}:{width:3000,height:2100,pad:180,font:28}):isNationwide()?{width:1800,height:2400,pad:250,font:10}:{width:1200,height:900,pad:140,font:15};const n=data&&state.level==='villages'?currentItems().length:0;const mapHeight=Math.max(base.height,n&&n<=120?n*8+220:0);return{...base,height:mapHeight+furnitureFooterHeight()}}
 function contentArea(spec){return{left:45,right:spec.width-115,top:145,bottom:spec.height-furnitureFooterHeight()-28}}
 function fittedView(){const s=sceneSpec();return{x:0,y:0,w:s.width,h:s.height}}
 function applyView(){if(view){$('map').setAttribute('viewBox',`${view.x} ${view.y} ${view.w} ${view.h}`);if(state.level==='villages'){cancelAnimationFrame(villageLabelFrame);villageLabelFrame=requestAnimationFrame(renderLabels)}}}
@@ -246,6 +247,20 @@ function mapAdaptiveLabel(f,t,text,font,used,area,reserve){
  }
  return null;
 }
+function mapOutsideLabelFit(f,t,text,font,used,area,reserve,items){
+ const anchor=mapLabelAnchor(f,t);if(!anchor)return null;
+ const width=Array.from(text).length*font+12,height=font*1.5+6;
+ const boxes=items.map(item=>[item.box[0]*t.scale+t.tx,item.box[1]*t.scale+t.ty,item.box[2]*t.scale+t.tx,item.box[3]*t.scale+t.ty]);
+ for(const distance of [24,38,56,78,105,140,185,240])for(const [dx,dy]of [[-1,0],[1,0],[-1,-.5],[1,-.5],[-1,.5],[1,.5],[0,-1],[0,1]]){
+  const x=anchor.x+dx*distance,y=anchor.y+dy*distance,rect=[x-width/2,y-height/2,x+width/2,y+height/2];
+  if(rect[0]<area.left||rect[2]>area.right||rect[1]<area.top||rect[3]>area.bottom)continue;
+  if(reserve&&leaderOverlap(rect,[reserve.x,reserve.y,reserve.x+reserve.width,reserve.y+reserve.height]))continue;
+  if(used.some(other=>leaderOverlap(rect,other))||boxes.some(box=>leaderOverlap(rect,box)))continue;
+  if(leaderFrames(t,5).some(box=>leaderOverlap(rect,box)))continue;
+  return{x,y,rect,font,leaderAnchor:anchor};
+ }
+ return null;
+}
 function labelLayout(items,t,font=15){
  const area=t.area||contentArea(sceneSpec()),reserve=state.legend.show?legendBox(sceneSpec()):null;
  const sizes=f=>(f.box[2]-f.box[0])*(f.box[3]-f.box[1]);
@@ -277,10 +292,10 @@ function labelLayout(items,t,font=15){
  let nextNumber=numberRows.length+1;
  for(const f of needsNumber){
   const value=String(nextNumber);
-  const pos=mapAdaptiveLabel(f,t,value,font,used,area,reserve);
+  const pos=mapAdaptiveLabel(f,t,value,font,used,area,reserve)||mapOutsideLabelFit(f,t,value,font,used,area,reserve,items);
   if(!pos)continue;
   used.push(pos.rect);
-  labels.push({f,x:pos.x,y:pos.y,font:pos.font,text:value,numeric:true,number:value});
+  labels.push({f,x:pos.x,y:pos.y,font:pos.font,text:value,numeric:true,number:value,leaderAnchor:pos.leaderAnchor});
   nextNumber++;
  }
  return labels;
@@ -293,8 +308,9 @@ function drawLabels(group,items,t,font=15,interactive=false){
  group.replaceChildren();
  for(const q of labelLayout(rendered.filter(f=>shownLabel(f)),t,font)){
   const g=svgEl('g',{'class':'map-label'});group.append(g);
+  if(q.leaderAnchor)g.append(svgEl('path',{d:`M${q.leaderAnchor.x},${q.leaderAnchor.y}L${q.x},${q.y}`,fill:'none',stroke:'#718b7c','stroke-width':1,'vector-effect':'non-scaling-stroke','data-label-leader':q.f.id}));
   const label=svgEl('text',{x:q.x,y:q.y,'font-size':q.font,'data-label':q.f.id,
-   'data-placement':q.districtNumber?'district-number':q.island?'below-island':'inside','text-anchor':'middle','dominant-baseline':'middle',
+   'data-placement':q.leaderAnchor?'outside':q.districtNumber?'district-number':q.island?'below-island':'inside','text-anchor':'middle','dominant-baseline':'middle',
    'font-weight':q.numeric||q.districtNumber?700:500,fill:'#2c493b',stroke:'#ffffffed',
    'stroke-width':q.numeric?3:2.4,'paint-order':'stroke','stroke-linejoin':'round'});
   label.style.strokeWidth=q.numeric?2.6:2.4;label.textContent=q.text;
@@ -329,7 +345,7 @@ function insetDefinitions(){return[
  ]}
 function activeInsetDefinitions(){const town=state.level==='villages'&&state.villageTown?data.towns.find(f=>f.id===state.villageTown):null,county=state.county||town?.county||'';return insetDefinitions().filter(q=>{if(town?.name==='乌坵乡')return q.town==='乌坵乡';if(town&&q.town==='乌坵乡')return false;return !county||q.county===county||data.towns.some(f=>f.name===q.town&&f.county===county)})}
 function appendInsetFrames(group,t,spec,prefix=''){for(const q of activeInsetDefinitions()){const b=q.box,g=svgEl('g',{'data-inset':prefix+q.name});const p=q.d?svgEl('path',{d:q.d,transform:transformOf(t),fill:'none',stroke:'#a3b5a8','stroke-width':.75,'vector-effect':'non-scaling-stroke'}):svgEl('rect',{x:b[0]*t.scale+t.tx,y:b[1]*t.scale+t.ty,width:(b[2]-b[0])*t.scale,height:(b[3]-b[1])*t.scale,rx:3,fill:'none',stroke:'#a3b5a8','stroke-width':.75,'vector-effect':'non-scaling-stroke'});g.append(p);group.append(g)}}
-function drawInsetFrames(group,t,spec){group.replaceChildren();if(identityPanelsActive()){for(const panel of identityPanelLayouts()){const {area}=panel;group.append(svgEl('rect',{x:area.left,y:area.top-52,width:area.right-area.left,height:area.bottom-area.top+52,rx:16,fill:'#fbfdfb',stroke:'#d7e2d9','stroke-width':1.4}));const title=svgEl('text',{x:(area.left+area.right)/2,y:area.top-18,'text-anchor':'middle','font-size':30,'font-weight':600,fill:'#294a3a'});title.textContent=panel.label;group.append(title);const note=svgEl('text',{x:(area.left+area.right)/2,y:area.top+13,'text-anchor':'middle','font-size':16,fill:'#74877a'});note.textContent=panel.items.length?panel.items.length+(panel.townLevel?' 个乡镇市区':' 个选区'):'当前范围没有此类选区';group.append(note);appendInsetFrames(group,panel.t,spec,panel.identity+'-')}return}appendInsetFrames(group,t,spec)}
+function drawInsetFrames(group,t,spec){group.replaceChildren();if(identityPanelsActive()){for(const panel of identityPanelLayouts()){const {area}=panel;group.append(svgEl('rect',{x:area.left,y:area.top-52,width:area.right-area.left,height:area.bottom-area.top+52,rx:16,fill:'#fbfdfb',stroke:'#d7e2d9','stroke-width':1.4}));const title=svgEl('text',{x:(area.left+area.right)/2,y:area.top-18,'text-anchor':'middle','font-size':30,'font-weight':600,fill:'#294a3a'});title.textContent=panel.label;group.append(title);const note=svgEl('text',{x:(area.left+area.right)/2,y:area.top+13,'text-anchor':'middle','font-size':16,fill:'#74877a'});note.textContent=panel.items.length?panel.items.length+(panel.townLevel?' 个乡镇市区':' 个选区'):mapLoadState[state.level==='council'?'议员选区':'立法机构民代选区']==='loading'?'正在载入地图…':'当前范围没有此类选区';group.append(note);appendInsetFrames(group,panel.t,spec,panel.identity+'-')}return}appendInsetFrames(group,t,spec)}
 function drawMapFurniture(group,t,spec){group.replaceChildren();const wide=isNationwide(),area=contentArea(spec),footerTop=spec.height-furnitureFooterHeight(),unit=wide?1.3:1,nx=spec.width-138,ny=wide?125:110,okNorth=decorationClear([nx-20,ny-12,nx+20,ny+57]),cx=okNorth?nx:spec.width-75,cy=okNorth?ny:85;
  const north=svgEl('g',{'data-decoration':'north-arrow',transform:`translate(${cx},${cy}) scale(${unit})`});north.append(svgEl('path',{d:'M0,8L-10,42L0,34L10,42Z',fill:'#365d49'}));north.append(svgEl('path',{d:'M0,8L0,34L10,42Z',fill:'#fff',stroke:'#365d49','stroke-width':.8}));const n=svgEl('text',{x:0,y:0,'font-size':13,'font-weight':600,'text-anchor':'middle',fill:'#365d49'});n.textContent='N';north.append(n);group.append(north);
  const pixelsPerKm=t.scale*10000/6371.0088,target=Math.min(wide?220:140,area.right-area.left-120),km=[.01,.02,.05,.1,.2,.5,1,2,5,10,20,50,100,200].reduce((a,b)=>Math.abs(b*pixelsPerKm-target)<Math.abs(a*pixelsPerKm-target)?b:a),length=km*pixelsPerKm,sx=area.left+70,sy=footerTop-8,okScale=decorationClear([sx-15,sy-30,sx+length+72,sy+32]),x=okScale?sx:area.left+20,y=okScale?sy:footerTop+15,font=wide?15:10,bar=svgEl('g',{'data-decoration':'scale-bar','data-distance-km':km,'data-length':length});
@@ -421,7 +437,7 @@ function appendSharedBorders(group,level,identity='regional',filterTown=false){
 
 
 function render(){
- if(!data)return;ensureMapDetails();$('canvas').classList.toggle('nationwide-mode',isNationwide());$('canvas').classList.toggle('county-mode',state.level==='counties');
+ if(!data)return;ensureMapDetails();syncMapLayerStatus();$('canvas').classList.toggle('nationwide-mode',isNationwide());$('canvas').classList.toggle('county-mode',state.level==='counties');
  const regionGroup=$('regions'),borderGroup=$('borders'),districtGroup=$('districtBorders'),townGroup=$('townBorders');
  for(const group of [regionGroup,borderGroup,districtGroup,townGroup]){group.replaceChildren();group.removeAttribute('transform')}
  if(identityPanelsActive()){
@@ -531,11 +547,37 @@ $('confirmReset').onclick=()=>{
 };
 function download(blob,name){const a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download=name;a.style.display='none';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),10000)}
 const filename=()=>((state.title||((state.county||'全台')+'地图填色')).replace(/[\\/:*?"<>|]/g,'_').slice(0,80));
-$('saveProject').onclick=()=>{download(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),filename()+'.json');toast('方案已保存，可在其他设备打开')};$('loadProject').onclick=()=>$('projectFile').click();$('projectFile').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{if(file.size>10000000)throw Error('方案文件过大');const next=cleanProject(JSON.parse(await file.text()));if(next.county&&!data.counties.some(f=>f.name===next.county))throw Error('方案中的县市未找到');pushHistory();state=next;erase=false;syncInputs();render();persist();toast('已打开地图方案')}catch(err){toast(err.message||'无法读取方案')}finally{e.target.value=''}};
+$('saveProject').onclick=()=>{download(new Blob([JSON.stringify(projectStateForSave(),null,2)],{type:'application/json'}),filename()+'.json');toast('方案已保存，可在其他设备打开')};$('loadProject').onclick=()=>$('projectFile').click();$('projectFile').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{if(file.size>10000000)throw Error('方案文件过大');const next=cleanProject(JSON.parse(await file.text()));if(next.county&&!data.counties.some(f=>f.name===next.county))throw Error('方案中的县市未找到');pushHistory();state=next;erase=false;syncInputs();render();persist();toast('已打开地图方案')}catch(err){toast(err.message||'无法读取方案')}finally{e.target.value=''}};
 function exportPredictionWinnerRows(){
- if(!state.exportSettings.winnerTable||state.fillMode!=='prediction'||typeof predictionUsesVoteDisplay==='function'&&predictionUsesVoteDisplay()||typeof predictionDistricts!=='function'||typeof directoryCandidates!=='function'||typeof predictionSummary!=='function')return[];
- const rows=[];for(const d of predictionDistricts()){if(exportPanelFilter&&state.level==='council'&&DistrictCore.identity(d)!==exportPanelFilter)continue;const summary=predictionSummary(d);if(summary.status!=='complete')continue;const record=state.predictions[d.id];if(!record?.winners?.length)continue;const winnerIds=new Set(record.winners),district=state.county?(d.county===d.name?d.county:shortDirectoryName(d)):(d.county===d.name?d.county:d.county+' · '+shortDirectoryName(d));for(const c of directoryCandidates(d))if(winnerIds.has(c.id)){const party=predictionParty(c.party);rows.push({district,number:c.number||'待补',name:candidateDisplayName(c),gender:c.gender||'待补',party:c.party,color:party.color,logo:logoFor(party),incumbent:c.incumbent===true?'现任':''})}}
- return rows
+ if(!state.exportSettings.winnerTable||state.fillMode!=='prediction'||typeof predictionDistricts!=='function'||typeof directoryCandidates!=='function')return[];
+ const rows=[],numeric=predictionUsesVoteDisplay();
+ function add(d,record,district,local=false){
+  const candidates=directoryCandidates(d),ids=new Set(local?[record.leaderId].filter(Boolean):record.winners||[]);
+  const complete=local?!!record.leaderId:predictionSummary(d).status==='complete';
+  if(!numeric&&!complete)return;
+  let leading=null;try{leading=PredictionCore.voteResult(candidates,record)}catch(e){}
+  for(const c of candidates){
+   const estimate=record.estimates?.[c.id],selected=ids.has(c.id);
+   if(numeric?!estimate&&!selected:!selected)continue;
+   const party=predictionParty(c.party);let result=null;
+   try{result=PredictionCore.candidateVoteResult(candidates,record,c.id)}catch(e){}
+   const status=selected?(local?'手选胜出':'手选当选'):leading?.candidate.id===c.id?(leading.partial?'暂时领先':d.type==='council'?'第一高票':'预测领先'):'已录入';
+   rows.push({district,number:c.number||'待补',name:candidateDisplayName(c),gender:c.gender||'待补',party:c.party,color:party.color,logo:logoFor(party),incumbent:c.incumbent===true?'现任':'',
+    ...(numeric?{estimated:true,votes:result?.votes==null?'—':result.votes.toLocaleString('zh-CN'),share:result?.share==null?'—':Number(result.share.toFixed(2))+'%'+(result.partial?'*':''),status}:{}),local});
+  }
+ }
+ if(typeof localPredictionActive==='function'&&localPredictionActive()){
+  for(const f of currentItems()){
+   const d=directoryDistrictById.get(f.parentDistrictId);if(!d)continue;
+   if(exportPanelFilter&&state.level==='council'&&DistrictCore.identity(d)!==exportPanelFilter)continue;
+   add(d,localRecord(d,f),[state.county?'':d.county,f.name].filter(Boolean).join(' · '),true);
+  }
+ }else for(const d of predictionDistricts()){
+  if(exportPanelFilter&&state.level==='council'&&DistrictCore.identity(d)!==exportPanelFilter)continue;
+  const record=state.predictions[d.id];if(!record)continue;
+  add(d,record,state.county?(d.county===d.name?d.county:shortDirectoryName(d)):(d.county===d.name?d.county:d.county+' · '+shortDirectoryName(d)));
+ }
+ return rows;
 }
 function exportTextWidth(value){let n=0;for(const c of Array.from(String(value||'')))n+=/[\u0000-\u00ff]/.test(c)?.55:1;return n}
 function truncateExportText(value,max){const text=String(value||'');if(exportTextWidth(text)<=max)return text;let out='',width=0;for(const c of Array.from(text)){const step=/[\u0000-\u00ff]/.test(c)?.55:1;if(width+step>max-1)break;out+=c;width+=step}return out+'…'}
@@ -543,12 +585,13 @@ function wrapExportText(value,max=82){const lines=[];for(const paragraph of Stri
 function appendExportNote(root,lines,y){if(!lines.length)return 0;const height=26+lines.length*19;root.append(svgEl('rect',{x:40,y,width:1120,height,rx:10,fill:'#f3f7f3',stroke:'#e0e8e1','stroke-width':1}));const label=svgEl('text',{x:60,y:y+21,'font-size':11,'font-weight':600,fill:'#557064'});label.textContent='说明';root.append(label);lines.forEach((line,index)=>{const text=svgEl('text',{x:102,y:y+21+index*19,'font-size':11.5,fill:'#60766b'});text.textContent=line;root.append(text)});return height}
 function exportPredictionTableLayout(rows){
  const columns=rows.length<=28?1:rows.length<=90?2:rows.length<=260?3:4,font=columns===1?12.5:11.5,lineHeight=font*1.45,rowHeight=34,gap=20;
- const width=Math.max(1120,columns*570+gap*(columns-1)+40),blockWidth=(width-40-gap*(columns-1))/columns,chunk=Math.ceil(rows.length/columns),headers=['选区','号次','姓名','性别','政党','是否现任'];
+ const width=Math.max(1120,columns*(rows.some(row=>row.estimated)?940:570)+gap*(columns-1)+40),blockWidth=(width-40-gap*(columns-1))/columns,chunk=Math.ceil(rows.length/columns),headers=['选区','号次','姓名','性别','政党','是否现任'],estimated=rows.some(row=>row.estimated);
+ if(estimated)headers.push('预测得票数','预测得票率','标记');
  const longest=key=>Math.max(0,...rows.map(row=>exportTextWidth(row?.[key])));
- const fixed=[52,47,65],flexWidth=blockWidth-fixed.reduce((n,v)=>n+v,0),desired=[Math.max(120,Math.min(215,longest('district')*font+24)),Math.max(110,Math.min(185,longest('name')*font+24)),Math.max(170,Math.min(260,longest('party')*font+52))],sum=desired.reduce((n,v)=>n+v,0);
- const widths=[flexWidth*desired[0]/sum,fixed[0],flexWidth*desired[1]/sum,fixed[1],flexWidth*desired[2]/sum,fixed[2]];
+ const fixed=[52,47,65],flexWidth=blockWidth-fixed.reduce((n,v)=>n+v,0)-(estimated?280:0),desired=[Math.max(120,Math.min(215,longest('district')*font+24)),Math.max(110,Math.min(185,longest('name')*font+24)),Math.max(170,Math.min(260,longest('party')*font+52))],sum=desired.reduce((n,v)=>n+v,0);
+ const widths=[flexWidth*desired[0]/sum,fixed[0],flexWidth*desired[1]/sum,fixed[1],flexWidth*desired[2]/sum,fixed[2]];if(estimated)widths.push(100,85,95);
  const blocks=Array.from({length:columns},(_,column)=>rows.slice(column*chunk,(column+1)*chunk).map(row=>{
-  const values=[row?.district,row?.number,row?.name,row?.gender,row?.party,row?.incumbent];
+  const values=[row?.district,row?.number,row?.name,row?.gender,row?.party,row?.incumbent];if(estimated)values.push(row?.votes||'—',row?.share||'—',row?.status||'手选当选');
   const cells=values.map((value,i)=>wrapExportText(value,Math.max(1,(widths[i]-(i===4?55:16))/font)));
   const height=Math.max(rowHeight,Math.max(...cells.map(lines=>lines.length))*lineHeight+18);
   return{row,cells,height};
@@ -556,7 +599,7 @@ function exportPredictionTableLayout(rows){
  return{columns,rowHeight,font,lineHeight,gap,width,blockWidth,widths,chunk,headers,blocks,height};
 }
 function appendExportPredictionTable(root,rows,y){
- if(!rows.length)return 0;const layout=exportPredictionTableLayout(rows),card=svgEl('g',{'data-export-winner-table':'true'});root.append(card);card.append(svgEl('rect',{x:40,y,width:layout.width,height:layout.height,rx:14,fill:'#fff',stroke:'#dce5df','stroke-width':1.2}));const heading=svgEl('text',{x:60,y:y+31,'font-size':19,'font-weight':600,fill:'#294a3a'});heading.textContent='预测当选候选人';card.append(heading);const summary=svgEl('text',{x:layout.width+20,y:y+30,'font-size':11,fill:'#718376','text-anchor':'end'});summary.textContent=`已预测 ${new Set(rows.map(r=>r.district)).size} 个选区 · ${rows.length} 人`;card.append(summary);card.append(svgEl('line',{x1:60,y1:y+46,x2:layout.width+20,y2:y+46,stroke:'#e5ece6'}));
+ if(!rows.length)return 0;const layout=exportPredictionTableLayout(rows),card=svgEl('g',{'data-export-winner-table':'true'});root.append(card);card.append(svgEl('rect',{x:40,y,width:layout.width,height:layout.height,rx:14,fill:'#fff',stroke:'#dce5df','stroke-width':1.2}));const heading=svgEl('text',{x:60,y:y+31,'font-size':19,'font-weight':600,fill:'#294a3a'});heading.textContent=rows.some(row=>row.estimated)?'预测得票候选人（*表示数据未填齐；第一高票不等于议员当选）':rows.some(row=>row.local)?'乡镇预测胜出候选人':'预测当选候选人';card.append(heading);const summary=svgEl('text',{x:layout.width+20,y:y+30,'font-size':11,fill:'#718376','text-anchor':'end'});summary.textContent=`已预测 ${new Set(rows.map(r=>r.district)).size} 个选区 · ${rows.length} 人`;card.append(summary);card.append(svgEl('line',{x1:60,y1:y+46,x2:layout.width+20,y2:y+46,stroke:'#e5ece6'}));
  const bodyY=y+59,{widths}=layout;for(let column=0;column<layout.columns;column++){const block=layout.blocks[column];if(!block.length)continue;const x=60+column*(layout.blockWidth+layout.gap),xs=[x],blockHeight=layout.rowHeight+block.reduce((n,r)=>n+r.height,0);for(const w of widths)xs.push(xs.at(-1)+w);card.append(svgEl('rect',{x,y:bodyY,width:layout.blockWidth,height:blockHeight,rx:7,fill:'#fff',stroke:'#dfe8e1','stroke-width':1}));card.append(svgEl('path',{d:`M${x},${bodyY+7}Q${x},${bodyY} ${x+7},${bodyY}H${x+layout.blockWidth-7}Q${x+layout.blockWidth},${bodyY} ${x+layout.blockWidth},${bodyY+7}V${bodyY+layout.rowHeight}H${x}Z`,fill:'#edf5f0'}));
   layout.headers.forEach((label,i)=>{const text=svgEl('text',{x:xs[i]+widths[i]/2,y:bodyY+layout.rowHeight/2+layout.font*.35,'font-size':layout.font,'font-weight':600,fill:'#466253','text-anchor':'middle'});text.textContent=label;card.append(text)});
   let rowY=bodyY+layout.rowHeight;for(const [index,{row,cells,height}]of block.entries()){const group=svgEl('g',{'data-export-winner-row':'true'});card.append(group);if(index%2)group.append(svgEl('rect',{x:x+.5,y:rowY,width:layout.blockWidth-1,height,fill:'#f8fbf9'}));group.append(svgEl('line',{x1:x,y1:rowY,x2:x+layout.blockWidth,y2:rowY,stroke:'#e7eee9','stroke-width':.7}));
@@ -742,7 +785,7 @@ function exportSvg(){
   const unresolved=exportLabelCoverage(originalItems,map);
   const zoomTargets=[...unresolved.map(row=>row.id),...keyRows.map(row=>row.id)];
   const detailY=mapY+contentHeight+(appendixHeight?appendixHeight+24:14);
-  const details=appendExportDetailInsets(root,originalItems,zoomTargets,detailY,contentWidth);
+  const details=state.exportSettings.layout==='compact'?{height:0,labelled:new Set()}:appendExportDetailInsets(root,originalItems,zoomTargets,detailY,contentWidth);
   const coverageRows=exportLabelCoverage(originalItems,map,details.labelled);
   const coverageY=detailY+(details.height?details.height+22:0);
   const coverageHeight=appendExportLabelCoverage(root,coverageRows,40,coverageY,contentWidth);
@@ -780,11 +823,14 @@ async function fetchMapJson(url,label,attempts=3){
  throw Error(label+'载入失败（已重试'+attempts+'次）：'+(lastError?.message||'网络连接异常'));
 }
 // Load only the map layers the current user actually opens.
-const detailRequests=Object.create(null);
+const detailRequests=Object.create(null),mapLoadState=Object.create(null);
+function syncMapLayerStatus(){const box=$('mapLoadingStatus');if(!box)return;const relevant=name=>name==='villages'?state.level==='villages':name==='议员选区'?state.level==='council':name==='立法机构民代选区'?state.level==='legislative':true;const loading=Object.keys(mapLoadState).filter(name=>relevant(name)&&mapLoadState[name]==='loading'),failed=Object.keys(mapLoadState).filter(name=>relevant(name)&&mapLoadState[name]==='error');box.hidden=!loading.length&&!failed.length;$('mapLoadingMessage').textContent=loading.length?'正在载入：'+loading.join('、'):'地图载入失败：'+failed.join('、');$('retryMapLayer').hidden=!!loading.length}
+if($('retryMapLayer'))$('retryMapLayer').onclick=()=>{for(const key of Object.keys(mapLoadState))if(mapLoadState[key]==='error')delete mapLoadState[key];render()};
 function loadMapDetail(name,url,apply){
  if(detailRequests[name])return detailRequests[name];
- detailRequests[name]=fetchMapJson(url,name).then(value=>{apply(value);render();return true}).catch(e=>{
-  delete detailRequests[name];
+ mapLoadState[name]='loading';
+ detailRequests[name]=fetchMapJson(url,name).then(value=>{apply(value);mapLoadState[name]='ready';render();return true}).catch(e=>{
+  delete detailRequests[name];mapLoadState[name]='error';syncMapLayerStatus();
   console.error('地图图层载入失败：'+name,e);
   toast(e.message||'地图数据载入失败，请重新选择地图层级');
   return false
@@ -797,7 +843,8 @@ function ensureMapDetails(){
  if(layer==='council'&&!data.council.length)loadMapDetail('议员选区','assets/map-council.json?v=20261031-split-v25',part=>{if(!Array.isArray(part.council)||part.council.length!==161||!Array.isArray(part.councilIndigenous)||part.councilIndigenous.length!==60)throw Error('议员选区数据不完整');data.council=part.council;data.councilIndigenous=part.councilIndigenous;});
  if(layer==='legislative'&&!data.legislative.length)loadMapDetail('立法机构民代选区','assets/map-legislative.json?v=20261031-split-v25',part=>{if(!Array.isArray(part.legislative)||part.legislative.length!==73||!Array.isArray(part.legislativeIndigenous))throw Error('立法机构民代数据不完整');data.legislative=part.legislative;data.legislativeIndigenous=part.legislativeIndigenous;for(const f of data.legislative)if(data.legislative.filter(x=>x.county===f.county).length===1)f.name=f.county;});
  if(layer==='villages'&&!data.villages.length&&!detailRequests.villages){
-  detailRequests.villages=Promise.all([1,2,3,4,5].map(n=>fetchMapJson('assets/map-villages-'+n+'.json?v=20261031-split-v25','村里地图第'+n+'部分'))).then(parts=>{const rows=parts.flat();if(rows.length!==data.villageMetadata.count)throw Error('村里边界数据不完整');data.villages=rows;render();return true}).catch(e=>{delete detailRequests.villages;toast(e.message||'村里地图载入失败');return false});
+  mapLoadState.villages='loading';
+  detailRequests.villages=Promise.all([1,2,3,4,5].map(n=>fetchMapJson('assets/map-villages-'+n+'.json?v=20261031-split-v25','村里地图第'+n+'部分'))).then(parts=>{const rows=parts.flat();if(rows.length!==data.villageMetadata.count)throw Error('村里边界数据不完整');data.villages=rows;mapLoadState.villages='ready';render();return true}).catch(e=>{delete detailRequests.villages;mapLoadState.villages='error';syncMapLayerStatus();toast(e.message||'村里地图载入失败');return false});
  }
 }
 // Export never uses an incomplete lazy-loaded layer or a blank initial map.
@@ -846,7 +893,8 @@ function startMapLoad(){
   const ready=()=>{try{resolve(JSON.parse(embedded.textContent))}catch(error){reject(error)}};
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ready,{once:true});else ready()
  }):fetchMapJson('assets/map-base.json?v=20261031-split-v25','基础地图');
- mapPromise.then(d=>{
+ mapPromise.then(async d=>{
+  if(document.readyState==='loading')await new Promise(resolve=>document.addEventListener('DOMContentLoaded',resolve,{once:true}));
   if(sequence!==mapLoadSequence)return;
   try{finishMapInitialization(d)}catch(error){showMapLoadError(error,'渲染')}
  }).catch(error=>{if(sequence===mapLoadSequence)showMapLoadError(error)});
@@ -900,7 +948,7 @@ function sanitizeElectionState(out,s){
  if(s.gradient?.max!==null&&s.gradient?.max!==undefined&&s.gradient?.max!==''){const max=Number(s.gradient.max);if(Number.isFinite(max)&&max>out.gradient.min&&(out.gradient.metric==='votes'||out.fillMode==='prediction'&&['votes','partyVotes','winnerVotes','candidateVotes'].includes(out.predictionDisplay)||max<=100))out.gradient.max=max;else out.gradient.min=0;}
  if(out.gradient.metric==='share'&&out.gradient.min>=100)out.gradient.min=0;
  out.legend={show:s.legend?.show!==false,onlyUsed:s.legend?.onlyUsed!==false,fontSize:Math.max(9,Math.min(22,Number(s.legend?.fontSize)||12)),caption:String(s.legend?.caption||'').slice(0,80),hidden:Array.isArray(s.legend?.hidden)?s.legend.hidden.filter(id=>out.palette.some(p=>p.id===id)):[]};
- out.exportSettings={winnerTable:s.exportSettings?.winnerTable!==false,note:simplify(String(s.exportSettings?.note||'')).trim().slice(0,500),councilScope:['all','regional','plains','mountain'].includes(s.exportSettings?.councilScope)?s.exportSettings.councilScope:'all'};
+ out.exportSettings={winnerTable:s.exportSettings?.winnerTable!==false,note:simplify(String(s.exportSettings?.note||'')).trim().slice(0,500),councilScope:['all','regional','plains','mountain'].includes(s.exportSettings?.councilScope)?s.exportSettings.councilScope:'all',layout:s.exportSettings?.layout==='compact'?'compact':'complete'};
  out.elections=Object.fromEntries(LEVELS.map(level=>[level,{}]));
  for(const level of LEVELS)for(const [id,record]of Object.entries(s.elections?.[level]||{})){
   if(!/^[0-9]{5,11}(?:-[0-9]{2})?$/.test(id))continue;
@@ -934,7 +982,7 @@ function legendTotalSeats(){
  return relevant.reduce((sum,d)=>sum+(Number(d.seats)||((office==='mayor'||office==='township')?1:0)),0);
 }
 function legendMetrics(entries=legendEntries()){
- const wide=isNationwide(),font=state.legend.fontSize*(wide?1.4:1),width=wide?350:280,labelX=Math.max(63,44+font*1.6),limit=Math.max(4,Math.floor((width-labelX-18)/font)),gradient=state.fillMode==='gradient'||state.fillMode==='prediction'&&predictionUsesGradient();
+ const wide=isNationwide(),panelScale=identityPanelsActive()?2:1,font=state.legend.fontSize*(wide?1.4:1)*panelScale,width=(wide?350:280)*panelScale,labelX=Math.max(63,44+font*1.6),limit=Math.max(4,Math.floor((width-labelX-18)/font)),gradient=state.fillMode==='gradient'||state.fillMode==='prediction'&&predictionUsesGradient();
  const rows=entries.map(p=>{const predictionLabel=Object.hasOwn(p,'legendSuffix')?p.name+p.legendSuffix:p.name+'（'+(counts()[p.id]||0)+(typeof predictionLegendCountUnit==='function'?predictionLegendCountUnit():predictionUsesVoteDisplay()?'区':'席')+'）',chars=Array.from(state.fillMode==='prediction'?predictionLabel:p.name),lines=[];for(let i=0;i<chars.length;i+=limit)lines.push(chars.slice(i,i+limit).join(''));return{p,lines,height:Math.max(font*1.85,lines.length*font*1.4+10)+(gradient?font*3.4:0)}});
  const title=Array.from(state.legendTitle||'图例'),titleLimit=Math.max(4,Math.floor((width-36)/(font+1))),titleLines=[];for(let i=0;i<title.length;i+=titleLimit)titleLines.push(title.slice(i,i+titleLimit).join(''));
  // Prediction legends show only the count of currently displayed electoral areas.

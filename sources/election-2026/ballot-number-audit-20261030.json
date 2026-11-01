@@ -1,0 +1,1479 @@
+{
+  "checkedAt": "2026-10-30",
+  "pendingBefore": 126,
+  "added": 55,
+  "pendingAfter": 71,
+  "cumulativeAdded": 254,
+  "previousRounds": [
+    {
+      "checkedAt": "2026-10-29",
+      "added": 199,
+      "pendingAfter": 126
+    }
+  ],
+  "groups": [
+    {
+      "type": "township",
+      "county": "高雄市",
+      "count": 6
+    },
+    {
+      "type": "township",
+      "county": "新竹县",
+      "count": 1
+    },
+    {
+      "type": "township",
+      "county": "苗栗县",
+      "count": 2
+    },
+    {
+      "type": "township",
+      "county": "屏东县",
+      "count": 62
+    }
+  ],
+  "updates": [
+    {
+      "candidateId": "council:10007:08:008",
+      "number": 9,
+      "county": "彰化县",
+      "district": "彰化县第8选举区",
+      "name": "洪健興",
+      "area": "彰化縣第八選舉區（二林鎮、大城鄉、芳苑鄉、竹塘鄉）",
+      "wikiName": "洪健興",
+      "type": "council",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國直轄市議員及縣市議員選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；彰化縣第八選舉區（二林鎮、大城鄉、芳苑鄉、竹塘鄉）；姓名：洪健興；号次：9。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10005:10005020:001",
+      "number": 3,
+      "county": "苗栗县",
+      "district": "苗栗县苑里镇",
+      "name": "劉育育",
+      "area": "苑裡鎮",
+      "wikiName": "劉育育",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；苑裡鎮；姓名：劉育育；号次：3。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10005:10005020:002",
+      "number": 1,
+      "county": "苗栗县",
+      "district": "苗栗县苑里镇",
+      "name": "張顧礫",
+      "area": "苑裡鎮",
+      "wikiName": "張顧礫",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；苑裡鎮；姓名：張顧礫；号次：1。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10005:10005020:003",
+      "number": 2,
+      "county": "苗栗县",
+      "district": "苗栗县苑里镇",
+      "name": "陳宏欣",
+      "area": "苑裡鎮",
+      "wikiName": "陳宏欣",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；苑裡鎮；姓名：陳宏欣；号次：2。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10005:10005030:001",
+      "number": 2,
+      "county": "苗栗县",
+      "district": "苗栗县通霄镇",
+      "name": "張可欣",
+      "area": "通霄鎮",
+      "wikiName": "張可欣",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；通霄鎮；姓名：張可欣；号次：2。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10005:10005030:002",
+      "number": 1,
+      "county": "苗栗县",
+      "district": "苗栗县通霄镇",
+      "name": "巫恒昭",
+      "area": "通霄鎮",
+      "wikiName": "巫恒昭",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；通霄鎮；姓名：巫恒昭；号次：1。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10005:10005050:001",
+      "number": 1,
+      "county": "苗栗县",
+      "district": "苗栗县头份市",
+      "name": "徐功凡",
+      "area": "頭份市",
+      "wikiName": "徐功凡",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；頭份市；姓名：徐功凡；号次：1。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10005:10005050:002",
+      "number": 2,
+      "county": "苗栗县",
+      "district": "苗栗县头份市",
+      "name": "曾玟學",
+      "area": "頭份市",
+      "wikiName": "曾玟學",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；頭份市；姓名：曾玟學；号次：2。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10005:10005060:001",
+      "number": 1,
+      "county": "苗栗县",
+      "district": "苗栗县后龙镇",
+      "name": "謝清輝",
+      "area": "後龍鎮",
+      "wikiName": "謝清輝",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；後龍鎮；姓名：謝清輝；号次：1。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10005:10005080:001",
+      "number": 2,
+      "county": "苗栗县",
+      "district": "苗栗县大湖乡",
+      "name": "黃惠琴",
+      "area": "大湖鄉",
+      "wikiName": "黃惠琴",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；大湖鄉；姓名：黃惠琴；号次：2。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10005:10005080:002",
+      "number": 1,
+      "county": "苗栗县",
+      "district": "苗栗县大湖乡",
+      "name": "謝見德",
+      "area": "大湖鄉",
+      "wikiName": "謝見德",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；大湖鄉；姓名：謝見德；号次：1。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10005:10005090:001",
+      "number": 1,
+      "county": "苗栗县",
+      "district": "苗栗县公馆乡",
+      "name": "葉美惠",
+      "area": "公館鄉",
+      "wikiName": "葉美惠",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；公館鄉；姓名：葉美惠；号次：1。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10005:10005110:001",
+      "number": 1,
+      "county": "苗栗县",
+      "district": "苗栗县南庄乡",
+      "name": "蕭正燕",
+      "area": "南庄鄉",
+      "wikiName": "蕭正燕",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；南庄鄉；姓名：蕭正燕；号次：1。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10005:10005110:002",
+      "number": 2,
+      "county": "苗栗县",
+      "district": "苗栗县南庄乡",
+      "name": "邱梓增",
+      "area": "南庄鄉",
+      "wikiName": "邱梓增",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；南庄鄉；姓名：邱梓增；号次：2。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10005:10005120:001",
+      "number": 2,
+      "county": "苗栗县",
+      "district": "苗栗县头屋乡",
+      "name": "涂金臺",
+      "area": "頭屋鄉",
+      "wikiName": "涂金臺",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；頭屋鄉；姓名：涂金臺；号次：2。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10005:10005120:002",
+      "number": 1,
+      "county": "苗栗县",
+      "district": "苗栗县头屋乡",
+      "name": "江貴熙",
+      "area": "頭屋鄉",
+      "wikiName": "江貴熙",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；頭屋鄉；姓名：江貴熙；号次：1。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10005:10005130:002",
+      "number": 1,
+      "county": "苗栗县",
+      "district": "苗栗县三义乡",
+      "name": "鄭淑如",
+      "area": "三義鄉",
+      "wikiName": "鄭淑如",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；三義鄉；姓名：鄭淑如；号次：1。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10005:10005140:001",
+      "number": 1,
+      "county": "苗栗县",
+      "district": "苗栗县西湖乡",
+      "name": "古秋雲",
+      "area": "西湖鄉",
+      "wikiName": "古秋雲",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；西湖鄉；姓名：古秋雲；号次：1。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10005:10005140:002",
+      "number": 2,
+      "county": "苗栗县",
+      "district": "苗栗县西湖乡",
+      "name": "郭豐文",
+      "area": "西湖鄉",
+      "wikiName": "郭豐文",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；西湖鄉；姓名：郭豐文；号次：2。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10005:10005150:001",
+      "number": 1,
+      "county": "苗栗县",
+      "district": "苗栗县造桥乡",
+      "name": "古育誌",
+      "area": "造橋鄉",
+      "wikiName": "古育誌",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；造橋鄉；姓名：古育誌；号次：1。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10005:10005150:002",
+      "number": 2,
+      "county": "苗栗县",
+      "district": "苗栗县造桥乡",
+      "name": "彭森華",
+      "area": "造橋鄉",
+      "wikiName": "彭森華",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；造橋鄉；姓名：彭森華；号次：2。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10005:10005160:001",
+      "number": 1,
+      "county": "苗栗县",
+      "district": "苗栗县三湾乡",
+      "name": "李運光",
+      "area": "三灣鄉",
+      "wikiName": "李運光",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；三灣鄉；姓名：李運光；号次：1。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10005:10005160:002",
+      "number": 2,
+      "county": "苗栗县",
+      "district": "苗栗县三湾乡",
+      "name": "陳光洋",
+      "area": "三灣鄉",
+      "wikiName": "陳光洋",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；三灣鄉；姓名：陳光洋；号次：2。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10005:10005160:003",
+      "number": 3,
+      "county": "苗栗县",
+      "district": "苗栗县三湾乡",
+      "name": "廖芳毅",
+      "area": "三灣鄉",
+      "wikiName": "廖芳毅",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；三灣鄉；姓名：廖芳毅；号次：3。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10005:10005170:001",
+      "number": 1,
+      "county": "苗栗县",
+      "district": "苗栗县狮潭乡",
+      "name": "劉淑能",
+      "area": "獅潭鄉",
+      "wikiName": "劉淑能",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；獅潭鄉；姓名：劉淑能；号次：1。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10005:10005180:001",
+      "number": 1,
+      "county": "苗栗县",
+      "district": "苗栗县泰安乡",
+      "name": "陳吉基",
+      "area": "泰安鄉",
+      "wikiName": "陳吉基",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；泰安鄉；姓名：陳吉基；号次：1。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10005:10005180:002",
+      "number": 2,
+      "county": "苗栗县",
+      "district": "苗栗县泰安乡",
+      "name": "簡德祥",
+      "area": "泰安鄉",
+      "wikiName": "簡德祥",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；泰安鄉；姓名：簡德祥；号次：2。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10008:10008020:002",
+      "number": 2,
+      "county": "南投县",
+      "district": "南投县埔里镇",
+      "name": "葉仁創",
+      "area": "埔里鎮",
+      "wikiName": "葉仁創",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；埔里鎮；姓名：葉仁創；号次：2。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10008:10008030:002",
+      "number": 2,
+      "county": "南投县",
+      "district": "南投县草屯镇",
+      "name": "張媛婷",
+      "area": "草屯鎮",
+      "wikiName": "張媛婷",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；草屯鎮；姓名：張媛婷；号次：2。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10008:10008060:001",
+      "number": 1,
+      "county": "南投县",
+      "district": "南投县名间乡",
+      "name": "陳翰立",
+      "area": "名間鄉",
+      "wikiName": "陳翰立",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；名間鄉；姓名：陳翰立；号次：1。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10008:10008070:002",
+      "number": 2,
+      "county": "南投县",
+      "district": "南投县鹿谷乡",
+      "name": "康誌合",
+      "area": "鹿谷鄉",
+      "wikiName": "康誌合",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；鹿谷鄉；姓名：康誌合；号次：2。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10008:10008070:003",
+      "number": 3,
+      "county": "南投县",
+      "district": "南投县鹿谷乡",
+      "name": "林智鴻",
+      "area": "鹿谷鄉",
+      "wikiName": "林智鴻",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；鹿谷鄉；姓名：林智鴻；号次：3。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10008:10008080:002",
+      "number": 2,
+      "county": "南投县",
+      "district": "南投县中寮乡",
+      "name": "張永輝",
+      "area": "中寮鄉",
+      "wikiName": "張永輝",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；中寮鄉；姓名：張永輝；号次：2。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10008:10008090:002",
+      "number": 2,
+      "county": "南投县",
+      "district": "南投县鱼池乡",
+      "name": "黃莠馨",
+      "area": "魚池鄉",
+      "wikiName": "黃莠馨",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；魚池鄉；姓名：黃莠馨；号次：2。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10008:10008100:002",
+      "number": 2,
+      "county": "南投县",
+      "district": "南投县国姓乡",
+      "name": "李明杰",
+      "area": "國姓鄉",
+      "wikiName": "李明杰",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；國姓鄉；姓名：李明杰；号次：2。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10008:10008110:001",
+      "number": 2,
+      "county": "南投县",
+      "district": "南投县水里乡",
+      "name": "葉銘豐",
+      "area": "水里鄉",
+      "wikiName": "葉銘豐",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；水里鄉；姓名：葉銘豐；号次：2。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10008:10008110:002",
+      "number": 3,
+      "county": "南投县",
+      "district": "南投县水里乡",
+      "name": "王銀斗",
+      "area": "水里鄉",
+      "wikiName": "王銀斗",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；水里鄉；姓名：王銀斗；号次：3。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10008:10008110:004",
+      "number": 4,
+      "county": "南投县",
+      "district": "南投县水里乡",
+      "name": "陳癸佑",
+      "area": "水里鄉",
+      "wikiName": "陳癸佑",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；水里鄉；姓名：陳癸佑；号次：4。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:10008:10008130:002",
+      "number": 2,
+      "county": "南投县",
+      "district": "南投县仁爱乡",
+      "name": "林瑞祥",
+      "area": "仁愛鄉",
+      "wikiName": "林瑞祥",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；仁愛鄉；姓名：林瑞祥；号次：2。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:09020:09020010:001",
+      "number": 1,
+      "county": "金门县",
+      "district": "金门县金城镇",
+      "name": "許燕輝",
+      "area": "金城鎮",
+      "wikiName": "許燕輝",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；金城鎮；姓名：許燕輝；号次：1。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:09020:09020010:002",
+      "number": 2,
+      "county": "金门县",
+      "district": "金门县金城镇",
+      "name": "石兆瑉",
+      "area": "金城鎮",
+      "wikiName": "石兆瑉",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；金城鎮；姓名：石兆瑉；号次：2。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:09020:09020020:001",
+      "number": 4,
+      "county": "金门县",
+      "district": "金门县金沙镇",
+      "name": "黃奕焮",
+      "area": "金沙鎮",
+      "wikiName": "黃奕焮",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；金沙鎮；姓名：黃奕焮；号次：4。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:09020:09020020:002",
+      "number": 2,
+      "county": "金门县",
+      "district": "金门县金沙镇",
+      "name": "馬自壯",
+      "area": "金沙鎮",
+      "wikiName": "馬自壯",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；金沙鎮；姓名：馬自壯；号次：2。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:09020:09020020:003",
+      "number": 1,
+      "county": "金门县",
+      "district": "金门县金沙镇",
+      "name": "王石堆",
+      "area": "金沙鎮",
+      "wikiName": "王石堆",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；金沙鎮；姓名：王石堆；号次：1。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:09020:09020020:004",
+      "number": 3,
+      "county": "金门县",
+      "district": "金门县金沙镇",
+      "name": "陳憶萍",
+      "area": "金沙鎮",
+      "wikiName": "陳憶萍",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；金沙鎮；姓名：陳憶萍；号次：3。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:09020:09020030:001",
+      "number": 1,
+      "county": "金门县",
+      "district": "金门县金湖镇",
+      "name": "陳向鑫",
+      "area": "金湖鎮",
+      "wikiName": "陳向鑫",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；金湖鎮；姓名：陳向鑫；号次：1。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:09020:09020030:002",
+      "number": 3,
+      "county": "金门县",
+      "district": "金门县金湖镇",
+      "name": "蔡乃靖",
+      "area": "金湖鎮",
+      "wikiName": "蔡乃靖",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；金湖鎮；姓名：蔡乃靖；号次：3。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:09020:09020030:003",
+      "number": 2,
+      "county": "金门县",
+      "district": "金门县金湖镇",
+      "name": "蔡西湖",
+      "area": "金湖鎮",
+      "wikiName": "蔡西湖",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；金湖鎮；姓名：蔡西湖；号次：2。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:09020:09020040:002",
+      "number": 1,
+      "county": "金门县",
+      "district": "金门县金宁乡",
+      "name": "陳成泉",
+      "area": "金寧鄉",
+      "wikiName": "陳成泉",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；金寧鄉；姓名：陳成泉；号次：1。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:09020:09020040:003",
+      "number": 3,
+      "county": "金门县",
+      "district": "金门县金宁乡",
+      "name": "翁品洋",
+      "area": "金寧鄉",
+      "wikiName": "翁品洋",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；金寧鄉；姓名：翁品洋；号次：3。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:09020:09020040:004",
+      "number": 2,
+      "county": "金门县",
+      "district": "金门县金宁乡",
+      "name": "李正騰",
+      "area": "金寧鄉",
+      "wikiName": "李正騰",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；金寧鄉；姓名：李正騰；号次：2。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:09020:09020050:002",
+      "number": 2,
+      "county": "金门县",
+      "district": "金门县烈屿乡",
+      "name": "洪鴻斌",
+      "area": "烈嶼鄉",
+      "wikiName": "洪鴻斌",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；烈嶼鄉；姓名：洪鴻斌；号次：2。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:09020:09020060:001",
+      "number": 3,
+      "county": "金门县",
+      "district": "金门县乌坵乡",
+      "name": "蔡金照",
+      "area": "烏坵鄉",
+      "wikiName": "蔡金照",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；烏坵鄉；姓名：蔡金照；号次：3。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:09020:09020060:002",
+      "number": 1,
+      "county": "金门县",
+      "district": "金门县乌坵乡",
+      "name": "吳玉林",
+      "area": "烏坵鄉",
+      "wikiName": "吳玉林",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；烏坵鄉；姓名：吳玉林；号次：1。",
+      "year": 2026
+    },
+    {
+      "candidateId": "township:09020:09020060:003",
+      "number": 2,
+      "county": "金门县",
+      "district": "金门县乌坵乡",
+      "name": "高丹華",
+      "area": "烏坵鄉",
+      "wikiName": "高丹華",
+      "type": "township",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+      "sourceTitle": "2026年选举选举区投票结果列表（用户指定参考）",
+      "evidence": "用户指定2026年维基页面；烏坵鄉；姓名：高丹華；号次：2。",
+      "year": 2026
+    }
+  ],
+  "unresolved": [
+    {
+      "candidateId": "township:64000:64000360:001",
+      "type": "township",
+      "county": "高雄市",
+      "district": "高雄市茂林区",
+      "name": "駱韋志",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:64000:64000370:001",
+      "type": "township",
+      "county": "高雄市",
+      "district": "高雄市桃源区",
+      "name": "杜司偉\nAndrew\nIsbabanal",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:64000:64000370:002",
+      "type": "township",
+      "county": "高雄市",
+      "district": "高雄市桃源区",
+      "name": "陳德福",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:64000:64000370:003",
+      "type": "township",
+      "county": "高雄市",
+      "district": "高雄市桃源区",
+      "name": "張志誠\nHaisul·\nIspalavi",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:64000:64000370:004",
+      "type": "township",
+      "county": "高雄市",
+      "district": "高雄市桃源区",
+      "name": "伊斯坦大·貝雅夫·正福\nIstanda·\nPaingav",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:64000:64000380:001",
+      "type": "township",
+      "county": "高雄市",
+      "district": "高雄市那玛夏区",
+      "name": "孔賢傑",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10004:10004120:002",
+      "type": "township",
+      "county": "新竹县",
+      "district": "新竹县尖石乡",
+      "name": "楊士龍",
+      "reason": "网页对应候选人号次栏为空；登记姓名楊士龍，官方抽签表为楊仕龍（2号），缺少姓名更正证明"
+    },
+    {
+      "candidateId": "township:10005:10005130:001",
+      "type": "township",
+      "county": "苗栗县",
+      "district": "苗栗县三义乡",
+      "name": "徐文達",
+      "reason": "网页对应候选人号次栏为空"
+    },
+    {
+      "candidateId": "township:10005:10005130:003",
+      "type": "township",
+      "county": "苗栗县",
+      "district": "苗栗县三义乡",
+      "name": "林盈富",
+      "reason": "网页对应候选人号次栏为空"
+    },
+    {
+      "candidateId": "township:10013:10013030:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县东港镇",
+      "name": "洪志明",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013030:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县东港镇",
+      "name": "黃禎祥",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013030:003",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县东港镇",
+      "name": "陳春朝",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013040:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县恒春镇",
+      "name": "盧玟欣",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013040:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县恒春镇",
+      "name": "陳文弘",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013040:003",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县恒春镇",
+      "name": "尤光彬",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013040:004",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县恒春镇",
+      "name": "盧玉棟",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013040:005",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县恒春镇",
+      "name": "尤光暉",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013050:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县万丹乡",
+      "name": "李建霖",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013050:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县万丹乡",
+      "name": "簡天屏",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013050:003",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县万丹乡",
+      "name": "李曜丞",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013050:004",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县万丹乡",
+      "name": "李和耿",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013060:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县长治乡",
+      "name": "邱佳娟",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013060:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县长治乡",
+      "name": "吳亮慶",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013070:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县麟洛乡",
+      "name": "盧重彰",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013070:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县麟洛乡",
+      "name": "李慧萍",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013070:003",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县麟洛乡",
+      "name": "廖龍依",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013080:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县九如乡",
+      "name": "藍聰信",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013090:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县里港乡",
+      "name": "陳明達",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013090:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县里港乡",
+      "name": "藍婉茜",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013110:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县高树乡",
+      "name": "梁正翰",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013110:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县高树乡",
+      "name": "王樹圍",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013120:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县万峦乡",
+      "name": "曾淼祥",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013120:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县万峦乡",
+      "name": "何秋葺",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013130:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县内埔乡",
+      "name": "曾健野",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013130:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县内埔乡",
+      "name": "李明宗",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013130:003",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县内埔乡",
+      "name": "鍾育杰",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013130:004",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县内埔乡",
+      "name": "林吉善",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013140:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县竹田乡",
+      "name": "鍾定豪",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013140:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县竹田乡",
+      "name": "張志誠",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013150:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县新埤乡",
+      "name": "王永豐",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013150:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县新埤乡",
+      "name": "曾明輝",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013160:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县枋寮乡",
+      "name": "蘇清波",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013160:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县枋寮乡",
+      "name": "洪茂豐",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013160:003",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县枋寮乡",
+      "name": "王立順",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013170:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县新园乡",
+      "name": "阮志光",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013170:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县新园乡",
+      "name": "黃金樹",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013180:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县崁顶乡",
+      "name": "郭建清",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013180:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县崁顶乡",
+      "name": "廖國富",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013180:003",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县崁顶乡",
+      "name": "蔡和清",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013180:004",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县崁顶乡",
+      "name": "劉惠美",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013190:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县林边乡",
+      "name": "鄭慶堂",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013190:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县林边乡",
+      "name": "郭美妏",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013200:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县南州乡",
+      "name": "葉俊緯",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013200:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县南州乡",
+      "name": "劉美吟",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013210:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县佳冬乡",
+      "name": "賴文一",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013220:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县琉球乡",
+      "name": "鄭源德",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013220:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县琉球乡",
+      "name": "蔡榮民",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013220:003",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县琉球乡",
+      "name": "李伊展",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013230:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县车城乡",
+      "name": "陳政雄",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013230:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县车城乡",
+      "name": "張春桂",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013240:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县满州乡",
+      "name": "古榮福",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013240:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县满州乡",
+      "name": "余增春",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013250:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县枋山乡",
+      "name": "羅金良",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013250:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县枋山乡",
+      "name": "洪啓能",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013270:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县雾台乡",
+      "name": "巴正義",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013280:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县玛家乡",
+      "name": "羅清仁",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013290:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县泰武乡",
+      "name": "曾大衛",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013290:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县泰武乡",
+      "name": "潘明福\nTivoran．Kazangilijan",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013330:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县牡丹乡",
+      "name": "詹德行",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013330:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县牡丹乡",
+      "name": "林采穎",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013330:003",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县牡丹乡",
+      "name": "邵世光",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    }
+  ],
+  "nameDiscrepancies": [
+    {
+      "candidateId": "council:10007:08:008",
+      "county": "彰化县",
+      "district": "第8选举区（二林镇、大城乡、芳苑乡、竹塘乡）",
+      "registrationName": "洪健興",
+      "drawName": "洪建興",
+      "drawNumber": 9,
+      "status": "按用户指定维基精确姓名洪健興补9号，保留官方抽签用字差异记录；未声称已取得官方更正",
+      "sourceUrl": "https://web.cec.gov.tw/api/file/3fa6c5bc-efb9-4f5b-aff5-a6da35f2d8f3.pdf",
+      "page": 3
+    },
+    {
+      "candidateId": "township:10004:10004120:002",
+      "county": "新竹县",
+      "district": "尖石乡",
+      "registrationName": "楊士龍",
+      "drawName": "楊仕龍",
+      "drawNumber": 2,
+      "status": "维基号次栏仍空白；官方抽签姓名用字不同，维持待核",
+      "sourceUrl": "https://web.cec.gov.tw/api/file/77b4cc63-fcb1-41e9-b0cd-da5493f1dd09.pdf",
+      "page": 1
+    }
+  ],
+  "sourceConflicts": [
+    {
+      "candidateId": "township:10007:10007210:001",
+      "current": 2,
+      "wiki": 1,
+      "name": "許淑美",
+      "county": "彰化县",
+      "district": "彰化县田尾乡",
+      "resolution": "已核实2026官方抽签表，保留原号次；维基列表与官方不一致",
+      "sourceUrl": "https://web.cec.gov.tw/api/file/fc3216f9-62be-4a43-aea3-4747ce4f6d1b.pdf",
+      "officialNumber": 2,
+      "evidence": "PDF第2頁；選舉區：彰化縣田尾鄉；姓名：許淑美；抽籤號次：2。115年即2026年。"
+    },
+    {
+      "candidateId": "township:10007:10007210:002",
+      "current": 1,
+      "wiki": 2,
+      "name": "劉美蘭",
+      "county": "彰化县",
+      "district": "彰化县田尾乡",
+      "resolution": "已核实2026官方抽签表，保留原号次；维基列表与官方不一致",
+      "sourceUrl": "https://web.cec.gov.tw/api/file/fc3216f9-62be-4a43-aea3-4747ce4f6d1b.pdf",
+      "officialNumber": 1,
+      "evidence": "PDF第2頁；選舉區：彰化縣田尾鄉；姓名：劉美蘭；抽籤號次：1。115年即2026年。"
+    },
+    {
+      "candidateId": "township:10009:10009170:001",
+      "current": 2,
+      "wiki": 1,
+      "name": "陳中一",
+      "county": "云林县",
+      "district": "云林县元长乡",
+      "resolution": "已核实2026官方抽签表，保留原号次；维基列表与官方不一致",
+      "sourceUrl": "https://web.cec.gov.tw/api/file/5698ea88-ba67-4f97-b357-bbc0735281af.pdf",
+      "officialNumber": 2,
+      "evidence": "[115年鄉鎮市長選舉]候選人姓名號次抽籤結果；製表機關：雲林縣選舉委員會；製表日期：115年10月27日。欄位：選舉區、姓名、抽籤號次。第2頁：雲林縣元長鄉 陳中一 2。"
+    },
+    {
+      "candidateId": "township:10009:10009170:002",
+      "current": 1,
+      "wiki": 2,
+      "name": "李宗懋",
+      "county": "云林县",
+      "district": "云林县元长乡",
+      "resolution": "已核实2026官方抽签表，保留原号次；维基列表与官方不一致",
+      "sourceUrl": "https://web.cec.gov.tw/api/file/5698ea88-ba67-4f97-b357-bbc0735281af.pdf",
+      "officialNumber": 1,
+      "evidence": "[115年鄉鎮市長選舉]候選人姓名號次抽籤結果；製表機關：雲林縣選舉委員會；製表日期：115年10月27日。欄位：選舉區、姓名、抽籤號次。第2頁：雲林縣元長鄉 李宗懋 1。"
+    },
+    {
+      "candidateId": "township:10002:10002120:001",
+      "current": 3,
+      "wiki": 1,
+      "name": "游吉祥",
+      "county": "宜兰县",
+      "district": "宜兰县南澳乡",
+      "resolution": "已核实2026官方抽签表，保留原号次；维基列表与官方不一致",
+      "sourceUrl": "https://web.cec.gov.tw/api/file/0b7dd493-dad1-4c71-9efb-e02717a8556e.pdf",
+      "officialNumber": 3,
+      "evidence": "[115年鄉鎮市長選舉]候選人抽籤結果；欄位：選舉區、姓名、性別、推薦之政黨、抽籤號次。第2頁：宜蘭縣南澳鄉 游吉祥 男 中國國民黨 3。"
+    },
+    {
+      "candidateId": "township:10002:10002120:003",
+      "current": 1,
+      "wiki": 3,
+      "name": "江子文",
+      "county": "宜兰县",
+      "district": "宜兰县南澳乡",
+      "resolution": "已核实2026官方抽签表，保留原号次；维基列表与官方不一致",
+      "sourceUrl": "https://web.cec.gov.tw/api/file/0b7dd493-dad1-4c71-9efb-e02717a8556e.pdf",
+      "officialNumber": 1,
+      "evidence": "[115年鄉鎮市長選舉]候選人抽籤結果；欄位：選舉區、姓名、性別、推薦之政黨、抽籤號次。第1頁：宜蘭縣南澳鄉 江子文 男 無 1。"
+    }
+  ],
+  "notes": [
+    "本轮仅补充用户指定页面中有明确号次且选区、姓名唯一匹配的记录。空白不按名册位置推定。已有号码与维基不一致者另行核查，官方来源优先。"
+  ]
+}

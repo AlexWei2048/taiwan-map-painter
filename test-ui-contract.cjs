@@ -50,7 +50,7 @@ test('Coastlines are excluded while all actual shared administrative borders rem
  assert.match(app,/\['#regions path','none',0\]/);
  assert.doesNotMatch(app,/for\(const f of countyOutlines\)/);
  assert.match(read('style.css'),/#regions path,#regions path:hover/);
- assert.match(index,/app\.js\?v=20261031-scope-coastline-v49/);
+ assert.match(index,/app\.js\?v=[\w-]+/);
 });
 
 test('Map coastline switches with scope for counties, towns and islands',()=>{
@@ -93,7 +93,7 @@ test('Councillor national scope has single-map choices and remains stored in pro
  assert.match(index,/id="councilViewScope"/);assert.match(app,/councilViewScope:'all'/);
  assert.match(app,/out\.councilViewScope=\['all','regional','plains','mountain'\]/);
  assert.match(app,/function councilVisibleIdentity\(\)/);
- assert.match(app,/state\.councilViewScope=oldCouncilView;render\(\)/);
+ assert.match(app,/state\.councilViewScope=oldCouncilView;state\.labels=oldLabels;render\(\)/);
 });
 test('Town geography loads only for the corresponding election view',()=>{
  assert.doesNotMatch(index,/<script src="town-areas\.js/);
@@ -250,12 +250,12 @@ test('Merged vote display calculates highest candidate from votes or shares',()=
 test('Numeric mode does not require manual predicted winners',()=>{
  assert.match(workspace,/\['topVote','最高票者（得票数\/得票率）'\]/);
  assert.match(town,/\['topVote','最高票者（得票数\/得票率）'\]/);
- assert.match(read('prediction-ui.js'),/if\(predictionUsesVoteDisplay\(\)\)\{r\.winners=\[\]/);
- assert.match(town,/if\(state\.predictionDisplay!=='composition'\)draft\.leaderId=''/);
+ assert.doesNotMatch(read('prediction-ui.js'),/r\.winners=\[\]/);
+ assert.doesNotMatch(town,/draft\.leaderId=''/);
  assert.match(index,/id="localUseVoteData"/);
  assert.match(read('style.css'),/\.prediction-dialog\.numeric-entry \.prediction-table th:first-child/);
  assert.match(read('style.css'),/\.local-dialog\.numeric-entry \.local-table th:first-child/);
- assert.match(app,/predictionUsesVoteDisplay\(\)\|\|typeof predictionDistricts/);
+ assert.doesNotMatch(app,/predictionUsesVoteDisplay\(\)\|\|typeof predictionDistricts/);
  assert.match(workspace,/state\.predictionDisplay==='candidateVote'\|\|!result\.partial/);
 });
 
@@ -350,7 +350,7 @@ test('County mayor legend contains only candidates actually represented by the m
  assert.match(workspace,/const unit=mayorLegendUnit\(\)/);
  assert.match(town,/function predictionLegendCountUnit\(\)\{if\(state\.predictionOffice==='mayor'\)return mayorLegendUnit\(\)/);
  assert.match(workspace,/return candidates\.filter\(c=>shown\.has\(c\.id\)\)\.map/);
- assert.match(workspace,/if\(state\.county&&state\.predictionOffice==='mayor'\)return countyMayorCandidateLegendEntries\(\)/);
+ assert.match(workspace,/state\.predictionOffice==='mayor'&&typeof localPredictionActive==='function'&&localPredictionActive\(\)\)return countyMayorCandidateLegendEntries/);
  assert.match(app,/if\(Object\.hasOwn\(p,'logo'\)\)return p\.logo/);
  assert.match(app,/const emblem=logoFor\(row\.p\)/);
 });
@@ -417,7 +417,7 @@ test('Highest-vote gradient uses leading margin not the winner own percentage',(
  assert.equal(townSingle.status,'winner');assert.equal(townSingle.value,0);
  assert.equal(townSingle.marginShare,null);
 });
-test('Nationwide mayor party legend counts use county or township units, not seats',()=>{
+test('Mayor election legends count seats while local maps count townships',()=>{
  const start=workspace.indexOf('function predictionCandidateLegendEntries(){');
  const end=workspace.indexOf('\nfunction predictionDistrictLabel(d)',start);
  assert.ok(start>=0&&end>start);
@@ -430,7 +430,7 @@ test('Nationwide mayor party legend counts use county or township units, not sea
   source+';return predictionCandidateLegendEntries');
  const rows=maker(state,{districts:[]},()=>({'blue':8,'green':4}),()=>false,()=>townMode,()=>townMode?'乡镇市区':'席',
   ()=>[{id:'blue',name:'甲党',color:'#112266'},{id:'green',name:'乙党',color:'#229955'}],unit);
- assert.deepEqual(rows().map(r=>r.legendSuffix),['（8县市）','（4县市）']);
+ assert.deepEqual(rows().map(r=>r.legendSuffix),['（8席）','（4席）']);
  townMode=true;
  assert.deepEqual(rows().map(r=>r.legendSuffix),['（8乡镇市区）','（4乡镇市区）']);
  state.predictionOffice='council';
@@ -446,7 +446,7 @@ test('Prediction legend contains only the displayed election-district count',()=
  assert.ok(start>=0&&end>start);
  const maker=new Function('state','isNationwide','counts','predictionUsesVoteDisplay',
   'predictionUsesGradient','predictionMarginMode','currentItems','predictionMapResult',
-  'predictionDisplayResult','predictionDistrictFor','regionResult','mayorLegendUnit',
+  'predictionDisplayResult','predictionDistrictFor','regionResult','mayorLegendUnit','identityPanelsActive',
   app.slice(start,end)+';return legendMetrics');
  const features=Array.from({length:12},(_,i)=>({id:'region-'+i,townId:'town-'+i}));
  const state={county:'',legend:{fontSize:12,caption:'之前的冗长说明'},fillMode:'prediction',predictionOffice:'mayor'};
@@ -457,7 +457,7 @@ test('Prediction legend contains only the displayed election-district count',()=
  const mayorUnit=new Function('state','localPredictionActive',
   workspace.slice(root,stop)+';return mayorLegendUnit')(state,()=>townMode);
  const metric=maker(state,()=>false,()=>({}),()=>true,()=>true,()=>true,
-  ()=>features,()=>({status:'winner'}),()=>null,()=>null,()=>({status:'winner'}),mayorUnit);
+  ()=>features,()=>({status:'winner'}),()=>null,()=>null,()=>({status:'winner'}),mayorUnit,()=>false);
  const legend=metric([{id:'a',name:'候选人甲',legendSuffix:'（3县市）',color:'#008000'}]);
  assert.deepEqual(legend.captionLines,['总共12县市']);
  assert.equal(legend.rows.length,1,'Candidate legend row must be preserved');
@@ -585,16 +585,16 @@ test('Existing party logos are displayed as circles in every HTML view',()=>{
 test('Electoral districts display their own numbers without numeric lookup entries; administrative areas use overflow numbering',()=>{
  const src=app.slice(app.indexOf('let mapNumberRows=[]'),app.indexOf('\nfunction activeInsetDefinitions(){'));
  assert.ok(src.includes('function districtMapNumber('));
- assert.doesNotMatch(src,/svgEl\('path'|data-leader-line|data-leader-region/);
+ assert.match(src,/data-label-leader/);
  const state={level:'council',county:'台北市',labels:true,legend:{show:false}};
  const data={counties:[]};
  const el=(tag,attrs)=>({tag,attrs:attrs||{},style:{},children:[],setAttribute(key,v){this.attrs[key]=v},append(...items){this.children.push(...items)}});
  const $=()=>null;
  const logic=new Function('state','data','featureElectorate','shownLabel','regionContains','leaderOverlap',
-  'contentArea','sceneSpec','legendBox','svgEl','paint','$','identityPanelsActive','view',
+  'contentArea','sceneSpec','legendBox','svgEl','paint','$','identityPanelsActive','view','leaderFrames',
   src+';return {labelLayout,drawLabels,mapNumberDisplayName,getRows:()=>mapNumberRows,resetRows:()=>{mapNumberRows=[]}}')(
   state,data,()=> 'regional',f=>f.name,()=>true,(a,b)=>a[0]<b[2]&&a[2]>b[0]&&a[1]<b[3]&&a[3]>b[1],
-  ()=>({left:0,right:1200,top:0,bottom:700}),()=>({height:900}),()=>({}),el,()=>{},$,()=>false,{});
+  ()=>({left:0,right:1200,top:0,bottom:700}),()=>({height:900}),()=>({}),el,()=>{},$,()=>false,{},()=>[]);
  const fifth={id:'c5',name:'第5选区',number:5,county:'台北市',box:[0,0,100,100],center:[50,50]};
  const eighth={id:'c8',name:'第8选区',number:'第8選舉區',county:'台北市',box:[120,0,220,100],center:[170,50]};
  const g={children:[],replaceChildren(){this.children=[]},append(node){this.children.push(node)}};
@@ -635,9 +635,9 @@ test('Export recovers every label omitted by collision-free main map placement, 
  const svgEl=(tag,attrs)=>({tag,attrs:attrs||{},style:{},textContent:'',children:[],setAttribute(k,v){this.attrs[k]=v},append(...x){this.children.push(...x)},replaceChildren(){this.children=[]}});
  const overlap=(a,b)=>a[0]<b[2]&&a[2]>b[0]&&a[1]<b[3]&&a[3]>b[1];
  const logic=new Function('state','data','featureElectorate','shownLabel','regionContains','leaderOverlap',
-  'contentArea','sceneSpec','legendBox','svgEl','paint','$','identityPanelsActive','view',src+';return {labelLayout,drawLabels}')(
+  'contentArea','sceneSpec','legendBox','svgEl','paint','$','identityPanelsActive','view','leaderFrames',src+';return {labelLayout,drawLabels}')(
    state,{counties:[]},()=> 'regional',f=>f.name,()=>true,overlap,
-   ()=>({left:0,right:1200,top:0,bottom:800}),()=>({height:950}),()=>({}),svgEl,()=>{},()=>null,()=>false,{});
+   ()=>({left:0,right:1200,top:0,bottom:800}),()=>({height:950}),()=>({}),svgEl,()=>{},()=>null,()=>false,{},()=>[]);
  const items=[
   {id:'named',name:'凤山区',county:'高雄市',box:[100,100,180,180],center:[140,140]},
   {id:'small',name:'前金区',county:'高雄市',box:[200,100,226,128],center:[213,114]},
@@ -650,7 +650,7 @@ test('Export recovers every label omitted by collision-free main map placement, 
  }));
  for(let i=0;i<rectangles.length;i++)for(let j=i+1;j<rectangles.length;j++)
   assert.ok(!overlap(rectangles[i].rect,rectangles[j].rect),'Labels overlap');
- assert.ok(!labels.some(l=>l.f.id==='very-tiny'),'Do not put overlapping text in too-small polygons');
+ assert.ok(labels.find(l=>l.f.id==='very-tiny')?.leaderAnchor,'Tiny polygons use checked external numbers');
  const code=app.slice(app.indexOf('// Every administrative area or electoral district must be identified'),app.indexOf('function exportSvg(){'));
  const wrapper=new Function('state','featureElectorate','districtMapNumber','wrapExportText','svgEl','exportNumberRows',
   code+';return {exportLabelCoverage,appendExportLabelCoverage,exportLabelCoverageLayout}');
@@ -709,8 +709,8 @@ test('Administrative lookup is embedded in the map and exported inside the SVG m
  assert.match(index,/id="mapWithKey"/);
  assert.match(index,/id="mapNumberKey"/);
  assert.match(index,/id="mapNumberKeyRows"/);
- assert.match(index,/app\.js\?v=20261101-export-insets-and-coverage-v56/);
- assert.match(index,/style\.css\?v=20261101-map-internal-directory-v35/);
+ assert.match(index,/app\.js\?v=[\w-]+/);
+ assert.match(index,/style\.css\?v=[\w-]+/);
  const canvasStart=index.indexOf('<div class="canvas" id="canvas">');
  const key=index.indexOf('<aside class="map-number-key"',canvasStart);
  const canvasEnd=index.indexOf('</div></div>\n<section aria-labelledby="districtReferenceTitle"',canvasStart);
@@ -798,9 +798,9 @@ test('Missing election results never crash gradient map legends',()=>{
  assert.ok(start>=0&&end>start);
  const legendCode=app.slice(start,end)+';return legendMetrics';
  const legend=new Function('state','isNationwide','currentItems','predictionUsesGradient','predictionMapResult',
-  'legendEntries','predictionUsesVoteDisplay','predictionLegendCountUnit','counts','mayorLegendUnit',legendCode)(
+  'legendEntries','predictionUsesVoteDisplay','predictionLegendCountUnit','counts','mayorLegendUnit','identityPanelsActive',legendCode)(
    {fillMode:'prediction',predictionOffice:'mayor',predictionDisplay:'topVote',legendTitle:'图例',gradient:{metric:'share'},legend:{fontSize:12,caption:''}},
-   ()=>true,()=>[{id:'county-with-no-votes'}],()=>true,()=>null,()=>[],()=>true,()=> '区',()=>({}),()=> '区');
+   ()=>true,()=>[{id:'county-with-no-votes'}],()=>true,()=>null,()=>[],()=>true,()=> '区',()=>({}),()=> '区',()=>false);
  const metrics=legend();
  assert.equal(metrics.gradient,true);
  assert.equal(metrics.missing,true);
@@ -861,7 +861,7 @@ test('2022 history remains isolated from saved 2026 state',()=>{
  assert.match(history,/if\(!recordsInView\(\)\.length\)throw Error/);
 });
 test('Historical district mismatch is not silently colored',()=>{
- assert.match(history,/unmatchedDistricts\.add\(norm\(h\.county\)/);
+ assert.match(history,/unmatchedDistricts\.add\(HistoryCore\.key/);
  assert.match(history,/__2022_unmatched__/);
  assert.match(history,/已暂不着色/);
  assert.match(history,/多席次选区按各党实际当选人数统计/);

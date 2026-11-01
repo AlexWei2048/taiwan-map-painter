@@ -1,0 +1,57 @@
+{
+  "summary": {
+    "mayor": {
+      "districts": 22,
+      "candidates": 81,
+      "seats": 22,
+      "womenReserved": 0
+    },
+    "council": {
+      "districts": 221,
+      "candidates": 1502,
+      "seats": 919,
+      "womenReserved": 190
+    },
+    "township": {
+      "districts": 204,
+      "candidates": 481,
+      "seats": 204,
+      "womenReserved": 0
+    }
+  },
+  "pdfAudit": {
+    "mayor": {
+      "pdfRows": 81,
+      "excelRows": 81,
+      "districtCountMismatches": [],
+      "officialTableNameMatches": 81
+    },
+    "council": {
+      "pdfRows": 1502,
+      "excelRows": 1502,
+      "districtCountMismatches": [],
+      "officialTableNameMatches": 1502
+    },
+    "township": {
+      "pdfRows": 481,
+      "excelRows": 481,
+      "districtCountMismatches": [],
+      "officialTableNameMatches": 481
+    }
+  },
+  "warnings": [],
+  "duplicateIds": 0,
+  "officialNameMatchedCount": 2064,
+  "nameCorrections": [
+    {
+      "nameOriginal": "王昌智",
+      "name": "王昌智 Mac Lunai",
+      "reason": "官方登记PDF完整姓名包含族名；原表漏录。"
+    },
+    {
+      "nameOriginal": "蔡依靜\nLamenǸPanay",
+      "name": "蔡依靜 Lamen‧Panay",
+      "reason": "原表族名分隔符乱码，按官方登记PDF恢复。"
+    }
+  ]
+}

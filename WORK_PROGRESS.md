@@ -192,3 +192,16 @@ Latest source revision: 20261030-no-offline-v11.
 - Validation: browser PNG exports succeeded for 22 county/city mayors (3600 × 5801) and 61 Taipei council seats (3600 × 5661); embedded emblems, all six columns, wrapped names and shared map furniture were visually checked. Behavioral regressions cover full field preservation, tri-state incumbency, unfinished-district exclusion, layouts up to 910 winner rows, mayor legend units and imported-party completeness.
 - Latest runtime/cache revision: `20261031-complete-winners-v16`.
 - In progress: final source packaging and publication to the original GitHub Pages site; then verify deployed revision.
+
+
+## 2026-11-01 功能审计修复
+
+- 手选当选人/乡镇胜出者与得票独立保存；历史浏览的自动保存与JSON仍指向用户方案。
+- 历史结果统一编号和身份键，并用实际乡镇集合核对身份选区范围；主图和导出放大图共用配色。
+- 恢复未来/历史选区表的搜索和CSV下载，修正历史CSV换行；CSV导入新增变更预览及空白保留策略。
+- 全台县市主图补齐22个名称或编号；增加避让后的外置数字引线，提高并列地图字号。
+- 增加完整/紧凑导出预览、像素尺寸和得票表；手机保留SVG。县市长最终图例统一政党＋席次。
+- 修复基础地图缓存命中早于后续脚本初始化的竞态，等待DOMContentLoaded后首次渲染。
+- 本地58项计算/回归检查通过；新增7项独立浏览器流程测试供CI执行。地图分片重建与现有几何、顺序一致。
+- 将旧source.zip明确移为archive/build-inputs-20261030.zip，恢复公开构建脚本、审计输入恢复器和数据校验清单；当前源码以主分支为准。
+- 未改变候选人ID、号次、性别及地图原始几何；数据核验日期仍为2026-10-30。

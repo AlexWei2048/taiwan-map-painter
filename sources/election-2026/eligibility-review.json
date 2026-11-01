@@ -1,0 +1,413 @@
+{
+  "checkedAt": "2026-10-29",
+  "exclusions": [
+    {
+      "type": "council",
+      "county": "台北市",
+      "name": "游智彬",
+      "districtNumber": 6,
+      "district": "第6选举区",
+      "reason": "缴附丧失中国大陆户籍证明后未满10年",
+      "status": "资格不符",
+      "url": "https://web.cec.gov.tw/central/article/65212",
+      "decisionDate": "2026-10-16",
+      "checkedAt": "2026-10-29",
+      "official": true
+    },
+    {
+      "type": "council",
+      "county": "新北市",
+      "name": "林正峰",
+      "districtNumber": 10,
+      "district": "第10选举区",
+      "reason": "帮助洗钱罪判决确定",
+      "status": "资格不符",
+      "url": "https://web.cec.gov.tw/central/article/65212",
+      "decisionDate": "2026-10-16",
+      "checkedAt": "2026-10-29",
+      "official": true
+    },
+    {
+      "type": "council",
+      "county": "桃园市",
+      "name": "蕭湘瀚",
+      "districtNumber": 1,
+      "district": "第1选举区",
+      "reason": "妨害公务等案判刑确定且尚未执行完毕",
+      "status": "资格不符",
+      "url": "https://web.cec.gov.tw/central/article/65212",
+      "decisionDate": "2026-10-16",
+      "checkedAt": "2026-10-29",
+      "official": true
+    },
+    {
+      "type": "council",
+      "county": "台中市",
+      "name": "鄭伯其",
+      "districtNumber": 13,
+      "district": "第13选举区",
+      "reason": "诈骗相关犯罪判决确定",
+      "status": "资格不符",
+      "url": "https://web.cec.gov.tw/central/article/65212",
+      "decisionDate": "2026-10-16",
+      "checkedAt": "2026-10-29",
+      "official": true
+    },
+    {
+      "type": "council",
+      "county": "台南市",
+      "name": "曹暐國",
+      "districtNumber": 7,
+      "district": "第7选举区",
+      "reason": "非法持有空气枪罪判决确定",
+      "status": "资格不符",
+      "url": "https://web.cec.gov.tw/central/article/65212",
+      "decisionDate": "2026-10-16",
+      "checkedAt": "2026-10-29",
+      "official": true
+    },
+    {
+      "type": "council",
+      "county": "云林县",
+      "name": "鍾任明",
+      "districtNumber": 4,
+      "district": "第4选举区",
+      "reason": "法院裁定清算程序确定且尚未复权",
+      "status": "资格不符",
+      "url": "https://web.cec.gov.tw/central/article/65212",
+      "decisionDate": "2026-10-16",
+      "checkedAt": "2026-10-29",
+      "official": true
+    },
+    {
+      "type": "council",
+      "county": "嘉义县",
+      "name": "何博倫",
+      "districtNumber": 6,
+      "district": "第6选举区",
+      "reason": "个资犯罪判决确定，保护管束未执行完毕",
+      "status": "资格不符",
+      "url": "https://web.cec.gov.tw/central/article/65212",
+      "decisionDate": "2026-10-16",
+      "checkedAt": "2026-10-29",
+      "official": true
+    },
+    {
+      "type": "council",
+      "county": "花莲县",
+      "name": "周駿宥",
+      "districtNumber": 5,
+      "district": "第5选举区",
+      "reason": "酒驾判刑确定且尚未执行完毕",
+      "status": "资格不符",
+      "url": "https://web.cec.gov.tw/central/article/65212",
+      "decisionDate": "2026-10-16",
+      "checkedAt": "2026-10-29",
+      "official": true
+    },
+    {
+      "type": "council",
+      "county": "金门县",
+      "name": "石永城",
+      "districtNumber": 1,
+      "district": "第1选举区",
+      "reason": "毒品相关犯罪判决确定",
+      "status": "资格不符",
+      "url": "https://web.cec.gov.tw/central/article/65212",
+      "decisionDate": "2026-10-16",
+      "checkedAt": "2026-10-29",
+      "official": true
+    },
+    {
+      "type": "council",
+      "county": "基隆市",
+      "name": "張芳麗",
+      "districtNumber": 3,
+      "district": "第3选举区",
+      "reason": "议长、副议长选举投票受贿罪判决确定",
+      "status": "资格不符",
+      "url": "https://web.cec.gov.tw/central/article/65212",
+      "decisionDate": "2026-10-16",
+      "checkedAt": "2026-10-29",
+      "official": true
+    },
+    {
+      "type": "township",
+      "county": "新竹县",
+      "name": "李貞秀",
+      "district": "竹北市",
+      "reason": "缴附丧失中国大陆户籍证明后未满10年，不予登记",
+      "status": "资格不符",
+      "url": "https://www.hsinchu.gov.tw/News_Content.aspx?n=153&s=357125",
+      "supportingUrls": [
+        "https://www.cna.com.tw/news/aloc/202610070161.aspx",
+        "https://web.cec.gov.tw/api/file/77b4cc63-fcb1-41e9-b0cd-da5493f1dd09.pdf"
+      ],
+      "decisionDate": "2026-10-07",
+      "checkedAt": "2026-10-29",
+      "official": true
+    },
+    {
+      "type": "township",
+      "county": "台中市",
+      "name": "吳天祐",
+      "district": "和平区",
+      "reason": "不具山地原住民身份；官方10月27日合格抽签5人名单未列其名，与9月30日审定结果交叉核对",
+      "status": "资格不符",
+      "url": "https://web.cec.gov.tw/tcec/article/64900",
+      "supportingUrls": [
+        "https://web.cec.gov.tw/api/file/ad0f698e-66fc-43b9-8fc4-da19e21b50aa.pdf"
+      ],
+      "decisionDate": "2026-09-30",
+      "checkedAt": "2026-10-29",
+      "official": true
+    },
+    {
+      "type": "township",
+      "county": "花莲县",
+      "name": "張榮法",
+      "district": "花莲市",
+      "reason": "医疗器材管理法案件判决确定，保护管束尚未执行完毕，选委会取消参选资格",
+      "status": "资格不符",
+      "url": "https://www.cna.com.tw/news/aloc/202610170067.aspx",
+      "supportingUrls": [
+        "https://udn.com/vote2026/story/7328/9820731"
+      ],
+      "decisionDate": "2026-10-17",
+      "checkedAt": "2026-10-29",
+      "official": false,
+      "sourceNote": "中央社引述花莲县选委会审定；官方第445次会议记录尚待获取"
+    }
+  ],
+  "countyCoverage": [
+    {
+      "county": "台北市",
+      "mayorCouncilStatus": "已核对全国官方审定",
+      "mayorCouncilUrl": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29",
+      "excludedCouncil": 1,
+      "townshipStatus": "不适用（没有民选乡镇市区长）"
+    },
+    {
+      "county": "新北市",
+      "mayorCouncilStatus": "已核对全国官方审定",
+      "mayorCouncilUrl": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29",
+      "excludedCouncil": 1,
+      "townshipStatus": "已检索官方站及公开资料，未取得完整合格名册，不能视为已审定通过"
+    },
+    {
+      "county": "桃园市",
+      "mayorCouncilStatus": "已核对全国官方审定",
+      "mayorCouncilUrl": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29",
+      "excludedCouncil": 1,
+      "townshipStatus": "已检索官方站及公开资料，未取得完整合格名册，不能视为已审定通过"
+    },
+    {
+      "county": "台中市",
+      "mayorCouncilStatus": "已核对全国官方审定",
+      "mayorCouncilUrl": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29",
+      "excludedCouncil": 1,
+      "townshipStatus": "已核对已公布不符者及官方抽签名单",
+      "townshipUrls": [
+        "https://web.cec.gov.tw/tcec/article/64900"
+      ]
+    },
+    {
+      "county": "台南市",
+      "mayorCouncilStatus": "已核对全国官方审定",
+      "mayorCouncilUrl": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29",
+      "excludedCouncil": 1,
+      "townshipStatus": "不适用（没有民选乡镇市区长）"
+    },
+    {
+      "county": "高雄市",
+      "mayorCouncilStatus": "已核对全国官方审定",
+      "mayorCouncilUrl": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29",
+      "excludedCouncil": 0,
+      "townshipStatus": "已核对媒体引述选委会：原住民区长全数合格",
+      "townshipUrls": [
+        "https://tw.news.yahoo.com/高雄里長選舉893里共1657人登記-選委會-20人不符資格-013033138.html"
+      ]
+    },
+    {
+      "county": "基隆市",
+      "mayorCouncilStatus": "已核对全国官方审定",
+      "mayorCouncilUrl": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29",
+      "excludedCouncil": 1,
+      "townshipStatus": "不适用（没有民选乡镇市区长）"
+    },
+    {
+      "county": "宜兰县",
+      "mayorCouncilStatus": "已核对全国官方审定",
+      "mayorCouncilUrl": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29",
+      "excludedCouncil": 0,
+      "townshipStatus": "已核对官方审查新闻稿：31人全部合格",
+      "townshipUrls": [
+        "https://web.cec.gov.tw/ilec/article/64845"
+      ]
+    },
+    {
+      "county": "新竹县",
+      "mayorCouncilStatus": "已核对全国官方审定",
+      "mayorCouncilUrl": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29",
+      "excludedCouncil": 0,
+      "townshipStatus": "已核对已公布不符者及官方抽签名单",
+      "townshipUrls": [
+        "https://www.hsinchu.gov.tw/News_Content.aspx?n=153&s=357125"
+      ]
+    },
+    {
+      "county": "新竹市",
+      "mayorCouncilStatus": "已核对全国官方审定",
+      "mayorCouncilUrl": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29",
+      "excludedCouncil": 0,
+      "townshipStatus": "不适用（没有民选乡镇市区长）"
+    },
+    {
+      "county": "苗栗县",
+      "mayorCouncilStatus": "已核对全国官方审定",
+      "mayorCouncilUrl": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29",
+      "excludedCouncil": 0,
+      "townshipStatus": "待补：官方不公开不符姓名，媒体确认有1名乡镇市长不符；仍须合格抽签名单辨识",
+      "townshipUrls": [
+        "https://www.cna.com.tw/news/aloc/202609290282.aspx"
+      ],
+      "unidentifiedIneligibleCount": 1
+    },
+    {
+      "county": "彰化县",
+      "mayorCouncilStatus": "已核对全国官方审定",
+      "mayorCouncilUrl": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29",
+      "excludedCouncil": 0,
+      "townshipStatus": "已核对媒体引述选委会：乡镇市长全数合格",
+      "townshipUrls": [
+        "https://udn.com/news/story/7325/9822319"
+      ]
+    },
+    {
+      "county": "南投县",
+      "mayorCouncilStatus": "已核对全国官方审定",
+      "mayorCouncilUrl": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29",
+      "excludedCouncil": 0,
+      "townshipStatus": "已核对官方新闻：32人全部合格",
+      "townshipUrls": [
+        "https://web.cec.gov.tw/ntec/article/65209"
+      ]
+    },
+    {
+      "county": "云林县",
+      "mayorCouncilStatus": "已核对全国官方审定",
+      "mayorCouncilUrl": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29",
+      "excludedCouncil": 1,
+      "townshipStatus": "已检索官方站及公开资料，未取得完整合格名册，不能视为已审定通过"
+    },
+    {
+      "county": "嘉义县",
+      "mayorCouncilStatus": "已核对全国官方审定",
+      "mayorCouncilUrl": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29",
+      "excludedCouncil": 1,
+      "townshipStatus": "已检索官方站及公开资料，未取得完整合格名册，不能视为已审定通过"
+    },
+    {
+      "county": "嘉义市",
+      "mayorCouncilStatus": "已核对全国官方审定",
+      "mayorCouncilUrl": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29",
+      "excludedCouncil": 0,
+      "townshipStatus": "不适用（没有民选乡镇市区长）"
+    },
+    {
+      "county": "屏东县",
+      "mayorCouncilStatus": "已核对全国官方审定",
+      "mayorCouncilUrl": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29",
+      "excludedCouncil": 0,
+      "townshipStatus": "已核对媒体引述选委会：不符者限代表和村里长，乡镇市长未列不符",
+      "townshipUrls": [
+        "https://udn.com/vote2026/story/7327/9803843"
+      ]
+    },
+    {
+      "county": "花莲县",
+      "mayorCouncilStatus": "已核对全国官方审定",
+      "mayorCouncilUrl": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29",
+      "excludedCouncil": 1,
+      "townshipStatus": "已核对中央社引述选委会：36人登记、35人合格、張榮法不符",
+      "townshipUrls": [
+        "https://www.cna.com.tw/news/aloc/202610170067.aspx"
+      ]
+    },
+    {
+      "county": "台东县",
+      "mayorCouncilStatus": "已核对全国官方审定",
+      "mayorCouncilUrl": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29",
+      "excludedCouncil": 0,
+      "townshipStatus": "已核对中央社引述选委会：不符者限代表和村里长",
+      "townshipUrls": [
+        "https://www.cna.com.tw/news/aipl/202610080108.aspx"
+      ]
+    },
+    {
+      "county": "澎湖县",
+      "mayorCouncilStatus": "已核对全国官方审定",
+      "mayorCouncilUrl": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29",
+      "excludedCouncil": 0,
+      "townshipStatus": "已检索官方站及公开资料，未取得完整合格名册，不能视为已审定通过"
+    },
+    {
+      "county": "金门县",
+      "mayorCouncilStatus": "已核对全国官方审定",
+      "mayorCouncilUrl": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29",
+      "excludedCouncil": 1,
+      "townshipStatus": "已检索官方站及公开资料，未取得完整合格名册，不能视为已审定通过"
+    },
+    {
+      "county": "连江县",
+      "mayorCouncilStatus": "已核对全国官方审定",
+      "mayorCouncilUrl": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29",
+      "excludedCouncil": 0,
+      "townshipStatus": "已核对政府新闻引述选委会第133次会议审查通过",
+      "townshipUrls": [
+        "https://www.matsu-news.gov.tw/news/article/244598",
+        "https://web.cec.gov.tw/lcec/article/64846"
+      ]
+    }
+  ],
+  "reviewNote": "已明确排除13人：10名议员、3名乡镇市区长。县市长81人全数符合中选会10月16日审定。苗栗县另有1名乡镇市长资格不符但姓名尚未由官方合格名单辨识，不能据媒体未点名猜测删除。登记人数为原始受理登记人数，不应随排除资格不符者改写；可另列有效候选人数。未取得完整地方合格名册的记录不得标为已通过资格审定。",
+  "unknownExclusions": [
+    {
+      "type": "township",
+      "county": "苗栗县",
+      "name": null,
+      "count": 1,
+      "status": "待核身份",
+      "url": "https://www.cna.com.tw/news/aloc/202609290282.aspx"
+    }
+  ],
+  "sourceRefs": {
+    "national": "turn1search0",
+    "li": "turn8search1",
+    "wu": "turn28search7",
+    "zhang": "turn20search9",
+    "miaoliPending": "turn5search2"
+  }
+}

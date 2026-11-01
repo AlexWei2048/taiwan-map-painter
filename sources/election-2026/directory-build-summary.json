@@ -1,0 +1,168 @@
+{
+  "asOf": "2026-10-29",
+  "summary": {
+    "mayor": {
+      "districts": 22,
+      "registered": 81,
+      "included": 81,
+      "numbered": 81
+    },
+    "council": {
+      "districts": 221,
+      "registered": 1502,
+      "included": 1492,
+      "numbered": 1373
+    },
+    "township": {
+      "districts": 204,
+      "registered": 481,
+      "included": 478,
+      "numbered": 272
+    }
+  },
+  "excluded": [
+    {
+      "candidateId": "council:63000:06:015",
+      "districtId": "council:63000:06",
+      "name": "游智彬",
+      "county": "台北市",
+      "type": "council",
+      "reason": "缴附丧失中国大陆户籍证明后未满10年",
+      "status": "资格不符",
+      "url": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "candidateId": "council:65000:10:001",
+      "districtId": "council:65000:10",
+      "name": "林正峰",
+      "county": "新北市",
+      "type": "council",
+      "reason": "帮助洗钱罪判决确定",
+      "status": "资格不符",
+      "url": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "candidateId": "council:68000:01:017",
+      "districtId": "council:68000:01",
+      "name": "萧湘瀚",
+      "county": "桃园市",
+      "type": "council",
+      "reason": "妨害公务等案判刑确定且尚未执行完毕",
+      "status": "资格不符",
+      "url": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "candidateId": "council:66000:13:009",
+      "districtId": "council:66000:13",
+      "name": "郑伯其",
+      "county": "台中市",
+      "type": "council",
+      "reason": "诈骗相关犯罪判决确定",
+      "status": "资格不符",
+      "url": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "candidateId": "council:67000:07:012",
+      "districtId": "council:67000:07",
+      "name": "曹𬀩国",
+      "county": "台南市",
+      "type": "council",
+      "reason": "非法持有空气枪罪判决确定",
+      "status": "资格不符",
+      "url": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "candidateId": "council:10009:04:003",
+      "districtId": "council:10009:04",
+      "name": "钟任明",
+      "county": "云林县",
+      "type": "council",
+      "reason": "法院裁定清算程序确定且尚未复权",
+      "status": "资格不符",
+      "url": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "candidateId": "council:10010:06:008",
+      "districtId": "council:10010:06",
+      "name": "何博伦",
+      "county": "嘉义县",
+      "type": "council",
+      "reason": "个资犯罪判决确定，保护管束未执行完毕",
+      "status": "资格不符",
+      "url": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "candidateId": "council:10015:05:004",
+      "districtId": "council:10015:05",
+      "name": "周骏宥",
+      "county": "花莲县",
+      "type": "council",
+      "reason": "酒驾判刑确定且尚未执行完毕",
+      "status": "资格不符",
+      "url": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "candidateId": "council:09020:01:011",
+      "districtId": "council:09020:01",
+      "name": "石永城",
+      "county": "金门县",
+      "type": "council",
+      "reason": "毒品相关犯罪判决确定",
+      "status": "资格不符",
+      "url": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "candidateId": "council:10017:03:003",
+      "districtId": "council:10017:03",
+      "name": "张芳丽",
+      "county": "基隆市",
+      "type": "council",
+      "reason": "议长、副议长选举投票受贿罪判决确定",
+      "status": "资格不符",
+      "url": "https://web.cec.gov.tw/central/article/65212",
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "candidateId": "township:10004:10004010:004",
+      "districtId": "township:10004:10004010",
+      "name": "李贞秀",
+      "county": "新竹县",
+      "type": "township",
+      "reason": "缴附丧失中国大陆户籍证明后未满10年，不予登记",
+      "status": "资格不符",
+      "url": "https://www.hsinchu.gov.tw/News_Content.aspx?n=153&s=357125",
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "candidateId": "township:66000:66000290:005",
+      "districtId": "township:66000:66000290",
+      "name": "吴天祐",
+      "county": "台中市",
+      "type": "township",
+      "reason": "不具山地原住民身份；官方10月27日合格抽签5人名单未列其名，与9月30日审定结果交叉核对",
+      "status": "资格不符",
+      "url": "https://web.cec.gov.tw/tcec/article/64900",
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "candidateId": "township:10015:10015010:004",
+      "districtId": "township:10015:10015010",
+      "name": "张荣法",
+      "county": "花莲县",
+      "type": "township",
+      "reason": "医疗器材管理法案件判决确定，保护管束尚未执行完毕，选委会取消参选资格",
+      "status": "资格不符",
+      "url": "https://www.cna.com.tw/news/aloc/202610170067.aspx",
+      "checkedAt": "2026-10-29"
+    }
+  ]
+}

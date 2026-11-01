@@ -1,0 +1,26 @@
+{
+  "縣市長": {
+    "pdfTotal": 81,
+    "excelRegistrationTotal": 81,
+    "excelCandidateTotal": 81,
+    "pdfDistricts": 22,
+    "excelDistricts": 22,
+    "mismatches": []
+  },
+  "議員": {
+    "pdfTotal": 1502,
+    "excelRegistrationTotal": 1502,
+    "excelCandidateTotal": 1502,
+    "pdfDistricts": 221,
+    "excelDistricts": 221,
+    "mismatches": []
+  },
+  "縣鎮市區長": {
+    "pdfTotal": 481,
+    "excelRegistrationTotal": 481,
+    "excelCandidateTotal": 481,
+    "pdfDistricts": 204,
+    "excelDistricts": 204,
+    "mismatches": []
+  }
+}

@@ -1,0 +1,17 @@
+.openai/
+preview-dist/
+node_modules/
+release-source.zip
+test-results/
+__pycache__/
+sources/*
+!sources/README.md
+!sources/data-snapshot.json
+!sources/election-2026/
+sources/election-2026/*
+!sources/election-2026/ballot-number-audit-20261029.json
+!sources/election-2026/ballot-number-audit-20261030.json
+!sources/election-2026/eligibility-review.json
+!sources/election-2026/directory-build-summary.json
+!sources/election-2026/candidate-extraction-audit.json
+!sources/election-2026/registration-pdf-audit.json

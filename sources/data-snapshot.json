@@ -1,0 +1,13 @@
+{
+  "verifiedAt": "2026-11-01",
+  "candidateDataAsOf": "2026-10-30",
+  "historyYear": 2022,
+  "note": "Source hashes identify this dataset, not new verification of every candidate.",
+  "sha256": {
+    "assets/election-2026.js": "fbf4b6e3f0d2b64458d71ad7d5e53e8f67e3604791d56c21760216d9ec2190b8",
+    "assets/map.json": "958ca1185f34b60c69fc36d372aa3ddef7bc909bad1de3fdc98dc462d8cd9398",
+    "assets/history-2022.json": "91b947babbc16109d4bd01ce4599eb6e21d6c24c6a47aa5f1818968bbae6ffd5",
+    "assets/history-council-districts-2022.json": "742f149586b7a3a1a8059e48761a1b76b4ab3e7862b0a1f73082f23759cfcaa6",
+    "town-areas.js": "dfecbc776ed801628f6a22494f78c6909d374ecee011a49f67472868e2919db8"
+  }
+}
