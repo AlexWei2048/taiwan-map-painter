@@ -94,7 +94,7 @@ const isNationwide=()=>!state.county&&!mayorTownBoundaryOverlay()&&['towns','cou
 function councilVisibleIdentity(){return exportPanelFilter||(state.level==='council'&&state.workspaceMode==='prediction'&&state.fillMode==='prediction'?state.councilViewScope:'all')}
 function panelIdentities(){const order=legislativeFourPanelsActive()?LEGISLATIVE_FREE_ORDER:ELECTORATE_ORDER,selected=state.level==='council'?councilVisibleIdentity():'all';return selected&&selected!=='all'?[selected]:order}
 function furnitureFooterHeight(){return Math.max(126,state.legend.show?legendMetrics(legendReserveEntries()).height+48:0)}
-function sceneSpec(){const panels=identityPanelsActive()?panelIdentities().length:0,base=panels===1?(state.county?{width:1200,height:900,pad:140,font:15}:{width:1800,height:2400,pad:250,font:10}):panels===4?(state.county?{width:2800,height:1500,pad:130,font:26}:{width:3200,height:2300,pad:180,font:28}):identityPanelsActive()?(state.county?{width:2400,height:1050,pad:120,font:26}:{width:3000,height:2100,pad:180,font:28}):isNationwide()?{width:1800,height:2400,pad:250,font:10}:{width:1200,height:900,pad:140,font:15};const n=data&&state.level==='villages'?currentItems().length:0;const mapHeight=Math.max(base.height,n&&n<=120?n*8+220:0);return{...base,height:mapHeight+furnitureFooterHeight()}}
+function sceneSpec(){const panels=identityPanelsActive()?panelIdentities().length:0,base=panels===1?(state.county?{width:1200,height:900,pad:140,font:15}:{width:1800,height:2400,pad:250,font:10}):panels===4?(state.county?{width:2800,height:1500,pad:130,font:26}:{width:3200,height:2300,pad:180,font:28}):identityPanelsActive()?(state.county?{width:2400,height:1050,pad:120,font:26}:{width:3000,height:2100,pad:180,font:28}):isNationwide()?{width:1800,height:2400,pad:250,font:10}:{width:1200,height:900,pad:140,font:15};const n=data&&state.level==='villages'?currentItems().length:0;const mapHeight=Math.max(base.height+(directTownNameLabels()?60:0),n&&n<=120?n*8+220:0);return{...base,height:mapHeight+furnitureFooterHeight()}}
 function contentArea(spec){return{left:45,right:spec.width-115,top:145,bottom:spec.height-furnitureFooterHeight()-28}}
 function fittedView(){const s=sceneSpec();return{x:0,y:0,w:s.width,h:s.height}}
 // Keep geometry movement cheap; expensive collision/leader layout runs only
@@ -115,7 +115,7 @@ function applyView(){
 }
 function fit(){view=fittedView();baseView={...view};flushView();renderLabels()}
 
-function geometryLayout(items,labels=true){if(!items.length)items=data.counties.filter(f=>!state.county||f.name===state.county);const spec=sceneSpec(),area=contentArea(spec),b=bounds(items);const visibleOutlines=state.level==='villages'&&state.villageTown?data.towns.filter(f=>f.id===state.villageTown):state.level!=='counties'?data.counties.filter(f=>!state.county||f.name===state.county):[];for(const outline of visibleOutlines){b[0]=Math.min(b[0],outline.box[0]);b[1]=Math.min(b[1],outline.box[1]);b[2]=Math.max(b[2],outline.box[2]);b[3]=Math.max(b[3],outline.box[3])}for(const q of activeInsetDefinitions()){b[0]=Math.min(b[0],q.box[0]);b[1]=Math.min(b[1],q.box[1]);b[2]=Math.max(b[2],q.box[2]);b[3]=Math.max(b[3],q.box[3])}const gutter=labels?(isNationwide()?250:state.level==='villages'?95:state.level==='counties'||mayorTownBoundaryOverlay()?100:140):20,left=area.left+gutter,right=area.right-gutter,w=right-left,h=area.bottom-area.top,scale=Math.min(w/Math.max(.0001,b[2]-b[0]),h/Math.max(.0001,b[3]-b[1]));return{scale,tx:(left+right)/2-(b[0]+b[2])/2*scale,ty:(area.top+area.bottom)/2-(b[1]+b[3])/2*scale,labelLeft:left-22,labelRight:right+22,area}}
+function geometryLayout(items,labels=true){if(!items.length)items=data.counties.filter(f=>!state.county||f.name===state.county);const spec=sceneSpec(),area=contentArea(spec),b=bounds(items);const visibleOutlines=state.level==='villages'&&state.villageTown?data.towns.filter(f=>f.id===state.villageTown):state.level!=='counties'?data.counties.filter(f=>!state.county||f.name===state.county):[];for(const outline of visibleOutlines){b[0]=Math.min(b[0],outline.box[0]);b[1]=Math.min(b[1],outline.box[1]);b[2]=Math.max(b[2],outline.box[2]);b[3]=Math.max(b[3],outline.box[3])}for(const q of activeInsetDefinitions()){b[0]=Math.min(b[0],q.box[0]);b[1]=Math.min(b[1],q.box[1]);b[2]=Math.max(b[2],q.box[2]);b[3]=Math.max(b[3],q.box[3])}const gutter=labels?(isNationwide()?250:state.level==='villages'?95:directTownNameLabels()?(mayorTownBoundaryOverlay()?90:116):state.level==='counties'||mayorTownBoundaryOverlay()?100:140):20,left=area.left+gutter,right=area.right-gutter,w=right-left,h=area.bottom-area.top,scale=Math.min(w/Math.max(.0001,b[2]-b[0]),h/Math.max(.0001,b[3]-b[1]));return{scale,tx:(left+right)/2-(b[0]+b[2])/2*scale,ty:(area.top+area.bottom)/2-(b[1]+b[3])/2*scale,labelLeft:left-22,labelRight:right+22,area}}
 function identityPanelLayouts(){
  if(!identityPanelsActive()||!data)return[];
  const identities=panelIdentities(),spec=sceneSpec(),area=contentArea(spec),gap=26,left=area.left+8,right=area.right-8,top=area.top+52,bottom=area.bottom-12,columns=identities.length===4?2:identities.length,rows=Math.ceil(identities.length/columns),panelWidth=(right-left-gap*(columns-1))/columns,panelHeight=(bottom-top-gap*(rows-1))/rows;
@@ -779,11 +779,19 @@ function townInsideLabelFit(f,t,width,height,used,area,reserve){
 }
 
 function townNameLabelLayout(items,t,font,area,reserve,attempt=0){
- const sorted=[...items].filter(f=>shownLabel(f)).sort((a,b)=>
-  (b.box[2]-b.box[0])*(b.box[3]-b.box[1])-
-  (a.box[2]-a.box[0])*(a.box[3]-a.box[1]));
- const labels=[],used=[],leaderText=[],pending=[],leaders=[],height=font*1.5+5;
+ const height=font*1.5+5,insideHeight=font*1.37+5;
  const labelWidth=(name,size=font)=>Array.from(name).length*size*1.04+8;
+ const insideWidth=name=>Array.from(name).length*font*.99+7;
+ // Regions with the fewest viable interior positions get first choice.
+ // Previously large polygons were placed first, unnecessarily pushing
+ // narrow urban districts into long, crowded outside callouts.
+ const sorted=[...items].filter(f=>shownLabel(f)).sort((a,b)=>{
+  const fit=f=>Math.min(
+   (f.box[2]-f.box[0])*t.scale/insideWidth(shownLabel(f)),
+   (f.box[3]-f.box[1])*t.scale/insideHeight);
+  return fit(a)-fit(b)||String(a.id).localeCompare(String(b.id));
+ });
+ const labels=[],used=[],leaderText=[],pending=[],leaders=[];
  const reserved=reserve?[reserve.x,reserve.y,reserve.x+reserve.width,reserve.y+reserve.height]:null;
  const valid=(rect)=>rect[0]>=area.left+2&&rect[2]<=area.right-2&&
   rect[1]>=area.top+2&&rect[3]<=area.bottom-2&&
@@ -791,8 +799,8 @@ function townNameLabelLayout(items,t,font,area,reserve,attempt=0){
  // Keep one fixed font across interior names and external callouts.
  // A narrow region moves outside instead of silently shrinking its type.
  for(const f of sorted){
-  const text=shownLabel(f),width=labelWidth(text);
-  const pos=townInsideLabelFit(f,t,width,height,used,area,reserve);
+  const text=shownLabel(f),width=insideWidth(text);
+  const pos=townInsideLabelFit(f,t,width,insideHeight,used,area,reserve);
   if(pos){used.push(pos.rect);labels.push({f,...pos,font,text,numeric:false})}
   else pending.push({f,text,font,anchor:townVisualCenter(f,t)});
  }
@@ -811,7 +819,7 @@ function townNameLabelLayout(items,t,font,area,reserve,attempt=0){
  // Give adjacent outside names an 8–13 px visible breathing gap rather
  // than the previous ~1 px. Reduce that extra gap only when the county has
  // more labels than two full columns could otherwise accommodate.
- const idealRowGap=height+Math.max(13,font*.95);
+ const idealRowGap=height+Math.max(16,font*1.05);
  const room=Math.max(0,area.bottom-area.top-height-11);
  const rowGap=Math.max(height+8,Math.min(idealRowGap,
   pending.length>2?room/Math.max(1,Math.ceil(pending.length/2)-1):idealRowGap));
@@ -831,17 +839,22 @@ function townNameLabelLayout(items,t,font,area,reserve,attempt=0){
  });
  for(const q of order){
   if(!q.anchor){remaining.push(q);continue}
-  const preference=(q.anchor.x<(box.left+box.right)/2)!==(attempt===2)?'left':'right';
-  // A crowded latitude band is better shared between both outer gutters;
-  // geographic proximity is a tie-breaker, not a reason for one dense fan.
+  const mid=(box.left+box.right)/2,halfWidth=Math.max(1,(box.right-box.left)/2);
+  const geographicSide=q.anchor.x<=mid?'left':'right';
+  const preference=attempt===2?(geographicSide==='left'?'right':'left'):geographicSide;
+  // Strong geographic preference for east/west towns, while central
+  // locations can share whichever column has less nearby congestion.
   const side=['left','right'].map(k=>{
    const rows=sides[k],max=capacity[k];
    if(rows.length>=max)return{side:k,score:Infinity};
    const coast=k==='left'?box.left:box.right;
    const near=rows.reduce((sum,r)=>sum+Math.max(0,1-Math.abs(r.anchor.y-q.anchor.y)/(rowGap*2)),0);
    const utilization=(rows.length/Math.max(1,max))**2;
-   return{side:k,score:.12*Math.abs(q.anchor.x-coast)+
-    near*rowGap*1.6+utilization*rowGap*2+(k===preference?0:12)};
+   const eastWest=Math.min(1,Math.abs(q.anchor.x-mid)/halfWidth);
+   const crossingPenalty=k===geographicSide?0:170*eastWest*eastWest+35*eastWest;
+   return{side:k,score:.22*Math.abs(q.anchor.x-coast)+
+    near*rowGap*1.35+utilization*rowGap*2+crossingPenalty+
+    (k===preference?0:8)};
   }).sort((a,b)=>a.score-b.score||(a.side===preference?-1:1))[0];
   if(side&&Number.isFinite(side.score))sides[side.side].push(q);else remaining.push(q);
  }
