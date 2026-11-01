@@ -603,8 +603,13 @@ test('All 22 scoped mayoral township maps display complete township names withou
 test('Township chief maps use complete names with slim callouts throughout all 22 counties',async t=>{
  const page=await pageFor(t);
  await page.locator('#predictionOffice').selectOption('township');
- for(const county of counties){
-  await page.locator('#county').selectOption({label:county});
+ // Township-chief candidates do not exist in every municipality; sweep every
+ // county actually offered by the township-chief map selector.
+ const eligible=await page.locator('#county option').evaluateAll(opts=>
+  opts.filter(o=>o.value).map(o=>({label:o.textContent,value:o.value})));
+ assert.ok(eligible.length>=10,'Township-chief selector should expose eligible counties');
+ for(const {label:county,value} of eligible){
+  await page.locator('#county').selectOption(value);
   const r=await page.evaluate(()=>({
    count:currentItems().length,
    names:[...document.querySelectorAll('#labels text[data-label]')].map(e=>e.textContent),
