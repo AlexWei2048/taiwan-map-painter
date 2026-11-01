@@ -138,6 +138,40 @@ test('Recording votes retains chosen winners and exports a complete vote table',
  assert.match(await page.locator('#legend').textContent(),/中国国民党（1席）/);
  await page.reload();await page.locator('#regions path').first().waitFor();assert.match(await page.locator('#predictionCoverage').innerText(),/已选当选人 1\/1/);
 });
+test('Exported single-column winner table has readable rows, roomy columns and clear party symbols',async t=>{
+ const page=await pageFor(t);
+ const result=await page.evaluate(()=>{
+  const logo=logoFor({id:'blue',name:'中国国民党'});
+  const rows=Array.from({length:22},(_,i)=>({
+   district:i?'县市'+i:'台北市',number:String(i+1),name:i?'测试候选人'+i:'测试候选人',
+   gender:i%2?'女':'男',party:i%3?'民主进步党':'中国国民党',
+   color:i%3?'#1B9431':'#000099',logo,incumbent:i%4===0?'现任':''
+  }));
+  const layout=exportPredictionTableLayout(rows),root=svgEl('g');
+  appendExportPredictionTable(root,rows,20);
+  const card=root.querySelector('[data-export-winner-table]');
+  const items=[...root.querySelectorAll('[data-export-winner-row]')];
+  const named=items[0].querySelector('text[font-size="16.2"]');
+  const partyLogo=items[0].querySelector('[data-export-party-logo]');
+  const numeric=exportPredictionTableLayout([{...rows[0],estimated:true,votes:'12345',share:'45%',status:'预测当选'}]);
+  return{
+   variant:card.dataset.exportTableStyle,font:layout.font,rowHeight:layout.rowHeight,
+   rows:items.length,logos:root.querySelectorAll('[data-export-party-logo]').length,
+   named:named?.textContent,logo:!!partyLogo,incumbents:items.filter(e=>e.textContent.includes('现任')).length,
+   width:layout.width,total:layout.widths.reduce((sum,w)=>sum+w,0),
+   height:layout.height,header:root.textContent.includes('是否现任'),
+   estimatedStillLegacy:!numeric.polished
+  };
+ });
+ assert.equal(result.variant,'polished');
+ assert.ok(result.font>=15&&result.rowHeight>=46);
+ assert.equal(result.rows,22);assert.equal(result.logos,22);
+ assert.equal(result.named,'测试候选人');
+ assert.equal(result.logo,true);assert.equal(result.incumbents,6);
+ assert.equal(result.width,1120);assert.equal(result.total,1084);
+ assert.ok(result.height>1100);assert.equal(result.header,true);
+ assert.equal(result.estimatedStillLegacy,true);
+});
 test('2026 and 2022 district searches and CSV downloads survive mode switching',async t=>{
  const page=await pageFor(t);await page.locator('#predictionOffice').selectOption('council');await page.locator('#county').selectOption({label:'台北市'});
  await page.waitForFunction(()=>document.querySelectorAll('#regions path[data-region]').length===8);
