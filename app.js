@@ -710,7 +710,7 @@ function townNameLabelLayout(items,t,font,area,reserve,attempt=0){
  const sorted=[...items].filter(f=>shownLabel(f)).sort((a,b)=>
   (b.box[2]-b.box[0])*(b.box[3]-b.box[1])-
   (a.box[2]-a.box[0])*(a.box[3]-a.box[1]));
- const labels=[],used=[],pending=[],leaders=[],height=font*1.5+5;
+ const labels=[],used=[],leaderText=[],pending=[],leaders=[],height=font*1.5+5;
  const labelWidth=(name,size=font)=>Array.from(name).length*size*1.04+8;
  const reserved=reserve?[reserve.x,reserve.y,reserve.x+reserve.width,reserve.y+reserve.height]:null;
  const valid=(rect)=>rect[0]>=area.left+2&&rect[2]<=area.right-2&&
@@ -784,12 +784,12 @@ function townNameLabelLayout(items,t,font,area,reserve,attempt=0){
     const rr=[rect[0],yy-height/2-3,rect[2],yy+height/2+3];
     if(!valid(rr))continue;
     const route=mapOrthogonalLeader(q.anchor,side,x,yy,width,
-     coastRail[side],leaders,used,area,insetFrames)||
-     mapGridLeaderRoute(q.anchor,side,x,yy,width,leaders,used,area,insetFrames);
+     coastRail[side],leaders,leaderText,area,insetFrames)||
+     mapGridLeaderRoute(q.anchor,side,x,yy,width,leaders,leaderText,area,insetFrames);
     if(route){chosen={y:yy,rect:rr,...route};break}
    }
    if(!chosen){remaining.push(q);continue}
-   used.push(chosen.rect);leaders.push(chosen.leaderPoints);
+   used.push(chosen.rect);leaderText.push(chosen.rect);leaders.push(chosen.leaderPoints);
    labels.push({f:q.f,x,y:chosen.y,rect:chosen.rect,text:q.text,font,
     numeric:false,leaderAnchor:q.anchor,leaderPath:chosen.leaderPath,
     leaderPoints:chosen.leaderPoints,column:side});
@@ -811,15 +811,15 @@ function townNameLabelLayout(items,t,font,area,reserve,attempt=0){
      const y=anchor.y+k*(height*.6+4);
      const rect=[x-width/2-4,y-height/2-3,x+width/2+4,y+height/2+3];
      if(!valid(rect))continue;
-     const route=mapOrthogonalLeader(anchor,side,x,y,width,coast,leaders,used,area,insetFrames)||
-      mapGridLeaderRoute(anchor,side,x,y,width,leaders,used,area,insetFrames);
+     const route=mapOrthogonalLeader(anchor,side,x,y,width,coast,leaders,leaderText,area,insetFrames)||
+      mapGridLeaderRoute(anchor,side,x,y,width,leaders,leaderText,area,insetFrames);
      if(route){pos={x,y,rect,side,...route};break}
     }
    }
    if(pos)break;
   }
   if(!pos)continue;
-  used.push(pos.rect);leaders.push(pos.leaderPoints);
+  used.push(pos.rect);leaderText.push(pos.rect);leaders.push(pos.leaderPoints);
   labels.push({f:q.f,x:pos.x,y:pos.y,rect:pos.rect,text:q.text,font,numeric:false,
    leaderAnchor:anchor,leaderPath:pos.leaderPath,leaderPoints:pos.leaderPoints,column:pos.side});
  }
