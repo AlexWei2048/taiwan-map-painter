@@ -414,3 +414,6 @@ dialog.floating-prediction-dialog > .floating-dialog-scroll{
 .prediction-dialog.metric-share #predictionAutoTotal,
 .local-dialog.metric-share .local-total,
 .local-dialog.metric-share #localTotalStatus{display:none!important}
+
+/* Council township victory means a locally selected leader, not a council seat. */
+.local-dialog.council-local:not(.numeric-entry) .local-leader-cell{display:table-cell!important}
