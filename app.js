@@ -42,7 +42,7 @@ function legislativeTownItems(identity){return(data?.towns||[]).filter(f=>!state
 // boundaries overlaid; it is not the separate town-by-town forecast scale.
 function mayorTownBoundaryOverlay(){
  return state.workspaceMode==='prediction'&&state.fillMode==='prediction'&&
-  state.predictionOffice==='mayor'&&state.level==='towns'&&state.predictionScale!=='town';
+  state.predictionOffice==='mayor'&&state.level==='towns'&&state.predictionScale==='overlay'&&!state.county;
 }
 function activeLayerItems(){if(mayorTownBoundaryOverlay())return data.counties;if(legislativeFourPanelsActive())return[...allLayerItems().filter(f=>featureElectorate(f)==='regional'),...LEGISLATIVE_FREE_ORDER.slice(1).flatMap(legislativeTownItems)];if(identityPanelsActive())return allLayerItems().filter(f=>state.level!=='council'||councilVisibleIdentity()==='all'||featureElectorate(f)===councilVisibleIdentity());return['council','legislative'].includes(state.level)?allLayerItems().filter(f=>featureElectorate(f)===activeElectorate()):data[state.level]}
 const currentItems=()=>typeof localPredictionActive==='function'&&localPredictionActive()?localPredictionItems():activeLayerItems().flatMap(f=>f.statewide&&state.county?[f.byCounty[state.county]].filter(Boolean):(!state.county||f.county===state.county)?[f]:[]).filter(f=>state.level!=='villages'||!state.villageTown||f.townId===state.villageTown);
@@ -802,8 +802,9 @@ function download(blob,name){const a=document.createElement('a'),url=URL.createO
 const filename=()=>((state.title||((state.county||'全台')+'地图填色')).replace(/[\\/:*?"<>|]/g,'_').slice(0,80));
 $('saveProject').onclick=()=>{download(new Blob([JSON.stringify(projectStateForSave(),null,2)],{type:'application/json'}),filename()+'.json');toast('方案已保存，可在其他设备打开')};$('loadProject').onclick=()=>$('projectFile').click();$('projectFile').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{if(file.size>10000000)throw Error('方案文件过大');const next=cleanProject(JSON.parse(await file.text()));if(next.county&&!data.counties.some(f=>f.name===next.county))throw Error('方案中的县市未找到');pushHistory();state=next;erase=false;syncInputs();render();persist();toast('已打开地图方案')}catch(err){toast(err.message||'无法读取方案')}finally{e.target.value=''}};
 function exportPredictionWinnerRows(){
+ if(mayorTownBoundaryOverlay())return[]; // Nationwide overview is navigation, not county winners.
  if(!state.exportSettings.winnerTable||state.fillMode!=='prediction'||typeof predictionDistricts!=='function'||typeof directoryCandidates!=='function')return[];
- const rows=[],numeric=predictionUsesVoteDisplay();
+ const rows=[],numeric=predictionUsesVoteDisplay()&&!(typeof localPredictionActive==='function'&&localPredictionActive()&&state.predictionOffice==='mayor'&&state.predictionDisplay==='composition');
  function add(d,record,district,local=false){
   const candidates=directoryCandidates(d),ids=new Set(local?[record.leaderId].filter(Boolean):record.winners||[]);
   const complete=local?!!record.leaderId:predictionSummary(d).status==='complete';
