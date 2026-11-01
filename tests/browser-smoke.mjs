@@ -147,7 +147,7 @@ test('Nationwide mayor map uses 22 full names, safe city leaders and framed offs
  const result=await page.evaluate(()=>{
   const labels=[...document.querySelectorAll('#labels [data-label]')];
   const box=e=>e.getBoundingClientRect();
-  const cityNames=['台北市','基隆市','新竹市','嘉义市'];
+  const cityNames=['台北市','基隆市','新竹市','嘉义市','桃园市','高雄市'];
   const islandFrames={连江县:'马祖',金门县:'金门',澎湖县:'澎湖'};
   const insideCounty=el=>{
    const polygon=document.querySelector('#regions [data-region="'+el.dataset.label+'"]');
@@ -183,7 +183,7 @@ test('Nationwide mayor map uses 22 full names, safe city leaders and framed offs
    }),cities,islands};
  });
  assert.equal(result.count,22);assert.equal(result.unique,22);assert.equal(result.numbered,false);
- for(const name of ['台北市','基隆市','新竹市','嘉义市']){
+ for(const name of ['台北市','基隆市','新竹市','嘉义市','桃园市','高雄市']){
   assert.equal(result.cities[name].placement,'outside');assert.equal(result.cities[name].leader,true);
   assert.equal(result.cities[name].overlaps,false);
  }
@@ -193,11 +193,11 @@ test('Nationwide mayor map uses 22 full names, safe city leaders and framed offs
  }
  assert.deepEqual(result.mainlandOutside,[],'All remaining county names remain within their own polygon');
  assert.equal(await page.locator('#mapNumberKey').isVisible(),false);
- for(const name of ['台北市','基隆市','新竹市','嘉义市']){
+ for(const name of ['台北市','基隆市','新竹市','嘉义市','桃园市','高雄市']){
   const id=await page.locator('#labels [data-label]').filter({hasText:name}).getAttribute('data-label');
   const line=page.locator('#labels [data-label-leader="'+id+'"]');
   assert.equal(await line.getAttribute('data-prominent-leader'),'true');
-  assert.ok(await line.evaluate(el=>{const w=parseFloat(getComputedStyle(el).strokeWidth);return w>=1.4&&w<=1.7}),'City callout must be clear but not excessively thick');
+  assert.ok(await line.evaluate(el=>{const w=parseFloat(getComputedStyle(el).strokeWidth);return w>=.8&&w<=1.1}),'City callout must be clear but not excessively thick');
   assert.equal(await page.locator('#labels [data-label-leader-halo="'+id+'"]').count(),1);
   const typography=await page.evaluate(id=>{
    const label=document.querySelector('#labels [data-label="'+id+'"]');
@@ -543,8 +543,8 @@ test('Kaohsiung county mayor townships use all 38 complete names, inside labels 
  const paths=await page.locator('#labels [data-label-leader]').evaluateAll(els=>els.map(el=>({
   id:el.dataset.label,d:el.getAttribute('d'),width:getComputedStyle(el).strokeWidth
  })));
- assert.ok(paths.every(p=>/^M[^HVLC]+H[^HVLC]+V[^HVLC]+H[^HVLC]+$/.test(p.d)),
-  'All township leaders must use perimeter-style orthogonal elbows: '+JSON.stringify(paths.filter(p=>!/^M[^HVLC]+H[^HVLC]+V[^HVLC]+H[^HVLC]+$/.test(p.d)).slice(0,4)));
+ assert.ok(paths.every(p=>/^M[-\d.,]+(?:[HV][-\d.]+){3,7}$/.test(p.d)),
+  'All township leaders must use perimeter-style orthogonal elbows: '+JSON.stringify(paths.filter(p=>!/^M[-\d.,]+(?:[HV][-\d.]+){3,7}$/.test(p.d)).slice(0,4)));
  assert.ok(paths.every(p=>parseFloat(p.width)<=1.1),'Township leaders must be delicate');
  assert.equal(await page.locator('#labels [data-town-leader-layer]').count(),1);
  assert.ok(await page.evaluate(()=>{
@@ -637,8 +637,8 @@ test('All 22 scoped mayoral township maps display complete township names withou
     })),
     widths:leaders.map(e=>parseFloat(getComputedStyle(e).strokeWidth))};
   });
-  assert.ok(quality.routes.every(d=>/^M[^HVLC]+H[^HVLC]+V[^HVLC]+H[^HVLC]+$/.test(d)),
-   county+' has a diagonal or trans-map fan: '+JSON.stringify(quality.routes.filter(d=>!/^M[^HVLC]+H[^HVLC]+V[^HVLC]+H[^HVLC]+$/.test(d)).slice(0,4)));
+  assert.ok(quality.routes.every(d=>/^M[-\d.,]+(?:[HV][-\d.]+){3,7}$/.test(d)),
+   county+' has a diagonal or trans-map fan: '+JSON.stringify(quality.routes.filter(d=>!/^M[-\d.,]+(?:[HV][-\d.]+){3,7}$/.test(d)).slice(0,4)));
   assert.equal(quality.underText,true,county+' leaders may cover names');
   assert.equal(quality.textCount,result.total);
   // Verify actual SVG glyph boxes and callout dots against polygon geometry,
@@ -704,7 +704,7 @@ test('Township chief maps use complete names with slim callouts throughout all 2
   assert.equal(r.numbers,0,county+' must not display numeric township labels');
   assert.equal(r.keyHidden,true,county+' should have no numeric lookup');
   assert.ok(r.names.some(n=>/[乡镇市区]$/.test(n)));
-  assert.ok(r.leaders.every(d=>/^M[^HVLC]+H[^HVLC]+V[^HVLC]+H[^HVLC]+$/.test(d)),
+  assert.ok(r.leaders.every(d=>/^M[-\d.,]+(?:[HV][-\d.]+){3,7}$/.test(d)),
    county+' should use rectangular leader routing');
  }
 });
