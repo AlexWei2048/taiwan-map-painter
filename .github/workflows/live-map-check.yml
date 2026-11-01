@@ -1,0 +1,55 @@
+name: Verify published map labels
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-live:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-package-lock playwright@1.56.1
+      - run: npx playwright install --with-deps chromium
+      - name: Check actual public GitHub Pages
+        run: |
+          node --input-type=module <<'NODE'
+          import { chromium } from 'playwright';
+          const browser=await chromium.launch({headless:true});
+          const page=await browser.newPage();
+          const errors=[];
+          page.on('pageerror', e=>errors.push(e.message));
+          const response=await page.goto('https://alexwei2048.github.io/taiwan-map-painter/?live-test=20261101-v59',{waitUntil:'domcontentloaded',timeout:60000});
+          await page.locator('#regions path[data-region]').first().waitFor({timeout:60000});
+          const result=await page.evaluate(()=>{
+            const names=[...document.querySelectorAll('#labels [data-label]')].map(e=>({name:e.textContent,placement:e.dataset.placement,number:e.dataset.numberKey||'',id:e.dataset.label}));
+            const cities=['台北市','基隆市','新竹市','嘉义市'];
+            return {
+              htmlScript:document.querySelector('script[src*="app.js"]')?.getAttribute('src'),
+              state:typeof state==='undefined'?null:{level:state.level,county:state.county,workspaceMode:state.workspaceMode,fillMode:state.fillMode,predictionOffice:state.predictionOffice},
+              labelCount:names.length,
+              numbered:names.filter(n=>n.number),
+              missingCities:cities.filter(n=>!names.some(e=>e.name===n)),
+              cities:names.filter(n=>cities.includes(n.name)),
+              islands:names.filter(n=>['连江县','金门县','澎湖县'].includes(n.name)),
+              keyVisible:!!document.querySelector('#mapNumberKey:not([hidden])'),
+              appOverview:typeof countyMayorOverview==='function'?countyMayorOverview():null,
+              names
+            };
+          });
+          console.log(JSON.stringify({status:response.status(),url:page.url(),errors,result},null,2));
+          await page.screenshot({path:'/tmp/live-county-mayor.png',fullPage:true});
+          await browser.close();
+          if(response.status()!==200||errors.length||result.labelCount!==22||result.numbered.length||result.missingCities.length||result.cities.some(c=>c.placement!=='outside')||result.islands.some(c=>c.placement!=='inset-bottom'))process.exit(1);
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: live-county-mayor-screenshot
+          path: /tmp/live-county-mayor.png
+          if-no-files-found: ignore
