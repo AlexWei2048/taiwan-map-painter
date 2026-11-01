@@ -94,7 +94,7 @@ const isNationwide=()=>!state.county&&!mayorTownBoundaryOverlay()&&['towns','cou
 function councilVisibleIdentity(){return exportPanelFilter||(state.level==='council'&&state.workspaceMode==='prediction'&&state.fillMode==='prediction'?state.councilViewScope:'all')}
 function panelIdentities(){const order=legislativeFourPanelsActive()?LEGISLATIVE_FREE_ORDER:ELECTORATE_ORDER,selected=state.level==='council'?councilVisibleIdentity():'all';return selected&&selected!=='all'?[selected]:order}
 function furnitureFooterHeight(){return Math.max(126,state.legend.show?legendMetrics(legendReserveEntries()).height+48:0)}
-function sceneSpec(){const panels=identityPanelsActive()?panelIdentities().length:0,base=panels===1?(state.county?{width:1200,height:900,pad:140,font:15}:{width:1800,height:2400,pad:250,font:10}):panels===4?(state.county?{width:2800,height:1500,pad:130,font:26}:{width:3200,height:2300,pad:180,font:28}):identityPanelsActive()?(state.county?{width:2400,height:1050,pad:120,font:26}:{width:3000,height:2100,pad:180,font:28}):isNationwide()?{width:1800,height:2400,pad:250,font:10}:{width:1200,height:900,pad:140,font:15};const n=data&&state.level==='villages'?currentItems().length:0;const mapHeight=Math.max(base.height+(directTownNameLabels()?60:0),n&&n<=120?n*8+220:0);return{...base,height:mapHeight+furnitureFooterHeight()}}
+function sceneSpec(){const panels=identityPanelsActive()?panelIdentities().length:0,base=panels===1?(state.county?{width:1200,height:900,pad:140,font:15}:{width:1800,height:2400,pad:250,font:10}):panels===4?(state.county?{width:2800,height:1500,pad:130,font:26}:{width:3200,height:2300,pad:180,font:28}):identityPanelsActive()?(state.county?{width:2400,height:1050,pad:120,font:26}:{width:3000,height:2100,pad:180,font:28}):isNationwide()?{width:1800,height:2400,pad:250,font:10}:{width:1200,height:900,pad:140,font:15};const n=data&&state.level==='villages'?currentItems().length:0;const townCount=directTownNameLabels()&&data?.towns?data.towns.reduce((count,f)=>count+(f.county===state.county),0):0;const calloutRoom=townCount>=35?180:townCount>=27?125:directTownNameLabels()?60:0;const mapHeight=Math.max(base.height+calloutRoom,n&&n<=120?n*8+220:0);return{...base,height:mapHeight+furnitureFooterHeight()}}
 function contentArea(spec){return{left:45,right:spec.width-115,top:145,bottom:spec.height-furnitureFooterHeight()-28}}
 function fittedView(){const s=sceneSpec();return{x:0,y:0,w:s.width,h:s.height}}
 // Keep geometry movement cheap; expensive collision/leader layout runs only
@@ -863,7 +863,7 @@ function townNameLabelLayout(items,t,font,area,reserve,attempt=0){
    const near=rows.reduce((sum,r)=>sum+Math.max(0,1-Math.abs(r.anchor.y-q.anchor.y)/(rowGap*2)),0);
    const utilization=(rows.length/Math.max(1,max))**2;
    const eastWest=Math.min(1,Math.abs(q.anchor.x-mid)/halfWidth);
-   const crossingPenalty=k===geographicSide?0:170*eastWest*eastWest+35*eastWest;
+   const crossingPenalty=k===geographicSide?0:320*eastWest+100*eastWest*eastWest;
    return{side:k,score:.22*Math.abs(q.anchor.x-coast)+
     near*rowGap*1.35+utilization*rowGap*2+crossingPenalty+
     (k===preference?0:8)};
