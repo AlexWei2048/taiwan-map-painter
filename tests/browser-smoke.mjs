@@ -111,10 +111,10 @@ test('Independent-candidate emblem is bundled for sidebar, legend and standalone
  assert.equal(shared.primary,shared.gray);
  assert.equal(shared.traditional,shared.gray);
  await page.locator('#workspaceFree').click();
- const logo=page.locator('.palette-row[data-party="gray"] img.party-logo');
+ const logo=page.locator('.palette-manage-row[data-party="gray"] img.party-logo');
  assert.equal(await logo.count(),1);
  assert.ok((await logo.getAttribute('src')).startsWith('data:image/png;base64,'));
- await page.locator('.palette-row[data-party="gray"] button.swatch').click();
+ await page.locator('.palette-manage-row[data-party="gray"] button.party-brush').click();
  await page.locator('#regions path[data-region]').first().click();
  const emblem=page.locator('#legend [data-party-logo="gray"]');
  assert.equal(await emblem.count(),1);
