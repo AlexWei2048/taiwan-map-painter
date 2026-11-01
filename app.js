@@ -158,7 +158,7 @@ function mapNumberRecord(f,number){
 }
 function mapNumberSorted(rows){return [...rows].sort((a,b)=>Number(a.number)-Number(b.number)||a.name.localeCompare(b.name,'zh'))}
 function mapNumberDisplayName(row,rows){
- if(!rows.some(other=>other!==row&&other.name===row.name))return row.name;
+ if(rows.filter(other=>other.name===row.name).length<=1)return row.name;
  return [row.group,row.town,row.name].filter(Boolean).join(' · ');
 }
 function renderMapNumberTable(){
