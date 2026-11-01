@@ -369,7 +369,9 @@ function mapOutsideLabelColumns(pending,t,used,area,reserve,items){
 }
 
 function countyMayorOverview(){
- return state.level==='counties'&&!state.county&&state.workspaceMode==='prediction'&&state.fillMode==='prediction'&&state.predictionOffice==='mayor';
+ // County-level nationwide labels must stay stable across restored projects,
+ // prediction presentation switches and free/2022 map modes.
+ return state.level==='counties'&&!state.county;
 }
 const COUNTY_CITY_CALLOUTS=new Set(['台北市','基隆市','新竹市','嘉义市']);
 // All 25 perimeter probes must be inside the county: a central point alone
@@ -556,6 +558,7 @@ function drawIdentityPanelLabels(group,interactive=false,exportAll=false){
  }
 }
 function renderLabels(){
+ const version=$('mapBuildVersion');if(version)version.hidden=!countyMayorOverview();
  const group=$('labels');group.replaceChildren();mapNumberRows=[];
  if(state.labels&&view){
   if(identityPanelsActive())drawIdentityPanelLabels(group,true,false);
