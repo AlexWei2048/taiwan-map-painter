@@ -381,14 +381,23 @@ function countyInsideName(f,t,name,font,used,area,reserve){
  for(const ratio of [1,.9,.8]){
   const size=font*ratio,width=Array.from(name).length*size*1.04+8,height=size*1.5+5;
   let best=null;
-  for(const p of mapLabelCandidatePoints(f,t)){
+  const consider=p=>{
    const rect=[p.x-width/2,p.y-height/2,p.x+width/2,p.y+height/2];
-   if(rect[0]<area.left||rect[2]>area.right||rect[1]<area.top||rect[3]>area.bottom)continue;
-   if(reserve&&leaderOverlap(rect,[reserve.x,reserve.y,reserve.x+reserve.width,reserve.y+reserve.height]))continue;
-   if(used.some(other=>leaderOverlap(rect,other)))continue;
-   if(!samples.every(dx=>samples.every(dy=>regionContains(f,p.x+dx*width,p.y+dy*height,t))))continue;
+   if(rect[0]<area.left||rect[2]>area.right||rect[1]<area.top||rect[3]>area.bottom)return;
+   if(reserve&&leaderOverlap(rect,[reserve.x,reserve.y,reserve.x+reserve.width,reserve.y+reserve.height]))return;
+   if(used.some(other=>leaderOverlap(rect,other)))return;
+   if(!samples.every(dx=>samples.every(dy=>regionContains(f,p.x+dx*width,p.y+dy*height,t))))return;
    const score=(p.x-cx)**2+(p.y-cy)**2;
    if(!best||score<best.score)best={x:p.x,y:p.y,rect,font:size,score};
+  };
+  for(const p of mapLabelCandidatePoints(f,t))consider(p);
+  // A thin crescent such as New Taipei City can have a valid interior label
+  // between the coarse candidate grid points; search densely only if needed.
+  if(!best){
+   const b=f.box;
+   for(let i=1;i<24;i++)for(let j=1;j<24;j++)
+    consider({x:(b[0]+(b[2]-b[0])*i/24)*t.scale+t.tx,
+     y:(b[1]+(b[3]-b[1])*j/24)*t.scale+t.ty});
   }
   if(best)return best;
  }
@@ -458,7 +467,7 @@ function countyMayorLabelLayout(items,t,font,area,reserve){
   if(pos){used.push(pos.rect);labels.push({f,...pos,text:name,numeric:false})}
   else missing.push(f);
  }
- const order=['台北市','基隆市','新竹市','嘉义市'];
+ const order=['基隆市','台北市','新竹市','嘉义市'];
  cities.sort((a,b)=>order.indexOf(a.name)-order.indexOf(b.name));
  for(const f of [...cities,...missing]){
   const name=shownLabel(f),pos=countyCityCallout(f,t,name,font,used,area,reserve,items);
