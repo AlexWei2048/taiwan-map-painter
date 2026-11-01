@@ -830,7 +830,24 @@ function exportTextWidth(value){let n=0;for(const c of Array.from(String(value||
 function truncateExportText(value,max){const text=String(value||'');if(exportTextWidth(text)<=max)return text;let out='',width=0;for(const c of Array.from(text)){const step=/[\u0000-\u00ff]/.test(c)?.55:1;if(width+step>max-1)break;out+=c;width+=step}return out+'…'}
 function wrapExportText(value,max=82){const lines=[];for(const paragraph of String(value||'').split(/\r?\n/)){if(!paragraph){lines.push('');continue}let line='',width=0;for(const token of paragraph.match(/[A-Za-z0-9]+(?:[’'-][A-Za-z0-9]+)*|[\s\S]/gu)||[]){for(const part of exportTextWidth(token)>max?Array.from(token):[token]){const step=exportTextWidth(part);if(line&&width+step>max){lines.push(line);line='';width=0}line+=part;width+=step}}if(line)lines.push(line)}return lines}
 function appendExportNote(root,lines,y){if(!lines.length)return 0;const height=26+lines.length*19;root.append(svgEl('rect',{x:40,y,width:1120,height,rx:10,fill:'#f3f7f3',stroke:'#e0e8e1','stroke-width':1}));const label=svgEl('text',{x:60,y:y+21,'font-size':11,'font-weight':600,fill:'#557064'});label.textContent='说明';root.append(label);lines.forEach((line,index)=>{const text=svgEl('text',{x:102,y:y+21+index*19,'font-size':11.5,fill:'#60766b'});text.textContent=line;root.append(text)});return height}
+function polishedPredictionTableLayout(rows){
+ const widths=[174,82,194,78,385,171],font=15.2,lineHeight=21,rowHeight=47;
+ const headers=['选区','号次','姓名','性别','政党','是否现任'];
+ const prepared=rows.map(row=>{
+  const values=[row.district,row.number,row.name,row.gender,row.party,row.incumbent];
+  const cells=values.map((value,i)=>wrapExportText(value,Math.max(3,(widths[i]-(i===4?83:i===0||i===2?32:18))/font)));
+  const height=Math.max(rowHeight,Math.max(1,...cells.map(lines=>lines.length))*lineHeight+20);
+  return{row,cells,height};
+ });
+ const headingHeight=86,tableHeaderHeight=46,paddingBottom=17;
+ return{polished:true,width:1120,blockWidth:1084,widths,font,lineHeight,rowHeight,
+  headers,blocks:[prepared],columns:1,tableHeaderHeight,headingHeight,
+  height:headingHeight+tableHeaderHeight+prepared.reduce((sum,item)=>sum+item.height,0)+paddingBottom};
+}
 function exportPredictionTableLayout(rows){
+ // With up to 28 non-numeric winners there is room for a true editorial table:
+ // larger names, aligned party logos and a compact incumbent-status chip.
+ if(rows.length&&rows.length<=28&&!rows.some(row=>row.estimated))return polishedPredictionTableLayout(rows);
  const columns=rows.length<=28?1:rows.length<=90?2:rows.length<=260?3:4,font=columns===1?12.5:11.5,lineHeight=font*1.45,rowHeight=34,gap=20;
  const width=Math.max(1120,columns*(rows.some(row=>row.estimated)?940:570)+gap*(columns-1)+40),blockWidth=(width-40-gap*(columns-1))/columns,chunk=Math.ceil(rows.length/columns),headers=['选区','号次','姓名','性别','政党','是否现任'],estimated=rows.some(row=>row.estimated);
  if(estimated)headers.push('预测得票数','预测得票率','标记');
@@ -845,8 +862,73 @@ function exportPredictionTableLayout(rows){
  })),bodyHeight=Math.max(rowHeight,...blocks.map(block=>rowHeight+block.reduce((n,r)=>n+r.height,0))),height=bodyHeight+79;
  return{columns,rowHeight,font,lineHeight,gap,width,blockWidth,widths,chunk,headers,blocks,height};
 }
+function appendExportPolishedWinnerTable(root,rows,y,layout){
+ const card=svgEl('g',{'data-export-winner-table':'true','data-export-table-style':'polished'});
+ root.append(card);
+ const left=40,innerX=58,innerWidth=layout.blockWidth,headingColor='#274d3b';
+ card.append(svgEl('rect',{x:left,y,width:layout.width,height:layout.height,rx:17,fill:'#ffffff',stroke:'#d9e5dd','stroke-width':1.3}));
+ card.append(svgEl('rect',{x:left,y:y+19,width:4,height:41,rx:2,fill:'#3f8562'}));
+ const heading=svgEl('text',{x:63,y:y+35,'font-size':21,'font-weight':700,fill:headingColor});
+ heading.textContent=rows.some(row=>row.local)?'乡镇预测胜出候选人':'预测当选候选人';
+ card.append(heading);
+ const meta=svgEl('text',{x:64,y:y+60,'font-size':12.5,fill:'#728679'});
+ meta.textContent='候选人号次 · 性别 · 政党及党徽 · 现任身份';card.append(meta);
+ const summary=svgEl('text',{x:left+layout.width-23,y:y+34,'font-size':13,'font-weight':500,fill:'#597466','text-anchor':'end'});
+ summary.textContent=`已预测 ${new Set(rows.map(row=>row.district)).size} 个选区 · ${rows.length} 人`;card.append(summary);
+ const headerY=y+layout.headingHeight,headerH=layout.tableHeaderHeight;
+ const widths=layout.widths,xs=[innerX];
+ for(const w of widths)xs.push(xs.at(-1)+w);
+ card.append(svgEl('rect',{x:innerX,y:headerY,width:innerWidth,height:headerH,rx:8,fill:'#eaf3ed'}));
+ const centered=new Set([1,3,5]);
+ layout.headers.forEach((name,i)=>{
+  const center=centered.has(i),x=center?xs[i]+widths[i]/2:xs[i]+(i===4?65:16);
+  const label=svgEl('text',{x,y:headerY+headerH/2,'font-size':14,'font-weight':650,fill:'#375d48',
+   'text-anchor':center?'middle':'start','dominant-baseline':'middle'});
+  label.textContent=name;card.append(label);
+ });
+ let rowY=headerY+headerH;
+ for(const [index,entry]of layout.blocks[0].entries()){
+  const {row,cells,height}=entry,mid=rowY+height/2;
+  const g=svgEl('g',{'data-export-winner-row':'true','data-export-row-index':index});
+  card.append(g);
+  if(index%2===1)g.append(svgEl('rect',{x:innerX,y:rowY,width:innerWidth,height,fill:'#f7faf8'}));
+  const baseline=mid-(Math.max(...cells.map(lines=>lines.length))-1)*0;
+  cells.forEach((lines,i)=>{
+   if(i===5)return;
+   const center=centered.has(i),leftAligned=i===0||i===2||i===4;
+   const tx=leftAligned?xs[i]+(i===4?66:16):xs[i]+widths[i]/2;
+   const size=i===2?16.2:i===4?14.6:14.8;
+   const fontWeight=i===2?650:i===4?550:450;
+   const label=svgEl('text',{x:tx,y:mid-(lines.length-1)*layout.lineHeight/2,'font-size':size,
+    'font-weight':fontWeight,fill:i===2?'#264937':'#4e665a',
+    'text-anchor':center?'middle':'start','dominant-baseline':'middle'});
+   for(const [n,line]of lines.entries()){
+    const span=svgEl('tspan',{x:tx,dy:n?layout.lineHeight:0});span.textContent=line;label.append(span);
+   }
+   g.append(label);
+  });
+  // Inline emblem and party-color stripe, instead of squeezing icons
+  // between two centred text columns.
+  const partyX=xs[4];
+  g.append(svgEl('rect',{x:partyX+14,y:mid-13,width:3,height:26,rx:1.5,fill:row.color||'#607b6b'}));
+  if(row.logo)appendCircularPartyLogo(g,row.logo,partyX+28,mid-12,24,{'data-export-party-logo':'true'});
+  if(row.incumbent){
+   const centerX=xs[5]+widths[5]/2;
+   g.append(svgEl('rect',{x:centerX-32,y:mid-13,width:64,height:26,rx:13,fill:'#e7f3ea'}));
+   const inc=svgEl('text',{x:centerX,y:mid+1,'font-size':13,'font-weight':600,fill:'#2d7049',
+    'text-anchor':'middle','dominant-baseline':'middle'});inc.textContent=row.incumbent;g.append(inc);
+  }
+  if(index!==layout.blocks[0].length-1)
+   g.append(svgEl('line',{x1:innerX+12,x2:innerX+innerWidth-12,y1:rowY+height,y2:rowY+height,
+    stroke:'#e3ebe5','stroke-width':.8}));
+  rowY+=height;
+ }
+ return layout.height;
+}
 function appendExportPredictionTable(root,rows,y){
- if(!rows.length)return 0;const layout=exportPredictionTableLayout(rows),card=svgEl('g',{'data-export-winner-table':'true'});root.append(card);card.append(svgEl('rect',{x:40,y,width:layout.width,height:layout.height,rx:14,fill:'#fff',stroke:'#dce5df','stroke-width':1.2}));const heading=svgEl('text',{x:60,y:y+31,'font-size':19,'font-weight':600,fill:'#294a3a'});heading.textContent=rows.some(row=>row.estimated)?'预测得票候选人（*表示数据未填齐；第一高票不等于议员当选）':rows.some(row=>row.local)?'乡镇预测胜出候选人':'预测当选候选人';card.append(heading);const summary=svgEl('text',{x:layout.width+20,y:y+30,'font-size':11,fill:'#718376','text-anchor':'end'});summary.textContent=`已预测 ${new Set(rows.map(r=>r.district)).size} 个选区 · ${rows.length} 人`;card.append(summary);card.append(svgEl('line',{x1:60,y1:y+46,x2:layout.width+20,y2:y+46,stroke:'#e5ece6'}));
+ if(!rows.length)return 0;const layout=exportPredictionTableLayout(rows);
+ if(layout.polished)return appendExportPolishedWinnerTable(root,rows,y,layout);
+ const card=svgEl('g',{'data-export-winner-table':'true'});root.append(card);card.append(svgEl('rect',{x:40,y,width:layout.width,height:layout.height,rx:14,fill:'#fff',stroke:'#dce5df','stroke-width':1.2}));const heading=svgEl('text',{x:60,y:y+31,'font-size':19,'font-weight':600,fill:'#294a3a'});heading.textContent=rows.some(row=>row.estimated)?'预测得票候选人（*表示数据未填齐；第一高票不等于议员当选）':rows.some(row=>row.local)?'乡镇预测胜出候选人':'预测当选候选人';card.append(heading);const summary=svgEl('text',{x:layout.width+20,y:y+30,'font-size':11,fill:'#718376','text-anchor':'end'});summary.textContent=`已预测 ${new Set(rows.map(r=>r.district)).size} 个选区 · ${rows.length} 人`;card.append(summary);card.append(svgEl('line',{x1:60,y1:y+46,x2:layout.width+20,y2:y+46,stroke:'#e5ece6'}));
  const bodyY=y+59,{widths}=layout;for(let column=0;column<layout.columns;column++){const block=layout.blocks[column];if(!block.length)continue;const x=60+column*(layout.blockWidth+layout.gap),xs=[x],blockHeight=layout.rowHeight+block.reduce((n,r)=>n+r.height,0);for(const w of widths)xs.push(xs.at(-1)+w);card.append(svgEl('rect',{x,y:bodyY,width:layout.blockWidth,height:blockHeight,rx:7,fill:'#fff',stroke:'#dfe8e1','stroke-width':1}));card.append(svgEl('path',{d:`M${x},${bodyY+7}Q${x},${bodyY} ${x+7},${bodyY}H${x+layout.blockWidth-7}Q${x+layout.blockWidth},${bodyY} ${x+layout.blockWidth},${bodyY+7}V${bodyY+layout.rowHeight}H${x}Z`,fill:'#edf5f0'}));
   layout.headers.forEach((label,i)=>{const text=svgEl('text',{x:xs[i]+widths[i]/2,y:bodyY+layout.rowHeight/2+layout.font*.35,'font-size':layout.font,'font-weight':600,fill:'#466253','text-anchor':'middle'});text.textContent=label;card.append(text)});
   let rowY=bodyY+layout.rowHeight;for(const [index,{row,cells,height}]of block.entries()){const group=svgEl('g',{'data-export-winner-row':'true'});card.append(group);if(index%2)group.append(svgEl('rect',{x:x+.5,y:rowY,width:layout.blockWidth-1,height,fill:'#f8fbf9'}));group.append(svgEl('line',{x1:x,y1:rowY,x2:x+layout.blockWidth,y2:rowY,stroke:'#e7eee9','stroke-width':.7}));
