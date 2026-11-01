@@ -493,20 +493,63 @@ function directTownNameLabels(){
 // lines across the colored map. Assign labels to the closest available side,
 // preserve geographic north/south order, and keep all vertical stems outside
 // the county outline. Actual paths are painted behind ALL name labels.
-function townNameLeaderAnchor(f,t,side){
- const p=mapLabelAnchor(f,t);
- if(!p)return null;
- const sign=side==='left'?-1:1;
- const extent=(side==='left'?p.x-(f.box[0]*t.scale+t.tx):
-  f.box[2]*t.scale+t.tx-p.x)+10;
- let boundary=p;
- for(let n=2;n<Math.max(4,extent);n+=2){
-  const x=p.x+sign*n;
-  if(!regionContains(f,x,p.y,t))break;
-  boundary={x,y:p.y};
+// Find a high-clearance representative point close to the geographic
+// interior. Cache original map coordinates across view/layout changes.
+const townVisualCenters=new WeakMap();
+function townVisualCenter(f,t){
+ let raw=townVisualCenters.get(f);
+ if(!raw){
+  const b=f.box,w=b[2]-b[0],h=b[3]-b[1],middle=[(b[0]+b[2])/2,(b[1]+b[3])/2];
+  const desired=f.center||f.labelAnchor||middle,unit={scale:1,tx:0,ty:0};
+  const candidates=[f.center,f.labelAnchor,middle].filter(Boolean).map(p=>[p[0],p[1]]);
+  for(let iy=1;iy<=11;iy++)for(let ix=1;ix<=11;ix++)
+   candidates.push([b[0]+w*ix/12,b[1]+h*iy/12]);
+  const radius=Math.max(.001,Math.min(w,h)),radii=[.06,.12,.19,.27,.35];
+  const dirs=[[1,0],[-1,0],[0,1],[0,-1],[.707,.707],[.707,-.707],[-.707,.707],[-.707,-.707]];
+  let best=null,bestScore=-Infinity;
+  for(const [x,y] of candidates){
+   if(!regionContains(f,x,y,unit))continue;
+   let clearance=0;
+   for(const fraction of radii){
+    if(!dirs.every(([dx,dy])=>regionContains(f,x+dx*radius*fraction,y+dy*radius*fraction,unit)))break;
+    clearance=fraction;
+   }
+   const distance=Math.hypot((x-desired[0])/Math.max(w,.001),(y-desired[1])/Math.max(h,.001));
+   const score=clearance*3-distance*.2;
+   if(score>bestScore){bestScore=score;best=[x,y]}
+  }
+  const fallback=mapLabelAnchor(f,unit);
+  raw=best||[fallback?.x??middle[0],fallback?.y??middle[1]];
+  townVisualCenters.set(f,raw);
  }
- return boundary;
+ return{x:raw[0]*t.scale+t.tx,y:raw[1]*t.scale+t.ty};
 }
+// The entire rendered name (including a small safety margin) must fit inside
+// the true polygon boundary. Sort candidate placements by visual-centre
+// distance; no label is permitted to cross a town border.
+function townInsideLabelFit(f,t,width,height,used,area,reserve){
+ const b=f.box,center=townVisualCenter(f,t);
+ if((b[2]-b[0])*t.scale<width+3||(b[3]-b[1])*t.scale<height+3)return null;
+ const candidates=[center,...mapLabelCandidatePoints(f,t)];
+ for(let ix=1;ix<=15;ix++)for(let iy=1;iy<=15;iy++)
+  candidates.push({x:(b[0]+(b[2]-b[0])*ix/16)*t.scale+t.tx,
+   y:(b[1]+(b[3]-b[1])*iy/16)*t.scale+t.ty});
+ candidates.sort((a,b)=>Math.hypot(a.x-center.x,a.y-center.y)-Math.hypot(b.x-center.x,b.y-center.y));
+ for(const p of candidates){
+  const rect=[p.x-width/2-1.5,p.y-height/2-1.5,p.x+width/2+1.5,p.y+height/2+1.5];
+  if(rect[0]<area.left||rect[2]>area.right||rect[1]<area.top||rect[3]>area.bottom)continue;
+  if(reserve&&leaderOverlap(rect,[reserve.x,reserve.y,reserve.x+reserve.width,reserve.y+reserve.height]))continue;
+  if(used.some(r=>leaderOverlap(rect,r)))continue;
+  let entirelyInside=true;
+  for(let ix=0;ix<=6&&entirelyInside;ix++)for(let iy=0;iy<=6;iy++){
+   const x=rect[0]+(rect[2]-rect[0])*ix/6,y=rect[1]+(rect[3]-rect[1])*iy/6;
+   if(!regionContains(f,x,y,t)){entirelyInside=false;break}
+  }
+  if(entirelyInside)return{x:p.x,y:p.y,rect};
+ }
+ return null;
+}
+
 function townNameLabelLayout(items,t,font,area,reserve){
  const sorted=[...items].filter(f=>shownLabel(f)).sort((a,b)=>
   (b.box[2]-b.box[0])*(b.box[3]-b.box[1])-
@@ -524,11 +567,11 @@ function townNameLabelLayout(items,t,font,area,reserve){
   const text=shownLabel(f);let found=null;
   for(const ratio of [1,.92,.84]){
    const size=font*ratio,width=labelWidth(text,size),h=size*1.5+5;
-   const pos=mapLabelFit(f,t,width,h,used,area,reserve);
+   const pos=townInsideLabelFit(f,t,width,h,used,area,reserve);
    if(pos){found={...pos,font:size};break}
   }
   if(found){used.push(found.rect);labels.push({f,...found,text,numeric:false})}
-  else pending.push({f,text,font,anchor:mapLabelAnchor(f,t)});
+  else pending.push({f,text,font,anchor:townVisualCenter(f,t)});
  }
  if(!pending.length)return labels;
  const box={
@@ -579,7 +622,7 @@ function townNameLabelLayout(items,t,font,area,reserve){
     if(valid(rr)){chosen={y:yy,rect:rr};break}
    }
    if(!chosen){remaining.push(q);continue}
-   const source=townNameLeaderAnchor(q.f,t,side)||q.anchor;
+   const source=q.anchor;
    // Four orthogonal pieces: short district-boundary stub, a horizontal
    // run to the outside rail, a vertical run along the perimeter, then the
    // short final stem to the adjacent complete name. No diagonal fan.
@@ -595,8 +638,7 @@ function townNameLabelLayout(items,t,font,area,reserve){
  // Insets and rare full columns: place a small label near its own territory
  // and use an orthogonal elbow rather than a diagonal through other towns.
  for(const q of remaining){
-  const anchor=q.anchor||{x:(q.f.box[0]+q.f.box[2])/2*t.scale+t.tx,
-   y:(q.f.box[1]+q.f.box[3])/2*t.scale+t.ty},width=labelWidth(q.text);
+  const anchor=q.anchor||townVisualCenter(q.f,t),width=labelWidth(q.text);
   const xs=[anchor.x+width/2+25,anchor.x-width/2-25,
    colX.left,colX.right,anchor.x];
   let pos=null;
@@ -614,7 +656,7 @@ function townNameLabelLayout(items,t,font,area,reserve){
   }
   if(!pos)continue;
   const side=pos.x<anchor.x?'left':'right';
-  const source=townNameLeaderAnchor(q.f,t,side)||anchor;
+  const source=townVisualCenter(q.f,t);
   const direction=side==='left'?-1:1;
   const elbow=source.x+direction*10,end=pos.x-direction*(width/2+6);
   used.push(pos.rect);
@@ -669,6 +711,15 @@ function labelLayout(items,t,font=15){
  return labels;
 }
 
+// Highlight the exact corresponding polygon on name hover. CSS controls
+// the temporary colour so underlying prediction/party fills are untouched.
+function toggleLabelRegionHighlight(f,active){
+ const layer=$('regions');
+ const featureId=String(f.id);
+ for(const path of layer.querySelectorAll('path[data-region]')){
+  if(path.dataset.region===featureId)path.classList.toggle('label-region-highlighted',active);
+ }
+}
 function drawLabels(group,items,t,font=15,interactive=false){
  const overview=state.level==='towns'&&!state.county&&!(typeof mayorTownBoundaryOverlay==='function'&&mayorTownBoundaryOverlay());
  const rendered=overview?(data?.counties||[]):items;
@@ -716,11 +767,20 @@ function drawLabels(group,items,t,font=15,interactive=false){
    'stroke-width':q.numeric?3:2.4,'paint-order':'stroke','stroke-linejoin':'round'});
   label.style.strokeWidth=(q.numeric?2.6:2.4)*zoomRatio;
   // CSS resets SVG text-anchor; enforce the measured centre for this overview.
-  if(countyMayorOverview())label.style.textAnchor='middle';
+  if(countyMayorOverview()||directTownNameLabels())label.style.textAnchor='middle';
   // Callout labels retain the same typography as the labels placed inside districts.
   label.textContent=q.text;
   if(q.numeric){label.setAttribute('data-number-key',q.number);mapNumberRecord(q.f,q.number)}
-  if(interactive){label.style.pointerEvents='auto';label.style.cursor='pointer';label.onclick=()=>paint(q.f)}
+  if(interactive){
+   label.style.pointerEvents='auto';label.style.cursor='pointer';
+   label.setAttribute('tabindex','0');
+   label.addEventListener('pointerenter',()=>toggleLabelRegionHighlight(q.f,true));
+   label.addEventListener('pointerleave',()=>toggleLabelRegionHighlight(q.f,false));
+   label.addEventListener('focus',()=>toggleLabelRegionHighlight(q.f,true));
+   label.addEventListener('blur',()=>toggleLabelRegionHighlight(q.f,false));
+   label.onclick=()=>paint(q.f);
+   label.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();paint(q.f)}};
+  }
   g.append(label);
  }
 }

@@ -385,3 +385,12 @@ dialog.floating-prediction-dialog > .floating-dialog-scroll{
   min-width:610px;
  }
 }
+
+/* Interactive district-name lookup; do not mutate saved election fill values. */
+#regions path[data-region].label-region-highlighted{
+ fill:#ffd66d!important;
+ filter:brightness(1.02);
+}
+#labels text[data-label]:focus-visible{
+ outline:none;fill:#165c45;stroke:#fff;stroke-width:3px;
+}
