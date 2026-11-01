@@ -503,28 +503,92 @@ test('Every council and regional legislative district is labelled in all 22 coun
  await page.waitForFunction(()=>document.querySelector('#regions [data-region][data-electorate="regional"]'));
  for(const county of counties){await page.locator('#county').selectOption({label:county});assert.deepEqual(await missingLabels(page,'#regions [data-region][data-electorate="regional"]'),[],county+' legislative')}
 });
-test('Kaohsiung township labels have geographical numbers, equal fonts and a nonoverlapping key in screen and export',async t=>{
- const page=await pageFor(t);await page.locator('#county').selectOption({label:'高雄市'});await page.locator('#predictionScale').selectOption('overlay');
- assert.equal(await page.locator('#labels [data-label]').count(),38);assert.deepEqual(await missingLabels(page),[]);
- const labels=await page.locator('#labels [data-label]').evaluateAll(nodes=>nodes.map(e=>({id:e.dataset.label,number:e.dataset.numberKey,font:e.getAttribute('font-size'),rect:{x:e.getBBox().x,y:e.getBBox().y,w:e.getBBox().width,h:e.getBBox().height}})));
- assert.equal(new Set(labels.map(e=>e.font)).size,1);
- for(let i=0;i<labels.length;i++)for(let j=i+1;j<labels.length;j++){const a=labels[i].rect,b=labels[j].rect;assert.ok(!(a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y),'Label overlap')}
- const towns=JSON.parse(await readFile(new URL('../assets/map-base.json',import.meta.url),'utf8')).towns;
- const numbered=labels.filter(e=>e.number).sort((a,b)=>Number(a.number)-Number(b.number));
- for(let i=1;i<numbered.length;i++)assert.ok(towns.find(f=>f.id===numbered[i].id).center[1]>=towns.find(f=>f.id===numbered[i-1].id).center[1]);
- assert.ok(await page.evaluate(()=>document.querySelector('#mapNumberKey').getBoundingClientRect().top>=document.querySelector('#map').getBoundingClientRect().bottom));
+test('Kaohsiung county mayor townships use all 38 complete names, inside labels and callouts, without numerical key',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#county').selectOption({label:'高雄市'});
+ await page.locator('#predictionScale').selectOption('overlay');
+ assert.equal(await page.locator('#regions path[data-region]').count(),38);
+ assert.deepEqual(await missingLabels(page),[],'Every town needs its own full name');
+ const names=await page.locator('#labels text[data-label]').evaluateAll(nodes=>nodes.map(el=>({
+  id:el.dataset.label,text:el.textContent,number:el.dataset.numberKey,font:el.getAttribute('font-size'),
+  placement:el.dataset.placement,rect:{x:el.getBBox().x,y:el.getBBox().y,w:el.getBBox().width,h:el.getBBox().height}
+ })));
+ const towns=JSON.parse(await readFile(new URL('../assets/map-base.json',import.meta.url),'utf8')).towns.filter(f=>f.county==='高雄市');
+ assert.equal(names.length,38);
+ assert.deepEqual(new Set(names.map(x=>x.text)),new Set(towns.map(f=>f.name)));
+ assert.ok(names.every(l=>!l.number),'Full labels must not be replaced with numeric lookup keys');
+ assert.ok(names.some(l=>l.placement==='inside'),'Large towns should be labelled inside the polygon');
+ assert.ok(names.some(l=>l.placement==='outside'),'Small towns should use callout lines');
+ const leaders=await page.locator('#labels [data-label-leader]').count();
+ assert.equal(leaders,names.filter(l=>l.placement==='outside').length);
+ assert.equal(await page.locator('#mapNumberKey').isVisible(),false);
+ for(let i=0;i<names.length;i++)for(let j=i+1;j<names.length;j++){
+  const a=names[i].rect,b=names[j].rect;
+  assert.ok(!(a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y),
+   'Overlapping names: '+names[i].text+' / '+names[j].text);
+ }
  const svg=await exportSvg(page);
- const result=await page.evaluate(source=>{const doc=new DOMParser().parseFromString(source,'image/svg+xml'),map=doc.querySelector('svg svg'),key=doc.querySelector('[data-map-number-key] rect');return{below:Number(key.getAttribute('y'))>=Number(map.getAttribute('y'))+Number(map.getAttribute('height')),numbers:[...map.querySelectorAll('[data-number-key]')].map(e=>[e.dataset.label,e.dataset.numberKey])}},svg);
- assert.ok(result.below);assert.deepEqual(result.numbers.sort(),numbered.map(e=>[e.id,e.number]).sort());
+ const result=await page.evaluate(source=>{
+  const doc=new DOMParser().parseFromString(source,'image/svg+xml');
+  return{
+   labels:[...doc.querySelectorAll('text[data-label]')].map(x=>x.textContent),
+   numbers:doc.querySelectorAll('[data-number-key],[data-map-number-key]').length,
+   leaders:doc.querySelectorAll('[data-label-leader]').length
+  };
+ },svg);
+ assert.equal(result.numbers,0);
+ assert.deepEqual(new Set(result.labels),new Set(towns.map(f=>f.name)));
+ assert.ok(result.leaders>0);
+});
+
+test('All 22 scoped mayoral township maps display complete township names without number keys',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#predictionScale').selectOption('overlay');
+ for(const county of counties){
+  await page.locator('#county').selectOption({label:county});
+  const result=await page.evaluate(()=>({
+   total:currentItems().length,
+   labelled:new Set([...document.querySelectorAll('#labels text[data-label]')].map(e=>e.dataset.label)).size,
+   numbers:document.querySelectorAll('#labels [data-number-key]').length,
+   visibleKey:!document.querySelector('#mapNumberKey').hidden
+  }));
+  assert.ok(result.total>0,county+' has no town geometries');
+  assert.equal(result.labelled,result.total,county+' township names missing');
+  assert.equal(result.numbers,0,county+' uses numbered labels');
+  assert.equal(result.visibleKey,false,county+' still shows a number key');
+ }
+});
+
+test('Township chief maps use complete names and a non-numeric legend for each township',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#predictionOffice').selectOption('township');
+ for(const county of ['宜兰县','苗栗县','彰化县','南投县','屏东县']){
+  await page.locator('#county').selectOption({label:county});
+  const r=await page.evaluate(()=>({
+   count:currentItems().length,
+   names:[...document.querySelectorAll('#labels text[data-label]')].map(e=>e.textContent),
+   numbers:document.querySelectorAll('#labels [data-number-key]').length,
+   keyHidden:document.querySelector('#mapNumberKey').hidden,
+   leaders:document.querySelectorAll('#labels [data-label-leader]').length
+  }));
+  assert.ok(r.count>0,county+' should have townships');
+  assert.equal(r.names.length,r.count,county+' names must cover all towns');
+  assert.equal(r.numbers,0,county+' must not display numeric town labels');
+  assert.equal(r.keyHidden,true,county+' should have no numeric lookup');
+  assert.ok(r.names.some(n=>/[乡镇市区]$/.test(n)));
+ }
 });
 test('Zooming the national council overview recalculates and restores all 221 official numbers',async t=>{
  const page=await pageFor(t);await page.locator('#predictionOffice').selectOption('council');await page.waitForFunction(()=>document.querySelectorAll('#regions [data-region]').length===221);
  await page.locator('#zoomIn').click();await page.locator('#zoomIn').click();assert.deepEqual(await missingLabels(page),[]);
  await page.locator('#fit').click();await page.locator('#county').selectOption({label:'高雄市'});assert.deepEqual(await missingLabels(page),[]);
 });
-test('Mobile township number key sits below the drawing and preserves all labels',async t=>{
- const page=await pageFor(t,{width:390,height:844});await page.locator('#county').selectOption({label:'高雄市'});await page.locator('#predictionScale').selectOption('overlay');
+test('Mobile township maps retain full names and do not show numeric lookup tables',async t=>{
+ const page=await pageFor(t,{width:390,height:844});
+ await page.locator('#county').selectOption({label:'高雄市'});
+ await page.locator('#predictionScale').selectOption('overlay');
  assert.deepEqual(await missingLabels(page),[]);
- assert.ok(await page.evaluate(()=>document.querySelector('#mapNumberKey').getBoundingClientRect().top>=document.querySelector('#map').getBoundingClientRect().bottom));
+ assert.equal(await page.locator('#labels [data-number-key]').count(),0);
+ assert.equal(await page.locator('#mapNumberKey').isVisible(),false);
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
 });
