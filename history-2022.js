@@ -218,7 +218,7 @@
   }
   const source=el('districtReferenceSource');source.replaceChildren(document.createTextNode('资料来源：中选会111年8月18日中选务字第1113150255号公告及2022年选举结果。'));const officialLink=document.createElement('a');officialLink.href='https://web.cec.gov.tw/api/file/1dc2a749-cd2a-4ce0-a2ba-0a5b8d7c0eab.pdf';officialLink.target='_blank';officialLink.rel='noopener';officialLink.textContent='查看中选会2022选区划分公告';source.append(officialLink);
  }
- function update(){if(!active||!data)return;const result=analyze();currentResult=result;showRows(result);paintHistory(result);renderHistoryDistrictReference();el('predictionScopeLabel').textContent='2022 历史选举结果';el('brushName').textContent='历史结果 · 只读浏览';el('headerExportPredictions').hidden=true}
+ function update(){if(!active||!data)return;const result=analyze();currentResult=result;showRows(result);paintHistory(result);renderHistoryDistrictReference();el('predictionScopeLabel').textContent='2022 历史选举结果';el('brushName').textContent='历史结果 · 只读浏览';el('headerExportPredictions').hidden=true;el('undo').disabled=true;el('redo').disabled=true}
  function switchMode(){
   state.workspaceMode='history';state.fillMode='solid';state.level=kind==='mayor'?(county?'towns':'counties'):kind==='council'?'council':'towns';state.county=county;
   if(kind==='council')state.councilViewScope='all';
@@ -268,6 +268,7 @@
   return !region?'#edf1e9':region.tie?'#aebdb4':region.party?tone(partyColor(region.party),region.share,currentResult.range):'#edf1e9';
  };
  const defaultDetail=regionDetail;regionDetail=function(feature){if(!active)return defaultDetail(feature);const region=currentResult?.regions.get(featureKey(feature));return !region?'历史数据未匹配':region.tie?'各党当选席次并列':region.party+' · '+region.seatCount+'席'};
+ const defaultPushHistory=pushHistory;pushHistory=function(){if(!active)return defaultPushHistory()};
  const defaultPaint=paint;paint=function(feature){if(!active)return defaultPaint(feature)};
  const defaultSaveState=projectStateForSave;projectStateForSave=function(){return active&&savedMapScope?savedMapScope:defaultSaveState()};
  const defaultRender=render;render=function(){defaultRender();if(active){update();for(const id of ['workspacePrediction','workspaceFree']){el(id).classList.remove('active');el(id).setAttribute('aria-pressed','false')}}};
