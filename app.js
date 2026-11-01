@@ -610,7 +610,9 @@ function exportLabelCoverage(items,map){
   const scope=[f.county,f.town].filter(Boolean).join(' · ');
   const district=['council','legislative'].includes(state.level);
   const number=districtMapNumber(f);
-  const value=district?(number?'第'+number+'选区'+(f.name&&!/^(?:第)?\d+(?:选区)?$/.test(f.name)?' · '+f.name:''):f.name):f.name;
+  const originalName=String(f.name||'').trim(),plainDistrict=originalName.match(/^(?:第\s*)?(\d+)\s*(?:选|選)(?:举|舉)?(?:区|區)$/);
+  const sameAsNumber=!!(number&&plainDistrict&&Number(plainDistrict[1])===Number(number));
+  const value=district?(number?'第'+number+'选区'+(originalName&&!sameAsNumber?' · '+originalName:''):originalName):originalName;
   rows.push({id,scope,value:value||f.name||id});
  }
  return rows.sort((a,b)=>a.scope.localeCompare(b.scope,'zh')||a.value.localeCompare(b.value,'zh'));
