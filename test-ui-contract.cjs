@@ -610,8 +610,8 @@ test('Electoral districts display their own numbers without numeric lookup entri
  assert.deepEqual(logic.getRows(),[]);
  state.level='towns';logic.resetRows();
  const county={id:'county',name:'基隆市',county:'基隆市',box:[0,0,100,100],center:[50,50]};
- const narrowA={id:'tiny-a',name:'狭小区域甲',county:'台北市',box:[0,0,10,10],center:[5,5]};
- const narrowB={id:'tiny-b',name:'狭小区域乙',county:'台北市',box:[20,20,30,30],center:[25,25]};
+ const narrowA={id:'tiny-a',name:'狭小区域甲',county:'台北市',box:[0,0,26,27],center:[13,13]};
+ const narrowB={id:'tiny-b',name:'狭小区域乙',county:'台北市',box:[35,0,61,27],center:[48,13]};
  logic.drawLabels(g,[county,narrowA,narrowB],{scale:1,tx:0,ty:0,area:{left:0,right:1200,top:0,bottom:700}},14);
  const admins=Object.fromEntries(g.children.map(n=>[n.children[0].attrs['data-label'],n.children[0]]));
  assert.equal(admins.county.textContent,'基隆市');
@@ -629,6 +629,50 @@ test('Electoral districts display their own numbers without numeric lookup entri
  assert.equal(islandLabel.numeric,false);
  assert.ok(islandLabel.y>island.center[1]);
 });
+test('Export recovers every label omitted by collision-free main map placement, including districts',()=>{
+ const src=app.slice(app.indexOf('let mapNumberRows=[]'),app.indexOf('\nfunction activeInsetDefinitions(){'));
+ const state={level:'towns',county:'高雄市',labels:true,legend:{show:false}};
+ const svgEl=(tag,attrs)=>({tag,attrs:attrs||{},style:{},textContent:'',children:[],setAttribute(k,v){this.attrs[k]=v},append(...x){this.children.push(...x)},replaceChildren(){this.children=[]}});
+ const overlap=(a,b)=>a[0]<b[2]&&a[2]>b[0]&&a[1]<b[3]&&a[3]>b[1];
+ const logic=new Function('state','data','featureElectorate','shownLabel','regionContains','leaderOverlap',
+  'contentArea','sceneSpec','legendBox','svgEl','paint','$','identityPanelsActive','view',src+';return {labelLayout,drawLabels}')(
+   state,{counties:[]},()=> 'regional',f=>f.name,()=>true,overlap,
+   ()=>({left:0,right:1200,top:0,bottom:800}),()=>({height:950}),()=>({}),svgEl,()=>{},()=>null,()=>false,{});
+ const items=[
+  {id:'named',name:'凤山区',county:'高雄市',box:[100,100,180,180],center:[140,140]},
+  {id:'small',name:'前金区',county:'高雄市',box:[200,100,226,128],center:[213,114]},
+  {id:'crowded',name:'苓雅区',county:'高雄市',box:[200,100,226,128],center:[213,114]},
+  {id:'very-tiny',name:'盐埕区',county:'高雄市',box:[250,100,257,107],center:[253,103]}
+ ];
+ const labels=logic.labelLayout(items,{scale:1,tx:0,ty:0,area:{left:0,right:1200,top:0,bottom:800}},15);
+ const rectangles=labels.map(l=>({
+  id:l.f.id,rect:[l.x-l.font*(l.text.length*.95)/2-4.5,l.y-l.font*.825-2.5,l.x+l.font*(l.text.length*.95)/2+4.5,l.y+l.font*.825+2.5]
+ }));
+ for(let i=0;i<rectangles.length;i++)for(let j=i+1;j<rectangles.length;j++)
+  assert.ok(!overlap(rectangles[i].rect,rectangles[j].rect),'Labels overlap');
+ assert.ok(!labels.some(l=>l.f.id==='very-tiny'),'Do not put overlapping text in too-small polygons');
+ const code=app.slice(app.indexOf('// Every administrative area or electoral district must be identified'),app.indexOf('function exportSvg(){'));
+ const wrapper=new Function('state','featureElectorate','districtMapNumber','wrapExportText','svgEl','exportNumberRows',
+  code+';return {exportLabelCoverage,appendExportLabelCoverage,exportLabelCoverageLayout}');
+ const coverage=wrapper(state,()=> 'regional',f=>String(f.number??''),value=>[String(value)],svgEl,[]);
+ const map={querySelectorAll:()=>labels.map(l=>({getAttribute:()=>l.f.id,hasAttribute:()=>l.numeric}))};
+ const rows=coverage.exportLabelCoverage(items,map);
+ assert.ok(rows.some(r=>r.id==='very-tiny'&&r.value==='盐埕区'));
+ assert.ok(rows.some(r=>r.id==='crowded')||rows.some(r=>r.id==='small'));
+ const panel=svgEl('g');
+ assert.ok(coverage.appendExportLabelCoverage(panel,rows,40,80,1100)>60);
+ assert.equal(panel.children[0].attrs['data-export-label-coverage'],'true');
+ state.level='council';
+ const districts=[{id:'d5',county:'高雄市',name:'第5选区',number:5},{id:'d6',county:'高雄市',name:'第6选区',number:6}];
+ const missing=coverage.exportLabelCoverage(districts,{querySelectorAll:()=>[
+  {getAttribute:()=> 'd5',hasAttribute:()=>false}
+ ]});
+ assert.equal(missing.length,1);
+ assert.equal(missing[0].value,'第6选区');
+ assert.match(app,/oldLabels=state\.labels/);
+ assert.match(app,/state\.labels=true;render\(\);try\{return exportSvg\(\)\}/);
+});
+
 test('Administrative lookup is embedded in the map and exported inside the SVG map whenever it fits',()=>{
  assert.match(index,/id="mapWithKey"/);
  assert.match(index,/id="mapNumberKey"/);
