@@ -23,7 +23,7 @@ async function enterRates(page){
  await page.locator('#savePrediction').click();
 }
 test('Nationwide mayor map uses 22 full names, safe city leaders and framed offshore labels',async t=>{
- const page=await pageFor(t);await page.waitForFunction(()=>document.querySelectorAll('#labels [data-label]').length===22);
+ const page=await pageFor(t);assert.equal(await page.locator('#mapBuildVersion').count(),0,'No build/version marker should appear in the map');await page.waitForFunction(()=>document.querySelectorAll('#labels [data-label]').length===22);
  const result=await page.evaluate(()=>{
   const labels=[...document.querySelectorAll('#labels [data-label]')];
   const box=e=>e.getBoundingClientRect();

@@ -581,7 +581,6 @@ function drawIdentityPanelLabels(group,interactive=false,exportAll=false){
  }
 }
 function renderLabels(){
- const version=$('mapBuildVersion');if(version)version.hidden=!countyMayorOverview();
  const group=$('labels');group.replaceChildren();mapNumberRows=[];
  if(state.labels&&view){
   if(identityPanelsActive())drawIdentityPanelLabels(group,true,false);
