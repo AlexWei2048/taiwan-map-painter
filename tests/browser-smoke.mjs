@@ -176,13 +176,14 @@ test('Mayor township map drills from neutral counties to independent township fo
 });
 test('Each mayor township county map has a visible return-to-Taiwan control that resets only map range',async t=>{
  const page=await pageFor(t);
- const back=page.getByRole('button',{name:'返回全台地图',exact:true});
- assert.equal(await back.count(),1);
+ const back=page.locator('#returnTaiwanMap');
+ assert.equal(await back.count(),1,'Map return button exists even while hidden');
  assert.equal(await back.isVisible(),false,'Hidden on county-level map');
  await page.locator('#predictionScale').selectOption('overlay');
  assert.equal(await back.isVisible(),false,'Hidden on nationwide township overview');
  await page.locator('#county').selectOption({label:'台北市'});
  assert.equal(await back.isVisible(),true,'Shown inside Taipei township detail');
+ assert.equal(await page.getByRole('button',{name:'返回全台地图',exact:true}).count(),1,'Accessible button label');
  assert.equal(await back.textContent().then(s=>s.trim()),'← 返回全台地图');
  const geometry=await page.evaluate(()=>{
   const r=document.querySelector('#returnTaiwanMap').getBoundingClientRect();
