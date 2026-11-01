@@ -160,6 +160,14 @@ test('Mayor township map drills from neutral counties to independent township fo
  await page.locator('#county').selectOption('');
  assert.equal(await page.evaluate(()=>mayorTownBoundaryOverlay()),true);
  assert.ok(await page.locator('#regions path[data-region]').evaluateAll(els=>els.every(e=>e.getAttribute('fill')==='#edf1e9')));
+ // The map-range dropdown offers the same navigation as clicking a county.
+ await page.locator('#county').selectOption({label:'高雄市'});
+ assert.equal(await page.evaluate(()=>localPredictionActive()),true);
+ assert.equal(await page.locator('#county').inputValue(),'高雄市');
+ assert.equal(await page.locator('#predictionScale').inputValue(),'overlay');
+ assert.ok(await page.locator('#regions path[data-region]').count()>20);
+ await page.locator('#county').selectOption('');
+ assert.equal(await page.evaluate(()=>mayorTownBoundaryOverlay()),true);
  // County layer remains independent and retains its original prediction.
  await page.locator('#predictionScale').selectOption('district');
  assert.equal(await page.evaluate(()=>state.level),'counties');
