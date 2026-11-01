@@ -248,8 +248,8 @@ test('Merged vote display calculates highest candidate from votes or shares',()=
  assert.equal(percentageOnly.votes,null);
 });
 test('Numeric mode does not require manual predicted winners',()=>{
- assert.match(workspace,/\['topVote','最高票者（得票数\/得票率）'\]/);
- assert.match(town,/\['topVote','最高票者（得票数\/得票率）'\]/);
+ assert.match(workspace,/\['topVote','预测得票'\]/);
+ assert.match(town,/\['topVote','预测得票'\]/);
  assert.doesNotMatch(read('prediction-ui.js'),/r\.winners=\[\]/);
  assert.doesNotMatch(town,/draft\.leaderId=''/);
  assert.match(index,/id="localUseVoteData"/);
@@ -257,6 +257,24 @@ test('Numeric mode does not require manual predicted winners',()=>{
  assert.match(read('style.css'),/\.local-dialog\.numeric-entry \.local-table th:first-child/);
  assert.doesNotMatch(app,/predictionUsesVoteDisplay\(\)\|\|typeof predictionDistricts/);
  assert.match(workspace,/state\.predictionDisplay==='candidateVote'\|\|!result\.partial/);
+});
+
+test('Two-stage forecast UI keeps both scopes and exclusive entry metrics',()=>{
+ const entry=read('prediction-vote-entry.js'),styles=read('style.css');
+ assert.match(index,/id="predictionDisplayBox"/);
+ assert.match(index,/id="predictionCandidateScopeBox"/);
+ assert.match(index,/id="predictionVoteMetric"/);
+ assert.match(index,/id="localVoteMetric"/);
+ assert.match(app,/predictionCandidateScope:'topVote',predictionVoteMetric:'share'/);
+ assert.match(workspace,/select\.value=state\.predictionDisplay==='composition'\?'composition':'topVote'/);
+ assert.match(workspace,/state\.predictionCandidateScope==='candidateVote'/);
+ assert.match(town,/function localDisplayOptions\(\)\{return \[\['composition','预测胜负'\],\['topVote','预测得票'\]\]\}/);
+ assert.match(entry,/keepOnlyMetric\(predictionDraft\)/);
+ assert.match(entry,/keepOnlyMetric\(localDraft\)/);
+ assert.match(entry,/control\.disabled=active&&kind!=='votes'/);
+ assert.match(entry,/control\.disabled=active&&kind!=='share'/);
+ assert.match(styles,/\.prediction-dialog\.metric-share \.vote-metric-column-votes/);
+ assert.match(styles,/\.local-dialog\.metric-votes \.vote-metric-column-share/);
 });
 
 test('Specified candidate shows own votes even when another candidate leads',()=>{
@@ -284,8 +302,11 @@ test('Specified candidate shows own votes even when another candidate leads',()=
 test('Candidate mode selection visible and survives saved projects',()=>{
  assert.match(index,/地图层级<\/label>/);
  assert.doesNotMatch(index,/地图按什么区域显示/);
- assert.match(index,/指定候选人（得票数\/得票率）/);
- assert.match(index,/最高票者（得票数\/得票率）/);
+ assert.match(index,/预测方式<\/label>/);
+ assert.match(index,/<option value="composition">预测胜负<\/option>/);
+ assert.match(index,/<option value="topVote">预测得票<\/option>/);
+ assert.match(index,/id="predictionCandidateScope"/);
+ assert.match(index,/<option value="candidateVote">指定候选人<\/option>/);
  assert.match(workspace,/function syncDistrictCandidatePicker\(\)/);
  assert.match(workspace,/PredictionCore\.candidateVoteResult\(cs,record,state\.localDisplayCandidate\)/);
  assert.match(workspace,/syncDistrictCandidatePicker\(\)/);
