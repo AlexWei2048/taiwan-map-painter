@@ -537,7 +537,10 @@ function drawLabels(group,items,t,font=15,interactive=false){
    'data-placement':q.leaderAnchor?'outside':q.districtNumber?'district-number':q.island?(q.insetBottom?'inset-bottom':'below-island'):'inside','text-anchor':'middle','dominant-baseline':'middle',
    'font-weight':q.numeric||q.districtNumber?700:500,fill:'#2c493b',stroke:'#ffffffed',
    'stroke-width':q.numeric?3:2.4,'paint-order':'stroke','stroke-linejoin':'round'});
-  label.style.strokeWidth=(q.numeric?2.6:2.4)*zoomRatio;label.textContent=q.text;
+  label.style.strokeWidth=(q.numeric?2.6:2.4)*zoomRatio;
+  // CSS resets SVG text-anchor; enforce the measured centre for this overview.
+  if(countyMayorOverview())label.style.textAnchor='middle';
+  label.textContent=q.text;
   if(q.numeric){label.setAttribute('data-number-key',q.number);mapNumberRecord(q.f,q.number)}
   if(interactive){label.style.pointerEvents='auto';label.style.cursor='pointer';label.onclick=()=>paint(q.f)}
   g.append(label);
