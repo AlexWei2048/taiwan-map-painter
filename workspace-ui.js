@@ -10,7 +10,7 @@ function predictionMarginLabel(result){
  const gap=Number(result.marginShare.toFixed(2))+' 个百分点';
  return '领先差距 '+(result.marginVotes!==null&&result.marginVotes!==undefined?result.marginVotes.toLocaleString('zh-CN')+' 票 / ':'')+gap+(result.partial?'（仅按已填写候选人计算）':'');
 }
-function predictionIsVotes(){return ['votes','partyVotes','winnerVotes'].includes(state.predictionDisplay)}
+function predictionIsVotes(){return ['votes','partyVotes','winnerVotes'].includes(state.predictionDisplay)||state.predictionDisplay==='candidateVote'&&state.predictionVoteMetric==='votes'}
 function predictionDisplayResult(d){
  if(!d)return null;
  try{
