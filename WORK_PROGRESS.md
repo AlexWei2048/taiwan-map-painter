@@ -238,3 +238,9 @@ Latest source revision: 20261030-no-offline-v11.
 - Scoped Kinmen/Lienchiang/Penghu township maps omit inset frames. Names that cannot fit inside are placed nearby with short, obstacle-checked leaders that cannot cross another township; reference digits remain the fallback.
 - Local preview verified all six Kinmen townships (including Wuqiu), four Lienchiang townships and six Penghu townships, plus all 22 nationwide county labels and Hsinchu City's frame clearance.
 - Added browser checks for inset title placement, mainland frame barriers, offshore township names and matching exports; 73 local regression checks pass.
+
+## 2026-11-02 interactive administrative index and island captions (v92)
+- Index entries retain their exact displayed feature, including identity-panel and township prediction features. Hover/focus highlights the same polygon; clicking or keyboard activation performs the same action as clicking that polygon.
+- Polygon/name hover and focus highlight the matching index row without changing saved party fills. Index actions use accessible buttons and keyboard focus styles.
+- Green Island and Orchid Island (Taitung) and Liuqiu (Pingtung) always use full-name captions centred immediately below their island extents, with bottom fitting room reserved for captions and export parity.
+- Added behavioural checks for index interaction and the three island captions. Local regression checks: 74 pass. Preview confirmed index click opens the matching Keelung prediction dialog and both Taitung captions are below their islands.

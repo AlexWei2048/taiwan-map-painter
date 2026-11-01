@@ -666,3 +666,33 @@ test('Offshore township maps omit inset frames and identify all townships with i
   const svg=await exportSvg(page);assert.equal((svg.match(/data-inset=/g)||[]).length,0);
  }
 });
+
+test('Administrative index supports bidirectional hover, keyboard focus and the same edit action as the map',async t=>{
+ const page=await pageFor(t);await page.locator('#county').selectOption({label:'高雄市'});
+ await page.locator('#predictionScale').selectOption('overlay');
+ const row=page.locator('#mapNumberKeyRows tr').first(),id=await row.getAttribute('data-region');
+ const polygon=page.locator('#regions path[data-region="'+id+'"]');
+ await row.hover();assert.equal(await polygon.evaluate(el=>el.classList.contains('label-region-highlighted')),true);
+ await page.mouse.move(1,1);assert.equal(await polygon.evaluate(el=>el.classList.contains('label-region-highlighted')),false);
+ await polygon.hover({force:true});assert.equal(await row.evaluate(el=>el.classList.contains('number-key-highlighted')),true);
+ await page.mouse.move(1,1);const button=row.locator('button');await button.focus();
+ assert.equal(await polygon.evaluate(el=>el.classList.contains('label-region-highlighted')),true);
+ await button.press('Enter');await page.locator('#localDialog').waitFor({state:'visible'});
+});
+test('Taitung and Pingtung island townships have centred full-name captions below the island in screen and export',async t=>{
+ const page=await pageFor(t);await page.locator('#predictionScale').selectOption('overlay');
+ for(const [county,names]of [['台东县',['绿岛乡','兰屿乡']],['屏东县',['琉球乡']]]){
+  await page.locator('#county').selectOption({label:county});
+  const metrics=await page.evaluate(names=>{
+   const items=currentItems(),t=geometryLayout(items,true);
+   return names.map(name=>{
+    const f=items.find(f=>f.name===name),el=document.querySelector('#labels text[data-label="'+f.id+'"]');
+    const b=el.getBBox();return{name,text:el.textContent,number:el.dataset.numberKey||'',placement:el.dataset.placement,
+     centred:Math.abs(Number(el.getAttribute('x'))-((f.box[0]+f.box[2])/2*t.scale+t.tx))<.1,
+     below:b.y>f.box[3]*t.scale+t.ty};
+   });
+  },names);
+  for(const q of metrics){assert.equal(q.text,q.name);assert.equal(q.number,'');assert.equal(q.placement,'island-town-bottom');assert.ok(q.centred&&q.below)}
+  const svg=await exportSvg(page);assert.equal((svg.match(/data-placement="island-town-bottom"/g)||[]).length,names.length);
+ }
+});

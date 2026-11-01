@@ -437,3 +437,8 @@ dialog.floating-prediction-dialog > .floating-dialog-scroll{
 .canvas>.map-number-key th,.canvas>.map-number-key td{padding:2px 4px;line-height:17px;font-size:12px}
 .canvas>.map-number-key .map-number-key-scroll{scrollbar-width:thin}
 .canvas>.map-number-key th,.canvas>.map-number-key td{padding:1px 4px;line-height:15px}
+
+.map-number-key tr[data-region]{cursor:pointer;transition:background-color .12s}
+.canvas>.map-number-key tr.number-key-highlighted,.canvas>.map-number-key tr:focus-within{background:#d9eee1;box-shadow:inset 3px 0 #25775a}
+.map-number-key .number-key-action{display:block;width:100%;border:0;border-radius:3px;background:transparent;color:inherit;font:inherit;text-align:left;line-height:inherit;padding:0;cursor:pointer}
+.map-number-key .number-key-action:focus-visible{outline:2px solid #25775a;outline-offset:2px}

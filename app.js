@@ -121,7 +121,7 @@ function applyView(){
 }
 function fit(){view=fittedView();baseView={...view};flushView();renderLabels()}
 
-function geometryLayout(items,labels=true){if(!items.length)items=data.counties.filter(f=>!state.county||f.name===state.county);const spec=sceneSpec(),area=contentArea(spec),b=bounds(items);const visibleOutlines=state.level==='villages'&&state.villageTown?data.towns.filter(f=>f.id===state.villageTown):state.level!=='counties'?data.counties.filter(f=>!state.county||f.name===state.county):[];for(const outline of visibleOutlines){b[0]=Math.min(b[0],outline.box[0]);b[1]=Math.min(b[1],outline.box[1]);b[2]=Math.max(b[2],outline.box[2]);b[3]=Math.max(b[3],outline.box[3])}for(const q of activeInsetDefinitions()){b[0]=Math.min(b[0],q.box[0]);b[1]=Math.min(b[1],q.box[1]);b[2]=Math.max(b[2],q.box[2]);b[3]=Math.max(b[3],q.box[3])}const gutter=labels?(isNationwide()?250:state.level==='villages'?95:directTownNameLabels()?(mayorTownBoundaryOverlay()?90:116):state.level==='counties'||mayorTownBoundaryOverlay()?100:140):20,left=area.left+gutter,right=Math.min(area.right-gutter,state.labels&&(['counties','towns','villages'].includes(state.level)||identityPanelsActive())?spec.width-mapKeyRailWidth(spec):area.right-gutter),w=right-left,h=area.bottom-area.top,scale=Math.min(w/Math.max(.0001,b[2]-b[0]),h/Math.max(.0001,b[3]-b[1]));return{scale,tx:(left+right)/2-(b[0]+b[2])/2*scale,ty:(area.top+area.bottom)/2-(b[1]+b[3])/2*scale,labelLeft:left-22,labelRight:right+22,area}}
+function geometryLayout(items,labels=true){if(!items.length)items=data.counties.filter(f=>!state.county||f.name===state.county);const spec=sceneSpec(),area=contentArea(spec),b=bounds(items);if(items.some(belowIslandTown))area.bottom-=48;const visibleOutlines=state.level==='villages'&&state.villageTown?data.towns.filter(f=>f.id===state.villageTown):state.level!=='counties'?data.counties.filter(f=>!state.county||f.name===state.county):[];for(const outline of visibleOutlines){b[0]=Math.min(b[0],outline.box[0]);b[1]=Math.min(b[1],outline.box[1]);b[2]=Math.max(b[2],outline.box[2]);b[3]=Math.max(b[3],outline.box[3])}for(const q of activeInsetDefinitions()){b[0]=Math.min(b[0],q.box[0]);b[1]=Math.min(b[1],q.box[1]);b[2]=Math.max(b[2],q.box[2]);b[3]=Math.max(b[3],q.box[3])}const gutter=labels?(isNationwide()?250:state.level==='villages'?95:directTownNameLabels()?(mayorTownBoundaryOverlay()?90:116):state.level==='counties'||mayorTownBoundaryOverlay()?100:140):20,left=area.left+gutter,right=Math.min(area.right-gutter,state.labels&&(['counties','towns','villages'].includes(state.level)||identityPanelsActive())?spec.width-mapKeyRailWidth(spec):area.right-gutter),w=right-left,h=area.bottom-area.top,scale=Math.min(w/Math.max(.0001,b[2]-b[0]),h/Math.max(.0001,b[3]-b[1]));return{scale,tx:(left+right)/2-(b[0]+b[2])/2*scale,ty:(area.top+area.bottom)/2-(b[1]+b[3])/2*scale,labelLeft:left-22,labelRight:right+22,area}}
 function identityPanelLayouts(){
  if(!identityPanelsActive()||!data)return[];
  const identities=panelIdentities(),spec=sceneSpec(),area=contentArea(spec),gap=26,left=area.left+8,right=Math.min(area.right-8,spec.width-mapKeyRailWidth(spec)),top=area.top+52,bottom=area.bottom-12,columns=identities.length===4?2:identities.length,rows=Math.ceil(identities.length/columns),panelWidth=(right-left-gap*(columns-1))/columns,panelHeight=(bottom-top-gap*(rows-1))/rows;
@@ -363,7 +363,7 @@ function mapNumberGroup(f){
  return (f.county||'全台')+type;
 }
 function mapNumberRecord(f,number){
- const record={number:String(number),id:String(f.id),name:f.name,town:f.town||'',group:mapNumberGroup(f)};
+ const record={number:String(number),id:String(f.id),name:f.name,town:f.town||'',group:mapNumberGroup(f),feature:f};
  const dest=exportNumberRows===null?mapNumberRows:exportNumberRows;
  if(!dest.some(r=>r.id===record.id&&r.group===record.group))dest.push(record);
 }
@@ -382,7 +382,18 @@ function renderMapNumberTable(){
  for(const row of rows){
   const tr=document.createElement('tr'),code=document.createElement('th'),name=document.createElement('td');
   code.scope='row';code.className='number-key-number';code.textContent=row.number;
-  name.textContent=mapNumberDisplayName(row,rows);
+  const button=document.createElement('button');button.type='button';
+  button.className='number-key-action';button.textContent=mapNumberDisplayName(row,rows);
+  button.setAttribute('aria-label','查看或编辑'+button.textContent);
+  name.append(button);tr.dataset.region=row.id;
+  const feature=row.feature;
+  if(feature){
+   tr.addEventListener('pointerenter',()=>toggleLabelRegionHighlight(feature,true));
+   tr.addEventListener('pointerleave',()=>toggleLabelRegionHighlight(feature,false));
+   tr.addEventListener('focusin',()=>toggleLabelRegionHighlight(feature,true));
+   tr.addEventListener('focusout',()=>toggleLabelRegionHighlight(feature,false));
+   tr.addEventListener('click',()=>{toggleLabelRegionHighlight(feature,false);paint(feature)});
+  }
   tr.append(code,name);body.append(tr);
  }
 }
@@ -1091,12 +1102,24 @@ function offshoreTownNameFit(f,t,text,font,used,area,reserve,items,leaders){
  return null;
 }
 
+function belowIslandTown(f){
+ return f.county==='台东县'&&['绿岛乡','兰屿乡'].includes(f.name)||f.county==='屏东县'&&f.name==='琉球乡';
+}
+function belowIslandTownLabel(f,t,text,font){
+ const width=Array.from(text).length*font*1.04+8,height=font*1.5+5;
+ const x=(f.box[0]+f.box[2])/2*t.scale+t.tx;
+ const y=f.box[3]*t.scale+t.ty+font*.5+height/2;
+ return{x,y,rect:[x-width/2,y-height/2,x+width/2,y+height/2],font,
+  text,numeric:false,island:true,islandTownBottom:true};
+}
+
 function labelLayout(items,t,font=15){
  const baseArea=t.area||contentArea(sceneSpec()),area={...baseArea,right:Math.min(baseArea.right,sceneSpec().width-((typeof document!=='undefined')?mapKeyRailWidth(sceneSpec()):290))},reserve=state.legend.show?legendBox(sceneSpec()):null;
  const sizes=f=>(f.box[2]-f.box[0])*(f.box[3]-f.box[1]);
  const sorted=[...items].sort((a,b)=>sizes(b)-sizes(a)),used=[],labels=[],needsNumber=[],outside=[],islandNames=[];
  for(const f of sorted){
   const name=shownLabel(f);if(!name)continue;
+  if(belowIslandTown(f)){const pos=belowIslandTownLabel(f,t,name,font);used.push(pos.rect);labels.push({f,...pos});continue}
   if(OFFSHORE_COUNTIES.has(f.name)&&f.name===f.county){
    const pos=countyIslandName(f,t,name,font);
    if(pos){used.push(pos.rect);labels.push({f,...pos,text:name,numeric:false});continue}
@@ -1160,7 +1183,11 @@ function toggleLabelRegionHighlight(f,active){
  for(const path of layer.querySelectorAll('path[data-region]')){
   if(path.dataset.region===featureId)path.classList.toggle('label-region-highlighted',active);
  }
+ const key=$('mapNumberKeyRows');
+ if(key)for(const row of key.querySelectorAll('tr[data-region]'))
+  if(row.dataset.region===featureId)row.classList.toggle('number-key-highlighted',active);
 }
+
 function drawLabels(group,items,t,font=15,interactive=false){
  const overview=state.level==='towns'&&!state.county&&!(typeof mayorTownBoundaryOverlay==='function'&&mayorTownBoundaryOverlay());
  const rendered=overview?(data?.counties||[]):items;
@@ -1195,7 +1222,7 @@ function drawLabels(group,items,t,font=15,interactive=false){
     'pointer-events':'none','data-label-anchor':q.f.id}));
   }
   const label=svgEl('text',{x:q.x,y:q.y,'font-size':q.font,'data-label':q.f.id,
-   'data-placement':q.leaderAnchor?'outside':q.districtNumber?'district-number':q.island?(q.insetBottom?'inset-bottom':'below-island'):'inside','data-callout-lane':q.calloutLane||'','text-anchor':'middle','dominant-baseline':'middle',
+   'data-placement':q.leaderAnchor?'outside':q.districtNumber?'district-number':q.island?(q.insetBottom?'inset-bottom':q.islandTownBottom?'island-town-bottom':'below-island'):'inside','data-callout-lane':q.calloutLane||'','text-anchor':'middle','dominant-baseline':'middle',
    'font-weight':q.numeric||q.districtNumber?700:500,fill:'#2c493b',stroke:'#ffffffed',
    'stroke-width':q.numeric?3:2.4,'paint-order':'stroke','stroke-linejoin':'round'});
   label.style.strokeWidth=(q.numeric?2.6:2.4)*zoomRatio;
@@ -1259,7 +1286,7 @@ function drawMapFurniture(group,t,spec){group.replaceChildren();const wide=isNat
 }
 function renderMapFurniture(){const spec=sceneSpec(),t=identityPanelsActive()?identityPanelLayouts()[0]?.t:geometryLayout(currentItems(),state.labels);if(!t)return;drawInsetFrames($('insetFrames'),t,spec);drawMapFurniture($('mapFurniture'),t,spec)}
 
-function regionPath(f){const identity=identityPanelsActive()?' · '+electorateName(featureElectorate(f)):'';const p=svgEl('path',{d:f.d,fill:fillColor(f),stroke:'none','stroke-width':0,'vector-effect':'non-scaling-stroke','fill-rule':'evenodd','data-region':f.id,'data-electorate':featureElectorate(f),tabindex:0,role:'button','aria-label':`${f.county}${f.name===f.county?'':f.name}${identity}，${regionDetail(f)}`});const title=svgEl('title');title.textContent=f.county+(f.name===f.county?'':f.name)+identity;p.append(title);p.addEventListener('click',()=>{if(!moved)paint(f)});p.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();paint(f)}};p.onpointermove=e=>{if(drag)return;const tip=$('tooltip'),r=$('canvas').getBoundingClientRect();tip.replaceChildren();const label=document.createElement('span');label.textContent=f.name;const sub=document.createElement('small');sub.textContent=f.county+(f.town?' · '+f.town:'')+identity+' · '+regionDetail(f);tip.append(label,sub);tip.hidden=false;tip.style.left=Math.min(e.clientX-r.left+15,r.width-165)+'px';tip.style.top=Math.max(45,e.clientY-r.top-48)+'px'};p.onpointerleave=()=>$('tooltip').hidden=true;return p}
+function regionPath(f){const identity=identityPanelsActive()?' · '+electorateName(featureElectorate(f)):'';const p=svgEl('path',{d:f.d,fill:fillColor(f),stroke:'none','stroke-width':0,'vector-effect':'non-scaling-stroke','fill-rule':'evenodd','data-region':f.id,'data-electorate':featureElectorate(f),tabindex:0,role:'button','aria-label':`${f.county}${f.name===f.county?'':f.name}${identity}，${regionDetail(f)}`});const title=svgEl('title');title.textContent=f.county+(f.name===f.county?'':f.name)+identity;p.append(title);p.addEventListener('click',()=>{if(!moved)paint(f)});p.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();paint(f)}};p.onpointermove=e=>{if(drag)return;const tip=$('tooltip'),r=$('canvas').getBoundingClientRect();tip.replaceChildren();const label=document.createElement('span');label.textContent=f.name;const sub=document.createElement('small');sub.textContent=f.county+(f.town?' · '+f.town:'')+identity+' · '+regionDetail(f);tip.append(label,sub);tip.hidden=false;tip.style.left=Math.min(e.clientX-r.left+15,r.width-165)+'px';tip.style.top=Math.max(45,e.clientY-r.top-48)+'px'};p.addEventListener('pointerenter',()=>toggleLabelRegionHighlight(f,true));p.onpointerleave=()=>{$('tooltip').hidden=true;toggleLabelRegionHighlight(f,false)};p.addEventListener('focus',()=>toggleLabelRegionHighlight(f,true));p.addEventListener('blur',()=>toggleLabelRegionHighlight(f,false));return p}
 
 // Nationwide views show shared internal borders only; county views restore
 // complete polygon outlines, including coastal and isolated-island edges.

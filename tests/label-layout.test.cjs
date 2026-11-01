@@ -74,3 +74,12 @@ test('Every administrative map uses interior names or geographic reference digit
   assert.ok(labels.every(q=>q.numeric||!q.leaderAnchor),'Administrative full names must never become long callouts');
  }
 });
+
+test('Green Island, Orchid Island and Liuqiu retain full names centred beneath their islands',()=>{
+ for(const [county,name]of [['台东县','绿岛乡'],['台东县','兰屿乡'],['屏东县','琉球乡']]){
+  const f={id:name,name,county,center:[410,310],box:[408,307,412,313]};
+  const label=layout('towns',{county}).labelLayout([f],t,15)[0];
+  assert.equal(label.text,name);assert.equal(label.numeric,false);assert.equal(label.islandTownBottom,true);
+  assert.equal(label.x,410);assert.ok(label.rect[1]>313);assert.equal(label.leaderAnchor,undefined);
+ }
+});
