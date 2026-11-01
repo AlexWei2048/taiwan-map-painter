@@ -171,7 +171,7 @@ test('Nationwide mayor map uses 22 full names, safe city leaders and framed offs
   }));
   return{count:labels.length,unique:new Set(labels.map(e=>e.dataset.label)).size,
    numbered:labels.some(e=>e.dataset.numberKey),names:labels.map(e=>e.textContent),
-   mainlandOutside:labels.filter(e=>!cityNames.includes(e.textContent)&&!islandFrames[e.textContent]).filter(e=>!insideCounty(e)).map(e=>{
+   mainlandOutside:labels.filter(e=>e.dataset.placement==='inside'&&!cityNames.includes(e.textContent)&&!islandFrames[e.textContent]).filter(e=>!insideCounty(e)).map(e=>{
     const r=box(e),p=document.querySelector('#regions [data-region="'+e.dataset.label+'"]'),root=document.querySelector('#map');
     const center=new DOMPoint((r.left+r.right)/2,(r.top+r.bottom)/2);
     const local=center.matrixTransform(root.getScreenCTM().inverse());
@@ -191,7 +191,9 @@ test('Nationwide mayor map uses 22 full names, safe city leaders and framed offs
   assert.equal(result.islands[name].placement,'inset-bottom');assert.equal(result.islands[name].inside,true);
   assert.ok(result.islands[name].bottomGap>=1);
  }
- assert.deepEqual(result.mainlandOutside,[],'All remaining county names remain within their own polygon');
+ assert.deepEqual(result.mainlandOutside,[],'All in-polygon county labels remain inside their true geography');
+ assert.equal(await page.locator('#labels text[data-placement="outside"]').count(),
+  await page.locator('#labels [data-label-leader]').count(),'Every externally placed county name needs its own leader');
  assert.equal(await page.locator('#mapNumberKey').isVisible(),false);
  for(const name of ['台北市','基隆市','新竹市','嘉义市','桃园市','高雄市']){
   const id=await page.locator('#labels [data-label]').filter({hasText:name}).getAttribute('data-label');
