@@ -125,6 +125,53 @@ function leaderCross(x,y,xx,yy,b){
  }
  return lo<=hi;
 }
+
+/* A shared orthogonal callout router. Reject intersecting and overlapping
+ * leader strokes, including parallel strokes on the same perimeter rail.
+ * It checks existing name rectangles too: a line must never point through
+ * someone else's name. The same geometry is used by county and town maps. */
+function mapLeaderSegments(points){
+ return points.slice(1).map((end,i)=>[points[i],end]);
+}
+function mapLeaderSegmentConflict(a,b,pad=2.6){
+ const [[x1,y1],[x2,y2]]=a,[[u1,v1],[u2,v2]]=b;
+ const ah=Math.abs(y1-y2)<.01,bh=Math.abs(v1-v2)<.01;
+ const between=(v,p,q)=>v>=Math.min(p,q)-pad&&v<=Math.max(p,q)+pad;
+ const overlap=(p,q,u,v)=>Math.min(Math.max(p,q),Math.max(u,v))>=Math.max(Math.min(p,q),Math.min(u,v))-pad;
+ if(ah&&bh)return Math.abs(y1-v1)<pad&&overlap(x1,x2,u1,u2);
+ if(!ah&&!bh)return Math.abs(x1-u1)<pad&&overlap(y1,y2,v1,v2);
+ const h=ah?a:b,vert=ah?b:a;
+ return between(vert[0][0],h[0][0],h[1][0])&&between(h[0][1],vert[0][1],vert[1][1]);
+}
+function mapLeaderClear(points,leaders,occupied,frames=[]){
+ const segments=mapLeaderSegments(points);
+ for(const segment of segments){
+  if(Math.hypot(segment[1][0]-segment[0][0],segment[1][1]-segment[0][1])<.01)continue;
+  for(const rect of occupied){
+   const padded=[rect[0]-1.5,rect[1]-1.5,rect[2]+1.5,rect[3]+1.5];
+   if(leaderCross(segment[0][0],segment[0][1],segment[1][0],segment[1][1],padded))return false;
+  }
+  for(const frame of frames)
+   if(leaderCross(segment[0][0],segment[0][1],segment[1][0],segment[1][1],frame))return false;
+  for(const previous of leaders)for(const other of mapLeaderSegments(previous))
+   if(mapLeaderSegmentConflict(segment,other))return false;
+ }
+ return true;
+}
+function mapOrthogonalLeader(anchor,side,x,y,width,coast,leaders,occupied,area,frames=[]){
+ const sign=side==='left'?-1:1,end=x-sign*(width/2+6);
+ // Distinct, narrow rails separate callouts while keeping their vertical
+ // segments outside the mapped coast and inside their own text columns.
+ for(let n=0;n<18;n++){
+  const rail=coast+sign*(8+n*3.4);
+  if(sign*(end-rail)<5||rail<area.left+2||rail>area.right-2)continue;
+  const points=[[anchor.x,anchor.y],[rail,anchor.y],[rail,y],[end,y]];
+  if(!mapLeaderClear(points,leaders,occupied,frames))continue;
+  return{leaderPath:'M'+anchor.x+','+anchor.y+'H'+rail+'V'+y+'H'+end,leaderPoints:points};
+ }
+ return null;
+}
+
 function shortLeader(q,t,occupied,reserve){
  const frames=leaderFrames(t),island=frames.find(b=>leaderIn(q.ax,q.ay,b));
  const area=t.area||contentArea(sceneSpec()),font=q.font,width=Array.from(shownLabel(q.f)).length*font*1.04+8;
@@ -244,7 +291,7 @@ function districtMapNumber(f){
 }
 // The detail-map renderer can adapt names; main-map numbers keep one font size.
 function mapAdaptiveLabel(f,t,text,font,used,area,reserve){
- for(const ratio of [1,.86,.72]){
+ for(const ratio of [1]){
   const size=Math.max(7,font*ratio);
   const width=Array.from(text).length*size*.95+9,height=size*1.65+5;
   const pos=mapLabelFit(f,t,width,height,used,area,reserve);
@@ -384,7 +431,7 @@ function countyInsideName(f,t,name,font,used,area,reserve){
  const center=f.center||f.labelAnchor||[(f.box[0]+f.box[2])/2,(f.box[1]+f.box[3])/2];
  const cx=center[0]*t.scale+t.tx,cy=center[1]*t.scale+t.ty;
  const samples=[-.48,-.24,0,.24,.48];
- for(const ratio of [1,.9,.8]){
+ for(const ratio of [1]){
   const size=font*ratio,width=Array.from(name).length*size*1.04+8,height=size*1.5+5;
   let best=null;
   const consider=p=>{
@@ -416,7 +463,7 @@ function countyIslandName(f,t,name,font){
  if(!inset)return null;
  const left=inset.box[0]*t.scale+t.tx,right=inset.box[2]*t.scale+t.tx;
  const top=inset.box[1]*t.scale+t.ty,bottom=inset.box[3]*t.scale+t.ty;
- const size=Math.min(font,(right-left-16)/(Array.from(name).length*1.04));
+ const size=font;
  const width=Array.from(name).length*size*1.04+4,height=size*1.5+4;
  const x=(left+right)/2,y=bottom-height/2-7;
  const rect=[x-width/2,y-height/2,x+width/2,y+height/2];
@@ -424,8 +471,8 @@ function countyIslandName(f,t,name,font){
  return{x,y,rect,font:size,island:true,insetBottom:true};
 }
 // City callouts follow the coast while avoiding other labels and inset frames.
-function countyCityCallout(f,t,name,font,used,area,reserve,items){
- const anchor=mapLabelAnchor(f,t);if(!anchor)return null;
+function countyCityCallout(f,t,name,font,used,area,reserve,items,leaders=[]){
+ const anchor=townVisualCenter(f,t);
  const mainland=items.filter(item=>!isInsetIslandFeature(item));
  const width=Array.from(name).length*font*1.04+8,height=font*1.5+5;
  const preferred=['台北市','基隆市'].includes(name)?'right':'left';
@@ -438,24 +485,23 @@ function countyCityCallout(f,t,name,font,used,area,reserve,items){
  for(const side of [preferred,preferred==='left'?'right':'left']){
   const sign=side==='left'?-1:1;
   const coast=mapLabelColumnEdge(mainland,t,side,[anchor.y-height,anchor.y+height],font,anchor.x);
-  for(const shift of [0,-1,1,-2,2,-3,3,-4,4,-5,5]){
+  for(const shift of [0,-1,1,-2,2,-3,3,-4,4,-5,5,-6,6,-7,7,-8,8,-9,9,-10,10,-11,11,-12,12]){
    const y=anchor.y+shift*(height+5);
-   const x=coast+sign*(width/2+Math.max(17,font*1.25));
+   const x=coast+sign*(width/2+Math.max(37,font*2.5));
    const rect=[x-width/2,y-height/2,x+width/2,y+height/2];
    if(blocked(rect))continue;
    if([-.42,0,.42].some(dx=>[-.42,0,.42].some(dy=>mainland.some(item=>regionContains(item,x+dx*width,y+dy*height,t)))))continue;
-   const edge=x-sign*(width/2+3),rail=coast+sign*9;
-   if(frames.some(frame=>leaderCross(anchor.x,anchor.y,rail,anchor.y,frame)||
-    leaderCross(rail,anchor.y,edge,y,frame)))continue;
-   const score=Math.abs(y-anchor.y)+Math.abs(edge-anchor.x)*.25+(side===preferred?0:90);
-   if(!best||score<best.score)best={x,y,rect,font,leaderAnchor:anchor,leaderPath:`M${anchor.x},${anchor.y}L${rail},${anchor.y}L${edge},${y}`,column:side,score};
+   const route=mapOrthogonalLeader(anchor,side,x,y,width,coast,leaders,used,area,frames);
+   if(!route)continue;
+   const score=Math.abs(y-anchor.y)+Math.abs(x-anchor.x)*.25+(side===preferred?0:90);
+   if(!best||score<best.score)best={x,y,rect,font,leaderAnchor:anchor,...route,column:side,score};
   }
  }
  return best;
 }
 function countyMayorLabelLayout(items,t,font,area,reserve){
  const sizes=f=>(f.box[2]-f.box[0])*(f.box[3]-f.box[1]);
- const regular=[],offshore=[],cities=[],missing=[],labels=[],used=[];
+ const regular=[],offshore=[],cities=[],missing=[],labels=[],used=[],leaders=[];
  for(const f of items){
   if(!shownLabel(f))continue;
   if(isInsetIslandFeature(f))offshore.push(f);
@@ -476,8 +522,8 @@ function countyMayorLabelLayout(items,t,font,area,reserve){
  const order=['基隆市','台北市','新竹市','嘉义市'];
  cities.sort((a,b)=>order.indexOf(a.name)-order.indexOf(b.name));
  for(const f of [...cities,...missing]){
-  const name=shownLabel(f),pos=countyCityCallout(f,t,name,font,used,area,reserve,items);
-  if(pos){used.push(pos.rect);labels.push({f,...pos,text:name,numeric:false})}
+  const name=shownLabel(f),pos=countyCityCallout(f,t,name,font,used,area,reserve,items,leaders);
+  if(pos){used.push(pos.rect);labels.push({f,...pos,text:name,numeric:false});leaders.push(pos.leaderPoints)}
  }
  return labels;
 }
@@ -554,23 +600,18 @@ function townNameLabelLayout(items,t,font,area,reserve){
  const sorted=[...items].filter(f=>shownLabel(f)).sort((a,b)=>
   (b.box[2]-b.box[0])*(b.box[3]-b.box[1])-
   (a.box[2]-a.box[0])*(a.box[3]-a.box[1]));
- const labels=[],used=[],pending=[],height=font*1.5+5;
+ const labels=[],used=[],pending=[],leaders=[],height=font*1.5+5;
  const labelWidth=(name,size=font)=>Array.from(name).length*size*1.04+8;
  const reserved=reserve?[reserve.x,reserve.y,reserve.x+reserve.width,reserve.y+reserve.height]:null;
  const valid=(rect)=>rect[0]>=area.left+2&&rect[2]<=area.right-2&&
   rect[1]>=area.top+2&&rect[3]<=area.bottom-2&&
   !(reserved&&leaderOverlap(rect,reserved))&&!used.some(other=>leaderOverlap(rect,other));
- // On-map names come first, beginning at the visual representative point.
- // A modest adaptive font reduces the number of external leaders in cities
- // without turning labels into tiny illegible print.
+ // Keep one fixed font across interior names and external callouts.
+ // A narrow region moves outside instead of silently shrinking its type.
  for(const f of sorted){
-  const text=shownLabel(f);let found=null;
-  for(const ratio of [1,.92,.84]){
-   const size=font*ratio,width=labelWidth(text,size),h=size*1.5+5;
-   const pos=townInsideLabelFit(f,t,width,h,used,area,reserve);
-   if(pos){found={...pos,font:size};break}
-  }
-  if(found){used.push(found.rect);labels.push({f,...found,text,numeric:false})}
+  const text=shownLabel(f),width=labelWidth(text);
+  const pos=townInsideLabelFit(f,t,width,height,used,area,reserve);
+  if(pos){used.push(pos.rect);labels.push({f,...pos,font,text,numeric:false})}
   else pending.push({f,text,font,anchor:townVisualCenter(f,t)});
  }
  if(!pending.length)return labels;
@@ -580,8 +621,8 @@ function townNameLabelLayout(items,t,font,area,reserve){
  };
  const columnWidth=Math.max(...pending.map(q=>labelWidth(q.text)))+6;
  const colX={
-  left:box.left-columnWidth/2-21,
-  right:box.right+columnWidth/2+21
+  left:box.left-columnWidth/2-44,
+  right:box.right+columnWidth/2+44
  };
  const fitsSide=side=>colX[side]-columnWidth/2>=area.left+5&&
   colX[side]+columnWidth/2<=area.right-5;
@@ -601,7 +642,8 @@ function townNameLabelLayout(items,t,font,area,reserve){
   const side=[preference,alternate].find(k=>sides[k].length<capacity[k]);
   if(side)sides[side].push(q);else remaining.push(q);
  }
- const coastRail={left:box.left-9,right:box.right+9};
+ const coastRail={left:box.left,right:box.right};
+ const insetFrames=leaderFrames(t,3);
  for(const side of ['left','right']){
   const rows=sides[side].sort((a,b)=>a.anchor.y-b.anchor.y||
    a.anchor.x-b.anchor.x||String(a.f.id).localeCompare(String(b.f.id)));
@@ -616,53 +658,47 @@ function townNameLabelLayout(items,t,font,area,reserve){
    // occupies a projected label lane. Never disturb the order of the rows.
    let chosen=null;
    const step=height+7;
-   for(const shift of [0,-1,1,-2,2,-3,3,-4,4]){
+   for(const shift of [0,-1,1,-2,2,-3,3,-4,4,-5,5,-6,6,-7,7,-8,8]){
     const yy=y+shift*step;
     const rr=[rect[0],yy-height/2-3,rect[2],yy+height/2+3];
-    if(valid(rr)){chosen={y:yy,rect:rr};break}
+    if(!valid(rr))continue;
+    const route=mapOrthogonalLeader(q.anchor,side,x,yy,width,
+     coastRail[side],leaders,used,area,insetFrames);
+    if(route){chosen={y:yy,rect:rr,...route};break}
    }
    if(!chosen){remaining.push(q);continue}
-   const source=q.anchor;
-   // Four orthogonal pieces: short district-boundary stub, a horizontal
-   // run to the outside rail, a vertical run along the perimeter, then the
-   // short final stem to the adjacent complete name. No diagonal fan.
-   const direction=side==='left'?-1:1;
-   const rail=coastRail[side],end=x-direction*(width/2+6);
-   const leaderPath='M'+source.x+','+source.y+
-    'H'+rail+'V'+chosen.y+'H'+end;
-   used.push(chosen.rect);
+   used.push(chosen.rect);leaders.push(chosen.leaderPoints);
    labels.push({f:q.f,x,y:chosen.y,rect:chosen.rect,text:q.text,font,
-    numeric:false,leaderAnchor:source,leaderPath,column:side});
+    numeric:false,leaderAnchor:q.anchor,leaderPath:chosen.leaderPath,
+    leaderPoints:chosen.leaderPoints,column:side});
   }
  }
  // Insets and rare full columns: place a small label near its own territory
  // and use an orthogonal elbow rather than a diagonal through other towns.
  for(const q of remaining){
   const anchor=q.anchor||townVisualCenter(q.f,t),width=labelWidth(q.text);
-  const xs=[anchor.x+width/2+25,anchor.x-width/2-25,
-   colX.left,colX.right,anchor.x];
+  const xs=[anchor.x+width/2+44,anchor.x-width/2-44,
+   colX.left,colX.right,anchor.x+width/2+62,anchor.x-width/2-62];
   let pos=null;
   for(const x0 of xs){
    const x=Math.max(area.left+width/2+8,
     Math.min(area.right-width/2-8,x0));
+   const side=x<anchor.x?'left':'right',coast=anchor.x;
    for(let n=0;n<Math.ceil((area.bottom-area.top)/(height+6))&&!pos;n++){
     for(const k of n?[n,-n]:[0]){
      const y=anchor.y+k*(height+6);
      const rect=[x-width/2-4,y-height/2-3,x+width/2+4,y+height/2+3];
-     if(valid(rect)){pos={x,y,rect};break}
+     if(!valid(rect))continue;
+     const route=mapOrthogonalLeader(anchor,side,x,y,width,coast,leaders,used,area,insetFrames);
+     if(route){pos={x,y,rect,side,...route};break}
     }
    }
    if(pos)break;
   }
   if(!pos)continue;
-  const side=pos.x<anchor.x?'left':'right';
-  const source=townVisualCenter(q.f,t);
-  const direction=side==='left'?-1:1;
-  const elbow=source.x+direction*10,end=pos.x-direction*(width/2+6);
-  used.push(pos.rect);
-  labels.push({f:q.f,...pos,text:q.text,font,numeric:false,
-   leaderAnchor:source,leaderPath:'M'+source.x+','+source.y+
-    'H'+elbow+'V'+pos.y+'H'+end,column:side});
+  used.push(pos.rect);leaders.push(pos.leaderPoints);
+  labels.push({f:q.f,x:pos.x,y:pos.y,rect:pos.rect,text:q.text,font,numeric:false,
+   leaderAnchor:anchor,leaderPath:pos.leaderPath,leaderPoints:pos.leaderPoints,column:pos.side});
  }
  return labels;
 }
@@ -727,39 +763,31 @@ function drawLabels(group,items,t,font=15,interactive=false){
  const zoomRatio=interactive&&view&&items.some(f=>districtMapNumber(f))?Math.min(1,view.w/sceneSpec().width):1;
  font*=zoomRatio;
  group.replaceChildren();
- // All town leader lines are in a BACK layer so no subsequent path can
- // run over another township's text (including its white readability halo).
- const townLeaderLayer=directTownNameLabels()?svgEl('g',{'data-town-leader-layer':'true'}):null;
- if(townLeaderLayer)group.append(townLeaderLayer);
+ // Paint EVERY leader behind all labels, using identical county/town
+ // styling. Later callouts can never obscure an earlier name.
+ const mapLeaderLayer=svgEl('g',{'data-map-leader-layer':'true'});
+ if(directTownNameLabels())mapLeaderLayer.setAttribute('data-town-leader-layer','true');
+ group.append(mapLeaderLayer);
  for(const q of labelLayout(rendered.filter(f=>shownLabel(f)),t,font)){
   const g=svgEl('g',{'class':'map-label'});group.append(g);
-  const cityCallout=!!q.leaderAnchor&&countyMayorOverview()&&COUNTY_CITY_CALLOUTS.has(q.f.name);
-  const townCallout=!!q.leaderAnchor&&directTownNameLabels();
-  const strongCallout=cityCallout||townCallout;
   if(q.leaderAnchor){
-   const end=q.x+(q.x<q.leaderAnchor.x?1:-1)*(q.text.length*q.font*.34+5);
-   const leaderPath=q.leaderPath||`M${q.leaderAnchor.x},${q.leaderAnchor.y}L${end},${q.y}`;
-   // A white underlay protects the dark leader against either party fill.
-   // Inline SVG styles deliberately outrank the generic #labels path CSS.
-   if(strongCallout)(townCallout?townLeaderLayer:g).append(svgEl('path',{d:leaderPath,fill:'none',
-    style:'fill:none;stroke:#fff;stroke-width:'+(townCallout?'2.1':'3.8')+'px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.94',
+   const direction=q.x<q.leaderAnchor.x?-1:1;
+   const end=q.x-direction*(Array.from(q.text).length*q.font*.52+5);
+   const elbow=q.leaderAnchor.x+direction*12;
+   const leaderPath=q.leaderPath||('M'+q.leaderAnchor.x+','+q.leaderAnchor.y+
+    'H'+elbow+'V'+q.y+'H'+end);
+   mapLeaderLayer.append(svgEl('path',{d:leaderPath,fill:'none',
+    style:'fill:none;stroke:#fff;stroke-width:2.1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.94',
     'vector-effect':'non-scaling-stroke','pointer-events':'none','data-label-leader-halo':q.f.id}));
-   const line=svgEl('path',{d:leaderPath,fill:'none',stroke:strongCallout?'#214e40':'#718b7c',
-    'stroke-width':strongCallout?1.55:.85,'stroke-opacity':strongCallout?1:.8,
-    'vector-effect':'non-scaling-stroke','data-label-leader':q.f.id,'data-label-column':q.column||'local'});
-   if(strongCallout){
-    line.style.stroke=townCallout?'#537d6b':'#214e40';
-    line.style.strokeWidth=townCallout?'0.9px':'1.55px';
-    line.style.strokeOpacity=townCallout?'.78':'1';
-    line.style.strokeLinecap='round';line.style.strokeLinejoin='round';
-    line.setAttribute('data-prominent-leader','true');
-   }
-   (townCallout?townLeaderLayer:g).append(line);
-   const dot=svgEl('circle',{cx:q.leaderAnchor.x,cy:q.leaderAnchor.y,r:(strongCallout?2.8:1.7)*zoomRatio,
-    fill:strongCallout?'#214e40':'#718b7c','data-label-anchor':q.f.id});
-   if(strongCallout){dot.style.stroke='#fff';dot.style.strokeWidth='1.1px'}
-   if(townCallout){dot.setAttribute('r',1.9*zoomRatio);dot.style.fill='#537d6b'}
-   (townCallout?townLeaderLayer:g).append(dot);
+   const line=svgEl('path',{d:leaderPath,fill:'none',
+    style:'fill:none;stroke:#537d6b;stroke-width:0.9px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.78',
+    'vector-effect':'non-scaling-stroke','pointer-events':'none',
+    'data-label-leader':q.f.id,'data-label-column':q.column||'local',
+    'data-prominent-leader':'true'});
+   mapLeaderLayer.append(line);
+   mapLeaderLayer.append(svgEl('circle',{cx:q.leaderAnchor.x,cy:q.leaderAnchor.y,
+    r:1.9*zoomRatio,fill:'#537d6b',style:'stroke:#fff;stroke-width:1.1px',
+    'pointer-events':'none','data-label-anchor':q.f.id}));
   }
   const label=svgEl('text',{x:q.x,y:q.y,'font-size':q.font,'data-label':q.f.id,
    'data-placement':q.leaderAnchor?'outside':q.districtNumber?'district-number':q.island?(q.insetBottom?'inset-bottom':'below-island'):'inside','text-anchor':'middle','dominant-baseline':'middle',
@@ -767,7 +795,7 @@ function drawLabels(group,items,t,font=15,interactive=false){
    'stroke-width':q.numeric?3:2.4,'paint-order':'stroke','stroke-linejoin':'round'});
   label.style.strokeWidth=(q.numeric?2.6:2.4)*zoomRatio;
   // CSS resets SVG text-anchor; enforce the measured centre for this overview.
-  if(countyMayorOverview()||directTownNameLabels())label.style.textAnchor='middle';
+  label.style.textAnchor='middle';
   // Callout labels retain the same typography as the labels placed inside districts.
   label.textContent=q.text;
   if(q.numeric){label.setAttribute('data-number-key',q.number);mapNumberRecord(q.f,q.number)}
