@@ -77,9 +77,15 @@ test('Nationwide mayor map uses 22 full names, safe city leaders and framed offs
   const id=await page.locator('#labels [data-label]').filter({hasText:name}).getAttribute('data-label');
   const line=page.locator('#labels [data-label-leader="'+id+'"]');
   assert.equal(await line.getAttribute('data-prominent-leader'),'true');
-  assert.ok(await line.evaluate(el=>parseFloat(getComputedStyle(el).strokeWidth)>=2),'City callout must be visibly thicker');
+  assert.ok(await line.evaluate(el=>{const w=parseFloat(getComputedStyle(el).strokeWidth);return w>=1.4&&w<=1.7}),'City callout must be clear but not excessively thick');
   assert.equal(await page.locator('#labels [data-label-leader-halo="'+id+'"]').count(),1);
-  assert.ok(await page.locator('#labels [data-label="'+id+'"]').evaluate(el=>Number.parseInt(getComputedStyle(el).fontWeight,10)>=600),'Full city name must be bold');
+  const typography=await page.evaluate(id=>{
+   const label=document.querySelector('#labels [data-label="'+id+'"]');
+   const reference=[...document.querySelectorAll('#labels [data-label]')].find(el=>el.textContent==='台东县');
+   const a=getComputedStyle(label),b=getComputedStyle(reference);
+   return{size:a.fontSize===b.fontSize,weight:a.fontWeight===b.fontWeight,fill:a.fill===b.fill,outline:a.strokeWidth===b.strokeWidth};
+  },id);
+  assert.deepEqual(typography,{size:true,weight:true,fill:true,outline:true},'Callout names must match all other county names');
  }
  const svg=await exportSvg(page);
  for(const name of result.names)assert.ok(svg.includes(name),'Export includes '+name);
