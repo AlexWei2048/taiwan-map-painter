@@ -152,27 +152,29 @@ function mapNumberGroup(f){
  return (f.county||'全台')+type;
 }
 function mapNumberRecord(f,number){
- const record={number:String(number),id:String(f.id),name:f.name,group:mapNumberGroup(f)};
+ const record={number:String(number),id:String(f.id),name:f.name,town:f.town||'',group:mapNumberGroup(f)};
  const dest=exportNumberRows===null?mapNumberRows:exportNumberRows;
  if(!dest.some(r=>r.id===record.id&&r.group===record.group))dest.push(record);
 }
-function mapNumberSorted(rows){return [...rows].sort((a,b)=>a.group.localeCompare(b.group,'zh')||(+a.number)-(+b.number)||a.name.localeCompare(b.name,'zh'))}
+function mapNumberSorted(rows){return [...rows].sort((a,b)=>Number(a.number)-Number(b.number)||a.name.localeCompare(b.name,'zh'))}
+function mapNumberDisplayName(row,rows){
+ if(!rows.some(other=>other!==row&&other.name===row.name))return row.name;
+ return [row.group,row.town,row.name].filter(Boolean).join(' · ');
+}
 function renderMapNumberTable(){
  const panel=$('mapNumberKey'),layout=$('mapWithKey'),body=$('mapNumberKeyRows');
  if(!panel||!layout||!body)return;
- const rows=state.labels?mapNumberSorted(mapNumberRows):[];
+ const rows=state.labels&&!['council','legislative'].includes(state.level)?mapNumberSorted(mapNumberRows):[];
  panel.hidden=!rows.length;layout.classList.toggle('has-number-key',!!rows.length);body.replaceChildren();
  $('mapNumberKeyCount').textContent=rows.length+'项';
- let section='';
  for(const row of rows){
-  if(section!==row.group){
-   section=row.group;const tr=document.createElement('tr'),th=document.createElement('th');th.colSpan=2;th.className='number-key-group';th.textContent=section;tr.append(th);body.append(tr);
-  }
   const tr=document.createElement('tr'),code=document.createElement('th'),name=document.createElement('td');
   code.scope='row';code.className='number-key-number';code.textContent=row.number;
-  name.textContent=row.name;tr.append(code,name);body.append(tr);
+  name.textContent=mapNumberDisplayName(row,rows);
+  tr.append(code,name);body.append(tr);
  }
 }
+
 function mapLabelCandidatePoints(f,t){
  const points=[f.center,f.labelAnchor].filter(Boolean).map(p=>({x:p[0]*t.scale+t.tx,y:p[1]*t.scale+t.ty}));
  const b=f.box;for(const i of [5,6,4,7,3,8,2,9])for(const j of [5,6,4,7,3,8,2,9])
@@ -225,12 +227,30 @@ function mapInsetLabelFit(f,t,width,height,used,area,reserve){
  }
  return fallback;
 }
+function districtMapNumber(f){
+ if(!['council','legislative'].includes(state.level))return '';
+ const value=String(f.number??'').trim();
+ const direct=value.match(/^(?:第\s*)?(\d+)(?:\s*(?:选|選)(?:举|舉)?区?)?$/);
+ if(direct)return String(Number(direct[1]));
+ const embedded=String(f.name||'').match(/第\s*(\d+)\s*(?:选|選)(?:举|舉)?区?/);
+ return embedded?String(Number(embedded[1])):'';
+}
 function labelLayout(items,t,font=15){
  const area=t.area||contentArea(sceneSpec()),reserve=state.legend.show?legendBox(sceneSpec()):null;
  const sizes=f=>(f.box[2]-f.box[0])*(f.box[3]-f.box[1]);
  const sorted=[...items].sort((a,b)=>sizes(b)-sizes(a)),used=[],labels=[],needsNumber=[];
  for(const f of sorted){
   const name=shownLabel(f);if(!name)continue;
+  if(['council','legislative'].includes(state.level)){
+   const districtNumber=districtMapNumber(f),text=districtNumber||name;
+   const width=Math.max(font*.82,Array.from(text).length*font*.82+4),height=font*1.3;
+   const pos=mapLabelFit(f,t,width,height,used,area,reserve)||mapLabelAnchor(f,t);
+   if(pos){
+    used.push(pos.rect||[pos.x-width/2,pos.y-height/2,pos.x+width/2,pos.y+height/2]);
+    labels.push({f,x:pos.x,y:pos.y,font,text,numeric:false,districtNumber:!!districtNumber});
+   }
+   continue;
+  }
   const width=Array.from(name).length*font*1.04+4,height=font*1.5+3;
   if(isInsetIslandFeature(f)){
    const pos=mapInsetLabelFit(f,t,width,height,used,area,reserve);
@@ -256,6 +276,7 @@ function labelLayout(items,t,font=15){
  }
  return labels;
 }
+
 function drawLabels(group,items,t,font=15,interactive=false){
  const overview=state.level==='towns'&&!state.county;
  const rendered=overview?(data?.counties||[]):items;
@@ -264,8 +285,8 @@ function drawLabels(group,items,t,font=15,interactive=false){
  for(const q of labelLayout(rendered.filter(f=>shownLabel(f)),t,font)){
   const g=svgEl('g',{'class':'map-label'});group.append(g);
   const label=svgEl('text',{x:q.x,y:q.y,'font-size':font,'data-label':q.f.id,
-   'data-placement':q.island?'below-island':'inside','text-anchor':'middle','dominant-baseline':'middle',
-   'font-weight':q.numeric?700:500,fill:'#2c493b',stroke:'#ffffffed',
+   'data-placement':q.districtNumber?'district-number':q.island?'below-island':'inside','text-anchor':'middle','dominant-baseline':'middle',
+   'font-weight':q.numeric||q.districtNumber?700:500,fill:'#2c493b',stroke:'#ffffffed',
    'stroke-width':q.numeric?3:2.4,'paint-order':'stroke','stroke-linejoin':'round'});
   label.style.strokeWidth=q.numeric?2.6:2.4;label.textContent=q.text;
   if(q.numeric){label.setAttribute('data-number-key',q.number);mapNumberRecord(q.f,q.number)}
@@ -538,28 +559,38 @@ function appendExportPredictionTable(root,rows,y){
  return layout.height
 }
 
-function appendNumberTableExport(root,entries,x,y,width){
- const rows=mapNumberSorted(entries);if(!rows.length)return 0;
- let height=64,group='';
- for(const row of rows){if(row.group!==group){group=row.group;height+=26}height+=19}
- root.append(svgEl('rect',{x,y,width,height,rx:11,fill:'#fff',stroke:'#dce5df','stroke-width':1}));
- const heading=svgEl('text',{x:x+14,y:y+27,'font-size':16,'font-weight':650,fill:'#294a3a'});
- heading.textContent='数字对照表';root.append(heading);
- let yy=y+52;group='';
- for(const row of rows){
-  if(row.group!==group){group=row.group;const sub=svgEl('text',{x:x+13,y:yy+6,'font-size':11,'font-weight':600,fill:'#718579'});sub.textContent=group;root.append(sub);yy+=26}
-  const number=svgEl('text',{x:x+15,y:yy+3,'font-size':12,'font-weight':700,fill:'#294a3a'});number.textContent=row.number;root.append(number);
-  const name=svgEl('text',{x:x+47,y:yy+3,'font-size':12,fill:'#365344'});name.textContent=row.name;root.append(name);yy+=19;
- }
- return height;
+function numberTableExportMetrics(entries,columns=1){
+ const rows=mapNumberSorted(entries),cols=Math.max(1,columns),perColumn=Math.ceil(rows.length/cols);
+ return{width:cols*210+22,height:53+perColumn*22,columns:cols,perColumn};
 }
+function appendNumberTableExport(root,entries,x,y,columns=1){
+ const rows=mapNumberSorted(entries);if(!rows.length)return 0;
+ const m=numberTableExportMetrics(rows,columns);
+ const panel=svgEl('g',{'data-map-number-key':'true'});
+ panel.append(svgEl('rect',{x,y,width:m.width,height:m.height,rx:11,fill:'#fff',stroke:'#dce5df','stroke-width':1}));
+ const heading=svgEl('text',{x:x+13,y:y+28,'font-size':17,'font-weight':650,fill:'#294a3a'});
+ heading.textContent='数字对照表';panel.append(heading);
+ const count=svgEl('text',{x:x+m.width-14,y:y+28,'text-anchor':'end','font-size':11,fill:'#718579'});
+ count.textContent=rows.length+'项';panel.append(count);
+ for(let i=0;i<rows.length;i++){
+  const row=rows[i],col=Math.floor(i/m.perColumn),index=i%m.perColumn;
+  const bx=x+10+col*210,by=y+48+index*22;
+  if(index%2===0)panel.append(svgEl('rect',{x:bx,y:by-3,width:207,height:21,fill:'#f5f8f5'}));
+  const num=svgEl('text',{x:bx+8,y:by+12,'font-size':12,'font-weight':700,fill:'#235443'});
+  num.textContent=row.number;panel.append(num);
+  const value=svgEl('text',{x:bx+39,y:by+12,'font-size':12,fill:'#365344'});
+  value.textContent=mapNumberDisplayName(row,rows);panel.append(value);
+ }
+ root.append(panel);return m.height;
+}
+
 function exportSvg(){
  const spec=sceneSpec(),winnerRows=exportPredictionWinnerRows(),tableLayout=winnerRows.length?exportPredictionTableLayout(winnerRows):null;
  const coreWidth=tableLayout?tableLayout.width+80:1200,contentWidth=coreWidth-80,contentHeight=Math.round(contentWidth*spec.height/spec.width);
  const notes=String(state.exportSettings.note||'').trim(),annotationLines=notes?wrapExportText(notes):[];
  const noteHeight=annotationLines.length?26+annotationLines.length*19:0,mapY=annotationLines.length?88+noteHeight:78;
- const keyWidth=state.labels?260:0,exportWidth=coreWidth+keyWidth,root=svgEl('svg',{xmlns:NS,width:exportWidth,height:1,viewBox:'0 0 '+exportWidth+' 1'});
- root.append(svgEl('rect',{width:exportWidth,height:1,fill:'#fff'}));
+ const root=svgEl('svg',{xmlns:NS,width:coreWidth,height:1,viewBox:'0 0 '+coreWidth+' 1'});
+ root.append(svgEl('rect',{width:coreWidth,height:1,fill:'#fff'}));
  const style=svgEl('style');style.textContent='path{stroke-linejoin:round}text{font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif}';root.append(style);
  const title=svgEl('text',{x:60,y:54,fill:'#294a3a','font-size':26,'font-weight':500});
  title.textContent=state.title||(state.fillMode==='prediction'?'2026 '+directoryOfficeName[state.predictionOffice]+'预测地图':$('scopeTitle').textContent);root.append(title);
@@ -575,12 +606,22 @@ function exportSvg(){
    else if(id==='labels'&&state.level==='villages')drawVillageLabels(g,currentItems(),geometryLayout(currentItems(),true),fittedView(),false);
    map.append(g);
   }
+  const keyRows=mapNumberSorted(exportNumberRows);
+  const perColumn=Math.max(1,Math.floor((spec.height-155-53)/22));
+  const inlineColumns=Math.ceil(keyRows.length/perColumn);
+  const inlineWidth=numberTableExportMetrics(keyRows,inlineColumns).width;
+  const inlineKey=keyRows.length>0&&inlineWidth<spec.width-50;
+  if(inlineKey)appendNumberTableExport(map,keyRows,22,72,inlineColumns);
   root.append(map);
-  const keyHeight=exportNumberRows.length?appendNumberTableExport(root,exportNumberRows,coreWidth-22,mapY+8,keyWidth-22):0;
-  const tableY=Math.max(mapY+contentHeight+40,mapY+keyHeight+35);
+  let appendixHeight=0;
+  if(keyRows.length&&!inlineKey){
+   const appendixColumns=Math.min(Math.max(1,Math.floor((contentWidth-30)/210)),Math.ceil(keyRows.length/30));
+   appendixHeight=appendNumberTableExport(root,keyRows,40,mapY+contentHeight+12,appendixColumns);
+  }
+  const tableY=mapY+contentHeight+Math.max(40,appendixHeight+24);
   if(winnerRows.length)appendExportPredictionTable(root,winnerRows,tableY);
-  const height=Math.max(mapY+contentHeight+72,mapY+keyHeight+40,winnerRows.length?tableY+tableLayout.height+32:0);
-  const actualWidth=keyHeight?exportWidth:coreWidth;
+  const height=Math.max(mapY+contentHeight+72,appendixHeight?mapY+contentHeight+appendixHeight+35:0,winnerRows.length?tableY+tableLayout.height+32:0);
+  const actualWidth=coreWidth;
   root.setAttribute('width',actualWidth);root.setAttribute('height',height);root.setAttribute('viewBox','0 0 '+actualWidth+' '+height);
   root.firstChild?.setAttribute('width',actualWidth);root.firstChild?.setAttribute('height',height);
   return new XMLSerializer().serializeToString(root);
