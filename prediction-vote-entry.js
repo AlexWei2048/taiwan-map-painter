@@ -5,8 +5,9 @@
  const numeric=()=>typeof predictionUsesVoteDisplay==='function'&&predictionUsesVoteDisplay();
  const valid=value=>value!==null&&value!==undefined&&String(value).trim()!=='';
  const metric=()=>state.predictionVoteMetric==='votes'?'votes':'share';
+ const selectedOnly=()=>numeric()&&state.predictionDisplay==='candidateVote'&&!!state.localDisplayCandidate;
  function previousMetric(record){
-  const rows=Object.values(record?.estimates||{});
+  const rows=selectedOnly()?[record?.estimates?.[state.localDisplayCandidate]].filter(Boolean):Object.values(record?.estimates||{});
   const hasVotes=rows.some(row=>valid(row?.votes));
   const hasShare=rows.some(row=>valid(row?.share));
   if(hasVotes&&!hasShare)return'votes';
@@ -17,11 +18,11 @@
   if(!numeric()||!draft?.estimates)return;
   const remove=metric()==='votes'?'share':'votes';
   for(const [id,row]of Object.entries(draft.estimates)){
-   if(!row)continue;
+   if(!row||selectedOnly()&&id!==state.localDisplayCandidate)continue;
    row[remove]=null;
    if(!valid(row.votes)&&!valid(row.share))delete draft.estimates[id];
   }
-  if(Object.hasOwn(draft,'totalVotes')&&metric()==='share')draft.totalVotes=null;
+  if(Object.hasOwn(draft,'totalVotes')&&metric()==='share'&&!selectedOnly())draft.totalVotes=null;
  }
  function decorate(dialogId,selectId,boxId,tableSelector,totalSelector){
   const dialog=byId(dialogId),box=byId(boxId),selector=byId(selectId);
@@ -36,17 +37,21 @@
    const th=[...table.querySelectorAll('thead th')];
    if(th[3])th[3].classList.add('vote-metric-column-votes');
    if(th[4])th[4].classList.add('vote-metric-column-share');
-   table.querySelectorAll('tbody tr').forEach(tr=>{
+   const district=dialogId==='predictionDialog'?directoryDistrictById.get(predictionEditId):localEditDistrict;
+   const candidates=district?directoryCandidates(district):[];
+   table.querySelectorAll('tbody tr').forEach((tr,index)=>{
+    const show=!active||!selectedOnly()||candidates[index]?.id===state.localDisplayCandidate;
+    tr.hidden=!show;
     const cells=tr.children;
     if(cells[3]){
      cells[3].classList.add('vote-metric-column-votes');
      const control=cells[3].querySelector('input');
-     if(control)control.disabled=active&&kind!=='votes';
+     if(control)control.disabled=!show||active&&kind!=='votes';
     }
     if(cells[4]){
      cells[4].classList.add('vote-metric-column-share');
      const control=cells[4].querySelector('input');
-     if(control)control.disabled=active&&kind!=='share';
+     if(control)control.disabled=!show||active&&kind!=='share';
     }
    });
   }
