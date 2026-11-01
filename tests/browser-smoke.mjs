@@ -397,10 +397,54 @@ test('Recording votes retains chosen winners and exports a complete vote table',
  assert.match(await page.locator('#legend').textContent(),/中国国民党（1席）/);
  await page.reload();await page.locator('#regions path').first().waitFor();assert.match(await page.locator('#predictionCoverage').innerText(),/已选当选人 1\/1/);
 });
+test('Unified forecast selectors and exclusive metric columns work in district and township dialogs',async t=>{
+ const page=await pageFor(t);
+ for(const office of ['mayor','council','township']){
+  await page.locator('#predictionOffice').selectOption(office);
+  assert.deepEqual(await page.locator('#predictionDisplay option').allTextContents(),['预测胜负','预测得票']);
+  await page.locator('#predictionDisplay').selectOption('topVote');
+  assert.equal(await page.locator('#predictionCandidateScope').isVisible(),true);
+  assert.deepEqual(await page.locator('#predictionCandidateScope option').allTextContents(),['所有候选人','指定候选人']);
+  await page.locator('#predictionCandidateScope').selectOption('candidateVote');
+  assert.equal(await page.locator('#localCandidate').isVisible(),true);
+  await page.locator('#predictionCandidateScope').selectOption('topVote');
+ }
+ await page.locator('#predictionOffice').selectOption('mayor');
+ await page.locator('#county').selectOption({label:'台北市'});
+ await page.locator('#predictionDisplay').selectOption('topVote');
+ await page.locator('#editPrediction').click();
+ assert.equal(await page.locator('#predictionVoteMetric').isVisible(),true);
+ await page.locator('#predictionVoteMetric').selectOption('votes');
+ assert.equal(await page.getByRole('spinbutton',{name:'蒋万安预测得票数',exact:true}).isVisible(),true);
+ assert.equal(await page.getByRole('spinbutton',{name:'蒋万安预测得票率',exact:true}).isVisible(),false);
+ await page.getByRole('spinbutton',{name:'蒋万安预测得票数',exact:true}).fill('100');
+ await page.locator('#predictionVoteMetric').selectOption('share');
+ assert.equal(await page.getByRole('spinbutton',{name:'蒋万安预测得票数',exact:true}).isVisible(),false);
+ assert.equal(await page.getByRole('spinbutton',{name:'蒋万安预测得票率',exact:true}).isVisible(),true);
+ await page.getByRole('spinbutton',{name:'蒋万安预测得票率',exact:true}).fill('48');
+ await page.locator('#savePrediction').click();
+ const saved=await page.evaluate(()=>Object.values(state.predictions[state.predictionRegion]?.estimates||{}));
+ assert.ok(saved.some(item=>item.share===48&&item.votes===null));
+ assert.ok(saved.every(item=>item.votes===null));
+ await page.locator('#predictionScale').selectOption('overlay');
+ await page.locator('#county').selectOption({label:'台北市'});
+ await page.locator('#predictionDisplay').selectOption('topVote');
+ await page.locator('#editPrediction').click();
+ assert.equal(await page.locator('#localVoteMetric').isVisible(),true);
+ await page.locator('#localVoteMetric').selectOption('votes');
+ assert.equal(await page.locator('#localRows input[aria-label$="预测得票数"]').first().isVisible(),true);
+ assert.equal(await page.locator('#localRows input[aria-label$="预测得票率"]').first().isVisible(),false);
+ await page.locator('#localVoteMetric').selectOption('share');
+ assert.equal(await page.locator('#localRows input[aria-label$="预测得票数"]').first().isVisible(),false);
+ assert.equal(await page.locator('#localRows input[aria-label$="预测得票率"]').first().isVisible(),true);
+ await page.locator('#cancelLocal').click();
+});
+
 test('Specified candidate export contains only the chosen candidate and entered vote rate',async t=>{
  const page=await pageFor(t);
  await page.locator('#county').selectOption({label:'台北市'});
- await page.locator('#predictionDisplay').selectOption('candidateVote');
+ await page.locator('#predictionDisplay').selectOption('topVote');
+ await page.locator('#predictionCandidateScope').selectOption('candidateVote');
  const selectedId=await page.locator('#localCandidate option').evaluateAll(options=>options.find(option=>option.textContent.includes('沈伯洋'))?.value);
  assert.ok(selectedId,'Chosen candidate appears in picker');
  await page.locator('#localCandidate').selectOption(selectedId);
