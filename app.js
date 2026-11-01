@@ -528,10 +528,28 @@ function drawLabels(group,items,t,font=15,interactive=false){
  group.replaceChildren();
  for(const q of labelLayout(rendered.filter(f=>shownLabel(f)),t,font)){
   const g=svgEl('g',{'class':'map-label'});group.append(g);
+  const cityCallout=!!q.leaderAnchor&&countyMayorOverview()&&COUNTY_CITY_CALLOUTS.has(q.f.name);
   if(q.leaderAnchor){
    const end=q.x+(q.x<q.leaderAnchor.x?1:-1)*(q.text.length*q.font*.34+5);
-   g.append(svgEl('path',{d:q.leaderPath||`M${q.leaderAnchor.x},${q.leaderAnchor.y}L${end},${q.y}`,fill:'none',stroke:'#718b7c','stroke-width':.85,'stroke-opacity':.8,'vector-effect':'non-scaling-stroke','data-label-leader':q.f.id,'data-label-column':q.column||'local'}));
-   g.append(svgEl('circle',{cx:q.leaderAnchor.x,cy:q.leaderAnchor.y,r:1.7*zoomRatio,fill:'#718b7c','data-label-anchor':q.f.id}));
+   const leaderPath=q.leaderPath||`M${q.leaderAnchor.x},${q.leaderAnchor.y}L${end},${q.y}`;
+   // A white underlay protects the dark leader against either party fill.
+   // Inline SVG styles deliberately outrank the generic #labels path CSS.
+   if(cityCallout)g.append(svgEl('path',{d:leaderPath,fill:'none',
+    style:'fill:none;stroke:#fff;stroke-width:5.4px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.96',
+    'vector-effect':'non-scaling-stroke','pointer-events':'none','data-label-leader-halo':q.f.id}));
+   const line=svgEl('path',{d:leaderPath,fill:'none',stroke:cityCallout?'#214e40':'#718b7c',
+    'stroke-width':cityCallout?2.3:.85,'stroke-opacity':cityCallout?1:.8,
+    'vector-effect':'non-scaling-stroke','data-label-leader':q.f.id,'data-label-column':q.column||'local'});
+   if(cityCallout){
+    line.style.stroke='#214e40';line.style.strokeWidth='2.3px';line.style.strokeOpacity='1';
+    line.style.strokeLinecap='round';line.style.strokeLinejoin='round';
+    line.setAttribute('data-prominent-leader','true');
+   }
+   g.append(line);
+   const dot=svgEl('circle',{cx:q.leaderAnchor.x,cy:q.leaderAnchor.y,r:(cityCallout?3.7:1.7)*zoomRatio,
+    fill:cityCallout?'#214e40':'#718b7c','data-label-anchor':q.f.id});
+   if(cityCallout){dot.style.stroke='#fff';dot.style.strokeWidth='1.6px'}
+   g.append(dot);
   }
   const label=svgEl('text',{x:q.x,y:q.y,'font-size':q.font,'data-label':q.f.id,
    'data-placement':q.leaderAnchor?'outside':q.districtNumber?'district-number':q.island?(q.insetBottom?'inset-bottom':'below-island'):'inside','text-anchor':'middle','dominant-baseline':'middle',
@@ -540,6 +558,7 @@ function drawLabels(group,items,t,font=15,interactive=false){
   label.style.strokeWidth=(q.numeric?2.6:2.4)*zoomRatio;
   // CSS resets SVG text-anchor; enforce the measured centre for this overview.
   if(countyMayorOverview())label.style.textAnchor='middle';
+  if(cityCallout){label.style.fontWeight='700';label.style.fill='#214e40';label.style.strokeWidth='3.2px'}
   label.textContent=q.text;
   if(q.numeric){label.setAttribute('data-number-key',q.number);mapNumberRecord(q.f,q.number)}
   if(interactive){label.style.pointerEvents='auto';label.style.cursor='pointer';label.onclick=()=>paint(q.f)}
