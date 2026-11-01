@@ -61,7 +61,7 @@ function localDisplayOptions(){return [['composition','预测胜负'],['topVote'
 const districtDisplayOptions=displayOptions;displayOptions=function(){return localPredictionActive()?localDisplayOptions():districtDisplayOptions()};
 const districtUsesVoteDisplay=predictionUsesVoteDisplay;predictionUsesVoteDisplay=function(){return districtUsesVoteDisplay()};
 const districtUsesGradient=predictionUsesGradient;predictionUsesGradient=function(){return districtUsesGradient()};
-const districtIsVotes=predictionIsVotes;predictionIsVotes=function(){return localPredictionActive()?false:districtIsVotes()};
+const districtIsVotes=predictionIsVotes;predictionIsVotes=function(){return localPredictionActive()?state.predictionDisplay==='candidateVote'&&state.predictionVoteMetric==='votes':districtIsVotes()};
 function predictionLegendCountUnit(){if(state.predictionOffice==='mayor')return mayorLegendUnit();if(localPredictionActive())return'乡镇市区';return predictionUsesVoteDisplay()?'区':'席'}
 const districtForMap=predictionDistrictFor;predictionDistrictFor=function(f){return localPredictionActive()?directoryDistrictById.get(f.parentDistrictId):districtForMap(f)};
 const districtMapFill=predictionFill;predictionFill=function(f){if(mayorTownBoundaryOverlay())return'#edf1e9';if(!localPredictionActive())return districtMapFill(f);const r=localMapResult(f);if(r.status==='tie')return'#aebdb4';if(r.status!=='winner')return'#edf1e9';const p=predictionParty(r.party);return predictionMarginMode()?ElectionCore.marginShade(p.color,r.marginShare??0):predictionUsesGradient()?ElectionCore.shade(p.color,r.value,predictionDomain().min,predictionDomain().max):p.color};
