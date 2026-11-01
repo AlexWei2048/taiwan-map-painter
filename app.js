@@ -209,10 +209,9 @@ function mapInsetLabelFit(f,t,width,height,used,area,reserve){
  const definition=insetDefinitionForFeature(f);if(!definition)return null;
  const insetTitle=f.name===definition.county||f.name===definition.town;
  const xMap=insetTitle?definition.label[0]:(f.box[0]+f.box[2])/2;
- const frameBottom=definition.box[3]*t.scale+t.ty,featureBottom=f.box[3]*t.scale+t.ty;
+ const featureBottom=f.box[3]*t.scale+t.ty;
  const x0=xMap*t.scale+t.tx;
- const y0=insetTitle?frameBottom-height/2-3:
-  Math.min(featureBottom+height/2+3,frameBottom-height/2-3);
+ const y0=featureBottom+height/2+2;
  const minX=area.left+width/2,maxX=area.right-width/2;
  const clampX=x=>Math.max(minX,Math.min(maxX,x));
  const fallback={x:clampX(x0),y:y0,rect:[clampX(x0)-width/2,y0-height/2,clampX(x0)+width/2,y0+height/2]};
