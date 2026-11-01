@@ -184,3 +184,18 @@ body.history-mode .title-row{display:none}
  .canvas>.map-number-key{top:auto;left:auto;width:calc(100% - 20px);margin:0 10px 40px}
  .map-number-key tbody{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 8px}
 }
+
+/* County detail navigation, placed within the map rather than the sidebar. */
+.return-taiwan-map{
+ position:absolute;left:19px;top:48px;z-index:4;display:inline-flex;align-items:center;gap:7px;
+ padding:9px 13px;border:1px solid #c7d9cc;border-radius:9px;background:#fffffff2;
+ color:#2d604b;font-size:12px;font-weight:600;line-height:1.25;
+ box-shadow:0 2px 9px #203c2922;white-space:nowrap;
+}
+.return-taiwan-map[hidden]{display:none}
+.return-taiwan-map:hover{background:#eef6ef;border-color:#8eb8a1}
+.return-taiwan-map:focus-visible{outline:2px solid #147d68;outline-offset:3px}
+.return-taiwan-map span[aria-hidden]{font-size:16px;line-height:12px}
+@media(max-width:650px){
+ .return-taiwan-map{left:12px;top:46px;padding:8px 11px;font-size:12px}
+}

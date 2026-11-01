@@ -122,6 +122,8 @@ function syncLocalControls(){if(localSyncing||!$('predictionScale'))return;local
  const desired=mayor?'overlay':'town';
  if(!scaleSelect.querySelector('option[value="'+desired+'"]'))scaleSelect.add(new Option('乡镇市区',desired));
  scaleSelect.value=mayor&&(mayorTownBoundaryOverlay()||active)?'overlay':active?'town':'district';
+ // The back button only appears on an individual county's mayoral township map.
+ $('returnTaiwanMap').hidden=!(mayor&&active&&state.predictionScale==='overlay'&&!!state.county&&state.level==='towns');
  $('localForecastControls').hidden=!active;$('localCandidateControl').hidden=state.predictionDisplay!=='candidateVote';$('localForecastHelp').hidden=!active;$('onlyIncomplete').closest('label').hidden=active;document.querySelector('.prediction-step').textContent=mayorTownBoundaryOverlay()?'点击县市进入乡镇市区预测，再逐个填写。':active?'点选乡镇市区，填写胜负与得票。':'点击地图填写预测；手动选当选者或录入得票。';if(active)$('electorateControls').hidden=true;if(active&&state.predictionOffice==='council')ensureTownPredictionAreas();
  $('editPrediction').textContent=active?'填写所选乡镇预测':'填写所选区预测';$('nextPrediction').textContent=active?'下一个未完成乡镇 →':'下一个未完成选区 →';$('openElectionDirectory').textContent=active?'查看本选区候选人':'查看所选区候选人';
  if(active&&data){const d=localParentDistrict(),features=localDistrictItems(d),townSelect=$('localTownSelect'),old=state.localTown||townSelect.value;townSelect.replaceChildren(...features.map(f=>new Option(f.scope||f.name,f.townId)));if(features.some(f=>f.townId===old))townSelect.value=old;state.localTown=townSelect.value;
@@ -132,6 +134,16 @@ function syncLocalControls(){if(localSyncing||!$('predictionScale'))return;local
 }
 const districtSyncWorkspace=syncWorkspace;syncWorkspace=function(){districtSyncWorkspace();syncLocalControls()};
 $('predictionScale').onchange=()=>applyLocalScale($('predictionScale').value);
+$('returnTaiwanMap').onclick=()=>{
+ if(!(state.workspaceMode==='prediction'&&state.fillMode==='prediction'&&
+  state.predictionOffice==='mayor'&&state.predictionScale==='overlay'&&
+  state.level==='towns'&&state.county))return;
+ pushHistory();
+ state.county='';state.predictionRegion='';state.localTown='';
+ state.predictionDisplay='composition';state.localPredictionDisplay='composition';
+ $('tooltip').hidden=true;
+ syncInputs();render();persist();
+};
 const districtSelectRegion=$('predictionRegion').onchange;$('predictionRegion').onchange=()=>{if(!localPredictionActive())return districtSelectRegion();const d=directoryDistrictById.get($('predictionRegion').value);if(!d)return;state.predictionRegion=d.id;if(state.county)state.county=d.county;if(d.type==='council')state.electorate.council=DistrictCore.identity(d);state.localTown='';syncInputs();render();persist()};
 const districtEditClick=$('editPrediction').onclick;$('editPrediction').onclick=()=>{if(!localPredictionActive())return districtEditClick();const f=localDistrictItems().find(f=>f.townId===$('localTownSelect').value);if(f)openLocalForecast(f)};
 const districtNextClick=$('nextPrediction').onclick;$('nextPrediction').onclick=()=>{if(!localPredictionActive())return districtNextClick();const features=localDistrictItems(),f=features.find(f=>localMapResult(f).status!=='winner')||features[0];if(f)openLocalForecast(f)};
