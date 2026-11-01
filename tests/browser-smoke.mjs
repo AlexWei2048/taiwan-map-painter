@@ -571,6 +571,10 @@ test('Town label hover highlights the matching polygon and restores its predicti
  const others=await page.locator('#regions path[data-region]').evaluateAll(els=>els.filter(e=>e.classList.contains('label-region-highlighted')).map(e=>e.dataset.region));
  assert.deepEqual(others,[candidate],'Hover must highlight only the name’s town');
  await page.mouse.move(2,2);
+ await page.waitForFunction(({id,baseline})=>{
+  const el=[...document.querySelectorAll('#regions path[data-region]')].find(x=>x.dataset.region===id);
+  return el&&!el.classList.contains('label-region-highlighted')&&getComputedStyle(el).fill===baseline;
+ },{id:candidate,baseline},{timeout:1500});
  assert.equal(await polygon.evaluate(e=>getComputedStyle(e).fill),baseline,'Leaving restores the exact election fill');
  await label.focus();
  assert.equal(await polygon.evaluate(e=>e.classList.contains('label-region-highlighted')),true);
@@ -585,6 +589,10 @@ test('Town label hover highlights the matching polygon and restores its predicti
  await townLabel.hover({force:true});
  assert.notEqual(await townShape.evaluate(e=>getComputedStyle(e).fill),initial);
  await page.mouse.move(2,2);
+ await page.waitForFunction(({id,initial})=>{
+  const el=[...document.querySelectorAll('#regions path[data-region]')].find(x=>x.dataset.region===id);
+  return el&&!el.classList.contains('label-region-highlighted')&&getComputedStyle(el).fill===initial;
+ },{id:next,initial},{timeout:1500});
  assert.equal(await townShape.evaluate(e=>getComputedStyle(e).fill),initial);
 });
 
