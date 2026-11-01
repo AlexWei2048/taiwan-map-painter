@@ -138,38 +138,53 @@ test('Recording votes retains chosen winners and exports a complete vote table',
  assert.match(await page.locator('#legend').textContent(),/中国国民党（1席）/);
  await page.reload();await page.locator('#regions path').first().waitFor();assert.match(await page.locator('#predictionCoverage').innerText(),/已选当选人 1\/1/);
 });
-test('Exported single-column winner table has readable rows, roomy columns and clear party symbols',async t=>{
+test('Export winner table has two candidates per row, with name-adjacent incumbency and party logos',async t=>{
  const page=await pageFor(t);
  const result=await page.evaluate(()=>{
   const logo=logoFor({id:'blue',name:'中国国民党'});
   const rows=Array.from({length:22},(_,i)=>({
-   district:i?'县市'+i:'台北市',number:String(i+1),name:i?'测试候选人'+i:'测试候选人',
-   gender:i%2?'女':'男',party:i%3?'民主进步党':'中国国民党',
+   district:i?'县市'+i:'台北市',number:String(i+1),
+   name:i?'测试候选人'+i:'测试候选人',gender:i%2?'女':'男',
+   party:i%3?'民主进步党':'中国国民党',
    color:i%3?'#1B9431':'#000099',logo,incumbent:i%4===0?'现任':''
   }));
   const layout=exportPredictionTableLayout(rows),root=svgEl('g');
   appendExportPredictionTable(root,rows,20);
   const card=root.querySelector('[data-export-winner-table]');
-  const items=[...root.querySelectorAll('[data-export-winner-row]')];
-  const named=items[0].querySelector('text[font-size="16.2"]');
-  const partyLogo=items[0].querySelector('[data-export-party-logo]');
+  const physicalRows=[...card.querySelectorAll('[data-export-winner-row]')];
+  const entries=[...card.querySelectorAll('[data-export-winner-entry]')];
+  const names=[...card.querySelectorAll('[data-export-field="name"]')];
+  const incumbents=[...card.querySelectorAll('[data-export-incumbent]')];
+  const headers=[...card.querySelectorAll('[data-export-winner-header]')].map(el=>el.textContent);
   const numeric=exportPredictionTableLayout([{...rows[0],estimated:true,votes:'12345',share:'45%',status:'预测当选'}]);
+  const oddRows=exportPredictionTableLayout(rows.slice(0,21));
+  const oddRoot=svgEl('g');appendExportPredictionTable(oddRoot,rows.slice(0,21),20);
+  const firstItem=entries[0],badge=firstItem.querySelector('[data-export-incumbent]');
+  const firstName=firstItem.querySelector('[data-export-field="name"]');
+  const secondItem=entries[1];
   return{
-   variant:card.dataset.exportTableStyle,font:layout.font,rowHeight:layout.rowHeight,
-   rows:items.length,logos:root.querySelectorAll('[data-export-party-logo]').length,
-   named:named?.textContent,logo:!!partyLogo,incumbents:items.filter(e=>e.textContent.includes('现任')).length,
-   width:layout.width,total:layout.widths.reduce((sum,w)=>sum+w,0),
-   height:layout.height,header:root.textContent.includes('是否现任'),
+   variant:card.dataset.exportTableStyle,columns:layout.columns,
+   rows:physicalRows.length,entries:entries.length,
+   pairCounts:physicalRows.map(r=>r.querySelectorAll('[data-export-winner-entry]').length),
+   logos:card.querySelectorAll('[data-export-party-logo]').length,
+   incumbents:incumbents.length,headers,firstName:firstName?.textContent,
+   inlineBadge:badge?Number(badge.getAttribute('x'))>Number(firstName.getAttribute('x')):false,
+   secondSlot:secondItem?.dataset.exportSlot,fonts:names.map(el=>Number(el.getAttribute('font-size'))),
+   width:layout.width,tableHeight:layout.height,
+   oddPairs:oddRows.pairs.length,
+   oddLastEntries:oddRoot.querySelectorAll('[data-export-winner-row]:last-of-type [data-export-winner-entry]').length,
    estimatedStillLegacy:!numeric.polished
   };
  });
- assert.equal(result.variant,'polished');
- assert.ok(result.font>=15&&result.rowHeight>=46);
- assert.equal(result.rows,22);assert.equal(result.logos,22);
- assert.equal(result.named,'测试候选人');
- assert.equal(result.logo,true);assert.equal(result.incumbents,6);
- assert.equal(result.width,1120);assert.equal(result.total,1084);
- assert.ok(result.height>1100);assert.equal(result.header,true);
+ assert.equal(result.variant,'two-up');assert.equal(result.columns,2);
+ assert.equal(result.rows,11);assert.equal(result.entries,22);
+ assert.ok(result.pairCounts.every(n=>n===2));
+ assert.equal(result.logos,22);assert.equal(result.incumbents,6);
+ assert.deepEqual(result.headers,['选区','姓名','政党','选区','姓名','政党']);
+ assert.equal(result.firstName,'测试候选人');assert.equal(result.inlineBadge,true);
+ assert.equal(result.secondSlot,'1');assert.ok(result.fonts.every(n=>n>=15));
+ assert.equal(result.width,1120);assert.ok(result.tableHeight<950);
+ assert.equal(result.oddPairs,11);assert.equal(result.oddLastEntries,1);
  assert.equal(result.estimatedStillLegacy,true);
 });
 test('2026 and 2022 district searches and CSV downloads survive mode switching',async t=>{
