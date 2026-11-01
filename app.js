@@ -184,6 +184,25 @@ function mapOrthogonalLeader(anchor,side,x,y,width,coast,leaders,occupied,area,f
     (delta?'V'+yy:'')+'H'+rail+'V'+y+'H'+end,leaderPoints:points};
   }
  }
+ // Escape through a short orthogonal elbow if every direct perimeter
+ // lane is occupied by existing names or other leaders.
+ for(const distance of [12,24,-12,-24]){
+  const elbow=anchor.x+sign*distance;
+  if(elbow<area.left+3||elbow>area.right-3)continue;
+  for(const delta of [-12,12,-26,26,-45,45]){
+   const yy=anchor.y+delta;
+   if(yy<area.top+3||yy>area.bottom-3)continue;
+   for(let n=0;n<8;n++){
+    const rail=coast+sign*(8+n*3.4);
+    if(sign*(end-rail)<5||rail<area.left+3||rail>area.right-3)continue;
+    const points=[[anchor.x,anchor.y],[elbow,anchor.y],[elbow,yy],
+     [rail,yy],[rail,y],[end,y]];
+    if(!mapLeaderClear(points,leaders,occupied,frames))continue;
+    return{leaderPath:'M'+anchor.x+','+anchor.y+'H'+elbow+'V'+yy+
+     'H'+rail+'V'+y+'H'+end,leaderPoints:points};
+   }
+  }
+ }
  return null;
 }
 function shortLeader(q,t,occupied,reserve){
@@ -438,7 +457,7 @@ function mapOutsideLabelColumns(pending,t,used,area,reserve,items){
 function countyMayorOverview(){
  return(state.level==='counties'||(typeof mayorTownBoundaryOverlay==='function'&&mayorTownBoundaryOverlay()))&&!state.county&&state.fillMode==='prediction'&&state.predictionOffice==='mayor';
 }
-const COUNTY_CITY_CALLOUTS=new Set(['台北市','基隆市','新竹市','嘉义市']);
+const COUNTY_CITY_CALLOUTS=new Set(['台北市','基隆市','新竹市','嘉义市','桃园市','高雄市']);
 // All 25 perimeter probes must be inside the county: a central point alone
 // can allow a name to spill over a concave administrative boundary.
 function countyInsideName(f,t,name,font,used,area,reserve){
@@ -611,7 +630,7 @@ function townInsideLabelFit(f,t,width,height,used,area,reserve){
  return null;
 }
 
-function townNameLabelLayout(items,t,font,area,reserve){
+function townNameLabelLayout(items,t,font,area,reserve,attempt=0){
  const sorted=[...items].filter(f=>shownLabel(f)).sort((a,b)=>
   (b.box[2]-b.box[0])*(b.box[3]-b.box[1])-
   (a.box[2]-a.box[0])*(a.box[3]-a.box[1]));
@@ -657,21 +676,27 @@ function townNameLabelLayout(items,t,font,area,reserve){
  });
  for(const q of order){
   if(!q.anchor){remaining.push(q);continue}
-  const preference=q.anchor.x<(box.left+box.right)/2?'left':'right';
+  const preference=(q.anchor.x<(box.left+box.right)/2)!==(attempt===2)?'left':'right';
   const alternate=preference==='left'?'right':'left';
   const side=[preference,alternate].find(k=>sides[k].length<capacity[k]);
   if(side)sides[side].push(q);else remaining.push(q);
  }
  const coastRail={left:box.left,right:box.right};
  const insetFrames=leaderFrames(t,3);
- for(const side of ['left','right']){
+ for(const side of (attempt===3?['right','left']:['left','right'])){
   const rows=sides[side].sort((a,b)=>a.anchor.y-b.anchor.y||
    a.anchor.x-b.anchor.x||String(a.f.id).localeCompare(String(b.f.id)));
   if(!rows.length)continue;
   const yValues=mapOrderedLabelRows(rows.map(q=>q.anchor.y),
    area.top+height/2+5,area.bottom-height/2-6,height+7);
   if(!yValues){remaining.push(...rows);continue}
-  for(let i=0;i<rows.length;i++){
+  const indexes=rows.map((_,i)=>i);
+  if(attempt===1||attempt===3)indexes.reverse();
+  else if(attempt===2)indexes.sort((i,j)=>{
+   const size=f=>(f.box[2]-f.box[0])*(f.box[3]-f.box[1]);
+   return size(rows[i].f)-size(rows[j].f);
+  });
+  for(const i of indexes){
    const q=rows[i],width=labelWidth(q.text),x=colX[side],y=yValues[i];
    let rect=[x-width/2-4,y-height/2-3,x+width/2+4,y+height/2+3];
    // Make small ordered adjustments if a legend or a large interior name
@@ -719,6 +744,15 @@ function townNameLabelLayout(items,t,font,area,reserve){
   used.push(pos.rect);leaders.push(pos.leaderPoints);
   labels.push({f:q.f,x:pos.x,y:pos.y,rect:pos.rect,text:q.text,font,numeric:false,
    leaderAnchor:anchor,leaderPath:pos.leaderPath,leaderPoints:pos.leaderPoints,column:pos.side});
+ }
+ if(attempt===0&&labels.length<sorted.length){
+  let best=labels;
+  for(const retry of [1,2,3]){
+   const alternate=townNameLabelLayout(items,t,font,area,reserve,retry);
+   if(alternate.length>best.length)best=alternate;
+   if(best.length===sorted.length)break;
+  }
+  return best;
  }
  return labels;
 }
