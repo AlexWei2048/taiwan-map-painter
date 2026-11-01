@@ -230,3 +230,11 @@ Latest source revision: 20261030-no-offline-v11.
 - SVG/PNG export expands every lookup row and places the legend beneath the key; keyed areas no longer trigger redundant export enlargement panels.
 - Updated regression and browser workflows to verify the new user-requested name-or-number contract instead of requiring external full-name leaders.
 - Local regression checks: 73 pass; preview verified Kaohsiung 38 labels, 29 number/key pairs, and the key above the legend.
+
+## 2026-11-02 island labels and inset barriers (v91)
+- Referenced Esri's island-label examples and Taiwan election-map inset layouts. Renamed the reference card/export heading to 行政区索引.
+- Mainland external-number columns reject both text rectangles and leader segments entering offshore inset frames; local/gutter fallbacks retain frame avoidance.
+- Offshore county features always use full county names centred at the bottom inside their inset frames, without reference digits.
+- Scoped Kinmen/Lienchiang/Penghu township maps omit inset frames. Names that cannot fit inside are placed nearby with short, obstacle-checked leaders that cannot cross another township; reference digits remain the fallback.
+- Local preview verified all six Kinmen townships (including Wuqiu), four Lienchiang townships and six Penghu townships, plus all 22 nationwide county labels and Hsinchu City's frame clearance.
+- Added browser checks for inset title placement, mainland frame barriers, offshore township names and matching exports; 73 local regression checks pass.

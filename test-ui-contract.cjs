@@ -746,7 +746,7 @@ test('Export images keep table titles and all data, without subtitles, counts or
  assert.match(standard,/预测得票候选人/);
  assert.match(standard,/layout\.headers\.forEach/);
  assert.doesNotMatch(standard,/第一高票不等于|已预测/);
- assert.match(numberKey,/数字对照表/);
+ assert.match(numberKey,/行政区索引/);
  assert.doesNotMatch(numberKey,/count\.textContent|项';panel\.append/);
  assert.match(coverage,/密集区域完整标注/);
  assert.doesNotMatch(coverage,/count\.textContent|note\.textContent|主地图空间不足/);

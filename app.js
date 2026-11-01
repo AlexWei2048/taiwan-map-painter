@@ -574,10 +574,12 @@ function mapOutsideLabelColumns(pending,t,used,area,reserve,items){
    rows.forEach((q,i)=>{
     const y=ys[i],rect=[x-width/2,y-height/2,x+width/2,y+height/2];
     if(used.some(other=>leaderOverlap(rect,other)))return;
+    if(!frame&&frames.some(other=>leaderOverlap(rect,other)))return;
     if(reserve&&leaderOverlap(rect,[reserve.x,reserve.y,reserve.x+reserve.width,reserve.y+reserve.height]))return;
     const end=x+(side==='left'?width/2+3:-width/2-3);
     // The horizontal stems end outside the geometry. Ordered fan segments
     // stay in the margin, so adjacent callouts cannot cross one another.
+    if(!frame&&frames.some(other=>leaderCross(q.anchor.x,q.anchor.y,rail,q.anchor.y,other)||leaderCross(rail,q.anchor.y,end,y,other)))return;
     const leaderPath=`M${q.anchor.x},${q.anchor.y}H${rail}L${end},${y}`;
     used.push(rect);placed.push({...q,x,y,rect,leaderAnchor:q.anchor,leaderPath,column:side});
    });
@@ -1033,12 +1035,72 @@ function townNameLabelLayout(items,t,font,area,reserve,attempt=0){
  return labels;
 }
 
+const OFFSHORE_COUNTIES=new Set(['金门县','连江县','澎湖县']);
+function offshoreTownMap(){
+ return OFFSHORE_COUNTIES.has(state.county)&&
+  (state.level==='towns'||state.level==='villages'||
+   (typeof localPredictionActive==='function'&&localPredictionActive())||
+   (typeof legislativeFourPanelsActive==='function'&&legislativeFourPanelsActive()));
+}
+function offshoreTownNameFit(f,t,text,font,used,area,reserve,items,leaders){
+ const anchor=townVisualCenter(f,t),width=Array.from(text).length*font*1.04+8,height=font*1.5+5;
+ const candidates=[];
+ for(const radius of [height,width*.75,width,width*1.4,width*1.9,width*2.5])
+  for(const [dx,dy]of [[0,1],[0,-1],[-1,0],[1,0],[-1,1],[1,1],[-1,-1],[1,-1]])
+   candidates.push({x:anchor.x+dx*(radius+width/2),y:anchor.y+dy*(radius+height/2)});
+ candidates.sort((a,b)=>Math.hypot(a.x-anchor.x,a.y-anchor.y)-Math.hypot(b.x-anchor.x,b.y-anchor.y));
+ const blocked=reserve?[reserve.x,reserve.y,reserve.x+reserve.width,reserve.y+reserve.height]:null;
+ for(const {x,y}of candidates){
+  const rect=[x-width/2-3,y-height/2-3,x+width/2+3,y+height/2+3];
+  if(rect[0]<area.left||rect[2]>area.right||rect[1]<area.top||rect[3]>area.bottom||
+    used.some(r=>leaderOverlap(rect,r))||blocked&&leaderOverlap(rect,blocked))continue;
+  if(!mapLeaderRectIsClear(rect,leaders))continue;
+  let coversLand=false;
+  for(const item of items){
+   if(rect[2]<item.box[0]*t.scale+t.tx||rect[0]>item.box[2]*t.scale+t.tx||
+      rect[3]<item.box[1]*t.scale+t.ty||rect[1]>item.box[3]*t.scale+t.ty)continue;
+   for(let ix=0;ix<=4&&!coversLand;ix++)for(let iy=0;iy<=4;iy++)
+    if(regionContains(item,rect[0]+(rect[2]-rect[0])*ix/4,rect[1]+(rect[3]-rect[1])*iy/4,t)){coversLand=true;break}
+   if(coversLand)break;
+  }
+  if(coversLand)continue;
+  const horizontal=Math.abs(x-anchor.x)>width/2;
+  const end=horizontal?[x+(x<anchor.x?width/2+6:-width/2-6),y]:[x,y+(y<anchor.y?height/2+6:-height/2-6)];
+  const routes=horizontal?[
+   [[anchor.x,anchor.y],[anchor.x,end[1]],end],
+   [[anchor.x,anchor.y],[end[0],anchor.y],end]]:[
+   [[anchor.x,anchor.y],[end[0],anchor.y],end]];
+  for(const points of routes){
+   if(!mapLeaderClear(points,leaders,used,[],1.5))continue;
+   // A nearby label must not point across another township to reach its island.
+   let ambiguous=false;
+   for(const [a,b]of mapLeaderSegments(points)){
+    const steps=Math.max(1,Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])/5));
+    for(let i=1;i<steps&&!ambiguous;i++){
+     const px=a[0]+(b[0]-a[0])*i/steps,py=a[1]+(b[1]-a[1])*i/steps;
+     if(items.some(other=>other!==f&&px>=other.box[0]*t.scale+t.tx&&px<=other.box[2]*t.scale+t.tx&&
+       py>=other.box[1]*t.scale+t.ty&&py<=other.box[3]*t.scale+t.ty&&regionContains(other,px,py,t)))ambiguous=true;
+    }
+   }
+   if(ambiguous)continue;
+   return{x,y,rect,font,leaderAnchor:anchor,leaderPoints:points,
+    leaderPath:`M${points[0][0]},${points[0][1]}L${points[1][0]},${points[1][1]}L${end[0]},${end[1]}`,
+    column:x<anchor.x?'left':'right',calloutLane:'island-near'};
+  }
+ }
+ return null;
+}
+
 function labelLayout(items,t,font=15){
  const baseArea=t.area||contentArea(sceneSpec()),area={...baseArea,right:Math.min(baseArea.right,sceneSpec().width-((typeof document!=='undefined')?mapKeyRailWidth(sceneSpec()):290))},reserve=state.legend.show?legendBox(sceneSpec()):null;
  const sizes=f=>(f.box[2]-f.box[0])*(f.box[3]-f.box[1]);
- const sorted=[...items].sort((a,b)=>sizes(b)-sizes(a)),used=[],labels=[],needsNumber=[],outside=[];
+ const sorted=[...items].sort((a,b)=>sizes(b)-sizes(a)),used=[],labels=[],needsNumber=[],outside=[],islandNames=[];
  for(const f of sorted){
   const name=shownLabel(f);if(!name)continue;
+  if(OFFSHORE_COUNTIES.has(f.name)&&f.name===f.county){
+   const pos=countyIslandName(f,t,name,font);
+   if(pos){used.push(pos.rect);labels.push({f,...pos,text:name,numeric:false});continue}
+  }
   if(['council','legislative'].includes(state.level)&&!f.parentDistrictId&&!f.legislativeTown&&districtMapNumber(f)){
    const districtNumber=districtMapNumber(f),text=districtNumber||name;
    const pos=mapNumberLabelFit(f,t,text,font,used,area,reserve);
@@ -1059,6 +1121,13 @@ function labelLayout(items,t,font=15){
    if(pos)lines=rows;
   }
   if(pos){used.push(pos.rect);labels.push({f,x:pos.x,y:pos.y,font,text:name,lines,numeric:false})}
+  else if(offshoreTownMap())islandNames.push(f);
+  else needsNumber.push(f);
+ }
+ const nearbyLeaders=[];
+ for(const f of islandNames){
+  const pos=offshoreTownNameFit(f,t,shownLabel(f),font,used,area,reserve,items,nearbyLeaders);
+  if(pos){used.push(pos.rect);nearbyLeaders.push(pos.leaderPoints);labels.push({f,...pos,text:shownLabel(f),numeric:false})}
   else needsNumber.push(f);
  }
  // Administrative reference numbers follow geography, not Chinese collation.
@@ -1180,7 +1249,7 @@ function insetDefinitions(){return[
  {name:'乌坵',town:'乌坵乡',box:[110,160,140,190],label:[125,183]},
  {name:'澎湖',county:'澎湖县',box:[20,435,110,565],label:[65,445]}
  ]}
-function activeInsetDefinitions(){const town=state.level==='villages'&&state.villageTown?data.towns.find(f=>f.id===state.villageTown):null,county=state.county||town?.county||'';return insetDefinitions().filter(q=>{if(town?.name==='乌坵乡')return q.town==='乌坵乡';if(town&&q.town==='乌坵乡')return false;return !county||q.county===county||data.towns.some(f=>f.name===q.town&&f.county===county)})}
+function activeInsetDefinitions(){if(offshoreTownMap())return[];const town=state.level==='villages'&&state.villageTown?data.towns.find(f=>f.id===state.villageTown):null,county=state.county||town?.county||'';return insetDefinitions().filter(q=>{if(town?.name==='乌坵乡')return q.town==='乌坵乡';if(town&&q.town==='乌坵乡')return false;return !county||q.county===county||data.towns.some(f=>f.name===q.town&&f.county===county)})}
 function appendInsetFrames(group,t,spec,prefix=''){for(const q of activeInsetDefinitions()){const b=q.box,g=svgEl('g',{'data-inset':prefix+q.name});const p=q.d?svgEl('path',{d:q.d,transform:transformOf(t),fill:'none',stroke:'#a3b5a8','stroke-width':.75,'vector-effect':'non-scaling-stroke'}):svgEl('rect',{x:b[0]*t.scale+t.tx,y:b[1]*t.scale+t.ty,width:(b[2]-b[0])*t.scale,height:(b[3]-b[1])*t.scale,rx:3,fill:'none',stroke:'#a3b5a8','stroke-width':.75,'vector-effect':'non-scaling-stroke'});g.append(p);group.append(g)}}
 function drawInsetFrames(group,t,spec){group.replaceChildren();if(identityPanelsActive()){for(const panel of identityPanelLayouts()){const {area}=panel;group.append(svgEl('rect',{x:area.left,y:area.top-52,width:area.right-area.left,height:area.bottom-area.top+52,rx:16,fill:'#fbfdfb',stroke:'#d7e2d9','stroke-width':1.4}));const title=svgEl('text',{x:(area.left+area.right)/2,y:area.top-18,'text-anchor':'middle','font-size':30,'font-weight':600,fill:'#294a3a'});title.textContent=panel.label;group.append(title);const note=svgEl('text',{x:(area.left+area.right)/2,y:area.top+13,'text-anchor':'middle','font-size':16,fill:'#74877a'});note.textContent=panel.items.length?panel.items.length+(panel.townLevel?' 个乡镇市区':' 个选区'):mapLoadState[state.level==='council'?'议员选区':'立法机构民代选区']==='loading'?'正在载入地图…':'当前范围没有此类选区';group.append(note);appendInsetFrames(group,panel.t,spec,panel.identity+'-')}return}appendInsetFrames(group,t,spec)}
 function drawMapFurniture(group,t,spec){group.replaceChildren();const wide=isNationwide(),area=contentArea(spec),footerTop=spec.height-furnitureFooterHeight(),unit=wide?1.3:1,nx=spec.width-mapKeyRailWidth(spec)-30,ny=wide?125:110,okNorth=decorationClear([nx-20,ny-12,nx+20,ny+57]),cx=okNorth?nx:spec.width-mapKeyRailWidth(spec)-25,cy=okNorth?ny:85;
@@ -1577,7 +1646,7 @@ function appendNumberTableExport(root,entries,x,y,columns=1){
  const panel=svgEl('g',{'data-map-number-key':'true'});
  panel.append(svgEl('rect',{x,y,width:m.width,height:m.height,rx:11,fill:'#fff',stroke:'#dce5df','stroke-width':1}));
  const heading=svgEl('text',{x:x+13,y:y+28,'font-size':17,'font-weight':650,fill:'#294a3a'});
- heading.textContent='数字对照表';panel.append(heading);
+ heading.textContent='行政区索引';panel.append(heading);
  for(let i=0;i<rows.length;i++){
   const row=rows[i],col=Math.floor(i/m.perColumn),index=i%m.perColumn;
   const bx=x+10+col*210,by=y+48+index*22;
@@ -1924,7 +1993,7 @@ function regionDetail(f){
  const r=regionResult(f);if(r.status!=='winner')return r.message;
  const p=paletteById(r.leader.partyId);return(state.gradient.groupBy==='party'?p?.name:r.leader.name+' · '+p?.name)+' · '+metricText(r.value);
 }
-function shownLabel(f){if((f.name==='乌坵'||f.name==='乌坵乡')&&!directTownNameLabels())return'';if(f.parentDistrictId||f.legislativeTown)return f.name;const identity=identityPanelsActive()?featureElectorate(f):activeElectorate();if(['council','legislative'].includes(state.level)&&identity!=='regional')return state.county?f.name:f.county==='\u5168\u56fd'?f.name:f.county+f.name.replace(/^第/, '第');if(state.level==='legislative'&&data.legislative.filter(x=>x.county===f.county).length===1)return f.county;return !state.county&&['council','legislative'].includes(state.level)?f.county+f.number:f.name}
+function shownLabel(f){if((f.name==='乌坵'||f.name==='乌坵乡')&&!directTownNameLabels()&&!offshoreTownMap())return'';if(f.parentDistrictId||f.legislativeTown)return f.name;const identity=identityPanelsActive()?featureElectorate(f):activeElectorate();if(['council','legislative'].includes(state.level)&&identity!=='regional')return state.county?f.name:f.county==='\u5168\u56fd'?f.name:f.county+f.name.replace(/^第/, '第');if(state.level==='legislative'&&data.legislative.filter(x=>x.county===f.county).length===1)return f.county;return !state.county&&['council','legislative'].includes(state.level)?f.county+f.number:f.name}
 function legendReserveEntries(){return legendEntries()}
 function legendVisiblePalette(){const palette=[...state.palette];if(state.fillMode==='prediction'&&typeof predictionPartyNamesInUse==='function')for(const name of predictionPartyNamesInUse()){const party=predictionParty(name);if(!palette.some(p=>p.id===party.id))palette.push(party)}return palette.filter(p=>!state.legend.hidden.includes(p.id))}
 function legendEntries(){if(state.fillMode==='prediction'&&typeof predictionCandidateLegendEntries==='function'){const entries=predictionCandidateLegendEntries();if(entries)return entries}const c=counts();return legendVisiblePalette().filter(p=>c[p.id])}

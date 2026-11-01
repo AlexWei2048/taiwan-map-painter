@@ -145,7 +145,7 @@ test('Floating candidate dialogs have full-width readable layout and top-right c
 test('Nationwide mayor map identifies all 22 counties by an interior name or its complete number key',async t=>{
  const page=await pageFor(t);await page.waitForFunction(()=>document.querySelectorAll('#labels [data-label]').length===22);
  const result=await assertAdministrativeKey(page);assert.equal(result.total,22);assert.ok(result.numbers>0);
- const invalid=await page.evaluate(()=>[...document.querySelectorAll('#labels text[data-label]:not([data-number-key])')].filter(el=>{
+ const invalid=await page.evaluate(()=>[...document.querySelectorAll('#labels text[data-label]:not([data-number-key]):not([data-placement="inset-bottom"])')].filter(el=>{
   const polygon=document.querySelector('#regions [data-region="'+el.dataset.label+'"]');
   const r=el.getBoundingClientRect(),inv=polygon.getScreenCTM().inverse();
   return ![-.3,0,.3].every(dx=>[-.3,0,.3].every(dy=>{
@@ -558,7 +558,7 @@ test('Dense administrative names fall back to numbers with a complete key above 
    text:doc.querySelector('[data-map-number-key]')?.textContent};
  },svg);
  assert.equal(exported.key,1);assert.equal(exported.numbers,r.numbers);assert.equal(exported.below,true);
- assert.ok(exported.text.includes('数字对照表'));
+ assert.ok(exported.text.includes('行政区索引'));
 });
 
 test('Town label hover highlights the matching polygon and restores its prediction fill',async t=>{
@@ -635,4 +635,34 @@ test('Mobile administrative keys stay inside the screen above the legend',async 
   const key=document.querySelector('#mapNumberKey').getBoundingClientRect();
   return key.left>=0&&key.right<=innerWidth&&document.documentElement.scrollWidth<=innerWidth;
  }));
+});
+
+test('Nationwide administrative labels keep mainland references outside island frames and centre offshore county titles at frame bottoms',async t=>{
+ const page=await pageFor(t);
+ const r=await page.evaluate(()=>{
+  const frames=[...document.querySelectorAll('#insetFrames [data-inset]')].map(el=>({name:el.dataset.inset,box:el.getBoundingClientRect()}));
+  const overlap=(a,b)=>a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;
+  const labels=[...document.querySelectorAll('#labels text[data-label]')];
+  const hsinchu=labels.find(el=>el.dataset.label==='10018');
+  return{hsinchu:!!hsinchu,clear:!!hsinchu&&frames.every(f=>!overlap(hsinchu.getBoundingClientRect(),f.box)),
+   offshore:[['金门县','金门'],['连江县','马祖'],['澎湖县','澎湖']].map(([name,inset])=>{
+    const el=labels.find(el=>el.textContent===name),frame=frames.find(f=>f.name===inset)?.box,b=el?.getBoundingClientRect();
+    return{name,number:el?.dataset.numberKey||'',placement:el?.dataset.placement,
+     inside:!!b&&b.left>=frame.left&&b.right<=frame.right&&b.top>=frame.top&&b.bottom<=frame.bottom,
+     centred:!!b&&Math.abs((b.left+b.right-frame.left-frame.right)/2)<2};
+   })};
+ });
+ assert.equal(r.hsinchu,true);assert.equal(r.clear,true);
+ for(const f of r.offshore){assert.equal(f.number,'');assert.equal(f.placement,'inset-bottom');assert.ok(f.inside&&f.centred,f.name)}
+ const svg=await exportSvg(page);assert.equal((svg.match(/data-placement="inset-bottom"/g)||[]).length,3);
+});
+test('Offshore township maps omit inset frames and identify all townships with interior or nearby labels',async t=>{
+ const page=await pageFor(t);await page.locator('#predictionScale').selectOption('overlay');
+ for(const county of ['金门县','连江县','澎湖县']){
+  await page.locator('#county').selectOption({label:county});
+  await assertAdministrativeKey(page);
+  assert.equal(await page.locator('#insetFrames [data-inset]').count(),0,county+' must not have island frames');
+  const near=await page.locator('#labels text[data-callout-lane="island-near"]').count();assert.ok(near>0,county+' uses nearby island names');
+  const svg=await exportSvg(page);assert.equal((svg.match(/data-inset=/g)||[]).length,0);
+ }
 });
