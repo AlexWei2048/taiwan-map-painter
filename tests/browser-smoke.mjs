@@ -543,8 +543,8 @@ test('Kaohsiung county mayor townships use all 38 complete names, inside labels 
  const paths=await page.locator('#labels [data-label-leader]').evaluateAll(els=>els.map(el=>({
   id:el.dataset.label,d:el.getAttribute('d'),width:getComputedStyle(el).strokeWidth
  })));
- assert.ok(paths.every(p=>/^M[-\\d.,]+H[-\\d.]+V[-\\d.]+H[-\\d.]+$/.test(p.d)),
-  'All township leaders must use perimeter-style orthogonal elbows: '+JSON.stringify(paths.filter(p=>!/^M[-\\d.,]+H[-\\d.]+V[-\\d.]+H[-\\d.]+$/.test(p.d)).slice(0,4)));
+ assert.ok(paths.every(p=>/^M[^HVLC]+H[^HVLC]+V[^HVLC]+H[^HVLC]+$/.test(p.d)),
+  'All township leaders must use perimeter-style orthogonal elbows: '+JSON.stringify(paths.filter(p=>!/^M[^HVLC]+H[^HVLC]+V[^HVLC]+H[^HVLC]+$/.test(p.d)).slice(0,4)));
  assert.ok(paths.every(p=>parseFloat(p.width)<=1.1),'Township leaders must be delicate');
  assert.equal(await page.locator('#labels [data-town-leader-layer]').count(),1);
  assert.ok(await page.evaluate(()=>{
@@ -583,8 +583,8 @@ test('All 22 scoped mayoral township maps display complete township names withou
     underText:labels.firstElementChild?.hasAttribute('data-town-leader-layer'),
     textCount:labels.querySelectorAll('text[data-label]').length};
   });
-  assert.ok(quality.routes.every(d=>/^M[-\\d.,]+H[-\\d.]+V[-\\d.]+H[-\\d.]+$/.test(d)),
-   county+' has a diagonal or trans-map fan: '+JSON.stringify(quality.routes.filter(d=>!/^M[-\\d.,]+H[-\\d.]+V[-\\d.]+H[-\\d.]+$/.test(d)).slice(0,4)));
+  assert.ok(quality.routes.every(d=>/^M[^HVLC]+H[^HVLC]+V[^HVLC]+H[^HVLC]+$/.test(d)),
+   county+' has a diagonal or trans-map fan: '+JSON.stringify(quality.routes.filter(d=>!/^M[^HVLC]+H[^HVLC]+V[^HVLC]+H[^HVLC]+$/.test(d)).slice(0,4)));
   assert.equal(quality.underText,true,county+' leaders may cover names');
   assert.equal(quality.textCount,result.total);
  }
