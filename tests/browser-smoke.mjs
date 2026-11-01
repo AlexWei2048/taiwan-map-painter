@@ -581,32 +581,46 @@ test('All 22 scoped mayoral township maps display complete township names withou
    const leaders=[...labels.querySelectorAll('[data-label-leader]')];
    return{routes:leaders.map(el=>el.getAttribute('d')),
     underText:labels.firstElementChild?.hasAttribute('data-town-leader-layer'),
-    textCount:labels.querySelectorAll('text[data-label]').length};
+    textCount:labels.querySelectorAll('text[data-label]').length,
+    textRects:[...labels.querySelectorAll('text[data-label]')].map(e=>({
+     name:e.textContent,id:e.dataset.label,rect:e.getBBox()
+    })),
+    widths:leaders.map(e=>parseFloat(getComputedStyle(e).strokeWidth))};
   });
   assert.ok(quality.routes.every(d=>/^M[^HVLC]+H[^HVLC]+V[^HVLC]+H[^HVLC]+$/.test(d)),
    county+' has a diagonal or trans-map fan: '+JSON.stringify(quality.routes.filter(d=>!/^M[^HVLC]+H[^HVLC]+V[^HVLC]+H[^HVLC]+$/.test(d)).slice(0,4)));
   assert.equal(quality.underText,true,county+' leaders may cover names');
   assert.equal(quality.textCount,result.total);
+  assert.ok(quality.widths.every(w=>w<=1.1),county+' has heavy leaders');
+  for(let i=0;i<quality.textRects.length;i++)for(let j=i+1;j<quality.textRects.length;j++){
+   const a=quality.textRects[i].rect,b=quality.textRects[j].rect;
+   assert.ok(!(a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y),
+    county+' labels overlap: '+quality.textRects[i].name+' / '+quality.textRects[j].name);
+  }
  }
 });
 
-test('Township chief maps use complete names and a non-numeric legend for each township',async t=>{
+test('Township chief maps use complete names with slim callouts throughout all 22 counties',async t=>{
  const page=await pageFor(t);
  await page.locator('#predictionOffice').selectOption('township');
- for(const county of ['宜兰县','苗栗县','彰化县','南投县','屏东县']){
+ for(const county of counties){
   await page.locator('#county').selectOption({label:county});
   const r=await page.evaluate(()=>({
    count:currentItems().length,
    names:[...document.querySelectorAll('#labels text[data-label]')].map(e=>e.textContent),
    numbers:document.querySelectorAll('#labels [data-number-key]').length,
    keyHidden:document.querySelector('#mapNumberKey').hidden,
-   leaders:document.querySelectorAll('#labels [data-label-leader]').length
+   leaders:[...document.querySelectorAll('#labels [data-label-leader]')].map(e=>e.getAttribute('d')),
+   isTownLabelMode:directTownNameLabels()
   }));
-  assert.ok(r.count>0,county+' should have townships');
-  assert.equal(r.names.length,r.count,county+' names must cover all towns');
-  assert.equal(r.numbers,0,county+' must not display numeric town labels');
+  if(!r.count)continue; // Some cities lack ordinary township-chief districts.
+  assert.equal(r.isTownLabelMode,true);
+  assert.equal(r.names.length,r.count,county+' names must cover all townships');
+  assert.equal(r.numbers,0,county+' must not display numeric township labels');
   assert.equal(r.keyHidden,true,county+' should have no numeric lookup');
   assert.ok(r.names.some(n=>/[乡镇市区]$/.test(n)));
+  assert.ok(r.leaders.every(d=>/^M[^HVLC]+H[^HVLC]+V[^HVLC]+H[^HVLC]+$/.test(d)),
+   county+' should use rectangular leader routing');
  }
 });
 test('Zooming the national council overview recalculates and restores all 221 official numbers',async t=>{
