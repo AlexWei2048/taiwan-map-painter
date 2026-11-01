@@ -43,3 +43,20 @@ test('Council township forecast pieces use administrative references rather than
  const q=layout().labelLayout([f],t,15)[0];
  assert.equal(q.text,'1');assert.equal(q.numeric,true);assert.equal(q.districtNumber,undefined);
 });
+
+test('Long township callouts on the correct side are shortened without losing names',()=>{
+ const begin=app.indexOf('function mapLeaderSegments('),end=app.indexOf('\nfunction mapOrthogonalLeader',begin);
+ const shorten=app.slice(app.indexOf('function townShortenCrossSideCallouts('),app.indexOf('\nfunction townNameLabelLayout'));
+ const solve=new Function('leaderFrames','leaderIn','leaderOverlap','leaderCross','regionContains',
+  app.slice(app.indexOf('function leaderCross('),app.indexOf('\n/* A shared orthogonal'))+'\n'+app.slice(begin,end)+'\n'+shorten+';return townShortenCrossSideCallouts')(
+   ()=>[],(x,y,b)=>x>=b[0]&&x<=b[2]&&y>=b[1]&&y<=b[3],overlap,null,
+   (f,x,y)=>x>=f.box[0]&&x<=f.box[2]&&y>=f.box[1]&&y<=f.box[3]);
+ const f={id:'urban',box:[390,290,410,310]},q={f,text:'城区',font:15,x:100,y:100,rect:[80,85,120,115],
+  column:'left',calloutLane:'perimeter',leaderAnchor:{x:400,y:300},
+  leaderPoints:[[400,300],[150,300],[150,100],[120,100]]};
+ const labels=[q];solve(labels,[f],t,{left:390,right:800},area,null,15,2.4);
+ assert.equal(labels.length,1);assert.equal(q.text,'城区');assert.equal(q.font,15);
+ assert.equal(q.calloutLane,'local-near');
+ const distance=q.leaderPoints.slice(1).reduce((s,p,i)=>s+Math.hypot(p[0]-q.leaderPoints[i][0],p[1]-q.leaderPoints[i][1]),0);
+ assert.ok(distance<100);assert.ok(q.rect[2]<390);
+});
