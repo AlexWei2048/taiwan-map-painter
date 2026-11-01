@@ -397,6 +397,33 @@ test('Recording votes retains chosen winners and exports a complete vote table',
  assert.match(await page.locator('#legend').textContent(),/中国国民党（1席）/);
  await page.reload();await page.locator('#regions path').first().waitFor();assert.match(await page.locator('#predictionCoverage').innerText(),/已选当选人 1\/1/);
 });
+test('Specified candidate export contains only the chosen candidate and entered vote rate',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#county').selectOption({label:'台北市'});
+ await page.locator('#predictionDisplay').selectOption('candidateVote');
+ const selectedId=await page.locator('#localCandidate option').evaluateAll(options=>options.find(option=>option.textContent.includes('沈伯洋'))?.value);
+ assert.ok(selectedId,'Chosen candidate appears in picker');
+ await page.locator('#localCandidate').selectOption(selectedId);
+ await page.locator('#editPrediction').click();
+ await page.getByRole('spinbutton',{name:'沈伯洋预测得票率',exact:true}).fill('40');
+ await page.getByRole('spinbutton',{name:'蒋万安预测得票率',exact:true}).fill('56');
+ await page.locator('#savePrediction').click();
+ const ownRows=await page.evaluate(()=>exportPredictionWinnerRows().map(r=>({name:r.name,votes:r.votes,share:r.share,specified:r.specified})));
+ assert.deepEqual(ownRows,[{name:'沈伯洋',votes:'—',share:'40%',specified:true}]);
+ const svg=await exportSvg(page);
+ const info=await page.evaluate(source=>{
+  const doc=new DOMParser().parseFromString(source,'image/svg+xml');
+  const table=doc.querySelector('[data-export-winner-table]');
+  return {title:table?.textContent?.includes('指定候选人得票预测'),text:table?.textContent||'',rowCount:table?.querySelectorAll('[data-export-winner-row]').length};
+ },svg);
+ assert.equal(info.title,true);
+ assert.equal(info.rowCount,1);
+ assert.match(info.text,/沈伯洋/);
+ assert.match(info.text,/40%/);
+ assert.match(info.text,/预测得票率/);
+ assert.doesNotMatch(info.text,/蒋万安|56%|预测得票数|标记/);
+});
+
 test('Export winner table has two candidates per row, with name-adjacent incumbency and party logos',async t=>{
  const page=await pageFor(t);
  const result=await page.evaluate(()=>{
