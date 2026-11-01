@@ -165,7 +165,7 @@ function mapLeaderRectIsClear(rect,leaders){
   !leaderIn(a[0],a[1],box)&&!leaderIn(b[0],b[1],box)&&
   !leaderCross(a[0],a[1],b[0],b[1],box)));
 }
-function mapLeaderClear(points,leaders,occupied,frames=[]){
+function mapLeaderClear(points,leaders,occupied,frames=[],strokeGap=1){
  const segments=mapLeaderSegments(points);
  for(const segment of segments){
   if(Math.hypot(segment[1][0]-segment[0][0],segment[1][1]-segment[0][1])<.01)continue;
@@ -178,11 +178,11 @@ function mapLeaderClear(points,leaders,occupied,frames=[]){
   for(const frame of frames)
    if(leaderCross(segment[0][0],segment[0][1],segment[1][0],segment[1][1],frame))return false;
   for(const previous of leaders)for(const other of mapLeaderSegments(previous))
-   if(mapLeaderSegmentConflict(segment,other))return false;
+   if(mapLeaderSegmentConflict(segment,other,strokeGap))return false;
  }
  return true;
 }
-function mapOrthogonalLeader(anchor,side,x,y,width,coast,leaders,occupied,area,frames=[]){
+function mapOrthogonalLeader(anchor,side,x,y,width,coast,leaders,occupied,area,frames=[],strokeGap=1){
  const sign=side==='left'?-1:1,end=x-sign*(width/2+6);
  // Leave the visual-centre dot fixed. A short optional vertical stub allows
  // nearby callouts to use independent lanes rather than sharing a stem.
@@ -191,11 +191,11 @@ function mapOrthogonalLeader(anchor,side,x,y,width,coast,leaders,occupied,area,f
   const yy=anchor.y+delta;
   if(yy<area.top+3||yy>area.bottom-3)continue;
   for(let n=0;n<24;n++){
-   const rail=coast+sign*(8+n*3.4);
+   const rail=coast+sign*(8+n*(strokeGap>1?4.6:3.4));
    if(sign*(end-rail)<5||rail<area.left+2||rail>area.right-2)continue;
    const points=delta?[[anchor.x,anchor.y],[anchor.x,yy],[rail,yy],[rail,y],[end,y]]:
     [[anchor.x,anchor.y],[rail,anchor.y],[rail,y],[end,y]];
-   if(!mapLeaderClear(points,leaders,occupied,frames))continue;
+   if(!mapLeaderClear(points,leaders,occupied,frames,strokeGap))continue;
    return{leaderPath:'M'+anchor.x+','+anchor.y+
     (delta?'V'+yy:'')+'H'+rail+'V'+y+'H'+end,leaderPoints:points};
   }
@@ -209,11 +209,11 @@ function mapOrthogonalLeader(anchor,side,x,y,width,coast,leaders,occupied,area,f
    const yy=anchor.y+delta;
    if(yy<area.top+3||yy>area.bottom-3)continue;
    for(let n=0;n<8;n++){
-    const rail=coast+sign*(8+n*3.4);
+    const rail=coast+sign*(8+n*(strokeGap>1?4.6:3.4));
     if(sign*(end-rail)<5||rail<area.left+3||rail>area.right-3)continue;
     const points=[[anchor.x,anchor.y],[elbow,anchor.y],[elbow,yy],
      [rail,yy],[rail,y],[end,y]];
-    if(!mapLeaderClear(points,leaders,occupied,frames))continue;
+    if(!mapLeaderClear(points,leaders,occupied,frames,strokeGap))continue;
     return{leaderPath:'M'+anchor.x+','+anchor.y+'H'+elbow+'V'+yy+
      'H'+rail+'V'+y+'H'+end,leaderPoints:points};
    }
@@ -225,7 +225,7 @@ function mapOrthogonalLeader(anchor,side,x,y,width,coast,leaders,occupied,area,f
 // Deterministic orthogonal grid escape for names that cannot use a short
 // coast rail. Previously drawn labels/lines are solid obstacles, so there
 // is no ambiguous crossing and the original interior anchor never moves.
-function mapGridLeaderRoute(anchor,side,x,y,width,leaders,occupied,area,frames=[]){
+function mapGridLeaderRoute(anchor,side,x,y,width,leaders,occupied,area,frames=[],strokeGap=1){
  const sign=side==='left'?-1:1,end=x-sign*(width/2+6);
  for(const step of [5,3]){
   const left=area.left+2,top=area.top+2;
@@ -245,7 +245,7 @@ function mapGridLeaderRoute(anchor,side,x,y,width,leaders,occupied,area,frames=[
   for(const rect of frames)if(!leaderIn(anchor.x,anchor.y,rect))mark(rect,3);
   for(const points of leaders)for(const [p,q] of mapLeaderSegments(points))
    mark([Math.min(p[0],q[0]),Math.min(p[1],q[1]),
-    Math.max(p[0],q[0]),Math.max(p[1],q[1])],3);
+    Math.max(p[0],q[0]),Math.max(p[1],q[1])],Math.max(3,strokeGap+1));
   const sx=Math.round((anchor.x-left)/step),sy=Math.round((anchor.y-top)/step);
   const ex=Math.round((end-left)/step),ey=Math.round((y-top)/step);
   if(sx<0||sx>=cols||ex<0||ex>=cols||sy<0||sy>=rows||ey<0||ey>=rows)continue;
@@ -284,7 +284,7 @@ function mapGridLeaderRoute(anchor,side,x,y,width,leaders,occupied,area,frames=[
       Math.abs(reduced[n-1][1]-point[1])<.01)))reduced.pop();
    reduced.push(point);
   }
-  if(reduced.length<2||!mapLeaderClear(reduced,leaders,occupied,frames))continue;
+  if(reduced.length<2||!mapLeaderClear(reduced,leaders,occupied,frames,strokeGap))continue;
   // Grid search can introduce many short zigzags. Shortcut them using the
   // same collision checks, preserving orthogonality and the exact anchor.
   const clean=[reduced[0]];
@@ -294,7 +294,7 @@ function mapGridLeaderRoute(anchor,side,x,y,width,leaders,occupied,area,frames=[
     const a=reduced[i],b=reduced[j];
     const candidates=a[0]===b[0]||a[1]===b[1]?[[a,b]]:
      [[a,[b[0],a[1]],b],[a,[a[0],b[1]],b]];
-    for(const route of candidates)if(mapLeaderClear(route,leaders,occupied,frames)){
+    for(const route of candidates)if(mapLeaderClear(route,leaders,occupied,frames,strokeGap)){
      jump={j,route};break;
     }
    }
@@ -808,9 +808,17 @@ function townNameLabelLayout(items,t,font,area,reserve,attempt=0){
  };
  const fitsSide=side=>colX[side]-columnWidth/2>=area.left+5&&
   colX[side]+columnWidth/2<=area.right-5;
- const maxRows=Math.max(1,Math.floor((area.bottom-area.top-12)/(height+7)));
+ // Give adjacent outside names an 8–13 px visible breathing gap rather
+ // than the previous ~1 px. Reduce that extra gap only when the county has
+ // more labels than two full columns could otherwise accommodate.
+ const idealRowGap=height+Math.max(13,font*.95);
+ const room=Math.max(0,area.bottom-area.top-height-11);
+ const rowGap=Math.max(height+8,Math.min(idealRowGap,
+  pending.length>2?room/Math.max(1,Math.ceil(pending.length/2)-1):idealRowGap));
+ const maxRows=Math.max(1,1+Math.floor(room/rowGap));
  const capacity={left:fitsSide('left')?maxRows:0,right:fitsSide('right')?maxRows:0};
  const sides={left:[],right:[]},remaining=[];
+ const strokeGap=2.4; // independent stems must never hug each other
  const order=[...pending].sort((a,b)=>{
   // Route tiny urban districts first so they are not trapped by longer
   // callouts already occupying their perimeter exit lanes.
@@ -824,9 +832,18 @@ function townNameLabelLayout(items,t,font,area,reserve,attempt=0){
  for(const q of order){
   if(!q.anchor){remaining.push(q);continue}
   const preference=(q.anchor.x<(box.left+box.right)/2)!==(attempt===2)?'left':'right';
-  const alternate=preference==='left'?'right':'left';
-  const side=[preference,alternate].find(k=>sides[k].length<capacity[k]);
-  if(side)sides[side].push(q);else remaining.push(q);
+  // A crowded latitude band is better shared between both outer gutters;
+  // geographic proximity is a tie-breaker, not a reason for one dense fan.
+  const side=['left','right'].map(k=>{
+   const rows=sides[k],max=capacity[k];
+   if(rows.length>=max)return{side:k,score:Infinity};
+   const coast=k==='left'?box.left:box.right;
+   const near=rows.reduce((sum,r)=>sum+Math.max(0,1-Math.abs(r.anchor.y-q.anchor.y)/(rowGap*2)),0);
+   const utilization=(rows.length/Math.max(1,max))**2;
+   return{side:k,score:.12*Math.abs(q.anchor.x-coast)+
+    near*rowGap*1.6+utilization*rowGap*2+(k===preference?0:12)};
+  }).sort((a,b)=>a.score-b.score||(a.side===preference?-1:1))[0];
+  if(side&&Number.isFinite(side.score))sides[side.side].push(q);else remaining.push(q);
  }
  const coastRail={left:box.left,right:box.right};
  const insetFrames=leaderFrames(t,3);
@@ -835,7 +852,7 @@ function townNameLabelLayout(items,t,font,area,reserve,attempt=0){
    a.anchor.x-b.anchor.x||String(a.f.id).localeCompare(String(b.f.id)));
   if(!rows.length)continue;
   const yValues=mapOrderedLabelRows(rows.map(q=>q.anchor.y),
-   area.top+height/2+5,area.bottom-height/2-6,height+7);
+   area.top+height/2+5,area.bottom-height/2-6,rowGap);
   if(!yValues){remaining.push(...rows);continue}
   const indexes=rows.map((_,i)=>i);
   if(attempt===1||attempt===3)indexes.reverse();
@@ -849,14 +866,14 @@ function townNameLabelLayout(items,t,font,area,reserve,attempt=0){
    // Make small ordered adjustments if a legend or a large interior name
    // occupies a projected label lane. Never disturb the order of the rows.
    let chosen=null;
-   const step=height+7;
+   const step=rowGap;
    for(const shift of [0,-1,1,-2,2,-3,3,-4,4,-5,5,-6,6,-7,7,-8,8]){
     const yy=y+shift*step;
     const rr=[rect[0],yy-height/2-3,rect[2],yy+height/2+3];
     if(!valid(rr))continue;
     const route=mapOrthogonalLeader(q.anchor,side,x,yy,width,
-     coastRail[side],leaders,leaderText,area,insetFrames)||
-     mapGridLeaderRoute(q.anchor,side,x,yy,width,leaders,leaderText,area,insetFrames);
+     coastRail[side],leaders,leaderText,area,insetFrames,strokeGap)||
+     mapGridLeaderRoute(q.anchor,side,x,yy,width,leaders,leaderText,area,insetFrames,strokeGap);
     if(route){chosen={y:yy,rect:rr,...route};break}
    }
    if(!chosen){remaining.push(q);continue}
@@ -879,11 +896,11 @@ function townNameLabelLayout(items,t,font,area,reserve,attempt=0){
    const side=x<anchor.x?'left':'right',coast=anchor.x;
    for(let n=0;n<Math.min(16,Math.ceil((area.bottom-area.top)/(height*.6+4)))&&!pos;n++){
     for(const k of n?[n,-n]:[0]){
-     const y=anchor.y+k*(height*.6+4);
+     const y=anchor.y+k*(height*.7+8);
      const rect=[x-width/2-4,y-height/2-3,x+width/2+4,y+height/2+3];
      if(!valid(rect))continue;
-     const route=mapOrthogonalLeader(anchor,side,x,y,width,coast,leaders,leaderText,area,insetFrames)||
-      mapGridLeaderRoute(anchor,side,x,y,width,leaders,leaderText,area,insetFrames);
+     const route=mapOrthogonalLeader(anchor,side,x,y,width,coast,leaders,leaderText,area,insetFrames,strokeGap)||
+      mapGridLeaderRoute(anchor,side,x,y,width,leaders,leaderText,area,insetFrames,strokeGap);
      if(route){pos={x,y,rect,side,...route};break}
     }
    }
