@@ -595,7 +595,7 @@ function appendNumberTableExport(root,entries,x,y,columns=1){
 
 // Every administrative area or electoral district must be identified somewhere
 // in the FINAL exported figure, even when its polygon cannot hold a legible label.
-function exportLabelCoverage(items,map){
+function exportLabelCoverage(items,map,detailLabelled=new Set()){
  const labelled=new Set();
  for(const el of map.querySelectorAll('[data-label]')){
   if(el.hasAttribute('data-number-key'))continue; // mapped admin number belongs to the paired number key
@@ -606,7 +606,7 @@ function exportLabelCoverage(items,map){
  for(const f of items){
   const id=String(f.id),token=[id,featureElectorate(f)].join('/');
   if(seen.has(token))continue;seen.add(token);
-  if(labelled.has(id)||!['council','legislative'].includes(state.level)&&keyed.has(id))continue;
+  if(labelled.has(id)||detailLabelled.has(id)||!['council','legislative'].includes(state.level)&&keyed.has(id))continue;
   const scope=[f.county,f.town].filter(Boolean).join(' · ');
   const district=['council','legislative'].includes(state.level);
   const number=districtMapNumber(f);
@@ -617,6 +617,55 @@ function exportLabelCoverage(items,map){
  }
  return rows.sort((a,b)=>a.scope.localeCompare(b.scope,'zh')||a.value.localeCompare(b.value,'zh'));
 }
+// Export-only detail maps restore geographic context in dense areas.
+ // Never draw a label unless its text has passed the same overlap test as the main map.
+function appendExportDetailInsets(root,features,targetIds,y,width){
+ const wanted=new Set(targetIds.map(String));
+ const candidates=features.filter(f=>wanted.has(String(f.id))&&Array.isArray(f.box)&&f.d);
+ candidates.sort((a,b)=>String(a.county).localeCompare(String(b.county),'zh')||
+  ((a.center?.[1]??(a.box[1]+a.box[3])/2)-(b.center?.[1]??(b.box[1]+b.box[3])/2))||
+  ((a.center?.[0]??(a.box[0]+a.box[2])/2)-(b.center?.[0]??(b.box[0]+b.box[2])/2)));
+ const chosen=candidates.slice(0,48),groups=[];
+ for(const f of chosen){
+  const last=groups.at(-1);
+  if(last&&last.length<5&&last[0].county===f.county)last.push(f);
+  else groups.push([f]);
+ }
+ if(!groups.length)return{height:0,labelled:new Set()};
+ const cols=width>=850?2:1,gap=18,cellWidth=(width-gap*(cols-1))/cols,cellHeight=355;
+ const rows=Math.ceil(groups.length/cols),labelled=new Set(),mapGroup=svgEl('g',{'data-export-detail-maps':'true'});
+ groups.forEach((items,index)=>{
+  const x=40+(index%cols)*(cellWidth+gap),top=y+Math.floor(index/cols)*(cellHeight+gap),
+   panel=svgEl('g',{'data-export-detail-map':items[0].county||'区域'});
+  panel.append(svgEl('rect',{x,y:top,width:cellWidth,height:cellHeight,rx:13,fill:'#fcfefc',stroke:'#d7e3d8','stroke-width':1.2}));
+  const title=svgEl('text',{x:x+16,y:top+30,'font-size':16,'font-weight':650,fill:'#294a3a'});
+  title.textContent=(items[0].county||'区域')+' · 局部放大 '+(index+1);panel.append(title);
+  const b=bounds(items),left=x+24,right=x+cellWidth-24,upper=top+54,lower=top+cellHeight-20;
+  const scale=Math.min((right-left)/Math.max(.0001,b[2]-b[0]),(lower-upper)/Math.max(.0001,b[3]-b[1]));
+  const t={scale,tx:(left+right)/2-(b[0]+b[2])/2*scale,
+   ty:(upper+lower)/2-(b[1]+b[3])/2*scale,area:{left,right,top:upper,bottom:lower}};
+  const land=svgEl('g',{transform:transformOf(t)});
+  for(const f of items)land.append(svgEl('path',{d:f.d,fill:fillColor(f),
+   stroke:'#486b58','stroke-width':1.3,'vector-effect':'non-scaling-stroke','fill-rule':'evenodd'}));
+  panel.append(land);
+  const used=[];
+  for(const f of [...items].sort((a,b)=>(b.box[2]-b.box[0])*(b.box[3]-b.box[1])-(a.box[2]-a.box[0])*(a.box[3]-a.box[1]))){
+   const text=['council','legislative'].includes(state.level)?districtMapNumber(f)||f.name:f.name;
+   if(!text)continue;
+   const pos=mapAdaptiveLabel(f,t,text,16,used,t.area,null);
+   if(!pos)continue;
+   const label=svgEl('text',{x:pos.x,y:pos.y,'text-anchor':'middle',
+    'dominant-baseline':'middle','font-size':pos.font,'font-weight':600,
+    fill:'#284538',stroke:'#fff','stroke-width':3,'paint-order':'stroke',
+    'data-export-detail-label':String(f.id)});
+   label.textContent=text;panel.append(label);used.push(pos.rect);labelled.add(String(f.id));
+  }
+  mapGroup.append(panel);
+ });
+ root.append(mapGroup);
+ return{height:rows*cellHeight+(rows-1)*gap,labelled};
+}
+
 function exportLabelCoverageLayout(rows,width){
  const columns=Math.max(1,Math.min(3,Math.floor((width-40)/300))),
   gap=14,margin=20,blockWidth=(width-margin*2-gap*(columns-1))/columns;
@@ -689,8 +738,13 @@ function exportSvg(){
    const appendixColumns=Math.min(Math.max(1,Math.floor((contentWidth-30)/210)),Math.ceil(keyRows.length/30));
    appendixHeight=appendNumberTableExport(root,keyRows,40,mapY+contentHeight+12,appendixColumns);
   }
-  const coverageRows=exportLabelCoverage(currentItems(),map);
-  const coverageY=mapY+contentHeight+(appendixHeight?appendixHeight+24:14);
+  const originalItems=currentItems();
+  const unresolved=exportLabelCoverage(originalItems,map);
+  const zoomTargets=[...unresolved.map(row=>row.id),...keyRows.map(row=>row.id)];
+  const detailY=mapY+contentHeight+(appendixHeight?appendixHeight+24:14);
+  const details=appendExportDetailInsets(root,originalItems,zoomTargets,detailY,contentWidth);
+  const coverageRows=exportLabelCoverage(originalItems,map,details.labelled);
+  const coverageY=detailY+(details.height?details.height+22:0);
   const coverageHeight=appendExportLabelCoverage(root,coverageRows,40,coverageY,contentWidth);
   const tableY=Math.max(mapY+contentHeight+40,coverageY+coverageHeight+30);
   if(winnerRows.length)appendExportPredictionTable(root,winnerRows,tableY);
