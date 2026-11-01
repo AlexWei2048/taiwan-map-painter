@@ -367,8 +367,118 @@ function mapOutsideLabelColumns(pending,t,used,area,reserve,items){
  }
  return placed;
 }
+
+function countyMayorOverview(){
+ return state.level==='counties'&&!state.county&&state.workspaceMode==='prediction'&&state.fillMode==='prediction'&&state.predictionOffice==='mayor';
+}
+const COUNTY_CITY_CALLOUTS=new Set(['台北市','基隆市','新竹市','嘉义市']);
+// All 25 perimeter probes must be inside the county: a central point alone
+// can allow a name to spill over a concave administrative boundary.
+function countyInsideName(f,t,name,font,used,area,reserve){
+ const center=f.center||f.labelAnchor||[(f.box[0]+f.box[2])/2,(f.box[1]+f.box[3])/2];
+ const cx=center[0]*t.scale+t.tx,cy=center[1]*t.scale+t.ty;
+ const samples=[-.48,-.24,0,.24,.48];
+ for(const ratio of [1,.9,.8]){
+  const size=font*ratio,width=Array.from(name).length*size*1.04+8,height=size*1.5+5;
+  let best=null;
+  const consider=p=>{
+   const rect=[p.x-width/2,p.y-height/2,p.x+width/2,p.y+height/2];
+   if(rect[0]<area.left||rect[2]>area.right||rect[1]<area.top||rect[3]>area.bottom)return;
+   if(reserve&&leaderOverlap(rect,[reserve.x,reserve.y,reserve.x+reserve.width,reserve.y+reserve.height]))return;
+   if(used.some(other=>leaderOverlap(rect,other)))return;
+   if(!samples.every(dx=>samples.every(dy=>regionContains(f,p.x+dx*width,p.y+dy*height,t))))return;
+   const score=(p.x-cx)**2+(p.y-cy)**2;
+   if(!best||score<best.score)best={x:p.x,y:p.y,rect,font:size,score};
+  };
+  for(const p of mapLabelCandidatePoints(f,t))consider(p);
+  // A thin crescent such as New Taipei City can have a valid interior label
+  // between the coarse candidate grid points; search densely only if needed.
+  if(!best){
+   const b=f.box;
+   for(let i=1;i<24;i++)for(let j=1;j<24;j++)
+    consider({x:(b[0]+(b[2]-b[0])*i/24)*t.scale+t.tx,
+     y:(b[1]+(b[3]-b[1])*j/24)*t.scale+t.ty});
+  }
+  if(best)return best;
+ }
+ return null;
+}
+// In the nationwide mayor view, offshore county titles belong in the bottom
+// centre of their respective inset frames, never beneath the island geometry.
+function countyIslandName(f,t,name,font){
+ const inset=insetDefinitionForFeature(f);
+ if(!inset)return null;
+ const left=inset.box[0]*t.scale+t.tx,right=inset.box[2]*t.scale+t.tx;
+ const top=inset.box[1]*t.scale+t.ty,bottom=inset.box[3]*t.scale+t.ty;
+ const size=Math.min(font,(right-left-16)/(Array.from(name).length*1.04));
+ const width=Array.from(name).length*size*1.04+4,height=size*1.5+4;
+ const x=(left+right)/2,y=bottom-height/2-7;
+ const rect=[x-width/2,y-height/2,x+width/2,y+height/2];
+ if(rect[0]<left+4||rect[2]>right-4||rect[1]<top+4)return null;
+ return{x,y,rect,font:size,island:true,insetBottom:true};
+}
+// City callouts follow the coast while avoiding other labels and inset frames.
+function countyCityCallout(f,t,name,font,used,area,reserve,items){
+ const anchor=mapLabelAnchor(f,t);if(!anchor)return null;
+ const mainland=items.filter(item=>!isInsetIslandFeature(item));
+ const width=Array.from(name).length*font*1.04+8,height=font*1.5+5;
+ const preferred=['台北市','基隆市'].includes(name)?'right':'left';
+ const frames=leaderFrames(t,6);
+ const blocked=rect=>rect[0]<area.left||rect[2]>area.right||rect[1]<area.top||rect[3]>area.bottom||
+  used.some(other=>leaderOverlap(rect,other))||
+  frames.some(frame=>leaderOverlap(rect,frame))||
+  !!(reserve&&leaderOverlap(rect,[reserve.x,reserve.y,reserve.x+reserve.width,reserve.y+reserve.height]));
+ let best=null;
+ for(const side of [preferred,preferred==='left'?'right':'left']){
+  const sign=side==='left'?-1:1;
+  const coast=mapLabelColumnEdge(mainland,t,side,[anchor.y-height,anchor.y+height],font,anchor.x);
+  for(const shift of [0,-1,1,-2,2,-3,3,-4,4,-5,5]){
+   const y=anchor.y+shift*(height+5);
+   const x=coast+sign*(width/2+Math.max(17,font*1.25));
+   const rect=[x-width/2,y-height/2,x+width/2,y+height/2];
+   if(blocked(rect))continue;
+   if([-.42,0,.42].some(dx=>[-.42,0,.42].some(dy=>mainland.some(item=>regionContains(item,x+dx*width,y+dy*height,t)))))continue;
+   const edge=x-sign*(width/2+3),rail=coast+sign*9;
+   if(frames.some(frame=>leaderCross(anchor.x,anchor.y,rail,anchor.y,frame)||
+    leaderCross(rail,anchor.y,edge,y,frame)))continue;
+   const score=Math.abs(y-anchor.y)+Math.abs(edge-anchor.x)*.25+(side===preferred?0:90);
+   if(!best||score<best.score)best={x,y,rect,font,leaderAnchor:anchor,leaderPath:`M${anchor.x},${anchor.y}L${rail},${anchor.y}L${edge},${y}`,column:side,score};
+  }
+ }
+ return best;
+}
+function countyMayorLabelLayout(items,t,font,area,reserve){
+ const sizes=f=>(f.box[2]-f.box[0])*(f.box[3]-f.box[1]);
+ const regular=[],offshore=[],cities=[],missing=[],labels=[],used=[];
+ for(const f of items){
+  if(!shownLabel(f))continue;
+  if(isInsetIslandFeature(f))offshore.push(f);
+  else if(COUNTY_CITY_CALLOUTS.has(f.name))cities.push(f);
+  else regular.push(f);
+ }
+ regular.sort((a,b)=>sizes(b)-sizes(a));
+ for(const f of regular){
+  const name=shownLabel(f),pos=countyInsideName(f,t,name,font,used,area,reserve);
+  if(pos){used.push(pos.rect);labels.push({f,...pos,text:name,numeric:false})}
+  else missing.push(f);
+ }
+ for(const f of offshore){
+  const name=shownLabel(f),pos=countyIslandName(f,t,name,font);
+  if(pos){used.push(pos.rect);labels.push({f,...pos,text:name,numeric:false})}
+  else missing.push(f);
+ }
+ const order=['基隆市','台北市','新竹市','嘉义市'];
+ cities.sort((a,b)=>order.indexOf(a.name)-order.indexOf(b.name));
+ for(const f of [...cities,...missing]){
+  const name=shownLabel(f),pos=countyCityCallout(f,t,name,font,used,area,reserve,items);
+  if(pos){used.push(pos.rect);labels.push({f,...pos,text:name,numeric:false})}
+ }
+ return labels;
+}
+
 function labelLayout(items,t,font=15){
  const area=t.area||contentArea(sceneSpec()),reserve=state.legend.show?legendBox(sceneSpec()):null;
+ if(countyMayorOverview())return countyMayorLabelLayout(items,t,font,area,reserve);
  const sizes=f=>(f.box[2]-f.box[0])*(f.box[3]-f.box[1]);
  const sorted=[...items].sort((a,b)=>sizes(b)-sizes(a)),used=[],labels=[],needsNumber=[],outside=[];
  for(const f of sorted){
@@ -424,10 +534,13 @@ function drawLabels(group,items,t,font=15,interactive=false){
    g.append(svgEl('circle',{cx:q.leaderAnchor.x,cy:q.leaderAnchor.y,r:1.7*zoomRatio,fill:'#718b7c','data-label-anchor':q.f.id}));
   }
   const label=svgEl('text',{x:q.x,y:q.y,'font-size':q.font,'data-label':q.f.id,
-   'data-placement':q.leaderAnchor?'outside':q.districtNumber?'district-number':q.island?'below-island':'inside','text-anchor':'middle','dominant-baseline':'middle',
+   'data-placement':q.leaderAnchor?'outside':q.districtNumber?'district-number':q.island?(q.insetBottom?'inset-bottom':'below-island'):'inside','text-anchor':'middle','dominant-baseline':'middle',
    'font-weight':q.numeric||q.districtNumber?700:500,fill:'#2c493b',stroke:'#ffffffed',
    'stroke-width':q.numeric?3:2.4,'paint-order':'stroke','stroke-linejoin':'round'});
-  label.style.strokeWidth=(q.numeric?2.6:2.4)*zoomRatio;label.textContent=q.text;
+  label.style.strokeWidth=(q.numeric?2.6:2.4)*zoomRatio;
+  // CSS resets SVG text-anchor; enforce the measured centre for this overview.
+  if(countyMayorOverview())label.style.textAnchor='middle';
+  label.textContent=q.text;
   if(q.numeric){label.setAttribute('data-number-key',q.number);mapNumberRecord(q.f,q.number)}
   if(interactive){label.style.pointerEvents='auto';label.style.cursor='pointer';label.onclick=()=>paint(q.f)}
   g.append(label);

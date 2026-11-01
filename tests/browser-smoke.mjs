@@ -22,10 +22,60 @@ async function enterRates(page){
  for(const [name,value]of [['郭玺','1'],['林志成','1'],['沈伯洋','40'],['萧文乾','1'],['蒋万安','56'],['唐新民','1']])await page.getByRole('spinbutton',{name:name+'预测得票率',exact:true}).fill(value);
  await page.locator('#savePrediction').click();
 }
-test('22 county shapes have 22 readable labels or numbers',async t=>{
+test('Nationwide mayor map uses 22 full names, safe city leaders and framed offshore labels',async t=>{
  const page=await pageFor(t);await page.waitForFunction(()=>document.querySelectorAll('#labels [data-label]').length===22);
- const ids=await page.locator('#labels [data-label]').evaluateAll(elements=>elements.map(e=>e.dataset.label));assert.equal(new Set(ids).size,22);
- assert.match(await page.locator('#mapNumberKey').innerText(),/新竹市/);assert.match(await page.locator('#mapNumberKey').innerText(),/嘉义市/);
+ const result=await page.evaluate(()=>{
+  const labels=[...document.querySelectorAll('#labels [data-label]')];
+  const box=e=>e.getBoundingClientRect();
+  const cityNames=['台北市','基隆市','新竹市','嘉义市'];
+  const islandFrames={连江县:'马祖',金门县:'金门',澎湖县:'澎湖'};
+  const insideCounty=el=>{
+   const polygon=document.querySelector('#regions [data-region="'+el.dataset.label+'"]');
+   const r=box(el),inv=polygon.getScreenCTM().inverse();
+   return [-.3,0,.3].every(dx=>[-.3,0,.3].every(dy=>{
+    const p=new DOMPoint((r.left+r.right)/2+dx*r.width,(r.top+r.bottom)/2+dy*r.height).matrixTransform(inv);
+    return polygon.isPointInFill(p);
+   }));
+  };
+  const cities=Object.fromEntries(cityNames.map(name=>{
+   const el=labels.find(e=>e.textContent===name),a=box(el);
+   const overlaps=[...document.querySelectorAll('#insetFrames [data-inset] > *')].some(e=>{
+    const b=box(e);return a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;
+   });
+   return[name,{placement:el.dataset.placement,leader:!!document.querySelector('#labels [data-label-leader="'+el.dataset.label+'"]'),overlaps}];
+  }));
+  const islands=Object.fromEntries(Object.entries(islandFrames).map(([name,inset])=>{
+   const el=labels.find(e=>e.textContent===name),a=box(el);
+   const b=box(document.querySelector('#insetFrames [data-inset="'+inset+'"] > *'));
+   return[name,{placement:el.dataset.placement,inside:a.left>=b.left&&a.right<=b.right&&a.top>=b.top&&a.bottom<=b.bottom,bottomGap:b.bottom-a.bottom}];
+  }));
+  return{count:labels.length,unique:new Set(labels.map(e=>e.dataset.label)).size,
+   numbered:labels.some(e=>e.dataset.numberKey),names:labels.map(e=>e.textContent),
+   mainlandOutside:labels.filter(e=>!cityNames.includes(e.textContent)&&!islandFrames[e.textContent]).filter(e=>!insideCounty(e)).map(e=>{
+    const r=box(e),p=document.querySelector('#regions [data-region="'+e.dataset.label+'"]'),root=document.querySelector('#map');
+    const center=new DOMPoint((r.left+r.right)/2,(r.top+r.bottom)/2);
+    const local=center.matrixTransform(root.getScreenCTM().inverse());
+    const pf=center.matrixTransform(p.getScreenCTM().inverse());
+    const f=data.counties.find(x=>x.id===e.dataset.label);
+    const t=geometryLayout(currentItems(),true);
+    return{name:e.textContent,w:r.width,h:r.height,centerOnPolygon:p.isPointInFill(pf),
+     centerCanvas:regionContains(f,local.x,local.y,t),box:[r.left,r.top,r.right,r.bottom].map(n=>Math.round(n))};
+   }),cities,islands};
+ });
+ assert.equal(result.count,22);assert.equal(result.unique,22);assert.equal(result.numbered,false);
+ for(const name of ['台北市','基隆市','新竹市','嘉义市']){
+  assert.equal(result.cities[name].placement,'outside');assert.equal(result.cities[name].leader,true);
+  assert.equal(result.cities[name].overlaps,false);
+ }
+ for(const name of ['连江县','金门县','澎湖县']){
+  assert.equal(result.islands[name].placement,'inset-bottom');assert.equal(result.islands[name].inside,true);
+  assert.ok(result.islands[name].bottomGap>=1);
+ }
+ assert.deepEqual(result.mainlandOutside,[],'All remaining county names remain within their own polygon');
+ assert.equal(await page.locator('#mapNumberKey').isVisible(),false);
+ const svg=await exportSvg(page);
+ for(const name of result.names)assert.ok(svg.includes(name),'Export includes '+name);
+ assert.equal((svg.match(/data-placement="inset-bottom"/g)||[]).length,3);
 });
 test('Recording votes retains chosen winners and exports a complete vote table',async t=>{
  const page=await pageFor(t);await selectMayor(page);await enterRates(page);
@@ -57,7 +107,7 @@ test('Compact export and preview are available at mobile width',async t=>{
  const page=await pageFor(t,{width:390,height:844});await page.locator('.export-menu summary').click();assert.equal(await page.locator('#exportSvg').isVisible(),true);
  await page.locator('#exportLayout').selectOption('compact');await page.locator('#previewExport').click();await page.waitForFunction(()=>document.querySelector('#exportPreviewStatus').textContent.includes('像素'));
  assert.equal(await page.locator('#exportPreviewImage').isVisible(),true);await page.locator('#closeExportPreview').click();
- const svg=await exportSvg(page);assert.ok(!svg.includes('data-export-detail-maps'));assert.match(svg,/data-map-number-key/);
+ const svg=await exportSvg(page);assert.ok(!svg.includes('data-export-detail-maps'));assert.ok(!svg.includes('data-number-key='),'No numbered key for nationwide county mayors');
 });
 test('CSV import previews changes and blank cells retain earlier choices',async t=>{
  const page=await pageFor(t);await selectMayor(page);await page.locator('.header-menu summary').first().click();
