@@ -591,170 +591,7 @@ test('Map labels show full names whenever they fit, number only overflow labels 
  const el=(tag,attrs)=>({tag,attrs:attrs||{},style:{},children:[],setAttribute(key,v){this.attrs[key]=v},append(...items){this.children.push(...items)}});
  const $=()=>null;
  const logic=new Function('state','data','featureElectorate','shownLabel','regionContains','leaderOverlap',
-  'contentArea','sceneSpec','legendBox','svgEl','paint','test('Number key exports and table are backed by the map numbers',()=>{
- assert.match(index,/id="mapWithKey"/);
- assert.match(index,/id="mapNumberKey"/);
- assert.match(index,/id="mapNumberKeyRows"/);
- assert.match(index,/app\.js\?v=20261101-conditional-island-labels-v53/);
- assert.match(read('style.css'),/\.map-view-with-keys\.has-number-key/);
- assert.match(read('workspace-ui.js'),/The main renderer now synchronizes region numbers and their adjacent table/);
- assert.match(app,/exportNumberRows=\[\]/);
- assert.match(app,/appendNumberTableExport\(root,exportNumberRows/);
- assert.match(app,/actualWidth=keyHeight\?exportWidth:coreWidth/);
- assert.match(app,/appendExportPredictionTable\(root,winnerRows,tableY\)/);
- assert.match(app,/numberLabelRegister|mapNumberRecord/);
- assert.match(app,/if\(state.labels&&view\)/);
- assert.doesNotMatch(app.slice(app.indexOf('function drawLabels('),app.indexOf('function drawIdentityPanelLabels(')),/svgEl\('path'/);
-});
-
-test('Map fetch retries bypass corrupt caches and report persistent network errors',async()=>{
- const start=app.indexOf('async function fetchMapJson(url,label,attempts=3){');
- const end=app.indexOf('// Load only the map layers',start);
- assert.ok(start>=0&&end>start);
- const calls=[],paused=[];
- const responses=[
-  ()=>Promise.reject(Error('connection lost')),
-  ()=>Promise.resolve({ok:true,json:()=>Promise.reject(Error('bad JSON'))}),
-  ()=>Promise.resolve({ok:true,json:()=>Promise.resolve({counties:[1,2,3]})})
- ];
- const fetch=(url,options)=>{calls.push({url,cache:options.cache});return responses[calls.length-1]()};
- const loader=new Function('fetch','setTimeout','console',app.slice(start,end)+';return fetchMapJson')(
-  fetch,callback=>{paused.push(true);callback()},{warn(){}});
- assert.deepEqual(await loader('assets/map-base.json?v=1','基础地图'),{counties:[1,2,3]});
- assert.equal(calls.length,3);
- assert.equal(calls[0].cache,'default');
- assert.equal(calls[1].cache,'reload');
- assert.match(calls[1].url,/&retry=/);
- assert.match(calls[2].url,/&retry=/);
- assert.equal(paused.length,2);
- let attempts=0;
- const fail=new Function('fetch','setTimeout','console',app.slice(start,end)+';return fetchMapJson')(
-  async()=>{attempts++;return{ok:false,status:503}},callback=>callback(),{warn(){}});
- await assert.rejects(fail('assets/map-base.json?v=1','基础地图'),/基础地图载入失败（已重试3次）：HTTP 503/);
- assert.equal(attempts,3);
-});
-test('Map recovery retries without reloading the page or clearing user prediction state',async()=>{
- assert.match(index,/id="retryMapLoad"/);
- assert.match(index,/id="loadErrorMessage"/);
- assert.doesNotMatch(index,/onclick="location\.reload\(\)"/);
- const start=app.indexOf('let mapPromise,mapLoadSequence=0;');
- const end=app.indexOf('\nfor(const p of PARTY_PRESETS)',start);
- assert.ok(start>=0&&end>start);
- const nodes=Object.fromEntries(['loadError','loadErrorMessage','progress','retryMapLoad','county'].map(k=>[k,{
-  hidden:true,textContent:'',children:[],append(child){this.children.push(child)}
- }]));
- const lookup=id=>nodes[id]||null;
- const valid=()=>({counties:Array.from({length:22},(_,i)=>({name:'县市'+i})),towns:[],legislative:[]});
- let downloads=0,renders=0;
- const state={county:'',fillMode:'solid'};
- const boot=new Function('$','fetchMapJson','document','state','data','COUNTY_ORDER','syncInputs','render','console',
-  app.slice(start,end)+';return {retry:()=>$("retryMapLoad").onclick(),value:()=>data,promise:()=>mapPromise}')(
-  lookup,async()=>{downloads++;return valid()},{createElement:()=>({})},state,null,[],()=>{},()=>{renders++},{error(){}});
- await boot.promise();await Promise.resolve();
- assert.equal(nodes.loadError.hidden,true);
- assert.equal(renders,1);
- assert.equal(boot.value().counties.length,22);
- boot.retry();
- assert.equal(renders,2);
- assert.equal(downloads,1);
- assert.equal(state.county,'');
- assert.match(app,/地图渲染出现问题/);
- assert.match(app,/地图资料载入失败/);
-});
-test('Missing election results never crash gradient map legends',()=>{
- const mapStart=town.indexOf('function predictionMapResult(f){');
- const mapEnd=town.indexOf('\nfunction localDisplayOptions()',mapStart);
- assert.ok(mapStart>=0&&mapEnd>mapStart);
- const makeResult=(isLocal,localResult,displayResult)=>new Function('localPredictionActive','localMapResult','predictionDisplayResult','predictionDistrictFor',
-  town.slice(mapStart,mapEnd)+';return predictionMapResult')(()=>isLocal,()=>localResult,()=>displayResult,()=>null);
- const region={id:'not-yet-predicted'};
- assert.equal(makeResult(false,null,null)(region).status,'missing');
- assert.equal(makeResult(true,null,null)(region).status,'missing');
- assert.equal(makeResult(false,null,{status:'winner'})(region).status,'winner');
- const start=app.indexOf('function legendMetrics('),end=app.indexOf('\nfunction legendBox(',start);
- assert.ok(start>=0&&end>start);
- const legendCode=app.slice(start,end)+';return legendMetrics';
- const legend=new Function('state','isNationwide','currentItems','predictionUsesGradient','predictionMapResult',
-  'legendEntries','predictionUsesVoteDisplay','predictionLegendCountUnit','counts','mayorLegendUnit',legendCode)(
-   {fillMode:'prediction',predictionOffice:'mayor',predictionDisplay:'topVote',legendTitle:'图例',gradient:{metric:'share'},legend:{fontSize:12,caption:''}},
-   ()=>true,()=>[{id:'county-with-no-votes'}],()=>true,()=>null,()=>[],()=>true,()=> '区',()=>({}),()=> '区');
- const metrics=legend();
- assert.equal(metrics.gradient,true);
- assert.equal(metrics.missing,true);
- assert.equal(metrics.tie,false);
- assert.ok(metrics.height>0);
-});
-test('Lazy geometry and council township script retry without clearing saved predictions',()=>{
- assert.match(app,/detailRequests\[name\]=fetchMapJson\(url,name\)/);
- assert.match(app,/fetchMapJson\('assets\/map-villages-'\+n/);
- assert.match(town,/for\(let attempt=0;attempt<3;attempt\+\+\)/);
- assert.match(town,/script\.src='town-areas\.js[^;]+retry=/);
- assert.match(town,/script\.onerror=\(\)=>\{script\.remove\(\)/);
- assert.match(read('style.css'),/#loadError\{position:absolute;left:50%;top:50%/);
-});
-function isolatedExportGuard(env){
- const start=app.indexOf('async function ensureExportMapReady(){');
- const end=app.indexOf('let mapPromise,mapLoadSequence=0;',start);
- assert.ok(start>=0&&end>start);
- const code=app.slice(start,end)+';return ensureExportMapReady;';
- return new Function('data','mapPromise','state','detailRequests','ensureMapDetails','localPredictionActive','ensureTownPredictionAreas','currentItems',code)(
-  env.data,Promise.resolve(env.data),env.state,env.detailRequests||{},env.ensureMapDetails||(()=>{}),env.localPredictionActive||(()=>false),env.ensureTownPredictionAreas||(()=>Promise.resolve(true)),env.currentItems||(()=>[{}])
- );
-}
-test('Export guard pauses for geometry promises, then succeeds after completion',async()=>{
- let finish,done=false;
- const pending=new Promise(resolve=>finish=resolve);
- const env={data:{council:Array(161),councilIndigenous:Array(60),districtBorders:{council:[{}]},townBorders:{all:Array(22)}},state:{level:'council'},detailRequests:{'议员选区':pending,'选区边界':Promise.resolve(true),'乡镇边界':Promise.resolve(true)}};
- const guard=isolatedExportGuard(env);
- const task=guard().then(()=>{done=true});
- await Promise.resolve();
- assert.equal(done,false,'Must not export before geometry finishes');
- finish(true);
- await task;
- assert.equal(done,true);
-});
-test('Export guard refuses missing or failed map geometry',async()=>{
- const data={council:Array(161),councilIndigenous:Array(60),districtBorders:{council:[{}]},townBorders:{all:Array(22)}};
- const env={data,state:{level:'council'},detailRequests:{'议员选区':Promise.resolve(false),'选区边界':Promise.resolve(true),'乡镇边界':Promise.resolve(true)}};
- await assert.rejects(isolatedExportGuard(env)(),/载入失败/);
- env.detailRequests['议员选区']=Promise.resolve(true);env.data={...data,council:[]};
- await assert.rejects(isolatedExportGuard(env)(),/尚未完整载入/);
-});
-test('Export guard validates village map before exporting',async()=>{
- const env={data:{villages:[{}],villageMetadata:{count:7731},townBorders:{all:Array(22)}},state:{level:'villages'},detailRequests:{villages:Promise.resolve(true),'乡镇边界':Promise.resolve(true)}};
- await assert.rejects(isolatedExportGuard(env)(),/村里地图资料尚未完整载入/);
-});
-test('Township or mayor maps export without unrelated council dependencies',async()=>{
- const env={data:{towns:[{}]},state:{level:'towns'},detailRequests:{}};
- await assert.doesNotReject(isolatedExportGuard(env)());
-});
-
-const history=read('history-2022.js');
-test('2022 history remains isolated from saved 2026 state',()=>{
- assert.match(index,/id="workspaceHistory"/);
- assert.match(history,/savedMapScope=clone\(state\)/);
- assert.match(history,/state=clone\(savedMapScope\)/);
- assert.match(history,/capture:true/);
- assert.match(history,/if\(!recordsInView\(\)\.length\)throw Error/);
-});
-test('Historical district mismatch is not silently colored',()=>{
- assert.match(history,/unmatchedDistricts\.add\(norm\(h\.county\)/);
- assert.match(history,/__2022_unmatched__/);
- assert.match(history,/已暂不着色/);
- assert.match(history,/多席次选区按各党实际当选人数统计/);
-});
-test('Main UI language avoids restricted expression',()=>{
- for(const file of ['index.html','app.js','workspace-ui.js','history-2022.js','candidate-directory.js'])assert.equal(read(file).includes('\u5168\u56fd'),false,file);
-});
-
-test('2022 council districts use independent historical boundaries and reconcile to 910 seats',()=>{
- const d=JSON.parse(read('assets/history-council-districts-2022.json'));
- assert.equal(d.year,2022);assert.equal(d.districtCount,215);assert.equal(d.rows.length,215);
- assert.equal(d.rows.reduce((n,x)=>n+x.seats,0),910);
- assert.equal(d.winnerCorrections.length,4);assert.equal(d.correctedElectedTotal,910);
- assert.ok(d.rows.every(x=>x.scopeTowns.length>0&&x.seats>0));
-});
-,'identityPanelsActive','view',
+  'contentArea','sceneSpec','legendBox','svgEl','paint','$','identityPanelsActive','view',
   src+';return {labelLayout,drawLabels,getRows:()=>mapNumberRows,resetRows:()=>{mapNumberRows=[]}}')(
   state,data,()=> 'regional',f=>f.name,()=>true,(a,b)=>a[0]<b[2]&&a[2]>b[0]&&a[1]<b[3]&&a[3]>b[1],
   ()=>({left:0,right:1200,top:0,bottom:700}),()=>({height:900}),()=>({}),el,()=>{},$,()=>false,{});
@@ -783,11 +620,12 @@ test('2022 council districts use independent historical boundaries and reconcile
  assert.equal(townLabel.numeric,false);
  assert.ok(townLabel.y>islandTown.box[3]);
 });
+
 test('Number key exports and table are backed by the map numbers',()=>{
  assert.match(index,/id="mapWithKey"/);
  assert.match(index,/id="mapNumberKey"/);
  assert.match(index,/id="mapNumberKeyRows"/);
- assert.match(index,/app\.js\?v=20261031-numeric-labels-v52/);
+ assert.match(index,/app\.js\?v=20261101-conditional-island-labels-v53/);
  assert.match(read('style.css'),/\.map-view-with-keys\.has-number-key/);
  assert.match(read('workspace-ui.js'),/The main renderer now synchronizes region numbers and their adjacent table/);
  assert.match(app,/exportNumberRows=\[\]/);
