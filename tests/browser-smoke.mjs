@@ -22,6 +22,66 @@ async function enterRates(page){
  for(const [name,value]of [['郭玺','1'],['林志成','1'],['沈伯洋','40'],['萧文乾','1'],['蒋万安','56'],['唐新民','1']])await page.getByRole('spinbutton',{name:name+'预测得票率',exact:true}).fill(value);
  await page.locator('#savePrediction').click();
 }
+test('Candidate prediction and township dialogs drag freely and resize from all four corners',async t=>{
+ const page=await pageFor(t,{width:1440,height:920});
+ await page.locator('#county').selectOption({label:'台北市'});
+ await page.locator('#editPrediction').click();
+ const modal=page.locator('#predictionDialog');
+ const header=modal.locator('.floating-dialog-drag');
+ await header.waitFor({state:'visible'});
+ assert.equal(await modal.locator('.floating-dialog-corner').count(),4);
+ const before=await modal.boundingBox();
+ assert.ok(before.width>=800&&before.height>=500);
+ const headerBox=await header.boundingBox();
+ const hx=headerBox.x+headerBox.width/2,hy=headerBox.y+headerBox.height/2;
+ await page.mouse.move(hx,hy);await page.mouse.down();await page.mouse.move(hx+50,hy+29,{steps:5});await page.mouse.up();
+ const moved=await modal.boundingBox();
+ assert.ok(Math.abs(moved.x-before.x-50)<=3);
+ assert.ok(Math.abs(moved.y-before.y-29)<=3);
+ for(const corner of ['nw','ne','sw','se']){
+  const target=modal.locator('[data-dialog-resize="'+corner+'"]');
+  const prev=await modal.boundingBox(),b=await target.boundingBox();
+  const x=b.x+b.width/2,y=b.y+b.height/2;
+  const dx=corner.includes('w')?-15:15,dy=corner.includes('n')?-10:10;
+  await page.mouse.move(x,y);await page.mouse.down();await page.mouse.move(x+dx,y+dy,{steps:4});await page.mouse.up();
+  const next=await modal.boundingBox();
+  assert.ok(next.width>prev.width+9,corner+' must expand width');
+  assert.ok(next.height>prev.height+5,corner+' must expand height');
+  if(corner.includes('w'))assert.ok(Math.abs((prev.x+prev.width)-(next.x+next.width))<=3,'west resize anchors east edge');
+  else assert.ok(Math.abs(next.x-prev.x)<=3,'east resize anchors west edge');
+ }
+ const older=await modal.boundingBox();
+ await modal.locator('[data-dialog-resize="nw"]').focus();
+ await page.keyboard.press('ArrowLeft');
+ const keyboardResized=await modal.boundingBox();
+ assert.ok(keyboardResized.width>older.width,'Keyboard resize is available');
+ await page.getByRole('radio',{name:'预测蒋万安当选',exact:true}).check();
+ await page.locator('#savePrediction').click();
+ assert.equal(await modal.isVisible(),false);
+ await page.locator('#predictionScale').selectOption('overlay');
+ const townId=await page.locator('#regions path[data-region]').first().getAttribute('data-region');
+ await page.locator('#regions path[data-region="'+townId+'"]').dispatchEvent('click');
+ const local=page.locator('#localDialog');
+ await local.locator('.floating-dialog-drag').waitFor({state:'visible'});
+ assert.equal(await local.locator('[data-dialog-resize]').count(),4);
+ const localBefore=await local.boundingBox(),bar=await local.locator('.floating-dialog-drag').boundingBox();
+ const px=bar.x+bar.width/2,py=bar.y+bar.height/2;
+ await page.mouse.move(px,py);await page.mouse.down();await page.mouse.move(px-36,py+20,{steps:4});await page.mouse.up();
+ const localMoved=await local.boundingBox();
+ assert.ok(Math.abs(localMoved.x-localBefore.x+36)<=3);
+ assert.ok(Math.abs(localMoved.y-localBefore.y-20)<=3);
+ const se=await local.locator('[data-dialog-resize="se"]').boundingBox();
+ await page.mouse.move(se.x+se.width/2,se.y+se.height/2);
+ await page.mouse.down();await page.mouse.move(se.x+se.width/2+23,se.y+se.height/2+17,{steps:4});await page.mouse.up();
+ const localResized=await local.boundingBox();
+ assert.ok(localResized.width>localMoved.width+12);
+ assert.ok(localResized.height>localMoved.height+9);
+ await page.getByRole('radio',{name:'预测蒋万安胜出',exact:true}).check();
+ await page.locator('#saveLocal').click();
+ assert.equal(await local.isVisible(),false);
+ assert.equal(await page.evaluate(()=>state.predictionOffice),'mayor');
+ assert.equal(await page.locator('#county').inputValue(),'台北市');
+});
 test('Nationwide mayor map uses 22 full names, safe city leaders and framed offshore labels',async t=>{
  const page=await pageFor(t);assert.equal(await page.locator('#mapBuildVersion').count(),0,'No build/version marker should appear in the map');await page.waitForFunction(()=>document.querySelectorAll('#labels [data-label]').length===22);
  const result=await page.evaluate(()=>{

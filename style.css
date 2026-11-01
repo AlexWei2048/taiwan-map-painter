@@ -199,3 +199,57 @@ body.history-mode .title-row{display:none}
 @media(max-width:650px){
  .return-taiwan-map{left:12px;top:46px;padding:8px 11px;font-size:12px}
 }
+
+/* 2026 candidate prediction: floating windows with four visible resize corners. */
+dialog.prediction-dialog.floating-prediction-dialog,
+dialog.prediction-dialog.show-estimates.floating-prediction-dialog,
+dialog.local-dialog.floating-prediction-dialog{
+ position:fixed;inset:auto;margin:0;max-width:none;max-height:none;
+ box-sizing:border-box;overflow:hidden;padding:0;
+ border-radius:14px;border:1px solid #cbded1;
+ box-shadow:0 22px 75px #153b2a43,0 4px 19px #173b291c;
+ background:#fbfcf8;
+}
+.floating-dialog-drag{
+ height:44px;min-height:44px;display:flex;gap:9px;align-items:center;
+ padding:0 18px;color:#346d56;font-size:12px;font-weight:650;
+ background:linear-gradient(90deg,#eaf3ed,#f7faf6);
+ border-bottom:1px solid #d9e8dc;cursor:move;user-select:none;touch-action:none;
+}
+.floating-dialog-drag:hover{background:#e4f0e8}
+.floating-dialog-drag:focus-visible{outline:2px solid #147d68;outline-offset:-3px}
+.floating-dialog-grip{font-size:21px;line-height:1;color:#378160}
+.floating-dialog-scroll{
+ box-sizing:border-box;height:calc(100% - 44px);min-height:0;overflow:auto;
+ overscroll-behavior:contain;padding:12px 24px 24px;scrollbar-width:thin;
+}
+.floating-dialog-scroll>.dialog-close{top:3px}
+.floating-dialog-scroll>.dialog-actions{bottom:-24px}
+.floating-dialog-scroll>.prediction-table-wrap{max-height:none}
+.floating-dialog-corner{
+ position:absolute;z-index:12;width:24px;height:24px;
+ border:0;outline-offset:2px;touch-action:none;user-select:none;
+}
+.floating-dialog-corner[data-dialog-resize="nw"]{top:0;left:0;cursor:nwse-resize}
+.floating-dialog-corner[data-dialog-resize="ne"]{top:0;right:0;cursor:nesw-resize}
+.floating-dialog-corner[data-dialog-resize="sw"]{bottom:0;left:0;cursor:nesw-resize}
+.floating-dialog-corner[data-dialog-resize="se"]{bottom:0;right:0;cursor:nwse-resize}
+.floating-dialog-corner::after{
+ content:"";position:absolute;width:9px;height:9px;border-color:#3e9674;border-style:solid;opacity:.9;
+}
+.floating-dialog-corner[data-dialog-resize="nw"]::after{top:4px;left:4px;border-width:2px 0 0 2px}
+.floating-dialog-corner[data-dialog-resize="ne"]::after{top:4px;right:4px;border-width:2px 2px 0 0}
+.floating-dialog-corner[data-dialog-resize="sw"]::after{bottom:4px;left:4px;border-width:0 0 2px 2px}
+.floating-dialog-corner[data-dialog-resize="se"]::after{bottom:4px;right:4px;border-width:0 2px 2px 0}
+.floating-dialog-corner:focus-visible{outline:3px solid #51a885}
+.floating-dialog-corner:hover::after{border-color:#126d50;opacity:1}
+dialog.local-dialog.floating-prediction-dialog .dialog-actions{bottom:-24px}
+@media(max-width:650px){
+ dialog.prediction-dialog.floating-prediction-dialog,
+ dialog.prediction-dialog.show-estimates.floating-prediction-dialog,
+ dialog.local-dialog.floating-prediction-dialog{border-radius:11px}
+ .floating-dialog-scroll{padding:9px 13px 18px}
+ .floating-dialog-drag{height:40px;min-height:40px;padding:0 14px;font-size:11px}
+ .floating-dialog-scroll{height:calc(100% - 40px)}
+ .floating-dialog-scroll>.dialog-actions{bottom:-18px}
+}
