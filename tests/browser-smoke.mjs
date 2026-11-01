@@ -726,6 +726,7 @@ test('All 22 scoped mayoral township maps display complete township names withou
     const t=geometryLayout(items,true);
     const mid=(bounds[0]+bounds[1])/2*t.scale+t.tx,half=(bounds[1]-bounds[0])/2*t.scale;
     let inside=0,outside=0,far=0,nearSide=0;
+    const laneStats={perimeter:{right:0,wrong:0},fallback:{right:0,wrong:0}},mismatched=[];
     for(const el of document.querySelectorAll('#labels text[data-label]')){
      if(el.dataset.placement==='inside'){inside++;continue}
      outside++;
@@ -735,9 +736,11 @@ test('All 22 scoped mayoral township maps display complete township names withou
      if(normalized<.32)continue;
      far++;
      const side=document.querySelector('#labels path[data-label-leader="'+el.dataset.label+'"]')?.dataset.labelColumn;
-     if(side===(anchor.x<mid?'left':'right'))nearSide++;
+     const lane=el.dataset.calloutLane==='perimeter'?'perimeter':'fallback';
+     if(side===(anchor.x<mid?'left':'right')){nearSide++;laneStats[lane].right++}
+     else{laneStats[lane].wrong++;mismatched.push([el.textContent,lane,side,Number(normalized.toFixed(2))])}
     }
-    return{inside,outside,far,nearSide,ratio:far?Number((nearSide/far).toFixed(2)):1};
+    return{inside,outside,far,nearSide,ratio:far?Number((nearSide/far).toFixed(2)):1,laneStats,mismatched};
    });
    console.log('Town callout distribution',county,JSON.stringify(metrics));
    assert.equal(metrics.inside+metrics.outside,result.total);
