@@ -84,7 +84,7 @@ const districtUpdateProgress=updateProgress;updateProgress=function(){districtUp
   syncInputs();render();persist();return;
  }
  if(!localPredictionActive())return districtCountyChange();state.county=$('county').value;state.predictionRegion='';const d=localParentDistrict();if(!d)return;state.predictionRegion=d.id;state.localTown='';if(d.type==='council')state.electorate.council=DistrictCore.identity(d);syncInputs();render();persist()};
-const districtDisplayChange=$('predictionDisplay').onchange;$('predictionDisplay').onchange=()=>{districtDisplayChange();if(localPredictionActive())state.localPredictionDisplay=state.predictionDisplay};
+const districtDisplayChange=$('predictionDisplay').onchange;$('predictionDisplay').onchange=()=>{if(localPredictionActive())state.localPredictionDisplay=$('predictionDisplay').value==='composition'?'composition':state.predictionCandidateScope==='candidateVote'?'candidateVote':'topVote';districtDisplayChange()};
 if(localPredictionActive()){state.predictionDisplay=normalizeVoteDisplay(state.localPredictionDisplay||'composition',true);const d=localParentDistrict();$('scopeTitle').textContent=(state.county||'全台')+' · '+(state.county&&d?.type==='council'?shortDirectoryName(d)+' · ':'')+'2026'+directoryOfficeName[state.predictionOffice]+'乡镇市区预测'}};
 function applyLocalScale(scale){
  if(scale==='overlay'&&state.predictionOffice==='mayor'){
@@ -188,7 +188,7 @@ const districtCountyChange=$('county').onchange;$('county').onchange=()=>{
   syncInputs();render();persist();return;
  }
  if(!localPredictionActive())return districtCountyChange();state.county=$('county').value;state.predictionRegion='';const d=localParentDistrict();if(!d)return;state.predictionRegion=d.id;state.localTown='';if(d.type==='council')state.electorate.council=DistrictCore.identity(d);syncInputs();render();persist()};
-const districtDisplayChange=$('predictionDisplay').onchange;$('predictionDisplay').onchange=()=>{districtDisplayChange();if(localPredictionActive())state.localPredictionDisplay=state.predictionDisplay};
+const districtDisplayChange=$('predictionDisplay').onchange;$('predictionDisplay').onchange=()=>{if(localPredictionActive())state.localPredictionDisplay=$('predictionDisplay').value==='composition'?'composition':state.predictionCandidateScope==='candidateVote'?'candidateVote':'topVote';districtDisplayChange()};
 // Saved township forecasts remain available after consolidating the mayor map selector.
 if(state.predictionOffice==='mayor'&&state.predictionScale==='town'){state.predictionScale='overlay';state.level='towns'}
 if(localPredictionActive()){state.predictionDisplay=normalizeVoteDisplay(state.localPredictionDisplay||'composition',true);const d=localParentDistrict();if(d){state.predictionRegion=d.id;state.level=d.type==='mayor'?'towns':'council';if(d.type==='council')state.electorate.council=DistrictCore.identity(d)}}
