@@ -230,9 +230,9 @@ function mapInsetLabelFit(f,t,width,height,used,area,reserve){
 function districtMapNumber(f){
  if(!['council','legislative'].includes(state.level))return '';
  const value=String(f.number??'').trim();
- const direct=value.match(/^(?:第\s*)?(\d+)(?:\s*(?:选|選)(?:举|舉)?区?)?$/);
+ const direct=value.match(/^(?:第\s*)?(\d+)(?:\s*(?:选|選)(?:举|舉)?(?:区|區)?)?$/);
  if(direct)return String(Number(direct[1]));
- const embedded=String(f.name||'').match(/第\s*(\d+)\s*(?:选|選)(?:举|舉)?区?/);
+ const embedded=String(f.name||'').match(/第\s*(\d+)\s*(?:选|選)(?:举|舉)?(?:区|區)?/);
  return embedded?String(Number(embedded[1])):'';
 }
 // Prefer collision-free labels. Never fall back to an unchecked anchor:
