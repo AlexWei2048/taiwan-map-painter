@@ -178,7 +178,7 @@ test('Blank candidate inputs display zero without saving artificial forecast dat
 });
 test('Rate gradient fields show 100 percent as default maximum',()=>{
  assert.match(read('workspace-ui.js'),/predictionMarginMode\(\)\?\(state\.gradient\.marginManual===true\?state\.gradient\.max:''\)/);
- assert.match(read('workspace-ui.js'),/state\.gradient\.max=predictionMarginMode\(\)\?null:predictionUsesGradient\(\)\?100:null/);
+ assert.match(read('workspace-ui.js'),/state\.gradient\.max=predictionMarginMode\(\)\|\|predictionIsVotes\(\)\?null:predictionUsesGradient\(\)\?100:null/);
  assert.match(app,/gradientMax'\)\.value=state\.gradient\.max===null\?\(state\.gradient\.metric==='share'\?100:''\)/);
  assert.match(app,/state\.gradient\.max=state\.gradient\.metric==='share'\?100:null/);
 });
