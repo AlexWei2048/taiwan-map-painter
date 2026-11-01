@@ -554,6 +554,40 @@ test('Kaohsiung county mayor townships use all 38 complete names, inside labels 
  }), 'All lines must be painted behind every township name');
 });
 
+test('Town label hover highlights the matching polygon and restores its prediction fill',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#county').selectOption({label:'高雄市'});
+ await page.locator('#predictionScale').selectOption('overlay');
+ const labels=page.locator('#labels text[data-label]');
+ const candidate=await labels.evaluateAll(nodes=>nodes.find(e=>e.dataset.placement==='inside')?.dataset.label);
+ assert.ok(candidate,'Need an inside town label to test pointer hover');
+ const label=page.locator('#labels text[data-label="'+candidate+'"]');
+ const polygon=page.locator('#regions path[data-region="'+candidate+'"]');
+ const baseline=await polygon.evaluate(e=>getComputedStyle(e).fill);
+ await label.hover({force:true});
+ const during=await polygon.evaluate(e=>({fill:getComputedStyle(e).fill,className:e.classList.contains('label-region-highlighted')}));
+ assert.equal(during.className,true);
+ assert.notEqual(during.fill,baseline,'Hover must visibly change the corresponding map polygon');
+ const others=await page.locator('#regions path[data-region]').evaluateAll(els=>els.filter(e=>e.classList.contains('label-region-highlighted')).map(e=>e.dataset.region));
+ assert.deepEqual(others,[candidate],'Hover must highlight only the name’s town');
+ await page.mouse.move(2,2);
+ assert.equal(await polygon.evaluate(e=>getComputedStyle(e).fill),baseline,'Leaving restores the exact election fill');
+ await label.focus();
+ assert.equal(await polygon.evaluate(e=>e.classList.contains('label-region-highlighted')),true);
+ await label.blur();
+ assert.equal(await polygon.evaluate(e=>e.classList.contains('label-region-highlighted')),false);
+ await page.locator('#predictionOffice').selectOption('township');
+ await page.locator('#county').selectOption({label:'宜兰县'});
+ const next=await page.locator('#labels text[data-label]').first().getAttribute('data-label');
+ const townLabel=page.locator('#labels text[data-label="'+next+'"]');
+ const townShape=page.locator('#regions path[data-region="'+next+'"]');
+ const initial=await townShape.evaluate(e=>getComputedStyle(e).fill);
+ await townLabel.hover({force:true});
+ assert.notEqual(await townShape.evaluate(e=>getComputedStyle(e).fill),initial);
+ await page.mouse.move(2,2);
+ assert.equal(await townShape.evaluate(e=>getComputedStyle(e).fill),initial);
+});
+
 test('All 22 scoped mayoral township maps display complete township names without number keys',async t=>{
  const page=await pageFor(t);
  await page.locator('#predictionScale').selectOption('overlay');
@@ -591,6 +625,36 @@ test('All 22 scoped mayoral township maps display complete township names withou
    county+' has a diagonal or trans-map fan: '+JSON.stringify(quality.routes.filter(d=>!/^M[^HVLC]+H[^HVLC]+V[^HVLC]+H[^HVLC]+$/.test(d)).slice(0,4)));
   assert.equal(quality.underText,true,county+' leaders may cover names');
   assert.equal(quality.textCount,result.total);
+  // Verify actual SVG glyph boxes and callout dots against polygon geometry,
+  // not just against coarse bounding boxes or the external-label columns.
+  const containment=await page.evaluate(()=>{
+   const items=new Map(currentItems().map(f=>[String(f.id),f]));
+   const t=geometryLayout(currentItems(),true);
+   const bad=[],centers=[];
+   for(const el of document.querySelectorAll('#labels text[data-label]')){
+    const f=items.get(el.dataset.label);
+    if(!f)continue;
+    const center=townVisualCenter(f,t);
+    if(!regionContains(f,center.x,center.y,t))bad.push(f.name+' visual centre outside polygon');
+    if(el.dataset.placement==='inside'){
+     const b=el.getBBox(),cx=b.x+b.width/2,cy=b.y+b.height/2;
+     if(Math.abs(cx-Number(el.getAttribute('x')))>3)bad.push(f.name+' horizontal text not centred');
+     for(const dx of [0,.25,.5,.75,1])for(const dy of [0,.25,.5,.75,1])
+      if(!regionContains(f,b.x+b.width*dx,b.y+b.height*dy,t))
+       bad.push(f.name+' text rectangle outside polygon');
+    }else if(el.dataset.placement==='outside'){
+     const dot=document.querySelector('#labels [data-label-anchor="'+el.dataset.label+'"]');
+     if(!dot){bad.push(f.name+' missing callout anchor');continue}
+     const x=Number(dot.getAttribute('cx')),y=Number(dot.getAttribute('cy'));
+     if(!regionContains(f,x,y,t))bad.push(f.name+' callout anchor outside polygon');
+     if(Math.hypot(x-center.x,y-center.y)>.5)bad.push(f.name+' anchor not at visual centre');
+    }
+    centers.push(center);
+   }
+   return{bad,count:centers.length};
+  });
+  assert.deepEqual(containment.bad,[],county+' invalid centre/labels: '+containment.bad.slice(0,8).join(', '));
+  assert.equal(containment.count,result.total);
   assert.ok(quality.widths.every(w=>w<=1.1),county+' has heavy leaders');
   for(let i=0;i<quality.textRects.length;i++)for(let j=i+1;j<quality.textRects.length;j++){
    const a=quality.textRects[i].rect,b=quality.textRects[j].rect;
