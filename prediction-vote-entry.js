@@ -88,11 +88,13 @@
  };
  byId('predictionVoteMetric').onchange=()=>{
   state.predictionVoteMetric=byId('predictionVoteMetric').value;
+  state.gradient.max=state.predictionDisplay==='candidateVote'&&metric()==='votes'?null:100;
   keepOnlyMetric(predictionDraft);
   renderPredictionRows();persist();
  };
  byId('localVoteMetric').onchange=()=>{
   state.predictionVoteMetric=byId('localVoteMetric').value;
+  state.gradient.max=state.predictionDisplay==='candidateVote'&&metric()==='votes'?null:100;
   keepOnlyMetric(localDraft);
   renderLocalRows();persist();
  };
