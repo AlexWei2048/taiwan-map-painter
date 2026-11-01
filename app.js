@@ -274,7 +274,7 @@ function mapGridLeaderRoute(anchor,side,x,y,width,leaders,occupied,area,frames=[
   chain.push([px(sx),py(sy)]);chain.reverse();
   const points=[[anchor.x,anchor.y],[chain[0][0],anchor.y],...chain,
    [chain.at(-1)[0],y],[end,y]];
-  const reduced=[];
+  let reduced=[];
   for(const point of points){
    if(reduced.length&&Math.hypot(point[0]-reduced.at(-1)[0],point[1]-reduced.at(-1)[1])<.01)continue;
    const n=reduced.length;
@@ -285,6 +285,23 @@ function mapGridLeaderRoute(anchor,side,x,y,width,leaders,occupied,area,frames=[
    reduced.push(point);
   }
   if(reduced.length<2||!mapLeaderClear(reduced,leaders,occupied,frames))continue;
+  // Grid search can introduce many short zigzags. Shortcut them using the
+  // same collision checks, preserving orthogonality and the exact anchor.
+  const clean=[reduced[0]];
+  for(let i=0;i<reduced.length-1;){
+   let jump=null;
+   for(let j=reduced.length-1;j>i&&!jump;j--){
+    const a=reduced[i],b=reduced[j];
+    const candidates=a[0]===b[0]||a[1]===b[1]?[[a,b]]:
+     [[a,[b[0],a[1]],b],[a,[a[0],b[1]],b]];
+    for(const route of candidates)if(mapLeaderClear(route,leaders,occupied,frames)){
+     jump={j,route};break;
+    }
+   }
+   if(!jump){clean.push(reduced[++i]);continue}
+   clean.push(...jump.route.slice(1));i=jump.j;
+  }
+  reduced=clean;
   let leaderPath='M'+anchor.x+','+anchor.y;
   for(let k=1;k<reduced.length;k++){
    const [a,b]=[reduced[k-1],reduced[k]];
