@@ -544,7 +544,7 @@ test('Kaohsiung county mayor townships use all 38 complete names, inside labels 
   id:el.dataset.label,d:el.getAttribute('d'),width:getComputedStyle(el).strokeWidth
  })));
  assert.ok(paths.every(p=>/^M[-\\d.,]+H[-\\d.]+V[-\\d.]+H[-\\d.]+$/.test(p.d)),
-  'All township leaders must use perimeter-style orthogonal elbows');
+  'All township leaders must use perimeter-style orthogonal elbows: '+JSON.stringify(paths.filter(p=>!/^M[-\\d.,]+H[-\\d.]+V[-\\d.]+H[-\\d.]+$/.test(p.d)).slice(0,4)));
  assert.ok(paths.every(p=>parseFloat(p.width)<=1.1),'Township leaders must be delicate');
  assert.equal(await page.locator('#labels [data-town-leader-layer]').count(),1);
  assert.ok(await page.evaluate(()=>{
@@ -584,7 +584,7 @@ test('All 22 scoped mayoral township maps display complete township names withou
     textCount:labels.querySelectorAll('text[data-label]').length};
   });
   assert.ok(quality.routes.every(d=>/^M[-\\d.,]+H[-\\d.]+V[-\\d.]+H[-\\d.]+$/.test(d)),
-   county+' has a diagonal or trans-map fan');
+   county+' has a diagonal or trans-map fan: '+JSON.stringify(quality.routes.filter(d=>!/^M[-\\d.,]+H[-\\d.]+V[-\\d.]+H[-\\d.]+$/.test(d)).slice(0,4)));
   assert.equal(quality.underText,true,county+' leaders may cover names');
   assert.equal(quality.textCount,result.total);
  }
