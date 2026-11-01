@@ -444,9 +444,9 @@ const COUNTY_CITY_CALLOUTS=new Set(['台北市','基隆市','新竹市','嘉义�
 function countyInsideName(f,t,name,font,used,area,reserve){
  const center=f.center||f.labelAnchor||[(f.box[0]+f.box[2])/2,(f.box[1]+f.box[3])/2];
  const cx=center[0]*t.scale+t.tx,cy=center[1]*t.scale+t.ty;
- const samples=[-.48,-.24,0,.24,.48];
+ const samples=[-.5,-.375,-.25,-.125,0,.125,.25,.375,.5];
  for(const ratio of [1]){
-  const size=font*ratio,width=Array.from(name).length*size*1.04+8,height=size*1.5+5;
+  const size=font*ratio,width=Array.from(name).length*size*1.1+12,height=size*1.7+8;
   let best=null;
   const consider=p=>{
    const rect=[p.x-width/2,p.y-height/2,p.x+width/2,p.y+height/2];
@@ -646,10 +646,14 @@ function townNameLabelLayout(items,t,font,area,reserve){
  const capacity={left:fitsSide('left')?maxRows:0,right:fitsSide('right')?maxRows:0};
  const sides={left:[],right:[]},remaining=[];
  const order=[...pending].sort((a,b)=>{
+  // Route tiny urban districts first so they are not trapped by longer
+  // callouts already occupying their perimeter exit lanes.
+  const size=f=>(f.box[2]-f.box[0])*(f.box[3]-f.box[1]);
   const pa=a.anchor,pb=b.anchor;
   const ca=pa?Math.min(Math.abs(pa.x-box.left),Math.abs(box.right-pa.x)):Infinity;
   const cb=pb?Math.min(Math.abs(pb.x-box.left),Math.abs(box.right-pb.x)):Infinity;
-  return ca-cb||(pa?.y??0)-(pb?.y??0)||String(a.f.id).localeCompare(String(b.f.id));
+  return size(a.f)-size(b.f)||ca-cb||(pa?.y??0)-(pb?.y??0)||
+   String(a.f.id).localeCompare(String(b.f.id));
  });
  for(const q of order){
   if(!q.anchor){remaining.push(q);continue}
@@ -693,16 +697,16 @@ function townNameLabelLayout(items,t,font,area,reserve){
  // and use an orthogonal elbow rather than a diagonal through other towns.
  for(const q of remaining){
   const anchor=q.anchor||townVisualCenter(q.f,t),width=labelWidth(q.text);
-  const xs=[anchor.x+width/2+44,anchor.x-width/2-44,
-   colX.left,colX.right,anchor.x+width/2+62,anchor.x-width/2-62];
+  const xs=[12,22,35,48,64,86,115,155,205].flatMap(gap=>
+   [anchor.x+width/2+gap,anchor.x-width/2-gap]).concat([colX.left,colX.right]);
   let pos=null;
   for(const x0 of xs){
    const x=Math.max(area.left+width/2+8,
     Math.min(area.right-width/2-8,x0));
    const side=x<anchor.x?'left':'right',coast=anchor.x;
-   for(let n=0;n<Math.ceil((area.bottom-area.top)/(height+6))&&!pos;n++){
+   for(let n=0;n<Math.ceil((area.bottom-area.top)/(height*.6+4))&&!pos;n++){
     for(const k of n?[n,-n]:[0]){
-     const y=anchor.y+k*(height+6);
+     const y=anchor.y+k*(height*.6+4);
      const rect=[x-width/2-4,y-height/2-3,x+width/2+4,y+height/2+3];
      if(!valid(rect))continue;
      const route=mapOrthogonalLeader(anchor,side,x,y,width,coast,leaders,used,area,insetFrames);
