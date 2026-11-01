@@ -301,7 +301,16 @@ function mapGridLeaderRoute(anchor,side,x,y,width,leaders,occupied,area,frames=[
    if(!jump){clean.push(reduced[++i]);continue}
    clean.push(...jump.route.slice(1));i=jump.j;
   }
-  reduced=clean;
+  reduced=[];
+  for(const p of clean){
+   const n=reduced.length;
+   if(n&&Math.hypot(p[0]-reduced[n-1][0],p[1]-reduced[n-1][1])<.01)continue;
+   if(n>1&&((Math.abs(reduced[n-2][0]-reduced[n-1][0])<.01&&Math.abs(reduced[n-1][0]-p[0])<.01)||
+    (Math.abs(reduced[n-2][1]-reduced[n-1][1])<.01&&Math.abs(reduced[n-1][1]-p[1])<.01)))reduced.pop();
+   reduced.push(p);
+  }
+  // Prefer another label slot over a winding route across the map.
+  if(reduced.length>8)continue;
   let leaderPath='M'+anchor.x+','+anchor.y;
   for(let k=1;k<reduced.length;k++){
    const [a,b]=[reduced[k-1],reduced[k]];
