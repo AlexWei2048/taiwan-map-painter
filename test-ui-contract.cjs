@@ -705,6 +705,30 @@ test('Automatic export detail maps show each possible label without overlaps and
  assert.match(app,/exportLabelCoverage\(originalItems,map,details\.labelled\)/);
 });
 
+test('Export images keep table titles and all data, without subtitles, counts or notes',()=>{
+ const section=(start,end)=>{
+  const first=app.indexOf(start),last=app.indexOf(end,first);
+  assert.ok(first>=0&&last>first,start+' must exist');
+  return app.slice(first,last);
+ };
+ const twoUp=section('function appendExportPolishedWinnerTable(', 'function appendExportPredictionTable(');
+ const standard=section('function appendExportPredictionTable(', 'function numberTableExportMetrics(');
+ const numberKey=section('function appendNumberTableExport(', '// Every administrative area');
+ const coverage=section('function appendExportLabelCoverage(', 'function exportSvg(){');
+ assert.match(twoUp,/heading\.textContent=rows\.some/);
+ assert.match(twoUp,/data-export-winner-row/);
+ assert.doesNotMatch(twoUp,/已预测|选区 · 候选人 · 政党及党徽/);
+ assert.match(standard,/预测得票候选人/);
+ assert.match(standard,/layout\.headers\.forEach/);
+ assert.doesNotMatch(standard,/第一高票不等于|已预测/);
+ assert.match(numberKey,/数字对照表/);
+ assert.doesNotMatch(numberKey,/count\.textContent|项';panel\.append/);
+ assert.match(coverage,/密集区域完整标注/);
+ assert.doesNotMatch(coverage,/count\.textContent|note\.textContent|主地图空间不足/);
+ assert.match(app,/const headingHeight=62,tableHeaderHeight=44/);
+ assert.match(app,/let rowY=y\+49/);
+});
+
 test('Administrative lookup stays inside the canvas card, below the drawing in exports',()=>{
  assert.match(index,/id="mapWithKey"/);
  assert.match(index,/id="mapNumberKey"/);
