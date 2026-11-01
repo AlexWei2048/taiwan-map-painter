@@ -143,13 +143,21 @@ function mapLeaderSegmentConflict(a,b,pad=2.6){
  const h=ah?a:b,vert=ah?b:a;
  return between(vert[0][0],h[0][0],h[1][0])&&between(h[0][1],vert[0][1],vert[1][1]);
 }
+function mapLeaderRectIsClear(rect,leaders){
+ const box=[rect[0]-2,rect[1]-2,rect[2]+2,rect[3]+2];
+ return leaders.every(points=>mapLeaderSegments(points).every(([a,b])=>
+  !leaderIn(a[0],a[1],box)&&!leaderIn(b[0],b[1],box)&&
+  !leaderCross(a[0],a[1],b[0],b[1],box)));
+}
 function mapLeaderClear(points,leaders,occupied,frames=[]){
  const segments=mapLeaderSegments(points);
  for(const segment of segments){
   if(Math.hypot(segment[1][0]-segment[0][0],segment[1][1]-segment[0][1])<.01)continue;
   for(const rect of occupied){
    const padded=[rect[0]-1.5,rect[1]-1.5,rect[2]+1.5,rect[3]+1.5];
-   if(leaderCross(segment[0][0],segment[0][1],segment[1][0],segment[1][1],padded))return false;
+   if(leaderIn(segment[0][0],segment[0][1],padded)||
+    leaderIn(segment[1][0],segment[1][1],padded)||
+    leaderCross(segment[0][0],segment[0][1],segment[1][0],segment[1][1],padded))return false;
   }
   for(const frame of frames)
    if(leaderCross(segment[0][0],segment[0][1],segment[1][0],segment[1][1],frame))return false;
@@ -160,18 +168,24 @@ function mapLeaderClear(points,leaders,occupied,frames=[]){
 }
 function mapOrthogonalLeader(anchor,side,x,y,width,coast,leaders,occupied,area,frames=[]){
  const sign=side==='left'?-1:1,end=x-sign*(width/2+6);
- // Distinct, narrow rails separate callouts while keeping their vertical
- // segments outside the mapped coast and inside their own text columns.
- for(let n=0;n<18;n++){
-  const rail=coast+sign*(8+n*3.4);
-  if(sign*(end-rail)<5||rail<area.left+2||rail>area.right-2)continue;
-  const points=[[anchor.x,anchor.y],[rail,anchor.y],[rail,y],[end,y]];
-  if(!mapLeaderClear(points,leaders,occupied,frames))continue;
-  return{leaderPath:'M'+anchor.x+','+anchor.y+'H'+rail+'V'+y+'H'+end,leaderPoints:points};
+ // Leave the visual-centre dot fixed. A short optional vertical stub allows
+ // nearby callouts to use independent lanes rather than sharing a stem.
+ const departures=[0,-5,5,-10,10,-16,16,-24,24,-36,36,-50,50,-70,70];
+ for(const delta of departures){
+  const yy=anchor.y+delta;
+  if(yy<area.top+3||yy>area.bottom-3)continue;
+  for(let n=0;n<24;n++){
+   const rail=coast+sign*(8+n*3.4);
+   if(sign*(end-rail)<5||rail<area.left+2||rail>area.right-2)continue;
+   const points=delta?[[anchor.x,anchor.y],[anchor.x,yy],[rail,yy],[rail,y],[end,y]]:
+    [[anchor.x,anchor.y],[rail,anchor.y],[rail,y],[end,y]];
+   if(!mapLeaderClear(points,leaders,occupied,frames))continue;
+   return{leaderPath:'M'+anchor.x+','+anchor.y+
+    (delta?'V'+yy:'')+'H'+rail+'V'+y+'H'+end,leaderPoints:points};
+  }
  }
  return null;
 }
-
 function shortLeader(q,t,occupied,reserve){
  const frames=leaderFrames(t),island=frames.find(b=>leaderIn(q.ax,q.ay,b));
  const area=t.area||contentArea(sceneSpec()),font=q.font,width=Array.from(shownLabel(q.f)).length*font*1.04+8;
@@ -479,6 +493,7 @@ function countyCityCallout(f,t,name,font,used,area,reserve,items,leaders=[]){
  const frames=leaderFrames(t,6);
  const blocked=rect=>rect[0]<area.left||rect[2]>area.right||rect[1]<area.top||rect[3]>area.bottom||
   used.some(other=>leaderOverlap(rect,other))||
+  !mapLeaderRectIsClear(rect,leaders)||
   frames.some(frame=>leaderOverlap(rect,frame))||
   !!(reserve&&leaderOverlap(rect,[reserve.x,reserve.y,reserve.x+reserve.width,reserve.y+reserve.height]));
  let best=null;
@@ -605,7 +620,8 @@ function townNameLabelLayout(items,t,font,area,reserve){
  const reserved=reserve?[reserve.x,reserve.y,reserve.x+reserve.width,reserve.y+reserve.height]:null;
  const valid=(rect)=>rect[0]>=area.left+2&&rect[2]<=area.right-2&&
   rect[1]>=area.top+2&&rect[3]<=area.bottom-2&&
-  !(reserved&&leaderOverlap(rect,reserved))&&!used.some(other=>leaderOverlap(rect,other));
+  !(reserved&&leaderOverlap(rect,reserved))&&!used.some(other=>leaderOverlap(rect,other))&&
+  mapLeaderRectIsClear(rect,leaders);
  // Keep one fixed font across interior names and external callouts.
  // A narrow region moves outside instead of silently shrinking its type.
  for(const f of sorted){
