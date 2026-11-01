@@ -101,7 +101,7 @@ test('Town geography loads only for the corresponding election view',()=>{
  assert.match(town,/if\(active&&state\.predictionOffice==='council'\)ensureTownPredictionAreas\(\)/);
 });
 test('Avoid comparing one candidate against unrelated national districts',()=>{
- assert.match(town,/return options/);
+ assert.match(town,/function localDisplayOptions\(\)\{return \[\['composition','预测胜负'\],\['topVote','预测得票'\]\]\}/);
  assert.match(town,/function localDistrictItems\(/);
 });
 test('Autobackup and export preserve existing behavior',()=>{
