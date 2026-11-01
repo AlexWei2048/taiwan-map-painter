@@ -174,6 +174,60 @@ test('Mayor township map drills from neutral counties to independent township fo
  assert.equal(await page.evaluate(()=>state.predictionOffice),'mayor');
  assert.ok(await page.locator('#regions path[data-region]').evaluateAll(els=>els.some(e=>e.getAttribute('fill')!=='#edf1e9')));
 });
+test('Each mayor township county map has a visible return-to-Taiwan control that resets only map range',async t=>{
+ const page=await pageFor(t);
+ const back=page.locator('#returnTaiwanMap');
+ assert.equal(await back.count(),1,'Map return button exists even while hidden');
+ assert.equal(await back.isVisible(),false,'Hidden on county-level map');
+ await page.locator('#predictionScale').selectOption('overlay');
+ assert.equal(await back.isVisible(),false,'Hidden on nationwide township overview');
+ await page.locator('#county').selectOption({label:'台北市'});
+ assert.equal(await back.isVisible(),true,'Shown inside Taipei township detail');
+ assert.equal(await page.getByRole('button',{name:'返回全台地图',exact:true}).count(),1,'Accessible button label');
+ assert.equal(await back.textContent().then(s=>s.trim()),'← 返回全台地图');
+ const geometry=await page.evaluate(()=>{
+  const r=document.querySelector('#returnTaiwanMap').getBoundingClientRect();
+  const canvas=document.querySelector('#canvas').getBoundingClientRect();
+  const info=document.querySelector('.canvas-info').getBoundingClientRect();
+  return{inside:r.left>=canvas.left&&r.right<=canvas.right&&r.top>=canvas.top&&r.bottom<=canvas.bottom,
+   belowInfo:r.top>=info.bottom};
+ });
+ assert.equal(geometry.inside,true,'Back control must fit inside map canvas');
+ assert.equal(geometry.belowInfo,true,'Back control must not obscure the map instruction');
+ // Preserve an independently recorded township winner across navigation.
+ const id=await page.locator('#regions path[data-region]').first().getAttribute('data-region');
+ await page.locator('#regions path[data-region="'+id+'"]').dispatchEvent('click');
+ await page.getByRole('radio',{name:'预测蒋万安胜出',exact:true}).check();
+ await page.locator('#saveLocal').click();
+ const before=await page.evaluate(id=>{
+  const f=currentItems().find(f=>f.id===id);
+  return localRecord(directoryDistrictById.get(f.parentDistrictId),f).leaderId;
+ },id);
+ assert.ok(before);
+ await back.click();
+ assert.equal(await back.isVisible(),false,'Hidden after returning to nationwide overview');
+ const after=await page.evaluate(()=>({
+  county:state.county,level:state.level,scale:state.predictionScale,office:state.predictionOffice,
+  overlay:mayorTownBoundaryOverlay(),local:localPredictionActive(),count:currentItems().length,
+  regionCount:document.querySelectorAll('#regions [data-region]').length,
+  allNeutral:[...document.querySelectorAll('#regions path[data-region]')].every(e=>e.getAttribute('fill')==='#edf1e9')
+ }));
+ assert.equal(after.county,'');assert.equal(await page.locator('#county').inputValue(),'');
+ assert.equal(after.level,'towns');assert.equal(after.scale,'overlay');assert.equal(after.office,'mayor');
+ assert.equal(after.overlay,true);assert.equal(after.local,false);
+ assert.equal(after.count,22);assert.equal(after.regionCount,22);assert.equal(after.allNeutral,true);
+ await page.locator('#county').selectOption({label:'台北市'});
+ assert.equal(await back.isVisible(),true);
+ const restored=await page.evaluate(id=>{
+  const f=currentItems().find(f=>f.id===id);
+  return localRecord(directoryDistrictById.get(f.parentDistrictId),f).leaderId;
+ },id);
+ assert.equal(restored,before,'Back navigation must not alter saved township forecast data');
+ await page.locator('#predictionScale').selectOption('district');
+ assert.equal(await back.isVisible(),false,'Hidden for county mayor prediction layer');
+ await page.locator('#predictionOffice').selectOption('council');
+ assert.equal(await back.isVisible(),false,'Hidden for council elections');
+});
 test('Published-site update time uses the last successful Pages deployment, minute-precision Taipei time',async t=>{
  const context=await browser.newContext();t.after(()=>context.close());
  const page=await context.newPage();
