@@ -375,7 +375,7 @@ function mapOutsideLabelColumns(pending,t,used,area,reserve,items){
 }
 
 function countyMayorOverview(){
- return(state.level==='counties'||mayorTownBoundaryOverlay())&&!state.county&&state.fillMode==='prediction'&&state.predictionOffice==='mayor';
+ return(state.level==='counties'||(typeof mayorTownBoundaryOverlay==='function'&&mayorTownBoundaryOverlay()))&&!state.county&&state.fillMode==='prediction'&&state.predictionOffice==='mayor';
 }
 const COUNTY_CITY_CALLOUTS=new Set(['台北市','基隆市','新竹市','嘉义市']);
 // All 25 perimeter probes must be inside the county: a central point alone
@@ -526,7 +526,7 @@ function labelLayout(items,t,font=15){
 }
 
 function drawLabels(group,items,t,font=15,interactive=false){
- const overview=state.level==='towns'&&!state.county&&!mayorTownBoundaryOverlay();
+ const overview=state.level==='towns'&&!state.county&&!(typeof mayorTownBoundaryOverlay==='function'&&mayorTownBoundaryOverlay());
  const rendered=overview?(data?.counties||[]):items;
  if(overview){font=19;interactive=false}
  const zoomRatio=interactive&&view&&items.some(f=>districtMapNumber(f))?Math.min(1,view.w/sceneSpec().width):1;
