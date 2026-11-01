@@ -170,3 +170,17 @@ body.history-mode #predictionScopeLabel{color:#356753}
 .export-preview-options label{display:flex;align-items:center;gap:8px}.export-preview-options select{width:auto;max-width:210px}.export-preview-options input{accent-color:#147d68}
 
 body.history-mode .title-row{display:none}
+
+/* Keep the key inside the canvas card, below the drawing, so it never covers labels. */
+.has-number-key>.canvas:not(.atlas-mode){height:auto;min-height:0}
+.has-number-key #map{height:clamp(470px,calc(100dvh - 232px),850px)}
+.canvas>.map-number-key{position:relative;top:auto;left:auto;width:calc(100% - 30px);max-height:none;margin:0 15px 46px;box-shadow:none}
+.map-number-key-scroll{max-height:240px}
+.map-number-key tbody{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:0 14px}
+.map-number-key tr{display:flex;min-width:0;align-items:baseline}
+.map-number-key td{flex:1}
+@media(max-width:650px){
+ .has-number-key #map{height:65dvh;min-height:380px}
+ .canvas>.map-number-key{top:auto;left:auto;width:calc(100% - 20px);margin:0 10px 40px}
+ .map-number-key tbody{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 8px}
+}

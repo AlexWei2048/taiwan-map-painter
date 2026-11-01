@@ -98,7 +98,7 @@ function identityPanelLayouts(){
  if(!identityPanelsActive()||!data)return[];
  const identities=panelIdentities(),spec=sceneSpec(),area=contentArea(spec),gap=26,left=area.left+8,right=area.right-8,top=area.top+52,bottom=area.bottom-12,columns=identities.length===4?2:identities.length,rows=Math.ceil(identities.length/columns),panelWidth=(right-left-gap*(columns-1))/columns,panelHeight=(bottom-top-gap*(rows-1))/rows;
  const geography=data.counties.filter(f=>!state.county||f.name===state.county),b=bounds(geography);for(const q of activeInsetDefinitions()){b[0]=Math.min(b[0],q.box[0]);b[1]=Math.min(b[1],q.box[1]);b[2]=Math.max(b[2],q.box[2]);b[3]=Math.max(b[3],q.box[3])}
- const mapPad=state.county?45:70,scale=Math.min((panelWidth-mapPad*2)/Math.max(.0001,b[2]-b[0]),(panelHeight-mapPad)/Math.max(.0001,b[3]-b[1]));
+ const mapPad=state.county?90:110,scale=Math.min((panelWidth-mapPad*2)/Math.max(.0001,b[2]-b[0]),(panelHeight-mapPad)/Math.max(.0001,b[3]-b[1]));
  return identities.map((identity,index)=>{const column=index%columns,row=Math.floor(index/columns),x=left+column*(panelWidth+gap),y=top+row*(panelHeight+gap),panelArea={left:x,right:x+panelWidth,top:y,bottom:y+panelHeight};return{identity,label:electorateName(identity),townLevel:legislativeFourPanelsActive()&&identity!=='regional',items:currentItems().filter(f=>featureElectorate(f)===identity),area:panelArea,t:{scale,tx:(panelArea.left+panelArea.right)/2-(b[0]+b[2])/2*scale,ty:(panelArea.top+panelArea.bottom+mapPad)/2-(b[1]+b[3])/2*scale,labelLeft:panelArea.left+8,labelRight:panelArea.right-8,area:panelArea}}})
 }
 function identityPanelFor(f){return identityPanelLayouts().find(p=>p.identity===featureElectorate(f))}
@@ -165,7 +165,7 @@ function mapNumberDisplayName(row,rows){
 function renderMapNumberTable(){
  const panel=$('mapNumberKey'),layout=$('mapWithKey'),body=$('mapNumberKeyRows');
  if(!panel||!layout||!body)return;
- const rows=state.labels&&!['council','legislative'].includes(state.level)?mapNumberSorted(mapNumberRows):[];
+ const rows=state.labels?mapNumberSorted(mapNumberRows):[];
  panel.hidden=!rows.length;layout.classList.toggle('has-number-key',!!rows.length);body.replaceChildren();
  $('mapNumberKeyCount').textContent=rows.length+'项';
  for(const row of rows){
@@ -229,15 +229,14 @@ function mapInsetLabelFit(f,t,width,height,used,area,reserve){
  return fallback;
 }
 function districtMapNumber(f){
- if(!['council','legislative'].includes(state.level))return '';
+ if(!['council','legislative'].includes(state.level)||f.parentDistrictId||f.legislativeTown)return '';
  const value=String(f.number??'').trim();
  const direct=value.match(/^(?:第\s*)?(\d+)(?:\s*(?:选|選)(?:举|舉)?(?:区|區)?)?$/);
  if(direct)return String(Number(direct[1]));
  const embedded=String(f.name||'').match(/第\s*(\d+)\s*(?:选|選)(?:举|舉)?(?:区|區)?/);
  return embedded?String(Number(embedded[1])):'';
 }
-// Prefer collision-free labels. Never fall back to an unchecked anchor:
- // any label that still cannot fit is included in the export's required coverage panel.
+// The detail-map renderer can adapt names; main-map numbers keep one font size.
 function mapAdaptiveLabel(f,t,text,font,used,area,reserve){
  for(const ratio of [1,.86,.72]){
   const size=Math.max(7,font*ratio);
@@ -261,19 +260,126 @@ function mapOutsideLabelFit(f,t,text,font,used,area,reserve,items){
  }
  return null;
 }
+function mapNumberLabelFit(f,t,text,font,used,area,reserve){
+ // Digits are narrower than Chinese names. Keep the same readable font size
+ // instead of shrinking a missing number until it becomes illegible.
+ const width=Array.from(text).reduce((sum,c)=>sum+font*(/\d/.test(c)?.64:1.04),0)+8;
+ const height=font*1.2+6;
+ const pos=mapLabelFit(f,t,width,height,used,area,reserve);
+ return pos?{...pos,font}:null;
+}
+function mapOrderedLabelRows(anchors,top,bottom,gap){
+ // Isotonic regression: preserve north-to-south order and minimum spacing,
+ // while moving the whole dense cluster as little as possible.
+ if(!anchors.length||bottom-top<(anchors.length-1)*gap)return null;
+ const blocks=[];
+ anchors.forEach((y,i)=>{
+  blocks.push({sum:y-i*gap,count:1});
+  while(blocks.length>1){const b=blocks.at(-1),a=blocks.at(-2);
+   if(a.sum/a.count<=b.sum/b.count)break;
+   blocks.splice(-2,2,{sum:a.sum+b.sum,count:a.count+b.count});
+  }
+ });
+ const limit=bottom-(anchors.length-1)*gap,rows=[];
+ for(const block of blocks){const y=Math.max(top,Math.min(limit,block.sum/block.count));
+  for(let i=0;i<block.count;i++)rows.push(y+rows.length*gap);
+ }
+ return rows;
+}
+function mapLabelColumnEdge(items,t,side,ys,font,fallback){
+ // Follow the coastline of this cluster's latitude band rather than the
+ // distant north-east corner of a long county such as Kaohsiung.
+ const step=Math.max(3,font/2),top=Math.min(...ys)-font,bottom=Math.max(...ys)+font;
+ let edge=side==='left'?Infinity:-Infinity;
+ for(let y=top;y<=bottom+step;y+=step){
+  const row=items.filter(f=>f.box[1]*t.scale+t.ty<=y&&f.box[3]*t.scale+t.ty>=y);
+  if(!row.length)continue;
+  const left=Math.min(...row.map(f=>f.box[0]*t.scale+t.tx)),right=Math.max(...row.map(f=>f.box[2]*t.scale+t.tx));
+  for(let x=side==='left'?left:right;side==='left'?x<=right:x>=left;x+=side==='left'?step:-step){
+   if(row.some(f=>regionContains(f,x,y,t))){edge=side==='left'?Math.min(edge,x-step):Math.max(edge,x+step);break}
+  }
+ }
+ return Number.isFinite(edge)?edge:fallback;
+}
+function mapOutsideLabelColumns(pending,t,used,area,reserve,items){
+ if(!pending.length)return[];
+ const frames=leaderFrames(t,0),groups=new Map(),placed=[];
+ for(const q of pending){
+  const anchor=mapLabelAnchor(q.f,t);if(!anchor)continue;
+  const frame=frames.findIndex(box=>leaderIn(anchor.x,anchor.y,box));
+  const key=frame<0?'main':String(frame);
+  if(!groups.has(key))groups.set(key,[]);
+  groups.get(key).push({...q,anchor});
+ }
+ for(const [key,entries]of groups){
+  const frame=key==='main'?null:frames[Number(key)];
+  const localItems=items.filter(f=>{const p=mapLabelAnchor(f,t);return p&&(frame?leaderIn(p.x,p.y,frame):!frames.some(b=>leaderIn(p.x,p.y,b)))});
+  if(!localItems.length)continue;
+  const box=[Math.min(...localItems.map(f=>f.box[0]*t.scale+t.tx)),Math.min(...localItems.map(f=>f.box[1]*t.scale+t.ty)),
+   Math.max(...localItems.map(f=>f.box[2]*t.scale+t.tx)),Math.max(...localItems.map(f=>f.box[3]*t.scale+t.ty))];
+  const font=entries[0].font,width=Math.max(...entries.map(q=>q.text.length))*font*.68+12,height=font*1.2+6,gap=height+7;
+  const limits=frame?{left:Math.max(area.left,frame[0]+4),right:Math.min(area.right,frame[2]-4),top:Math.max(area.top,frame[1]+height),bottom:Math.min(area.bottom,frame[3]-4)}:area;
+  const positions={left:box[0]-width/2-22,right:box[2]+width/2+22};
+  // Split a dense cluster between the two margins. Minimizing displacement
+  // prevents a city-centre group from stretching across the entire map height.
+  const westToEast=[...entries].sort((a,b)=>a.anchor.x-b.anchor.x||a.anchor.y-b.anchor.y||String(a.f.id).localeCompare(String(b.f.id)));
+  const ordered=rows=>[...rows].sort((a,b)=>a.anchor.y-b.anchor.y||a.anchor.x-b.anchor.x||String(a.f.id).localeCompare(String(b.f.id)));
+  let sides=null,best=Infinity;
+  for(let split=0;split<=entries.length;split++){
+   const candidate={left:ordered(westToEast.slice(0,split)),right:ordered(westToEast.slice(split))};let score=0;
+   for(const side of ['left','right']){
+    const rows=candidate[side],x=positions[side];if(!rows.length)continue;
+    if(x-width/2<limits.left||x+width/2>limits.right){score=Infinity;break}
+    const ys=mapOrderedLabelRows(rows.map(q=>q.anchor.y),limits.top+height/2,limits.bottom-height/2,gap);
+    if(!ys){score=Infinity;break}
+    rows.forEach((q,i)=>{score+=(ys[i]-q.anchor.y)**2+.002*(x-q.anchor.x)**2});
+   }
+   if(score<best){best=score;sides=candidate}
+  }
+  if(!sides)continue;
+  for(const side of ['left','right']){
+   const rows=sides[side].sort((a,b)=>a.anchor.y-b.anchor.y||a.anchor.x-b.anchor.x||String(a.f.id).localeCompare(String(b.f.id)));
+   if(!rows.length)continue;
+   const ys=mapOrderedLabelRows(rows.map(q=>q.anchor.y),limits.top+height/2,limits.bottom-height/2,gap);
+   if(!ys)continue;
+   const edge=frame?(side==='left'?box[0]:box[2]):mapLabelColumnEdge(localItems,t,side,ys.concat(rows.map(q=>q.anchor.y)),font,side==='left'?box[0]:box[2]);
+   const x=side==='left'?edge-width/2-22:edge+width/2+22;
+   if(x-width/2<limits.left||x+width/2>limits.right)continue;
+   const rail=side==='left'?edge-8:edge+8;
+   rows.forEach((q,i)=>{
+    const y=ys[i],rect=[x-width/2,y-height/2,x+width/2,y+height/2];
+    if(used.some(other=>leaderOverlap(rect,other)))return;
+    if(reserve&&leaderOverlap(rect,[reserve.x,reserve.y,reserve.x+reserve.width,reserve.y+reserve.height]))return;
+    const end=x+(side==='left'?width/2+3:-width/2-3);
+    // The horizontal stems end outside the geometry. Ordered fan segments
+    // stay in the margin, so adjacent callouts cannot cross one another.
+    const leaderPath=`M${q.anchor.x},${q.anchor.y}H${rail}L${end},${y}`;
+    used.push(rect);placed.push({...q,x,y,rect,leaderAnchor:q.anchor,leaderPath,column:side});
+   });
+  }
+ }
+ // Insets or very unusual extents may have no column margin. Still use a
+ // checked local callout rather than silently dropping a district number.
+ const done=new Set(placed.map(q=>q.f.id));
+ for(const q of pending)if(!done.has(q.f.id)){
+  const pos=mapOutsideLabelFit(q.f,t,q.text,q.font,used,area,reserve,items);
+  if(pos){used.push(pos.rect);placed.push({...q,...pos})}
+ }
+ return placed;
+}
 function labelLayout(items,t,font=15){
  const area=t.area||contentArea(sceneSpec()),reserve=state.legend.show?legendBox(sceneSpec()):null;
  const sizes=f=>(f.box[2]-f.box[0])*(f.box[3]-f.box[1]);
- const sorted=[...items].sort((a,b)=>sizes(b)-sizes(a)),used=[],labels=[],needsNumber=[];
+ const sorted=[...items].sort((a,b)=>sizes(b)-sizes(a)),used=[],labels=[],needsNumber=[],outside=[];
  for(const f of sorted){
   const name=shownLabel(f);if(!name)continue;
-  if(['council','legislative'].includes(state.level)){
+  if(['council','legislative'].includes(state.level)&&!f.parentDistrictId&&!f.legislativeTown){
    const districtNumber=districtMapNumber(f),text=districtNumber||name;
-   const pos=mapAdaptiveLabel(f,t,text,font,used,area,reserve);
+   const pos=mapNumberLabelFit(f,t,text,font,used,area,reserve);
    if(pos){
     used.push(pos.rect);
     labels.push({f,x:pos.x,y:pos.y,font:pos.font,text,numeric:false,districtNumber:!!districtNumber});
-   }
+   }else outside.push({f,font,text,numeric:false,districtNumber:!!districtNumber});
    continue;
   }
   const width=Array.from(name).length*font*1.04+4,height=font*1.5+3;
@@ -286,18 +392,20 @@ function labelLayout(items,t,font=15){
   if(pos){used.push(pos.rect);labels.push({f,x:pos.x,y:pos.y,font,text:name,numeric:false})}
   else needsNumber.push(f);
  }
+ // Administrative reference numbers follow geography, not Chinese collation.
  needsNumber.sort((a,b)=>String(a.county).localeCompare(String(b.county),'zh')||
-  String(a.name).localeCompare(String(b.name),'zh')||String(a.id).localeCompare(String(b.id)));
+  (a.center?.[1]??a.box[1])-(b.center?.[1]??b.box[1])||
+  (a.center?.[0]??a.box[0])-(b.center?.[0]??b.box[0])||String(a.id).localeCompare(String(b.id)));
  const numberRows=exportNumberRows===null?mapNumberRows:exportNumberRows;
  let nextNumber=numberRows.length+1;
  for(const f of needsNumber){
   const value=String(nextNumber);
-  const pos=mapAdaptiveLabel(f,t,value,font,used,area,reserve)||mapOutsideLabelFit(f,t,value,font,used,area,reserve,items);
-  if(!pos)continue;
-  used.push(pos.rect);
-  labels.push({f,x:pos.x,y:pos.y,font:pos.font,text:value,numeric:true,number:value,leaderAnchor:pos.leaderAnchor});
+  const pos=mapNumberLabelFit(f,t,value,font,used,area,reserve);
+  const q={f,font,text:value,numeric:true,number:value};
+  if(pos){used.push(pos.rect);labels.push({...q,...pos})}else outside.push(q);
   nextNumber++;
  }
+ labels.push(...mapOutsideLabelColumns(outside,t,used,area,reserve,items));
  return labels;
 }
 
@@ -305,15 +413,21 @@ function drawLabels(group,items,t,font=15,interactive=false){
  const overview=state.level==='towns'&&!state.county;
  const rendered=overview?(data?.counties||[]):items;
  if(overview){font=19;interactive=false}
+ const zoomRatio=interactive&&view&&items.some(f=>districtMapNumber(f))?Math.min(1,view.w/sceneSpec().width):1;
+ font*=zoomRatio;
  group.replaceChildren();
  for(const q of labelLayout(rendered.filter(f=>shownLabel(f)),t,font)){
   const g=svgEl('g',{'class':'map-label'});group.append(g);
-  if(q.leaderAnchor)g.append(svgEl('path',{d:`M${q.leaderAnchor.x},${q.leaderAnchor.y}L${q.x},${q.y}`,fill:'none',stroke:'#718b7c','stroke-width':1,'vector-effect':'non-scaling-stroke','data-label-leader':q.f.id}));
+  if(q.leaderAnchor){
+   const end=q.x+(q.x<q.leaderAnchor.x?1:-1)*(q.text.length*q.font*.34+5);
+   g.append(svgEl('path',{d:q.leaderPath||`M${q.leaderAnchor.x},${q.leaderAnchor.y}L${end},${q.y}`,fill:'none',stroke:'#718b7c','stroke-width':.85,'stroke-opacity':.8,'vector-effect':'non-scaling-stroke','data-label-leader':q.f.id,'data-label-column':q.column||'local'}));
+   g.append(svgEl('circle',{cx:q.leaderAnchor.x,cy:q.leaderAnchor.y,r:1.7*zoomRatio,fill:'#718b7c','data-label-anchor':q.f.id}));
+  }
   const label=svgEl('text',{x:q.x,y:q.y,'font-size':q.font,'data-label':q.f.id,
    'data-placement':q.leaderAnchor?'outside':q.districtNumber?'district-number':q.island?'below-island':'inside','text-anchor':'middle','dominant-baseline':'middle',
    'font-weight':q.numeric||q.districtNumber?700:500,fill:'#2c493b',stroke:'#ffffffed',
    'stroke-width':q.numeric?3:2.4,'paint-order':'stroke','stroke-linejoin':'round'});
-  label.style.strokeWidth=q.numeric?2.6:2.4;label.textContent=q.text;
+  label.style.strokeWidth=(q.numeric?2.6:2.4)*zoomRatio;label.textContent=q.text;
   if(q.numeric){label.setAttribute('data-number-key',q.number);mapNumberRecord(q.f,q.number)}
   if(interactive){label.style.pointerEvents='auto';label.style.cursor='pointer';label.onclick=()=>paint(q.f)}
   g.append(label);
@@ -462,7 +576,7 @@ function render(){
 }
 function recolor(){if(state.fillMode==='prediction'){render();return}if(state.fillMode==='gradient'){for(const p of $('regions').querySelectorAll('path')){const f=currentItems().find(f=>f.id===p.dataset.region);if(!f)continue;p.setAttribute('fill',fillColor(f));p.setAttribute('aria-label',f.county+(f.name===f.county?'':f.name)+'，'+regionDetail(f));}return;}for(const p of $('regions').querySelectorAll('path')){const f=currentItems().find(x=>x.id===p.dataset.region);if(!f)continue;const pal=paletteById(featureFillId(f));p.setAttribute('fill',pal?.color||'#edf1e9');p.setAttribute('aria-label',f.county+(f.name===f.county?'':f.name)+'，'+(pal?.name||'未填色'))}}
 function paint(f){if(state.fillMode==='prediction'&&typeof openPredictionRegion==='function'){openPredictionRegion(f);return}if(typeof inspectCandidateRegion==='function'&&inspectCandidateRegion(f))return;if(state.fillMode==='gradient'){if(erase){pushHistory();delete state.elections[state.level][f.id];afterElectionEdit();return;}openVoteEditor(f);return;}const id=erase?undefined:state.selected,store=f.legislativeTown?state.legislativeTownFills[featureElectorate(f)]:state.fills[state.level],key=f.legislativeTown?f.sourceId:f.id;if(store[key]===id)return;pushHistory();if(id)store[key]=id;else delete store[key];recolor();renderPalette();renderLegend();renderList();updateProgress();persist()}
-function zoom(factor,anchor){if(!view)return;const next=view.w*factor;if(next<baseView.w/16||next>baseView.w*2)return;const a=anchor||[.5,.5];view={x:view.x+view.w*a[0]*(1-factor),y:view.y+view.h*a[1]*(1-factor),w:next,h:view.h*factor};applyView()}
+function zoom(factor,anchor){if(!view)return;const next=view.w*factor;if(next<baseView.w/16||next>baseView.w*2)return;const a=anchor||[.5,.5];view={x:view.x+view.w*a[0]*(1-factor),y:view.y+view.h*a[1]*(1-factor),w:next,h:view.h*factor};applyView();if(state.level!=='villages')renderLabels()}
 $('county').onchange=()=>{state.county=$('county').value;state.villageTown='';syncVillageControls();render();persist()};for(const [id,level]of [['townLevel','towns'],['countyLevel','counties'],['councilLevel','council'],['legislativeLevel','legislative'],['villageLevel','villages']])$(id).onclick=()=>{if(state.level===level)return;state.level=level;if(typeof predictionLevelChanged==='function')predictionLevelChanged(level);syncInputs();render();persist();toast('各地图图层的填色和数据分别保存')};$('showLabels').onchange=()=>{state.labels=$('showLabels').checked;render();persist()};$('search').oninput=renderList;for(const [id,key]of [['mapTitle','title'],['legendTitle','legendTitle']]){let editing=false;$(id).onfocus=()=>editing=false;$(id).oninput=()=>{if(!editing){pushHistory();editing=true}state[key]=simplify($(id).value);if(key==='legendTitle')renderLegend();persist()};}$('eraser').onclick=()=>{erase=!erase;renderPalette();updateBrush()};$('undo').onclick=()=>restore('undo');$('redo').onclick=()=>restore('redo');$('zoomIn').onclick=()=>zoom(.8);$('zoomOut').onclick=()=>zoom(1.25);$('fit').onclick=fit;
 $('map').addEventListener('wheel',e=>{if(!view)return;e.preventDefault();const p=new DOMPoint(e.clientX,e.clientY).matrixTransform($('map').getScreenCTM().inverse());zoom(e.deltaY>0?1.1:1/1.1,[(p.x-view.x)/view.w,(p.y-view.y)/view.h])},{passive:false});
 $('map').addEventListener('pointerdown',e=>{if(e.button!==0)return;moved=false;drag={x:e.clientX,y:e.clientY,v:{...view},pointer:e.pointerId,matrix:$('map').getScreenCTM()?.inverse()}});
@@ -649,9 +763,9 @@ function exportLabelCoverage(items,map,detailLabelled=new Set()){
  for(const f of items){
   const id=String(f.id),token=[id,featureElectorate(f)].join('/');
   if(seen.has(token))continue;seen.add(token);
-  if(labelled.has(id)||detailLabelled.has(id)||!['council','legislative'].includes(state.level)&&keyed.has(id))continue;
+  if(labelled.has(id)||detailLabelled.has(id)||keyed.has(id))continue;
   const scope=[f.county,f.town].filter(Boolean).join(' · ');
-  const district=['council','legislative'].includes(state.level);
+  const district=['council','legislative'].includes(state.level)&&!f.parentDistrictId&&!f.legislativeTown;
   const number=districtMapNumber(f);
   const originalName=String(f.name||'').trim(),plainDistrict=originalName.match(/^(?:第\s*)?(\d+)\s*(?:选|選)(?:举|舉)?(?:区|區)$/);
   const sameAsNumber=!!(number&&plainDistrict&&Number(plainDistrict[1])===Number(number));
@@ -770,15 +884,11 @@ function exportSvg(){
    map.append(g);
   }
   const keyRows=mapNumberSorted(exportNumberRows);
-  const perColumn=Math.max(1,Math.floor((spec.height-155-53)/22));
-  const inlineColumns=Math.ceil(keyRows.length/perColumn);
-  const inlineWidth=numberTableExportMetrics(keyRows,inlineColumns).width;
-  const inlineKey=keyRows.length>0&&inlineWidth<spec.width-50;
-  if(inlineKey)appendNumberTableExport(map,keyRows,22,72,inlineColumns);
   root.append(map);
+  // The complete key belongs below the drawing, never over external numbers.
   let appendixHeight=0;
-  if(keyRows.length&&!inlineKey){
-   const appendixColumns=Math.min(Math.max(1,Math.floor((contentWidth-30)/210)),Math.ceil(keyRows.length/30));
+  if(keyRows.length){
+   const appendixColumns=Math.min(Math.max(1,Math.floor((contentWidth-30)/210)),Math.ceil(keyRows.length/12));
    appendixHeight=appendNumberTableExport(root,keyRows,40,mapY+contentHeight+12,appendixColumns);
   }
   const originalItems=currentItems();
@@ -967,7 +1077,7 @@ function regionDetail(f){
  const r=regionResult(f);if(r.status!=='winner')return r.message;
  const p=paletteById(r.leader.partyId);return(state.gradient.groupBy==='party'?p?.name:r.leader.name+' · '+p?.name)+' · '+metricText(r.value);
 }
-function shownLabel(f){if(f.name==='乌坵'||f.name==='乌坵乡')return'';const identity=identityPanelsActive()?featureElectorate(f):activeElectorate();if(['council','legislative'].includes(state.level)&&identity!=='regional')return state.county?f.name:f.county==='\u5168\u56fd'?f.name:f.county+f.name.replace(/^第/, '第');if(state.level==='legislative'&&data.legislative.filter(x=>x.county===f.county).length===1)return f.county;return !state.county&&['council','legislative'].includes(state.level)?f.county+f.number:f.name}
+function shownLabel(f){if(f.name==='乌坵'||f.name==='乌坵乡')return'';if(f.parentDistrictId||f.legislativeTown)return f.name;const identity=identityPanelsActive()?featureElectorate(f):activeElectorate();if(['council','legislative'].includes(state.level)&&identity!=='regional')return state.county?f.name:f.county==='\u5168\u56fd'?f.name:f.county+f.name.replace(/^第/, '第');if(state.level==='legislative'&&data.legislative.filter(x=>x.county===f.county).length===1)return f.county;return !state.county&&['council','legislative'].includes(state.level)?f.county+f.number:f.name}
 function legendReserveEntries(){return legendEntries()}
 function legendVisiblePalette(){const palette=[...state.palette];if(state.fillMode==='prediction'&&typeof predictionPartyNamesInUse==='function')for(const name of predictionPartyNamesInUse()){const party=predictionParty(name);if(!palette.some(p=>p.id===party.id))palette.push(party)}return palette.filter(p=>!state.legend.hidden.includes(p.id))}
 function legendEntries(){if(state.fillMode==='prediction'&&typeof predictionCandidateLegendEntries==='function'){const entries=predictionCandidateLegendEntries();if(entries)return entries}const c=counts();return legendVisiblePalette().filter(p=>c[p.id])}

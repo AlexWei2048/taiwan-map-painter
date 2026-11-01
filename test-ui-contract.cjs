@@ -705,7 +705,7 @@ test('Automatic export detail maps show each possible label without overlaps and
  assert.match(app,/exportLabelCoverage\(originalItems,map,details\.labelled\)/);
 });
 
-test('Administrative lookup is embedded in the map and exported inside the SVG map whenever it fits',()=>{
+test('Administrative lookup stays inside the canvas card, below the drawing in exports',()=>{
  assert.match(index,/id="mapWithKey"/);
  assert.match(index,/id="mapNumberKey"/);
  assert.match(index,/id="mapNumberKeyRows"/);
@@ -721,8 +721,8 @@ test('Administrative lookup is embedded in the map and exported inside the SVG m
  assert.match(app,/function mapNumberDisplayName\(/);
  const table=app.slice(app.indexOf('function renderMapNumberTable(){'),app.indexOf('\nfunction mapLabelCandidatePoints('));
  assert.doesNotMatch(table,/number-key-group|th\.colSpan/);
- assert.ok(table.includes("state.labels&&!['council','legislative'].includes(state.level)"));
- assert.match(app,/appendNumberTableExport\(map,keyRows,22,72,inlineColumns\)/);
+ assert.ok(table.includes("state.labels?mapNumberSorted(mapNumberRows):[]"));
+ assert.match(app,/appendNumberTableExport\(root,keyRows,40,mapY\+contentHeight\+12,appendixColumns\)/);
  assert.match(app,/actualWidth=coreWidth/);
  assert.match(app,/appendExportPredictionTable\(root,winnerRows,tableY\)/);
  assert.match(app,/if\(state\.labels&&view\)/);
