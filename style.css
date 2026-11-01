@@ -394,3 +394,23 @@ dialog.floating-prediction-dialog > .floating-dialog-scroll{
 #labels text[data-label]:focus-visible{
  outline:none;fill:#165c45;stroke:#fff;stroke-width:3px;
 }
+
+
+/* 2026 prediction controls: exactly two forecast types, followed by candidate scope. */
+#predictionCandidateScopeBox{margin-top:10px}
+#predictionCandidateScopeBox[hidden],#localCandidateControl[hidden],
+.vote-metric-control[hidden]{display:none!important}
+.vote-metric-control{display:flex;align-items:center;flex-wrap:wrap;gap:12px;
+ padding:11px 14px;margin:13px 0;border:1px solid #cfe1d5;border-radius:10px;
+ background:#f0f7f2;color:#284d3b;font-size:13px;font-weight:600}
+.vote-metric-control select{min-width:170px;max-width:100%;padding:9px 12px;
+ border:1px solid #b8d0bf;border-radius:8px;background:#fff;color:#244d39}
+.floating-prediction-dialog .floating-dialog-scroll > .estimate-toggle[hidden],
+.floating-prediction-dialog .floating-dialog-scroll > .local-entry-toggle[hidden]{display:none!important}
+.prediction-dialog.metric-votes .vote-metric-column-share,
+.local-dialog.metric-votes .vote-metric-column-share,
+.prediction-dialog.metric-share .vote-metric-column-votes,
+.local-dialog.metric-share .vote-metric-column-votes{display:none!important}
+.prediction-dialog.metric-share #predictionAutoTotal,
+.local-dialog.metric-share .local-total,
+.local-dialog.metric-share #localTotalStatus{display:none!important}
