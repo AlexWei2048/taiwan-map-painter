@@ -729,6 +729,15 @@ test('Export images keep table titles and all data, without subtitles, counts or
  assert.match(app,/let rowY=y\+49/);
 });
 
+test('Township winner table export uses the full township-district title',()=>{
+ const twoUp=app.slice(app.indexOf('function appendExportPolishedWinnerTable('),app.indexOf('function appendExportPredictionTable('));
+ const standard=app.slice(app.indexOf('function appendExportPredictionTable('),app.indexOf('function numberTableExportMetrics('));
+ for(const renderer of [twoUp,standard]){
+  assert.match(renderer,/乡镇市区预测胜出候选人/);
+  assert.doesNotMatch(renderer,/['"]乡镇预测胜出候选人['"]/);
+ }
+});
+
 test('Specified-candidate export selects one ID and only includes entered vote metrics',()=>{
  const collector=app.slice(app.indexOf('function exportPredictionWinnerRows(){'),app.indexOf('function exportTextWidth('));
  assert.match(collector,/candidateMode=state\.predictionDisplay==='candidateVote'/);
