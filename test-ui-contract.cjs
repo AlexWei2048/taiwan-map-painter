@@ -292,6 +292,10 @@ test('Specified candidate shows own votes even when another candidate leads',()=
  assert.equal(p.candidateVoteResult(candidates,{estimates:{A:{share:40}}},'B'),null);
  const fromVotes=p.candidateVoteResult(candidates,{estimates:{B:{votes:40},C:{votes:60}}},'B');
  assert.equal(fromVotes.votes,40);assert.equal(fromVotes.value,40);assert.equal(fromVotes.partial,true);
+ const singleVote=p.candidateVoteResult(candidates,{estimates:{B:{votes:1234}}},'B');
+ assert.equal(singleVote.votes,1234);
+ assert.equal(singleVote.value,1234);
+ assert.equal(singleVote.share,null,'One candidate vote count cannot imply 100 percent');
  const townCore=require('./town-prediction-core.js');
  const t=townCore.summary(candidates,{estimates:{B:{share:27.5}}},'candidateVote','B',true);
  assert.equal(t.status,'winner');assert.equal(t.candidate.id,'B');assert.equal(t.value,27.5);
