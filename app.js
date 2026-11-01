@@ -778,6 +778,56 @@ function townInsideLabelFit(f,t,width,height,used,area,reserve){
  return null;
 }
 
+// Replace an unnecessarily long cross-map callout with a short local
+// one on its geographic side, but only if the new label stays out of
+// neighbouring polygons, other names, inset frames and existing leaders.
+function townShortenCrossSideCallouts(labels,items,t,box,area,reserve,font,strokeGap){
+ const mid=(box.left+box.right)/2,half=Math.max(1,(box.right-box.left)/2);
+ const frames=leaderFrames(t,3);
+ const reserved=reserve?[reserve.x,reserve.y,reserve.x+reserve.width,reserve.y+reserve.height]:null;
+ const distant=labels.filter(q=>q.calloutLane==='perimeter'&&q.leaderAnchor&&
+  q.column!==(q.leaderAnchor.x<mid?'left':'right')&&
+  Math.abs(q.leaderAnchor.x-mid)/half>.34).sort((a,b)=>
+   Math.abs(b.leaderAnchor.x-mid)-Math.abs(a.leaderAnchor.x-mid));
+ for(const q of distant){
+  const anchor=q.leaderAnchor,side=anchor.x<mid?'left':'right',sign=side==='left'?-1:1;
+  const width=Array.from(q.text).length*font*1.04+8,height=font*1.5+5;
+  const occupied=labels.filter(other=>other!==q).map(other=>other.rect);
+  const otherLeaders=labels.filter(other=>other!==q&&other.leaderPoints)
+   .map(other=>other.leaderPoints);
+  let chosen=null;
+  for(const gap of [20,32,48,68,92]){
+   const x=anchor.x+sign*(width/2+gap),rail=anchor.x+sign*11;
+   const end=x-sign*(width/2+6);
+   if(x-width/2-4<area.left||x+width/2+4>area.right)continue;
+   for(const offset of [0,-1,1,-2,2,-3,3]){
+    const y=anchor.y+offset*(height+13);
+    const rect=[x-width/2-4,y-height/2-3,x+width/2+4,y+height/2+3];
+    if(rect[1]<area.top+2||rect[3]>area.bottom-2)continue;
+    if(reserved&&leaderOverlap(rect,reserved)||
+       occupied.some(r=>leaderOverlap(rect,r))||
+       frames.some(r=>leaderOverlap(rect,r))||
+       !mapLeaderRectIsClear(rect,otherLeaders))continue;
+    // A local label in a neighbouring town is worse than a longer,
+    // unambiguous external callout. Check the actual polygon, not only bboxes.
+    const samples=[[x,y],[rect[0],rect[1]],[rect[0],rect[3]],
+     [rect[2],rect[1]],[rect[2],rect[3]]];
+    if(items.some(f=>f!==q.f&&samples.some(([px,py])=>
+     px>=f.box[0]*t.scale+t.tx&&px<=f.box[2]*t.scale+t.tx&&
+     py>=f.box[1]*t.scale+t.ty&&py<=f.box[3]*t.scale+t.ty&&
+     regionContains(f,px,py,t))))continue;
+    const points=[[anchor.x,anchor.y],[rail,anchor.y],[rail,y],[end,y]];
+    if(!mapLeaderClear(points,otherLeaders,occupied,frames,strokeGap))continue;
+    chosen={x,y,rect,leaderPoints:points,column:side,calloutLane:'local-near',
+     leaderPath:'M'+anchor.x+','+anchor.y+'H'+rail+'V'+y+'H'+end};
+    break;
+   }
+   if(chosen)break;
+  }
+  if(chosen)Object.assign(q,chosen);
+ }
+}
+
 function townNameLabelLayout(items,t,font,area,reserve,attempt=0){
  const height=font*1.5+5,insideHeight=font*1.37+5;
  const labelWidth=(name,size=font)=>Array.from(name).length*size*1.04+8;
@@ -938,6 +988,7 @@ function townNameLabelLayout(items,t,font,area,reserve,attempt=0){
   labels.push({f:q.f,x:pos.x,y:pos.y,rect:pos.rect,text:q.text,font,numeric:false,
    leaderAnchor:anchor,leaderPath:pos.leaderPath,leaderPoints:pos.leaderPoints,column:pos.side});
  }
+ townShortenCrossSideCallouts(labels,items,t,box,area,reserve,font,strokeGap);
  if(attempt===0&&labels.length<sorted.length){
   let best=labels;
   for(const retry of [1,2]){
