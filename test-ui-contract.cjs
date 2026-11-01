@@ -599,7 +599,7 @@ test('Electoral districts display their own numbers without numeric lookup entri
  const eighth={id:'c8',name:'第8选区',number:'第8選舉區',county:'台北市',box:[120,0,220,100],center:[170,50]};
  const g={children:[],replaceChildren(){this.children=[]},append(node){this.children.push(node)}};
  logic.drawLabels(g,[fifth,eighth],{scale:1,tx:0,ty:0,area:{left:0,right:1200,top:0,bottom:700}},14);
- const districts=Object.fromEntries(g.children.map(n=>[n.children[0].attrs['data-label'],n.children[0]]));
+ const districts=Object.fromEntries(g.children.flatMap(n=>n.children.filter(child=>child.attrs?.['data-label']).map(child=>[child.attrs['data-label'],child])));
  assert.equal(districts.c5.textContent,'5');
  assert.equal(districts.c8.textContent,'8');
  assert.equal(districts.c5.attrs['data-number-key'],undefined);
@@ -613,7 +613,7 @@ test('Electoral districts display their own numbers without numeric lookup entri
  const narrowA={id:'tiny-a',name:'狭小区域甲',county:'台北市',box:[0,0,26,27],center:[13,13]};
  const narrowB={id:'tiny-b',name:'狭小区域乙',county:'台北市',box:[35,0,61,27],center:[48,13]};
  logic.drawLabels(g,[county,narrowA,narrowB],{scale:1,tx:0,ty:0,area:{left:0,right:1200,top:0,bottom:700}},14);
- const admins=Object.fromEntries(g.children.map(n=>[n.children[0].attrs['data-label'],n.children[0]]));
+ const admins=Object.fromEntries(g.children.flatMap(n=>n.children.filter(child=>child.attrs?.['data-label']).map(child=>[child.attrs['data-label'],child])));
  assert.equal(admins.county.textContent,'基隆市');
  assert.equal(admins.county.attrs['data-number-key'],undefined);
  assert.equal(admins['tiny-a'].textContent,'1');
@@ -876,4 +876,36 @@ test('2022 council districts use independent historical boundaries and reconcile
  assert.equal(d.rows.reduce((n,x)=>n+x.seats,0),910);
  assert.equal(d.winnerCorrections.length,4);assert.equal(d.correctedElectedTotal,910);
  assert.ok(d.rows.every(x=>x.scopeTowns.length>0&&x.seats>0));
+});
+
+
+test('County and township map callouts use one readable font and never share a leader segment',()=>{
+ const src=app.slice(app.indexOf('function leaderFrames('),app.indexOf('// Highlight the exact corresponding polygon'));
+ const state={level:'towns',county:'测试县',workspaceMode:'prediction',fillMode:'prediction',predictionOffice:'township',predictionScale:'district',legend:{show:false}};
+ const area={left:20,right:1180,top:20,bottom:860},t={scale:1,tx:0,ty:0,area};
+ const regionContains=(f,x,y)=>x>=f.box[0]&&x<=f.box[2]&&y>=f.box[1]&&y<=f.box[3];
+ const layout=new Function('state','data','activeInsetDefinitions','contentArea','sceneSpec','shownLabel',
+  'regionContains','legendBox','featureElectorate','insetDefinitions',src+
+  ';return {townNameLabelLayout,mapLeaderClear,countyMayorLabelLayout}')(
+  state,{counties:[]},()=>[],()=>area,()=>({width:1200,height:900}),
+  f=>f.name,regionContains,()=>null,()=> 'regional',()=>[]);
+ const items=Array.from({length:12},(_,i)=>{
+  const x=440+(i%3)*24,y=60+i*48;
+  return{id:'t'+i,name:'乡镇测试'+i,box:[x,y,x+12,y+16],center:[x+6,y+8]};
+ });
+ const labels=layout.townNameLabelLayout(items,t,15,area,null);
+ assert.equal(labels.length,items.length,'well-spaced tiny towns should all retain their names');
+ assert.deepEqual([...new Set(labels.map(q=>q.font))],[15],'inside and outside names share one font');
+ const leaders=labels.filter(q=>q.leaderPoints);
+ for(const q of leaders){
+  assert.match(q.leaderPath,/^M[-\d.,]+(?:H|V)/);
+  assert.equal(q.leaderAnchor.x,(q.f.box[0]+q.f.box[2])/2);
+  assert.equal(q.leaderAnchor.y,(q.f.box[1]+q.f.box[3])/2);
+ }
+ for(let i=0;i<leaders.length;i++)for(let j=0;j<i;j++)
+  assert.ok(layout.mapLeaderClear(leaders[i].leaderPoints,[leaders[j].leaderPoints],[]),
+   'callouts must not cross or share perimeter segments');
+ assert.match(app,/const size=font;/,'offshore and mainland names use one font');
+ assert.match(app,/const mapLeaderLayer=svgEl\('g',\{'data-map-leader-layer':'true'\}\)/);
+ assert.match(app,/label.style.textAnchor='middle';/);
 });
