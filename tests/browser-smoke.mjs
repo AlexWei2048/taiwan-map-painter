@@ -103,7 +103,7 @@ test('Mayor township map overlays town borders without changing county winners o
   labels:[...document.querySelectorAll('#labels [data-label]')].map(e=>[e.dataset.label,e.textContent]),
   countyCount:currentItems().length
  }));
- await page.locator('#townLevel').click();
+ await page.locator('#predictionScale').selectOption('overlay');
  const after=await page.evaluate(()=>({
   overlay:mayorTownBoundaryOverlay(),office:state.predictionOffice,level:state.level,scale:state.predictionScale,
   width:sceneSpec().width,height:sceneSpec().height,
@@ -119,8 +119,9 @@ test('Mayor township map overlays town borders without changing county winners o
  assert.equal(before.office,'mayor');assert.equal(before.level,'counties');
  assert.equal(before.countyCount,22);
  assert.equal(after.overlay,true);assert.equal(after.office,'mayor');assert.equal(after.level,'towns');
- assert.equal(after.scale,'district');assert.equal(after.countyCount,22);
+ assert.equal(after.scale,'overlay');assert.equal(after.countyCount,22);
  assert.equal(after.width,before.width);assert.equal(after.height,before.height);
+ assert.equal(await page.locator('#predictionScale').inputValue(),'overlay');
  assert.deepEqual(after.colors,before.colors);
  assert.deepEqual(after.labels,before.labels);
  assert.ok(after.townBorderCount>0);assert.equal(after.showTownSettings,true);
@@ -136,7 +137,7 @@ test('Mayor township map overlays town borders without changing county winners o
  assert.match(await page.locator('#predictionDialogTitle').innerText(),/县市长|台北市|新北市/);
  await page.locator('#cancelPrediction').click();
  assert.equal(await page.evaluate(()=>state.level),'towns');
- await page.locator('#countyLevel').click();
+ await page.locator('#predictionScale').selectOption('district');
  assert.equal(await page.evaluate(()=>state.predictionOffice),'mayor');
  assert.equal(await page.evaluate(()=>state.level),'counties');
 });

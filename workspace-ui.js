@@ -133,7 +133,7 @@ syncPredictionControls=function(){
  if(task&&!syncingWorkspace)syncWorkspace();
 };
 const oldEnterPrediction=enterPrediction;
-enterPrediction=function(office=state.predictionOffice){const preserveLocal=office===state.predictionOffice&&state.predictionScale==='town'&&['mayor','council'].includes(office);pushHistory();state.workspaceMode='prediction';state.predictionOffice=office;if(!preserveLocal)state.level={mayor:'counties',council:'council',township:'towns'}[office];state.villageTown='';state.fillMode='prediction';erase=false;$('inspectElection').checked=false;try{ensurePredictionParties()}catch(e){toast(e.message)}syncInputs();if(data)render();persist()};
+enterPrediction=function(office=state.predictionOffice){const preserveLocal=office===state.predictionOffice&&(state.predictionScale==='town'&&['mayor','council'].includes(office)||office==='mayor'&&state.predictionScale==='overlay');pushHistory();state.workspaceMode='prediction';state.predictionOffice=office;if(!preserveLocal)state.level={mayor:'counties',council:'council',township:'towns'}[office];state.villageTown='';state.fillMode='prediction';erase=false;$('inspectElection').checked=false;try{ensurePredictionParties()}catch(e){toast(e.message)}syncInputs();if(data)render();persist()};
 const oldOpenPrediction=openPredictionDistrict;
 openPredictionDistrict=function(d){if(!d)return;if($('directoryDialog').open)$('directoryDialog').close();state.workspaceMode='prediction';state.predictionRegion=d.id;erase=false;oldOpenPrediction(d);$('predictionScope').textContent='选区范围：'+d.scope;applyEstimateVisibility();syncDirectoryToDistrict(d)};
 const oldPredictionLevelChanged=predictionLevelChanged;
