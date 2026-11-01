@@ -222,3 +222,4 @@ Latest source revision: 20261030-no-offline-v11.
 - Preview verification: nationwide council 221/221 labels at fit and after zoom; Kaohsiung council 15/15. Found and filled the remaining Qianjin township name (38/38 Kaohsiung labels).
 - Removed workspace-ui.js's secondary applyView wrapper, which had queued another full label layout every frame despite the main navigation scheduler.
 - Direct main publication was blocked by automatic approval review; preparing a review branch without changing the public site.
+- CI verified exports with embedded emblems and incumbency, historical switching, CSV flows, all county council/legislative labels, national zoom, and mobile names. Remaining routing assertions initially rejected excessively bent grid routes; added obstacle-checked shortcutting. Updated the route validator's minimum from three segments to one, because a straight horizontal callout is also valid orthogonal routing; the seven-segment limit remains.
