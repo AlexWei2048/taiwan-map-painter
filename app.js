@@ -545,8 +545,27 @@ function townNameLabelLayout(items,t,font,area,reserve){
     if(best&&i>4&&i*(height+5)>best.score)break;
    }
   }
-  // Small offshore shapes may need a nearby callout instead of a mainland
-  // margin column; preserve the complete name in all cases.
+  // Wuqiu is drawn inside its own tiny inset, detached from the main Kinmen
+  // coastline. Use the inset frame as a local placement target rather than
+  // forcing its township name into either mainland-margin column.
+  if(!best){
+   const inset=insetDefinitions().find(frame=>frame.town===q.f.name);
+   if(inset){
+    const fx1=inset.box[0]*t.scale+t.tx,fy1=inset.box[1]*t.scale+t.ty,
+     fx2=inset.box[2]*t.scale+t.tx,fy2=inset.box[3]*t.scale+t.ty,
+     cx=(fx1+fx2)/2,cy=(fy1+fy2)/2;
+    for(const [x,y] of [
+     [cx,fy2+height/2+9],[cx,fy1-height/2-9],
+     [fx2+width/2+9,cy],[fx1-width/2-9,cy],
+     [cx,fy2+height*1.5+14],[cx,fy1-height*1.5-14]
+    ]){
+     const rect=[x-width/2-3,y-height/2-2,x+width/2+3,y+height/2+2];
+     if(!valid(rect,anchor)||frames.some(frame=>leaderOverlap(rect,frame)))continue;
+     best={x,y,rect,side:x<anchor.x?'left':'right'};break;
+    }
+   }
+  }
+  // Other offshore shapes use the existing checked nearby-callout search.
   if(!best){
    const pos=mapOutsideLabelFit(q.f,t,q.text,font,used,area,reserve,items);
    if(pos)best={...pos,side:pos.x<anchor.x?'left':'right'};
