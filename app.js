@@ -205,6 +205,82 @@ function mapOrthogonalLeader(anchor,side,x,y,width,coast,leaders,occupied,area,f
  }
  return null;
 }
+
+// Deterministic orthogonal grid escape for names that cannot use a short
+// coast rail. Previously drawn labels/lines are solid obstacles, so there
+// is no ambiguous crossing and the original interior anchor never moves.
+function mapGridLeaderRoute(anchor,side,x,y,width,leaders,occupied,area,frames=[]){
+ const sign=side==='left'?-1:1,end=x-sign*(width/2+6);
+ for(const step of [5,3]){
+  const left=area.left+2,top=area.top+2;
+  const cols=Math.floor((area.right-left-2)/step)+1;
+  const rows=Math.floor((area.bottom-top-2)/step)+1;
+  if(cols<2||rows<2)continue;
+  const total=cols*rows,block=new Uint8Array(total);
+  const px=col=>left+col*step,py=row=>top+row*step;
+  const mark=(r,pad)=>{
+   const xa=Math.max(0,Math.ceil((r[0]-pad-left)/step));
+   const xb=Math.min(cols-1,Math.floor((r[2]+pad-left)/step));
+   const ya=Math.max(0,Math.ceil((r[1]-pad-top)/step));
+   const yb=Math.min(rows-1,Math.floor((r[3]+pad-top)/step));
+   for(let j=ya;j<=yb;j++)for(let i=xa;i<=xb;i++)block[j*cols+i]=1;
+  };
+  for(const rect of occupied)mark(rect,2);
+  for(const rect of frames)if(!leaderIn(anchor.x,anchor.y,rect))mark(rect,3);
+  for(const points of leaders)for(const [p,q] of mapLeaderSegments(points))
+   mark([Math.min(p[0],q[0]),Math.min(p[1],q[1]),
+    Math.max(p[0],q[0]),Math.max(p[1],q[1])],3);
+  const sx=Math.round((anchor.x-left)/step),sy=Math.round((anchor.y-top)/step);
+  const ex=Math.round((end-left)/step),ey=Math.round((y-top)/step);
+  if(sx<0||sx>=cols||ex<0||ex>=cols||sy<0||sy>=rows||ey<0||ey>=rows)continue;
+  const start=sy*cols+sx,goal=ey*cols+ex;
+  if(block[start]||block[goal])continue;
+  const prev=new Int32Array(total);prev.fill(-1);
+  const queue=new Int32Array(total),rank=new Uint8Array(total);
+  let head=0,tail=1;queue[0]=start;prev[start]=start;rank[start]=0;
+  while(head<tail&&prev[goal]===-1){
+   const id=queue[head++],cx=id%cols,cy=Math.floor(id/cols);
+   const horizontal=ex>=cx?1:-1,vertical=ey>=cy?cols:-cols;
+   // Prefer paths that run sideways to the correct map perimeter.
+   for(const delta of [horizontal,vertical,-vertical,-horizontal]){
+    const nx=delta===1?cx+1:delta===-1?cx-1:cx;
+    const ny=Math.abs(delta)===cols?cy+(delta>0?1:-1):cy;
+    if(nx<0||nx>=cols||ny<0||ny>=rows)continue;
+    const next=id+delta;
+    if(prev[next]!==-1||block[next])continue;
+    prev[next]=id;queue[tail++]=next;
+    if(next===goal)break;
+   }
+  }
+  if(prev[goal]===-1)continue;
+  const chain=[];
+  for(let id=goal;id!==start;id=prev[id])chain.push([px(id%cols),py(Math.floor(id/cols))]);
+  chain.push([px(sx),py(sy)]);chain.reverse();
+  const points=[[anchor.x,anchor.y],[chain[0][0],anchor.y],...chain,
+   [chain.at(-1)[0],y],[end,y]];
+  const reduced=[];
+  for(const point of points){
+   if(reduced.length&&Math.hypot(point[0]-reduced.at(-1)[0],point[1]-reduced.at(-1)[1])<.01)continue;
+   const n=reduced.length;
+   if(n>1&&((Math.abs(reduced[n-2][0]-reduced[n-1][0])<.01&&
+      Math.abs(reduced[n-1][0]-point[0])<.01)||
+     (Math.abs(reduced[n-2][1]-reduced[n-1][1])<.01&&
+      Math.abs(reduced[n-1][1]-point[1])<.01)))reduced.pop();
+   reduced.push(point);
+  }
+  if(reduced.length<2||!mapLeaderClear(reduced,leaders,occupied,frames))continue;
+  let leaderPath='M'+anchor.x+','+anchor.y;
+  for(let k=1;k<reduced.length;k++){
+   const [a,b]=[reduced[k-1],reduced[k]];
+   if(Math.abs(a[0]-b[0])<.01)leaderPath+='V'+b[1];
+   else if(Math.abs(a[1]-b[1])<.01)leaderPath+='H'+b[0];
+   else{leaderPath='';break}
+  }
+  if(leaderPath)return{leaderPath,leaderPoints:reduced};
+ }
+ return null;
+}
+
 function shortLeader(q,t,occupied,reserve){
  const frames=leaderFrames(t),island=frames.find(b=>leaderIn(q.ax,q.ay,b));
  const area=t.area||contentArea(sceneSpec()),font=q.font,width=Array.from(shownLabel(q.f)).length*font*1.04+8;
@@ -708,7 +784,8 @@ function townNameLabelLayout(items,t,font,area,reserve,attempt=0){
     const rr=[rect[0],yy-height/2-3,rect[2],yy+height/2+3];
     if(!valid(rr))continue;
     const route=mapOrthogonalLeader(q.anchor,side,x,yy,width,
-     coastRail[side],leaders,used,area,insetFrames);
+     coastRail[side],leaders,used,area,insetFrames)||
+     mapGridLeaderRoute(q.anchor,side,x,yy,width,leaders,used,area,insetFrames);
     if(route){chosen={y:yy,rect:rr,...route};break}
    }
    if(!chosen){remaining.push(q);continue}
@@ -734,7 +811,8 @@ function townNameLabelLayout(items,t,font,area,reserve,attempt=0){
      const y=anchor.y+k*(height*.6+4);
      const rect=[x-width/2-4,y-height/2-3,x+width/2+4,y+height/2+3];
      if(!valid(rect))continue;
-     const route=mapOrthogonalLeader(anchor,side,x,y,width,coast,leaders,used,area,insetFrames);
+     const route=mapOrthogonalLeader(anchor,side,x,y,width,coast,leaders,used,area,insetFrames)||
+      mapGridLeaderRoute(anchor,side,x,y,width,leaders,used,area,insetFrames);
      if(route){pos={x,y,rect,side,...route};break}
     }
    }
