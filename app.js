@@ -489,116 +489,138 @@ function directTownNameLabels(){
   (state.predictionOffice==='township'||
    state.predictionOffice==='mayor'&&state.predictionScale==='overlay');
 }
+// Town-name callouts use *perimeter lanes* rather than fanning diagonal
+// lines across the colored map. Assign labels to the closest available side,
+// preserve geographic north/south order, and keep all vertical stems outside
+// the county outline. Actual paths are painted behind ALL name labels.
+function townNameLeaderAnchor(f,t,side){
+ const p=mapLabelAnchor(f,t);
+ if(!p)return null;
+ const sign=side==='left'?-1:1;
+ const extent=(side==='left'?p.x-(f.box[0]*t.scale+t.tx):
+  f.box[2]*t.scale+t.tx-p.x)+10;
+ let boundary=p;
+ for(let n=2;n<Math.max(4,extent);n+=2){
+  const x=p.x+sign*n;
+  if(!regionContains(f,x,p.y,t))break;
+  boundary={x,y:p.y};
+ }
+ return boundary;
+}
 function townNameLabelLayout(items,t,font,area,reserve){
  const sorted=[...items].filter(f=>shownLabel(f)).sort((a,b)=>
-  (b.box[2]-b.box[0])*(b.box[3]-b.box[1])-(a.box[2]-a.box[0])*(a.box[3]-a.box[1]));
- const labels=[],used=[],pending=[],textWidth=name=>Array.from(name).length*font*1.04+8;
- const height=font*1.5+5;
- // Try the centre and progressively more detailed interior representative
- // points first; never put a label outside a polygon without an anchor line.
+  (b.box[2]-b.box[0])*(b.box[3]-b.box[1])-
+  (a.box[2]-a.box[0])*(a.box[3]-a.box[1]));
+ const labels=[],used=[],pending=[],height=font*1.5+5;
+ const labelWidth=(name,size=font)=>Array.from(name).length*size*1.04+8;
+ const reserved=reserve?[reserve.x,reserve.y,reserve.x+reserve.width,reserve.y+reserve.height]:null;
+ const valid=(rect)=>rect[0]>=area.left+2&&rect[2]<=area.right-2&&
+  rect[1]>=area.top+2&&rect[3]<=area.bottom-2&&
+  !(reserved&&leaderOverlap(rect,reserved))&&!used.some(other=>leaderOverlap(rect,other));
+ // On-map names come first, beginning at the visual representative point.
+ // A modest adaptive font reduces the number of external leaders in cities
+ // without turning labels into tiny illegible print.
  for(const f of sorted){
-  const text=shownLabel(f),width=textWidth(text);
-  const pos=mapLabelFit(f,t,width,height,used,area,reserve);
-  if(pos){used.push(pos.rect);labels.push({f,...pos,text,font,numeric:false})}
+  const text=shownLabel(f);let found=null;
+  for(const ratio of [1,.92,.84]){
+   const size=font*ratio,width=labelWidth(text,size),h=size*1.5+5;
+   const pos=mapLabelFit(f,t,width,h,used,area,reserve);
+   if(pos){found={...pos,font:size};break}
+  }
+  if(found){used.push(found.rect);labels.push({f,...found,text,numeric:false})}
   else pending.push({f,text,font,anchor:mapLabelAnchor(f,t)});
  }
  if(!pending.length)return labels;
- // Place the remaining complete names in balanced columns outside the county
- // silhouette. Each slot is collision-tested against every interior label.
- const nameWidth=Math.max(...pending.map(q=>textWidth(q.text)));
- const leftEdge=Math.min(...items.map(f=>f.box[0]*t.scale+t.tx));
- const rightEdge=Math.max(...items.map(f=>f.box[2]*t.scale+t.tx));
- const sideX={
-  left:Math.max(area.left+nameWidth/2+5,leftEdge-nameWidth/2-17),
-  right:Math.min(area.right-nameWidth/2-5,rightEdge+nameWidth/2+17)
+ const box={
+  left:Math.min(...items.map(f=>f.box[0]*t.scale+t.tx)),
+  right:Math.max(...items.map(f=>f.box[2]*t.scale+t.tx))
  };
- const reserved=reserve?[reserve.x,reserve.y,reserve.x+reserve.width,reserve.y+reserve.height]:null;
- const frames=leaderFrames(t,5);
- const valid=(rect,anchor)=>{
-  if(rect[0]<area.left||rect[2]>area.right||rect[1]<area.top||rect[3]>area.bottom)return false;
-  if(reserved&&leaderOverlap(rect,reserved)||used.some(r=>leaderOverlap(rect,r)))return false;
-  // Labels for mainland towns must stay out of the offshore inset frames.
-  if(anchor&&!frames.some(r=>leaderIn(anchor.x,anchor.y,r))&&frames.some(r=>leaderOverlap(rect,r)))return false;
-  return true;
+ const columnWidth=Math.max(...pending.map(q=>labelWidth(q.text)))+6;
+ const colX={
+  left:box.left-columnWidth/2-21,
+  right:box.right+columnWidth/2+21
  };
- // Northernmost first gives the tightly packed metropolitan towns their
- // own ordered rows instead of hundreds of crossing leader lines.
- pending.sort((a,b)=>(a.anchor?.y??0)-(b.anchor?.y??0)||
-  (a.anchor?.x??0)-(b.anchor?.x??0)||String(a.f.id).localeCompare(String(b.f.id)));
- for(const q of pending){
+ const fitsSide=side=>colX[side]-columnWidth/2>=area.left+5&&
+  colX[side]+columnWidth/2<=area.right-5;
+ const maxRows=Math.max(1,Math.floor((area.bottom-area.top-12)/(height+7)));
+ const capacity={left:fitsSide('left')?maxRows:0,right:fitsSide('right')?maxRows:0};
+ const sides={left:[],right:[]},remaining=[];
+ const order=[...pending].sort((a,b)=>{
+  const pa=a.anchor,pb=b.anchor;
+  const ca=pa?Math.min(Math.abs(pa.x-box.left),Math.abs(box.right-pa.x)):Infinity;
+  const cb=pb?Math.min(Math.abs(pb.x-box.left),Math.abs(box.right-pb.x)):Infinity;
+  return ca-cb||(pa?.y??0)-(pb?.y??0)||String(a.f.id).localeCompare(String(b.f.id));
+ });
+ for(const q of order){
+  if(!q.anchor){remaining.push(q);continue}
+  const preference=q.anchor.x<(box.left+box.right)/2?'left':'right';
+  const alternate=preference==='left'?'right':'left';
+  const side=[preference,alternate].find(k=>sides[k].length<capacity[k]);
+  if(side)sides[side].push(q);else remaining.push(q);
+ }
+ const coastRail={left:box.left-9,right:box.right+9};
+ for(const side of ['left','right']){
+  const rows=sides[side].sort((a,b)=>a.anchor.y-b.anchor.y||
+   a.anchor.x-b.anchor.x||String(a.f.id).localeCompare(String(b.f.id)));
+  if(!rows.length)continue;
+  const yValues=mapOrderedLabelRows(rows.map(q=>q.anchor.y),
+   area.top+height/2+5,area.bottom-height/2-6,height+7);
+  if(!yValues){remaining.push(...rows);continue}
+  for(let i=0;i<rows.length;i++){
+   const q=rows[i],width=labelWidth(q.text),x=colX[side],y=yValues[i];
+   let rect=[x-width/2-4,y-height/2-3,x+width/2+4,y+height/2+3];
+   // Make small ordered adjustments if a legend or a large interior name
+   // occupies a projected label lane. Never disturb the order of the rows.
+   let chosen=null;
+   const step=height+7;
+   for(const shift of [0,-1,1,-2,2,-3,3,-4,4]){
+    const yy=y+shift*step;
+    const rr=[rect[0],yy-height/2-3,rect[2],yy+height/2+3];
+    if(valid(rr)){chosen={y:yy,rect:rr};break}
+   }
+   if(!chosen){remaining.push(q);continue}
+   const source=townNameLeaderAnchor(q.f,t,side)||q.anchor;
+   // Four orthogonal pieces: short district-boundary stub, a horizontal
+   // run to the outside rail, a vertical run along the perimeter, then the
+   // short final stem to the adjacent complete name. No diagonal fan.
+   const direction=side==='left'?-1:1;
+   const rail=coastRail[side],end=x-direction*(width/2+6);
+   const leaderPath='M'+source.x+','+source.y+
+    'H'+rail+'V'+chosen.y+'H'+end;
+   used.push(chosen.rect);
+   labels.push({f:q.f,x,y:chosen.y,rect:chosen.rect,text:q.text,font,
+    numeric:false,leaderAnchor:source,leaderPath,column:side});
+  }
+ }
+ // Insets and rare full columns: place a small label near its own territory
+ // and use an orthogonal elbow rather than a diagonal through other towns.
+ for(const q of remaining){
   const anchor=q.anchor||{x:(q.f.box[0]+q.f.box[2])/2*t.scale+t.tx,
-   y:(q.f.box[1]+q.f.box[3])/2*t.scale+t.ty};
-  const width=textWidth(q.text);
-  let best=null;
-  for(const side of ['left','right']){
-   const x=sideX[side],bias=side==='left'?Math.abs(anchor.x-leftEdge):Math.abs(rightEdge-anchor.x);
-   // Search around the actual latitude; use a consistent baseline spacing.
-   for(let i=0;i<=Math.ceil((area.bottom-area.top)/(height+5));i++){
-    for(const direction of i===0?[0]:[-1,1]){
-     const y=Math.max(area.top+height/2+2,
-      Math.min(area.bottom-height/2-2,anchor.y+direction*i*(height+5)));
-     const rect=[x-width/2-3,y-height/2-2,x+width/2+3,y+height/2+2];
-     if(!valid(rect,anchor))continue;
-     const score=Math.abs(y-anchor.y)*1.8+Math.abs(x-anchor.x)*.19+bias*.08;
-     if(!best||score<best.score)best={x,y,rect,side,score};
-    }
-    if(best&&i>4&&i*(height+5)>best.score)break;
-   }
-  }
-  // Wuqiu is drawn inside its own tiny inset, detached from the main Kinmen
-  // coastline. Use the inset frame as a local placement target rather than
-  // forcing its township name into either mainland-margin column.
-  if(!best){
-   const inset=insetDefinitions().find(frame=>frame.town===q.f.name);
-   if(inset){
-    const fx1=inset.box[0]*t.scale+t.tx,fy1=inset.box[1]*t.scale+t.ty,
-     fx2=inset.box[2]*t.scale+t.tx,fy2=inset.box[3]*t.scale+t.ty,
-     cx=(fx1+fx2)/2,cy=(fy1+fy2)/2;
-    for(const [x,y] of [
-     [cx,fy2+height/2+9],[cx,fy1-height/2-9],
-     [fx2+width/2+9,cy],[fx1-width/2-9,cy],
-     [cx,fy2+height*1.5+14],[cx,fy1-height*1.5-14]
-    ]){
-     const rect=[x-width/2-3,y-height/2-2,x+width/2+3,y+height/2+2];
-     if(!valid(rect,anchor)||frames.some(frame=>leaderOverlap(rect,frame)))continue;
-     best={x,y,rect,side:x<anchor.x?'left':'right'};break;
+   y:(q.f.box[1]+q.f.box[3])/2*t.scale+t.ty},width=labelWidth(q.text);
+  const xs=[anchor.x+width/2+25,anchor.x-width/2-25,
+   colX.left,colX.right,anchor.x];
+  let pos=null;
+  for(const x0 of xs){
+   const x=Math.max(area.left+width/2+8,
+    Math.min(area.right-width/2-8,x0));
+   for(let n=0;n<Math.ceil((area.bottom-area.top)/(height+6))&&!pos;n++){
+    for(const k of n?[n,-n]:[0]){
+     const y=anchor.y+k*(height+6);
+     const rect=[x-width/2-4,y-height/2-3,x+width/2+4,y+height/2+3];
+     if(valid(rect)){pos={x,y,rect};break}
     }
    }
+   if(pos)break;
   }
-  // Other offshore shapes use the existing checked nearby-callout search.
-  if(!best){
-   const pos=mapOutsideLabelFit(q.f,t,q.text,font,used,area,reserve,items);
-   if(pos)best={...pos,side:pos.x<anchor.x?'left':'right'};
-  }
-  // An isolated island or highly unusual county extent can leave no valid
-  // map-margin column. Place the complete name near the actual feature anchor
-  // in any available, non-overlapping local slot instead of dropping it.
-  if(!best){
-   const clampX=x=>Math.max(area.left+width/2+6,Math.min(area.right-width/2-6,x));
-   const range=Math.ceil((area.bottom-area.top)/(height+5));
-   for(const x of [clampX(anchor.x+width+22),clampX(anchor.x-width-22),
-     clampX(anchor.x),clampX(sideX.left),clampX(sideX.right)]){
-    for(let i=0;i<=range&&!best;i++){
-     for(const delta of i===0?[0]:[-i,i]){
-      const y=Math.max(area.top+height/2+4,
-       Math.min(area.bottom-height/2-4,anchor.y+delta*(height+5)));
-      const rect=[x-width/2-3,y-height/2-2,x+width/2+3,y+height/2+2];
-      if(rect[0]<area.left||rect[2]>area.right||rect[1]<area.top||rect[3]>area.bottom)continue;
-      if(reserved&&leaderOverlap(rect,reserved)||used.some(other=>leaderOverlap(rect,other)))continue;
-      best={x,y,rect,side:x<anchor.x?'left':'right'};break;
-     }
-    }
-    if(best)break;
-   }
-  }
-  if(!best)continue;
-  const side=best.side,sign=side==='left'?-1:1;
-  const end=best.x-sign*(width/2+4);
-  const rail=anchor.x+sign*Math.min(14,Math.max(5,Math.abs(end-anchor.x)*.18));
-  const leaderPath=best.leaderPath||'M'+anchor.x+','+anchor.y+'L'+rail+','+anchor.y+'L'+end+','+best.y;
-  used.push(best.rect);
-  labels.push({f:q.f,x:best.x,y:best.y,rect:best.rect,text:q.text,font,
-   numeric:false,leaderAnchor:anchor,leaderPath,column:side});
+  if(!pos)continue;
+  const side=pos.x<anchor.x?'left':'right';
+  const source=townNameLeaderAnchor(q.f,t,side)||anchor;
+  const direction=side==='left'?-1:1;
+  const elbow=source.x+direction*10,end=pos.x-direction*(width/2+6);
+  used.push(pos.rect);
+  labels.push({f:q.f,...pos,text:q.text,font,numeric:false,
+   leaderAnchor:source,leaderPath:'M'+source.x+','+source.y+
+    'H'+elbow+'V'+pos.y+'H'+end,column:side});
  }
  return labels;
 }
@@ -654,6 +676,10 @@ function drawLabels(group,items,t,font=15,interactive=false){
  const zoomRatio=interactive&&view&&items.some(f=>districtMapNumber(f))?Math.min(1,view.w/sceneSpec().width):1;
  font*=zoomRatio;
  group.replaceChildren();
+ // All town leader lines are in a BACK layer so no subsequent path can
+ // run over another township's text (including its white readability halo).
+ const townLeaderLayer=directTownNameLabels()?svgEl('g',{'data-town-leader-layer':'true'}):null;
+ if(townLeaderLayer)group.append(townLeaderLayer);
  for(const q of labelLayout(rendered.filter(f=>shownLabel(f)),t,font)){
   const g=svgEl('g',{'class':'map-label'});group.append(g);
   const cityCallout=!!q.leaderAnchor&&countyMayorOverview()&&COUNTY_CITY_CALLOUTS.has(q.f.name);
@@ -664,22 +690,25 @@ function drawLabels(group,items,t,font=15,interactive=false){
    const leaderPath=q.leaderPath||`M${q.leaderAnchor.x},${q.leaderAnchor.y}L${end},${q.y}`;
    // A white underlay protects the dark leader against either party fill.
    // Inline SVG styles deliberately outrank the generic #labels path CSS.
-   if(strongCallout)g.append(svgEl('path',{d:leaderPath,fill:'none',
-    style:'fill:none;stroke:#fff;stroke-width:3.8px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.96',
+   if(strongCallout)(townCallout?townLeaderLayer:g).append(svgEl('path',{d:leaderPath,fill:'none',
+    style:'fill:none;stroke:#fff;stroke-width:'+(townCallout?'2.1':'3.8')+'px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.94',
     'vector-effect':'non-scaling-stroke','pointer-events':'none','data-label-leader-halo':q.f.id}));
    const line=svgEl('path',{d:leaderPath,fill:'none',stroke:strongCallout?'#214e40':'#718b7c',
     'stroke-width':strongCallout?1.55:.85,'stroke-opacity':strongCallout?1:.8,
     'vector-effect':'non-scaling-stroke','data-label-leader':q.f.id,'data-label-column':q.column||'local'});
    if(strongCallout){
-    line.style.stroke='#214e40';line.style.strokeWidth='1.55px';line.style.strokeOpacity='1';
+    line.style.stroke=townCallout?'#537d6b':'#214e40';
+    line.style.strokeWidth=townCallout?'0.9px':'1.55px';
+    line.style.strokeOpacity=townCallout?'.78':'1';
     line.style.strokeLinecap='round';line.style.strokeLinejoin='round';
     line.setAttribute('data-prominent-leader','true');
    }
-   g.append(line);
+   (townCallout?townLeaderLayer:g).append(line);
    const dot=svgEl('circle',{cx:q.leaderAnchor.x,cy:q.leaderAnchor.y,r:(strongCallout?2.8:1.7)*zoomRatio,
     fill:strongCallout?'#214e40':'#718b7c','data-label-anchor':q.f.id});
    if(strongCallout){dot.style.stroke='#fff';dot.style.strokeWidth='1.1px'}
-   g.append(dot);
+   if(townCallout){dot.setAttribute('r',1.9*zoomRatio);dot.style.fill='#537d6b'}
+   (townCallout?townLeaderLayer:g).append(dot);
   }
   const label=svgEl('text',{x:q.x,y:q.y,'font-size':q.font,'data-label':q.f.id,
    'data-placement':q.leaderAnchor?'outside':q.districtNumber?'district-number':q.island?(q.insetBottom?'inset-bottom':'below-island'):'inside','text-anchor':'middle','dominant-baseline':'middle',
