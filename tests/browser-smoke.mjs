@@ -719,6 +719,22 @@ test('All 22 scoped mayoral township maps display complete township names withou
    county+' has a diagonal or trans-map fan: '+JSON.stringify(quality.routes.filter(d=>!/^M[-\d.,]+(?:[HV][-\d.]+){1,7}$/.test(d)).slice(0,4)));
   assert.equal(quality.underText,true,county+' leaders may cover names');
   assert.equal(quality.textCount,result.total);
+  // Perimeter names must have a real air gap, not just non-overlapping glyphs.
+  const breathing=await page.evaluate(()=>{
+   const names=[...document.querySelectorAll('#labels text[data-callout-lane="perimeter"]')]
+    .map(el=>({name:el.textContent,b:el.getBBox(),
+     side:document.querySelector('#labels path[data-label-leader="'+el.dataset.label+'"]')?.dataset.labelColumn}));
+   const squeezed=[];
+   for(let i=0;i<names.length;i++)for(let j=i+1;j<names.length;j++){
+    const a=names[i],b=names[j];
+    if(a.side!==b.side||!a.side)continue;
+    if(a.b.x>b.b.x+b.b.width+5||b.b.x>a.b.x+a.b.width+5)continue;
+    const blank=Math.max(b.b.y-(a.b.y+a.b.height),a.b.y-(b.b.y+b.b.height));
+    if(blank<7)squeezed.push([a.name,b.name,Number(blank.toFixed(1))]);
+   }
+   return squeezed;
+  });
+  assert.deepEqual(breathing,[],county+' callout text too tightly packed');
   // Verify actual SVG glyph boxes and callout dots against polygon geometry,
   // not just against coarse bounding boxes or the external-label columns.
   const containment=await page.evaluate(()=>{
