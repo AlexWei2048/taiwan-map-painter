@@ -673,11 +673,43 @@ test('Export recovers every label omitted by collision-free main map placement, 
  assert.match(app,/state\.labels=true;render\(\);try\{return exportSvg\(\)\}/);
 });
 
+test('Automatic export detail maps show each possible label without overlaps and retain coverage for unplaceable areas',()=>{
+ const code=app.slice(app.indexOf('// Every administrative area or electoral district must be identified'),app.indexOf('function exportSvg(){'));
+ const svgEl=(tag,attrs)=>({tag,attrs:attrs||{},textContent:'',children:[],append(...items){this.children.push(...items)}}),
+  state={level:'council'};
+ const bounds=items=>[
+  Math.min(...items.map(f=>f.box[0])),Math.min(...items.map(f=>f.box[1])),
+  Math.max(...items.map(f=>f.box[2])),Math.max(...items.map(f=>f.box[3]))
+ ];
+ const maker=new Function('state','svgEl','bounds','transformOf','fillColor','mapAdaptiveLabel',
+  'featureElectorate','districtMapNumber','wrapExportText','exportNumberRows',code+
+  ';return {appendExportDetailInsets,exportLabelCoverage}');
+ const supported=maker(state,svgEl,bounds,t=>'translate('+t.tx+' '+t.ty+') scale('+t.scale+')',
+  ()=>'#a0c5b0',(f,t,value,font,used)=>{
+   if(f.id==='no-room')return null;
+   const x=(f.box[0]+f.box[2])/2*t.scale+t.tx,y=(f.box[1]+f.box[3])/2*t.scale+t.ty;
+   return{x,y,font,rect:[x-12,y-12,x+12,y+12]};
+  },()=>'regional',f=>String(f.number||''),value=>[String(value)],[]);
+ const features=[
+  {id:'a',county:'高雄市',name:'第1选区',number:1,box:[0,0,10,10],d:'M0,0H10V10H0Z'},
+  {id:'no-room',county:'高雄市',name:'第2选区',number:2,box:[20,0,30,10],d:'M20,0H30V10H20Z'}
+ ];
+ const drawing=svgEl('g'),result=supported.appendExportDetailInsets(drawing,features,features.map(f=>f.id),100,1100);
+ assert.ok(result.height>300);
+ assert.ok(result.labelled.has('a'));
+ assert.equal(result.labelled.has('no-room'),false);
+ assert.equal(drawing.children[0].attrs['data-export-detail-maps'],'true');
+ const lookup=supported.exportLabelCoverage(features,{querySelectorAll:()=>[]},result.labelled);
+ assert.deepEqual(lookup.map(r=>r.id),['no-room']);
+ assert.match(app,/appendExportDetailInsets\(root,originalItems,zoomTargets,detailY,contentWidth\)/);
+ assert.match(app,/exportLabelCoverage\(originalItems,map,details\.labelled\)/);
+});
+
 test('Administrative lookup is embedded in the map and exported inside the SVG map whenever it fits',()=>{
  assert.match(index,/id="mapWithKey"/);
  assert.match(index,/id="mapNumberKey"/);
  assert.match(index,/id="mapNumberKeyRows"/);
- assert.match(index,/app\.js\?v=20261101-export-complete-labels-v55/);
+ assert.match(index,/app\.js\?v=20261101-export-insets-and-coverage-v56/);
  assert.match(index,/style\.css\?v=20261101-map-internal-directory-v35/);
  const canvasStart=index.indexOf('<div class="canvas" id="canvas">');
  const key=index.indexOf('<aside class="map-number-key"',canvasStart);
