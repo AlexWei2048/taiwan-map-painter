@@ -70,7 +70,7 @@ function setBrush(id){state.selected=id;erase=false;renderPalette();renderLegend
 function updateBrush(){if(state.fillMode==='prediction'){$('brushName').textContent='2026 用户预测 · 点击选区选择预测当选者';return}if($('inspectElection')?.checked){$('brushName').textContent='查询 2026 资料 · 点击地图选择选区';return}if(state.fillMode==='gradient'){$('brushName').textContent=erase?'橡皮擦 · 点击区域清除投票数据':'点击区域，录入或编辑投票数据';$('eraser').classList.toggle('active',erase);$('eraser').setAttribute('aria-pressed',erase);return;}const p=paletteById(state.selected);$('brushName').textContent=erase?'橡皮擦 · 点击区域恢复未填色':`${p?.name||'画笔'} · 点击区域填色`;$('eraser').classList.toggle('active',erase);$('eraser').setAttribute('aria-pressed',erase)}
 function renderPalette(){const root=$('palette');root.replaceChildren();const c=counts();state.palette.forEach((p,index)=>{const row=document.createElement('div');row.dataset.party=p.id;row.className='palette-row'+(!erase&&state.selected===p.id?' selected':'');const sw=document.createElement('button');sw.className='swatch';sw.style.background=p.color;sw.setAttribute('aria-label',`选择${p.name}画笔`);sw.setAttribute('aria-pressed',!erase&&state.selected===p.id);sw.onclick=()=>setBrush(p.id);const input=document.createElement('input');input.className='palette-name';input.value=p.name;input.maxLength=40;input.setAttribute('aria-label',`修改${p.name}图例名称`);input.onfocus=()=>{input.dataset.before=input.value;delete input.dataset.history};input.oninput=()=>{if(!input.dataset.history){pushHistory();input.dataset.history='1'}p.name=simplify(input.value)||'未命名';renderLegend();updateBrush();persist()};input.onchange=()=>{const name=simplify(input.value.trim())||'未命名';if(p.name!==name){pushHistory();p.name=name;persist();renderLegend();renderList();updateBrush()}};const count=document.createElement('span');count.className='palette-count';count.textContent=c[p.id]||'0';const edit=document.createElement('label');edit.className='color-edit';edit.title='修改颜色';const color=document.createElement('input');color.type='color';color.value=p.color;color.setAttribute('aria-label',`修改${p.name}颜色`);color.onchange=()=>{if(p.color!==color.value){pushHistory();p.color=color.value;recolor();renderPalette();renderLegend();renderList();persist()}};edit.append(color);const del=document.createElement('button');del.className='remove-color';del.textContent='×';del.title='删除类别（可撤销）';del.setAttribute('aria-label',`删除${p.name}类别`);del.onclick=()=>{if(LEVELS.some(level=>Object.values(state.elections[level]).some(r=>r.rows.some(row=>row.partyId===p.id)))||(typeof predictionPaletteInUse==='function'&&predictionPaletteInUse(p)))return toast('此类别已用于投票数据，可在图例编辑中隐藏；删除前请先修改关联数据');if(state.palette.length===1)return toast('至少保留一个颜色类别');pushHistory();state.palette=state.palette.filter(x=>x.id!==p.id);for(const level of LEVELS)for(const k in state.fills[level])if(state.fills[level][k]===p.id)delete state.fills[level][k];if(state.selected===p.id)state.selected=state.palette[0].id;renderPalette();recolor();renderLegend();renderList();updateProgress();updateBrush();persist()};const logo=logoFor(p);if(logo){const img=document.createElement('img');img.className='party-logo';img.src=logo;img.alt=p.name+'党徽';row.append(img)}row.append(sw,input,count,edit);const order=document.createElement('div');order.className='party-order';for(const [direction,label]of [[-1,'上移'],[1,'下移']]){const b=document.createElement('button');b.className='move-party';b.type='button';b.textContent=direction<0?'↑':'↓';b.dataset.direction=direction;b.title=label+p.name;b.setAttribute('aria-label',label+'画笔：'+p.name);b.disabled=index+direction<0||index+direction>=state.palette.length;b.onclick=()=>moveParty(p.id,direction);order.append(b)}row.append(order,del);root.append(row)});updateBrush()}
 let legendLayoutKey='';
-function renderLegend(){const spec=sceneSpec();drawLegend($('legend'),spec,true);const reserve=legendBox(spec),key=[spec.width,spec.height,reserve.height,state.county,state.level,state.legend.show].join('/');if(data&&view&&key!==legendLayoutKey){legendLayoutKey=key;if(!identityPanelsActive()){const t=geometryLayout(currentItems(),state.labels);$('regions').setAttribute('transform',transformOf(t));$('borders').setAttribute('transform',transformOf(t));$('districtBorders').setAttribute('transform',transformOf(t));$('townBorders').setAttribute('transform',transformOf(t));fit();renderMapFurniture()}}}
+function renderLegend(){const spec=sceneSpec();drawLegend($('legend'),spec,true);positionMapNumberTable();const reserve=legendBox(spec),key=[spec.width,spec.height,reserve.height,state.county,state.level,state.legend.show].join('/');if(data&&view&&key!==legendLayoutKey){legendLayoutKey=key;if(!identityPanelsActive()){const t=geometryLayout(currentItems(),state.labels);$('regions').setAttribute('transform',transformOf(t));$('borders').setAttribute('transform',transformOf(t));$('districtBorders').setAttribute('transform',transformOf(t));$('townBorders').setAttribute('transform',transformOf(t));fit();renderMapFurniture()}}}
 
 function updateProgress(){syncCountyChoices();const items=currentItems();$('scopeTitle').textContent=(state.level==='villages'&&state.villageTown?(data.towns.find(f=>f.id===state.villageTown)?.name||''):state.county||'全台')+levelLabel(state.level)+(state.fillMode==='prediction'?' · 用户预测':'');if(state.fillMode==='prediction')$('scopeTitle').textContent=(state.county||'全台')+' · 2026 '+({mayor:'县市长',council:'议员',township:'乡镇市区长'})[state.predictionOffice]+'预测';$('progress').textContent='';$('regionCount').textContent=items.length;$('islandNote').textContent='离岛采用移位示意，非实际相对位置';syncElectionControls()}
 function renderList(){const root=$('regionList');root.replaceChildren();const q=simplify($('search').value.trim()),items=currentItems().filter(f=>(f.county+(f.town||'')+f.name).includes(q));if(!items.length){root.innerHTML='<p class="empty-search">没有找到匹配的区域</p>';return}items.slice(0,300).forEach(f=>{const b=document.createElement('button');b.className='region-item';const dot=document.createElement('span');dot.className='region-dot';dot.style.background=fillColor(f);const t=document.createElement('span');t.textContent=f.name;const sub=document.createElement('small');sub.textContent=state.level!=='counties'?f.county+(f.town?' · '+f.town:''):'';b.append(dot,t,sub);b.title=`点击为${f.county}${f.name}填色`;b.onclick=()=>paint(f);root.append(b)});if(items.length>300){const more=document.createElement('p');more.className='data-help';more.textContent='显示前 300 个结果，请筛选县市、乡镇或输入名称查找。';root.append(more)}}
@@ -95,6 +95,11 @@ function councilVisibleIdentity(){return exportPanelFilter||(state.level==='coun
 function panelIdentities(){const order=legislativeFourPanelsActive()?LEGISLATIVE_FREE_ORDER:ELECTORATE_ORDER,selected=state.level==='council'?councilVisibleIdentity():'all';return selected&&selected!=='all'?[selected]:order}
 function furnitureFooterHeight(){return Math.max(126,state.legend.show?legendMetrics(legendReserveEntries()).height+48:0)}
 function sceneSpec(){const panels=identityPanelsActive()?panelIdentities().length:0,base=panels===1?(state.county?{width:1200,height:900,pad:140,font:15}:{width:1800,height:2400,pad:250,font:10}):panels===4?(state.county?{width:2800,height:1500,pad:130,font:26}:{width:3200,height:2300,pad:180,font:28}):identityPanelsActive()?(state.county?{width:2400,height:1050,pad:120,font:26}:{width:3000,height:2100,pad:180,font:28}):isNationwide()?{width:1800,height:2400,pad:250,font:10}:{width:1200,height:900,pad:140,font:15};const n=data&&state.level==='villages'?currentItems().length:0;const townCount=directTownNameLabels()&&data?.towns?data.towns.reduce((count,f)=>count+(f.county===state.county),0):0;const calloutRoom=townCount>=35?180:townCount>=27?125:directTownNameLabels()?60:0;const mapHeight=Math.max(base.height+calloutRoom,n&&n<=120?n*8+220:0);return{...base,height:mapHeight+furnitureFooterHeight()}}
+function mapKeyRailWidth(spec){
+ const pixels=typeof document!=='undefined'?$('map')?.getBoundingClientRect().width:0;
+ return Math.max(310,legendMetrics(legendReserveEntries()).width+80,pixels?155*spec.width/pixels+55:0);
+}
+
 function contentArea(spec){return{left:45,right:spec.width-115,top:145,bottom:spec.height-furnitureFooterHeight()-28}}
 function fittedView(){const s=sceneSpec();return{x:0,y:0,w:s.width,h:s.height}}
 // Keep geometry movement cheap; expensive collision/leader layout runs only
@@ -103,6 +108,7 @@ let viewFrame=0,navigationLabelTimer=0;
 function flushView(){
  if(viewFrame){cancelAnimationFrame(viewFrame);viewFrame=0}
  if(view)$('map').setAttribute('viewBox',`${view.x} ${view.y} ${view.w} ${view.h}`);
+ if(typeof document!=='undefined')positionMapNumberTable();
 }
 function scheduleNavigationLabels(){
  clearTimeout(navigationLabelTimer);
@@ -115,10 +121,10 @@ function applyView(){
 }
 function fit(){view=fittedView();baseView={...view};flushView();renderLabels()}
 
-function geometryLayout(items,labels=true){if(!items.length)items=data.counties.filter(f=>!state.county||f.name===state.county);const spec=sceneSpec(),area=contentArea(spec),b=bounds(items);const visibleOutlines=state.level==='villages'&&state.villageTown?data.towns.filter(f=>f.id===state.villageTown):state.level!=='counties'?data.counties.filter(f=>!state.county||f.name===state.county):[];for(const outline of visibleOutlines){b[0]=Math.min(b[0],outline.box[0]);b[1]=Math.min(b[1],outline.box[1]);b[2]=Math.max(b[2],outline.box[2]);b[3]=Math.max(b[3],outline.box[3])}for(const q of activeInsetDefinitions()){b[0]=Math.min(b[0],q.box[0]);b[1]=Math.min(b[1],q.box[1]);b[2]=Math.max(b[2],q.box[2]);b[3]=Math.max(b[3],q.box[3])}const gutter=labels?(isNationwide()?250:state.level==='villages'?95:directTownNameLabels()?(mayorTownBoundaryOverlay()?90:116):state.level==='counties'||mayorTownBoundaryOverlay()?100:140):20,left=area.left+gutter,right=area.right-gutter,w=right-left,h=area.bottom-area.top,scale=Math.min(w/Math.max(.0001,b[2]-b[0]),h/Math.max(.0001,b[3]-b[1]));return{scale,tx:(left+right)/2-(b[0]+b[2])/2*scale,ty:(area.top+area.bottom)/2-(b[1]+b[3])/2*scale,labelLeft:left-22,labelRight:right+22,area}}
+function geometryLayout(items,labels=true){if(!items.length)items=data.counties.filter(f=>!state.county||f.name===state.county);const spec=sceneSpec(),area=contentArea(spec),b=bounds(items);const visibleOutlines=state.level==='villages'&&state.villageTown?data.towns.filter(f=>f.id===state.villageTown):state.level!=='counties'?data.counties.filter(f=>!state.county||f.name===state.county):[];for(const outline of visibleOutlines){b[0]=Math.min(b[0],outline.box[0]);b[1]=Math.min(b[1],outline.box[1]);b[2]=Math.max(b[2],outline.box[2]);b[3]=Math.max(b[3],outline.box[3])}for(const q of activeInsetDefinitions()){b[0]=Math.min(b[0],q.box[0]);b[1]=Math.min(b[1],q.box[1]);b[2]=Math.max(b[2],q.box[2]);b[3]=Math.max(b[3],q.box[3])}const gutter=labels?(isNationwide()?250:state.level==='villages'?95:directTownNameLabels()?(mayorTownBoundaryOverlay()?90:116):state.level==='counties'||mayorTownBoundaryOverlay()?100:140):20,left=area.left+gutter,right=Math.min(area.right-gutter,state.labels&&(['counties','towns','villages'].includes(state.level)||identityPanelsActive())?spec.width-mapKeyRailWidth(spec):area.right-gutter),w=right-left,h=area.bottom-area.top,scale=Math.min(w/Math.max(.0001,b[2]-b[0]),h/Math.max(.0001,b[3]-b[1]));return{scale,tx:(left+right)/2-(b[0]+b[2])/2*scale,ty:(area.top+area.bottom)/2-(b[1]+b[3])/2*scale,labelLeft:left-22,labelRight:right+22,area}}
 function identityPanelLayouts(){
  if(!identityPanelsActive()||!data)return[];
- const identities=panelIdentities(),spec=sceneSpec(),area=contentArea(spec),gap=26,left=area.left+8,right=area.right-8,top=area.top+52,bottom=area.bottom-12,columns=identities.length===4?2:identities.length,rows=Math.ceil(identities.length/columns),panelWidth=(right-left-gap*(columns-1))/columns,panelHeight=(bottom-top-gap*(rows-1))/rows;
+ const identities=panelIdentities(),spec=sceneSpec(),area=contentArea(spec),gap=26,left=area.left+8,right=Math.min(area.right-8,spec.width-mapKeyRailWidth(spec)),top=area.top+52,bottom=area.bottom-12,columns=identities.length===4?2:identities.length,rows=Math.ceil(identities.length/columns),panelWidth=(right-left-gap*(columns-1))/columns,panelHeight=(bottom-top-gap*(rows-1))/rows;
  const geography=data.counties.filter(f=>!state.county||f.name===state.county),b=bounds(geography);for(const q of activeInsetDefinitions()){b[0]=Math.min(b[0],q.box[0]);b[1]=Math.min(b[1],q.box[1]);b[2]=Math.max(b[2],q.box[2]);b[3]=Math.max(b[3],q.box[3])}
  const mapPad=state.county?90:110,scale=Math.min((panelWidth-mapPad*2)/Math.max(.0001,b[2]-b[0]),(panelHeight-mapPad)/Math.max(.0001,b[3]-b[1]));
  return identities.map((identity,index)=>{const column=index%columns,row=Math.floor(index/columns),x=left+column*(panelWidth+gap),y=top+row*(panelHeight+gap),panelArea={left:x,right:x+panelWidth,top:y,bottom:y+panelHeight};return{identity,label:electorateName(identity),townLevel:legislativeFourPanelsActive()&&identity!=='regional',items:currentItems().filter(f=>featureElectorate(f)===identity),area:panelArea,t:{scale,tx:(panelArea.left+panelArea.right)/2-(b[0]+b[2])/2*scale,ty:(panelArea.top+panelArea.bottom+mapPad)/2-(b[1]+b[3])/2*scale,labelLeft:panelArea.left+8,labelRight:panelArea.right-8,area:panelArea}}})
@@ -372,6 +378,7 @@ function renderMapNumberTable(){
  const rows=state.labels?mapNumberSorted(mapNumberRows):[];
  panel.hidden=!rows.length;layout.classList.toggle('has-number-key',!!rows.length);body.replaceChildren();
  $('mapNumberKeyCount').textContent=rows.length+'项';
+ positionMapNumberTable();
  for(const row of rows){
   const tr=document.createElement('tr'),code=document.createElement('th'),name=document.createElement('td');
   code.scope='row';code.className='number-key-number';code.textContent=row.number;
@@ -379,6 +386,20 @@ function renderMapNumberTable(){
   tr.append(code,name);body.append(tr);
  }
 }
+
+function positionMapNumberTable(){
+ const panel=$('mapNumberKey'),canvas=$('canvas'),legend=$('legend'),map=$('map');
+ if(!panel||panel.hidden||!canvas||!map)return;
+ const frame=canvas.getBoundingClientRect(),bounds=map.getBoundingClientRect();
+ const box=state.legend.show&&legend?.childElementCount?legend.getBoundingClientRect():null;
+ const bottom=box&&box.height?box.top-frame.top-10:bounds.bottom-frame.top-32;
+ const right=box&&box.width?frame.right-box.right:20;
+ panel.style.right=Math.max(10,right)+'px';
+ panel.style.bottom=Math.max(36,frame.height-bottom)+'px';
+ panel.style.width=Math.max(155,Math.min(260,box?.width||220,frame.width*.36))+'px';
+ panel.style.maxHeight=Math.max(110,bottom-65)+'px';
+}
+if(typeof window!=='undefined')window.addEventListener('resize',()=>positionMapNumberTable());
 
 function mapLabelCandidatePoints(f,t){
  const points=[f.center,f.labelAnchor].filter(Boolean).map(p=>({x:p[0]*t.scale+t.tx,y:p[1]*t.scale+t.ty}));
@@ -1013,32 +1034,12 @@ function townNameLabelLayout(items,t,font,area,reserve,attempt=0){
 }
 
 function labelLayout(items,t,font=15){
- const area=t.area||contentArea(sceneSpec()),reserve=state.legend.show?legendBox(sceneSpec()):null;
- if(countyMayorOverview())return countyMayorLabelLayout(items,t,font,area,reserve);
- if(directTownNameLabels()){
-  const labels=townNameLabelLayout(items,t,font,area,reserve);
-  const done=new Set(labels.map(q=>q.f.id)),used=labels.map(q=>q.rect);
-  const pending=items.filter(f=>shownLabel(f)&&!done.has(f.id))
-   .map(f=>({f,font,text:shownLabel(f),numeric:false}));
-  const leaders=labels.filter(q=>q.leaderPoints).map(q=>q.leaderPoints);
-  for(const q of mapOutsideLabelColumns(pending,t,used,area,reserve,items)){
-   const anchor=townVisualCenter(q.f,t),width=Array.from(q.text).length*font*1.04+8;
-   const side=q.x<anchor.x?'left':'right',frames=leaderFrames(t,3);
-   const occupied=labels.map(row=>row.rect);
-   const route=mapOrthogonalLeader(anchor,side,q.x,q.y,width,anchor.x,leaders,occupied,area,frames)||
-    mapGridLeaderRoute(anchor,side,q.x,q.y,width,leaders,occupied,area,frames);
-   const end=q.x+(side==='left'?width/2+6:-width/2-6),rail=end+(side==='left'?8:-8);
-   labels.push({...q,...route,leaderAnchor:anchor,
-    leaderPath:route?.leaderPath||`M${anchor.x},${anchor.y}H${rail}V${q.y}H${end}`});
-   if(route)leaders.push(route.leaderPoints);
-  }
-  return labels;
- }
+ const baseArea=t.area||contentArea(sceneSpec()),area={...baseArea,right:Math.min(baseArea.right,sceneSpec().width-((typeof document!=='undefined')?mapKeyRailWidth(sceneSpec()):290))},reserve=state.legend.show?legendBox(sceneSpec()):null;
  const sizes=f=>(f.box[2]-f.box[0])*(f.box[3]-f.box[1]);
  const sorted=[...items].sort((a,b)=>sizes(b)-sizes(a)),used=[],labels=[],needsNumber=[],outside=[];
  for(const f of sorted){
   const name=shownLabel(f);if(!name)continue;
-  if(['council','legislative'].includes(state.level)&&!f.parentDistrictId&&!f.legislativeTown){
+  if(['council','legislative'].includes(state.level)&&!f.parentDistrictId&&!f.legislativeTown&&districtMapNumber(f)){
    const districtNumber=districtMapNumber(f),text=districtNumber||name;
    const pos=mapNumberLabelFit(f,t,text,font,used,area,reserve);
    if(pos){
@@ -1048,13 +1049,16 @@ function labelLayout(items,t,font=15){
    continue;
   }
   const width=Array.from(name).length*font*1.04+4,height=font*1.5+3;
-  if(isInsetIslandFeature(f)){
-   const pos=mapInsetLabelFit(f,t,width,height,used,area,reserve);
-   used.push(pos.rect);labels.push({f,x:pos.x,y:pos.y,font,text:name,numeric:false,island:true});
-   continue;
+  // Every administrative name follows the same interior-only rule,
+  // including offshore islands and mayor/council township detail panels.
+  let pos=townInsideLabelFit(f,t,width,height,used,area,reserve),lines=null;
+  const chars=Array.from(name);
+  if(!pos&&chars.length>=3&&chars.length<=6){
+   const split=Math.ceil(chars.length/2),rows=[chars.slice(0,split).join(''),chars.slice(split).join('')];
+   pos=townInsideLabelFit(f,t,Math.max(...rows.map(row=>row.length))*font*1.04+4,font*2.35+4,used,area,reserve);
+   if(pos)lines=rows;
   }
-  const pos=mapLabelFit(f,t,width,height,used,area,reserve);
-  if(pos){used.push(pos.rect);labels.push({f,x:pos.x,y:pos.y,font,text:name,numeric:false})}
+  if(pos){used.push(pos.rect);labels.push({f,x:pos.x,y:pos.y,font,text:name,lines,numeric:false})}
   else needsNumber.push(f);
  }
  // Administrative reference numbers follow geography, not Chinese collation.
@@ -1067,7 +1071,12 @@ function labelLayout(items,t,font=15){
   const value=String(nextNumber);
   const pos=mapNumberLabelFit(f,t,value,font,used,area,reserve);
   const q={f,font,text:value,numeric:true,number:value};
-  if(pos){used.push(pos.rect);labels.push({...q,...pos})}else outside.push(q);
+  if(pos){used.push(pos.rect);labels.push({...q,...pos})}
+  else{
+   // A tiny polygon may not even fit one digit. Keep the number at its
+   // interior anchor and resolve crowded numbers in the outer margin.
+   outside.push(q);
+  }
   nextNumber++;
  }
  labels.push(...mapOutsideLabelColumns(outside,t,used,area,reserve,items));
@@ -1174,7 +1183,7 @@ function insetDefinitions(){return[
 function activeInsetDefinitions(){const town=state.level==='villages'&&state.villageTown?data.towns.find(f=>f.id===state.villageTown):null,county=state.county||town?.county||'';return insetDefinitions().filter(q=>{if(town?.name==='乌坵乡')return q.town==='乌坵乡';if(town&&q.town==='乌坵乡')return false;return !county||q.county===county||data.towns.some(f=>f.name===q.town&&f.county===county)})}
 function appendInsetFrames(group,t,spec,prefix=''){for(const q of activeInsetDefinitions()){const b=q.box,g=svgEl('g',{'data-inset':prefix+q.name});const p=q.d?svgEl('path',{d:q.d,transform:transformOf(t),fill:'none',stroke:'#a3b5a8','stroke-width':.75,'vector-effect':'non-scaling-stroke'}):svgEl('rect',{x:b[0]*t.scale+t.tx,y:b[1]*t.scale+t.ty,width:(b[2]-b[0])*t.scale,height:(b[3]-b[1])*t.scale,rx:3,fill:'none',stroke:'#a3b5a8','stroke-width':.75,'vector-effect':'non-scaling-stroke'});g.append(p);group.append(g)}}
 function drawInsetFrames(group,t,spec){group.replaceChildren();if(identityPanelsActive()){for(const panel of identityPanelLayouts()){const {area}=panel;group.append(svgEl('rect',{x:area.left,y:area.top-52,width:area.right-area.left,height:area.bottom-area.top+52,rx:16,fill:'#fbfdfb',stroke:'#d7e2d9','stroke-width':1.4}));const title=svgEl('text',{x:(area.left+area.right)/2,y:area.top-18,'text-anchor':'middle','font-size':30,'font-weight':600,fill:'#294a3a'});title.textContent=panel.label;group.append(title);const note=svgEl('text',{x:(area.left+area.right)/2,y:area.top+13,'text-anchor':'middle','font-size':16,fill:'#74877a'});note.textContent=panel.items.length?panel.items.length+(panel.townLevel?' 个乡镇市区':' 个选区'):mapLoadState[state.level==='council'?'议员选区':'立法机构民代选区']==='loading'?'正在载入地图…':'当前范围没有此类选区';group.append(note);appendInsetFrames(group,panel.t,spec,panel.identity+'-')}return}appendInsetFrames(group,t,spec)}
-function drawMapFurniture(group,t,spec){group.replaceChildren();const wide=isNationwide(),area=contentArea(spec),footerTop=spec.height-furnitureFooterHeight(),unit=wide?1.3:1,nx=spec.width-138,ny=wide?125:110,okNorth=decorationClear([nx-20,ny-12,nx+20,ny+57]),cx=okNorth?nx:spec.width-75,cy=okNorth?ny:85;
+function drawMapFurniture(group,t,spec){group.replaceChildren();const wide=isNationwide(),area=contentArea(spec),footerTop=spec.height-furnitureFooterHeight(),unit=wide?1.3:1,nx=spec.width-mapKeyRailWidth(spec)-30,ny=wide?125:110,okNorth=decorationClear([nx-20,ny-12,nx+20,ny+57]),cx=okNorth?nx:spec.width-mapKeyRailWidth(spec)-25,cy=okNorth?ny:85;
  const north=svgEl('g',{'data-decoration':'north-arrow',transform:`translate(${cx},${cy}) scale(${unit})`});north.append(svgEl('path',{d:'M0,8L-10,42L0,34L10,42Z',fill:'#365d49'}));north.append(svgEl('path',{d:'M0,8L0,34L10,42Z',fill:'#fff',stroke:'#365d49','stroke-width':.8}));const n=svgEl('text',{x:0,y:0,'font-size':13,'font-weight':600,'text-anchor':'middle',fill:'#365d49'});n.textContent='N';north.append(n);group.append(north);
  const pixelsPerKm=t.scale*10000/6371.0088,target=Math.min(wide?220:140,area.right-area.left-120),km=[.01,.02,.05,.1,.2,.5,1,2,5,10,20,50,100,200].reduce((a,b)=>Math.abs(b*pixelsPerKm-target)<Math.abs(a*pixelsPerKm-target)?b:a),length=km*pixelsPerKm,sx=area.left+70,sy=footerTop-8,okScale=decorationClear([sx-15,sy-30,sx+length+72,sy+32]),x=okScale?sx:area.left+20,y=okScale?sy:footerTop+15,font=wide?15:10,bar=svgEl('g',{'data-decoration':'scale-bar','data-distance-km':km,'data-length':length});
  bar.append(svgEl('rect',{x:x-12,y:y-24,width:length+70,height:52,rx:6,fill:'#ffffffed'}));for(let i=0;i<2;i++)bar.append(svgEl('rect',{x:x+i*length/2,y,width:length/2,height:6,fill:i?'#fff':'#365d49',stroke:'#365d49','stroke-width':.8}));for(let i=0;i<3;i++){const text=svgEl('text',{x:x+i*length/2,y:y-7,'font-size':font,'text-anchor':'middle',fill:'#466253'});text.textContent=Number(((km<1?km*1000:km)*i/2).toFixed(2))+(i===2?(km<1?' m':' km'):'');bar.append(text)}group.append(bar);
@@ -1704,7 +1713,7 @@ function exportSvg(){
  try{
   for(const id of ['predictionPatterns','insetFrames','regions','townBorders','districtBorders','borders','labels','mapFurniture','legend']){
    if(id==='labels'&&!state.labels)continue;if(!$(id))continue;
-   const g=$(id).cloneNode(true);g.removeAttribute('id');
+   const g=$(id).cloneNode(true);g.removeAttribute('id');if(id==='legend')g.setAttribute('data-export-map-legend','true');
    if(id==='labels'&&identityPanelsActive())drawIdentityPanelLabels(g,false,true);
    else if(id==='labels'&&state.level!=='villages')drawLabels(g,currentItems(),geometryLayout(currentItems(),true),sceneSpec().font,false);
    else if(id==='labels'&&state.level==='villages')drawVillageLabels(g,currentItems(),geometryLayout(currentItems(),true),fittedView(),false);
@@ -1712,15 +1721,26 @@ function exportSvg(){
   }
   const keyRows=mapNumberSorted(exportNumberRows);
   root.append(map);
-  // The complete key belongs below the drawing, never over external numbers.
-  let appendixHeight=0;
+  let appendixHeight=0,sidebarHeight=0,sidebarWidth=0;
   if(keyRows.length){
-   const appendixColumns=Math.min(Math.max(1,Math.floor((contentWidth-30)/210)),Math.ceil(keyRows.length/12));
-   appendixHeight=appendNumberTableExport(root,keyRows,40,mapY+contentHeight+12,appendixColumns);
+   const keyColumns=Math.max(1,Math.ceil(keyRows.length/38));
+   const keyMetrics=numberTableExportMetrics(keyRows,keyColumns);
+   const box=legendBox(spec),factor=contentWidth/spec.width;
+   const inRail=keyColumns===1&&keyMetrics.width<mapKeyRailWidth(spec)*factor-20;
+   const lx=inRail?coreWidth-Math.max(keyMetrics.width,box.width*factor)-25:coreWidth+12,ly=mapY;
+   const keyHeight=appendNumberTableExport(root,keyRows,lx,ly,keyColumns);
+   const legend=map.querySelector('[data-export-map-legend]');
+   sidebarWidth=inRail?0:Math.max(keyMetrics.width,state.legend.show?box.width*factor:0)+32;
+   sidebarHeight=ly+keyHeight+24;
+   if(legend&&state.legend.show){
+    legend.remove();
+    const wrapper=svgEl('g',{transform:`translate(${lx-box.x*factor},${sidebarHeight-box.y*factor}) scale(${factor})`,'data-export-legend-below-key':'true'});
+    wrapper.append(legend);root.append(wrapper);sidebarHeight+=box.height*factor+24;
+   }
   }
   const originalItems=currentItems();
   const unresolved=exportLabelCoverage(originalItems,map);
-  const zoomTargets=[...unresolved.map(row=>row.id),...keyRows.map(row=>row.id)];
+  const zoomTargets=unresolved.map(row=>row.id);
   const detailY=mapY+contentHeight+(appendixHeight?appendixHeight+24:14);
   const details=state.exportSettings.layout==='compact'?{height:0,labelled:new Set()}:appendExportDetailInsets(root,originalItems,zoomTargets,detailY,contentWidth);
   const coverageRows=exportLabelCoverage(originalItems,map,details.labelled);
@@ -1728,8 +1748,8 @@ function exportSvg(){
   const coverageHeight=appendExportLabelCoverage(root,coverageRows,40,coverageY,contentWidth);
   const tableY=Math.max(mapY+contentHeight+40,coverageY+coverageHeight+30);
   if(winnerRows.length)appendExportPredictionTable(root,winnerRows,tableY);
-  const height=Math.max(mapY+contentHeight+72,coverageY+coverageHeight+32,winnerRows.length?tableY+tableLayout.height+32:0);
-  const actualWidth=coreWidth;
+  const height=Math.max(sidebarHeight,mapY+contentHeight+72,coverageY+coverageHeight+32,winnerRows.length?tableY+tableLayout.height+32:0);
+  const actualWidth=coreWidth+sidebarWidth;
   root.setAttribute('width',actualWidth);root.setAttribute('height',height);root.setAttribute('viewBox','0 0 '+actualWidth+' '+height);
   root.firstChild?.setAttribute('width',actualWidth);root.firstChild?.setAttribute('height',height);
   return new XMLSerializer().serializeToString(root);

@@ -5,8 +5,8 @@ const app=fs.readFileSync('app.js','utf8');
 const src=app.slice(app.indexOf('let mapNumberRows=[]'),app.indexOf('\nfunction activeInsetDefinitions(){'));
 const area={left:20,right:980,top:30,bottom:760},t={scale:1,tx:0,ty:0,area};
 const overlap=(a,b)=>a[0]<b[2]&&a[2]>b[0]&&a[1]<b[3]&&a[3]>b[1];
-function layout(level='council'){
- const state={level,county:'高雄市',labels:true,legend:{show:false}};
+function layout(level='council',overrides={}){
+ const state={level,county:'高雄市',labels:true,legend:{show:false},...overrides};
  return new Function('state','data','featureElectorate','shownLabel','regionContains','leaderOverlap','leaderIn',
   'contentArea','sceneSpec','legendBox','svgEl','paint','$','identityPanelsActive','view','leaderFrames',
   src+';return {labelLayout,mapOrderedLabelRows}')(
@@ -59,4 +59,18 @@ test('Long township callouts on the correct side are shortened without losing na
  assert.equal(q.calloutLane,'local-near');
  const distance=q.leaderPoints.slice(1).reduce((s,p,i)=>s+Math.hypot(p[0]-q.leaderPoints[i][0],p[1]-q.leaderPoints[i][1]),0);
  assert.ok(distance<100);assert.ok(q.rect[2]<390);
+});
+
+test('Every administrative map uses interior names or geographic reference digits, including prediction views',()=>{
+ const small={id:'urban',name:'放不下的行政区',county:'高雄市',center:[410,310],box:[400,300,420,320]};
+ const large={id:'rural',name:'大树区',county:'高雄市',center:[600,400],box:[530,330,670,470]};
+ for(const level of ['counties','towns','villages'])for(const office of ['mayor','township']){
+  const solver=layout(level,{workspaceMode:'prediction',fillMode:'prediction',predictionOffice:office,predictionScale:'overlay'});
+  const labels=solver.labelLayout([small,large],t,15);
+  assert.equal(labels.length,2);
+  const numbered=labels.find(q=>q.f.id===small.id),named=labels.find(q=>q.f.id===large.id);
+  assert.equal(numbered.numeric,true);assert.equal(numbered.text,'1');
+  assert.equal(named.text,large.name);assert.equal(named.numeric,false);
+  assert.ok(labels.every(q=>q.numeric||!q.leaderAnchor),'Administrative full names must never become long callouts');
+ }
 });

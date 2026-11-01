@@ -652,7 +652,7 @@ test('Electoral districts display their own numbers without numeric lookup entri
  const islandLabel=logic.labelLayout([island],{scale:1,tx:0,ty:0,area:{left:0,right:1200,top:0,bottom:700}},14)[0];
  assert.equal(islandLabel.text,'澎湖县');
  assert.equal(islandLabel.numeric,false);
- assert.ok(islandLabel.y>island.center[1]);
+ assert.ok(islandLabel.y>=island.box[1]&&islandLabel.y<=island.box[3]);
 });
 test('Export recovers every label omitted by collision-free main map placement, including districts',()=>{
  const src=app.slice(app.indexOf('let mapNumberRows=[]'),app.indexOf('\nfunction activeInsetDefinitions(){'));
@@ -776,7 +776,7 @@ test('Specified-candidate export selects one ID and only includes entered vote m
  assert.match(app,/heading\.textContent=layout\.specified\?'指定候选人得票预测'/);
 });
 
-test('Administrative lookup stays inside the canvas card, below the drawing in exports',()=>{
+test('Administrative lookup sits above the legend and exports every entry',()=>{
  assert.match(index,/id="mapWithKey"/);
  assert.match(index,/id="mapNumberKey"/);
  assert.match(index,/id="mapNumberKeyRows"/);
@@ -793,7 +793,8 @@ test('Administrative lookup stays inside the canvas card, below the drawing in e
  const table=app.slice(app.indexOf('function renderMapNumberTable(){'),app.indexOf('\nfunction mapLabelCandidatePoints('));
  assert.doesNotMatch(table,/number-key-group|th\.colSpan/);
  assert.ok(table.includes("state.labels?mapNumberSorted(mapNumberRows):[]"));
- assert.match(app,/appendNumberTableExport\(root,keyRows,40,mapY\+contentHeight\+12,appendixColumns\)/);
+ assert.match(app,/appendNumberTableExport\(root,keyRows,lx,ly,keyColumns\)/);
+ assert.match(app,/data-export-legend-below-key/);
  assert.match(app,/actualWidth=coreWidth/);
  assert.match(app,/appendExportPredictionTable\(root,winnerRows,tableY\)/);
  assert.match(app,/if\(state\.labels&&view\)/);

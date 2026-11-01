@@ -420,3 +420,20 @@ dialog.floating-prediction-dialog > .floating-dialog-scroll{
 
 /* Specified candidate vote entry shows no other candidate rows. */
 .prediction-dialog .prediction-table tbody tr[hidden],.local-dialog .local-table tbody tr[hidden]{display:none!important}
+
+/* Administrative reference key sits directly above the legend. */
+.has-number-key>.canvas:not(.atlas-mode){height:clamp(470px,calc(100dvh - 232px),850px)}
+.has-number-key #map{height:100%;min-height:0}
+.canvas>.map-number-key{position:absolute;top:auto;left:auto;right:20px;bottom:125px;width:220px;max-height:65%;margin:0;padding:12px 11px 10px;z-index:4;box-shadow:0 3px 14px #273b2810;background:#fff}
+.canvas>.map-number-key .map-number-key-scroll{max-height:none;overflow:auto}
+.canvas>.map-number-key tbody{display:table-row-group}
+.canvas>.map-number-key tr{display:table-row}
+.canvas>.map-number-key td{display:table-cell}
+@media(max-width:650px){
+ .has-number-key>.canvas:not(.atlas-mode){height:65dvh;min-height:380px}
+ .canvas>.map-number-key{padding:8px;max-width:36%;font-size:11px}
+ .map-number-key th,.map-number-key td{padding:4px 3px}
+}
+.canvas>.map-number-key th,.canvas>.map-number-key td{padding:2px 4px;line-height:17px;font-size:12px}
+.canvas>.map-number-key .map-number-key-scroll{scrollbar-width:thin}
+.canvas>.map-number-key th,.canvas>.map-number-key td{padding:1px 4px;line-height:15px}

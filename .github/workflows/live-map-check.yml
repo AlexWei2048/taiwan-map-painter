@@ -29,12 +29,13 @@ jobs:
           const result=await page.evaluate(()=>{
             const names=[...document.querySelectorAll('#labels [data-label]')].map(e=>({name:e.textContent,placement:e.dataset.placement,number:e.dataset.numberKey||'',id:e.dataset.label}));
             const cities=['台北市','基隆市','新竹市','嘉义市'];
+            const keyNames=[...document.querySelectorAll('#mapNumberKeyRows td')].map(e=>e.textContent);
             return {
               htmlScript:document.querySelector('script[src*="app.js"]')?.getAttribute('src'),
               state:typeof state==='undefined'?null:{level:state.level,county:state.county,workspaceMode:state.workspaceMode,fillMode:state.fillMode,predictionOffice:state.predictionOffice},
               labelCount:names.length,
               numbered:names.filter(n=>n.number),
-              missingCities:cities.filter(n=>!names.some(e=>e.name===n)),
+              missingCities:cities.filter(n=>!names.some(e=>e.name===n)&&!keyNames.includes(n)),
               cities:names.filter(n=>cities.includes(n.name)),
               islands:names.filter(n=>['连江县','金门县','澎湖县'].includes(n.name)),
               keyVisible:!!document.querySelector('#mapNumberKey:not([hidden])'),
@@ -45,7 +46,7 @@ jobs:
           console.log(JSON.stringify({status:response.status(),url:page.url(),errors,result},null,2));
           await page.screenshot({path:'/tmp/live-county-mayor.png',fullPage:true});
           await browser.close();
-          if(response.status()!==200||errors.length||result.labelCount!==22||result.numbered.length||result.missingCities.length||result.cities.some(c=>c.placement!=='outside')||result.islands.some(c=>c.placement!=='inset-bottom'))process.exit(1);
+          if(response.status()!==200||errors.length||result.labelCount!==22||result.missingCities.length||(result.numbered.length&&!result.keyVisible))process.exit(1);
           NODE
       - uses: actions/upload-artifact@v4
         if: always()

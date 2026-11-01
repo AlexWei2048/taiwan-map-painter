@@ -223,3 +223,10 @@ Latest source revision: 20261030-no-offline-v11.
 - Removed workspace-ui.js's secondary applyView wrapper, which had queued another full label layout every frame despite the main navigation scheduler.
 - Direct main publication was blocked by automatic approval review; preparing a review branch without changing the public site.
 - CI verified exports with embedded emblems and incumbency, historical switching, CSV flows, all county council/legislative labels, national zoom, and mobile names. Remaining routing assertions initially rejected excessively bent grid routes; added obstacle-checked shortcutting. Updated the route validator's minimum from three segments to one, because a straight horizontal callout is also valid orthogonal routing; the seven-segment limit remains.
+
+## 2026-11-02 administrative number keys (v90)
+- Unified administrative name placement for county, township, village, prediction and identity-panel views: full names must fit inside the polygon; overflow uses geographic reference numbers with a complete lookup.
+- The lookup card is positioned above the legend, with a dedicated map margin and scrolling for long on-screen lists. Official electoral district numbers keep their existing values.
+- SVG/PNG export expands every lookup row and places the legend beneath the key; keyed areas no longer trigger redundant export enlargement panels.
+- Updated regression and browser workflows to verify the new user-requested name-or-number contract instead of requiring external full-name leaders.
+- Local regression checks: 73 pass; preview verified Kaohsiung 38 labels, 29 number/key pairs, and the key above the legend.

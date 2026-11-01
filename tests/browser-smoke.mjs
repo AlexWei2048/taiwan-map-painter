@@ -581,55 +581,39 @@ test('Every council and regional legislative district is labelled in all 22 coun
  await page.waitForFunction(()=>document.querySelector('#regions [data-region][data-electorate="regional"]'));
  for(const county of counties){await page.locator('#county').selectOption({label:county});assert.deepEqual(await missingLabels(page,'#regions [data-region][data-electorate="regional"]'),[],county+' legislative')}
 });
-test('Kaohsiung county mayor townships use all 38 complete names, inside labels and callouts, without numerical key',async t=>{
- const page=await pageFor(t);
- await page.locator('#county').selectOption({label:'高雄市'});
+async function assertAdministrativeKey(page){
+ const r=await page.evaluate(()=>{
+  const items=currentItems(),labels=[...document.querySelectorAll('#labels text[data-label]')];
+  const rows=[...document.querySelectorAll('#mapNumberKeyRows tr')].map(tr=>({number:tr.querySelector('th').textContent,name:tr.querySelector('td').textContent}));
+  const bad=[];
+  for(const el of labels){
+   const f=items.find(f=>String(f.id)===el.dataset.label);if(!f)continue;
+   if(el.dataset.numberKey){
+    const row=rows.find(row=>row.number===el.dataset.numberKey);
+    if(!row||!row.name.includes(f.name))bad.push(f.name+' missing from key');
+   }else if(el.textContent!==f.name)bad.push(f.name+' wrong name');
+  }
+  const key=document.querySelector('#mapNumberKey'),legend=document.querySelector('#legend');
+  return{total:items.length,labelled:labels.length,numbers:labels.filter(el=>el.dataset.numberKey).length,
+   rows:rows.length,bad,above:key.hidden||key.getBoundingClientRect().bottom<=legend.getBoundingClientRect().top+1};
+ });
+ assert.equal(r.labelled,r.total);assert.deepEqual(r.bad,[]);assert.equal(r.rows,r.numbers);assert.ok(r.above);
+ return r;
+}
+test('Dense administrative names fall back to numbers with a complete key above the legend and in exports',async t=>{
+ const page=await pageFor(t);await page.locator('#county').selectOption({label:'高雄市'});
  await page.locator('#predictionScale').selectOption('overlay');
- assert.equal(await page.locator('#regions path[data-region]').count(),38);
- assert.deepEqual(await missingLabels(page),[],'Every town needs its own full name');
- const names=await page.locator('#labels text[data-label]').evaluateAll(nodes=>nodes.map(el=>({
-  id:el.dataset.label,text:el.textContent,number:el.dataset.numberKey,font:el.getAttribute('font-size'),
-  placement:el.dataset.placement,rect:{x:el.getBBox().x,y:el.getBBox().y,w:el.getBBox().width,h:el.getBBox().height}
- })));
- const towns=JSON.parse(await readFile(new URL('../assets/map-base.json',import.meta.url),'utf8')).towns.filter(f=>f.county==='高雄市');
- assert.equal(names.length,38);
- assert.deepEqual(new Set(names.map(x=>x.text)),new Set(towns.map(f=>f.name)));
- assert.ok(names.every(l=>!l.number),'Full labels must not be replaced with numeric lookup keys');
- assert.ok(names.some(l=>l.placement==='inside'),'Large towns should be labelled inside the polygon');
- assert.ok(names.some(l=>l.placement==='outside'),'Small towns should use callout lines');
- const leaders=await page.locator('#labels [data-label-leader]').count();
- assert.equal(leaders,names.filter(l=>l.placement==='outside').length);
- assert.equal(await page.locator('#mapNumberKey').isVisible(),false);
- for(let i=0;i<names.length;i++)for(let j=i+1;j<names.length;j++){
-  const a=names[i].rect,b=names[j].rect;
-  assert.ok(!(a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y),
-   'Overlapping names: '+names[i].text+' / '+names[j].text);
- }
+ const r=await assertAdministrativeKey(page);assert.equal(r.total,38);assert.ok(r.numbers>0);
  const svg=await exportSvg(page);
- const result=await page.evaluate(source=>{
+ const exported=await page.evaluate(source=>{
   const doc=new DOMParser().parseFromString(source,'image/svg+xml');
-  return{
-   labels:[...doc.querySelectorAll('text[data-label]')].map(x=>x.textContent),
-   numbers:doc.querySelectorAll('[data-number-key],[data-map-number-key]').length,
-   leaders:doc.querySelectorAll('[data-label-leader]').length
-  };
+  return{key:doc.querySelectorAll('[data-map-number-key]').length,
+   numbers:doc.querySelectorAll('[data-number-key]').length,
+   below:!!doc.querySelector('[data-export-legend-below-key]'),
+   text:doc.querySelector('[data-map-number-key]')?.textContent};
  },svg);
- assert.equal(result.numbers,0);
- assert.deepEqual(new Set(result.labels),new Set(towns.map(f=>f.name)));
- assert.ok(result.leaders>0);
- // No diagonal fan: every external township leader uses orthogonal elbows.
- const paths=await page.locator('#labels [data-label-leader]').evaluateAll(els=>els.map(el=>({
-  id:el.dataset.label,d:el.getAttribute('d'),width:getComputedStyle(el).strokeWidth
- })));
- assert.ok(paths.every(p=>/^M[-\d.,]+(?:[HV][-\d.]+){1,7}$/.test(p.d)),
-  'All township leaders must use perimeter-style orthogonal elbows: '+JSON.stringify(paths.filter(p=>!/^M[-\d.,]+(?:[HV][-\d.]+){1,7}$/.test(p.d)).slice(0,4)));
- assert.ok(paths.every(p=>parseFloat(p.width)<=1.1),'Township leaders must be delicate');
- assert.equal(await page.locator('#labels [data-town-leader-layer]').count(),1);
- assert.ok(await page.evaluate(()=>{
-  const labels=document.querySelector('#labels');
-  return labels.firstElementChild?.hasAttribute('data-town-leader-layer')&&
-   [...labels.querySelectorAll('text[data-label]')].every(el=>!el.parentElement.querySelector('[data-label-leader]'));
- }), 'All lines must be painted behind every township name');
+ assert.equal(exported.key,1);assert.equal(exported.numbers,r.numbers);assert.equal(exported.below,true);
+ assert.ok(exported.text.includes('数字对照表'));
 });
 
 test('Town label hover highlights the matching polygon and restores its prediction fill',async t=>{
@@ -682,169 +666,28 @@ test('Town label hover highlights the matching polygon and restores its predicti
  assert.equal(await townShape.evaluate(e=>getComputedStyle(e).fill),initial);
 });
 
-test('All 22 scoped mayoral township maps display complete township names without number keys',async t=>{
- const page=await pageFor(t);
- await page.locator('#predictionScale').selectOption('overlay');
+test('All 22 mayoral township views keep every name or its matching number',async t=>{
+ const page=await pageFor(t);await page.locator('#predictionScale').selectOption('overlay');
  for(const county of counties){
-  await page.locator('#county').selectOption({label:county});
-  const result=await page.evaluate(()=>({
-   total:currentItems().length,
-   labelled:new Set([...document.querySelectorAll('#labels text[data-label]')].map(e=>e.dataset.label)).size,
-   numbers:document.querySelectorAll('#labels [data-number-key]').length,
-   visibleKey:!document.querySelector('#mapNumberKey').hidden,
-   missing:currentItems().filter(f=>!document.querySelector('#labels text[data-label="'+f.id+'"]')).map(f=>({
-    name:f.name,id:f.id,box:f.box,center:f.center,
-    anchor:mapLabelAnchor(f,geometryLayout(currentItems(),true))
-   })),
-   frameDefinitions:county==='金门县'?activeInsetDefinitions().map(d=>({name:d.name,box:d.box})):[]
-  }));
-  assert.ok(result.total>0,county+' has no town geometries');
-  assert.equal(result.labelled,result.total,county+' township names missing: '+JSON.stringify(result.missing)+'; frames='+JSON.stringify(result.frameDefinitions));
-  assert.equal(result.numbers,0,county+' uses numbered labels');
-  assert.equal(result.visibleKey,false,county+' still shows a number key');
-  // Full 22-county map sweep, also check that leader routes do not fan
-  // diagonally through the map or cross over the text rendering layer.
-  const quality=await page.evaluate(()=>{
-   const labels=document.querySelector('#labels');
-   const leaders=[...labels.querySelectorAll('[data-label-leader]')];
-   return{routes:leaders.map(el=>el.getAttribute('d')),
-    underText:labels.firstElementChild?.hasAttribute('data-town-leader-layer'),
-    textCount:labels.querySelectorAll('text[data-label]').length,
-    textRects:[...labels.querySelectorAll('text[data-label]')].map(e=>({
-     name:e.textContent,id:e.dataset.label,rect:e.getBBox()
-    })),
-    widths:leaders.map(e=>parseFloat(getComputedStyle(e).strokeWidth))};
-  });
-  assert.ok(quality.routes.every(d=>/^M[-\d.,]+(?:[HV][-\d.]+){1,7}$/.test(d)),
-   county+' has a diagonal or trans-map fan: '+JSON.stringify(quality.routes.filter(d=>!/^M[-\d.,]+(?:[HV][-\d.]+){1,7}$/.test(d)).slice(0,4)));
-  assert.equal(quality.underText,true,county+' leaders may cover names');
-  assert.equal(quality.textCount,result.total);
-  if(['新北市','台中市','高雄市','嘉义县'].includes(county)){
-   const metrics=await page.evaluate(()=>{
-    const items=currentItems(),bounds=items.reduce((b,f)=>[
-     Math.min(b[0],f.box[0]),Math.max(b[1],f.box[2])],[Infinity,-Infinity]);
-    const t=geometryLayout(items,true);
-    const mid=(bounds[0]+bounds[1])/2*t.scale+t.tx,half=(bounds[1]-bounds[0])/2*t.scale;
-    let inside=0,outside=0,far=0,nearSide=0;
-    const laneStats={perimeter:{right:0,wrong:0},fallback:{right:0,wrong:0}},mismatched=[];
-    for(const el of document.querySelectorAll('#labels text[data-label]')){
-     if(el.dataset.placement==='inside'){inside++;continue}
-     outside++;
-     const f=items.find(item=>String(item.id)===el.dataset.label);
-     if(!f)continue;
-     const anchor=townVisualCenter(f,t),normalized=Math.abs(anchor.x-mid)/Math.max(1,half);
-     if(normalized<.32)continue;
-     far++;
-     const side=document.querySelector('#labels path[data-label-leader="'+el.dataset.label+'"]')?.dataset.labelColumn;
-     const lane=el.dataset.calloutLane==='perimeter'?'perimeter':'fallback';
-     if(side===(anchor.x<mid?'left':'right')){nearSide++;laneStats[lane].right++}
-     else{laneStats[lane].wrong++;mismatched.push([el.textContent,lane,side,Number(normalized.toFixed(2))])}
-    }
-    return{inside,outside,far,nearSide,ratio:far?Number((nearSide/far).toFixed(2)):1,laneStats,mismatched};
-   });
-   console.log('Town callout distribution',county,JSON.stringify(metrics));
-   assert.equal(metrics.inside+metrics.outside,result.total);
-   const minimumInside={'新北市':17,'台中市':5,'高雄市':10,'嘉义县':16};
-   const minimumNearSide={'新北市':.85,'台中市':.75,'高雄市':.60,'嘉义县':.85};
-   assert.ok(metrics.inside>=minimumInside[county],
-    county+' lost readable names that previously fitted inside their own polygons');
-   assert.ok(metrics.ratio>=minimumNearSide[county],
-    county+' callout sides too often contradict the source geography');
-  }
-  // Perimeter names must have a real air gap, not just non-overlapping glyphs.
-  const breathing=await page.evaluate(()=>{
-   const names=[...document.querySelectorAll('#labels text[data-callout-lane="perimeter"]')]
-    .map(el=>({name:el.textContent,b:el.getBBox(),
-     side:document.querySelector('#labels path[data-label-leader="'+el.dataset.label+'"]')?.dataset.labelColumn}));
-   const squeezed=[];
-   for(let i=0;i<names.length;i++)for(let j=i+1;j<names.length;j++){
-    const a=names[i],b=names[j];
-    if(a.side!==b.side||!a.side)continue;
-    if(a.b.x>b.b.x+b.b.width+5||b.b.x>a.b.x+a.b.width+5)continue;
-    const blank=Math.max(b.b.y-(a.b.y+a.b.height),a.b.y-(b.b.y+b.b.height));
-    if(blank<7)squeezed.push([a.name,b.name,Number(blank.toFixed(1))]);
-   }
-   return squeezed;
-  });
-  assert.deepEqual(breathing,[],county+' callout text too tightly packed');
-  // Verify actual SVG glyph boxes and callout dots against polygon geometry,
-  // not just against coarse bounding boxes or the external-label columns.
-  const containment=await page.evaluate(()=>{
-   const items=new Map(currentItems().map(f=>[String(f.id),f]));
-   const t=geometryLayout(currentItems(),true);
-   const bad=[],centers=[];
-   for(const el of document.querySelectorAll('#labels text[data-label]')){
-    const f=items.get(el.dataset.label);
-    if(!f)continue;
-    const center=townVisualCenter(f,t);
-    if(!regionContains(f,center.x,center.y,t))bad.push(f.name+' visual centre outside polygon');
-    if(el.dataset.placement==='inside'){
-     const b=el.getBBox(),cx=b.x+b.width/2,cy=b.y+b.height/2;
-     if(Math.abs(cx-Number(el.getAttribute('x')))>3)bad.push(f.name+' horizontal text not centred');
-     for(const dx of [0,.25,.5,.75,1])for(const dy of [0,.25,.5,.75,1])
-      if(!regionContains(f,b.x+b.width*dx,b.y+b.height*dy,t))
-       bad.push(f.name+' text rectangle outside polygon');
-    }else if(el.dataset.placement==='outside'){
-     const dot=document.querySelector('#labels [data-label-anchor="'+el.dataset.label+'"]');
-     if(!dot){bad.push(f.name+' missing callout anchor');continue}
-     const x=Number(dot.getAttribute('cx')),y=Number(dot.getAttribute('cy'));
-     if(!regionContains(f,x,y,t))bad.push(f.name+' callout anchor outside polygon');
-     if(Math.hypot(x-center.x,y-center.y)>.5)bad.push(f.name+' anchor not at visual centre');
-    }
-    centers.push(center);
-   }
-   return{bad,count:centers.length};
-  });
-  assert.deepEqual(containment.bad,[],county+' invalid centre/labels: '+containment.bad.slice(0,8).join(', '));
-  assert.equal(containment.count,result.total);
-  assert.ok(quality.widths.every(w=>w<=1.1),county+' has heavy leaders');
-  for(let i=0;i<quality.textRects.length;i++)for(let j=i+1;j<quality.textRects.length;j++){
-   const a=quality.textRects[i].rect,b=quality.textRects[j].rect;
-   assert.ok(!(a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y),
-    county+' labels overlap: '+quality.textRects[i].name+' / '+quality.textRects[j].name);
-  }
+  await page.locator('#county').selectOption({label:county});await assertAdministrativeKey(page);
  }
 });
-
-test('Township chief maps use complete names with slim callouts throughout all 22 counties',async t=>{
- const page=await pageFor(t);
- await page.locator('#predictionOffice').selectOption('township');
- // Township-chief candidates do not exist in every municipality; sweep every
- // county actually offered by the township-chief map selector.
- const eligible=await page.locator('#county option').evaluateAll(opts=>
-  opts.filter(o=>o.value).map(o=>({label:o.textContent,value:o.value})));
- assert.ok(eligible.length>=10,'Township-chief selector should expose eligible counties');
- for(const {label:county,value} of eligible){
-  await page.locator('#county').selectOption(value);
-  const r=await page.evaluate(()=>({
-   count:currentItems().length,
-   names:[...document.querySelectorAll('#labels text[data-label]')].map(e=>e.textContent),
-   numbers:document.querySelectorAll('#labels [data-number-key]').length,
-   keyHidden:document.querySelector('#mapNumberKey').hidden,
-   leaders:[...document.querySelectorAll('#labels [data-label-leader]')].map(e=>e.getAttribute('d')),
-   isTownLabelMode:directTownNameLabels()
-  }));
-  if(!r.count)continue; // Some cities lack ordinary township-chief districts.
-  assert.equal(r.isTownLabelMode,true);
-  assert.equal(r.names.length,r.count,county+' names must cover all townships');
-  assert.equal(r.numbers,0,county+' must not display numeric township labels');
-  assert.equal(r.keyHidden,true,county+' should have no numeric lookup');
-  assert.ok(r.names.some(n=>/[乡镇市区]$/.test(n)));
-  assert.ok(r.leaders.every(d=>/^M[-\d.,]+(?:[HV][-\d.]+){1,7}$/.test(d)),
-   county+' should use rectangular leader routing');
- }
+test('Township-chief maps use the same name-or-number rule in every eligible county',async t=>{
+ const page=await pageFor(t);await page.locator('#predictionOffice').selectOption('township');
+ const eligible=await page.locator('#county option').evaluateAll(opts=>opts.filter(o=>o.value).map(o=>o.value));
+ for(const value of eligible){await page.locator('#county').selectOption(value);await assertAdministrativeKey(page)}
 });
 test('Zooming the national council overview recalculates and restores all 221 official numbers',async t=>{
  const page=await pageFor(t);await page.locator('#predictionOffice').selectOption('council');await page.waitForFunction(()=>document.querySelectorAll('#regions [data-region]').length===221);
  await page.locator('#zoomIn').click();await page.locator('#zoomIn').click();assert.deepEqual(await missingLabels(page),[]);
  await page.locator('#fit').click();await page.locator('#county').selectOption({label:'高雄市'});assert.deepEqual(await missingLabels(page),[]);
 });
-test('Mobile township maps retain full names and do not show numeric lookup tables',async t=>{
+test('Mobile administrative keys stay inside the screen above the legend',async t=>{
  const page=await pageFor(t,{width:390,height:844});
- await page.locator('#county').selectOption({label:'高雄市'});
- await page.locator('#predictionScale').selectOption('overlay');
- assert.deepEqual(await missingLabels(page),[]);
- assert.equal(await page.locator('#labels [data-number-key]').count(),0);
- assert.equal(await page.locator('#mapNumberKey').isVisible(),false);
- assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
+ await page.locator('#county').selectOption({label:'高雄市'});await page.locator('#predictionScale').selectOption('overlay');
+ const r=await assertAdministrativeKey(page);assert.ok(r.numbers>0);
+ assert.ok(await page.evaluate(()=>{
+  const key=document.querySelector('#mapNumberKey').getBoundingClientRect();
+  return key.left>=0&&key.right<=innerWidth&&document.documentElement.scrollWidth<=innerWidth;
+ }));
 });
