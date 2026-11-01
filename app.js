@@ -800,8 +800,20 @@ function townNameLabelLayout(items,t,font,area,reserve,attempt=0){
  // A narrow region moves outside instead of silently shrinking its type.
  for(const f of sorted){
   const text=shownLabel(f),width=insideWidth(text);
-  const pos=townInsideLabelFit(f,t,width,insideHeight,used,area,reserve);
-  if(pos){used.push(pos.rect);labels.push({f,...pos,font,text,numeric:false})}
+  let pos=townInsideLabelFit(f,t,width,insideHeight,used,area,reserve),lines=null;
+  // A narrow north-south town may fit a compact two-line name even when
+  // one row would spill into an adjacent district. Keep the full name and
+  // original font; never rotate, abbreviate or shrink the characters.
+  const chars=Array.from(text);
+  if(!pos&&chars.length>=3&&chars.length<=6){
+   const split=Math.ceil(chars.length/2);
+   const rows=[chars.slice(0,split).join(''),chars.slice(split).join('')];
+   const twoWidth=Math.max(...rows.map(insideWidth));
+   const twoHeight=font*2.35+4;
+   pos=townInsideLabelFit(f,t,twoWidth,twoHeight,used,area,reserve);
+   if(pos)lines=rows;
+  }
+  if(pos){used.push(pos.rect);labels.push({f,...pos,font,text,lines,numeric:false})}
   else pending.push({f,text,font,anchor:townVisualCenter(f,t)});
  }
  if(!pending.length)return labels;
@@ -900,8 +912,10 @@ function townNameLabelLayout(items,t,font,area,reserve,attempt=0){
  // and use an orthogonal elbow rather than a diagonal through other towns.
  for(const q of remaining){
   const anchor=q.anchor||townVisualCenter(q.f,t),width=labelWidth(q.text);
+  const outward=anchor.x<(box.left+box.right)/2?-1:1;
   const xs=[12,30,55,95,155].flatMap(gap=>
-   [anchor.x+width/2+gap,anchor.x-width/2-gap]).concat([colX.left,colX.right]);
+   [anchor.x+outward*(width/2+gap),anchor.x-outward*(width/2+gap)])
+   .concat(outward<0?[colX.left,colX.right]:[colX.right,colX.left]);
   let pos=null;
   for(const x0 of xs){
    const x=Math.max(area.left+width/2+8,
@@ -1048,7 +1062,14 @@ function drawLabels(group,items,t,font=15,interactive=false){
   // CSS resets SVG text-anchor; enforce the measured centre for this overview.
   label.style.textAnchor='middle';
   // Callout labels retain the same typography as the labels placed inside districts.
-  label.textContent=q.text;
+  if(q.lines?.length===2){
+   const spacing=q.font*1.08;
+   for(const [i,line]of q.lines.entries()){
+    const span=svgEl('tspan',{x:q.x,y:q.y+(i-.5)*spacing,
+     'dominant-baseline':'middle'});
+    span.textContent=line;label.append(span);
+   }
+  }else label.textContent=q.text;
   if(q.numeric){label.setAttribute('data-number-key',q.number);mapNumberRecord(q.f,q.number)}
   if(interactive){
    label.style.pointerEvents='auto';label.style.cursor='pointer';
