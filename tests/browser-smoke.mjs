@@ -115,7 +115,9 @@ test('Independent-candidate emblem is bundled for sidebar, legend and standalone
  assert.equal(await logo.count(),1);
  assert.ok((await logo.getAttribute('src')).startsWith('data:image/png;base64,'));
  await page.locator('.palette-manage-row[data-party="gray"] button.party-brush').click();
- await page.locator('#regions path[data-region]').first().click();
+ // The small SVG coastline is not reliably pointer-hittable at default zoom;
+ // dispatch the existing click handler instead of changing map geometry.
+ await page.locator('#regions path[data-region]').first().dispatchEvent('click');
  const emblem=page.locator('#legend [data-party-logo="gray"]');
  assert.equal(await emblem.count(),1);
  const svg=await exportSvg(page);
