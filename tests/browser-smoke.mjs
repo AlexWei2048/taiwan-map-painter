@@ -444,14 +444,19 @@ test('Specified candidate export contains only the chosen candidate and entered 
  const page=await pageFor(t);
  await page.locator('#county').selectOption({label:'台北市'});
  await page.locator('#predictionDisplay').selectOption('topVote');
+ await page.locator('#editPrediction').click();
+ await page.getByRole('spinbutton',{name:'蒋万安预测得票率',exact:true}).fill('56');
+ await page.locator('#savePrediction').click();
  await page.locator('#predictionCandidateScope').selectOption('candidateVote');
  const selectedId=await page.locator('#localCandidate option').evaluateAll(options=>options.find(option=>option.textContent.includes('沈伯洋'))?.value);
  assert.ok(selectedId,'Chosen candidate appears in picker');
  await page.locator('#localCandidate').selectOption(selectedId);
  await page.locator('#editPrediction').click();
+ assert.equal(await page.getByRole('spinbutton',{name:'蒋万安预测得票率',exact:true}).isVisible(),false);
  await page.getByRole('spinbutton',{name:'沈伯洋预测得票率',exact:true}).fill('40');
- await page.getByRole('spinbutton',{name:'蒋万安预测得票率',exact:true}).fill('56');
  await page.locator('#savePrediction').click();
+ assert.equal(await page.evaluate(()=>Object.values(state.predictions[state.predictionRegion]?.estimates||{}).filter(r=>r.share===56).length),1,
+  'Editing one candidate keeps another candidate prediction');
  const ownRows=await page.evaluate(()=>exportPredictionWinnerRows().map(r=>({name:r.name,votes:r.votes,share:r.share,specified:r.specified})));
  assert.deepEqual(ownRows,[{name:'沈伯洋',votes:'—',share:'40%',specified:true}]);
  const svg=await exportSvg(page);
