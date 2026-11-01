@@ -1304,7 +1304,7 @@ function polishedPredictionTableLayout(rows){
  // district, name (with an inline incumbent badge) and party + emblem.
  const width=1120,innerWidth=1084,gap=14,slotWidth=(innerWidth-gap)/2;
  const widths=[120,172,slotWidth-292],font=15.5,lineHeight=21.5,rowHeight=55;
- const headingHeight=84,tableHeaderHeight=44,paddingBottom=18;
+ const headingHeight=62,tableHeaderHeight=44,paddingBottom=18;
  const entries=rows.map(row=>{
   const district=wrapExportText(row.district,Math.max(3,(widths[0]-24)/14.2));
   const name=wrapExportText(row.name,Math.max(3,(widths[1]-(row.incumbent?62:25))/font));
@@ -1346,15 +1346,9 @@ function appendExportPolishedWinnerTable(root,rows,y,layout){
  const outerX=40,innerX=58,innerWidth=layout.innerWidth;
  card.append(svgEl('rect',{x:outerX,y,width:layout.width,height:layout.height,rx:17,fill:'#fff',
   stroke:'#d9e5dd','stroke-width':1.3}));
- card.append(svgEl('rect',{x:outerX,y:y+19,width:4,height:40,rx:2,fill:'#3f8562'}));
- const heading=svgEl('text',{x:63,y:y+34,'font-size':21,'font-weight':700,fill:'#274d3b'});
+ card.append(svgEl('rect',{x:outerX,y:y+18,width:4,height:28,rx:2,fill:'#3f8562'}));
+ const heading=svgEl('text',{x:63,y:y+38,'font-size':21,'font-weight':700,fill:'#274d3b'});
  heading.textContent=rows.some(row=>row.local)?'乡镇预测胜出候选人':'预测当选候选人';card.append(heading);
- const detail=svgEl('text',{x:64,y:y+60,'font-size':12.5,fill:'#728679'});
- detail.textContent='选区 · 候选人 · 政党及党徽';card.append(detail);
- const summary=svgEl('text',{x:outerX+layout.width-23,y:y+34,'font-size':13,
-  fill:'#597466','text-anchor':'end'});
- summary.textContent=`已预测 ${new Set(rows.map(row=>row.district)).size} 个选区 · ${rows.length} 人`;
- card.append(summary);
  const headerY=y+layout.headingHeight,headerH=layout.tableHeaderHeight,bodyY=headerY+headerH;
  const slotX=i=>innerX+i*(layout.slotWidth+layout.gap);
  for(let i=0;i<2;i++){
@@ -1428,7 +1422,7 @@ function appendExportPolishedWinnerTable(root,rows,y,layout){
 function appendExportPredictionTable(root,rows,y){
  if(!rows.length)return 0;const layout=exportPredictionTableLayout(rows);
  if(layout.polished)return appendExportPolishedWinnerTable(root,rows,y,layout);
- const card=svgEl('g',{'data-export-winner-table':'true'});root.append(card);card.append(svgEl('rect',{x:40,y,width:layout.width,height:layout.height,rx:14,fill:'#fff',stroke:'#dce5df','stroke-width':1.2}));const heading=svgEl('text',{x:60,y:y+31,'font-size':19,'font-weight':600,fill:'#294a3a'});heading.textContent=rows.some(row=>row.estimated)?'预测得票候选人（*表示数据未填齐；第一高票不等于议员当选）':rows.some(row=>row.local)?'乡镇预测胜出候选人':'预测当选候选人';card.append(heading);const summary=svgEl('text',{x:layout.width+20,y:y+30,'font-size':11,fill:'#718376','text-anchor':'end'});summary.textContent=`已预测 ${new Set(rows.map(r=>r.district)).size} 个选区 · ${rows.length} 人`;card.append(summary);card.append(svgEl('line',{x1:60,y1:y+46,x2:layout.width+20,y2:y+46,stroke:'#e5ece6'}));
+ const card=svgEl('g',{'data-export-winner-table':'true'});root.append(card);card.append(svgEl('rect',{x:40,y,width:layout.width,height:layout.height,rx:14,fill:'#fff',stroke:'#dce5df','stroke-width':1.2}));const heading=svgEl('text',{x:60,y:y+31,'font-size':19,'font-weight':600,fill:'#294a3a'});heading.textContent=rows.some(row=>row.estimated)?'预测得票候选人':rows.some(row=>row.local)?'乡镇预测胜出候选人':'预测当选候选人';card.append(heading);card.append(svgEl('line',{x1:60,y1:y+46,x2:layout.width+20,y2:y+46,stroke:'#e5ece6'}));
  const bodyY=y+59,{widths}=layout;for(let column=0;column<layout.columns;column++){const block=layout.blocks[column];if(!block.length)continue;const x=60+column*(layout.blockWidth+layout.gap),xs=[x],blockHeight=layout.rowHeight+block.reduce((n,r)=>n+r.height,0);for(const w of widths)xs.push(xs.at(-1)+w);card.append(svgEl('rect',{x,y:bodyY,width:layout.blockWidth,height:blockHeight,rx:7,fill:'#fff',stroke:'#dfe8e1','stroke-width':1}));card.append(svgEl('path',{d:`M${x},${bodyY+7}Q${x},${bodyY} ${x+7},${bodyY}H${x+layout.blockWidth-7}Q${x+layout.blockWidth},${bodyY} ${x+layout.blockWidth},${bodyY+7}V${bodyY+layout.rowHeight}H${x}Z`,fill:'#edf5f0'}));
   layout.headers.forEach((label,i)=>{const text=svgEl('text',{x:xs[i]+widths[i]/2,y:bodyY+layout.rowHeight/2+layout.font*.35,'font-size':layout.font,'font-weight':600,fill:'#466253','text-anchor':'middle'});text.textContent=label;card.append(text)});
   let rowY=bodyY+layout.rowHeight;for(const [index,{row,cells,height}]of block.entries()){const group=svgEl('g',{'data-export-winner-row':'true'});card.append(group);if(index%2)group.append(svgEl('rect',{x:x+.5,y:rowY,width:layout.blockWidth-1,height,fill:'#f8fbf9'}));group.append(svgEl('line',{x1:x,y1:rowY,x2:x+layout.blockWidth,y2:rowY,stroke:'#e7eee9','stroke-width':.7}));
@@ -1451,8 +1445,6 @@ function appendNumberTableExport(root,entries,x,y,columns=1){
  panel.append(svgEl('rect',{x,y,width:m.width,height:m.height,rx:11,fill:'#fff',stroke:'#dce5df','stroke-width':1}));
  const heading=svgEl('text',{x:x+13,y:y+28,'font-size':17,'font-weight':650,fill:'#294a3a'});
  heading.textContent='数字对照表';panel.append(heading);
- const count=svgEl('text',{x:x+m.width-14,y:y+28,'text-anchor':'end','font-size':11,fill:'#718579'});
- count.textContent=rows.length+'项';panel.append(count);
  for(let i=0;i<rows.length;i++){
   const row=rows[i],col=Math.floor(i/m.perColumn),index=i%m.perColumn;
   const bx=x+10+col*210,by=y+48+index*22;
@@ -1548,7 +1540,7 @@ function exportLabelCoverageLayout(rows,width){
   const lines=wrapExportText(text,maxChars);
   return{lines,height:Math.max(30,12+lines.length*17)};
  }));
- const height=78+Math.max(0,...prepared.map(chunk=>chunk.reduce((sum,row)=>sum+row.height,0)))+16;
+ const height=52+Math.max(0,...prepared.map(chunk=>chunk.reduce((sum,row)=>sum+row.height,0)))+18;
  return{columns,gap,margin,blockWidth,prepared,height};
 }
 function appendExportLabelCoverage(root,rows,x,y,width){
@@ -1557,13 +1549,9 @@ function appendExportLabelCoverage(root,rows,x,y,width){
  g.append(svgEl('rect',{x,y,width,height:m.height,rx:12,fill:'#fff',stroke:'#dbe6dc','stroke-width':1.1}));
  const h=svgEl('text',{x:x+20,y:y+30,'font-size':18,'font-weight':700,fill:'#294a3a'});
  h.textContent='密集区域完整标注';g.append(h);
- const count=svgEl('text',{x:x+width-20,y:y+29,'font-size':12,'text-anchor':'end',fill:'#647b6e'});
- count.textContent=rows.length+'项';g.append(count);
- const note=svgEl('text',{x:x+20,y:y+52,'font-size':11.5,fill:'#698075'});
- note.textContent='主地图空间不足的行政区名称或选区号次在此完整显示，避免相互遮挡';g.append(note);
  m.prepared.forEach((chunk,i)=>{
   const colX=x+m.margin+i*(m.blockWidth+m.gap);
-  let rowY=y+65;
+  let rowY=y+49;
   chunk.forEach((record,j)=>{
    if(j%2===0)g.append(svgEl('rect',{x:colX,y:rowY,width:m.blockWidth,height:record.height,rx:3,fill:'#f6f9f6'}));
    const tx=svgEl('text',{x:colX+8,y:rowY+18,'font-size':12.4,fill:'#335748'});
