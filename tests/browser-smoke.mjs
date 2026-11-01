@@ -550,10 +550,15 @@ test('All 22 scoped mayoral township maps display complete township names withou
    total:currentItems().length,
    labelled:new Set([...document.querySelectorAll('#labels text[data-label]')].map(e=>e.dataset.label)).size,
    numbers:document.querySelectorAll('#labels [data-number-key]').length,
-   visibleKey:!document.querySelector('#mapNumberKey').hidden
+   visibleKey:!document.querySelector('#mapNumberKey').hidden,
+   missing:currentItems().filter(f=>!document.querySelector('#labels text[data-label="'+f.id+'"]')).map(f=>({
+    name:f.name,id:f.id,box:f.box,center:f.center,
+    anchor:mapLabelAnchor(f,geometryLayout(currentItems(),true))
+   })),
+   frameDefinitions:county==='金门县'?activeInsetDefinitions().map(d=>({name:d.name,box:d.box})):[]
   }));
   assert.ok(result.total>0,county+' has no town geometries');
-  assert.equal(result.labelled,result.total,county+' township names missing');
+  assert.equal(result.labelled,result.total,county+' township names missing: '+JSON.stringify(result.missing)+'; frames='+JSON.stringify(result.frameDefinitions));
   assert.equal(result.numbers,0,county+' uses numbered labels');
   assert.equal(result.visibleKey,false,county+' still shows a number key');
  }
