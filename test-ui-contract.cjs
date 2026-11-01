@@ -729,6 +729,19 @@ test('Export images keep table titles and all data, without subtitles, counts or
  assert.match(app,/let rowY=y\+49/);
 });
 
+test('Specified-candidate export selects one ID and only includes entered vote metrics',()=>{
+ const collector=app.slice(app.indexOf('function exportPredictionWinnerRows(){'),app.indexOf('function exportTextWidth('));
+ assert.match(collector,/candidateMode=state\.predictionDisplay==='candidateVote'/);
+ assert.match(collector,/c\.id!==selectedCandidateId/);
+ assert.match(collector,/if\(c\.id!==selectedCandidateId\|\|\(!hasVotes&&!hasShare\)\)continue/);
+ assert.match(collector,/share:candidateMode\?\(hasShare\?/);
+ const layout=app.slice(app.indexOf('function exportPredictionTableLayout('),app.indexOf('function appendExportPolishedWinnerTable('));
+ assert.match(layout,/metricFields=estimated\?\(specified\?/);
+ assert.match(layout,/\['votes','share'\]\.filter/);
+ assert.match(layout,/headers\.push\(\.\.\.metricFields\.map/);
+ assert.match(app,/heading\.textContent=layout\.specified\?'指定候选人得票预测'/);
+});
+
 test('Administrative lookup stays inside the canvas card, below the drawing in exports',()=>{
  assert.match(index,/id="mapWithKey"/);
  assert.match(index,/id="mapNumberKey"/);
