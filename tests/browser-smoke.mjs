@@ -565,6 +565,10 @@ test('Town label hover highlights the matching polygon and restores its predicti
  const polygon=page.locator('#regions path[data-region="'+candidate+'"]');
  const baseline=await polygon.evaluate(e=>getComputedStyle(e).fill);
  await label.hover({force:true});
+ await page.waitForFunction(({id,baseline})=>{
+  const el=[...document.querySelectorAll('#regions path[data-region]')].find(x=>x.dataset.region===id);
+  return el&&el.classList.contains('label-region-highlighted')&&getComputedStyle(el).fill!==baseline;
+ },{id:candidate,baseline},{timeout:1500});
  const during=await polygon.evaluate(e=>({fill:getComputedStyle(e).fill,className:e.classList.contains('label-region-highlighted')}));
  assert.equal(during.className,true);
  assert.notEqual(during.fill,baseline,'Hover must visibly change the corresponding map polygon');
@@ -587,6 +591,10 @@ test('Town label hover highlights the matching polygon and restores its predicti
  const townShape=page.locator('#regions path[data-region="'+next+'"]');
  const initial=await townShape.evaluate(e=>getComputedStyle(e).fill);
  await townLabel.hover({force:true});
+ await page.waitForFunction(({id,initial})=>{
+  const el=[...document.querySelectorAll('#regions path[data-region]')].find(x=>x.dataset.region===id);
+  return el&&el.classList.contains('label-region-highlighted')&&getComputedStyle(el).fill!==initial;
+ },{id:next,initial},{timeout:1500});
  assert.notEqual(await townShape.evaluate(e=>getComputedStyle(e).fill),initial);
  await page.mouse.move(2,2);
  await page.waitForFunction(({id,initial})=>{
