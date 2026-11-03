@@ -293,7 +293,10 @@ test('Each mayor township county map has a visible return-to-Taiwan control that
  await page.locator('#predictionScale').selectOption('district');
  assert.equal(await back.isVisible(),false,'Hidden for county mayor prediction layer');
  await page.locator('#predictionOffice').selectOption('council');
- assert.equal(await back.isVisible(),false,'Hidden for council elections');
+ assert.equal(await back.isVisible(),true,'Shown for county council prediction');
+ await back.click();
+ assert.equal(await page.locator('#county').inputValue(),'');
+ assert.equal(await back.isVisible(),false,'Hidden on national council overview');
 });
 test('Published-site update time uses the last successful Pages deployment, minute-precision Taipei time',async t=>{
  const context=await browser.newContext();t.after(()=>context.close());
