@@ -9,11 +9,12 @@ function councilSeatRows(d){
  });
  return Array.from({length:Number(d.seats)||0},(_,i)=>winners[i]||null);
 }
+function councilCountyPresentation(){return councilSeatMode()||state.workspaceMode==='free'&&state.level==='council'&&!!state.county}
 const baseCouncilScene=sceneSpec;
-sceneSpec=function(){return councilSeatMode()?{width:1600,height:1450+furnitureFooterHeight(),pad:80,font:26}:baseCouncilScene()};
+sceneSpec=function(){return councilCountyPresentation()?{width:1600,height:1450+furnitureFooterHeight(),pad:80,font:26}:baseCouncilScene()};
 const baseCouncilPanels=identityPanelLayouts;
 identityPanelLayouts=function(){
- if(!councilSeatMode())return baseCouncilPanels();
+ if(!councilCountyPresentation())return baseCouncilPanels();
  const ids=panelIdentities(),spec=sceneSpec(),a=contentArea(spec),gap=28;
  const split=ids.length===3&&ids[0]==='regional';
  return ids.map((identity,i)=>{
@@ -23,7 +24,7 @@ identityPanelLayouts=function(){
   const items=currentItems().filter(f=>featureElectorate(f)===identity),geo=data.counties.filter(f=>f.name===state.county),b=bounds(geo),pad=35;
   const scale=Math.min((area.right-area.left-pad*2)/(b[2]-b[0]),(area.bottom-area.top-pad*2)/(b[3]-b[1]));
   const panel={identity,label:electorateName(identity),items,area,t:{scale,tx:(area.left+area.right)/2-(b[0]+b[2])/2*scale,ty:(area.top+area.bottom)/2-(b[1]+b[3])/2*scale,labelLeft:area.left,labelRight:area.right,area}};
-  return prepareCouncilSeatPanel(panel);
+  return councilSeatMode()?prepareCouncilSeatPanel(panel):panel;
  });
 };
 function councilSeatPlacement(f,n,t,used,items){
@@ -143,5 +144,5 @@ predictionPartyCounts=function(){return councilSeatMode()?councilCountySeatCount
 const baseCouncilCaption=predictionLegendCaption;
 predictionLegendCaption=function(){return councilSeatMode()?'每圆一席；空心圆尚未预测，党徽表示预测当选，灰圆表示无可用党徽':baseCouncilCaption()};
 const baseCouncilRender=render;
-render=function(){document.getElementById('canvas').classList.toggle('council-seats-mode',councilSeatMode());baseCouncilRender()};
+render=function(){document.getElementById('canvas').classList.toggle('council-seats-mode',councilCountyPresentation());baseCouncilRender()};
 if(data)render();

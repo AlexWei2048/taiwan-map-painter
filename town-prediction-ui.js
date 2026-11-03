@@ -76,7 +76,7 @@ const districtDomain=predictionDomain;predictionDomain=function(){
 const districtLegendCaption=predictionLegendCaption;predictionLegendCaption=function(){if(!localPredictionActive())return districtLegendCaption();const d=localParentDistrict(),name=Object.fromEntries(localDisplayOptions())[state.predictionDisplay],c=candidateById.get(state.localDisplayCandidate);return (predictionMarginMode()?(state.predictionDisplay==='partyTop'?'最高票政党':'最高票者'):name)+(state.predictionDisplay==='candidateVote'&&c?'：'+candidateDisplayName(c):'')+(predictionMarginMode()?'；领先差距（百分点），按1、5、10、15、20、25、30以上分档':'')+(d?.type==='council'?'；乡镇市区得票不表示独立当选席次':'；乡镇胜负不等同县市最终当选')};
 const districtRegionDetail=predictionRegionDetail;predictionRegionDetail=function(f){if(mayorTownBoundaryOverlay())return'点击县市，进入乡镇市区预测';if(!localPredictionActive())return districtRegionDetail(f);const r=localMapResult(f);return(r.status==='winner'?(r.candidate?candidateDisplayName(r.candidate)+' · ':'')+r.party+(predictionUsesGradient()?' · '+predictionMetricLabel(r)+(predictionMarginMode()?' · '+predictionMarginLabel(r):r.partial?' · 仅根据已填写候选人':''):' · 预测胜出'):r.message)+(f.partial?' · 仅本选区覆盖部分':'')};
 const districtDecorations=renderPredictionDecorations;renderPredictionDecorations=function(){if(localPredictionActive())$('predictionPatterns').replaceChildren();else districtDecorations()};
-const districtUpdateBrush=updateBrush;updateBrush=function(){if(councilCountyOverview()){$('brushName').textContent='点击县市进入议员预测';return}if(townshipCountyOverview()||mayorTownBoundaryOverlay()){$('brushName').textContent='点击县市进入乡镇市区预测';return}if(localPredictionActive())$('brushName').textContent='乡镇市区预测 · 点击地区填写'+(state.predictionOffice==='mayor'?'胜负与得票':'本选区候选人的得票');else districtUpdateBrush()};
+const districtUpdateBrush=updateBrush;updateBrush=function(){if(freeCountyOverview()){$('brushName').textContent='点击县市进入地图填色';return}if(councilCountyOverview()){$('brushName').textContent='点击县市进入议员预测';return}if(townshipCountyOverview()||mayorTownBoundaryOverlay()){$('brushName').textContent='点击县市进入乡镇市区预测';return}if(localPredictionActive())$('brushName').textContent='乡镇市区预测 · 点击地区填写'+(state.predictionOffice==='mayor'?'胜负与得票':'本选区候选人的得票');else districtUpdateBrush()};
 const districtUpdateProgress=updateProgress;updateProgress=function(){districtUpdateProgress();const districtCountyChange=$('county').onchange;$('county').onchange=()=>{
  if(mayorTownBoundaryOverlay()){
   pushHistory();state.county=$('county').value;state.predictionRegion='';state.localTown='';
@@ -125,7 +125,7 @@ function syncLocalControls(){if(localSyncing||!$('predictionScale'))return;local
  if(!scaleSelect.querySelector('option[value="'+desired+'"]'))scaleSelect.add(new Option('乡镇市区',desired));
  scaleSelect.value=mayor&&(mayorTownBoundaryOverlay()||active)?'overlay':active?'town':'district';
  // County-scoped township-chief and mayoral township maps return to their overview.
- $('returnTaiwanMap').hidden=!(state.workspaceMode==='prediction'&&state.predictionOffice==='council'&&!!state.county&&state.level==='council'||(mayor&&active&&state.predictionScale==='overlay'||state.workspaceMode==='prediction'&&state.predictionOffice==='township')&&!!state.county&&state.level==='towns');
+ $('returnTaiwanMap').hidden=!(state.workspaceMode==='free'&&!!state.county||state.workspaceMode==='prediction'&&state.predictionOffice==='council'&&!!state.county&&state.level==='council'||(mayor&&active&&state.predictionScale==='overlay'||state.workspaceMode==='prediction'&&state.predictionOffice==='township')&&!!state.county&&state.level==='towns');
  $('localForecastControls').hidden=!active;$('localCandidateControl').hidden=state.predictionDisplay!=='candidateVote';$('predictionCandidateScopeBox').hidden=state.predictionDisplay==='composition';$('predictionCandidateScope').value=state.predictionDisplay==='candidateVote'?'candidateVote':'topVote';$('localForecastHelp').hidden=!active;$('onlyIncomplete').closest('label').hidden=active;document.querySelector('.prediction-step').textContent=councilCountyOverview()?'点击县市进入该县市的议员预测。':townshipCountyOverview()||mayorTownBoundaryOverlay()?'点击县市进入乡镇市区预测，再逐个填写。':active?'点选乡镇市区，填写胜负与得票。':'点击地图填写预测；手动选当选者或录入得票。';if(active)$('electorateControls').hidden=true;if(active&&state.predictionOffice==='council')ensureTownPredictionAreas();
  $('editPrediction').textContent=active?'填写所选乡镇预测':'填写所选区预测';$('nextPrediction').textContent=active?'下一个未完成乡镇 →':'下一个未完成选区 →';$('openElectionDirectory').textContent=active?'查看本选区候选人':'查看所选区候选人';
  if(active&&data){const d=localParentDistrict(),features=localDistrictItems(d),townSelect=$('localTownSelect'),old=state.localTown||townSelect.value;townSelect.replaceChildren(...features.map(f=>new Option(f.scope||f.name,f.townId)));if(features.some(f=>f.townId===old))townSelect.value=old;state.localTown=townSelect.value;
@@ -137,10 +137,11 @@ function syncLocalControls(){if(localSyncing||!$('predictionScale'))return;local
 const districtSyncWorkspace=syncWorkspace;syncWorkspace=function(){districtSyncWorkspace();syncLocalControls()};
 $('predictionScale').onchange=()=>applyLocalScale($('predictionScale').value);
 $('returnTaiwanMap').onclick=()=>{
+ const free=state.workspaceMode==='free';
  const council=state.workspaceMode==='prediction'&&state.predictionOffice==='council'&&state.level==='council';
  const township=state.workspaceMode==='prediction'&&state.predictionOffice==='township'&&state.level==='towns';
  const mayor=state.workspaceMode==='prediction'&&state.fillMode==='prediction'&&state.predictionOffice==='mayor'&&state.predictionScale==='overlay'&&state.level==='towns';
- if(!(state.county&&(township||mayor||council)))return;
+ if(!(state.county&&(free||township||mayor||council)))return;
  pushHistory();state.county='';state.predictionRegion='';state.localTown='';
  if(mayor){state.predictionDisplay='composition';state.localPredictionDisplay='composition'}
  $('tooltip').hidden=true;syncInputs();render();persist();

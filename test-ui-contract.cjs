@@ -44,7 +44,7 @@ test('Coastlines are excluded while all actual shared administrative borders rem
  assert.match(app,/sharedMapBorders\(level,identity,!!state\.county\)/);
  assert.match(app,/includeCoast\?'complete':'internal'/);
  assert.equal(calculate([{...polygons[0]}, {...polygons[1],id:'a'}]).all,'');
- assert.match(app,/appendSharedBorders\(districtGroup,mayorTownBoundaryOverlay\(\)\|\|councilCountyOverview\(\)\?'counties':state.level/);
+ assert.match(app,/appendSharedBorders\(districtGroup,mayorTownBoundaryOverlay\(\)\|\|councilCountyOverview\(\)\|\|freeCountyOverview\(\)\?'counties':state.level/);
  assert.match(app,/appendSharedBorders\(borderGroup,'counties'\)/);
  assert.match(app,/appendSharedBorders\(group,'towns','regional',state.level==='villages'\)/);
  assert.match(app,/\['#regions path','none',0\]/);

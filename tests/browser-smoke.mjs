@@ -832,3 +832,27 @@ test('Hovering and keyboard-focusing a seat frame highlights only its matching m
  await group.focus();assert.equal(await polygon.evaluate(e=>e.classList.contains('label-region-highlighted')),true);
  await group.blur();await page.waitForFunction(({id,before})=>getComputedStyle(document.querySelector('#regions path[data-region="'+id+'"]')).fill===before,{id,before});assert.equal(await polygon.evaluate(e=>getComputedStyle(e).fill),before);
 });
+
+
+test('Free painting offers four clean layers and county drilldown with preserved colours and return navigation',async t=>{
+ const page=await pageFor(t);await page.locator('#workspaceFree').click();
+ assert.equal(await page.locator('#freeLayerPicker button').count(),4);assert.equal(await page.locator('#villageLevel').count(),0);assert.equal(await page.locator('#freeLayerPicker small').count(),0);
+ await page.locator('#townLevel').click();assert.equal(await page.locator('#regions path[data-region]').count(),22);
+ await page.locator('#regions path[aria-label^="台北市"]').click({force:true});assert.equal(await page.locator('#county').inputValue(),'台北市');
+ assert.equal(await page.locator('#regions path[data-region]').count(),12);assert.equal(await page.locator('#returnTaiwanMap').isVisible(),true);
+ const id=await page.locator('#regions path[data-region]').first().getAttribute('data-region');
+ await page.locator('#regions path[data-region="'+id+'"]').dispatchEvent('click');
+ const stored=await page.evaluate(id=>state.fills.towns[id],id);assert.ok(stored);
+ await page.locator('#returnTaiwanMap').click();assert.equal(await page.locator('#county').inputValue(),'');assert.equal(await page.locator('#regions path[data-region]').count(),22);
+ assert.equal(await page.evaluate(id=>state.fills.towns[id],id),stored);
+ for(const layer of ['#councilLevel','#legislativeLevel']){
+  await page.locator(layer).click();assert.equal(await page.locator('#regions path[data-region]').count(),22);
+  await page.locator('#regions path[aria-label^="台北市"]').click({force:true});
+  assert.equal(await page.locator('#county').inputValue(),'台北市');assert.equal(await page.locator('#returnTaiwanMap').isVisible(),true);
+  assert.equal(await page.locator('#predictionDialog').isVisible(),false);
+  assert.ok(await page.locator('#regions g[data-electorate]').count()>=3);
+  await page.locator('#returnTaiwanMap').click();assert.equal(await page.locator('#county').inputValue(),'');
+ }
+ await page.locator('#countyLevel').click();await page.locator('#regions path[aria-label^="台北市"]').dispatchEvent('click');
+ assert.equal(await page.locator('#county').inputValue(),'');assert.ok(await page.evaluate(()=>Object.keys(state.fills.counties).length));
+});
