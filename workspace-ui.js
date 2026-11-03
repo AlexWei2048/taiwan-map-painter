@@ -131,12 +131,12 @@ syncPredictionControls=function(){
  const ds=predictionDistricts(),picker=$('predictionRegion'),old=state.predictionRegion||picker.value,complete=d=>{if(predictionUsesVoteDisplay()){const result=predictionDisplayResult(d);return !!result&&(state.predictionDisplay==='candidateVote'||!result.partial)}return predictionSummary(d).status==='complete'},visible=$('onlyIncomplete').checked?ds.filter(d=>!complete(d)):ds;picker.replaceChildren();
  for(const county of COUNTY_ORDER){const local=visible.filter(d=>d.county===county);if(!local.length)continue;const group=document.createElement('optgroup');group.label=county;for(const d of local)group.append(new Option(predictionDistrictLabel(d),d.id));picker.append(group)}
  if(visible.some(d=>d.id===old))picker.value=old;$('editPrediction').disabled=!visible.length;$('nextPrediction').disabled=!ds.length;
- const done=ds.filter(complete),seats=predictionUsesVoteDisplay()?0:done.reduce((n,d)=>n+predictionSummary(d).winners.length,0);
+ const done=ds.filter(complete),seats=predictionUsesVoteDisplay()?0:(state.predictionOffice==='council'?ds.filter(d=>['complete','partial'].includes(predictionSummary(d).status)):done).reduce((n,d)=>n+predictionSummary(d).winners.length,0);
  const numeric=ds.filter(d=>directoryCandidates(d).some(c=>{const e=state.predictions[d.id]?.estimates?.[c.id];return e&&(e.votes!==null&&e.votes!==undefined||e.share!==null&&e.share!==undefined)})).length;
  const marks=ds.filter(d=>state.fills[{mayor:'counties',council:'council',township:'towns'}[d.type]][d.mapRegionId]).length;
  $('predictionCoverage').textContent=state.predictionOffice==='council'?`已选当选人 ${done.length}/${ds.length} 区 · 已预测 ${seats} 席 · 手动标色 ${marks} 区`:predictionUsesVoteDisplay()?`得票数据完整 ${done.length}/${ds.length} 区 · 已录入 ${numeric} 区`:`已选当选人 ${done.length}/${ds.length} 区 · 已预测 ${seats} 席 · 已填得票 ${numeric} 区 · 手动标色 ${marks} 区`;
  $('predictionProgressBar').value=ds.length?Math.round(100*done.length/ds.length):0;$('predictionProgressText').textContent=`当前范围已完成 ${done.length}/${ds.length} 个选区（${$('predictionProgressBar').value}%）`;
- const summary=$('predictionSeatSummary');summary.replaceChildren();const counts={};for(const d of done)for(const row of predictionSummary(d).parties)counts[row.name]=(counts[row.name]||0)+row.seats;
+ const summary=$('predictionSeatSummary');summary.replaceChildren();const counts={};for(const d of state.predictionOffice==='council'?ds.filter(d=>['complete','partial'].includes(predictionSummary(d).status)):done)for(const row of predictionSummary(d).parties)counts[row.name]=(counts[row.name]||0)+row.seats;
  for(const [name,n]of Object.entries(counts)){if(predictionUsesVoteDisplay())continue;const item=dirText('span',name+' '+n+'席');item.style.borderLeft='4px solid '+predictionParty(name).color;summary.append(item)}
  if(task&&!syncingWorkspace)syncWorkspace();
 };
