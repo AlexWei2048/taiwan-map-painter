@@ -740,7 +740,7 @@ test('Export images keep table titles and all data, without subtitles, counts or
  const standard=section('function appendExportPredictionTable(', 'function numberTableExportMetrics(');
  const numberKey=section('function appendNumberTableExport(', '// Every administrative area');
  const coverage=section('function appendExportLabelCoverage(', 'function exportSvg(){');
- assert.match(twoUp,/heading\.textContent=rows\.some/);
+ assert.match(twoUp,/heading\.textContent=layout\.specified/);
  assert.match(twoUp,/data-export-winner-row/);
  assert.doesNotMatch(twoUp,/已预测|选区 · 候选人 · 政党及党徽/);
  assert.match(standard,/预测得票候选人/);

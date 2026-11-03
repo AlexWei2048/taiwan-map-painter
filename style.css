@@ -466,3 +466,5 @@ dialog.floating-prediction-dialog > .floating-dialog-scroll{
 .history-result-dialog::backdrop{background:#193b3166}
 .history-result-dialog .history-table-wrap{max-height:65dvh;overflow:auto}
 .history-mode #historyControls select{margin-bottom:15px}
+
+.history-development-notice{width:min(420px,90vw);border:1px solid #dce5df;border-radius:18px;padding:28px;color:#294a3a}.history-development-notice::backdrop{background:#173b3155}.history-development-notice h2{font-size:21px;margin:0 0 12px}.history-development-notice p{color:#62796c;margin-bottom:24px}.history-development-notice form{text-align:right}

@@ -8,9 +8,10 @@ let browser;
 before(async()=>{browser=await chromium.launch({headless:true})});
 after(async()=>{await browser?.close()});
 const base=process.env.MAP_TEST_URL||'http://127.0.0.1:8765/';
-async function pageFor(t,viewport){
+async function pageFor(t,viewport,owner=true){
  const context=await browser.newContext(viewport?{viewport}:{});t.after(()=>context.close());
- const page=await context.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));
+ const page=await context.newPage(),errors=[];
+ if(owner)await page.route('**/history-access.js*',route=>route.fulfill({contentType:'application/javascript',body:'window.HistoryAccess={ready:Promise.resolve(true),canAccess:()=>true,notice:()=>{}};'}));page.on('pageerror',error=>errors.push(error.message));
  t.after(()=>assert.deepEqual(errors,[],'No application exceptions'));
  await page.goto(base);await page.locator('#regions path[data-region]').first().waitFor();assert.equal(await page.locator('#loadError').isVisible(),false);return page;
 }
@@ -469,7 +470,7 @@ test('Export winner table has two candidates per row, with name-adjacent incumbe
  assert.equal(result.secondSlot,'1');assert.ok(result.fonts.every(n=>n>=15));
  assert.equal(result.width,1120);assert.ok(result.tableHeight<950);
  assert.equal(result.oddPairs,11);assert.equal(result.oddLastEntries,1);
- assert.equal(result.estimatedStillLegacy,true);
+ assert.equal(result.estimatedStillLegacy,false);
 });
 test('2026 and 2022 district searches and CSV downloads survive mode switching',async t=>{
  const page=await pageFor(t);await page.locator('#predictionOffice').selectOption('council');await page.locator('#county').selectOption({label:'台北市'});
@@ -910,4 +911,36 @@ test('2022 township and mayor maps navigate by county with actual numeric result
  await page.locator('#historyCandidateScope').selectOption('candidate');assert.equal(await page.locator('#historyCandidate').isVisible(),true);
  await page.locator('#labels [data-label]').first().click();await page.locator('#historyResultDialog').waitFor({state:'visible'});
  assert.match(await page.locator('#historyDialogRows').textContent(),/蒋万安/);
+});
+
+
+test('Public history entry stays in the current workspace and displays the development notice',async t=>{
+ const page=await pageFor(t,undefined,false);let historyRequests=0;page.on('request',r=>{if(r.url().includes('assets/history-'))historyRequests++});
+ await page.locator('#categoryHistory').click();await page.locator('#historyDevelopmentNotice').waitFor({state:'visible'});
+ assert.match(await page.locator('#historyDevelopmentNotice').textContent(),/开发中，敬请期待/);
+ assert.equal(await page.locator('#categoryFuture').getAttribute('aria-selected'),'true');assert.equal(await page.locator('#historyControls').isVisible(),false);assert.equal(historyRequests,0);
+ await page.getByRole('button',{name:'知道了',exact:true}).click();
+ assert.match(await page.locator('.sidebar-footer').textContent(),/网页开发：Alex Wei; 测试和推广：星夜长街/);
+});
+test('All exported image titles and filenames preserve the office even with a custom title',async t=>{
+ const page=await pageFor(t);
+ const result=await page.evaluate(()=>{
+  const results=[];state.title='我的判断';
+  for(const office of ['mayor','council','township']){state.workspaceMode='prediction';state.predictionOffice=office;results.push({office,title:exportMapTitle(),file:exportFilename()})}
+  for(const level of ['council','legislative','towns']){state.workspaceMode='free';state.level=level;results.push({level,title:exportMapTitle(),file:exportFilename()})}
+  return results;
+ });
+ for(const row of result){const type={mayor:'县市长',council:'议员',township:'乡镇市区长',legislative:'立法机构区域民代',towns:'乡镇市区'}[row.office||row.level];assert.ok(row.title.includes(type));assert.ok(row.file.includes(type));assert.ok(row.title.includes('我的判断'))}
+});
+test('Council and township winner tables use the mayor design without losing long lists or numeric data',async t=>{
+ const page=await pageFor(t);
+ const result=await page.evaluate(()=>{
+  const rows=Array.from({length:910},(_,i)=>({district:'第'+(i+1)+'选区',name:'测试候选人',party:'中国国民党',color:'#000099',logo:logoFor(predictionParty('中国国民党')),incumbent:i%2?'现任':''}));
+  return [rows.slice(0,65),rows.slice(0,204),rows,rows.slice(0,32).map(r=>({...r,local:true,estimated:true,votes:'12345',share:'45%',status:'预测领先'}))].map(rs=>{
+   const root=svgEl('g'),layout=exportPredictionTableLayout(rs);appendExportPredictionTable(root,rs,0);
+   return{rows:rs.length,polished:layout.polished,entries:root.querySelectorAll('[data-export-winner-entry]').length,height:layout.height,headers:layout.headers,metrics:root.querySelectorAll('[data-export-field="votes"]').length};
+  });
+ });
+ for(const r of result){assert.equal(r.polished,true);assert.equal(r.entries,r.rows);assert.ok(r.height<10000)}
+ assert.ok(result[3].headers.includes('预测得票率'));assert.equal(result[3].metrics,32);
 });

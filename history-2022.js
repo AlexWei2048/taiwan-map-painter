@@ -219,6 +219,7 @@
   if(kind==='council'){state.councilViewScope='all';metric='party'}el('historyMetric').value=metric;currentResult=loaded?analyze():null;
  }
  function activate(){
+  if(!window.HistoryAccess?.canAccess()){window.HistoryAccess?.notice();return}
   if(!active)savedMapScope=clone(state);
   active=true;document.body.classList.add('history-mode');document.querySelector('.intro h1').textContent='回看2022选举结果';document.querySelector('.intro > p').textContent='选一类选举，点击地图查看实际得票与当选结果。';
   el('historyControls').hidden=false;el('mapSettings').hidden=true;

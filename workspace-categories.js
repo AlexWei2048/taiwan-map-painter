@@ -10,7 +10,7 @@
   futureModes.hidden=isHistory;historyModes.hidden=!isHistory;
  }
  future.addEventListener('click',()=>{select('future');$c('workspacePrediction').click()});
- history.addEventListener('click',()=>{select('history');$c('workspaceHistory').click()});
+ history.addEventListener('click',()=>{if(!window.HistoryAccess?.canAccess()){window.HistoryAccess?.notice();return}select('history');$c('workspaceHistory').click()});
  $c('workspacePrediction').addEventListener('click',()=>select('future'));
  $c('workspaceFree').addEventListener('click',()=>select('future'));
  $c('workspaceHistory').addEventListener('click',()=>select('history'));
