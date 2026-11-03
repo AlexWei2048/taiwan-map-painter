@@ -798,6 +798,47 @@ test('Hovering and keyboard-focusing a seat frame highlights only its matching m
 });
 
 
+test('Free-paint nationwide township map displays the same township edges as the 2026 map',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#workspaceFree').click();
+ await page.locator('#townLevel').click();
+ const baseline=await page.evaluate(()=>({
+  overview:freeCountyOverview(),
+  regions:document.querySelectorAll('#regions path[data-region]').length,
+  township:document.querySelector('#districtBorders path[data-shared-boundary="towns"]')?.getAttribute('d'),
+  county:document.querySelector('#borders path[data-shared-boundary="counties"]')?.getAttribute('d'),
+  innerStroke:document.querySelector('#districtBorders path[data-shared-boundary="towns"]')?.getAttribute('stroke'),
+  outerStroke:document.querySelector('#borders path[data-shared-boundary="counties"]')?.getAttribute('stroke'),
+  requestedInner:state.borderColor,requestedOuter:state.countyBorderColor
+ }));
+ assert.equal(baseline.overview,true);
+ assert.equal(baseline.regions,22,'Keep the existing county-colour navigation overview');
+ assert.ok(baseline.township?.length>1000,'Render full internal township borders on the nationwide map');
+ assert.ok(baseline.county?.length>100,'Keep the complete inter-county border overlay');
+ assert.notEqual(baseline.township,baseline.county);
+ assert.equal(baseline.innerStroke,baseline.requestedInner);
+ assert.equal(baseline.outerStroke,baseline.requestedOuter);
+ // Township outlines must remain present after a real free-paint edit and return.
+ await page.locator('#regions path[aria-label^="台北市"]').dispatchEvent('click');
+ assert.equal(await page.locator('#county').inputValue(),'台北市');
+ const id=await page.locator('#regions path[data-region]').first().getAttribute('data-region');
+ await page.locator('#regions path[data-region="'+id+'"]').dispatchEvent('click');
+ const painted=await page.evaluate(id=>state.fills.towns[id],id);
+ assert.ok(painted);
+ await page.locator('#returnTaiwanMap').click();
+ assert.equal(await page.locator('#county').inputValue(),'');
+ assert.equal(await page.locator('#regions path[data-region]').count(),22);
+ assert.equal(await page.locator('#districtBorders path[data-shared-boundary="towns"]').getAttribute('d'),baseline.township);
+ assert.equal(await page.evaluate(id=>state.fills.towns[id],id),painted);
+ const svg=await exportSvg(page);
+ assert.match(svg,/data-shared-boundary="towns"/);
+ assert.match(svg,/data-shared-boundary="counties"/);
+ // Both views must use exactly the same geometry, not a simplified county subdivision.
+ await page.locator('#workspacePrediction').click();
+ await page.locator('#predictionScale').selectOption('overlay');
+ await page.waitForFunction(()=>document.querySelectorAll('#regions path[data-region]').length>300);
+ assert.equal(await page.locator('#districtBorders path[data-shared-boundary="towns"]').getAttribute('d'),baseline.township);
+});
 test('Free painting keeps township county navigation but paints each nationwide council and legislative district separately',async t=>{
  const page=await pageFor(t);await page.locator('#workspaceFree').click();
  assert.equal(await page.locator('#freeLayerPicker button').count(),4);
