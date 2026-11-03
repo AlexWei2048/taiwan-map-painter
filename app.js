@@ -41,11 +41,11 @@ function freeCountyOverview(){return state.workspaceMode==='free'&&!state.county
 function councilCountyOverview(){if(typeof History2022View!=='undefined'&&History2022View.active())return History2022View.kind()==='council'&&History2022View.overview();return state.workspaceMode==='prediction'&&state.predictionOffice==='council'&&state.level==='council'&&!state.county}
 function identityPanelsActive(){return !regionalLegislativeOnly()&&!freeCountyOverview()&&!councilCountyOverview()&&['council','legislative'].includes(state.level)&&!(typeof localPredictionActive==='function'&&localPredictionActive()&&!!state.county)}
 function legislativeTownItems(identity){return(data?.towns||[]).filter(f=>!state.county||f.county===state.county).map(f=>({...f,id:identity+':'+f.id,sourceId:f.id,electorate:identity,legislativeTown:true}))}
-// The mayoral town-boundary layer is a county election map with township
-// boundaries overlaid; it is not the separate town-by-town forecast scale.
+// Legacy county-only township overview has been retired. In the mayoral
+// "township" scale both nationwide and county maps render saved township results.
+// Keep the compatibility predicate for existing renderer callers.
 function mayorTownBoundaryOverlay(){
- return state.workspaceMode==='prediction'&&state.fillMode==='prediction'&&
-  state.predictionOffice==='mayor'&&state.level==='towns'&&state.predictionScale==='overlay'&&!state.county;
+ return false;
 }
 function townshipCountyOverview(){
  return state.workspaceMode==='prediction'&&state.predictionOffice==='township'&&state.level==='towns'&&!state.county;
