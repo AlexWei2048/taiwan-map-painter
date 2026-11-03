@@ -783,3 +783,31 @@ test('Council forecasts only offer winners and county overview uses saved party 
  await page.reload();
  assert.equal(await page.locator('#regions path[aria-label^="台北市"]').getAttribute('fill'),expected.color);
 });
+
+
+test('Council seat maps show one same-size symbol per seat across all counties, with grouped party emblems and grey fallback',async t=>{
+ const page=await pageFor(t);await page.locator('#predictionOffice').selectOption('council');
+ for(const county of counties){
+  await page.locator('#county').selectOption({label:county});
+  const r=await page.evaluate(()=>{
+   const expected=predictionDistricts().map(d=>({id:d.id,seats:Number(d.seats)}));
+   const groups=[...document.querySelectorAll('#labels [data-seat-district]')];
+   const wrong=expected.filter(d=>groups.find(g=>g.dataset.seatDistrict===d.id)?.querySelectorAll('[data-seat-slot]').length!==d.seats);
+   const area=sceneSpec();
+   const clipped=groups.filter(g=>{const b=g.getBBox();return b.y+b.height>area.height-furnitureFooterHeight()||b.x<0||b.x+b.width>area.width}).map(g=>g.dataset.seatDistrict);
+   return{wrong,clipped,count:groups.length,expected:expected.length};
+  });
+  assert.deepEqual(r.wrong,[],county);assert.deepEqual(r.clipped,[],county+' symbols fit canvas');assert.equal(r.count,r.expected);
+ }
+ await page.locator('#county').selectOption({label:'台北市'});
+ const seeded=await page.evaluate(()=>{
+  const d=predictionDistricts()[0],cs=directoryCandidates(d),major=cs.filter(c=>predictionParty(c.party).id==='blue').slice(0,2),other=cs.find(c=>c.party==='无党籍');
+  state.predictions[d.id]={winners:[major[0].id,other.id,major[1].id],estimates:{}};render();
+  const group=document.querySelector('[data-seat-district="'+d.id+'"]');
+  const slots=[...group.querySelectorAll('[data-seat-status="predicted"]')];
+  return{ids:slots.map(g=>g.dataset.seatParty),logos:group.querySelectorAll('[data-seat-logo]').length,grey:group.querySelectorAll('circle[fill="#91999f"]').length,empty:group.querySelectorAll('[data-seat-status="empty"]').length,seats:d.seats};
+ });
+ assert.deepEqual(seeded.ids,['blue','blue','gray']);assert.equal(seeded.logos,2);assert.equal(seeded.grey,1);assert.equal(seeded.empty,seeded.seats-3);
+ await page.locator('#labels [data-seat-district]').first().click({force:true});assert.equal(await page.locator('#predictionDialog').isVisible(),true);await page.locator('#cancelPrediction').click();
+ const svg=await exportSvg(page);assert.match(svg,/data-seat-slot/);assert.match(svg,/data-seat-logo/);
+});
