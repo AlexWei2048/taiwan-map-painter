@@ -457,3 +457,12 @@ dialog.floating-prediction-dialog > .floating-dialog-scroll{
 #freeLayerPicker .layer-options button{min-height:48px;padding:12px 8px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
 #freeLayerPicker .layer-options button.active{background:#e9f4ee;border-color:#77ad98;color:#165d48;box-shadow:0 0 0 1px #77ad9830}
 #freeLayerPicker .layer-options button:hover{border-color:#77ad98;background:#f1f8f3}
+
+/* Historical results use the same map navigation and a roomy, read-only result table. */
+.history-result-section{margin:22px 0;padding:20px;background:#fff;border:1px solid var(--line);border-radius:13px}
+.history-result-section #historySummary{margin-bottom:14px;color:#567365;font-size:13px}
+.history-result-section .history-table-wrap{max-height:460px;overflow:auto}
+.history-result-dialog{width:min(960px,94vw);max-height:88dvh;overflow:auto;border:1px solid var(--line);border-radius:16px;padding:26px;color:var(--ink)}
+.history-result-dialog::backdrop{background:#193b3166}
+.history-result-dialog .history-table-wrap{max-height:65dvh;overflow:auto}
+.history-mode #historyControls select{margin-bottom:15px}

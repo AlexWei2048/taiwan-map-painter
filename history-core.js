@@ -26,6 +26,24 @@
   const cell=value=>{let text=String(value??'');if(/^[=+@\t\r-]/.test(text))text="'"+text;return'"'+text.replace(/"/g,'""')+'"'};
   return'\uFEFF'+rows.map(row=>row.map(cell).join(',')).join('\r\n');
  }
- const api={identity,districtNumber,key,sameScope,csv};
+
+ // Merge shared township/village edges into district boundary rings.
+ function mergePaths(paths){
+  const edges=new Map(),points=new Map();
+  const add=(a,b)=>{const ka=a.join(','),kb=b.join(',');if(ka===kb)return;points.set(ka,a);points.set(kb,b);const k=ka<kb?ka+'|'+kb:kb+'|'+ka;if(edges.has(k))edges.delete(k);else edges.set(k,[ka,kb])};
+  for(const d of paths)for(const part of d.split(/M/i).filter(Boolean)){
+   const numbers=part.match(/-?(?:\d*\.)?\d+(?:e[+-]?\d+)?/gi)||[],ring=[];
+   for(let i=0;i+1<numbers.length;i+=2)ring.push([Number(numbers[i]),Number(numbers[i+1])]);
+   for(let i=0;i<ring.length;i++)add(ring[i],ring[(i+1)%ring.length]);
+  }
+  const adjacency=new Map();for(const [k,[a,b]]of edges){for(const v of [a,b]){if(!adjacency.has(v))adjacency.set(v,new Set());adjacency.get(v).add(k)}}
+  const rings=[];
+  while(edges.size){const [key,[start,next]]=edges.entries().next().value;let cursor=start,edge=key,ring=[];
+   while(edge){const pair=edges.get(edge);if(!pair)break;ring.push(cursor);const end=pair[0]===cursor?pair[1]:pair[0];edges.delete(edge);adjacency.get(pair[0]).delete(edge);adjacency.get(pair[1]).delete(edge);cursor=end;if(cursor===start)break;edge=adjacency.get(cursor)?.values().next().value}
+   if(ring.length>=3)rings.push('M'+ring.join('L')+'Z');
+  }
+  return rings.join('');
+ }
+ const api={identity,districtNumber,key,sameScope,csv,mergePaths};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.HistoryCore=api;
 })(typeof window==='undefined'?{}:window);

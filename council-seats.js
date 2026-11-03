@@ -1,7 +1,9 @@
 'use strict';
 // One fixed-size symbol per statutory seat. Geography stays neutral.
-function councilSeatMode(){return state.workspaceMode==='prediction'&&state.fillMode==='prediction'&&state.predictionOffice==='council'&&state.level==='council'&&!!state.county}
+function councilSeatMode(){if(typeof History2022View!=='undefined'&&History2022View.seatMode())return true;return state.workspaceMode==='prediction'&&state.fillMode==='prediction'&&state.predictionOffice==='council'&&state.level==='council'&&!!state.county}
+function councilSeatDistrictFor(f){return typeof History2022View!=='undefined'&&History2022View.seatMode()?History2022View.districtFor(f):predictionDistrictFor(f)}
 function councilSeatRows(d){
+ if(typeof History2022View!=='undefined'&&History2022View.seatMode())return History2022View.seatRows(d);
  const cs=directoryCandidates(d),record=state.predictions[d.id],picked=new Set(record?.winners||[]);
  const winners=cs.filter(c=>picked.has(c.id)).sort((a,b)=>{
   const pa=predictionParty(a.party),pb=predictionParty(b.party);
@@ -71,14 +73,14 @@ function councilSeatBoundaryTouchesRect(f,r){
 }
 const councilSeatPanelCache=new Map();
 function prepareCouncilSeatPanel(panel){
- const key=[state.county,panel.identity,panel.t.scale,panel.t.tx,panel.t.ty,panel.area.bottom,panel.items.map(f=>f.id+':'+predictionDistrictFor(f)?.seats).join(',')].join('/');
+ const key=[state.county,panel.identity,panel.t.scale,panel.t.tx,panel.t.ty,panel.area.bottom,panel.items.map(f=>f.id+':'+councilSeatDistrictFor(f)?.seats).join(',')].join('/');
  if(councilSeatPanelCache.has(key))return councilSeatPanelCache.get(key);
  const initial={...panel.t},cx=(panel.area.left+panel.area.right)/2,cy=(panel.area.top+panel.area.bottom)/2;
  for(let attempt=0;attempt<10;attempt++){
   const factor=Math.pow(.88,attempt);panel.t={...initial,scale:initial.scale*factor,tx:cx+(initial.tx-cx)*factor,ty:cy+(initial.ty-cy)*factor};
   const placements=new Map(),used=[];
   for(const f of [...panel.items].sort((a,b)=>(a.box[2]-a.box[0])*(a.box[3]-a.box[1])-(b.box[2]-b.box[0])*(b.box[3]-b.box[1]))){
-   const q=councilSeatPlacement(f,Number(predictionDistrictFor(f)?.seats)||1,panel.t,used,panel.items);if(!q)break;placements.set(f.id,q);
+   const q=councilSeatPlacement(f,Number(councilSeatDistrictFor(f)?.seats)||1,panel.t,used,panel.items);if(!q)break;placements.set(f.id,q);
   }
   if(placements.size===panel.items.length){panel.seatPlacements=placements;if(councilSeatPanelCache.size>60)councilSeatPanelCache.clear();councilSeatPanelCache.set(key,panel);return panel}
  }
@@ -109,7 +111,7 @@ function drawCouncilSeats(group,interactive){
   const layer=svgEl('g',{'data-council-seat-panel':panel.identity}),leaders=svgEl('g',{'data-seat-leaders':panel.identity,'pointer-events':'none'});layer.append(leaders);group.append(layer);
   // Place the most constrained districts first.
   for(const f of [...panel.items].sort((a,b)=>(a.box[2]-a.box[0])*(a.box[3]-a.box[1])-(b.box[2]-b.box[0])*(b.box[3]-b.box[1]))){
-   const d=predictionDistrictFor(f);if(!d)continue;
+   const d=councilSeatDistrictFor(f);if(!d)continue;
    const seats=councilSeatRows(d),q=cached.get(f.id);
    const g=svgEl('g',{'data-seat-district':d.id,'data-seat-region':f.id,'data-seat-count':seats.length,'data-seat-placement':q.outside?'outside':'inside'});layer.append(g);
    if(q.outside){
@@ -122,12 +124,12 @@ function drawCouncilSeats(group,interactive){
    const name=svgEl('text',{x:q.x,y:q.rect[1]+22,'text-anchor':'middle','font-size':24,fill:'#294a3a','paint-order':'stroke',stroke:'#fff','stroke-width':4,'data-label':f.id,'data-placement':'district-number'});name.textContent=districtMapNumber(f)||f.name;if(state.labels)g.append(name);
    seats.forEach((c,i)=>{
     const row=Math.floor(i/q.cols),col=i%q.cols,rowCount=Math.min(q.cols,seats.length-row*q.cols),x=q.x+(col-(rowCount-1)/2)*q.pitch-q.size/2,y=q.rect[1]+33+row*q.pitch;
-    const p=c?predictionParty(c.party):null,emblem=p&&!['其他','其他政党'].includes(c.party)?logoFor(p):'',slot=svgEl('g',{'data-seat-slot':i,'data-seat-status':c?'predicted':'empty','data-seat-party':p?.id||'','data-seat-candidate':c?.id||''});
+    const p=c?predictionParty(c.party):null,emblem=p&&!['其他','其他政党'].includes(c.party)?logoFor(p):'',slot=svgEl('g',{'data-seat-slot':i,'data-seat-status':c?(c.history?'elected':'predicted'):'empty','data-seat-party':p?.id||'','data-seat-candidate':c?.id||''});
     const title=svgEl('title');title.textContent=c?candidateDisplayName(c)+' · '+c.party:'尚未预测';slot.append(title);
     slot.append(svgEl('circle',{cx:x+q.size/2,cy:y+q.size/2,r:q.size/2,fill:c&&!emblem?'#91999f':'#fff',stroke:c&&!emblem?'#91999f':'#8b9c92','stroke-width':1.8}));
     if(emblem)appendCircularPartyLogo(slot,emblem,x,y,q.size,{'data-seat-logo':p.id});g.append(slot);
    });
-   if(interactive){g.setAttribute('role','button');g.setAttribute('tabindex','0');g.setAttribute('aria-label',shortDirectoryName(d)+'，应选'+seats.length+'席，已预测'+seats.filter(Boolean).length+'席');g.style.cursor='pointer';g.setAttribute('pointer-events','all');g.onpointerenter=()=>toggleLabelRegionHighlight(f,true);g.onpointerleave=()=>toggleLabelRegionHighlight(f,false);g.onfocus=()=>toggleLabelRegionHighlight(f,true);g.onblur=()=>toggleLabelRegionHighlight(f,false);g.onclick=()=>openPredictionDistrict(d);g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openPredictionDistrict(d)}}}
+   if(interactive){g.setAttribute('role','button');g.setAttribute('tabindex','0');g.setAttribute('aria-label',shortDirectoryName(d)+'，应选'+seats.length+'席，'+(typeof History2022View!=='undefined'&&History2022View.seatMode()?'实际当选':'已预测')+seats.filter(Boolean).length+'席');g.style.cursor='pointer';g.setAttribute('pointer-events','all');g.onpointerenter=()=>toggleLabelRegionHighlight(f,true);g.onpointerleave=()=>toggleLabelRegionHighlight(f,false);g.onfocus=()=>toggleLabelRegionHighlight(f,true);g.onblur=()=>toggleLabelRegionHighlight(f,false);g.onclick=()=>{if(typeof History2022View!=='undefined'&&History2022View.seatMode())History2022View.openRegion(f);else openPredictionDistrict(d)};g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();g.onclick()}}}
   }
  }
 }
