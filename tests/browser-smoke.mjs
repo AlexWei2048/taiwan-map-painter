@@ -825,7 +825,7 @@ test('Free painting keeps township county navigation but paints each nationwide 
   names:[...document.querySelectorAll('#regions path[data-region]')].map(p=>p.getAttribute('aria-label'))
  }));
  assert.equal(council.total,221);assert.equal(council.ids.length,2);
- assert.ok(council.names.some(s=>s.includes('第1选举区')),'District-specific names remain available');
+ assert.ok(council.names.some(s=>s.includes('第1选区')),'District-specific names remain available');
  await page.locator('.party-brush').nth(0).click();
  await page.locator('#regions path[data-region="'+council.ids[0]+'"]').dispatchEvent('click');
  await page.locator('.party-brush').nth(1).click();
