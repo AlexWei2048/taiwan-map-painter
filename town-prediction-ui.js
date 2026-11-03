@@ -1,6 +1,6 @@
 'use strict';
 // Subarea forecasts have their own records, keyed by district and township.
-function localPredictionActive(){return state.workspaceMode==='prediction'&&state.fillMode==='prediction'&&state.predictionOffice==='mayor'&&(state.predictionScale==='town'||state.predictionOffice==='mayor'&&state.predictionScale==='overlay'&&!!state.county)}
+function localPredictionActive(){return state.workspaceMode==='prediction'&&state.fillMode==='prediction'&&state.predictionOffice==='mayor'&&state.level==='towns'&&['town','overlay'].includes(state.predictionScale)}
 function localParentDistrict(){const chosen=directoryDistrictById.get(state.predictionRegion);return chosen&&chosen.type===state.predictionOffice&&(!state.county||chosen.county===state.county)?chosen:predictionDistricts()[0]}
 const localMayorFeatureCache=new Map();
 let nationwideCouncilLocalFeatures=null,loadingTownAreas=null;
@@ -130,7 +130,14 @@ function syncLocalControls(){if(localSyncing||!$('predictionScale'))return;local
  $('editPrediction').textContent=active?'填写所选乡镇预测':'填写所选区预测';$('nextPrediction').textContent=active?'下一个未完成乡镇 →':'下一个未完成选区 →';$('openElectionDirectory').textContent=active?'查看本选区候选人':'查看所选区候选人';
  if(active&&data){const d=localParentDistrict(),features=localDistrictItems(d),townSelect=$('localTownSelect'),old=state.localTown||townSelect.value;townSelect.replaceChildren(...features.map(f=>new Option(f.scope||f.name,f.townId)));if(features.some(f=>f.townId===old))townSelect.value=old;state.localTown=townSelect.value;
  const select=$('localCandidate'),cs=directoryCandidates(d);if(!cs.some(c=>c.id===state.localDisplayCandidate))state.localDisplayCandidate=cs[0]?.id||'';select.replaceChildren(...cs.map(c=>new Option((c.number==='待补'?'号次待补':c.number+'号')+' · '+candidateDisplayName(c),c.id)));select.value=state.localDisplayCandidate;
- const usable=features.filter(f=>localMapResult(f).status==='winner').length,recorded=features.filter(f=>Object.keys(localRecord(d,f).estimates||{}).length||localRecord(d,f).leaderId).length;$('predictionCoverage').textContent=`本选区 ${features.length} 个乡镇市区 · 已填写 ${recorded} 个 · 当前显示可用 ${usable} 个`;$('predictionSeatSummary').replaceChildren();$('predictionProgressBar').value=features.length?Math.round(100*recorded/features.length):0;$('predictionProgressText').textContent=`所选选区已填写 ${recorded}/${features.length} 个乡镇市区（${$('predictionProgressBar').value}%）`;$('localForecastHelp').textContent=d.type==='mayor'?'各乡镇沿用本县市的县市长候选人；乡镇胜出与县市最终当选分别保存。':'各乡镇仅录入当前议员选区候选人的得票；跨选区乡镇只显示本选区部分，高票不代表独立分配席次。';$('editPrediction').disabled=!features.length;$('nextPrediction').disabled=!features.length;
+ const visibleFeatures=!state.county&&state.predictionOffice==='mayor'?localPredictionItems():features;
+  const usable=visibleFeatures.filter(f=>localMapResult(f).status==='winner').length,recorded=visibleFeatures.filter(f=>{const parent=directoryDistrictById.get(f.parentDistrictId);return parent&&(Object.keys(localRecord(parent,f).estimates||{}).length||localRecord(parent,f).leaderId)}).length;
+  const scope=!state.county&&state.predictionOffice==='mayor'?'全台':'本选区';
+  $('predictionCoverage').textContent=`${scope} ${visibleFeatures.length} 个乡镇市区 · 已填写 ${recorded} 个 · 当前显示可用 ${usable} 个`;
+  $('predictionSeatSummary').replaceChildren();$('predictionProgressBar').value=visibleFeatures.length?Math.round(100*recorded/visibleFeatures.length):0;
+  $('predictionProgressText').textContent=`${scope}已填写 ${recorded}/${visibleFeatures.length} 个乡镇市区（${$('predictionProgressBar').value}%）`;
+  $('localForecastHelp').textContent=!state.county&&state.predictionOffice==='mayor'?'全台地图按各乡镇市区已保存的县市长预测胜负或得票着色；点击任何乡镇市区可直接修改。编辑器下拉选项对应当前选择的县市。':d.type==='mayor'?'各乡镇沿用本县市的县市长候选人；乡镇胜出与县市最终当选分别保存。':'各乡镇仅录入当前议员选区候选人的得票；跨选区乡镇只显示本选区部分，高票不代表独立分配席次。';
+  $('editPrediction').disabled=!features.length;$('nextPrediction').disabled=!features.length;
  }
  localSyncing=false;
 }
