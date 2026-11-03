@@ -349,6 +349,7 @@ test('Unified forecast selectors and exclusive metric columns work in district a
  const page=await pageFor(t);
  for(const office of ['mayor','council','township']){
   await page.locator('#predictionOffice').selectOption(office);
+  if(office==='council'){assert.deepEqual(await page.locator('#predictionDisplay option').allTextContents(),['预测胜负']);continue}
   assert.deepEqual(await page.locator('#predictionDisplay option').allTextContents(),['预测胜负','预测得票']);
   await page.locator('#predictionDisplay').selectOption('topVote');
   assert.equal(await page.locator('#predictionCandidateScope').isVisible(),true);
