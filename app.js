@@ -1411,7 +1411,10 @@ function render(){
   const transform=transformOf(geometryLayout(currentItems(),state.labels));
   for(const group of [regionGroup,borderGroup,districtGroup,townGroup])group.setAttribute('transform',transform);
   renderTownBorders();
-  appendSharedBorders(districtGroup,mayorTownBoundaryOverlay()||councilCountyOverview()||freeCountyOverview()?'counties':state.level,'regional',state.level==='villages');
+  // The nationwide free-paint township overview uses county fill polygons, but
+   // its internal borders must be the SAME township mesh as the 2026 map.
+   // The separate county-border layer remains above it for county outlines.
+   appendSharedBorders(districtGroup,mayorTownBoundaryOverlay()||councilCountyOverview()?'counties':state.level,'regional',state.level==='villages');
   for(const f of currentItems())regionGroup.append(regionPath(f));
   if(state.level!=='counties'&&!mayorTownBoundaryOverlay()&&!(state.level==='villages'&&state.villageTown))appendSharedBorders(borderGroup,'counties');
  }
