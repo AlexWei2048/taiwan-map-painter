@@ -900,7 +900,7 @@ test('2022 township and mayor maps navigate by county with actual numeric result
  const page=await pageFor(t);await page.locator('#categoryHistory').click();await page.locator('#historyOffice').selectOption('township');
  await page.waitForFunction(()=>document.querySelector('#historySummary').textContent.includes('204席'));
  assert.equal(await page.locator('#regions path[data-region]').count(),368);
- assert.equal(await page.locator('#regions [data-region="63000010"]').getAttribute('fill'),'#fff');
+ assert.equal(await page.locator('#regions [data-region="63000010"]').getAttribute('fill'),'#ffffff');
  await page.locator('#historyCounty').selectOption({label:'屏东县'});assert.ok(await page.locator('#regions path[data-region]').count()>1);
  await page.locator('#returnTaiwanMap').click();assert.equal(await page.locator('#historyCounty').inputValue(),'');
  await page.locator('#historyOffice').selectOption('mayor');await page.locator('#historyScale').selectOption('town');
