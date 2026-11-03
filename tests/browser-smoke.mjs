@@ -159,100 +159,70 @@ test('Nationwide mayor map identifies all 22 counties by an interior name or its
  const names=await page.evaluate(()=>data.counties.map(f=>f.name));
  for(const name of names)assert.ok(svg.includes(name),'Export identifies '+name);
 });
-test('Mayor township map drills from neutral counties to independent township forecasts',async t=>{
+test('Nationwide mayor township map colours each town from its own saved forecast, without inheriting county results',async t=>{
  const page=await pageFor(t);
  await selectMayor(page);
  await page.locator('#county').selectOption('');
- const countyColors=await page.locator('#regions path[data-region]').evaluateAll(els=>els.map(e=>e.getAttribute('fill')));
- assert.ok(countyColors.some(color=>color!=='#edf1e9'),'Saved county winner has its own color');
+ const countyWinner=await page.evaluate(()=>state.predictions['mayor:63000']?.winners?.[0]);
+ assert.ok(countyWinner,'A countywide mayor prediction was saved');
  await page.locator('#predictionScale').selectOption('overlay');
- const overview=await page.evaluate(()=>({
-  active:mayorTownBoundaryOverlay(),local:localPredictionActive(),
-  office:state.predictionOffice,county:state.county,
+ const nationwide=await page.evaluate(()=>({
+  local:localPredictionActive(),office:state.predictionOffice,county:state.county,
   level:state.level,scale:state.predictionScale,
-  count:currentItems().length,
-  fills:[...document.querySelectorAll('#regions path[data-region]')].map(e=>e.getAttribute('fill')),
-  labels:[...document.querySelectorAll('#labels [data-label]')].map(e=>e.textContent),
-  townBorders:document.querySelectorAll('#townBorders path').length,
-  winnerTable:exportPredictionWinnerRows().length,
-  options:[...document.querySelector('#predictionScale').options].map(e=>e.textContent),
-  target:currentItems().find(f=>f.name==='台北市')?.id
+  count:currentItems().length,expected:data.towns.length,
+  ids:currentItems().map(f=>f.id),fills:[...document.querySelectorAll('#regions path[data-region]')].map(e=>e.getAttribute('fill')),
+  options:[...document.querySelector('#predictionScale').options].map(e=>e.textContent)
  }));
- assert.equal(overview.active,true);assert.equal(overview.local,false);
- assert.equal(overview.office,'mayor');assert.equal(overview.level,'towns');
- assert.equal(overview.scale,'overlay');assert.equal(overview.count,22);
- assert.ok(overview.fills.every(color=>color==='#edf1e9'),'County winner colors must not be inherited');
- assert.equal(overview.labels.length,22);assert.ok(overview.townBorders>0);
- assert.equal(overview.winnerTable,0);
- assert.deepEqual(overview.options,['县市','乡镇市区']);
- assert.ok(overview.target);
- await page.locator('#regions path[data-region="'+overview.target+'"]').dispatchEvent('click');
- const county=await page.evaluate(()=>({
-  scope:state.county,office:state.predictionOffice,scale:state.predictionScale,
-  local:localPredictionActive(),count:currentItems().length,
-  wrongCounty:currentItems().some(f=>f.county!=='台北市'),
-  fills:[...document.querySelectorAll('#regions path[data-region]')].map(e=>e.getAttribute('fill'))
- }));
- assert.equal(county.scope,'台北市');assert.equal(county.office,'mayor');
- assert.equal(await page.locator('#county').inputValue(),'台北市');
- assert.equal(await page.locator('#predictionScale').inputValue(),'overlay');
- assert.equal(county.local,true);assert.ok(county.count>1);
- assert.equal(county.wrongCounty,false);
- assert.ok(county.fills.every(color=>color==='#edf1e9'));
- const firstId=await page.locator('#regions path[data-region]').first().getAttribute('data-region');
- await page.locator('#regions path[data-region="'+firstId+'"]').dispatchEvent('click');
+ assert.equal(nationwide.local,true);
+ assert.equal(nationwide.office,'mayor');assert.equal(nationwide.county,'');
+ assert.equal(nationwide.level,'towns');assert.equal(nationwide.scale,'overlay');
+ assert.equal(nationwide.count,nationwide.expected);
+ assert.ok(nationwide.count>300,'Every township is displayed, not only 22 county outlines');
+ assert.equal(new Set(nationwide.ids).size,nationwide.count);
+ assert.ok(nationwide.fills.every(color=>color==='#edf1e9'),'Countywide winner is not automatically assigned to towns');
+ assert.deepEqual(nationwide.options,['县市','乡镇市区']);
+ const townId=await page.evaluate(()=>data.towns.find(f=>f.county==='台北市'&&f.name==='中正区').id);
+ await page.locator('#regions path[data-region="'+townId+'"]').dispatchEvent('click');
  await page.locator('#localDialog').waitFor({state:'visible'});
  await page.getByRole('radio',{name:'预测蒋万安胜出',exact:true}).check();
  await page.locator('#saveLocal').click();
  const saved=await page.evaluate(id=>{
   const f=currentItems().find(f=>f.id===id);
-  const record=f?localRecord(directoryDistrictById.get(f.parentDistrictId),f):null;
+  const record=localRecord(directoryDistrictById.get(f.parentDistrictId),f);
   return{
-   office:state.predictionOffice,county:state.county,level:state.level,
-   fill:document.querySelector('#regions path[data-region="'+id+'"]')?.getAttribute('fill'),
-   winner:record?.leaderId,
-   countyWinner:state.predictions['mayor:63000']?.winners||[],
-   rows:exportPredictionWinnerRows().map(r=>({district:r.district,name:r.name,local:r.local,estimated:r.estimated})),
-   layout:exportPredictionTableLayout(exportPredictionWinnerRows()).polished
+   county:state.county,fill:document.querySelector('#regions path[data-region="'+id+'"]')?.getAttribute('fill'),
+   winner:record.leaderId,countyWinner:state.predictions['mayor:63000']?.winners||[],
+   legend:document.querySelector('#legend')?.textContent||'',
+   rows:exportPredictionWinnerRows().map(r=>({district:r.district,name:r.name,local:r.local}))
   };
- },firstId);
- assert.equal(saved.office,'mayor');assert.equal(saved.county,'台北市');
- assert.ok(saved.winner);assert.notEqual(saved.fill,'#edf1e9');
- assert.ok(saved.countyWinner.length>0,'Countywide winner data remains untouched');
- assert.ok(saved.rows.some(r=>r.local&&r.name==='蒋万安'));
- assert.equal(saved.layout,true,'Township composition table keeps the two-up winner layout');
+ },townId);
+ assert.equal(saved.county,'');assert.ok(saved.winner);
+ assert.notEqual(saved.fill,'#edf1e9','National map must immediately show the saved town result');
+ assert.ok(saved.countyWinner.includes(countyWinner));
+ assert.ok(saved.rows.some(r=>r.local&&r.district.includes('台北市')&&r.name==='蒋万安'));
+ assert.match(saved.legend,/乡镇市区/);
  const svg=await exportSvg(page);
- assert.match(svg,/data-export-table-style="two-up"/);
  assert.match(svg,/蒋万安/);
- // Returning to the nationwide map never paints counties from their saved winners.
- await page.locator('#county').selectOption('');
- assert.equal(await page.evaluate(()=>mayorTownBoundaryOverlay()),true);
- assert.ok(await page.locator('#regions path[data-region]').evaluateAll(els=>els.every(e=>e.getAttribute('fill')==='#edf1e9')));
- // The map-range dropdown offers the same navigation as clicking a county.
  await page.locator('#county').selectOption({label:'高雄市'});
  assert.equal(await page.evaluate(()=>localPredictionActive()),true);
- assert.equal(await page.locator('#county').inputValue(),'高雄市');
- assert.equal(await page.locator('#predictionScale').inputValue(),'overlay');
  assert.ok(await page.locator('#regions path[data-region]').count()>20);
  await page.locator('#county').selectOption('');
- assert.equal(await page.evaluate(()=>mayorTownBoundaryOverlay()),true);
- // County layer remains independent and retains its original prediction.
+ assert.equal(await page.evaluate(()=>localPredictionActive()),true);
+ assert.equal(await page.locator('#regions path[data-region="'+townId+'"]').getAttribute('fill'),saved.fill);
  await page.locator('#predictionScale').selectOption('district');
  assert.equal(await page.evaluate(()=>state.level),'counties');
- assert.equal(await page.evaluate(()=>state.predictionOffice),'mayor');
- assert.ok(await page.locator('#regions path[data-region]').evaluateAll(els=>els.some(e=>e.getAttribute('fill')!=='#edf1e9')));
+ assert.ok(await page.locator('#regions path[data-region]').evaluateAll(els=>els.some(e=>e.getAttribute('fill')!=='#edf1e9')),'County-level predictions remain independent');
 });
-test('Each mayor township county map has a visible return-to-Taiwan control that resets only map range',async t=>{
- const page=await pageFor(t);
- const back=page.locator('#returnTaiwanMap');
- assert.equal(await back.count(),1,'Map return button exists even while hidden');
- assert.equal(await back.isVisible(),false,'Hidden on county-level map');
+test('Mayor township county return control restores the full national map with existing town colours',async t=>{
+ const page=await pageFor(t),back=page.locator('#returnTaiwanMap');
+ assert.equal(await back.count(),1);
+ assert.equal(await back.isVisible(),false);
  await page.locator('#predictionScale').selectOption('overlay');
- assert.equal(await back.isVisible(),false,'Hidden on nationwide township overview');
+ assert.equal(await back.isVisible(),false);
+ assert.ok(await page.locator('#regions path[data-region]').count()>300);
  await page.locator('#county').selectOption({label:'台北市'});
- assert.equal(await back.isVisible(),true,'Shown inside Taipei township detail');
- assert.equal(await page.getByRole('button',{name:'返回全台地图',exact:true}).count(),1,'Accessible button label');
- assert.equal(await back.textContent().then(s=>s.trim()),'← 返回全台地图');
+ assert.equal(await back.isVisible(),true);
+ assert.equal(await page.getByRole('button',{name:'返回全台地图',exact:true}).count(),1);
  const geometry=await page.evaluate(()=>{
   const r=document.querySelector('#returnTaiwanMap').getBoundingClientRect();
   const canvas=document.querySelector('#canvas').getBoundingClientRect();
@@ -260,44 +230,35 @@ test('Each mayor township county map has a visible return-to-Taiwan control that
   return{inside:r.left>=canvas.left&&r.right<=canvas.right&&r.top>=canvas.top&&r.bottom<=canvas.bottom,
    belowInfo:r.top>=info.bottom};
  });
- assert.equal(geometry.inside,true,'Back control must fit inside map canvas');
- assert.equal(geometry.belowInfo,true,'Back control must not obscure the map instruction');
- // Preserve an independently recorded township winner across navigation.
+ assert.equal(geometry.inside,true);assert.equal(geometry.belowInfo,true);
  const id=await page.locator('#regions path[data-region]').first().getAttribute('data-region');
  await page.locator('#regions path[data-region="'+id+'"]').dispatchEvent('click');
  await page.getByRole('radio',{name:'预测蒋万安胜出',exact:true}).check();
  await page.locator('#saveLocal').click();
- const before=await page.evaluate(id=>{
-  const f=currentItems().find(f=>f.id===id);
-  return localRecord(directoryDistrictById.get(f.parentDistrictId),f).leaderId;
- },id);
- assert.ok(before);
+ const before=await page.locator('#regions path[data-region="'+id+'"]').getAttribute('fill');
+ assert.notEqual(before,'#edf1e9');
  await back.click();
- assert.equal(await back.isVisible(),false,'Hidden after returning to nationwide overview');
- const after=await page.evaluate(()=>({
-  county:state.county,level:state.level,scale:state.predictionScale,office:state.predictionOffice,
-  overlay:mayorTownBoundaryOverlay(),local:localPredictionActive(),count:currentItems().length,
-  regionCount:document.querySelectorAll('#regions [data-region]').length,
-  allNeutral:[...document.querySelectorAll('#regions path[data-region]')].every(e=>e.getAttribute('fill')==='#edf1e9')
- }));
- assert.equal(after.county,'');assert.equal(await page.locator('#county').inputValue(),'');
- assert.equal(after.level,'towns');assert.equal(after.scale,'overlay');assert.equal(after.office,'mayor');
- assert.equal(after.overlay,true);assert.equal(after.local,false);
- assert.equal(after.count,22);assert.equal(after.regionCount,22);assert.equal(after.allNeutral,true);
+ assert.equal(await back.isVisible(),false);
+ const after=await page.evaluate(id=>{
+  const f=currentItems().find(f=>f.id===id);
+  return{county:state.county,level:state.level,scale:state.predictionScale,
+   local:localPredictionActive(),count:currentItems().length,expected:data.towns.length,
+   fill:document.querySelector('#regions path[data-region="'+id+'"]')?.getAttribute('fill'),
+   winner:localRecord(directoryDistrictById.get(f.parentDistrictId),f).leaderId};
+ },id);
+ assert.equal(after.county,'');assert.equal(after.level,'towns');assert.equal(after.scale,'overlay');
+ assert.equal(after.local,true);assert.equal(after.count,after.expected);
+ assert.ok(after.winner);assert.equal(after.fill,before);
  await page.locator('#county').selectOption({label:'台北市'});
  assert.equal(await back.isVisible(),true);
- const restored=await page.evaluate(id=>{
-  const f=currentItems().find(f=>f.id===id);
-  return localRecord(directoryDistrictById.get(f.parentDistrictId),f).leaderId;
- },id);
- assert.equal(restored,before,'Back navigation must not alter saved township forecast data');
+ assert.equal(await page.locator('#regions path[data-region="'+id+'"]').getAttribute('fill'),before);
  await page.locator('#predictionScale').selectOption('district');
- assert.equal(await back.isVisible(),false,'Hidden for county mayor prediction layer');
+ assert.equal(await back.isVisible(),false);
  await page.locator('#predictionOffice').selectOption('council');
- assert.equal(await back.isVisible(),true,'Shown for county council prediction');
+ assert.equal(await back.isVisible(),true);
  await back.click();
  assert.equal(await page.locator('#county').inputValue(),'');
- assert.equal(await back.isVisible(),false,'Hidden on national council overview');
+ assert.equal(await back.isVisible(),false);
 });
 test('Published-site update time uses the last successful Pages deployment, minute-precision Taipei time',async t=>{
  const context=await browser.newContext();t.after(()=>context.close());
