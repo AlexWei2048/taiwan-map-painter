@@ -798,30 +798,80 @@ test('Hovering and keyboard-focusing a seat frame highlights only its matching m
 });
 
 
-test('Free painting offers four clean layers and county drilldown with preserved colours and return navigation',async t=>{
+test('Free painting keeps township county navigation but paints each nationwide council and legislative district separately',async t=>{
  const page=await pageFor(t);await page.locator('#workspaceFree').click();
- assert.equal(await page.locator('#freeLayerPicker button').count(),4);assert.equal(await page.locator('#villageLevel').count(),0);assert.equal(await page.locator('#freeLayerPicker small').count(),0);
- await page.locator('#townLevel').click();assert.equal(await page.locator('#regions path[data-region]').count(),22);
- await page.locator('#regions path[aria-label^="台北市"]').click({force:true});assert.equal(await page.locator('#county').inputValue(),'台北市');
- assert.equal(await page.locator('#regions path[data-region]').count(),12);assert.equal(await page.locator('#returnTaiwanMap').isVisible(),true);
- const id=await page.locator('#regions path[data-region]').first().getAttribute('data-region');
- await page.locator('#regions path[data-region="'+id+'"]').dispatchEvent('click');
- const stored=await page.evaluate(id=>state.fills.towns[id],id);assert.ok(stored);
- await page.locator('#returnTaiwanMap').click();assert.equal(await page.locator('#county').inputValue(),'');assert.equal(await page.locator('#regions path[data-region]').count(),22);
- assert.equal(await page.evaluate(id=>state.fills.towns[id],id),stored);
- for(const layer of ['#councilLevel','#legislativeLevel']){
-  await page.locator(layer).click();assert.equal(await page.locator('#regions path[data-region]').count(),22);
-  await page.locator('#regions path[aria-label^="台北市"]').click({force:true});
-  assert.equal(await page.locator('#county').inputValue(),'台北市');assert.equal(await page.locator('#returnTaiwanMap').isVisible(),true);
-  assert.equal(await page.locator('#predictionDialog').isVisible(),false);
-  if(layer==='#councilLevel')assert.ok(await page.locator('#regions g[data-electorate]').count()>=3);else assert.equal(await page.locator('#regions g[data-electorate]').count(),0);
-  await page.locator('#returnTaiwanMap').click();assert.equal(await page.locator('#county').inputValue(),'');
- }
- await page.locator('#countyLevel').click();await page.locator('#regions path[aria-label^="台北市"]').dispatchEvent('click');
- assert.equal(await page.locator('#county').inputValue(),'');assert.ok(await page.evaluate(()=>Object.keys(state.fills.counties).length));
+ assert.equal(await page.locator('#freeLayerPicker button').count(),4);
+ assert.equal(await page.locator('#villageLevel').count(),0);
+ await page.locator('#townLevel').click();
+ assert.equal(await page.locator('#regions path[data-region]').count(),22);
+ await page.locator('#regions path[aria-label^="台北市"]').click({force:true});
+ assert.equal(await page.locator('#county').inputValue(),'台北市');
+ assert.equal(await page.locator('#regions path[data-region]').count(),12);
+ const town=await page.locator('#regions path[data-region]').first().getAttribute('data-region');
+ await page.locator('#regions path[data-region="'+town+'"]').dispatchEvent('click');
+ const townParty=await page.evaluate(id=>state.fills.towns[id],town);assert.ok(townParty);
+ await page.locator('#returnTaiwanMap').click();
+ assert.equal(await page.locator('#county').inputValue(),'');
+ assert.equal(await page.locator('#regions path[data-region]').count(),22);
+ assert.equal(await page.evaluate(id=>state.fills.towns[id],town),townParty);
+
+ await page.locator('#councilLevel').click();
+ await page.waitForFunction(()=>data.council.length===161&&data.councilIndigenous.length===60&&document.querySelectorAll('#regions path[data-region]').length===221);
+ assert.equal(await page.locator('#county').inputValue(),'');
+ assert.equal(await page.locator('#regions g[data-electorate]').count(),3,'Council regions retain separate electorate panels');
+ const council=await page.evaluate(()=>({
+  ids:data.council.filter(f=>f.county==='台北市').slice(0,2).map(f=>f.id),
+  total:currentItems().length,
+  names:[...document.querySelectorAll('#regions path[data-region]')].map(p=>p.getAttribute('aria-label'))
+ }));
+ assert.equal(council.total,221);assert.equal(council.ids.length,2);
+ assert.ok(council.names.some(s=>s.includes('第1选举区')),'District-specific names remain available');
+ await page.locator('.party-brush').nth(0).click();
+ await page.locator('#regions path[data-region="'+council.ids[0]+'"]').dispatchEvent('click');
+ await page.locator('.party-brush').nth(1).click();
+ await page.locator('#regions path[data-region="'+council.ids[1]+'"]').dispatchEvent('click');
+ const councilFills=await page.evaluate(ids=>ids.map(id=>({
+  stored:state.fills.council[id],
+  color:document.querySelector('#regions path[data-region="'+id+'"]')?.getAttribute('fill')
+ })),council.ids);
+ assert.equal(await page.locator('#county').inputValue(),'','Clicking national council regions must paint, not drill down');
+ assert.ok(councilFills.every(x=>x.stored&&x.color===(paletteById(x.stored)?.color)));
+ assert.notEqual(councilFills[0].color,councilFills[1].color,'Different districts in one county may have different colours');
+ assert.ok((await exportSvg(page)).includes('data-region="'+council.ids[0]+'"'));
+ await page.locator('#county').selectOption({label:'台北市'});
+ assert.ok(await page.locator('#regions path[data-region="'+council.ids[0]+'"]').count());
+ await page.locator('#returnTaiwanMap').click();
+ assert.equal(await page.locator('#regions path[data-region="'+council.ids[1]+'"]').getAttribute('fill'),councilFills[1].color);
+
+ await page.locator('#legislativeLevel').click();
+ await page.waitForFunction(()=>data.legislative.length===73&&document.querySelectorAll('#regions path[data-region]').length===73);
+ assert.equal(await page.locator('#regions g[data-electorate]').count(),0,'Regional legislative map has one complete geographic layer');
+ const legislative=await page.evaluate(()=>({
+  ids:data.legislative.filter(f=>f.county==='台北市').slice(0,2).map(f=>f.id),total:currentItems().length
+ }));
+ assert.equal(legislative.total,73);assert.equal(legislative.ids.length,2);
+ await page.locator('.party-brush').nth(0).click();
+ await page.locator('#regions path[data-region="'+legislative.ids[0]+'"]').dispatchEvent('click');
+ await page.locator('.party-brush').nth(1).click();
+ await page.locator('#regions path[data-region="'+legislative.ids[1]+'"]').dispatchEvent('click');
+ const legislativeFills=await page.evaluate(ids=>ids.map(id=>({
+  stored:state.fills.legislative[id],
+  color:document.querySelector('#regions path[data-region="'+id+'"]')?.getAttribute('fill')
+ })),legislative.ids);
+ assert.equal(await page.locator('#county').inputValue(),'','Clicking national regional legislative districts must paint directly');
+ assert.ok(legislativeFills.every(x=>x.stored&&x.color===paletteById(x.stored)?.color));
+ assert.notEqual(legislativeFills[0].color,legislativeFills[1].color);
+ assert.ok((await exportSvg(page)).includes('data-region="'+legislative.ids[1]+'"'));
+ await page.locator('#county').selectOption({label:'台北市'});
+ assert.equal(await page.locator('#regions path[data-region]').count(),8);
+ await page.locator('#returnTaiwanMap').click();
+ assert.equal(await page.locator('#regions path[data-region="'+legislative.ids[0]+'"]').getAttribute('fill'),legislativeFills[0].color);
+
+ await page.locator('#countyLevel').click();
+ await page.locator('#regions path[aria-label^="台北市"]').dispatchEvent('click');
+ assert.ok(await page.evaluate(()=>Object.keys(state.fills.counties).length));
+ assert.equal(await page.evaluate(id=>state.fills.towns[id],town),townParty,'Other free-painting layers stay unchanged');
 });
-
-
 test('Free regional legislators use a single unframed regional-only map and show district totals in the legend',async t=>{
  const page=await pageFor(t);await page.locator('#workspaceFree').click();
  assert.deepEqual(await page.locator('#freeLayerPicker button').allTextContents(),['县市','乡镇市区','议员','立法机构区域民代']);
