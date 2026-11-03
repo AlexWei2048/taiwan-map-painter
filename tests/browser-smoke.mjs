@@ -851,9 +851,24 @@ test('Free painting offers four clean layers and county drilldown with preserved
   await page.locator('#regions path[aria-label^="台北市"]').click({force:true});
   assert.equal(await page.locator('#county').inputValue(),'台北市');assert.equal(await page.locator('#returnTaiwanMap').isVisible(),true);
   assert.equal(await page.locator('#predictionDialog').isVisible(),false);
-  assert.ok(await page.locator('#regions g[data-electorate]').count()>=3);
+  if(layer==='#councilLevel')assert.ok(await page.locator('#regions g[data-electorate]').count()>=3);else assert.equal(await page.locator('#regions g[data-electorate]').count(),0);
   await page.locator('#returnTaiwanMap').click();assert.equal(await page.locator('#county').inputValue(),'');
  }
  await page.locator('#countyLevel').click();await page.locator('#regions path[aria-label^="台北市"]').dispatchEvent('click');
  assert.equal(await page.locator('#county').inputValue(),'');assert.ok(await page.evaluate(()=>Object.keys(state.fills.counties).length));
+});
+
+
+test('Free regional legislators use a single unframed regional-only map and show district totals in the legend',async t=>{
+ const page=await pageFor(t);await page.locator('#workspaceFree').click();
+ assert.deepEqual(await page.locator('#freeLayerPicker button').allTextContents(),['县市','乡镇市区','议员','立法机构区域民代']);
+ await page.locator('#legislativeLevel').click();
+ await page.waitForFunction(()=>document.querySelector('#legend').textContent.includes('共 73 个选区'));
+ await page.locator('#county').selectOption({label:'台北市'});
+ assert.equal(await page.locator('#regions path[data-region]').count(),8);
+ assert.equal(await page.locator('#regions path[data-electorate="plains"],#regions path[data-electorate="mountain"],#regions path[data-electorate="party"]').count(),0);
+ assert.equal(await page.locator('#insetFrames rect,#insetFrames text').count(),0);
+ assert.match(await page.locator('#legend').textContent(),/共 8 个选区/);
+ assert.equal(await page.evaluate(()=>districtTableRows().every(d=>DistrictCore.identity(d)==='regional')),true);
+ const svg=await exportSvg(page);assert.match(svg,/共 8 个选区/);assert.doesNotMatch(svg,/data-electorate="(?:plains|mountain|party)"/);
 });

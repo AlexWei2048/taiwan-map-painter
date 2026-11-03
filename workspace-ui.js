@@ -195,13 +195,13 @@ function syncWorkspace(){
  syncingWorkspace=false;
 }
 let districtTableKey='';
-function districtTableRows(){return DistrictCore.filter(DISTRICT_DETAILS[state.level]||[],state.county,simplify($('districtTableSearch').value.trim()))}
+function districtTableRows(){return DistrictCore.filter((DISTRICT_DETAILS[state.level]||[]).filter(d=>!regionalLegislativeOnly()||DistrictCore.identity(d)==='regional'),state.county,simplify($('districtTableSearch').value.trim()))}
 function renderDistrictTable(){
  const active=['council','legislative'].includes(state.level);$('districtReference').hidden=!active;if(!active)return;
  const key=[state.level,state.county,$('districtTableSearch').value,state.fillMode].join('/');if(key===districtTableKey)return;districtTableKey=key;
- const rows=districtTableRows(),groups=DistrictCore.groups(rows,COUNTY_ORDER);$('districtReferenceTitle').textContent=(state.county||'全台')+(state.level==='council'?'议员':'立法机构民代')+'选区范围与名额';
- $('districtReferenceSummary').textContent=state.level==='council'?`${rows.length} 个选区，含区域及少数民族选区，按县市合并列示`:`${rows.filter(d=>d.county!=='\u5168\u56fd').length} 个区域选区 + ${rows.filter(d=>d.county==='\u5168\u56fd').length} 个全台少数民族选区`;
- $('districtReferenceNote').textContent=state.level==='council'&&councilCountyOverview()?'全台地图按县市显示，点击县市进入该县市的议员预测；表格包含全部身份选区。妇保中的跨区合计按公告原文列示，不能逐区累加。':state.level==='council'?'表格包含本范围全部身份选区；地图将区域、平地少数民族、山地少数民族三类并列显示。妇保中的跨区合计按公告原文列示，不能逐区累加。':'立法机构民代范围采用第11届（2024年）资料。自由填色地图分区域、不分区政党、平地少数民族、山地少数民族四类显示并共用图例；后三类可按乡镇市区分别填色。';
+ const rows=districtTableRows(),groups=DistrictCore.groups(rows,COUNTY_ORDER);$('districtReferenceTitle').textContent=(state.county||'全台')+(state.level==='council'?'议员':'立法机构区域民代')+'选区范围与名额';
+ $('districtReferenceSummary').textContent=state.level==='council'?`${rows.length} 个选区，含区域及少数民族选区，按县市合并列示`:`${rows.length} 个区域选区`;
+ $('districtReferenceNote').textContent=state.level==='council'&&councilCountyOverview()?'全台地图按县市显示，点击县市进入该县市的议员预测；表格包含全部身份选区。妇保中的跨区合计按公告原文列示，不能逐区累加。':state.level==='council'?'表格包含本范围全部身份选区；地图将区域、平地少数民族、山地少数民族三类并列显示。妇保中的跨区合计按公告原文列示，不能逐区累加。':'立法机构区域民代范围采用第11届（2024年）区域选区资料；地图与表格仅显示区域选区。';
  const root=$('districtTableGroups');const open=new Set([...root.querySelectorAll('details[open]')].map(d=>d.dataset.county));root.replaceChildren();
  for(const group of groups){const details=document.createElement('details');details.className='county-district-group';details.dataset.county=group.county;details.open=!!state.county||open.has(group.county)||(!open.size&&group.county===groups[0]?.county);details.append(dirText('summary',group.county+' · '+group.districts.length+'个选区'));
   const wrap=dirText('div','','reference-table-wrap'),table=document.createElement('table');table.className='reference-table';const caption=dirText('caption',group.county+'选区范围、应选名额与妇保名额');table.append(caption);const head=document.createElement('thead'),h=document.createElement('tr');for(const t of ['选区','类别','包含区域／选民范围','应选名额','妇保名额','操作']){const th=dirText('th',t);th.scope='col';h.append(th)}head.append(h);table.append(head);const body=document.createElement('tbody');
