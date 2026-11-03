@@ -341,7 +341,7 @@ test('Independent-candidate emblem is bundled for sidebar, legend and standalone
 test('Recording votes retains chosen winners and exports a complete vote table',async t=>{
  const page=await pageFor(t);await selectMayor(page);await enterRates(page);
  const svg=await exportSvg(page);assert.match(svg,/预测得票候选人/);assert.match(svg,/预测得票率/);assert.match(svg,/data-export-party-logo/);
- assert.equal((svg.match(/data-export-winner-row=/g)||[]).length,6);
+ assert.equal((svg.match(/data-export-winner-entry=/g)||[]).length,6);assert.equal((svg.match(/data-export-winner-row=/g)||[]).length,3);
  await page.locator('#predictionDisplay').selectOption('composition');assert.match(await page.locator('#predictionCoverage').innerText(),/已选当选人 1\/1/);
  assert.match(await page.locator('#legend').textContent(),/中国国民党（1席）/);
  await page.reload();await page.locator('#regions path').first().waitFor();assert.match(await page.locator('#predictionCoverage').innerText(),/已选当选人 1\/1/);
@@ -935,12 +935,12 @@ test('All exported image titles and filenames preserve the office even with a cu
 test('Council and township winner tables use the mayor design without losing long lists or numeric data',async t=>{
  const page=await pageFor(t);
  const result=await page.evaluate(()=>{
-  const rows=Array.from({length:910},(_,i)=>({district:'第'+(i+1)+'选区',name:'测试候选人',party:'中国国民党',color:'#000099',logo:logoFor(predictionParty('中国国民党')),incumbent:i%2?'现任':''}));
+  const rows=Array.from({length:910},(_,i)=>({district:'第'+(i+1)+'选区',name:'测试候选人',party:'中国国民党',number:String(i+1),gender:i%2?'女':'男',color:'#000099',logo:logoFor(predictionParty('中国国民党')),incumbent:i%2?'现任':''}));
   return [rows.slice(0,65),rows.slice(0,204),rows,rows.slice(0,32).map(r=>({...r,local:true,estimated:true,votes:'12345',share:'45%',status:'预测领先'}))].map(rs=>{
    const root=svgEl('g'),layout=exportPredictionTableLayout(rs);appendExportPredictionTable(root,rs,0);
-   return{rows:rs.length,polished:layout.polished,entries:root.querySelectorAll('[data-export-winner-entry]').length,height:layout.height,headers:layout.headers,metrics:root.querySelectorAll('[data-export-field="votes"]').length};
+   return{rows:rs.length,polished:layout.polished,entries:root.querySelectorAll('[data-export-winner-entry]').length,height:layout.height,meta:root.querySelectorAll('[data-export-field="candidate-meta"]').length,headers:layout.headers,metrics:root.querySelectorAll('[data-export-field="votes"]').length};
   });
  });
- for(const r of result){assert.equal(r.polished,true);assert.equal(r.entries,r.rows);assert.ok(r.height<10000)}
+ for(const r of result){assert.equal(r.polished,true);assert.equal(r.entries,r.rows);assert.equal(r.meta,r.rows);assert.ok(r.height<14000)}
  assert.ok(result[3].headers.includes('预测得票率'));assert.equal(result[3].metrics,32);
 });
