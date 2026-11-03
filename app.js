@@ -1562,9 +1562,10 @@ function polishedPredictionTableLayout(rows){
   const district=wrapExportText(row.district,Math.max(3,(widths[0]-24)/14.2));
   const name=wrapExportText(row.name,Math.max(3,(widths[1]-(row.incumbent?62:25))/font));
   const party=wrapExportText(row.party,Math.max(3,(widths[2]-64)/14));
+  const meta=wrapExportText([row.number?'号次 '+row.number:'',row.gender||''].filter(Boolean).join(' · '),(widths[1]-24)/11.5).filter(Boolean);
   const cells=[district,name,party,...metricFields.map((k,i)=>wrapExportText(row[k]||'—',(extraWidths[i]-24)/14))];
-  const height=Math.max(rowHeight,Math.max(...cells.map(c=>c.length))*lineHeight+23);
-  return{row,cells,height};
+  const height=Math.max(rowHeight,Math.max(...cells.map(c=>c.length))*lineHeight+23,name.length*lineHeight+meta.length*16+(meta.length?6:0)+23);
+  return{row,cells,meta,height};
  });
  const pairs=[];
  for(let i=0;i<entries.length;i+=columns){
@@ -1632,8 +1633,8 @@ function appendExportPolishedWinnerTable(root,rows,y,layout){
     'data-export-district':row.district});
    group.append(item);
    const [districtLines,nameLines,partyLines]=entry.cells;
-   function linesAt(lines,xPos,size,weight,color,kind){
-    const text=svgEl('text',{x:xPos,y:mid-(lines.length-1)*layout.lineHeight/2,
+   function linesAt(lines,xPos,size,weight,color,kind,offset=0){
+    const text=svgEl('text',{x:xPos,y:mid+offset-(lines.length-1)*layout.lineHeight/2,
      'font-size':size,'font-weight':weight,fill:color,'dominant-baseline':'middle',
      'data-export-field':kind});
     lines.forEach((line,i)=>{
@@ -1645,10 +1646,12 @@ function appendExportPolishedWinnerTable(root,rows,y,layout){
    const [districtWidth,nameWidth]=layout.widths;
    linesAt(districtLines,x+13,14.2,450,'#536e60','district');
    const nameX=x+districtWidth+12;
-   linesAt(nameLines,nameX,layout.font,650,'#254a39','name');
+   const nameOffset=entry.meta?.length?-(entry.meta.length*16+6)/2:0;
+   linesAt(nameLines,nameX,layout.font,650,'#254a39','name',nameOffset);
+   (entry.meta||[]).forEach((line,i)=>{const meta=svgEl('text',{x:nameX,y:mid+nameOffset+(nameLines.length-1)*layout.lineHeight/2+20+i*16,'font-size':11.5,fill:'#708377','data-export-field':'candidate-meta'});meta.textContent=line;item.append(meta)});
    if(row.incumbent){
     const lastLine=nameLines.at(-1)||'';
-    const lastLineY=mid+(nameLines.length-1)*layout.lineHeight/2;
+    const lastLineY=mid+nameOffset+(nameLines.length-1)*layout.lineHeight/2;
     // The name column reserves space for this inline badge, even when wrapping.
     const offset=exportTextWidth(lastLine)*layout.font+8;
     const badgeX=nameX+offset;
