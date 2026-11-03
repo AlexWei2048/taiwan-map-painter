@@ -256,3 +256,10 @@ Latest source revision: 20261030-no-offline-v11.
 - National township-chief maps drill into the clicked county before any prediction action. All 22 counties are available as map scopes; county township-chief views show a return-to-Taiwan button. Navigation preserves entered forecasts and fills.
 - National council panels retain electoral geometry and colours but use full county names instead of district numbers. County-scoped maps retain official district labels. Exports follow the same county-name overview without adding redundant per-district coverage appendices.
 - Updated browser checks for national council names, white unsupported areas and township county drilldown/return; 75 local regression checks pass. Preview verified Taipei can be entered without a prediction dialog and council national labels are all county names.
+
+
+## 2026-11-03 v95 议员全台入口
+- 议员预测全台地图合并为一张县市地图，完整标出22县市名称，不再按身份分三张。
+- 点击县市进入县市议员预测，县市图及乡镇预测图均可返回全台；导航不改变预测。
+- 全台入口隐藏身份筛选与乡镇层级，县市内部保留选区类别与预测功能。
+- 75项本地检查通过；预览验证高雄市点击进入和返回。

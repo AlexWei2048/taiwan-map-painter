@@ -624,12 +624,22 @@ test('Township-chief maps use the same name-or-number rule in every eligible cou
 });
 test('National council overview labels counties while county views retain all official district labels',async t=>{
  const page=await pageFor(t);await page.locator('#predictionOffice').selectOption('council');
- await page.waitForFunction(()=>document.querySelectorAll('#regions [data-region]').length===221);
+ await page.waitForFunction(()=>document.querySelectorAll('#regions [data-region]').length===22);
+ assert.equal(await page.locator('#insetFrames [data-electorate]').count(),0);
  const national=()=>page.locator('#labels text[data-label]').evaluateAll(els=>els.map(e=>({text:e.textContent,official:e.dataset.placement==='district-number'})));
  for(const q of await national()){assert.equal(q.official,false);assert.match(q.text,/[县市]$/)}
  await page.locator('#zoomIn').click();await page.locator('#fit').click();
  for(const q of await national())assert.match(q.text,/[县市]$/);
- await page.locator('#county').selectOption({label:'高雄市'});assert.deepEqual(await missingLabels(page),[]);
+ const saved=await page.evaluate(()=>JSON.stringify(state.predictions));
+ await page.locator('#regions path[aria-label^="高雄市"]').click({force:true});
+ assert.equal(await page.locator('#county').inputValue(),'高雄市');
+ assert.equal(await page.locator('#predictionDialog').isVisible(),false);
+ assert.deepEqual(await missingLabels(page),[]);
+ assert.equal(await page.locator('#returnTaiwanMap').isVisible(),true);
+ await page.locator('#returnTaiwanMap').click();
+ assert.equal(await page.locator('#county').inputValue(),'');
+ assert.equal(await page.locator('#regions path[data-region]').count(),22);
+ assert.equal(await page.evaluate(()=>JSON.stringify(state.predictions)),saved);
 });
 test('Mobile administrative keys stay inside the screen above the legend',async t=>{
  const page=await pageFor(t,{width:390,height:844});
