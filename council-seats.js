@@ -41,7 +41,15 @@ function councilSeatPlacement(f,n,t,used,items){
  const external=[];
  for(let y=a.top+70;y<a.bottom-45;y+=20)for(let x=a.left+35;x<a.right-35;x+=20)external.push({x,y});
  external.sort((p,q)=>Math.hypot(p.x-anchor.x,p.y-anchor.y)-Math.hypot(q.x-anchor.x,q.y-anchor.y));
- for(const s of shapes)for(const p of external){const r=rect(p,s);if(!clear(r)||councilSeatRectTouchesLand(r,items,t))continue;used.push(r);return{...p,...s,rect:r,anchor,size,pitch,outside:true}}
+ let best=null,bestScore=Infinity;
+ for(const p of external)for(const s of shapes){
+  const r=rect(p,s),distance=Math.hypot(Math.max(r[0]-anchor.x,0,anchor.x-r[2]),Math.max(r[1]-anchor.y,0,anchor.y-r[3]));
+  // Prefer nearby frames, while avoiding long single-column seat strips.
+  const score=distance+Math.hypot(p.x-anchor.x,p.y-anchor.y)*.25+Math.max(s.w/s.h,s.h/s.w)*32;
+  if(score>=bestScore||!clear(r)||councilSeatRectTouchesLand(r,items,t))continue;
+  bestScore=score;best={...p,...s,rect:r,anchor,size,pitch,outside:true};
+ }
+ if(best){used.push(best.rect);return best}
  return null;
 }
 const councilSeatRings=new WeakMap();
@@ -76,17 +84,39 @@ function prepareCouncilSeatPanel(panel){
  throw Error('席次框布局空间不足，请缩小地图范围');
 }
 
+function councilSeatLeaderPoints(q,frames,existing=[]){
+ const a=[q.anchor.x,q.anchor.y],r=q.rect,clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
+ const ports=[[r[0],clamp(a[1],r[1]+12,r[3]-12)],[r[2],clamp(a[1],r[1]+12,r[3]-12)],[clamp(a[0],r[0]+12,r[2]-12),r[1]],[clamp(a[0],r[0]+12,r[2]-12),r[3]]];
+ const candidates=[];
+ for(const b of ports){
+  candidates.push([a,[b[0],a[1]],b],[a,[a[0],b[1]],b]);
+  for(const fraction of [.2,.5,.8]){const x=a[0]+(b[0]-a[0])*fraction,y=a[1]+(b[1]-a[1])*fraction;candidates.push([a,[x,a[1]],[x,b[1]],b],[a,[a[0],y],[b[0],y],b])}
+ }
+ let best=null,bestCost=Infinity;
+ for(const points of candidates){
+  const compact=points.filter((p,i)=>!i||p[0]!==points[i-1][0]||p[1]!==points[i-1][1]),segments=mapLeaderSegments(compact);
+  let cost=segments.reduce((sum,[[x,y],[xx,yy]])=>sum+Math.hypot(xx-x,yy-y),0)+compact.length*5;
+  for(const segment of segments){const [[x,y],[xx,yy]]=segment;if(leaderCross(x,y,xx,yy,r))cost+=1e7;for(const frame of frames)if(leaderIn(x,y,frame)||leaderIn(xx,yy,frame)||leaderCross(x,y,xx,yy,frame))cost+=1e6;for(const prior of existing)if(mapLeaderSegmentConflict(segment,prior))cost+=10000}
+  if(cost<bestCost){bestCost=cost;best=compact}
+ }
+ return best;
+}
 function drawCouncilSeats(group,interactive){
  group.replaceChildren();
  for(const panel of identityPanelLayouts()){
-  const cached=panel.seatPlacements;
+  const cached=panel.seatPlacements,routed=[];
   const layer=svgEl('g',{'data-council-seat-panel':panel.identity}),leaders=svgEl('g',{'data-seat-leaders':panel.identity,'pointer-events':'none'});layer.append(leaders);group.append(layer);
   // Place the most constrained districts first.
   for(const f of [...panel.items].sort((a,b)=>(a.box[2]-a.box[0])*(a.box[3]-a.box[1])-(b.box[2]-b.box[0])*(b.box[3]-b.box[1]))){
    const d=predictionDistrictFor(f);if(!d)continue;
    const seats=councilSeatRows(d),q=cached.get(f.id);
    const g=svgEl('g',{'data-seat-district':d.id,'data-seat-region':f.id,'data-seat-count':seats.length,'data-seat-placement':q.outside?'outside':'inside'});layer.append(g);
-   if(q.outside){leaders.append(svgEl('path',{d:`M${q.anchor.x},${q.anchor.y}L${q.x},${q.y}`,fill:'none',stroke:'#80978d','stroke-width':1.5,'pointer-events':'none','data-seat-leader':d.id}));}
+   if(q.outside){
+    const points=councilSeatLeaderPoints(q,[...cached.values()].filter(other=>other!==q).map(other=>other.rect),routed),path=points.map((p,i)=>(i?'L':'M')+p[0]+','+p[1]).join('');routed.push(...mapLeaderSegments(points));
+    leaders.append(svgEl('path',{d:path,fill:'none',style:'fill:none;stroke:#fff;stroke-width:2.1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.94','vector-effect':'non-scaling-stroke','data-seat-leader-halo':d.id}));
+    leaders.append(svgEl('path',{d:path,fill:'none',style:'fill:none;stroke:#537d6b;stroke-width:0.9px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.78','vector-effect':'non-scaling-stroke','data-seat-leader':d.id}));
+    leaders.append(svgEl('circle',{cx:q.anchor.x,cy:q.anchor.y,r:4,fill:'#537d6b',style:'stroke:#fff;stroke-width:1.4px','data-seat-anchor':d.id}));
+   }
    g.append(svgEl('rect',{x:q.rect[0],y:q.rect[1],width:q.w,height:q.h,rx:9,fill:q.outside?'#ffffffed':'#ffffff55',stroke:q.outside?'#dce5df':'none','data-seat-frame':d.id}));
    const name=svgEl('text',{x:q.x,y:q.rect[1]+22,'text-anchor':'middle','font-size':24,fill:'#294a3a','paint-order':'stroke',stroke:'#fff','stroke-width':4,'data-label':f.id,'data-placement':'district-number'});name.textContent=districtMapNumber(f)||f.name;if(state.labels)g.append(name);
    seats.forEach((c,i)=>{
