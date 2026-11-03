@@ -1204,7 +1204,7 @@ function toggleLabelRegionHighlight(f,active){
 function drawLabels(group,items,t,font=15,interactive=false,countyNamesOnly=false){
  const overview=state.level==='towns'&&!state.county&&!(typeof mayorTownBoundaryOverlay==='function'&&mayorTownBoundaryOverlay());
  const rendered=overview?(data?.counties||[]):items;
- if(typeof councilCountyOverview==='function'&&councilCountyOverview())font=19;
+ if(typeof freeCountyOverview==='function'&&freeCountyOverview()||typeof councilCountyOverview==='function'&&councilCountyOverview())font=19;
  if(overview){font=19;interactive=interactive&&(typeof freeCountyOverview==='function'&&freeCountyOverview()||typeof townshipCountyOverview==='function'&&townshipCountyOverview())}
  const zoomRatio=interactive&&view&&items.some(f=>districtMapNumber(f))?Math.min(1,view.w/sceneSpec().width):1;
  font*=zoomRatio;

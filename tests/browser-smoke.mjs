@@ -736,6 +736,7 @@ test('Township-chief maps show white for ineligible areas while retaining eligib
  await page.locator('#solidMode').click();
  assert.equal(await page.locator('#regions path[data-region="'+result.excluded.id+'"]').getAttribute('fill'),'#ffffff');
  await page.locator('#workspaceFree').click();
+ await page.locator('#county').selectOption({label:'台北市'});
  assert.notEqual(await page.locator('#regions path[data-region="'+result.excluded.id+'"]').getAttribute('fill'),'#ffffff');
 });
 
