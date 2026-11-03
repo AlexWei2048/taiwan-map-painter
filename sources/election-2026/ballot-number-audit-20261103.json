@@ -1,0 +1,621 @@
+{
+  "checkedAt": "2026-11-03",
+  "basis": "Wikipedia 2026 township candidate tables, existing qualified candidate directory, and single-candidate electoral numbering rule",
+  "pendingBefore": 71,
+  "added": 7,
+  "pendingAfter": 64,
+  "groups": [
+    {
+      "type": "township",
+      "county": "高雄市",
+      "count": 4
+    },
+    {
+      "type": "township",
+      "county": "苗栗县",
+      "count": 2
+    },
+    {
+      "type": "township",
+      "county": "屏东县",
+      "count": 58
+    }
+  ],
+  "updates": [
+    {
+      "candidateId": "township:64000:64000360:001",
+      "county": "高雄市",
+      "district": "高雄市茂林区",
+      "name": "駱韋志",
+      "number": 1,
+      "method": "single-candidate-rule",
+      "sourceUrl": "https://news.tvbs.com.tw/politics/4041834",
+      "evidence": "2026年该选区审定合格候选人仅駱韋志一位；单一候选人号次为1号。此号次依选务规则与人数确定，非维基直接标号。"
+    },
+    {
+      "candidateId": "township:64000:64000380:001",
+      "county": "高雄市",
+      "district": "高雄市那玛夏区",
+      "name": "孔賢傑",
+      "number": 1,
+      "method": "single-candidate-rule",
+      "sourceUrl": "https://news.tvbs.com.tw/politics/4041834",
+      "evidence": "2026年该选区审定合格候选人仅孔賢傑一位；单一候选人号次为1号。此号次依选务规则与人数确定，非维基直接标号。"
+    },
+    {
+      "candidateId": "township:10004:10004120:002",
+      "county": "新竹县",
+      "district": "新竹县尖石乡",
+      "name": "楊士龍",
+      "number": 2,
+      "method": "unique-remaining-number-inference",
+      "sourceUrl": "https://web.cec.gov.tw/api/file/77b4cc63-fcb1-41e9-b0cd-da5493f1dd09.pdf",
+      "evidence": "同选区审定候选人共3位，其他候选人已核对号次为1、3号，唯一余号为2号；登记名为楊士龍，官方抽签表为楊仕龍（用字差异），仅标记为推算。"
+    },
+    {
+      "candidateId": "township:10013:10013080:001",
+      "county": "屏东县",
+      "district": "屏东县九如乡",
+      "name": "藍聰信",
+      "number": 1,
+      "method": "single-candidate-rule",
+      "sourceUrl": "https://news.tvbs.com.tw/politics/4041834",
+      "evidence": "2026年该选区审定合格候选人仅藍聰信一位；单一候选人号次为1号。此号次依选务规则与人数确定，非维基直接标号。"
+    },
+    {
+      "candidateId": "township:10013:10013210:001",
+      "county": "屏东县",
+      "district": "屏东县佳冬乡",
+      "name": "賴文一",
+      "number": 1,
+      "method": "single-candidate-rule",
+      "sourceUrl": "https://news.tvbs.com.tw/politics/4041834",
+      "evidence": "2026年该选区审定合格候选人仅賴文一一位；单一候选人号次为1号。此号次依选务规则与人数确定，非维基直接标号。"
+    },
+    {
+      "candidateId": "township:10013:10013270:001",
+      "county": "屏东县",
+      "district": "屏东县雾台乡",
+      "name": "巴正義",
+      "number": 1,
+      "method": "single-candidate-rule",
+      "sourceUrl": "https://news.tvbs.com.tw/politics/4041834",
+      "evidence": "2026年该选区审定合格候选人仅巴正義一位；单一候选人号次为1号。此号次依选务规则与人数确定，非维基直接标号。"
+    },
+    {
+      "candidateId": "township:10013:10013280:001",
+      "county": "屏东县",
+      "district": "屏东县玛家乡",
+      "name": "羅清仁",
+      "number": 1,
+      "method": "single-candidate-rule",
+      "sourceUrl": "https://news.tvbs.com.tw/politics/4041834",
+      "evidence": "2026年该选区审定合格候选人仅羅清仁一位；单一候选人号次为1号。此号次依选务规则与人数确定，非维基直接标号。"
+    }
+  ],
+  "unresolved": [
+    {
+      "candidateId": "township:64000:64000370:001",
+      "type": "township",
+      "county": "高雄市",
+      "district": "高雄市桃源区",
+      "name": "杜司偉\nAndrew\nIsbabanal",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:64000:64000370:002",
+      "type": "township",
+      "county": "高雄市",
+      "district": "高雄市桃源区",
+      "name": "陳德福",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:64000:64000370:003",
+      "type": "township",
+      "county": "高雄市",
+      "district": "高雄市桃源区",
+      "name": "張志誠\nHaisul·\nIspalavi",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:64000:64000370:004",
+      "type": "township",
+      "county": "高雄市",
+      "district": "高雄市桃源区",
+      "name": "伊斯坦大·貝雅夫·正福\nIstanda·\nPaingav",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10005:10005130:001",
+      "type": "township",
+      "county": "苗栗县",
+      "district": "苗栗县三义乡",
+      "name": "徐文達",
+      "reason": "网页对应候选人号次栏为空"
+    },
+    {
+      "candidateId": "township:10005:10005130:003",
+      "type": "township",
+      "county": "苗栗县",
+      "district": "苗栗县三义乡",
+      "name": "林盈富",
+      "reason": "网页对应候选人号次栏为空"
+    },
+    {
+      "candidateId": "township:10013:10013030:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县东港镇",
+      "name": "洪志明",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013030:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县东港镇",
+      "name": "黃禎祥",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013030:003",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县东港镇",
+      "name": "陳春朝",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013040:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县恒春镇",
+      "name": "盧玟欣",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013040:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县恒春镇",
+      "name": "陳文弘",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013040:003",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县恒春镇",
+      "name": "尤光彬",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013040:004",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县恒春镇",
+      "name": "盧玉棟",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013040:005",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县恒春镇",
+      "name": "尤光暉",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013050:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县万丹乡",
+      "name": "李建霖",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013050:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县万丹乡",
+      "name": "簡天屏",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013050:003",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县万丹乡",
+      "name": "李曜丞",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013050:004",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县万丹乡",
+      "name": "李和耿",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013060:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县长治乡",
+      "name": "邱佳娟",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013060:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县长治乡",
+      "name": "吳亮慶",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013070:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县麟洛乡",
+      "name": "盧重彰",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013070:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县麟洛乡",
+      "name": "李慧萍",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013070:003",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县麟洛乡",
+      "name": "廖龍依",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013090:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县里港乡",
+      "name": "陳明達",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013090:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县里港乡",
+      "name": "藍婉茜",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013110:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县高树乡",
+      "name": "梁正翰",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013110:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县高树乡",
+      "name": "王樹圍",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013120:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县万峦乡",
+      "name": "曾淼祥",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013120:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县万峦乡",
+      "name": "何秋葺",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013130:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县内埔乡",
+      "name": "曾健野",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013130:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县内埔乡",
+      "name": "李明宗",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013130:003",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县内埔乡",
+      "name": "鍾育杰",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013130:004",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县内埔乡",
+      "name": "林吉善",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013140:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县竹田乡",
+      "name": "鍾定豪",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013140:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县竹田乡",
+      "name": "張志誠",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013150:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县新埤乡",
+      "name": "王永豐",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013150:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县新埤乡",
+      "name": "曾明輝",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013160:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县枋寮乡",
+      "name": "蘇清波",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013160:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县枋寮乡",
+      "name": "洪茂豐",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013160:003",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县枋寮乡",
+      "name": "王立順",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013170:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县新园乡",
+      "name": "阮志光",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013170:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县新园乡",
+      "name": "黃金樹",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013180:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县崁顶乡",
+      "name": "郭建清",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013180:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县崁顶乡",
+      "name": "廖國富",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013180:003",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县崁顶乡",
+      "name": "蔡和清",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013180:004",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县崁顶乡",
+      "name": "劉惠美",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013190:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县林边乡",
+      "name": "鄭慶堂",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013190:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县林边乡",
+      "name": "郭美妏",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013200:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县南州乡",
+      "name": "葉俊緯",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013200:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县南州乡",
+      "name": "劉美吟",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013220:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县琉球乡",
+      "name": "鄭源德",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013220:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县琉球乡",
+      "name": "蔡榮民",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013220:003",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县琉球乡",
+      "name": "李伊展",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013230:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县车城乡",
+      "name": "陳政雄",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013230:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县车城乡",
+      "name": "張春桂",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013240:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县满州乡",
+      "name": "古榮福",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013240:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县满州乡",
+      "name": "余增春",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013250:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县枋山乡",
+      "name": "羅金良",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013250:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县枋山乡",
+      "name": "洪啓能",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013290:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县泰武乡",
+      "name": "曾大衛",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013290:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县泰武乡",
+      "name": "潘明福\nTivoran．Kazangilijan",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013330:001",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县牡丹乡",
+      "name": "詹德行",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013330:002",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县牡丹乡",
+      "name": "林采穎",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    },
+    {
+      "candidateId": "township:10013:10013330:003",
+      "type": "township",
+      "county": "屏东县",
+      "district": "屏东县牡丹乡",
+      "name": "邵世光",
+      "reason": "该网页未列此选区/候选人或不能唯一匹配"
+    }
+  ],
+  "notes": [
+    "2026-11-03复核维基2026年乡镇市区长选区投票结果列表与现有审定名册。",
+    "新增6名单人选区候选人1号及1名完整选区唯一余号推算；推算与已公布分别标识。",
+    "尖石乡登记姓名楊士龍与官方抽签表楊仕龍存在用字差异，标记为号次推算，尚需核实姓名更正。",
+    "其余64名保留待补，不以候选人列表顺序推定号码。"
+  ],
+  "sourceUrls": [
+    "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表",
+    "https://news.tvbs.com.tw/politics/4041834",
+    "https://web.cec.gov.tw/api/file/77b4cc63-fcb1-41e9-b0cd-da5493f1dd09.pdf"
+  ]
+}
