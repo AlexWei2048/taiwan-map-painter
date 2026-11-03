@@ -244,3 +244,9 @@ Latest source revision: 20261030-no-offline-v11.
 - Polygon/name hover and focus highlight the matching index row without changing saved party fills. Index actions use accessible buttons and keyboard focus styles.
 - Green Island and Orchid Island (Taitung) and Liuqiu (Pingtung) always use full-name captions centred immediately below their island extents, with bottom fitting room reserved for captions and export parity.
 - Added behavioural checks for index interaction and the three island captions. Local regression checks: 74 pass. Preview confirmed index click opens the matching Keelung prediction dialog and both Taitung captions are below their islands.
+
+## 2026-11-03 township election coverage (v93)
+- Township-chief election maps use a neutral grey for administrative areas without a corresponding township-chief election district. Eligible but unpredicted districts retain the existing pale fill, including municipal indigenous district-chief elections.
+- The coverage mask applies to prediction and manual party-colouring modes within this election view, with explicit tooltip/click feedback and a grey legend entry. Grey areas are excluded from election-area counts and gradient missing-result status.
+- The same fill and legend are included in exports; switching to free colouring, mayor/council maps or historical views does not apply this mask.
+- Added real-dataset unit coverage and browser export/mode-switch regression checks; 75 local regression checks pass. Preview confirms national urban areas are grey while eligible mountainous districts remain available.

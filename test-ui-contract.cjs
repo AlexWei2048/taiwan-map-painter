@@ -472,7 +472,7 @@ test('Prediction legend contains only the displayed election-district count',()=
  const maker=new Function('state','isNationwide','counts','predictionUsesVoteDisplay',
   'predictionUsesGradient','predictionMarginMode','currentItems','predictionMapResult',
   'predictionDisplayResult','predictionDistrictFor','regionResult','mayorLegendUnit','identityPanelsActive',
-  app.slice(start,end)+';return legendMetrics');
+  'const noTownshipElection=()=>false;'+app.slice(start,end)+';return legendMetrics');
  const features=Array.from({length:12},(_,i)=>({id:'region-'+i,townId:'town-'+i}));
  const state={county:'',legend:{fontSize:12,caption:'之前的冗长说明'},fillMode:'prediction',predictionOffice:'mayor'};
  const root=workspace.indexOf('function mayorLegendUnit(){');
@@ -868,7 +868,7 @@ test('Missing election results never crash gradient map legends',()=>{
  assert.equal(makeResult(false,null,{status:'winner'})(region).status,'winner');
  const start=app.indexOf('function legendMetrics('),end=app.indexOf('\nfunction legendBox(',start);
  assert.ok(start>=0&&end>start);
- const legendCode=app.slice(start,end)+';return legendMetrics';
+ const legendCode='const noTownshipElection=()=>false;'+app.slice(start,end)+';return legendMetrics';
  const legend=new Function('state','isNationwide','currentItems','predictionUsesGradient','predictionMapResult',
   'legendEntries','predictionUsesVoteDisplay','predictionLegendCountUnit','counts','mayorLegendUnit','identityPanelsActive',legendCode)(
    {fillMode:'prediction',predictionOffice:'mayor',predictionDisplay:'topVote',legendTitle:'图例',gradient:{metric:'share'},legend:{fontSize:12,caption:''}},

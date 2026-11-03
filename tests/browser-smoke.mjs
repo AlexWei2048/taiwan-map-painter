@@ -696,3 +696,27 @@ test('Taitung and Pingtung island townships have centred full-name captions belo
   const svg=await exportSvg(page);assert.equal((svg.match(/data-placement="island-town-bottom"/g)||[]).length,names.length);
  }
 });
+
+test('Township-chief maps grey out ineligible areas while retaining eligible municipal district elections and exports',async t=>{
+ const page=await pageFor(t);await page.locator('#predictionOffice').selectOption('township');
+ const result=await page.evaluate(()=>{
+  const get=(county,name)=>{
+   const f=data.towns.find(f=>f.county===county&&f.name===name);
+   return {id:f.id,fill:document.querySelector('#regions path[data-region="'+f.id+'"]')?.getAttribute('fill')};
+  };
+  return{excluded:get('台北市','中正区'),urban:get('桃园市','桃园区'),included:get('桃园市','复兴区'),
+   legend:document.querySelector('[data-no-township-election-legend]')?.textContent};
+ });
+ assert.equal(result.excluded.fill,'#d1d5db');assert.equal(result.urban.fill,'#d1d5db');
+ assert.equal(result.included.fill,'#edf1e9');assert.equal(result.legend,'无乡镇市区长选举');
+ const source=await exportSvg(page);
+ const exported=await page.evaluate(({source,id})=>{
+  const doc=new DOMParser().parseFromString(source,'image/svg+xml');
+  return {fill:doc.querySelector('[data-region="'+id+'"]')?.getAttribute('fill'),legend:!!doc.querySelector('[data-no-township-election-legend]')};
+ },{source,id:result.excluded.id});
+ assert.equal(exported.fill,'#d1d5db');assert.equal(exported.legend,true);
+ await page.locator('#solidMode').click();
+ assert.equal(await page.locator('#regions path[data-region="'+result.excluded.id+'"]').getAttribute('fill'),'#d1d5db');
+ await page.locator('#workspaceFree').click();
+ assert.notEqual(await page.locator('#regions path[data-region="'+result.excluded.id+'"]').getAttribute('fill'),'#d1d5db');
+});
