@@ -492,8 +492,9 @@ test('Historical detail insets use the same party colors as their main map',asyn
 });
 test('Compact export and preview are available at mobile width',async t=>{
  const page=await pageFor(t,{width:390,height:844});await page.locator('.export-menu summary').click();assert.equal(await page.locator('#exportSvg').isVisible(),true);
- await page.locator('#exportLayout').selectOption('compact');await page.locator('#previewExport').click();await page.waitForFunction(()=>document.querySelector('#exportPreviewStatus').textContent.includes('像素'));
+ assert.equal(await page.locator('#exportLayout').count(),0);await page.locator('#previewExport').click();assert.equal(await page.locator('#previewLayout').count(),0);await page.waitForFunction(()=>document.querySelector('#exportPreviewStatus').textContent.includes('像素'));
  assert.equal(await page.locator('#exportPreviewImage').isVisible(),true);await page.locator('#closeExportPreview').click();
+ await page.evaluate(()=>{state.exportSettings.layout='complete'});
  const svg=await exportSvg(page);assert.ok(!svg.includes('data-export-detail-maps'));assert.ok(svg.includes('data-map-number-key='),'Compact exports preserve every administrative number mapping');
 });
 test('CSV import previews changes and blank cells retain earlier choices',async t=>{

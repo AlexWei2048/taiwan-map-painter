@@ -10,7 +10,7 @@ function pruneUnusedAutoPredictionPalette(project){const linked=new Set();for(co
 const COUNTY_ORDER=['台北市','新北市','桃园市','台中市','台南市','高雄市','基隆市','宜兰县','新竹县','新竹市','苗栗县','彰化县','南投县','云林县','嘉义县','嘉义市','屏东县','花莲县','台东县','澎湖县','金门县','连江县'];
 const LEVELS=['towns','counties','council','legislative','villages'];
 const levelLabel=level=>({villages:'村里',towns:'乡镇市区',counties:'县市',council:'议员',legislative:'立法机构区域民代'})[level];
-const defaults=()=>({version:1,title:'',legendTitle:'图例',county:'',villageTown:'',districtLeaders:false,level:'counties',workspaceMode:'prediction',electorate:{council:'regional',legislative:'regional'},predictionOffice:'mayor',predictionDisplay:'composition',predictionCandidateScope:'topVote',predictionVoteMetric:'share',predictionScale:'district',councilViewScope:'all',localPredictions:{},localPredictionDisplay:'',localDisplayCandidate:'',localTown:'',predictions:{},labels:true,borderColor:'#80978d',borderWidth:0.6,countyBorderColor:'#385d4b',countyBorderWidth:1.5,townBorderColor:'#b6c4ba',townBorderWidth:0.4,showTownBoundaries:true,selected:'blue',palette:presetPalette(),settingsRevision:2,paletteRevision:3,fills:{towns:{},counties:{},council:{},legislative:{},villages:{}},legislativeTownFills:{party:{},plains:{},mountain:{}},fillMode:'prediction',gradient:{groupBy:'candidate',metric:'share',min:0,max:null,marginManual:false},legend:{show:true,onlyUsed:false,fontSize:12,caption:'',hidden:[]},exportSettings:{winnerTable:true,note:'',councilScope:'all',layout:'complete'},elections:{towns:{},counties:{},council:{},legislative:{},villages:{}}});
+const defaults=()=>({version:1,title:'',legendTitle:'图例',county:'',villageTown:'',districtLeaders:false,level:'counties',workspaceMode:'prediction',electorate:{council:'regional',legislative:'regional'},predictionOffice:'mayor',predictionDisplay:'composition',predictionCandidateScope:'topVote',predictionVoteMetric:'share',predictionScale:'district',councilViewScope:'all',localPredictions:{},localPredictionDisplay:'',localDisplayCandidate:'',localTown:'',predictions:{},labels:true,borderColor:'#80978d',borderWidth:0.6,countyBorderColor:'#385d4b',countyBorderWidth:1.5,townBorderColor:'#b6c4ba',townBorderWidth:0.4,showTownBoundaries:true,selected:'blue',palette:presetPalette(),settingsRevision:2,paletteRevision:3,fills:{towns:{},counties:{},council:{},legislative:{},villages:{}},legislativeTownFills:{party:{},plains:{},mountain:{}},fillMode:'prediction',gradient:{groupBy:'candidate',metric:'share',min:0,max:null,marginManual:false},legend:{show:true,onlyUsed:false,fontSize:12,caption:'',hidden:[]},exportSettings:{winnerTable:true,note:'',councilScope:'all',layout:'compact'},elections:{towns:{},counties:{},council:{},legislative:{},villages:{}}});
 let state=defaults(),data=null,undo=[],redo=[],view=null,baseView=null,erase=false,drag=null,moved=false,toastTimer,persistTimer;
 const clone=x=>JSON.parse(JSON.stringify(x));
 function cleanProject(s){
@@ -1871,10 +1871,8 @@ function exportSvg(){
    }
   }
   const originalItems=currentItems();
-  const unresolved=exportLabelCoverage(originalItems,map);
-  const zoomTargets=unresolved.map(row=>row.id);
   const detailY=mapY+contentHeight+(appendixHeight?appendixHeight+24:14);
-  const details=state.exportSettings.layout==='compact'?{height:0,labelled:new Set()}:appendExportDetailInsets(root,originalItems,zoomTargets,detailY,contentWidth);
+  const details={height:0,labelled:new Set()};
   const coverageRows=exportLabelCoverage(originalItems,map,details.labelled);
   const coverageY=detailY+(details.height?details.height+22:0);
   const coverageHeight=appendExportLabelCoverage(root,coverageRows,40,coverageY,contentWidth);
@@ -2043,7 +2041,7 @@ function sanitizeElectionState(out,s){
  if(s.gradient?.max!==null&&s.gradient?.max!==undefined&&s.gradient?.max!==''){const max=Number(s.gradient.max);if(Number.isFinite(max)&&max>out.gradient.min&&(out.gradient.metric==='votes'||out.fillMode==='prediction'&&['votes','partyVotes','winnerVotes','candidateVotes'].includes(out.predictionDisplay)||max<=100))out.gradient.max=max;else out.gradient.min=0;}
  if(out.gradient.metric==='share'&&out.gradient.min>=100)out.gradient.min=0;
  out.legend={show:s.legend?.show!==false,onlyUsed:s.legend?.onlyUsed!==false,fontSize:Math.max(9,Math.min(22,Number(s.legend?.fontSize)||12)),caption:String(s.legend?.caption||'').slice(0,80),hidden:Array.isArray(s.legend?.hidden)?s.legend.hidden.filter(id=>out.palette.some(p=>p.id===id)):[]};
- out.exportSettings={winnerTable:s.exportSettings?.winnerTable!==false,note:simplify(String(s.exportSettings?.note||'')).trim().slice(0,500),councilScope:['all','regional','plains','mountain'].includes(s.exportSettings?.councilScope)?s.exportSettings.councilScope:'all',layout:s.exportSettings?.layout==='compact'?'compact':'complete'};
+ out.exportSettings={winnerTable:s.exportSettings?.winnerTable!==false,note:simplify(String(s.exportSettings?.note||'')).trim().slice(0,500),councilScope:['all','regional','plains','mountain'].includes(s.exportSettings?.councilScope)?s.exportSettings.councilScope:'all',layout:'compact'};
  out.elections=Object.fromEntries(LEVELS.map(level=>[level,{}]));
  for(const level of LEVELS)for(const [id,record]of Object.entries(s.elections?.[level]||{})){
   if(!/^[0-9]{5,11}(?:-[0-9]{2})?$/.test(id))continue;

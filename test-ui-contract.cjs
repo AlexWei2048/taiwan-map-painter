@@ -726,7 +726,8 @@ test('Automatic export detail maps show each possible label without overlaps and
  assert.equal(drawing.children[0].attrs['data-export-detail-maps'],'true');
  const lookup=supported.exportLabelCoverage(features,{querySelectorAll:()=>[]},result.labelled);
  assert.deepEqual(lookup.map(r=>r.id),['no-room']);
- assert.match(app,/appendExportDetailInsets\(root,originalItems,zoomTargets,detailY,contentWidth\)/);
+ assert.doesNotMatch(app,/appendExportDetailInsets\(root,originalItems,zoomTargets,detailY,contentWidth\)/);
+ assert.match(app,/layout:'compact'/);
  assert.match(app,/exportLabelCoverage\(originalItems,map,details\.labelled\)/);
 });
 
