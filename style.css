@@ -468,3 +468,7 @@ dialog.floating-prediction-dialog > .floating-dialog-scroll{
 .history-mode #historyControls select{margin-bottom:15px}
 
 .history-development-notice{width:min(420px,90vw);border:1px solid #dce5df;border-radius:18px;padding:28px;color:#294a3a}.history-development-notice::backdrop{background:#173b3155}.history-development-notice h2{font-size:21px;margin:0 0 12px}.history-development-notice p{color:#62796c;margin-bottom:24px}.history-development-notice form{text-align:right}
+
+/* Island Palette: responsive header branding (2026-11-03). */
+.brand-logo{width:48px;height:48px;object-fit:contain;display:block;flex:none}
+@media(max-width:700px){.brand-logo{width:38px;height:38px}}
