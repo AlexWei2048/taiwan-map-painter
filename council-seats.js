@@ -22,7 +22,8 @@ identityPanelLayouts=function(){
   else{const w=(a.right-a.left-gap*(ids.length-1))/ids.length;area={left:a.left+i*(w+gap),right:a.left+i*(w+gap)+w,top:a.top+52,bottom:a.bottom}}
   const items=currentItems().filter(f=>featureElectorate(f)===identity),geo=data.counties.filter(f=>f.name===state.county),b=bounds(geo),pad=35;
   const scale=Math.min((area.right-area.left-pad*2)/(b[2]-b[0]),(area.bottom-area.top-pad*2)/(b[3]-b[1]));
-  return{identity,label:electorateName(identity),items,area,t:{scale,tx:(area.left+area.right)/2-(b[0]+b[2])/2*scale,ty:(area.top+area.bottom)/2-(b[1]+b[3])/2*scale,labelLeft:area.left,labelRight:area.right,area}};
+  const panel={identity,label:electorateName(identity),items,area,t:{scale,tx:(area.left+area.right)/2-(b[0]+b[2])/2*scale,ty:(area.top+area.bottom)/2-(b[1]+b[3])/2*scale,labelLeft:area.left,labelRight:area.right,area}};
+  return prepareCouncilSeatPanel(panel);
  });
 };
 function councilSeatPlacement(f,n,t,used,items){
@@ -34,42 +35,73 @@ function councilSeatPlacement(f,n,t,used,items){
  candidates.unshift(anchor);candidates.sort((p,q)=>Math.hypot(p.x-anchor.x,p.y-anchor.y)-Math.hypot(q.x-anchor.x,q.y-anchor.y));
  const rect=(p,s)=>[p.x-s.w/2,p.y-s.h/2,p.x+s.w/2,p.y+s.h/2];
  const clear=r=>r[0]>=a.left+6&&r[2]<=a.right-6&&r[1]>=a.top+20&&r[3]<=a.bottom-6&&!used.some(u=>leaderOverlap(r,u));
- const inside=r=>{if(![[r[0],r[1]],[r[2],r[1]],[r[0],r[3]],[r[2],r[3]]].every(([x,y])=>regionContains(f,x,y,t)))return false;for(let y=r[1];y<=r[3];y+=8)for(let x=r[0];x<=r[2];x+=8)if(!regionContains(f,x,y,t))return false;return true};
+ const inside=r=>[[r[0],r[1]],[r[2],r[1]],[r[0],r[3]],[r[2],r[3]]].every(([x,y])=>regionContains(f,x,y,t))&&!councilSeatBoundaryTouchesRect(f,[(r[0]-t.tx)/t.scale,(r[1]-t.ty)/t.scale,(r[2]-t.tx)/t.scale,(r[3]-t.ty)/t.scale]);
  for(const p of candidates)for(const s of shapes){const r=rect(p,s);if(clear(r)&&inside(r)){used.push(r);return{...p,...s,rect:r,anchor,size,pitch,outside:false}}}
- // Small islands and narrow urban districts get a nearby labelled seat group.
+ // External cards must clear the complete map, not only other districts' centres.
  const external=[];
  for(let y=a.top+70;y<a.bottom-45;y+=20)for(let x=a.left+35;x<a.right-35;x+=20)external.push({x,y});
  external.sort((p,q)=>Math.hypot(p.x-anchor.x,p.y-anchor.y)-Math.hypot(q.x-anchor.x,q.y-anchor.y));
- for(const p of external)for(const s of shapes){const r=rect(p,s);if(!clear(r))continue;let overlaps=false;for(const other of items)if(other!==f&&regionContains(other,p.x,p.y,t)){overlaps=true;break}if(overlaps)continue;used.push(r);return{...p,...s,rect:r,anchor,size,pitch,outside:true}}
- // Last-resort overflow row retains every statutory seat.
- const s=shapes[0],p={x:a.right-s.w/2-8,y:Math.max(a.top+70,...used.map(r=>r[3]+s.h/2+12))},r=rect(p,s);used.push(r);return{...p,...s,rect:r,anchor,size,pitch,outside:true};
+ for(const p of external)for(const s of shapes){const r=rect(p,s);if(!clear(r)||councilSeatRectTouchesLand(r,items,t))continue;used.push(r);return{...p,...s,rect:r,anchor,size,pitch,outside:true}}
+ return null;
 }
-const councilSeatPlacementCache=new Map();
+const councilSeatRings=new WeakMap();
+function councilSeatRectTouchesLand(rect,items,t){
+ const r=[(rect[0]-t.tx)/t.scale,(rect[1]-t.ty)/t.scale,(rect[2]-t.tx)/t.scale,(rect[3]-t.ty)/t.scale];
+ for(const f of items){
+  if(!leaderOverlap(r,f.box))continue;
+  if([[rect[0],rect[1]],[rect[2],rect[1]],[rect[0],rect[3]],[rect[2],rect[3]]].some(([x,y])=>regionContains(f,x,y,t)))return true;
+  if(councilSeatBoundaryTouchesRect(f,r))return true;
+ }
+ return false;
+}
+function councilSeatBoundaryTouchesRect(f,r){
+  let rings=councilSeatRings.get(f);
+  if(!rings){rings=f.d.split(/M/i).filter(Boolean).map(part=>{const v=part.match(/-?(?:\d*\.)?\d+(?:e[+-]?\d+)?/gi)||[];return Array.from({length:Math.floor(v.length/2)},(_,i)=>[Number(v[i*2]),Number(v[i*2+1])])});councilSeatRings.set(f,rings)}
+  for(const ring of rings)for(let i=0;i<ring.length;i++){const p=ring[i],q=ring[(i+1)%ring.length];if(leaderIn(p[0],p[1],r)||leaderCross(p[0],p[1],q[0],q[1],r))return true}
+ return false;
+}
+const councilSeatPanelCache=new Map();
+function prepareCouncilSeatPanel(panel){
+ const key=[state.county,panel.identity,panel.t.scale,panel.t.tx,panel.t.ty,panel.area.bottom,panel.items.map(f=>f.id+':'+predictionDistrictFor(f)?.seats).join(',')].join('/');
+ if(councilSeatPanelCache.has(key))return councilSeatPanelCache.get(key);
+ const initial={...panel.t},cx=(panel.area.left+panel.area.right)/2,cy=(panel.area.top+panel.area.bottom)/2;
+ for(let attempt=0;attempt<10;attempt++){
+  const factor=Math.pow(.88,attempt);panel.t={...initial,scale:initial.scale*factor,tx:cx+(initial.tx-cx)*factor,ty:cy+(initial.ty-cy)*factor};
+  const placements=new Map(),used=[];
+  for(const f of [...panel.items].sort((a,b)=>(a.box[2]-a.box[0])*(a.box[3]-a.box[1])-(b.box[2]-b.box[0])*(b.box[3]-b.box[1]))){
+   const q=councilSeatPlacement(f,Number(predictionDistrictFor(f)?.seats)||1,panel.t,used,panel.items);if(!q)break;placements.set(f.id,q);
+  }
+  if(placements.size===panel.items.length){panel.seatPlacements=placements;if(councilSeatPanelCache.size>60)councilSeatPanelCache.clear();councilSeatPanelCache.set(key,panel);return panel}
+ }
+ throw Error('席次框布局空间不足，请缩小地图范围');
+}
+
 function drawCouncilSeats(group,interactive){
  group.replaceChildren();
  for(const panel of identityPanelLayouts()){
-  const used=[],cacheKey=[state.county,panel.identity,panel.t.scale,panel.t.tx,panel.t.ty,panel.area.bottom,panel.items.map(f=>f.id+':'+predictionDistrictFor(f)?.seats).join(',')].join('/');
-  let cached=councilSeatPlacementCache.get(cacheKey);if(!cached){cached=new Map();if(councilSeatPlacementCache.size>60)councilSeatPlacementCache.clear();councilSeatPlacementCache.set(cacheKey,cached)}
-  const layer=svgEl('g',{'data-council-seat-panel':panel.identity});group.append(layer);
+  const cached=panel.seatPlacements;
+  const layer=svgEl('g',{'data-council-seat-panel':panel.identity}),leaders=svgEl('g',{'data-seat-leaders':panel.identity,'pointer-events':'none'});layer.append(leaders);group.append(layer);
   // Place the most constrained districts first.
   for(const f of [...panel.items].sort((a,b)=>(a.box[2]-a.box[0])*(a.box[3]-a.box[1])-(b.box[2]-b.box[0])*(b.box[3]-b.box[1]))){
    const d=predictionDistrictFor(f);if(!d)continue;
-   const seats=councilSeatRows(d),q=cached.get(f.id)||councilSeatPlacement(f,seats.length,panel.t,used,panel.items);
-   if(cached.has(f.id))used.push(q.rect);else cached.set(f.id,q);
-   const g=svgEl('g',{'data-seat-district':d.id,'data-seat-count':seats.length,'data-seat-placement':q.outside?'outside':'inside'});layer.append(g);
-   if(q.outside){g.append(svgEl('path',{d:`M${q.anchor.x},${q.anchor.y}L${q.x},${q.y}`,fill:'none',stroke:'#80978d','stroke-width':1.5,'pointer-events':'none'}));g.append(svgEl('rect',{x:q.rect[0],y:q.rect[1],width:q.w,height:q.h,rx:9,fill:'#ffffffed',stroke:'#dce5df'}))}
+   const seats=councilSeatRows(d),q=cached.get(f.id);
+   const g=svgEl('g',{'data-seat-district':d.id,'data-seat-region':f.id,'data-seat-count':seats.length,'data-seat-placement':q.outside?'outside':'inside'});layer.append(g);
+   if(q.outside){leaders.append(svgEl('path',{d:`M${q.anchor.x},${q.anchor.y}L${q.x},${q.y}`,fill:'none',stroke:'#80978d','stroke-width':1.5,'pointer-events':'none','data-seat-leader':d.id}));}
+   g.append(svgEl('rect',{x:q.rect[0],y:q.rect[1],width:q.w,height:q.h,rx:9,fill:q.outside?'#ffffffed':'#ffffff55',stroke:q.outside?'#dce5df':'none','data-seat-frame':d.id}));
    const name=svgEl('text',{x:q.x,y:q.rect[1]+22,'text-anchor':'middle','font-size':24,fill:'#294a3a','paint-order':'stroke',stroke:'#fff','stroke-width':4,'data-label':f.id,'data-placement':'district-number'});name.textContent=districtMapNumber(f)||f.name;if(state.labels)g.append(name);
    seats.forEach((c,i)=>{
     const row=Math.floor(i/q.cols),col=i%q.cols,rowCount=Math.min(q.cols,seats.length-row*q.cols),x=q.x+(col-(rowCount-1)/2)*q.pitch-q.size/2,y=q.rect[1]+33+row*q.pitch;
-    const p=c?predictionParty(c.party):null,emblem=p&&!['无党籍','其他','其他政党'].includes(c.party)?logoFor(p):'',slot=svgEl('g',{'data-seat-slot':i,'data-seat-status':c?'predicted':'empty','data-seat-party':p?.id||'','data-seat-candidate':c?.id||''});
+    const p=c?predictionParty(c.party):null,emblem=p&&!['其他','其他政党'].includes(c.party)?logoFor(p):'',slot=svgEl('g',{'data-seat-slot':i,'data-seat-status':c?'predicted':'empty','data-seat-party':p?.id||'','data-seat-candidate':c?.id||''});
     const title=svgEl('title');title.textContent=c?candidateDisplayName(c)+' · '+c.party:'尚未预测';slot.append(title);
     slot.append(svgEl('circle',{cx:x+q.size/2,cy:y+q.size/2,r:q.size/2,fill:c&&!emblem?'#91999f':'#fff',stroke:c&&!emblem?'#91999f':'#8b9c92','stroke-width':1.8}));
     if(emblem)appendCircularPartyLogo(slot,emblem,x,y,q.size,{'data-seat-logo':p.id});g.append(slot);
    });
-   if(interactive){g.setAttribute('role','button');g.setAttribute('tabindex','0');g.setAttribute('aria-label',shortDirectoryName(d)+'，应选'+seats.length+'席，已预测'+seats.filter(Boolean).length+'席');g.style.cursor='pointer';g.onpointerenter=()=>toggleLabelRegionHighlight(f,true);g.onpointerleave=()=>toggleLabelRegionHighlight(f,false);g.onfocus=()=>toggleLabelRegionHighlight(f,true);g.onblur=()=>toggleLabelRegionHighlight(f,false);g.onclick=()=>openPredictionDistrict(d);g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openPredictionDistrict(d)}}}
+   if(interactive){g.setAttribute('role','button');g.setAttribute('tabindex','0');g.setAttribute('aria-label',shortDirectoryName(d)+'，应选'+seats.length+'席，已预测'+seats.filter(Boolean).length+'席');g.style.cursor='pointer';g.setAttribute('pointer-events','all');g.onpointerenter=()=>toggleLabelRegionHighlight(f,true);g.onpointerleave=()=>toggleLabelRegionHighlight(f,false);g.onfocus=()=>toggleLabelRegionHighlight(f,true);g.onblur=()=>toggleLabelRegionHighlight(f,false);g.onclick=()=>openPredictionDistrict(d);g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openPredictionDistrict(d)}}}
   }
  }
 }
+const baseCouncilSeatHighlight=toggleLabelRegionHighlight;
+toggleLabelRegionHighlight=function(f,active){baseCouncilSeatHighlight(f,active);for(const group of $('labels').querySelectorAll('[data-seat-region]'))if(group.dataset.seatRegion===String(f.id))group.classList.toggle('seat-region-highlighted',active)};
 const baseCouncilRenderLabels=renderLabels;
 renderLabels=function(){if(!councilSeatMode())return baseCouncilRenderLabels();clearTimeout(navigationLabelTimer);navigationLabelTimer=0;mapNumberRows=[];drawCouncilSeats($('labels'),true);renderMapNumberTable()};
 const baseCouncilLabels=drawIdentityPanelLabels;

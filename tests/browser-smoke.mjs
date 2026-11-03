@@ -795,9 +795,11 @@ test('Council seat maps show one same-size symbol per seat across all counties, 
    const wrong=expected.filter(d=>groups.find(g=>g.dataset.seatDistrict===d.id)?.querySelectorAll('[data-seat-slot]').length!==d.seats);
    const area=sceneSpec();
    const clipped=groups.filter(g=>{const b=g.getBBox();return b.y+b.height>area.height-furnitureFooterHeight()||b.x<0||b.x+b.width>area.width}).map(g=>g.dataset.seatDistrict);
-   return{wrong,clipped,count:groups.length,expected:expected.length};
+   const crossing=[];
+   for(const panel of identityPanelLayouts())for(const f of panel.items){const g=groups.find(g=>g.dataset.seatRegion===f.id),frame=g?.querySelector('[data-seat-frame]');if(!frame)continue;const r=[Number(frame.getAttribute('x')),Number(frame.getAttribute('y')),Number(frame.getAttribute('x'))+Number(frame.getAttribute('width')),Number(frame.getAttribute('y'))+Number(frame.getAttribute('height'))];if(g.dataset.seatPlacement==='outside'){if(councilSeatRectTouchesLand(r,panel.items,panel.t))crossing.push(f.id)}else{for(let y=r[1];y<=r[3];y+=6)for(let x=r[0];x<=r[2];x+=6)if(!regionContains(f,x,y,panel.t))crossing.push(f.id)}}
+   return{wrong,clipped,crossing,count:groups.length,expected:expected.length};
   });
-  assert.deepEqual(r.wrong,[],county);assert.deepEqual(r.clipped,[],county+' symbols fit canvas');assert.equal(r.count,r.expected);
+  assert.deepEqual(r.wrong,[],county);assert.deepEqual(r.crossing,[],county+' frames remain in own district or fully outside land');assert.deepEqual(r.clipped,[],county+' symbols fit canvas');assert.equal(r.count,r.expected);
  }
  await page.locator('#county').selectOption({label:'台北市'});
  const seeded=await page.evaluate(()=>{
@@ -807,7 +809,24 @@ test('Council seat maps show one same-size symbol per seat across all counties, 
   const slots=[...group.querySelectorAll('[data-seat-status="predicted"]')];
   return{ids:slots.map(g=>g.dataset.seatParty),logos:group.querySelectorAll('[data-seat-logo]').length,grey:group.querySelectorAll('circle[fill="#91999f"]').length,empty:group.querySelectorAll('[data-seat-status="empty"]').length,seats:d.seats};
  });
- assert.deepEqual(seeded.ids,['blue','blue','gray']);assert.equal(seeded.logos,2);assert.equal(seeded.grey,1);assert.equal(seeded.empty,seeded.seats-3);
+ assert.deepEqual(seeded.ids,['blue','blue','gray']);assert.equal(seeded.logos,3);assert.equal(seeded.grey,0);assert.equal(seeded.empty,seeded.seats-3);
  await page.locator('#labels [data-seat-district]').first().click({force:true});assert.equal(await page.locator('#predictionDialog').isVisible(),true);await page.locator('#cancelPrediction').click();
  const svg=await exportSvg(page);assert.match(svg,/data-seat-slot/);assert.match(svg,/data-seat-logo/);
+});
+
+
+test('Hovering and keyboard-focusing a seat frame highlights only its matching map district',async t=>{
+ const page=await pageFor(t);await page.locator('#predictionOffice').selectOption('council');await page.locator('#county').selectOption({label:'台北市'});
+ const group=page.locator('#labels [data-seat-district]').first(),id=await group.getAttribute('data-seat-region');
+ const polygon=page.locator('#regions path[data-region="'+id+'"]');
+ const before=await polygon.evaluate(e=>getComputedStyle(e).fill);
+ await group.locator('[data-seat-frame]').hover();
+ assert.equal(await polygon.evaluate(e=>e.classList.contains('label-region-highlighted')),true);
+ assert.notEqual(await polygon.evaluate(e=>getComputedStyle(e).fill),before);
+ assert.equal(await page.locator('#regions .label-region-highlighted').count(),1);
+ assert.equal(await group.evaluate(e=>e.classList.contains('seat-region-highlighted')),true);
+ await page.mouse.move(2,2);
+ assert.equal(await polygon.evaluate(e=>getComputedStyle(e).fill),before);
+ await group.focus();assert.equal(await polygon.evaluate(e=>e.classList.contains('label-region-highlighted')),true);
+ await group.blur();assert.equal(await polygon.evaluate(e=>getComputedStyle(e).fill),before);
 });

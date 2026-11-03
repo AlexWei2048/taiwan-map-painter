@@ -446,3 +446,6 @@ dialog.floating-prediction-dialog > .floating-dialog-scroll{
 /* Give seat symbols room at a readable, uniform size. */
 .canvas.council-seats-mode:not(.atlas-mode){height:max(900px,calc(90vw - 230px));min-height:900px}
 @media(max-width:700px){.canvas.council-seats-mode:not(.atlas-mode){height:850px;min-height:850px}}
+
+#labels [data-seat-district].seat-region-highlighted [data-seat-frame]{stroke:#cf9e35;stroke-width:3;fill:#fff9e5}
+#labels [data-seat-district]:focus-visible{outline:none}
