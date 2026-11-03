@@ -37,7 +37,10 @@ const featureElectorate=f=>f.electorate||'regional';
 let exportPanelFilter='';
 function regionalLegislativeOnly(){return state.workspaceMode==='free'&&state.level==='legislative'}
 function legislativeFourPanelsActive(){return false}
-function freeCountyOverview(){return state.workspaceMode==='free'&&!state.county&&['towns','council','legislative'].includes(state.level)}
+// Only township free-painting keeps the county navigation overview.
+// Council districts are shown in separate electorate panels, and regional
+// legislative districts are painted individually even at nationwide scope.
+function freeCountyOverview(){return state.workspaceMode==='free'&&!state.county&&state.level==='towns'}
 function councilCountyOverview(){if(typeof History2022View!=='undefined'&&History2022View.active())return History2022View.kind()==='council'&&History2022View.overview();return state.workspaceMode==='prediction'&&state.predictionOffice==='council'&&state.level==='council'&&!state.county}
 function identityPanelsActive(){return !regionalLegislativeOnly()&&!freeCountyOverview()&&!councilCountyOverview()&&['council','legislative'].includes(state.level)&&!(typeof localPredictionActive==='function'&&localPredictionActive()&&!!state.county)}
 function legislativeTownItems(identity){return(data?.towns||[]).filter(f=>!state.county||f.county===state.county).map(f=>({...f,id:identity+':'+f.id,sourceId:f.id,electorate:identity,legislativeTown:true}))}
