@@ -832,10 +832,11 @@ test('Free painting keeps township county navigation but paints each nationwide 
  await page.locator('#regions path[data-region="'+council.ids[1]+'"]').dispatchEvent('click');
  const councilFills=await page.evaluate(ids=>ids.map(id=>({
   stored:state.fills.council[id],
+  expected:paletteById(state.fills.council[id])?.color,
   color:document.querySelector('#regions path[data-region="'+id+'"]')?.getAttribute('fill')
  })),council.ids);
  assert.equal(await page.locator('#county').inputValue(),'','Clicking national council regions must paint, not drill down');
- assert.ok(councilFills.every(x=>x.stored&&x.color===(paletteById(x.stored)?.color)));
+ assert.ok(councilFills.every(x=>x.stored&&x.color===x.expected));
  assert.notEqual(councilFills[0].color,councilFills[1].color,'Different districts in one county may have different colours');
  assert.ok((await exportSvg(page)).includes('data-region="'+council.ids[0]+'"'));
  await page.locator('#county').selectOption({label:'台北市'});
@@ -856,10 +857,11 @@ test('Free painting keeps township county navigation but paints each nationwide 
  await page.locator('#regions path[data-region="'+legislative.ids[1]+'"]').dispatchEvent('click');
  const legislativeFills=await page.evaluate(ids=>ids.map(id=>({
   stored:state.fills.legislative[id],
+  expected:paletteById(state.fills.legislative[id])?.color,
   color:document.querySelector('#regions path[data-region="'+id+'"]')?.getAttribute('fill')
  })),legislative.ids);
  assert.equal(await page.locator('#county').inputValue(),'','Clicking national regional legislative districts must paint directly');
- assert.ok(legislativeFills.every(x=>x.stored&&x.color===paletteById(x.stored)?.color));
+ assert.ok(legislativeFills.every(x=>x.stored&&x.color===x.expected));
  assert.notEqual(legislativeFills[0].color,legislativeFills[1].color);
  assert.ok((await exportSvg(page)).includes('data-region="'+legislative.ids[1]+'"'));
  await page.locator('#county').selectOption({label:'台北市'});
