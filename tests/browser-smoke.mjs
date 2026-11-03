@@ -821,12 +821,14 @@ test('Hovering and keyboard-focusing a seat frame highlights only its matching m
  const polygon=page.locator('#regions path[data-region="'+id+'"]');
  const before=await polygon.evaluate(e=>getComputedStyle(e).fill);
  await group.locator('[data-seat-frame]').hover();
+ await page.waitForFunction(({id,before})=>{const p=document.querySelector('#regions path[data-region="'+id+'"]');return p.classList.contains('label-region-highlighted')&&getComputedStyle(p).fill!==before},{id,before});
  assert.equal(await polygon.evaluate(e=>e.classList.contains('label-region-highlighted')),true);
  assert.notEqual(await polygon.evaluate(e=>getComputedStyle(e).fill),before);
  assert.equal(await page.locator('#regions .label-region-highlighted').count(),1);
  assert.equal(await group.evaluate(e=>e.classList.contains('seat-region-highlighted')),true);
  await page.mouse.move(2,2);
+ await page.waitForFunction(({id,before})=>getComputedStyle(document.querySelector('#regions path[data-region="'+id+'"]')).fill===before,{id,before});
  assert.equal(await polygon.evaluate(e=>getComputedStyle(e).fill),before);
  await group.focus();assert.equal(await polygon.evaluate(e=>e.classList.contains('label-region-highlighted')),true);
- await group.blur();assert.equal(await polygon.evaluate(e=>getComputedStyle(e).fill),before);
+ await group.blur();await page.waitForFunction(({id,before})=>getComputedStyle(document.querySelector('#regions path[data-region="'+id+'"]')).fill===before,{id,before});assert.equal(await polygon.evaluate(e=>getComputedStyle(e).fill),before);
 });
