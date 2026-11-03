@@ -919,7 +919,14 @@ test('Free nationwide council is regional-only with county labels and drills int
  await page.locator('#regions path[data-region="'+legislative[0]+'"]').hover({force:true});
  assert.match(await page.locator('#tooltip').textContent(),/台北市/);
  assert.match(await page.locator('#tooltip').textContent(),/第1选区/);
+ const beforeLegislative=await page.evaluate(ids=>ids.map(id=>state.fills.legislative[id]||null),legislative);
  await page.locator('.party-brush').nth(0).click();
+ await page.locator('#regions path[data-region="'+legislative[0]+'"]').dispatchEvent('click');
+ assert.equal(await page.locator('#county').inputValue(),'台北市','Nationwide regional legislator map must open the county');
+ assert.deepEqual(await page.evaluate(ids=>ids.map(id=>state.fills.legislative[id]||null),legislative),beforeLegislative,
+  'Drilling into county must not paint any district');
+ assert.equal(await page.locator('#regions path[data-region]').count(),8);
+ assert.ok(await page.locator('#labels [data-placement="district-number"]').count()>0,'County map retains district numbers');
  await page.locator('#regions path[data-region="'+legislative[0]+'"]').dispatchEvent('click');
  await page.locator('.party-brush').nth(1).click();
  await page.locator('#regions path[data-region="'+legislative[1]+'"]').dispatchEvent('click');
@@ -928,17 +935,20 @@ test('Free nationwide council is regional-only with county labels and drills int
   expected:paletteById(state.fills.legislative[id])?.color,
   color:document.querySelector('#regions path[data-region="'+id+'"]')?.getAttribute('fill')
  })),legislative);
- assert.equal(await page.locator('#county').inputValue(),'','National legislative districts still allow individual painting');
  assert.ok(legislativeFills.every(x=>x.stored&&x.color===x.expected));
  assert.notEqual(legislativeFills[0].color,legislativeFills[1].color);
+ await page.locator('#returnTaiwanMap').click();
+ assert.equal(await page.locator('#county').inputValue(),'');
+ assert.equal(await page.locator('#regions path[data-region="'+legislative[0]+'"]').getAttribute('fill'),legislativeFills[0].color);
+ assert.equal(await page.locator('#regions path[data-region="'+legislative[1]+'"]').getAttribute('fill'),legislativeFills[1].color);
  const nationalLegislativeSvg=await exportSvg(page);
  assert.match(nationalLegislativeSvg,/data-region="63000-01"/);
  assert.doesNotMatch(nationalLegislativeSvg,/data-placement="district-number"|data-label-leader=|data-number-key=/);
- await page.locator('#county').selectOption({label:'台北市'});
- assert.equal(await page.locator('#regions path[data-region]').count(),8);
- assert.ok(await page.locator('#labels [data-placement="district-number"]').count()>0,'County map retains individual district labels');
+ await page.locator('#regions path[data-region="'+legislative[1]+'"]').dispatchEvent('click');
+ assert.equal(await page.locator('#county').inputValue(),'台北市','Clicking a second national district opens the county again');
+ assert.equal(await page.locator('#regions path[data-region="'+legislative[1]+'"]').getAttribute('fill'),legislativeFills[1].color,
+  'Reentering county must preserve its district fill');
  await page.locator('#returnTaiwanMap').click();
- assert.equal(await page.locator('#regions path[data-region="'+legislative[0]+'"]').getAttribute('fill'),legislativeFills[0].color);
  await countyOnlyLabels();
  await page.locator('#countyLevel').click();
  await page.locator('#regions path[aria-label^="台北市"]').dispatchEvent('click');
