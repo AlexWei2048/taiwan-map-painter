@@ -46,18 +46,18 @@
     if(cells[3]){
      cells[3].classList.add('vote-metric-column-votes');
      const control=cells[3].querySelector('input');
-     if(control)control.disabled=!show||active&&kind!=='votes';
+     if(control)control.disabled=state.predictionOffice==='council'||!show||active&&kind!=='votes';
     }
     if(cells[4]){
      cells[4].classList.add('vote-metric-column-share');
      const control=cells[4].querySelector('input');
-     if(control)control.disabled=!show||active&&kind!=='share';
+     if(control)control.disabled=state.predictionOffice==='council'||!show||active&&kind!=='share';
     }
    });
   }
   if(totalSelector){
    const el=dialog.querySelector(totalSelector);
-   if(el)el.hidden=active&&kind!=='votes';
+   if(el)el.hidden=state.predictionOffice==='council'||active&&kind!=='votes';
   }
  }
  function decorateDistrict(){decorate('predictionDialog','predictionVoteMetric','predictionVoteMetricBox','.prediction-table','#predictionAutoTotal')}

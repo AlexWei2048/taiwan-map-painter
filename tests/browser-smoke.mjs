@@ -756,3 +756,29 @@ test('Township national map drills into a county without opening predictions and
  assert.ok((await page.locator('#regions path[data-region]').evaluateAll(els=>els.map(el=>el.getAttribute('fill')))).every(fill=>fill==='#ffffff'));
  await page.locator('#returnTaiwanMap').click();assert.equal(await page.locator('#county').inputValue(),'');
 });
+
+
+test('Council forecasts only offer winners and county overview uses saved party seat leaders',async t=>{
+ const page=await pageFor(t);await page.locator('#predictionOffice').selectOption('council');
+ assert.deepEqual(await page.locator('#predictionDisplay option').evaluateAll(els=>els.map(e=>e.value)),['composition']);
+ assert.equal(await page.locator('#predictionScaleBox').isVisible(),false);
+ await page.locator('#county').selectOption({label:'台北市'});
+ await page.locator('#editPrediction').click();
+ assert.equal(await page.locator('#predictionVoteMetricBox').isVisible(),false);
+ assert.equal(await page.locator('#predictionAutoTotal').isVisible(),false);
+ assert.equal(await page.locator('#predictionRows input[type=number]:enabled').count(),0);
+ await page.locator('#cancelPrediction').click();
+ // Seed a valid partial choice through the same candidate and record schema used by the form.
+ const expected=await page.evaluate(()=>{
+  const d=predictionDistricts()[0],c=directoryCandidates(d)[0];
+  state.predictions[d.id]={winners:[c.id],estimates:{},method:'manual'};
+  ensurePredictionParties();render();persist();
+  return{color:predictionParty(c.party).color,party:predictionParty(c.party).id};
+ });
+ await page.locator('#returnTaiwanMap').click();
+ assert.equal(await page.locator('#regions path[aria-label^="台北市"]').getAttribute('fill'),expected.color);
+ assert.match(await page.locator('#regions path[aria-label^="台北市"]').getAttribute('aria-label'),/1席/);
+ const count=await page.evaluate(id=>predictionPartyCounts()[id],expected.party);assert.equal(count,1);
+ await page.reload();
+ assert.equal(await page.locator('#regions path[aria-label^="台北市"]').getAttribute('fill'),expected.color);
+});

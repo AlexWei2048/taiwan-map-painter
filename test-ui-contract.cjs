@@ -271,8 +271,8 @@ test('Two-stage forecast UI keeps both scopes and exclusive entry metrics',()=>{
  assert.match(town,/function localDisplayOptions\(\)\{return \[\['composition','预测胜负'\],\['topVote','预测得票'\]\]\}/);
  assert.match(entry,/keepOnlyMetric\(predictionDraft\)/);
  assert.match(entry,/keepOnlyMetric\(localDraft\)/);
- assert.match(entry,/control\.disabled=!show\|\|active&&kind!=='votes'/);
- assert.match(entry,/control\.disabled=!show\|\|active&&kind!=='share'/);
+ assert.match(entry,/control\.disabled=state.predictionOffice==='council'\|\|!show\|\|active&&kind!=='votes'/);
+ assert.match(entry,/control\.disabled=state.predictionOffice==='council'\|\|!show\|\|active&&kind!=='share'/);
  assert.match(styles,/\.prediction-dialog\.metric-share \.vote-metric-column-votes/);
  assert.match(styles,/\.local-dialog\.metric-votes \.vote-metric-column-share/);
 });
