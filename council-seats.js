@@ -41,7 +41,7 @@ function councilSeatPlacement(f,n,t,used,items){
  const external=[];
  for(let y=a.top+70;y<a.bottom-45;y+=20)for(let x=a.left+35;x<a.right-35;x+=20)external.push({x,y});
  external.sort((p,q)=>Math.hypot(p.x-anchor.x,p.y-anchor.y)-Math.hypot(q.x-anchor.x,q.y-anchor.y));
- for(const p of external)for(const s of shapes){const r=rect(p,s);if(!clear(r)||councilSeatRectTouchesLand(r,items,t))continue;used.push(r);return{...p,...s,rect:r,anchor,size,pitch,outside:true}}
+ for(const s of shapes)for(const p of external){const r=rect(p,s);if(!clear(r)||councilSeatRectTouchesLand(r,items,t))continue;used.push(r);return{...p,...s,rect:r,anchor,size,pitch,outside:true}}
  return null;
 }
 const councilSeatRings=new WeakMap();
