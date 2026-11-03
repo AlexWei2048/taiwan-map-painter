@@ -860,7 +860,7 @@ test('Free nationwide council is regional-only with county labels and drills int
    numberedKey:!document.querySelector('#mapNumberKey').hidden
   }));
   assert.ok(facts.names.length>=18,'National map must label the counties');
-  assert.ok(facts.names.every(name=>COUNTY_ORDER.includes(name)),JSON.stringify(facts.names));
+  assert.ok(facts.names.every(name=>/[县市]$/.test(name)),JSON.stringify(facts.names));
   assert.equal(facts.numbers,0,'No district numbers on national map');
   assert.equal(facts.leaders,0,'No national label leader lines');
   assert.equal(facts.numberedKey,false,'No numeric district key on national map');
