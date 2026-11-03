@@ -622,10 +622,14 @@ test('Township-chief maps use the same name-or-number rule in every eligible cou
  const eligible=await page.locator('#county option').evaluateAll(opts=>opts.filter(o=>o.value).map(o=>o.value));
  for(const value of eligible){await page.locator('#county').selectOption(value);await assertAdministrativeKey(page)}
 });
-test('Zooming the national council overview recalculates and restores all 221 official numbers',async t=>{
- const page=await pageFor(t);await page.locator('#predictionOffice').selectOption('council');await page.waitForFunction(()=>document.querySelectorAll('#regions [data-region]').length===221);
- await page.locator('#zoomIn').click();await page.locator('#zoomIn').click();assert.deepEqual(await missingLabels(page),[]);
- await page.locator('#fit').click();await page.locator('#county').selectOption({label:'高雄市'});assert.deepEqual(await missingLabels(page),[]);
+test('National council overview labels counties while county views retain all official district labels',async t=>{
+ const page=await pageFor(t);await page.locator('#predictionOffice').selectOption('council');
+ await page.waitForFunction(()=>document.querySelectorAll('#regions [data-region]').length===221);
+ const national=()=>page.locator('#labels text[data-label]').evaluateAll(els=>els.map(e=>({text:e.textContent,official:e.dataset.placement==='district-number'})));
+ for(const q of await national()){assert.equal(q.official,false);assert.match(q.text,/[县市]$/)}
+ await page.locator('#zoomIn').click();await page.locator('#fit').click();
+ for(const q of await national())assert.match(q.text,/[县市]$/);
+ await page.locator('#county').selectOption({label:'高雄市'});assert.deepEqual(await missingLabels(page),[]);
 });
 test('Mobile administrative keys stay inside the screen above the legend',async t=>{
  const page=await pageFor(t,{width:390,height:844});
@@ -697,7 +701,7 @@ test('Taitung and Pingtung island townships have centred full-name captions belo
  }
 });
 
-test('Township-chief maps grey out ineligible areas while retaining eligible municipal district elections and exports',async t=>{
+test('Township-chief maps show white for ineligible areas while retaining eligible municipal district elections and exports',async t=>{
  const page=await pageFor(t);await page.locator('#predictionOffice').selectOption('township');
  const result=await page.evaluate(()=>{
   const get=(county,name)=>{
@@ -707,16 +711,35 @@ test('Township-chief maps grey out ineligible areas while retaining eligible mun
   return{excluded:get('台北市','中正区'),urban:get('桃园市','桃园区'),included:get('桃园市','复兴区'),
    legend:document.querySelector('[data-no-township-election-legend]')?.textContent};
  });
- assert.equal(result.excluded.fill,'#d1d5db');assert.equal(result.urban.fill,'#d1d5db');
+ assert.equal(result.excluded.fill,'#ffffff');assert.equal(result.urban.fill,'#ffffff');
  assert.equal(result.included.fill,'#edf1e9');assert.equal(result.legend,'无乡镇市区长选举');
  const source=await exportSvg(page);
  const exported=await page.evaluate(({source,id})=>{
   const doc=new DOMParser().parseFromString(source,'image/svg+xml');
   return {fill:doc.querySelector('[data-region="'+id+'"]')?.getAttribute('fill'),legend:!!doc.querySelector('[data-no-township-election-legend]')};
  },{source,id:result.excluded.id});
- assert.equal(exported.fill,'#d1d5db');assert.equal(exported.legend,true);
+ assert.equal(exported.fill,'#ffffff');assert.equal(exported.legend,true);
  await page.locator('#solidMode').click();
- assert.equal(await page.locator('#regions path[data-region="'+result.excluded.id+'"]').getAttribute('fill'),'#d1d5db');
+ assert.equal(await page.locator('#regions path[data-region="'+result.excluded.id+'"]').getAttribute('fill'),'#ffffff');
  await page.locator('#workspaceFree').click();
- assert.notEqual(await page.locator('#regions path[data-region="'+result.excluded.id+'"]').getAttribute('fill'),'#d1d5db');
+ assert.notEqual(await page.locator('#regions path[data-region="'+result.excluded.id+'"]').getAttribute('fill'),'#ffffff');
+});
+
+test('Township national map drills into a county without opening predictions and returns without changing data',async t=>{
+ const page=await pageFor(t);await page.locator('#predictionOffice').selectOption('township');
+ const before=await page.evaluate(()=>JSON.stringify({predictions:state.predictions,fills:state.fills}));
+ const id=await page.evaluate(()=>data.towns.find(f=>f.county==='宜兰县'&&f.name==='大同乡').id);
+ await page.locator('#regions path[data-region="'+id+'"]').click({force:true});
+ assert.equal(await page.locator('#county').inputValue(),'宜兰县');
+ assert.equal(await page.locator('#predictionDialog').isVisible(),false);
+ assert.equal(await page.locator('#returnTaiwanMap').isVisible(),true);
+ await page.locator('#returnTaiwanMap').click();assert.equal(await page.locator('#county').inputValue(),'');
+ assert.equal(await page.locator('#returnTaiwanMap').isVisible(),false);
+ assert.equal(await page.evaluate(()=>JSON.stringify({predictions:state.predictions,fills:state.fills})),before);
+ // A county without any eligible township-chief election is still a valid map scope.
+ await page.locator('#county').selectOption({label:'台北市'});
+ assert.equal(await page.locator('#returnTaiwanMap').isVisible(),true);
+ assert.ok(await page.locator('#regions path[data-region]').count()>0);
+ assert.ok((await page.locator('#regions path[data-region]').evaluateAll(els=>els.map(el=>el.getAttribute('fill')))).every(fill=>fill==='#ffffff'));
+ await page.locator('#returnTaiwanMap').click();assert.equal(await page.locator('#county').inputValue(),'');
 });

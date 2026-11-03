@@ -250,3 +250,9 @@ Latest source revision: 20261030-no-offline-v11.
 - The coverage mask applies to prediction and manual party-colouring modes within this election view, with explicit tooltip/click feedback and a grey legend entry. Grey areas are excluded from election-area counts and gradient missing-result status.
 - The same fill and legend are included in exports; switching to free colouring, mayor/council maps or historical views does not apply this mask.
 - Added real-dataset unit coverage and browser export/mode-switch regression checks; 75 local regression checks pass. Preview confirms national urban areas are grey while eligible mountainous districts remain available.
+
+## 2026-11-03 township county navigation and council overview (v94)
+- Areas without township-chief elections use white instead of grey, retaining the coverage explanation and protected election editing.
+- National township-chief maps drill into the clicked county before any prediction action. All 22 counties are available as map scopes; county township-chief views show a return-to-Taiwan button. Navigation preserves entered forecasts and fills.
+- National council panels retain electoral geometry and colours but use full county names instead of district numbers. County-scoped maps retain official district labels. Exports follow the same county-name overview without adding redundant per-district coverage appendices.
+- Updated browser checks for national council names, white unsupported areas and township county drilldown/return; 75 local regression checks pass. Preview verified Taipei can be entered without a prediction dialog and council national labels are all county names.
