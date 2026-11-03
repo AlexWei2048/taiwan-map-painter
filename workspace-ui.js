@@ -184,7 +184,7 @@ function syncWorkspace(){
  $('workspacePrediction').classList.toggle('active',task);$('workspacePrediction').setAttribute('aria-pressed',task);$('workspaceFree').classList.toggle('active',!task);$('workspaceFree').setAttribute('aria-pressed',!task);
  $('predictionOffice').hidden=!task;document.querySelector('label[for="predictionOffice"]').hidden=!task;
  $('councilViewScopeBox').hidden=!(task&&state.fillMode==='prediction'&&state.predictionOffice==='council');$('councilViewScope').value=state.councilViewScope||'all';
- $('freeMapTools').hidden=task;if(!task)$('freeMapHelp').textContent=state.level==='counties'?'选择政党画笔，点击县市上色。':state.county?'选择政党画笔，点击区域上色；可随时返回全台。':'点击县市进入地图填色；县市颜色按已填区域最多的政党显示，并列为灰色。';$('manualBrushTools').hidden=!manual;$('scopeDisplayTools').hidden=!task||manual;$('predictionDisplayBox').hidden=!task||manual;
+ $('freeMapTools').hidden=task;if(!task)$('freeMapHelp').textContent=state.level==='counties'?'选择政党画笔，点击县市上色。':state.county?'选择政党画笔，点击区域上色；可随时返回全台。':freeNationwideCouncilMap()?'全台议员图仅显示区域选区及县市名称；鼠标悬停查看选区信息，点击选区进入县市后可显示并填色少数民族选区。':freeNationwideDistrictMap()?'全台区域民代图保留各选区独立颜色，只标县市名称；鼠标悬停可查看选区信息，点击选区直接填色。':'点击县市进入地图填色；县市颜色按已填区域最多的政党显示，并列为灰色。';$('manualBrushTools').hidden=!manual;$('scopeDisplayTools').hidden=!task||manual;$('predictionDisplayBox').hidden=!task||manual;
  $('predictionMode').hidden=!task;$('legacyDataTools').hidden=task;$('solidMode').textContent=task?'按政党手动上色':'直接给地图上色';
  $('predictionPanel').querySelector('h2').textContent=task?'填写预测':'地图上色';$('mapSettings').querySelector('h2').textContent=task?'选举与范围':'地图与范围';
  $('scopeDisplayTools').querySelector('.scope-display-note')?.replaceChildren(document.createTextNode(state.predictionOffice==='council'?'议员仅预测当选者；全台图按各县市预测席次最多的政党着色。':'先选择预测方式；预测得票可查看所有候选人中的最高票者，或指定某位候选人。切换方式不会清除已保存的预测。'));
@@ -195,13 +195,13 @@ function syncWorkspace(){
  syncingWorkspace=false;
 }
 let districtTableKey='';
-function districtTableRows(){return DistrictCore.filter((DISTRICT_DETAILS[state.level]||[]).filter(d=>!regionalLegislativeOnly()||DistrictCore.identity(d)==='regional'),state.county,simplify($('districtTableSearch').value.trim()))}
+function districtTableRows(){return DistrictCore.filter((DISTRICT_DETAILS[state.level]||[]).filter(d=>!(regionalLegislativeOnly()||freeNationwideCouncilMap())||DistrictCore.identity(d)==='regional'),state.county,simplify($('districtTableSearch').value.trim()))}
 function renderDistrictTable(){
  const active=['council','legislative'].includes(state.level);$('districtReference').hidden=!active;if(!active)return;
- const key=[state.level,state.county,$('districtTableSearch').value,state.fillMode].join('/');if(key===districtTableKey)return;districtTableKey=key;
+ const key=[state.level,state.county,$('districtTableSearch').value,state.fillMode,state.workspaceMode].join('/');if(key===districtTableKey)return;districtTableKey=key;
  const rows=districtTableRows(),groups=DistrictCore.groups(rows,COUNTY_ORDER);$('districtReferenceTitle').textContent=(state.county||'全台')+(state.level==='council'?'议员':'立法机构区域民代')+'选区范围与名额';
- $('districtReferenceSummary').textContent=state.level==='council'?`${rows.length} 个选区，含区域及少数民族选区，按县市合并列示`:`${rows.length} 个区域选区`;
- $('districtReferenceNote').textContent=state.level==='council'&&councilCountyOverview()?'全台地图按县市显示，点击县市进入该县市的议员预测；表格包含全部身份选区。妇保中的跨区合计按公告原文列示，不能逐区累加。':state.level==='council'?'表格包含本范围全部身份选区；地图将区域、平地少数民族、山地少数民族三类并列显示。妇保中的跨区合计按公告原文列示，不能逐区累加。':'立法机构区域民代范围采用第11届（2024年）区域选区资料；地图与表格仅显示区域选区。';
+ $('districtReferenceSummary').textContent=state.level==='council'&&!freeNationwideCouncilMap()?`${rows.length} 个选区，含区域及少数民族选区，按县市合并列示`:`${rows.length} 个区域选区`;
+ $('districtReferenceNote').textContent=state.level==='council'&&councilCountyOverview()?'全台地图按县市显示，点击县市进入该县市的议员预测；表格包含全部身份选区。妇保中的跨区合计按公告原文列示，不能逐区累加。':state.level==='council'?(freeNationwideCouncilMap()?'全台地图与表格仅显示区域选区；点击地图上的选区进入县市后，显示区域、平地少数民族、山地少数民族三类选区。':'本县市地图与表格显示区域、平地少数民族、山地少数民族三类选区；妇保跨区合计不可逐区累加。'):'立法机构区域民代范围采用第11届（2024年）区域选区资料；地图与表格仅显示区域选区。';
  const root=$('districtTableGroups');const open=new Set([...root.querySelectorAll('details[open]')].map(d=>d.dataset.county));root.replaceChildren();
  for(const group of groups){const details=document.createElement('details');details.className='county-district-group';details.dataset.county=group.county;details.open=!!state.county||open.has(group.county)||(!open.size&&group.county===groups[0]?.county);details.append(dirText('summary',group.county+' · '+group.districts.length+'个选区'));
   const wrap=dirText('div','','reference-table-wrap'),table=document.createElement('table');table.className='reference-table';const caption=dirText('caption',group.county+'选区范围、应选名额与妇保名额');table.append(caption);const head=document.createElement('thead'),h=document.createElement('tr');for(const t of ['选区','类别','包含区域／选民范围','应选名额','妇保名额','操作']){const th=dirText('th',t);th.scope='col';h.append(th)}head.append(h);table.append(head);const body=document.createElement('tbody');
