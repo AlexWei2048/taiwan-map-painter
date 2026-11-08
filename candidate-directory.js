@@ -30,7 +30,23 @@ $('openElectionDirectory').onclick=()=>{if(state.county){$('directoryCounty').va
 if(candidateDatabase){for(const county of COUNTY_ORDER)$('directoryCounty').add(new Option(county,county));const n=candidateDatabase.candidates.length;$('directoryStatus').textContent=`${candidateDatabase.districts.length} 个选区 · ${n.toLocaleString('zh-CN')} 名候选人 · 资料核对至 ${candidateDatabase.asOf}`+(candidateDatabase.ballotNumberAudit?.pendingAfter?' · 号次待核 '+candidateDatabase.ballotNumberAudit.pendingAfter+' 人':'');for(const id of ['directoryOffice','directoryCounty'])$(id).onchange=populateDirectoryDistricts;for(const id of ['directoryDistrict','directorySearch'])$(id)[id==='directorySearch'?'oninput':'onchange']=()=>{directoryPage=0;renderCandidateDirectory()};$('directoryPrev').onclick=()=>{directoryPage--;renderCandidateDirectory();$('electionDirectory').scrollIntoView({behavior:'smooth'})};$('directoryNext').onclick=()=>{directoryPage++;renderCandidateDirectory();$('electionDirectory').scrollIntoView({behavior:'smooth'})};$('downloadCandidateData').onclick=downloadDirectoryCSV;$('loadCandidateRoster').onclick=loadCandidateRoster;populateDirectoryDistricts();renderDirectorySources()}else{$('directoryStatus').textContent='选举资料未能载入，请刷新重试。'}
 
 // Ballot audit is explicit and does not alter any forecast candidate roster.
-if(candidateDatabase?.ballotNumberAudit){const audit=candidateDatabase.ballotNumberAudit;$('ballotAuditStatus').textContent=`号次核对 ${audit.checkedAt}：本轮补齐 ${audit.added} 名，仍有 ${audit.pendingAfter} 名待核。`;$('onlyPendingNumbers').onchange=()=>{directoryPage=0;renderCandidateDirectory()};$('downloadBallotAudit').onclick=()=>{const rows=[['县市','选举类别','选区','姓名','候选人ID','待核原因'],...audit.unresolved.map(c=>[c.county,directoryOfficeName[c.type],c.district,c.name,c.candidateId,c.reason])];download(new Blob(['\uFEFF'+rows.map(r=>r.map(csvCell).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}),'2026候选人号次待核清单.csv')};const details=document.createElement('details');details.append(dirText('summary','本轮号次补齐与待核情况'));details.append(dirText('p',`原待补 ${audit.pendingBefore} 名；本轮补充 ${audit.added} 名（含单人选区规则确定和完整选区唯一余号推算）；仍待核 ${audit.pendingAfter} 名。推算与官方公布号次已区分标记，不按名单顺序猜号。`));for(const group of audit.groups)details.append(dirText('p',group.county+' · '+directoryOfficeName[group.type]+'：'+group.count+' 名待核'));$('directorySources').prepend(details)}
+if(candidateDatabase?.ballotNumberAudit){
+ const audit=candidateDatabase.ballotNumberAudit,complete=audit.pendingAfter===0;
+ $('ballotAuditStatus').textContent=`号次核对 ${audit.checkedAt}：本轮补齐 ${audit.added} 名，${complete?'现有候选人全部有号次（部分依据第三方资料）':'仍有 '+audit.pendingAfter+' 名待补'}。`;
+ $('onlyPendingNumbers').onchange=()=>{directoryPage=0;renderCandidateDirectory()};
+ $('downloadBallotAudit').textContent=complete?'下载本轮号次核查记录':'下载待核号次清单';
+ $('downloadBallotAudit').onclick=()=>{
+  const rows=complete
+   ?[['县市','选举类别','选区','姓名','候选人ID','号次','核对方式','号次来源','依据'],...audit.updates.map(c=>[c.county,directoryOfficeName.township,c.district,c.name,c.candidateId,c.number,c.method,c.sourceUrl,c.evidence])]
+   :[['县市','选举类别','选区','姓名','候选人ID','待核原因'],...audit.unresolved.map(c=>[c.county,directoryOfficeName[c.type],c.district,c.name,c.candidateId,c.reason])];
+  download(new Blob(['\uFEFF'+rows.map(r=>r.map(csvCell).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}),complete?'2026候选人本轮号次核查记录.csv':'2026候选人号次待核清单.csv');
+ };
+ const details=document.createElement('details');
+ details.append(dirText('summary','本轮号次补齐与资料来源'));
+ details.append(dirText('p',`原待补 ${audit.pendingBefore} 名；本轮补充 ${audit.added} 名；目前待补 ${audit.pendingAfter} 名。本轮部分号次依据第三方候选人清单而非官方抽签表，相关来源已逐人标注，候选人号次可悬停核对。此前官方号次及推算标记均保留。`));
+ for(const group of audit.groups)details.append(dirText('p',group.county+' · '+directoryOfficeName[group.type]+'：'+group.count+' 名本轮补录'));
+ $('directorySources').prepend(details);
+}
 
 if(candidateDatabase?.ballotNumberAudit?.nameDiscrepancies){const details=document.createElement('details');details.append(dirText('summary','两处姓名用字差异及号次处理'));for(const row of candidateDatabase.ballotNumberAudit.nameDiscrepancies)details.append(dirText('p',row.county+' · '+row.district+'：登记“'+row.registrationName+'”，抽签表“'+row.drawName+'”（'+row.drawNumber+'号）。'+row.status));$('directorySources').prepend(details)}
 
