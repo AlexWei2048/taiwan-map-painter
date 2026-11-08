@@ -1,0 +1,674 @@
+{
+  "checkedAt": "2026-11-08",
+  "basis": "User-specified Wikipedia township-election results page supplemented with verified 2026 candidate-number lists (正見 / 台灣選票視覺化速查); published numbers treated as secondary-source unless independently supported by official election commission",
+  "previousAuditPath": "sources/election-2026/ballot-number-audit-20261103.json",
+  "pendingBefore": 64,
+  "added": 64,
+  "pendingAfter": 0,
+  "groups": [
+    {
+      "type": "township",
+      "county": "苗栗县",
+      "count": 2
+    },
+    {
+      "type": "township",
+      "county": "屏东县",
+      "count": 58
+    },
+    {
+      "type": "township",
+      "county": "高雄市",
+      "count": 4
+    }
+  ],
+  "updates": [
+    {
+      "candidateId": "township:10005:10005130:001",
+      "county": "苗栗县",
+      "district": "苗栗县三义乡",
+      "name": "徐文達",
+      "number": 2,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E8%8B%97%E6%A0%97%E7%B8%A3/%E4%B8%89%E7%BE%A9%E9%84%89",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10005:10005130:003",
+      "county": "苗栗县",
+      "district": "苗栗县三义乡",
+      "name": "林盈富",
+      "number": 3,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E8%8B%97%E6%A0%97%E7%B8%A3/%E4%B8%89%E7%BE%A9%E9%84%89",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013030:002",
+      "county": "屏东县",
+      "district": "屏东县东港镇",
+      "name": "黃禎祥",
+      "number": 1,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013030:001",
+      "county": "屏东县",
+      "district": "屏东县东港镇",
+      "name": "洪志明",
+      "number": 2,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013030:003",
+      "county": "屏东县",
+      "district": "屏东县东港镇",
+      "name": "陳春朝",
+      "number": 3,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013040:005",
+      "county": "屏东县",
+      "district": "屏东县恒春镇",
+      "name": "尤光暉",
+      "number": 1,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013040:003",
+      "county": "屏东县",
+      "district": "屏东县恒春镇",
+      "name": "尤光彬",
+      "number": 2,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013040:001",
+      "county": "屏东县",
+      "district": "屏东县恒春镇",
+      "name": "盧玟欣",
+      "number": 3,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013040:004",
+      "county": "屏东县",
+      "district": "屏东县恒春镇",
+      "name": "盧玉棟",
+      "number": 4,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013040:002",
+      "county": "屏东县",
+      "district": "屏东县恒春镇",
+      "name": "陳文弘",
+      "number": 5,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013050:002",
+      "county": "屏东县",
+      "district": "屏东县万丹乡",
+      "name": "簡天屏",
+      "number": 1,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013050:001",
+      "county": "屏东县",
+      "district": "屏东县万丹乡",
+      "name": "李建霖",
+      "number": 2,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013050:003",
+      "county": "屏东县",
+      "district": "屏东县万丹乡",
+      "name": "李曜丞",
+      "number": 3,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013050:004",
+      "county": "屏东县",
+      "district": "屏东县万丹乡",
+      "name": "李和耿",
+      "number": 4,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013060:001",
+      "county": "屏东县",
+      "district": "屏东县长治乡",
+      "name": "邱佳娟",
+      "number": 1,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013060:002",
+      "county": "屏东县",
+      "district": "屏东县长治乡",
+      "name": "吳亮慶",
+      "number": 2,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013070:002",
+      "county": "屏东县",
+      "district": "屏东县麟洛乡",
+      "name": "李慧萍",
+      "number": 1,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013070:003",
+      "county": "屏东县",
+      "district": "屏东县麟洛乡",
+      "name": "廖龍依",
+      "number": 2,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013070:001",
+      "county": "屏东县",
+      "district": "屏东县麟洛乡",
+      "name": "盧重彰",
+      "number": 3,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013090:001",
+      "county": "屏东县",
+      "district": "屏东县里港乡",
+      "name": "陳明達",
+      "number": 1,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013090:002",
+      "county": "屏东县",
+      "district": "屏东县里港乡",
+      "name": "藍婉茜",
+      "number": 2,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013110:001",
+      "county": "屏东县",
+      "district": "屏东县高树乡",
+      "name": "梁正翰",
+      "number": 1,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013110:002",
+      "county": "屏东县",
+      "district": "屏东县高树乡",
+      "name": "王樹圍",
+      "number": 2,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013120:002",
+      "county": "屏东县",
+      "district": "屏东县万峦乡",
+      "name": "何秋葺",
+      "number": 1,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013120:001",
+      "county": "屏东县",
+      "district": "屏东县万峦乡",
+      "name": "曾淼祥",
+      "number": 2,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013130:004",
+      "county": "屏东县",
+      "district": "屏东县内埔乡",
+      "name": "林吉善",
+      "number": 1,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013130:003",
+      "county": "屏东县",
+      "district": "屏东县内埔乡",
+      "name": "鍾育杰",
+      "number": 2,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013130:002",
+      "county": "屏东县",
+      "district": "屏东县内埔乡",
+      "name": "李明宗",
+      "number": 3,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013130:001",
+      "county": "屏东县",
+      "district": "屏东县内埔乡",
+      "name": "曾健野",
+      "number": 4,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013140:002",
+      "county": "屏东县",
+      "district": "屏东县竹田乡",
+      "name": "張志誠",
+      "number": 1,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013140:001",
+      "county": "屏东县",
+      "district": "屏东县竹田乡",
+      "name": "鍾定豪",
+      "number": 2,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013150:001",
+      "county": "屏东县",
+      "district": "屏东县新埤乡",
+      "name": "王永豐",
+      "number": 1,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013150:002",
+      "county": "屏东县",
+      "district": "屏东县新埤乡",
+      "name": "曾明輝",
+      "number": 2,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013160:001",
+      "county": "屏东县",
+      "district": "屏东县枋寮乡",
+      "name": "蘇清波",
+      "number": 1,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013160:003",
+      "county": "屏东县",
+      "district": "屏东县枋寮乡",
+      "name": "王立順",
+      "number": 2,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013160:002",
+      "county": "屏东县",
+      "district": "屏东县枋寮乡",
+      "name": "洪茂豐",
+      "number": 3,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013170:001",
+      "county": "屏东县",
+      "district": "屏东县新园乡",
+      "name": "阮志光",
+      "number": 1,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013170:002",
+      "county": "屏东县",
+      "district": "屏东县新园乡",
+      "name": "黃金樹",
+      "number": 2,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013180:004",
+      "county": "屏东县",
+      "district": "屏东县崁顶乡",
+      "name": "劉惠美",
+      "number": 1,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/politician/4573d59e-9556-4b7a-9b9c-624cb6c3e7c1",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013180:002",
+      "county": "屏东县",
+      "district": "屏东县崁顶乡",
+      "name": "廖國富",
+      "number": 2,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/politician/4573d59e-9556-4b7a-9b9c-624cb6c3e7c1",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013180:003",
+      "county": "屏东县",
+      "district": "屏东县崁顶乡",
+      "name": "蔡和清",
+      "number": 3,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/politician/4573d59e-9556-4b7a-9b9c-624cb6c3e7c1",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013180:001",
+      "county": "屏东县",
+      "district": "屏东县崁顶乡",
+      "name": "郭建清",
+      "number": 4,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/politician/4573d59e-9556-4b7a-9b9c-624cb6c3e7c1",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013190:001",
+      "county": "屏东县",
+      "district": "屏东县林边乡",
+      "name": "鄭慶堂",
+      "number": 1,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013190:002",
+      "county": "屏东县",
+      "district": "屏东县林边乡",
+      "name": "郭美妏",
+      "number": 2,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013200:002",
+      "county": "屏东县",
+      "district": "屏东县南州乡",
+      "name": "劉美吟",
+      "number": 1,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013200:001",
+      "county": "屏东县",
+      "district": "屏东县南州乡",
+      "name": "葉俊緯",
+      "number": 2,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013220:001",
+      "county": "屏东县",
+      "district": "屏东县琉球乡",
+      "name": "鄭源德",
+      "number": 1,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013220:003",
+      "county": "屏东县",
+      "district": "屏东县琉球乡",
+      "name": "李伊展",
+      "number": 2,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013220:002",
+      "county": "屏东县",
+      "district": "屏东县琉球乡",
+      "name": "蔡榮民",
+      "number": 3,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013230:001",
+      "county": "屏东县",
+      "district": "屏东县车城乡",
+      "name": "陳政雄",
+      "number": 1,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013230:002",
+      "county": "屏东县",
+      "district": "屏东县车城乡",
+      "name": "張春桂",
+      "number": 2,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013240:002",
+      "county": "屏东县",
+      "district": "屏东县满州乡",
+      "name": "余增春",
+      "number": 1,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013240:001",
+      "county": "屏东县",
+      "district": "屏东县满州乡",
+      "name": "古榮福",
+      "number": 2,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013250:001",
+      "county": "屏东县",
+      "district": "屏东县枋山乡",
+      "name": "羅金良",
+      "number": 1,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013250:002",
+      "county": "屏东县",
+      "district": "屏东县枋山乡",
+      "name": "洪啓能",
+      "number": 2,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013290:001",
+      "county": "屏东县",
+      "district": "屏东县泰武乡",
+      "name": "曾大衛",
+      "number": 1,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013290:002",
+      "county": "屏东县",
+      "district": "屏东县泰武乡",
+      "name": "潘明福\nTivoran．Kazangilijan",
+      "number": 2,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013330:003",
+      "county": "屏东县",
+      "district": "屏东县牡丹乡",
+      "name": "邵世光",
+      "number": 1,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013330:002",
+      "county": "屏东县",
+      "district": "屏东县牡丹乡",
+      "name": "林采穎",
+      "number": 2,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:10013:10013330:001",
+      "county": "屏东县",
+      "district": "屏东县牡丹乡",
+      "name": "詹德行",
+      "number": 3,
+      "method": "referenceSite",
+      "sourceUrl": "https://xn--2lw665d.tw/election/2026/%E5%B1%8F%E6%9D%B1%E7%B8%A3?tab=%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:64000:64000370:001",
+      "county": "高雄市",
+      "district": "高雄市桃源区",
+      "name": "杜司偉\nAndrew\nIsbabanal",
+      "number": 1,
+      "method": "referenceSite",
+      "sourceUrl": "https://www.taiwanvotes.tw/%E9%AB%98%E9%9B%84%E5%B8%82/%E6%A1%83%E6%BA%90%E5%8D%80/",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:64000:64000370:003",
+      "county": "高雄市",
+      "district": "高雄市桃源区",
+      "name": "張志誠\nHaisul·\nIspalavi",
+      "number": 2,
+      "method": "referenceSite",
+      "sourceUrl": "https://www.taiwanvotes.tw/%E9%AB%98%E9%9B%84%E5%B8%82/%E6%A1%83%E6%BA%90%E5%8D%80/",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:64000:64000370:004",
+      "county": "高雄市",
+      "district": "高雄市桃源区",
+      "name": "伊斯坦大·貝雅夫·正福\nIstanda·\nPaingav",
+      "number": 3,
+      "method": "referenceSite",
+      "sourceUrl": "https://www.taiwanvotes.tw/%E9%AB%98%E9%9B%84%E5%B8%82/%E6%A1%83%E6%BA%90%E5%8D%80/",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    },
+    {
+      "candidateId": "township:64000:64000370:002",
+      "county": "高雄市",
+      "district": "高雄市桃源区",
+      "name": "陳德福",
+      "number": 4,
+      "method": "referenceSite",
+      "sourceUrl": "https://www.taiwanvotes.tw/%E9%AB%98%E9%9B%84%E5%B8%82/%E6%A1%83%E6%BA%90%E5%8D%80/",
+      "evidence": "2026年乡镇市区长选区候选人号次清单；按所属选区及登记姓名对应，非官方号次公告。"
+    }
+  ],
+  "unresolved": [],
+  "notes": [
+    "保留全部此前号次和候选人身份资料，不按登记顺序推断号次。",
+    "本轮号次由非官方候选人名单交叉补全；尚未获得屏东等各县选委会完整官方乡镇市区长号次公告，第三方来源保持明确标注。",
+    "号码在各完整选区内依1至候选人数连续、无重复；原始审定姓名与选区逐一对应。",
+    "维基百科指定页面部分空白或改名，未据空白行推算号码。"
+  ]
+}
