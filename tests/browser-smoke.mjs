@@ -798,6 +798,54 @@ test('Hovering and keyboard-focusing a seat frame highlights only its matching m
 });
 
 
+test('All 2026 township candidates have complete, source-traced ballot numbers without changing mayor or council totals',async t=>{
+ const page=await pageFor(t);
+ const status=await page.evaluate(()=>{
+  const db=window.ELECTION_2026_DATA,byId=new Map(db.candidates.map(c=>[c.id,c]));
+  const township=db.candidates.filter(c=>c.type==='township');
+  const failures=db.districts.filter(d=>d.type==='township').flatMap(d=>{
+   const numbers=d.candidateIds.map(id=>byId.get(id)?.number).sort((a,b)=>a-b);
+   return numbers.length!==d.candidateIds.length||numbers.some((x,i)=>x!==i+1)?[d.name]:[];
+  });
+  const sample=Object.fromEntries([
+   'township:64000:64000370:001',
+   'township:64000:64000370:002',
+   'township:64000:64000370:003',
+   'township:64000:64000370:004',
+   'township:10005:10005130:001',
+   'township:10005:10005130:003',
+   'township:10013:10013180:004'
+  ].map(id=>[id,{number:byId.get(id)?.number,source:byId.get(id)?.numberSource}]));
+  return {asOf:db.asOf,summary:db.summary,updates:db.ballotNumberAudit?.updates.length,
+   pending:db.ballotNumberAudit?.pendingAfter,unresolved:db.ballotNumberAudit?.unresolved.length,
+   townshipCount:township.length,stillPending:township.filter(c=>c.number==='待补').length,
+   recentSourceCount:township.filter(c=>c.numberCheckedAt==='2026-11-08'&&c.numberSource).length,
+   failures,sample};
+ });
+ assert.equal(status.asOf,'2026-11-08');
+ assert.equal(status.summary.township.numbered,478);
+ assert.equal(status.summary.mayor.numbered,81);
+ assert.equal(status.summary.council.numbered,1492);
+ assert.equal(status.townshipCount,478);
+ assert.equal(status.stillPending,0);
+ assert.equal(status.pending,0);
+ assert.equal(status.unresolved,0);
+ assert.equal(status.updates,64);
+ assert.equal(status.recentSourceCount,64);
+ assert.deepEqual(status.failures,[],'Every township district has a complete unique 1..N ballot sequence');
+ assert.deepEqual([
+  status.sample['township:64000:64000370:001'].number,
+  status.sample['township:64000:64000370:002'].number,
+  status.sample['township:64000:64000370:003'].number,
+  status.sample['township:64000:64000370:004'].number
+ ],[1,4,2,3],'Taoyuan indigenous-district name and candidate IDs retain correct ballot number mapping');
+ assert.equal(status.sample['township:10005:10005130:001'].number,2);
+ assert.equal(status.sample['township:10005:10005130:003'].number,3);
+ assert.equal(status.sample['township:10013:10013180:004'].number,4);
+ assert.ok(Object.values(status.sample).every(x=>x.source));
+ assert.match(await page.locator('#ballotAuditStatus').textContent(),/本轮补齐 64 名/);
+ assert.match(await page.locator('#downloadBallotAudit').textContent(),/核查记录/);
+});
 test('Free-paint nationwide township map displays the same township edges as the 2026 map',async t=>{
  const page=await pageFor(t);
  await page.locator('#workspaceFree').click();
