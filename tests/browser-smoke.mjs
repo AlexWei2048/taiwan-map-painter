@@ -814,7 +814,7 @@ test('All 2026 township candidates have complete, source-traced ballot numbers w
    'township:64000:64000370:004',
    'township:10005:10005130:001',
    'township:10005:10005130:003',
-   'township:10013:10013180:004'
+   'township:10013:10013180:001'
   ].map(id=>[id,{number:byId.get(id)?.number,source:byId.get(id)?.numberSource}]));
   return {asOf:db.asOf,summary:db.summary,updates:db.ballotNumberAudit?.updates.length,
    pending:db.ballotNumberAudit?.pendingAfter,unresolved:db.ballotNumberAudit?.unresolved.length,
@@ -841,7 +841,7 @@ test('All 2026 township candidates have complete, source-traced ballot numbers w
  ],[1,4,2,3],'Taoyuan indigenous-district name and candidate IDs retain correct ballot number mapping');
  assert.equal(status.sample['township:10005:10005130:001'].number,2);
  assert.equal(status.sample['township:10005:10005130:003'].number,3);
- assert.equal(status.sample['township:10013:10013180:004'].number,4);
+ assert.equal(status.sample['township:10013:10013180:001'].number,4);
  assert.ok(Object.values(status.sample).every(x=>x.source));
  assert.match(await page.locator('#ballotAuditStatus').textContent(),/本轮补齐 64 名/);
  assert.match(await page.locator('#downloadBallotAudit').textContent(),/核查记录/);
