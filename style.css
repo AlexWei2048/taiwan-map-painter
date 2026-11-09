@@ -472,3 +472,11 @@ dialog.floating-prediction-dialog > .floating-dialog-scroll{
 /* Island Palette: responsive header branding (2026-11-03). */
 .brand-logo{width:48px;height:48px;object-fit:contain;display:block;flex:none}
 @media(max-width:700px){.brand-logo{width:38px;height:38px}}
+
+body.history-mode .regions-panel{display:block!important}
+#historyFromPrediction{margin-top:8px;width:100%}
+#historySearchTools{max-width:380px;margin-bottom:10px}
+#historySearch{width:100%}
+#historyPager{display:flex;align-items:center;gap:12px;margin-top:12px}
+#historyCompare{margin-top:18px}
+#historyCompare summary{cursor:pointer}

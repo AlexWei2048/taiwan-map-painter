@@ -1033,7 +1033,7 @@ test('2022 council uses all historical district geometries and actual elected se
  assert.equal(total,910);
  await page.locator('#historyCounty').selectOption({label:'新竹市'});
  assert.equal(await page.locator('#regions path[data-region]').count(),6);assert.equal(await page.locator('[data-seat-status="elected"]').count(),34);
- assert.equal(await page.locator('#historyMetric option').count(),1);
+ assert.equal(await page.locator('#historyMetric option').count(),4);
  await page.locator('[data-seat-district]').first().click();await page.locator('#historyResultDialog').waitFor({state:'visible'});
  assert.ok(await page.locator('#historyDialogRows tr').count()>0);assert.equal(await page.locator('#predictionDialog').isVisible(),false);
  await page.locator('#closeHistoryResult').click();
@@ -1086,4 +1086,24 @@ test('Council and township winner tables use the mayor design without losing lon
  });
  for(const r of result){assert.equal(r.polished,true);assert.equal(r.entries,r.rows);assert.equal(r.meta,r.rows);assert.ok(r.height<14000)}
  assert.ok(result[3].headers.includes('预测得票率'));assert.equal(result[3].metrics,32);
+});
+
+test('2022 council result filters, regional search and historical export',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#historyFromPrediction').click();
+ await page.waitForFunction(()=>document.querySelector('#historySummary').textContent.includes('22席'));
+ await page.locator('#historyOffice').selectOption('council');
+ await page.locator('#historyCounty').selectOption({label:'台北市'});
+ await page.locator('#historyMetric').selectOption('seats');
+ assert.equal(await page.locator('#historyParty').isVisible(),true);
+ await page.locator('#historyMetric').selectOption('share');
+ await page.locator('#historyCandidateScope').selectOption('candidate');
+ assert.ok(await page.locator('#historyCandidate option').count()>1);
+ await page.locator('#historyBrowse').click();
+ await page.locator('#historySearch').fill('王世坚');
+ assert.equal(await page.locator('#historyResults tbody tr').count(),1);
+ await page.locator('#historyMetric').selectOption('party');
+ const svg=await exportSvg(page);
+ assert.match(svg,/实际得票率/);
+ assert.match(svg,/王世坚/);
 });
