@@ -164,7 +164,7 @@
   const wrap=document.createElement('div');wrap.className='history-table-wrap';
   const table=document.createElement('table');table.className='history-candidate-table';
   const head=document.createElement('thead'),hr=document.createElement('tr');
-  for(const label of ['县市','选区／乡镇市区','号次','候选人','性别','选举时现任','政党','得票数','得票率','结果']){const th=document.createElement('th');th.textContent=label;hr.append(th)}
+  for(const label of ['县市','选区／乡镇市区','号次','候选人','性别','选举时现任','政党','得票数','得票率','当选']){const th=document.createElement('th');th.textContent=label;hr.append(th)}
   head.append(hr);table.append(head);const body=document.createElement('tbody');
   for(const r of rows.slice(resultPage*100,(resultPage+1)*100)){
    const tr=document.createElement('tr');

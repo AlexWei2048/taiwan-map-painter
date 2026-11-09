@@ -1568,7 +1568,7 @@ function polishedPredictionTableLayout(rows){
  const numeric=rows.some(row=>row.estimated),specified=rows.every(row=>row.specified);
  const metricFields=numeric?(specified?['votes','share'].filter(k=>rows.some(r=>k==='votes'?r.hasVotes:r.hasShare)):['votes','share','status']):[];
  const historical=rows[0]?.historical;
- const metricHeaders={votes:historical?'实际得票数':'预测得票数',share:historical?'实际得票率':'预测得票率',status:'标记'};
+ const metricHeaders={votes:historical?'实际得票数':'预测得票数',share:historical?'实际得票率':'预测得票率',status:historical?'当选':'标记'};
  const extraWidths=metricFields.map(k=>k==='status'?110:105),extraWidth=extraWidths.reduce((n,w)=>n+w,0);
  const columns=rows.length<=90?2:rows.length<=260?4:6,gap=14,slotWidth=535+extraWidth;
  const innerWidth=columns*slotWidth+(columns-1)*gap,width=innerWidth+36;
