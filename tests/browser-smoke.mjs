@@ -1156,7 +1156,7 @@ test('Historical result windows share prediction drag and resize controls',async
  const page=await pageFor(t,{width:1200,height:950});
  await page.locator('#categoryHistory').click();
  await page.waitForFunction(()=>document.querySelector('#historySummary').textContent.includes('22席'));
- await page.locator('#regions [data-region="63000"]').click();
+ await page.locator('#regions [data-region="63000"]').press("Enter");
  const dialog=page.locator('#historyResultDialog');
  const before=await dialog.boundingBox();
  const bar=dialog.locator('.floating-dialog-drag');
