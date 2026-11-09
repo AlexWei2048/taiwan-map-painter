@@ -480,3 +480,15 @@ body.history-mode .regions-panel{display:block!important}
 #historyPager{display:flex;align-items:center;gap:12px;margin-top:12px}
 #historyCompare{margin-top:18px}
 #historyCompare summary{cursor:pointer}
+
+.history-result-dialog{padding:clamp(14px,5vw,26px);max-width:94vw}
+.history-result-dialog h2{padding-right:38px}
+.history-result-dialog .history-table-wrap{width:100%;text-align:start}
+.history-result-dialog .history-candidate-table{width:max-content;min-width:100%}
+.history-result-dialog .history-candidate-table :is(th,td):first-child{position:sticky;left:0;width:48px;min-width:48px;max-width:48px}
+.history-result-dialog .history-candidate-table :is(th,td):nth-child(2){position:sticky;left:48px;text-align:left;box-shadow:1px 0 #dce6dd}
+.history-result-dialog .history-candidate-table th:nth-child(-n+2){z-index:3}
+.history-result-dialog .history-candidate-table td:nth-child(-n+2){z-index:2;background:#fff}
+.history-result-dialog .history-candidate-table td:nth-child(4){font-weight:inherit;text-align:center}
+.history-result-dialog .history-elected-row td{background:#eaf5ee;font-weight:650}
+.history-result-dialog .history-elected-row td:nth-child(-n+2){background:#eaf5ee}

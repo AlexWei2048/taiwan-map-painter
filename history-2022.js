@@ -334,15 +334,26 @@
  }
  function openHistoryRegion(f){
   const key=featureKey(f),rows=currentResult?.rows.filter(r=>areaKey(r)===key)||[];
-  el('historyDialogTitle').textContent=(f.county===f.name?f.name:f.county+' · '+f.name)+' · 2022实际结果';
-  const body=el('historyDialogRows');body.replaceChildren();
+  el('historyDialogTitle').textContent=(f.county===f.name?f.name:f.county+' · '+f.name)+' · 2022 '+(kind==='mayor'&&f.county.endsWith('市')?'市长':titles[kind])+'选举结果';
+  const body=el('historyDialogRows'),table=body.closest('table'),wrap=table.parentElement;
+  const hiddenColumns=new Set();
+  if(!rows.some(r=>r.gender))hiddenColumns.add(2);
+  if(!rows.some(r=>typeof r.incumbent==='boolean'))hiddenColumns.add(3);
+  [...table.tHead.rows[0].cells].forEach((cell,i)=>{cell.hidden=hiddenColumns.has(i)});
+  wrap.hidden=!rows.length;
+  const missing=el('historyDialogMissing');
+  missing.hidden=!rows.length||!hiddenColumns.size;
+  missing.textContent='本选区历史资料缺少'+[...hiddenColumns].map(i=>table.tHead.rows[0].cells[i].textContent).join('、')+'字段。';
+  body.replaceChildren();
   for(const r of [...rows].sort((a,b)=>b.votes-a.votes)){
    const tr=document.createElement('tr');
+   if(!mayorTownView()&&r.elected)tr.className='history-elected-row';
    for(const [i,value] of [r.number||'—',r.name,r.gender||'—',incumbentLabel(r),r.party,r.votes.toLocaleString('zh-CN'),(r._share||0).toFixed(2)+'%',resultStatus(r)].entries()){
+    if(hiddenColumns.has(i))continue;
     const td=document.createElement('td');
     const logo=i===4?logoFor(predictionParty(r.party)):'';
-    if(logo){const img=document.createElement('img');img.src=logo;img.alt='';td.className='history-party-cell';td.append(img)}
-    td.append(value);tr.append(td);
+    if(logo){const img=document.createElement('img');img.src=logo;img.alt='';const party=document.createElement('span');party.className='history-party-cell';party.append(img,value);td.append(party)}
+    if(!logo)td.append(value);tr.append(td);
    }
    body.append(tr);
   }
@@ -350,8 +361,12 @@
   el('historyDialogMessage').textContent=!rows.length?(noElection(f)?'2022年本区域不举行乡镇市区长选举。':'暂无该层级的历史数据。'):district?
    '应选 '+district.seats+' 席 · 妇保 '+district.womenReserved+' 席 · 有效票 '+rows.reduce((n,r)=>n+r.votes,0).toLocaleString('zh-CN'):
    (mayorTownView()?'本地区得票':'2022年实际得票与当选结果');
+  if(rows.length)el('historyDialogMessage').append(' · '+rows.length+' 位候选人 · 按得票数排序');
   if(kind==='mayor'&&f.county==='嘉义市')el('historyDialogMessage').append(' · 2022年12月18日重行投票');
-  el('historyResultDialog').showModal();
+  const dialog=el('historyResultDialog'),hint=el('historyDialogScroll');
+  hint.hidden=true;dialog.showModal();
+  wrap.scrollLeft=0;wrap.scrollTop=0;
+  hint.hidden=wrap.scrollWidth<=wrap.clientWidth;
  }
  function exportRows(){
   const result=currentResult;

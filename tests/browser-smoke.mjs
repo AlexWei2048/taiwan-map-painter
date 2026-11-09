@@ -1111,3 +1111,22 @@ test('2022 council result filters, regional search and historical export',async 
  assert.match(svg,/实际得票率/);
  assert.match(svg,/王世坚/);
 });
+
+test('Mobile historical result keeps ballot numbers and candidate names visible',async t=>{
+ const page=await pageFor(t,{width:390,height:844});
+ await page.locator('#categoryHistory').click();
+ await page.waitForFunction(()=>document.querySelector('#historySummary').textContent.includes('22席'));
+ await page.locator('#historyCounty').selectOption({label:'台北市'});
+ await page.locator('#regions [data-region="63000"]').click();
+ const dialog=page.locator('#historyResultDialog');
+ assert.match(await dialog.locator('h2').textContent(),/台北市 · 2022 市长选举结果/);
+ assert.equal(await dialog.getByRole('columnheader',{name:'性别',exact:true}).count(),0);
+ const name=dialog.locator('.history-elected-row td').nth(1);
+ assert.equal(await name.textContent(),'蒋万安');
+ const wrap=dialog.locator('.history-table-wrap');
+ assert.equal(await wrap.evaluate(el=>el.scrollLeft),0);
+ const before=await name.boundingBox();
+ await wrap.evaluate(el=>{el.scrollLeft=el.scrollWidth});
+ assert.ok(await wrap.evaluate(el=>el.scrollLeft)>0);
+ assert.ok(Math.abs((await name.boundingBox()).x-before.x)<2);
+});
