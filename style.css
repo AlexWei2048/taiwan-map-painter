@@ -203,7 +203,8 @@ body.history-mode .title-row{display:none}
 /* 2026 candidate prediction: floating windows with four visible resize corners. */
 dialog.prediction-dialog.floating-prediction-dialog,
 dialog.prediction-dialog.show-estimates.floating-prediction-dialog,
-dialog.local-dialog.floating-prediction-dialog{
+dialog.local-dialog.floating-prediction-dialog,
+dialog.history-result-dialog.floating-prediction-dialog{
  position:fixed;inset:auto;margin:0;max-width:none;max-height:none;
  box-sizing:border-box;overflow:hidden;padding:0;
  border-radius:14px;border:1px solid #cbded1;

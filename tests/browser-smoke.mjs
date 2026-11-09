@@ -1133,3 +1133,21 @@ test('Mobile historical result keeps ballot numbers and candidate names visible'
  assert.ok(await wrap.evaluate(el=>el.scrollLeft)>0);
  assert.ok(Math.abs((await name.boundingBox()).x-before.x)<2);
 });
+
+
+test('Historical result windows share prediction drag and resize controls',async t=>{
+ const page=await pageFor(t,{width:1200,height:950});
+ await page.locator('#categoryHistory').click();
+ await page.waitForFunction(()=>document.querySelector('#historySummary').textContent.includes('22席'));
+ await page.locator('#regions [data-region="63000"]').click();
+ const dialog=page.locator('#historyResultDialog');
+ const before=await dialog.boundingBox();
+ const bar=dialog.locator('.floating-dialog-drag');
+ await bar.press('ArrowRight');
+ assert.equal((await dialog.boundingBox()).x,before.x+10);
+ assert.equal(await dialog.locator('[data-dialog-resize]').count(),4);
+ await dialog.locator('[data-dialog-resize="se"]').press('ArrowRight');
+ assert.equal((await dialog.boundingBox()).width,before.width+10);
+ await dialog.getByRole('button',{name:'关闭历史结果'}).click();
+ assert.equal(await dialog.isVisible(),false);
+});

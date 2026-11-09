@@ -1,4 +1,4 @@
-/* Movable, four-corner-resizable 2026 candidate prediction dialogs. */
+/* Movable, four-corner-resizable election dialogs. */
 (function(){
  'use strict';
  const PADDING=12;
@@ -15,7 +15,7 @@
   bar.className='floating-dialog-drag';
   bar.tabIndex=0;
   bar.setAttribute('role','button');
-  bar.setAttribute('aria-label','拖动移动预测窗口，方向键也可移动');
+  bar.setAttribute('aria-label','拖动移动窗口，方向键也可移动');
   bar.innerHTML='<span class="floating-dialog-grip" aria-hidden="true">⠿</span><span>按住此处移动窗口</span>';
   // The close button belongs in the fixed header, never in the scrolling form.
   // Moving the existing DOM node retains its application close handler.
@@ -124,4 +124,5 @@
  }
  init('predictionDialog',920);
  init('localDialog',850);
+ init('historyResultDialog',960);
 })();

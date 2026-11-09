@@ -338,6 +338,10 @@
  }
  window.History2022View={metricLabel,exportRows,active:()=>active,kind:()=>kind,overview:historyOverview,seatMode:historyCouncilSeats,items:historyItems,noElection,districtFor:historicalDistrictFor,seatRows:historicalSeatRows,openRegion:openHistoryRegion,features:()=>historicalFeatures};
  const resultSection=document.createElement('section');resultSection.id='historyResultSection';resultSection.hidden=true;resultSection.className='history-result-section';const resultHeading=document.createElement('h3');resultHeading.textContent='2022 实际选举结果';resultSection.append(resultHeading,el('historySummary'),el('historySearchTools'),el('historyResults'),el('historyPager'),el('historyCompare'));el('districtReference').before(resultSection);
+ const historyTableWrap=el('historyDialogRows').closest('.history-table-wrap');
+ new ResizeObserver(()=>{
+  el('historyDialogScroll').hidden=historyTableWrap.scrollWidth<=historyTableWrap.clientWidth;
+ }).observe(historyTableWrap);
  el('closeHistoryResult').onclick=()=>el('historyResultDialog').close();
  el('workspaceHistory').onclick=activate;
  for(const id of ['workspacePrediction','workspaceFree'])el(id).addEventListener('click',()=>{if(active)deactivate()},{capture:true});
