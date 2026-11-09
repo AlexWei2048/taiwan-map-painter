@@ -176,7 +176,7 @@
    const partyName=document.createElement('span');partyName.textContent=r.party;partyCell.append(partyName);tr.append(partyCell);
    const votes=document.createElement('td');votes.className='history-number';votes.textContent=r.votes.toLocaleString('zh-CN');tr.append(votes);
    const rate=document.createElement('td');rate.className='history-number';rate.textContent=(r._share||0).toFixed(2)+'%';tr.append(rate);
-   const status=document.createElement('td');status.textContent=resultStatus(r);status.className=r.elected?'history-winner':'history-loser';tr.append(status);
+   const status=document.createElement('td');appendResultMark(status,r);tr.append(status);
    body.append(tr)
   }
   table.append(body);wrap.append(table);root.append(wrap);
@@ -243,6 +243,12 @@
  function voteMetric(){return metric==='share'||metric==='votes'}
  function metricLabel(){return metric==='seats'?selectedParty+'当选席次':metric==='share'?'得票率':metric==='votes'?'得票数':kind==='council'?'实际当选席次':mayorTownView()?'当地最高票':'实际当选结果'}
  function seatRange(result){const counts=county?[...result.regions.values()].map(r=>r.partyCounts):[...result.countySeats.values()];return{min:0,max:Math.max(1,...counts.map(c=>c.get(selectedParty)||0))}}
+ function appendResultMark(cell,r){
+  if(mayorTownView()||!r.elected)return;
+  const mark=document.createElement('img');
+  mark.src='assets/elected-mark.png';mark.alt='当选';mark.width=18;mark.height=18;
+  cell.append(mark);
+ }
  function resultStatus(r){return mayorTownView()?'地区得票':r.elected?'当选':'未当选'}
  function incumbentLabel(r){return r.incumbent===true?'现任':r.incumbent===false?'非现任':'—'}
  let resultPage=0;
@@ -305,12 +311,12 @@
   for(const r of [...rows].sort((a,b)=>b.votes-a.votes)){
    const tr=document.createElement('tr');
    if(!mayorTownView()&&r.elected)tr.className='history-elected-row';
-   for(const [i,value] of [r.number||'—',r.name,r.gender||'—',incumbentLabel(r),r.party,r.votes.toLocaleString('zh-CN'),(r._share||0).toFixed(2)+'%',resultStatus(r)].entries()){
+   for(const [i,value] of [r.number||'—',r.name,r.gender||'—',incumbentLabel(r),r.party,r.votes.toLocaleString('zh-CN'),(r._share||0).toFixed(2)+'%',''].entries()){
     if(hiddenColumns.has(i))continue;
     const td=document.createElement('td');
     const logo=i===4?logoFor(predictionParty(r.party)):'';
     if(logo){const img=document.createElement('img');img.src=logo;img.alt='';const party=document.createElement('span');party.className='history-party-cell';party.append(img,value);td.append(party)}
-    if(!logo)td.append(value);tr.append(td);
+    if(i===7)appendResultMark(td,r);else if(!logo)td.append(value);tr.append(td);
    }
    body.append(tr);
   }

@@ -1122,6 +1122,10 @@ test('Mobile historical result keeps ballot numbers and candidate names visible'
  assert.equal(await dialog.getByRole('columnheader',{name:'性别',exact:true}).count(),0);
  const name=dialog.locator('.history-elected-row td').nth(1);
  assert.equal(await name.textContent(),'蒋万安');
+ const mark=dialog.getByRole('img',{name:'当选',exact:true});
+ assert.equal(await mark.count(),1);
+ await mark.evaluate(el=>el.decode());
+ assert.equal(await dialog.locator('tbody tr').nth(1).locator('td').last().innerHTML(),'');
  const wrap=dialog.locator('.history-table-wrap');
  assert.equal(await wrap.evaluate(el=>el.scrollLeft),0);
  const bounds=await wrap.boundingBox(),initial=await name.boundingBox();
