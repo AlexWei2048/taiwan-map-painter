@@ -1051,6 +1051,10 @@ test('2022 township and mayor maps navigate by county with actual numeric result
  assert.equal(await page.locator('#regions path[data-region]').count(),22);
  await page.locator('#labels [data-label="63000"]').click();assert.equal(await page.locator('#historyCounty').inputValue(),'台北市');assert.equal(await page.locator('#regions path[data-region]').count(),12);
  await page.locator('#historyMetric').selectOption('votes');assert.equal(await page.locator('#historyCandidateScope').isVisible(),true);
+ const gradients=page.locator('#legend [data-history-gradient-party]');
+ assert.deepEqual((await gradients.evaluateAll(nodes=>nodes.map(n=>n.getAttribute('data-history-gradient-party')))).sort(),['中国国民党','民主进步党']);
+ assert.match(await page.locator('#legend').textContent(),/乡镇市区最高票候选人.*69,266.*领先地区数/);
+ assert.match(await exportSvg(page),/data-history-gradient-party="中国国民党"/);
  await page.locator('#historyCandidateScope').selectOption('candidate');assert.equal(await page.locator('#historyCandidate').isVisible(),true);
  await page.locator('#labels [data-label]').first().click();await page.locator('#historyResultDialog').waitFor({state:'visible'});
  assert.match(await page.locator('#historyDialogRows').textContent(),/蒋万安/);

@@ -119,26 +119,56 @@
   const identity=featureElectorate(feature),number=districtNumber(feature.number||feature.name);if(unmatchedDistricts.has(norm(feature.county)+'|'+identity+'|'+number))return '__2022_unmatched__';
   return feature.county+'|'+identity+'|'+number;
  }
+ function gradientParties(result){
+  if(metric==='seats')return selectedParty?[selectedParty]:[];
+  return voteMetric()?[...new Set([...result.regions.values()].map(r=>r.top?.party).filter(Boolean))]:[];
+ }
+ const historyLegendFont=()=>state.legend.fontSize*(isNationwide()?1.4:1)*(identityPanelsActive()?2:1);
+ function legendHeight(result){
+  const font=historyLegendFont(),gradients=gradientParties(result);
+  return 86+(result.partySeats.size+(kind==='township'?1:0))*font*2.05+
+   (gradients.length?gradients.length*font*2.1+font*4:0);
+ }
  function drawLegend(result){
   const root=el('legend');if(!root)return;root.replaceChildren();delete root.dataset.historyBox;if(!state.legend.show)return;
   const entries=[...result.partySeats].sort((a,b)=>b[1]-a[1]);if(!entries.length&&kind!=='township')return;
-  const spec=sceneSpec(),font=state.legend.fontSize*(isNationwide()?1.4:1)*(identityPanelsActive()?2:1),rowH=font*2.05,width=identityPanelsActive()?560:isNationwide()?350:300;
-  const gradient=voteMetric()||metric==='seats',height=(gradient?162:86)+(entries.length+(kind==='township'?1:0))*rowH,x=spec.width-width-25,y=spec.height-furnitureFooterHeight()+20;
+  const spec=sceneSpec(),font=historyLegendFont(),rowH=font*2.05,width=identityPanelsActive()?560:isNationwide()?350:300;
+  const gradients=gradientParties(result),height=legendHeight(result),x=spec.width-width-25,y=spec.height-furnitureFooterHeight()+20;
   const svg=(tag,attrs)=>{const node=document.createElementNS(NS,tag);for(const [k,v]of Object.entries(attrs||{}))node.setAttribute(k,v);return node};
   root.dataset.historyBox=[x,y,width,height].join(',');
   root.append(svg('rect',{x,y,width,height,rx:12,fill:'#fff',stroke:'#dce5df','stroke-width':1}));
   const heading=svg('text',{x:x+18,y:y+27,'font-size':font+1,'font-weight':600,fill:'#294a3a'});
-  heading.textContent='2022实际结果 · '+[...result.partySeats.values()].reduce((a,b)=>a+b,0)+(mayorTownView()?'个领先地区':'席');root.append(heading);
+  const localLeaders=mayorTownView()&&(!voteMetric()||candidateScope==='top');
+  const count=entries.reduce((sum,[,n])=>sum+n,0);
+  heading.textContent=mayorTownView()?'2022 县市长选举 · '+(localLeaders?'乡镇市区最高票候选人':'乡镇市区得票'):'2022 '+titles[kind]+'实际结果';
+  root.append(heading);
   const caption=svg('text',{x:x+18,y:y+47,'font-size':font*.78,fill:'#728477'});
-  caption.textContent=metric==='seats'?selectedParty+' · 当选席次':voteMetric()?'颜色代表候选人政党，深浅代表得票':kind==='council'?'每个党徽代表一席实际当选席次':mayorTownView()?'显示乡镇市区得票领先政党':'按实际当选人统计';root.append(caption);
+  const unit=metric==='seats'?'席':metric==='votes'?'票':'%';
+  caption.textContent=voteMetric()?(candidateScope==='candidate'?'指定':'最高票')+'候选人'+metricLabel()+'（'+unit+'）':metric==='seats'?selectedParty+' · 当选席次':kind==='council'?'每个党徽代表一席实际当选席次':mayorTownView()?'显示乡镇市区得票领先政党':'按实际当选人统计';
+  root.append(caption);
   root.append(svg('line',{x1:x+18,y1:y+58,x2:x+width-18,y2:y+58,stroke:'#e5ece6'}));
-  if(gradient){
-   const bx=x+18,by=y+78,bw=width-36,range=metric==='seats'?result.seatRange:result.range;
-   const unit=metric==='seats'?'席':metric==='votes'?'票':'%';
-   for(let i=0;i<40;i++){const v=range.min+(range.max-range.min)*(i+.5)/40;root.append(svg('rect',{x:bx+i*bw/40,y:by,width:bw/40+1,height:13,fill:tone(metric==='seats'?partyColor(selectedParty):candidateScope==='candidate'?partyColor(result.rows.find(r=>candidateKey(r)===selectedCandidate)?.party||'无党籍'):'#177d68',v,range)}))}
-   for(const [offset,label]of [[0,range.min+unit],[.5,((range.min+range.max)/2).toFixed(1).replace(/\.0$/,'')+unit],[1,range.max+unit]]){const t=svg('text',{x:bx+offset*bw,y:by+29,'text-anchor':offset===0?'start':offset===.5?'middle':'end','font-size':font*.75,fill:'#526c60'});t.textContent=label;root.append(t)}
+  let rowY=y+67;
+  if(gradients.length){
+   const bx=x+18+font*10,bw=x+width-18-bx,range=metric==='seats'?result.seatRange:result.range;
+   for(const party of gradients){
+    const group=svg('g',{'data-history-gradient-party':party});
+    const label=svg('text',{x:x+18,y:rowY+font,'font-size':font*.78,fill:'#426052'});
+    label.textContent=party;group.append(label);
+    for(let i=0;i<40;i++){
+     const value=range.min+(range.max-range.min)*i/39;
+     group.append(svg('rect',{x:bx+i*bw/40,y:rowY,width:bw/40+.15,height:font*1.1,fill:tone(partyColor(party),value,range)}));
+    }
+    root.append(group);rowY+=font*2.1;
+   }
+   for(const [offset,value] of [[0,range.min],[.5,(range.min+range.max)/2],[1,range.max]]){
+    const tick=svg('text',{x:bx+offset*bw,y:rowY,'text-anchor':offset===0?'start':offset===.5?'middle':'end','font-size':font*.75,fill:'#526c60'});
+    tick.textContent=value.toLocaleString('zh-CN',{maximumFractionDigits:metric==='votes'?0:1})+unit;root.append(tick);
+   }
+   rowY+=font*2;
+   const summary=svg('text',{x:x+18,y:rowY+font,'font-size':font*.88,'font-weight':600,fill:'#294a3a'});
+   summary.textContent=mayorTownView()?'领先地区数（共 '+count+' 个）':'当选席次（共 '+count+' 席）';
+   root.append(summary);rowY+=font*2;
   }
-  let rowY=y+(gradient?130:67);
   for(const [party,count]of entries){
    const p=predictionParty(party),logo=logoFor(p);
    root.append(svg('rect',{x:x+18,y:rowY+3,width:font,height:font,rx:3,fill:partyColor(party)}));
@@ -416,9 +446,8 @@
   return defaultLegendBox(spec);
  };
  const defaultFooter=furnitureFooterHeight;furnitureFooterHeight=function(){
-  if(!active)return defaultFooter();
-  const number=Math.min(30,new Set(recordsInView().filter(r=>r.elected).map(r=>r.party)).size);
-  const font=state.legend.fontSize*(isNationwide()?1.4:1)*(identityPanelsActive()?2:1);return Math.max(defaultFooter(),(metric!=='party'?162:86)+(number+(kind==='township'?1:0))*font*2.05+50)
+  if(!active||!currentResult||!state.legend.show)return defaultFooter();
+  return Math.max(defaultFooter(),legendHeight(currentResult)+50);
  };
  const defaultPreparedExport=preparedExportSvg;preparedExportSvg=function(){
   if(!active)return defaultPreparedExport();
