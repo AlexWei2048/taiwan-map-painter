@@ -335,7 +335,15 @@
   const result=currentResult;
   if(!state.exportSettings.winnerTable||!result||metric==='seats'||(historyOverview()&&kind==='mayor'))return [];
   const rows=voteMetric()?[...result.regions.values()].map(r=>r.top).filter(Boolean):[...result.regions.values()].flatMap(r=>r.leaders);
-  return rows.filter(r=>!exportPanelFilter||kind!=='council'||r.electorate===exportPanelFilter).map(r=>{
+  const ordered=rows.filter(r=>!exportPanelFilter||kind!=='council'||r.electorate===exportPanelFilter);
+  ordered.sort((a,b)=>
+   COUNTY_ORDER.indexOf(a.county)-COUNTY_ORDER.indexOf(b.county)||
+   a.county.localeCompare(b.county,'zh')||
+   (kind==='council'?Number(districtNumber(a.district))-Number(districtNumber(b.district))||
+    ELECTORATE_ORDER.indexOf(a.electorate)-ELECTORATE_ORDER.indexOf(b.electorate):
+    a.town.localeCompare(b.town,'zh',{numeric:true}))||
+   b.votes-a.votes||Number(a.number)-Number(b.number));
+  return ordered.map(r=>{
    const party=predictionParty(r.party);
    return {historical:true,estimated:true,district:[r.county,r.town||r.district].filter(Boolean).join(' · '),
     number:r.number,name:r.name,gender:r.gender||'—',incumbent:r.incumbent===true?'现任':'',party:r.party,color:party.color,logo:logoFor(party),

@@ -1109,6 +1109,16 @@ test('2022 council result filters, regional search and historical export',async 
  const svg=await exportSvg(page);
  assert.match(svg,/实际得票率/);
  assert.match(svg,/王世坚/);
+ const rows=await page.evaluate(()=>History2022View.exportRows().map(row=>({
+  district:Number(row.district.match(/第(\d+)选举区/)[1]),votes:Number(row.votes.replaceAll(',',''))
+ })));
+ assert.equal(rows.length,61);
+ assert.deepEqual([...new Set(rows.map(r=>r.district))],[1,2,3,4,5,6,7,8]);
+ for(let i=1;i<rows.length;i++){
+  const previous=rows[i-1],current=rows[i];
+  assert.ok(previous.district<current.district||(previous.district===current.district&&previous.votes>=current.votes));
+ }
+
 });
 
 test('Mobile historical result keeps ballot numbers and candidate names visible',async t=>{
