@@ -185,7 +185,7 @@ function syncWorkspace(){
  $('predictionOffice').hidden=!task;document.querySelector('label[for="predictionOffice"]').hidden=!task;
  $('councilViewScopeBox').hidden=!(task&&state.fillMode==='prediction'&&state.predictionOffice==='council');$('councilViewScope').value=state.councilViewScope||'all';
  $('freeMapTools').hidden=task;if(!task)$('freeMapHelp').textContent=state.level==='counties'?'选择政党画笔，点击县市上色。':state.county?'选择政党画笔，点击区域上色；可随时返回全台。':freeNationwideCouncilMap()?'全台议员图仅显示区域选区及县市名称；鼠标悬停查看选区信息，点击选区进入县市后可显示并填色少数民族选区。':freeNationwideDistrictMap()?'全台区域民代图保留各选区独立颜色，只标县市名称；鼠标悬停查看选区信息，点击选区进入所属县市后再填色。':'点击县市进入地图填色；县市颜色按已填区域最多的政党显示，并列为灰色。';$('manualBrushTools').hidden=!manual;$('scopeDisplayTools').hidden=!task||manual;$('predictionDisplayBox').hidden=!task||manual;
- $('predictionMode').hidden=!task;$('legacyDataTools').hidden=task;$('solidMode').textContent=task?'按政党手动上色':'直接给地图上色';
+ $('predictionMode').hidden=!task;$('solidMode').textContent=task?'按政党手动上色':'直接给地图上色';
  $('predictionPanel').querySelector('h2').textContent=task?'填写预测':'地图上色';$('mapSettings').querySelector('h2').textContent=task?'选举与范围':'地图与范围';
  $('scopeDisplayTools').querySelector('.scope-display-note')?.replaceChildren(document.createTextNode(state.predictionOffice==='council'?'议员仅预测当选者；全台图按各县市预测席次最多的政党着色。':'先选择预测方式；预测得票可查看所有候选人中的最高票者，或指定某位候选人。切换方式不会清除已保存的预测。'));
  $('predictionScopeLabel').textContent=task?'2026 用户预测':'自由填色 · 自行录入数据';
