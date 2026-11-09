@@ -1067,7 +1067,7 @@ test('Public history entry stays in the current workspace and displays the devel
  assert.match(await page.locator('#historyDevelopmentNotice').textContent(),/开发中，敬请期待/);
  assert.equal(await page.locator('#categoryFuture').getAttribute('aria-selected'),'true');assert.equal(await page.locator('#historyControls').isVisible(),false);assert.equal(historyRequests,0);
  await page.getByRole('button',{name:'知道了',exact:true}).click();
- assert.match(await page.locator('.sidebar-footer').textContent(),/网页开发：Alex Wei; 测试和推广：星夜长街/);
+ assert.match(await page.locator('.sidebar-footer').innerText(),/网页开发：Alex Wei\n测试和推广：星夜长街/);
 });
 test('All exported image titles and filenames preserve the office even with a custom title',async t=>{
  const page=await pageFor(t);
@@ -1103,7 +1103,6 @@ test('2022 council result filters, regional search and historical export',async 
  await page.locator('#historyMetric').selectOption('share');
  await page.locator('#historyCandidateScope').selectOption('candidate');
  assert.ok(await page.locator('#historyCandidate option').count()>1);
- await page.locator('#historyBrowse').click();
  await page.locator('#historySearch').fill('王世坚');
  assert.equal(await page.locator('#historyResults tbody tr').count(),1);
  await page.locator('#historyMetric').selectOption('party');

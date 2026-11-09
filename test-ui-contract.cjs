@@ -984,10 +984,18 @@ test('County and township map callouts use one readable font and never share a l
 });
 
 test('Both historical entry pages include the controls wired by history JavaScript',()=>{
- const ids=['historyParty','historySearch','historyBrowse','historyPrev','historyNext','historyPage',
+ const ids=['historyParty','historySearch','historyPrev','historyNext','historyPage',
   'historyPager','historyCompare','historyCompareStatus','historyCompareRows','historyFromPrediction'];
  for(const name of ['index.html','map-v60.html']){
   const html=read(name);
   for(const id of ids)assert.equal(html.split('id="'+id+'"').length-1,1,name+': '+id);
+ }
+});
+
+test('Historical data tools are removed and footer credits use separate lines',()=>{
+ for(const name of ['index.html','map-v60.html']){
+  const html=read(name);
+  assert.doesNotMatch(html,/id="history(?:Browse|Load|Import|CsvExport|Files|Status)"/);
+  assert.match(html,/网页开发：Alex Wei<br>测试和推广：星夜长街/);
  }
 });
