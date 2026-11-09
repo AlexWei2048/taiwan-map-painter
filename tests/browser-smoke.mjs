@@ -1125,6 +1125,10 @@ test('Mobile historical result keeps ballot numbers and candidate names visible'
  assert.equal(await name.textContent(),'蒋万安');
  const wrap=dialog.locator('.history-table-wrap');
  assert.equal(await wrap.evaluate(el=>el.scrollLeft),0);
+ const bounds=await wrap.boundingBox(),initial=await name.boundingBox();
+ assert.ok(initial.x>=bounds.x&&initial.x+initial.width<=bounds.x+bounds.width);
+ // Force overflow independently of the system's CJK font metrics.
+ await wrap.evaluate(el=>{el.style.maxWidth='220px'});
  const before=await name.boundingBox();
  await wrap.evaluate(el=>{el.scrollLeft=el.scrollWidth});
  assert.ok(await wrap.evaluate(el=>el.scrollLeft)>0);
