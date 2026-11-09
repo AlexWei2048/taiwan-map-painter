@@ -1048,8 +1048,10 @@ test('2022 township and mayor maps navigate by county with actual numeric result
  await page.locator('#historyCounty').selectOption({label:'屏东县'});assert.ok(await page.locator('#regions path[data-region]').count()>1);
  await page.locator('#returnTaiwanMap').click();assert.equal(await page.locator('#historyCounty').inputValue(),'');
  await page.locator('#historyOffice').selectOption('mayor');await page.locator('#historyScale').selectOption('town');
- assert.equal(await page.locator('#regions path[data-region]').count(),22);
- await page.locator('#labels [data-label="63000"]').click();assert.equal(await page.locator('#historyCounty').inputValue(),'台北市');assert.equal(await page.locator('#regions path[data-region]').count(),12);
+ assert.equal(await page.locator('#regions path[data-region]').count(),368);
+ assert.notEqual(await page.locator('#regions [data-region="63000010"]').getAttribute('fill'),'#edf1e9');
+ await page.locator('#historyCounty').selectOption({label:'台北市'});
+ assert.equal(await page.locator('#regions path[data-region]').count(),12);
  await page.locator('#historyMetric').selectOption('votes');assert.equal(await page.locator('#historyCandidateScope').isVisible(),true);
  const gradients=page.locator('#legend [data-history-gradient-party]');
  assert.deepEqual((await gradients.evaluateAll(nodes=>nodes.map(n=>n.getAttribute('data-history-gradient-party')))).sort(),['中国国民党','民主进步党']);
@@ -1109,6 +1111,7 @@ test('2022 council result filters, regional search and historical export',async 
  const svg=await exportSvg(page);
  assert.match(svg,/实际得票率/);
  assert.match(svg,/王世坚/);
+ assert.equal((svg.match(/data-export-elected-mark="true"/g)||[]).length,61);
  const rows=await page.evaluate(()=>History2022View.exportRows().map(row=>({
   district:Number(row.district.match(/第(\d+)选举区/)[1]),votes:Number(row.votes.replaceAll(',',''))
  })));

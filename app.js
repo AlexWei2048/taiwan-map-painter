@@ -1614,6 +1614,7 @@ function exportPredictionTableLayout(rows){
  })),bodyHeight=Math.max(rowHeight,...blocks.map(block=>rowHeight+block.reduce((n,r)=>n+r.height,0))),height=bodyHeight+79;
  return{columns,rowHeight,font,lineHeight,gap,width,blockWidth,widths,chunk,headers,blocks,height,specified};
 }
+let exportElectedMark='';
 function appendExportPolishedWinnerTable(root,rows,y,layout){
  const card=svgEl('g',{'data-export-winner-table':'true','data-export-table-style':layout.columns===2?'two-up':'multi-column'});
  root.append(card);
@@ -1684,7 +1685,15 @@ function appendExportPolishedWinnerTable(root,rows,y,layout){
     {'data-export-party-logo':'true'});
    linesAt(partyLines,partyX+55,14,500,'#526b5e','party');
    let metricX=partyX+layout.widths[2];
-   (layout.metricFields||[]).forEach((field,i)=>{linesAt(entry.cells[i+3],metricX+13,14,450,'#536e60',field);metricX+=layout.widths[i+3]});
+   (layout.metricFields||[]).forEach((field,i)=>{
+    if(field==='status'&&row.historical){
+     if(row.elected&&exportElectedMark){
+      const mark=svgEl('image',{href:exportElectedMark,x:metricX+13,y:mid-9,width:18,height:18,'aria-label':'当选','data-export-elected-mark':'true'});
+      item.append(mark);
+     }
+    }else linesAt(entry.cells[i+3],metricX+13,14,450,'#536e60',field);
+    metricX+=layout.widths[i+3];
+   });
   }
   if(pairIndex!==layout.pairs.length-1)group.append(svgEl('line',{x1:innerX+9,
    x2:innerX+innerWidth-9,y1:currentY+pair.height,y2:currentY+pair.height,
@@ -1972,6 +1981,12 @@ async function ensureExportMapReady(){
  if(state.level==='legislative'&&(data.legislative.length!==73||data.legislativeIndigenous.length!==2))throw Error('立法机构民代选区资料尚未完整载入');
  if(state.level==='villages'&&data.villages.length!==data.villageMetadata.count)throw Error('村里地图资料尚未完整载入');
  if(!currentItems().length)throw Error('当前地图没有可导出的地理区域');
+ if(typeof History2022View!=='undefined'&&History2022View.active()&&state.exportSettings.winnerTable&&!exportElectedMark){
+  const response=await fetch('assets/elected-mark.png');
+  if(!response.ok)throw Error('当选图标载入失败，请重试');
+  const bytes=new Uint8Array(await response.arrayBuffer());
+  exportElectedMark='data:image/png;base64,'+btoa(String.fromCharCode(...bytes));
+ }
 }
 let mapPromise,mapLoadSequence=0;
 function showMapLoadError(error,phase='下载'){
