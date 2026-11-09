@@ -982,3 +982,12 @@ test('County and township map callouts use one readable font and never share a l
  assert.match(app,/const mapLeaderLayer=svgEl\('g',\{'data-map-leader-layer':'true'\}\)/);
  assert.match(app,/label.style.textAnchor='middle';/);
 });
+
+test('Both historical entry pages include the controls wired by history JavaScript',()=>{
+ const ids=['historyParty','historySearch','historyBrowse','historyPrev','historyNext','historyPage',
+  'historyPager','historyCompare','historyCompareStatus','historyCompareRows','historyFromPrediction'];
+ for(const name of ['index.html','map-v60.html']){
+  const html=read(name);
+  for(const id of ids)assert.equal(html.split('id="'+id+'"').length-1,1,name+': '+id);
+ }
+});
