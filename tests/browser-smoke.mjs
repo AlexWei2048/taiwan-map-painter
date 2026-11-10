@@ -1117,7 +1117,7 @@ test('2022 vote percentage and absolute-count maps have distinct color ranges an
  await page.locator('#historyCounty').selectOption({label:'台北市'});
  await page.locator('#historyScale').selectOption('town');
  assert.deepEqual(await page.locator('#historyMetric option').allTextContents(),
-  ['实际当选结果','得票率','得票数']);
+  ['当地最高票','得票率','得票数']);
  await page.locator('#historyMetric').selectOption('share');
  const share=await page.evaluate(()=>{
   const group=document.querySelector('#legend [data-history-gradient-party]');
