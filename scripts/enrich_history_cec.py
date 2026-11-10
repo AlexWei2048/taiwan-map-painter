@@ -245,6 +245,17 @@ def run(archive_path=None, output=SNAPSHOT, report_path=REPORT, audit_only=False
               "unmatchedContestStats": stats_missing[:100]}
     print("CEC_ENRICHMENT_REPORT", json.dumps(totals, ensure_ascii=False), flush=True)
     print("MISSING_CANDIDATES", json.dumps(missing[:12], ensure_ascii=False), flush=True)
+    for row in missing[:20]:
+        contest = next(c for c in snapshot["contests"] if c["contest_id"] == row["contest_id"])
+        target = (row["office"], contest["electorate"], norm(contest["county_name"]))
+        near = [(key, values) for key, values in profiles.items()
+                if key[:3] == target and (key[4] == ballot(row["ballot"])
+                or key[3] == norm(row["name"]))]
+        print("CANDIDATE_DIAG", row["name"], row["contest_id"],
+              json.dumps([{"name": key[3], "ballot": key[4],
+                           "town": value["town"], "category": value["source_category"]}
+                          for key, values in near for value in values][:55], ensure_ascii=False), flush=True)
+
     print("MISSING_CONTESTS", json.dumps(stats_missing[:12], ensure_ascii=False), flush=True)
     if audit_only:
         return report
