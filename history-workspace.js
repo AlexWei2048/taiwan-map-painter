@@ -57,18 +57,65 @@
    .sort((a,b)=>Core.compareResultRows(a,b,filters.office||'council'));
  }
  function overviewCards(overview={}){
-  const value=number=>Number.isFinite(number)?Number(number).toLocaleString('zh-CN'):'暂无资料';
-  const percent=number=>Number.isFinite(number)?number.toFixed(2)+'%':'暂无资料';
+  const value=n=>Number.isFinite(n)?Number(n).toLocaleString('zh-CN'):'暂无资料';
+  const percent=n=>Number.isFinite(n)?n.toFixed(2)+'%':'暂无资料';
+  // Overlapping council electorates must never be added into one electorate total.
   const separated=Array.isArray(overview.turnoutGroups)&&overview.turnoutGroups.length>1;
+  const ballots=n=>separated?'按类别分别统计':value(n);
+  const rateValue=n=>separated?'按类别分别统计':percent(n);
   return[
-   {label:'候选人',value:value(overview.candidateCount)},
-   {label:'官方当选',value:value(overview.electedCount)},
-   {label:'选举人数',value:separated?'按选举类型分别统计':value(overview.registeredVoters)},
-   {label:'投票率',value:separated?'按选举类型分别统计':percent(overview.turnout)},
-   {label:'有效率',value:separated?'按选举类型分别统计':percent(rate(overview.validVotes,overview.ballotsCast,overview.invalidVotes))},
-   {label:'有效票',value:separated?'按选举类型分别统计':value(overview.validVotes)},
-   {label:'无效票',value:separated?'按选举类型分别统计':value(overview.invalidVotes)}
+   {label:'选举人数',value:ballots(overview.registeredVoters),group:'participation',detail:'登记选民'},
+   {label:'投票人数',value:ballots(overview.ballotsCast),group:'participation',detail:'实际投票'},
+   {label:'投票率',value:rateValue(overview.turnout),group:'participation',detail:'投票人数占选举人数'},
+   {label:'有效票',value:ballots(overview.validVotes),group:'ballots',detail:'计入候选人得票'},
+   {label:'无效票',value:ballots(overview.invalidVotes),group:'ballots',detail:'未计入有效得票'},
+   {label:'有效率',value:rateValue(rate(overview.validVotes,overview.ballotsCast,overview.invalidVotes)),group:'ballots',detail:'有效票占投票人数'},
+   {label:'候选人数',value:value(overview.candidateCount),group:'people',detail:'本范围候选人'},
+   {label:'当选人数',value:value(overview.electedCount),group:'people',detail:'实际当选人数'}
   ];
+ }
+ const summaryFormat=n=>Number.isFinite(n)?Number(n).toLocaleString('zh-CN'):'暂无资料';
+ function portion(part,total){
+  if(!Number.isFinite(part)||!Number.isFinite(total)||total<=0||part<0||part>total)return null;
+  return Math.min(100,Math.max(0,part/total*100));
+ }
+ function overviewCharts(overview={},selection={}){
+  const groups=turnoutCards(overview,selection);
+  const separated=selection.office==='council'&&selection.electorate==='all'&&groups.length>1;
+  const breakdown=(title,part,other,total,firstLabel,secondLabel)=>{
+   const valid=Number.isFinite(part)&&Number.isFinite(other)&&Number.isFinite(total)&&
+    total>0&&part>=0&&other>=0&&part+other===total;
+   return{title,firstLabel,secondLabel,first:valid?part:null,second:valid?other:null,
+    percent:valid?portion(part,total):null};
+  };
+  const result=[];
+  if(separated){
+   for(const group of groups){
+    result.push({type:'electorate',title:group.title,eyebrow:'分组选举统计',
+     subtitle:'选举人数 '+summaryFormat(group.registeredVoters),
+     bars:[
+      breakdown('投票率',group.ballotsCast,
+       Number.isFinite(group.registeredVoters)&&Number.isFinite(group.ballotsCast)?group.registeredVoters-group.ballotsCast:null,
+       group.registeredVoters,'已投票','未投票'),
+      breakdown('有效率',group.validVotes,group.invalidVotes,group.ballotsCast,'有效票','无效票')
+     ]});
+   }
+  }else{
+   const group=groups[0]||overview;
+   result.push({type:'participation',title:'投票参与',eyebrow:'投票情况',
+    subtitle:'选举人数 '+summaryFormat(group.registeredVoters),
+    bars:[breakdown('投票率',group.ballotsCast,
+     Number.isFinite(group.registeredVoters)&&Number.isFinite(group.ballotsCast)?group.registeredVoters-group.ballotsCast:null,
+     group.registeredVoters,'已投票','未投票')]});
+   result.push({type:'ballots',title:'选票有效情况',eyebrow:'选票结构',
+    subtitle:'投票人数 '+summaryFormat(group.ballotsCast),
+    bars:[breakdown('有效率',group.validVotes,group.invalidVotes,group.ballotsCast,'有效票','无效票')]});
+  }
+  const candidates=Number.isFinite(overview.candidateCount)?overview.candidateCount:null;
+  const elected=Number.isFinite(overview.electedCount)?overview.electedCount:null;
+  result.push({type:'candidates',title:'候选与当选对比',eyebrow:'参选结果',
+   candidates,elected,percent:portion(elected,candidates)});
+  return result;
  }
  function drilldownSelection(selection={},county){
   if(selection.office!=='mayor'||!county)return null;
@@ -87,7 +134,7 @@
   return'\uFEFF'+rows.map(row=>row.map(cell).join(',')).join('\r\n');
  }
 
- const api={normalizeSelection,levelOptions,electorateOptions,turnoutCards,featurePresentation,badgeFallback,candidateRows,overviewCards,drilldownSelection,exportStem,historyCsv};
+ const api={normalizeSelection,levelOptions,electorateOptions,turnoutCards,featurePresentation,badgeFallback,candidateRows,overviewCards,overviewCharts,drilldownSelection,exportStem,historyCsv};
  if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
 
  const doc=root.document;
@@ -114,13 +161,92 @@
   const contests=[...indexed.contestsById.values()],countyId=state.county?contests.find(contest=>contest.county_name===state.county)?.county_id:'';
   return root.HistoryCore.filter(indexed,{year:state.year,office:state.office,electorate:state.electorate,countyId});
  }
+ function renderOverviewCharts(){
+  const rootNode=el('historyOverviewCharts');if(!rootNode)return;
+  rootNode.replaceChildren();
+  if(!currentOverview)return;
+  const models=overviewCharts(currentOverview,state);
+  rootNode.classList.toggle('history-overview-charts--grouped',models.some(model=>model.type==='electorate'));
+  const fmt=n=>summaryFormat(n);
+  const make=(tag,className,text)=>{
+   const node=doc.createElement(tag);if(className)node.className=className;
+   if(text!==undefined)node.textContent=text;
+   return node;
+  };
+  function appendBar(container,bar){
+   const block=make('div','history-chart-stat');
+   block.dataset.kind=bar.title==='有效率'?'valid':'turnout';
+   const heading=make('div','history-chart-stat-head');
+   heading.append(make('span','history-chart-stat-label',bar.title),
+    make('strong','history-chart-stat-value',bar.percent===null?'暂无资料':bar.percent.toFixed(2)+'%'));
+   block.append(heading);
+   if(bar.percent!==null){
+    const track=make('div','history-chart-track');
+    track.setAttribute('role','img');
+    track.setAttribute('aria-label',bar.firstLabel+' '+fmt(bar.first)+'，'+bar.secondLabel+' '+fmt(bar.second));
+    const a=make('span','history-chart-segment history-chart-segment--primary');
+    const b=make('span','history-chart-segment history-chart-segment--secondary');
+    a.style.width=bar.percent+'%';b.style.width=(100-bar.percent)+'%';
+    track.append(a,b);block.append(track);
+    const caption=make('div','history-chart-legend');
+    for(const [label,value,type] of [[bar.firstLabel,bar.first,'primary'],[bar.secondLabel,bar.second,'secondary']]){
+     const item=make('span','history-chart-legend-item'),dot=make('i','history-chart-dot history-chart-dot--'+type);
+     dot.setAttribute('aria-hidden','true');
+     item.append(dot,make('span','',label+' '+fmt(value)));caption.append(item);
+    }
+    block.append(caption);
+   }else{
+    block.append(make('p','history-chart-empty','当前范围缺少可核实的投票数据'));
+   }
+   container.append(block);
+  }
+  for(const model of models){
+   const card=make('article','history-chart-card history-chart-card--'+model.type);
+   const head=make('div','history-chart-heading');
+   head.append(make('span','history-chart-eyebrow',model.eyebrow),
+    make('h4','',model.title));
+   card.append(head);
+   if(model.type==='candidates'){
+    const candidates=model.candidates,elected=model.elected;
+    const known=Number.isFinite(candidates)&&candidates>0&&Number.isFinite(elected)&&elected>=0&&elected<=candidates;
+    if(known){
+     for(const [label,count,width,kind] of [['候选人数',candidates,100,'all'],['当选人数',elected,model.percent,'elected']]){
+      const row=make('div','history-chart-compare');
+      const labelRow=make('div','history-chart-compare-label');
+      labelRow.append(make('span','',label),make('strong','',fmt(count)));
+      const track=make('div','history-chart-compare-track'),fill=make('div','history-chart-compare-fill history-chart-compare-fill--'+kind);
+      track.setAttribute('role','img');
+      track.setAttribute('aria-label',label+' '+fmt(count));
+      fill.style.width=width+'%';track.append(fill);row.append(labelRow,track);card.append(row);
+     }
+     card.append(make('p','history-chart-footnote','当选人数占候选人数 '+model.percent.toFixed(2)+'%'));
+    }else card.append(make('p','history-chart-empty','暂无可用候选人统计'));
+   }else{
+    card.append(make('p','history-chart-subtitle',model.subtitle));
+    for(const bar of model.bars)appendBar(card,bar);
+   }
+   rootNode.append(card);
+  }
+ }
  function renderTurnoutCards(){
   const rootNode=el('historyOverviewCards');if(!rootNode)return;
   rootNode.replaceChildren();
-  if(!currentOverview){const note=doc.createElement('p');note.className='history-overview-placeholder';note.textContent='概况数据正在载入。';rootNode.append(note);return}
-  for(const card of overviewCards(currentOverview)){const article=doc.createElement('article');article.className='history-overview-card';const label=doc.createElement('span'),strong=doc.createElement('strong');label.textContent=card.label;strong.textContent=card.value;article.append(label,strong);rootNode.append(article)}
-  if(state.office==='council'&&state.electorate==='all')for(const card of turnoutCards(currentOverview,state)){const article=doc.createElement('article');article.className='history-overview-card history-turnout-card';const label=doc.createElement('span'),strong=doc.createElement('strong'),detail=doc.createElement('small');label.textContent=card.title;strong.textContent='选举人数 '+(card.registeredVoters===null?'暂无资料':card.registeredVoters.toLocaleString('zh-CN'));const turnout='投票率 '+(card.turnout===null?'暂无资料':card.turnout.toFixed(2)+'%'),valid='有效率 '+(card.validRate===null?'暂无资料':card.validRate.toFixed(2)+'%');const ballots='有效票 '+(card.validVotes===null?'暂无资料':card.validVotes.toLocaleString('zh-CN'))+' · 无效票 '+(card.invalidVotes===null?'暂无资料':card.invalidVotes.toLocaleString('zh-CN'));detail.textContent=turnout+' · '+valid+'；'+ballots;article.append(label,strong,detail);rootNode.append(article)}
-  if(state.office==='council'&&state.electorate==='all'){const note=doc.createElement('p');note.className='history-overview-placeholder';note.textContent='区域、平地少数民族、山地少数民族分别统计，不合并可能重叠的选民。';rootNode.append(note)}
+  if(!currentOverview){
+   const note=doc.createElement('p');note.className='history-overview-placeholder';
+   note.textContent='概况数据正在载入。';rootNode.append(note);
+   el('historyOverviewCharts')?.replaceChildren();return;
+  }
+  for(const card of overviewCards(currentOverview)){
+   const article=doc.createElement('article');article.className='history-overview-card';
+   article.dataset.group=card.group;
+   const label=doc.createElement('span'),strong=doc.createElement('strong'),detail=doc.createElement('small');
+   label.textContent=card.label;strong.textContent=card.value;detail.textContent=card.detail;
+   if(card.value==='按类别分别统计')article.classList.add('history-overview-card--separated');
+   article.append(label,strong,detail);rootNode.append(article);
+  }
+  renderOverviewCharts();
+  const note=el('historyOverviewNote');
+  if(note)note.hidden=!(state.office==='council'&&state.electorate==='all'&&currentOverview.turnoutGroups?.length>1);
  }
  function render(){
   state=readSelection();
