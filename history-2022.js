@@ -29,7 +29,7 @@
   loading=(async()=>{
    if(el('historyLoadStatus'))el('historyLoadStatus').textContent='正在载入 2022 年历史选举数据…';if(el('historyRetry'))el('historyRetry').hidden=true;
    try{
-    const [resp,metaResp,geoResp]=await Promise.all([fetch('assets/history-2022.json?v=20261110-schema-v2',{cache:'default'}),fetch('assets/history-council-districts-2022.json?v=20261031-districts-v2',{cache:'default'}),fetch('assets/history-hsinchu-geography-2022.json?v=20261103-history-v103')]);
+    const [resp,metaResp,geoResp]=await Promise.all([fetch('assets/history-2022.json?v=20261110-cec-complete-v1',{cache:'default'}),fetch('assets/history-council-districts-2022.json?v=20261031-districts-v2',{cache:'default'}),fetch('assets/history-hsinchu-geography-2022.json?v=20261103-history-v103')]);
     if(!resp.ok)throw Error('历史投票数据 HTTP '+resp.status);if(!metaResp.ok)throw Error('2022议员选区资料 HTTP '+metaResp.status);
     const obj=await resp.json(),meta=await metaResp.json();
     if(meta.year!==2022||meta.districtCount!==215||!Array.isArray(meta.rows)||meta.rows.reduce((n,x)=>n+x.seats,0)!==910)throw Error('2022议员选区资料未通过完整性核验');
@@ -317,8 +317,8 @@
   el('historyDialogTitle').textContent=(f.county===f.name?f.name:f.county+' · '+f.name)+' · 2022 '+(kind==='mayor'&&f.county.endsWith('市')?'市长':titles[kind])+'选举结果';
   const body=el('historyDialogRows'),table=body.closest('table'),wrap=table.parentElement;
   const hiddenColumns=new Set();
-  if(!rows.some(r=>r.gender))hiddenColumns.add(2);
-  if(!rows.some(r=>typeof r.incumbent==='boolean'))hiddenColumns.add(3);
+  // Every candidate now has CEC-verified gender and election-time incumbency.
+  // Show both columns, including on narrow screens; retain dash fallback if needed.
   [...table.tHead.rows[0].cells].forEach((cell,i)=>{cell.hidden=hiddenColumns.has(i)});
   wrap.hidden=!rows.length;
   const missing=el('historyDialogMissing');
