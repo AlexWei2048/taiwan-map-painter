@@ -262,7 +262,7 @@
   }
   const panels={map:'historyMapPanel',candidates:'historyCandidatesPanel',overview:'historyOverviewPanel'};
   for(const [view,id] of Object.entries(panels)){const node=el(id);if(node)node.hidden=state.view!==view}
-  for(const view of VIEWS){const button=el('historyView'+view[0].toUpperCase()+view.slice(1));if(button){const selected=state.view===view;button.classList.toggle('active',selected);button.setAttribute('aria-selected',String(selected))}}
+  for(const view of VIEWS){const button=el('historyView'+view[0].toUpperCase()+view.slice(1));if(button){const selected=state.view===view;button.classList.toggle('active',selected);button.setAttribute('aria-pressed',String(selected))}}
   renderTurnoutCards();if(el('historyCoverage')&&currentResult)el('historyCoverage').textContent='当前范围：'+currentResult.contests.length+'个选举区 · '+currentResult.candidacies.length+'条候选人记录。资料来源：台湾地区选举事务主管机构公开资料。';emit();return{...state};
  }
  function setView(view){state=normalizeSelection({...readSelection(),view},[2022]);render()}
@@ -285,9 +285,9 @@
   const blob=new Blob([historyCsv(currentResult,state)],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),link=doc.createElement('a');link.href=url;link.download=exportStem(state)+'.csv';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
  }
  for(const id of ['historyYear','historyOffice','historyElectorate','historyCounty','historyScale','historyMetric'])el(id)?.addEventListener('change',render);
- for(const [view,id] of [['map','historyViewMap'],['candidates','historyViewCandidates'],['overview','historyViewOverview']])el(id)?.addEventListener('click',()=>setView(view));
+ for(const [view,id] of [['candidates','historyViewCandidates'],['overview','historyViewOverview']])el(id)?.addEventListener('click',()=>setView(state.view===view?'map':view));
  for(const id of ['workspacePrediction','workspaceFree'])el(id)?.addEventListener('click',()=>{active=false});
- function setSnapshot(snapshot){try{indexed=root.HistoryCore.index(snapshot);render();return true}catch(error){indexed=null;currentResult=null;currentOverview=null;if(el('historyLoadStatus'))el('historyLoadStatus').textContent='历史数据版本不兼容，请重新载入。';if(el('historyRetry'))el('historyRetry').hidden=false;return false}}
+ function setSnapshot(snapshot){try{indexed=root.HistoryCore.index(snapshot);render();return true}catch(error){indexed=null;currentResult=null;currentOverview=null;if(el('historyLoadStatus')){el('historyLoadStatus').hidden=false;el('historyLoadStatus').textContent='历史数据版本不兼容，请重新载入。'};if(el('historyRetry'))el('historyRetry').hidden=false;return false}}
  root.addEventListener('historysnapshotready',event=>setSnapshot(event.detail.snapshot));
  const existing=root.History2022View?.snapshot?.();if(existing)setSnapshot(existing);
  const heading=el('historyResultSection')?.querySelector('.history-result-heading');if(heading&&!el('historyExportCsv')){const button=doc.createElement('button');button.type='button';button.id='historyExportCsv';button.className='button quiet';button.textContent='导出当前结果 CSV';button.onclick=exportCsv;heading.append(button)}

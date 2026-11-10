@@ -20,7 +20,7 @@
   if(loaded)return true;
   if(loading)return loading;
   loading=(async()=>{
-   if(el('historyLoadStatus'))el('historyLoadStatus').textContent='正在载入 2022 年历史选举数据…';if(el('historyRetry'))el('historyRetry').hidden=true;
+   if(el('historyLoadStatus')){el('historyLoadStatus').hidden=false;el('historyLoadStatus').textContent='正在载入 2022 年历史选举数据…'};if(el('historyRetry'))el('historyRetry').hidden=true;
    try{
     const [resp,metaResp,geoResp]=await Promise.all([fetch('assets/history-2022.json?v=20261110-cec-complete-v1',{cache:'default'}),fetch('assets/history-council-districts-2022.json?v=20261031-districts-v2',{cache:'default'}),fetch('assets/history-hsinchu-geography-2022.json?v=20261103-history-v103')]);
     if(!resp.ok)throw Error('历史投票数据 HTTP '+resp.status);if(!metaResp.ok)throw Error('2022议员选区资料 HTTP '+metaResp.status);
@@ -29,9 +29,9 @@
     districtMetadata=meta.rows.map(d=>({...d,county:norm(d.county),name:norm(d.name),scope:norm(d.scope),scopeTowns:d.scopeTowns.map(norm),electorate:HistoryCore.identity(d.electorate)}));if(!geoResp.ok)throw Error('2022新竹市地图载入失败');hsinchuGeometry=await geoResp.json();if(hsinchuGeometry.year!==2022||hsinchuGeometry.features?.length!==5)throw Error('2022新竹市选区范围不完整');
     if(obj.schemaVersion!==2||obj.year!==2022||!Array.isArray(obj.rows)||obj.rows.length<8000)throw Error('历史快照内容不完整或版本不兼容');
     snapshotData=obj;addRows(obj.rows);ensureHistoryGeometry();loaded=true;window.dispatchEvent(new CustomEvent('historysnapshotready',{detail:{snapshot:obj}}));
-    if(el('historyLoadStatus'))el('historyLoadStatus').textContent='已载入 2022 年县市长、县市议员和乡镇市区长选举结果。';return true
+    if(el('historyLoadStatus')){el('historyLoadStatus').textContent='';el('historyLoadStatus').hidden=true}return true
    }catch(error){
-    if(el('historyLoadStatus'))el('historyLoadStatus').textContent='历史数据暂时未能载入：'+error.message;if(el('historyRetry'))el('historyRetry').hidden=false;toast('2022 历史数据载入失败：'+error.message);return false
+    if(el('historyLoadStatus')){el('historyLoadStatus').hidden=false;el('historyLoadStatus').textContent='历史数据暂时未能载入：'+error.message};if(el('historyRetry'))el('historyRetry').hidden=false;toast('2022 历史数据载入失败：'+error.message);return false
    }finally{loading=null}
   })();
   return loading
@@ -234,14 +234,14 @@
  function activate(){
   if(!window.HistoryAccess?.canAccess()){window.HistoryAccess?.notice();return}
   if(!active)savedMapScope=clone(state);
-  active=true;document.body.classList.add('history-mode');document.querySelector('.intro h1').textContent='回看2022选举结果';document.querySelector('.intro > p').textContent='选一类选举，点击地图查看实际得票与当选结果。';
+  active=true;document.body.classList.add('history-mode');
   el('historyControls').hidden=false;el('mapSettings').hidden=true;
   
   el('workspacePrediction').classList.remove('active');el('workspaceFree').classList.remove('active');
   switchMode();render();snapshot().then(success=>{if(active&&success){render()}})
  }
  function deactivate(){
-  active=false;document.body.classList.remove('history-mode');document.querySelector('.intro h1').textContent='画出你的选举预测';document.querySelector('.intro > p').textContent='选一场选举，点选区，开始预测。';
+  active=false;document.body.classList.remove('history-mode');
   if(savedMapScope){state=clone(savedMapScope);savedMapScope=null;}currentResult=null;districtTableKey='';el('headerExportPredictions').hidden=false;
   el('historyControls').hidden=true;el('historyResultSection').hidden=true;el('mapSettings').hidden=false;
   if(data){syncInputs();render()}

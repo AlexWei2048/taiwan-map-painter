@@ -1002,12 +1002,18 @@ test('Both historical entry pages include the controls wired by history JavaScri
  }
 });
 
-test('Unified historical workspace has one filter hierarchy and three result views',()=>{
+test('Unified historical workspace keeps the map and has two toggleable result detail views',()=>{
  const ids=['historyYear','historyOffice','historyElectorate','historyCounty','historyScale','historyMetric',
-  'historyCandidate','historyParty','historyViewMap','historyViewCandidates','historyViewOverview',
+  'historyCandidate','historyParty','historyViewCandidates','historyViewOverview',
   'historyMapPanel','historyCandidatesPanel','historyOverviewPanel','historyLoadStatus','historyRetry','historyCoverage'];
  for(const id of ids)assert.equal(index.split('id="'+id+'"').length-1,1,id+' must be unique');
- for(const label of ['结果地图','候选人结果','选举概况','县市议员','平地少数民族议员','山地少数民族议员'])assert.match(index,new RegExp(label));
+ for(const label of ['候选人结果','选举概况','县市议员','平地少数民族议员','山地少数民族议员'])assert.match(index,new RegExp(label));
+ assert.doesNotMatch(index,/id="historyViewMap"|>结果地图<\/button>/);
+ assert.match(index,/id="historyViewCandidates" aria-pressed="false"/);
+ assert.match(index,/id="historyViewOverview" aria-pressed="false"/);
+ assert.doesNotMatch(read('history-2022.js'),/回看2022选举结果|选一类选举，点击地图查看实际得票与当选结果|已载入 2022 年县市长/);
+ assert.match(read('style.css'),/body\.history-mode \.intro > h1,body\.history-mode \.intro > p/);
+ assert.match(read('history-workspace.js'),/setView\(state\.view===view\?'map':view\)/);
  assert.match(index,/history-workspace\.js\?v=[\w-]+/);
  const controls=index.slice(index.indexOf('id="historyControls"'),index.indexOf('id="mapSettings"'));
  assert.doesNotMatch(controls,/>议员<\/option>/);
