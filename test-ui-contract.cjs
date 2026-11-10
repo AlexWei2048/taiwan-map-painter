@@ -926,8 +926,17 @@ test('Township or mayor maps export without unrelated council dependencies',asyn
 });
 
 const history=read('history-2022.js');
+test('2022 history opens directly from its tab without a redundant sub-button',()=>{
+ const categories=read('workspace-categories.js'),history=read('history-2022.js');
+ for(const page of ['index.html','map-v60.html'])assert.doesNotMatch(read(page),/id="workspaceHistory"|id="historyModes"|2022 九合一<\/button>/);
+ assert.match(categories,/history\.addEventListener\('click',[^\n]*History2022View\?\.activate\?\.\(\)/);
+ assert.doesNotMatch(categories,/workspaceHistory|historyModes/);
+ assert.doesNotMatch(history,/workspaceHistory/);
+ assert.doesNotMatch(read('history-access.js'),/workspaceHistory/);
+});
+
 test('2022 history remains isolated from saved 2026 state',()=>{
- assert.match(index,/id="workspaceHistory"/);
+ assert.doesNotMatch(index,/id="workspaceHistory"|id="historyModes"/);
  assert.match(history,/savedMapScope=clone\(state\)/);
  assert.match(history,/state=clone\(savedMapScope\)/);
  assert.match(history,/capture:true/);
