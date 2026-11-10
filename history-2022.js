@@ -6,15 +6,8 @@
  const norm=x=>simplify(String(x||'')).trim();
  const normalizeParty=name=>{let s=norm(name||'无党籍');if(s.includes('无党籍及未经政党推荐')||s==='无党籍及未经政党推薦')s='无党籍';return s};
  const partyColor=p=>predictionParty(p).color;
- const tone=(color,share,range)=>{
-  if(metric==='party')return color;
-  // Preserve the party's exact base color at the high end. Only mix with white for lower shares.
-  const hex=/^#[0-9a-f]{6}$/i.test(color)?color:'#8a9892';
-  const rgb=[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16));
-  const t=Math.max(0,Math.min(1,(share-range.min)/Math.max(1,range.max-range.min)));
-  const strength=.28+.72*Math.pow(t,.8);
-  return '#'+rgb.map(channel=>Math.round(255+(channel-255)*strength).toString(16).padStart(2,'0')).join('');
- };
+ // Use the exact high-contrast nonlinear palette of the 2026 election view.
+ const tone=(color,value,range)=>metric==='party'?color:ElectionCore.shade(color,value,range.min,range.max);
  const electionKey=r=>[r.type,r.electorate,r.level,r.county,r.town,r.village,r.district,r.number,r.name].join('|');
  const dbIds=new Set();
  const addRows=rows=>{let added=0;for(const src of rows){
@@ -92,7 +85,7 @@
  function legendHeight(result){
   const font=historyLegendFont(),gradients=gradientParties(result);
   return 86+(result.partySeats.size+(kind==='township'?1:0))*font*2.05+
-   (gradients.length?gradients.length*font*2.1+font*4:0);
+   (gradients.length?gradients.length*font*4.3+font*2.3:0);
  }
  function drawLegend(result){
   const root=el('legend');if(!root)return;root.replaceChildren();delete root.dataset.historyBox;if(!state.legend.show)return;
@@ -114,22 +107,30 @@
   root.append(svg('line',{x1:x+18,y1:y+58,x2:x+width-18,y2:y+58,stroke:'#e5ece6'}));
   let rowY=y+67;
   if(gradients.length){
-   const bx=x+18+font*10,bw=x+width-18-bx,range=metric==='seats'?result.seatRange:result.range;
-   for(const party of gradients){
+   const bx=x+18,bw=width-36,range=metric==='seats'?result.seatRange:result.range;
+   const stops=metric==='votes'||metric==='seats'?[0,.5,1]:[0,.25,.5,.75,1];
+   for(const [index,party] of gradients.entries()){
     const group=svg('g',{'data-history-gradient-party':party});
-    const label=svg('text',{x:x+18,y:rowY+font,'font-size':font*.78,fill:'#426052'});
+    group.append(svg('rect',{x:bx,y:rowY+3,width:font,height:font,rx:3,fill:partyColor(party)}));
+    const label=svg('text',{x:bx+font*1.35,y:rowY+font,'font-size':font*.88,'font-weight':600,fill:'#426052'});
     label.textContent=party;group.append(label);
-    for(let i=0;i<40;i++){
-     const value=range.min+(range.max-range.min)*i/39;
-     group.append(svg('rect',{x:bx+i*bw/40,y:rowY,width:bw/40+.15,height:font*1.1,fill:tone(partyColor(party),value,range)}));
+    const gy=rowY+font*1.35,barHeight=font*1.4;
+    const id='history-gradient-'+index,defs=svg('defs'),gradient=svg('linearGradient',{id,x1:'0%',x2:'100%',y1:'0%',y2:'0%'});
+    // Sample the actual 2026 nonlinear shade at 11 points, matching historical map colors.
+    for(let step=0;step<=10;step++){
+     const fraction=step/10,value=range.min+(range.max-range.min)*fraction;
+     gradient.append(svg('stop',{offset:(fraction*100)+'%','stop-color':tone(partyColor(party),value,range)}));
     }
-    root.append(group);rowY+=font*2.1;
+    defs.append(gradient);group.append(defs);
+    group.append(svg('rect',{x:bx,y:gy,width:bw,height:barHeight,rx:4,fill:'url(#'+id+')',stroke:'#b0bcb1','stroke-width':.55,'data-history-gradient-bar':party}));
+    for(const fraction of stops){
+     const value=range.min+(range.max-range.min)*fraction,tx=bx+bw*fraction;
+     if(fraction>0&&fraction<1)group.append(svg('line',{x1:tx,x2:tx,y1:gy+1,y2:gy+barHeight-1,stroke:'#526355','stroke-width':1,opacity:.36}));
+     const tick=svg('text',{x:tx,y:rowY+font*3.55,'text-anchor':fraction===0?'start':fraction===1?'end':'middle','font-size':font*.7,fill:'#526c60'});
+     tick.textContent=value.toLocaleString('zh-CN',{maximumFractionDigits:metric==='votes'||metric==='seats'?0:1})+unit;group.append(tick);
+    }
+    root.append(group);rowY+=font*4.3;
    }
-   for(const [offset,value] of [[0,range.min],[.5,(range.min+range.max)/2],[1,range.max]]){
-    const tick=svg('text',{x:bx+offset*bw,y:rowY,'text-anchor':offset===0?'start':offset===.5?'middle':'end','font-size':font*.75,fill:'#526c60'});
-    tick.textContent=value.toLocaleString('zh-CN',{maximumFractionDigits:metric==='votes'?0:1})+unit;root.append(tick);
-   }
-   rowY+=font*2;
    const summary=svg('text',{x:x+18,y:rowY+font,'font-size':font*.88,'font-weight':600,fill:'#294a3a'});
    summary.textContent=mayorTownView()?'领先地区数（共 '+count+' 个）':'当选席次（共 '+count+' 席）';
    root.append(summary);rowY+=font*2;
