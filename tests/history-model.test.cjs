@@ -32,6 +32,28 @@ test('2022 snapshot exposes a versioned entity model with stable identifiers',()
  assert.ok(snapshot.candidacies.every(c=>c.candidacy_id&&c.contest_id&&'candidate_id' in c));
 });
 
+test('enriched 2022 history has verified complete candidate and turnout fields',()=>{
+ assert.equal(snapshot.candidacies.length,2280);
+ assert.equal(snapshot.contests.length,441);
+ assert.ok(snapshot.candidacies.every(c=>['男','女'].includes(c.gender)&&typeof c.incumbent_at_election==='boolean'));
+ assert.ok(snapshot.rows.every(r=>['男','女'].includes(r.gender)&&typeof r.incumbent==='boolean'));
+ for(const c of snapshot.contests){
+  assert.ok(Number.isInteger(c.registered_voters)&&Number.isInteger(c.ballots_cast)&&Number.isInteger(c.invalid_votes),c.contest_id);
+  assert.equal(c.valid_votes+c.invalid_votes,c.ballots_cast,c.contest_id);
+  assert.ok(c.ballots_cast<=c.registered_voters,c.contest_id);
+ }
+ assert.match(snapshot.provenance.cecArchiveEnrichment.source,/^https:\/\/data\.cec\.gov\.tw\//);
+ assert.match(snapshot.provenance.cecArchiveEnrichment.sha256,/^[a-f0-9]{64}$/);
+ const chiayi=snapshot.contests.find(c=>c.election_id==='2022-mayor'&&c.county_name==='嘉义市');
+ assert.ok(chiayi);
+ assert.equal(chiayi.election_date,'2022-12-18');
+ assert.deepEqual([chiayi.registered_voters,chiayi.ballots_cast,chiayi.valid_votes,chiayi.invalid_votes],[214130,94188,93813,375]);
+ const chiayiCandidates=snapshot.candidacies.filter(c=>c.contest_id===chiayi.contest_id);
+ assert.equal(chiayiCandidates.length,5);
+ assert.equal(chiayiCandidates.filter(c=>c.incumbent_at_election).length,1);
+ assert.equal(chiayiCandidates.find(c=>c.candidate_name==='黄敏惠').gender,'女');
+});
+
 test('official result semantics and source labels survive normalization',()=>{
  const marks=new Set(snapshot.candidacies.map(c=>c.elected_mark));
  assert.ok(marks.has('*'),'ordinary official winners retained');
