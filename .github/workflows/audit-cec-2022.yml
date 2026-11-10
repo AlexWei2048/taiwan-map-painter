@@ -5,7 +5,7 @@ on:
     paths: [.github/workflows/audit-cec-2022.yml, scripts/audit_cec_2022.py, scripts/enrich_history_2022_cec.py]
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
 jobs:
   audit:
     runs-on: ubuntu-latest
@@ -16,4 +16,13 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install opencc-python-reimplemented requests beautifulsoup4
-      - run: python scripts/enrich_history_2022_cec.py
+      - run: python scripts/enrich_history_2022_cec.py --write
+      - name: Commit complete, validated CEC 2022 dataset
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/history-2022.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Complete 2022 election records using official CEC data'
+            git push
+          fi
