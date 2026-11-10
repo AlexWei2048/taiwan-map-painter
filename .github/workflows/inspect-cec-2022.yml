@@ -51,6 +51,13 @@ jobs:
                   print('COUNTY_EXAMPLE',repr([x for x in b if len(x)>=6 and x[2]=='00' and x[3]=='000' and x[4]=='0000'][:8]))
                   print('DISTRICT_EXAMPLE',repr([x for x in b if len(x)>=6 and x[2]!='00' and x[3]=='000' and x[4]=='0000'][:5]))
                   print('TOWN_EXAMPLE',repr([x for x in b if len(x)>=6 and x[3]!='000' and x[4]=='0000'][:4]))
+              selected=[n for n in names if '2022-111年地方公職人員選舉/' in n and n.endswith('/elcand.csv')]
+              for n in selected:
+                  lines=z.read(n).decode('utf-8-sig').splitlines()
+                  print('ALL_CAND_FILES',n.split('2022-111年地方公職人員選舉/')[1],len(lines),repr(lines[:1]))
+              other=[n for n in names if n.startswith('votedata/votedata/2022年_嘉義市長重行選舉/') and n.endswith('.csv')]
+              for n in other:
+                  print('CHIAYI_FILE',n,repr(z.read(n).decode('utf-8-sig').splitlines()[:2]))
           import json
           snap=json.loads(Path('assets/history-2022.json').read_text())
           for key in ('candidacies','contests','rows'):
