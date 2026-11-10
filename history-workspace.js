@@ -1,6 +1,7 @@
 (function(root){
  'use strict';
  const OFFICES=new Set(['mayor','council','township']);
+ const Core=typeof module!=='undefined'&&module.exports?require('./history-core.js'):root.HistoryCore;
  const VIEWS=new Set(['map','candidates','overview']);
  const ELECTORATES=new Set(['all','regional','plains','mountain']);
  const METRICS={mayor:new Set(['party','share','votes']),council:new Set(['party','seats','share','votes']),township:new Set(['party','share','votes'])};
@@ -53,7 +54,7 @@
  function candidateRows(rows=[],filters={}){
   const search=String(filters.search||'').trim().toLocaleLowerCase('zh-CN'),party=String(filters.party||'');
   return rows.filter(row=>(!party||row.party_name===party)&&(!search||[row.candidate_name,row.party_name,row.contest_name].some(value=>String(value||'').toLocaleLowerCase('zh-CN').includes(search))))
-   .sort((a,b)=>Number(b.votes||0)-Number(a.votes||0)||String(a.ballot_number||'').localeCompare(String(b.ballot_number||''),'zh',{numeric:true}));
+   .sort((a,b)=>Core.compareResultRows(a,b,filters.office||'council'));
  }
  function overviewCards(overview={}){
   const value=number=>Number.isFinite(number)?Number(number).toLocaleString('zh-CN'):'暂无资料';
@@ -80,7 +81,8 @@
  function historyCsv(result={contests:[],candidacies:[]},selection={}){
   const contests=new Map((result.contests||[]).map(item=>[item.contest_id,item])),rows=[['年份','选举类别','县市规范名称','县市官方名称','选区规范名称','选区官方名称','候选人规范姓名','候选人官方姓名','政党规范名称','政党官方名称','号次','得票数','得票率','官方当选']];
   const offices={mayor:'县市长',council:'县市议员',township:'乡镇市区长'};
-  for(const item of result.candidacies||[]){const contest=contests.get(item.contest_id)||{};rows.push([selection.year||2022,offices[selection.office]||selection.office,contest.county_name,contest.county_name_official,contest.district_name,contest.district_name_official,item.candidate_name,item.candidate_name_official,item.party_name,item.party_name_official,item.ballot_number,item.votes,item.vote_share,item.elected_official?'是':''])}
+  const ordered=[...(result.candidacies||[])].sort((a,b)=>{const ca=contests.get(a.contest_id)||{},cb=contests.get(b.contest_id)||{};return Core.compareResultRows({...a,county_name:ca.county_name,district_name:ca.district_name,electorate:ca.electorate},{...b,county_name:cb.county_name,district_name:cb.district_name,electorate:cb.electorate},selection.office)});
+  for(const item of ordered){const contest=contests.get(item.contest_id)||{};rows.push([selection.year||2022,offices[selection.office]||selection.office,contest.county_name,contest.county_name_official,contest.district_name,contest.district_name_official,item.candidate_name,item.candidate_name_official,item.party_name,item.party_name_official,item.ballot_number,item.votes,item.vote_share,item.elected_official?'是':''])}
   const cell=value=>{let text=String(value??'');if(/^[=+@\t\r-]/.test(text))text="'"+text;return'"'+text.replace(/"/g,'""')+'"'};
   return'\uFEFF'+rows.map(row=>row.map(cell).join(',')).join('\r\n');
  }
