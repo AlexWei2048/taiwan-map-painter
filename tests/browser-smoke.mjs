@@ -1021,7 +1021,14 @@ test('Free regional legislators use a single unframed regional-only map and show
 test('2022 council uses all historical district geometries and actual elected seat symbols',async t=>{
  const page=await pageFor(t);await page.locator('#categoryHistory').click();await page.locator('#historyOffice').selectOption('council');
  await page.waitForFunction(()=>document.querySelector('#historySummary').textContent.includes('910席'));
- await page.locator('#historyViewOverview').click();await page.waitForFunction(()=>document.querySelectorAll('.history-overview-card').length>=7);
+ await page.locator('#historyViewOverview').click();await page.waitForFunction(()=>document.querySelectorAll('.history-overview-card').length===8);
+ assert.deepEqual(await page.locator('#historyOverviewCards .history-overview-card > span').allTextContents(),
+  ['选举人数','投票人数','投票率','有效票','无效票','有效率','候选人数','当选人数']);
+ assert.equal(await page.locator('#historyOverviewCharts .history-chart-card').count(),4);
+ assert.deepEqual(await page.locator('#historyOverviewCharts .history-chart-card h4').allTextContents(),
+  ['区域议员','平地少数民族议员','山地少数民族议员','候选与当选对比']);
+ assert.equal(await page.locator('#historyOverviewCharts .history-chart-track').count(),6);
+ assert.equal(await page.locator('#historyOverviewNote').isVisible(),true);
  assert.match(await page.locator('#historyOverviewPanel').textContent(),/分别统计，不合并/);
  await page.locator('#historyViewCandidates').click();assert.equal(await page.locator('#historyCandidatesPanel').isVisible(),true);assert.equal(await page.locator('#historyResultParty').count(),1);
  await page.locator('#historyViewMap').click();
@@ -1197,6 +1204,34 @@ test('Historical office comes before year, and town-level mayor results mark the
   const labels=await page.locator('#historyOverviewCards .history-overview-card span').allTextContents();
   for(const label of ['选举人数','投票率','有效率'])assert.ok(labels.includes(label),label);
   for(const label of ['选举时现任','女性候选人','女性当选人'])assert.equal(labels.includes(label),false,label);
+});
+
+test('2022 actual result overview has responsive metrics and turnout visualizations',async t=>{
+ const page=await pageFor(t,{width:390,height:844});
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyCounty').selectOption({label:'台北市'});
+ await page.locator('#historyViewOverview').click();
+ await page.waitForFunction(()=>document.querySelectorAll('#historyOverviewCards .history-overview-card').length===8);
+ const labels=await page.locator('#historyOverviewCards .history-overview-card > span').allTextContents();
+ assert.deepEqual(labels,['选举人数','投票人数','投票率','有效票','无效票','有效率','候选人数','当选人数']);
+ assert.equal(await page.locator('#historyOverviewCharts .history-chart-card').count(),3);
+ assert.deepEqual(await page.locator('#historyOverviewCharts .history-chart-card h4').allTextContents(),
+  ['投票参与','选票有效情况','候选与当选对比']);
+ assert.equal(await page.locator('#historyOverviewCharts .history-chart-track').count(),2);
+ assert.equal(await page.locator('#historyOverviewNote').isVisible(),false);
+ const summary=await page.locator('#historyOverviewCards .history-overview-card > strong').allTextContents();
+ assert.notEqual(summary[0],'暂无资料');
+ assert.notEqual(summary[1],'暂无资料');
+ assert.match(summary[2],/\d+\.\d{2}%/);
+ const layout=await page.evaluate(()=>{
+  const visuals=document.querySelector('#historyOverviewCharts');
+  const cards=[...visuals.querySelectorAll('.history-chart-card')];
+  const r=visuals.getBoundingClientRect();
+  return {width:r.width,childWidths:cards.map(c=>c.getBoundingClientRect().width),overflow:visuals.scrollWidth-visuals.clientWidth,
+   cardsOnOneColumn:cards.every(c=>Math.abs(c.getBoundingClientRect().width-r.width)<2)};
+ });
+ assert.ok(layout.cardsOnOneColumn,'charts should stack on a narrow screen');
+ assert.ok(layout.overflow<=2,'chart grid should not overflow horizontally');
 });
 
 test('Mobile historical result keeps ballot numbers and candidate names visible',async t=>{
