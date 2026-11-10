@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "year": 2022,
+  "summary": {
+    "officialCandidateRows": 2275,
+    "snapshotCandidacies": 2280,
+    "matchedCandidacies": 2280,
+    "unmatchedCandidacies": 0,
+    "ambiguousCandidacies": 0,
+    "updatedContestStats": 441,
+    "unmatchedContestStats": 0,
+    "filledCandidateRows": 9062,
+    "totalCandidateRows": 9062,
+    "missingGender": 0,
+    "missingIncumbent": 0,
+    "missingRegisteredVoters": 0
+  },
+  "provenance": {
+    "source": "https://data.cec.gov.tw/%E9%81%B8%E8%88%89%E8%B3%87%E6%96%99%E5%BA%AB/votedata.zip",
+    "sha256": "84740535b1f4a9a8fec8ebfe8f7577889837b7639cd7f5e40ef8826c6ab2f69a",
+    "downloadedAt": "2026-11-10T09:51:32.955306+00:00",
+    "archivePaths": [
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/C1/city/elbase.csv",
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/C1/city/elcand.csv",
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/C1/city/elprof.csv",
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/C1/prv/elbase.csv",
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/C1/prv/elcand.csv",
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/C1/prv/elprof.csv",
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/T1/city/elbase.csv",
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/T1/city/elcand.csv",
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/T1/city/elprof.csv",
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/T1/prv/elbase.csv",
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/T1/prv/elcand.csv",
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/T1/prv/elprof.csv",
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/T2/city/elbase.csv",
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/T2/city/elcand.csv",
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/T2/city/elprof.csv",
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/T2/prv/elbase.csv",
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/T2/prv/elcand.csv",
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/T2/prv/elprof.csv",
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/T3/city/elbase.csv",
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/T3/city/elcand.csv",
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/T3/city/elprof.csv",
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/T3/prv/elbase.csv",
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/T3/prv/elcand.csv",
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/T3/prv/elprof.csv",
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/D1/elbase.csv",
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/D1/elcand.csv",
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/D1/elprof.csv",
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/D2/elbase.csv",
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/D2/elcand.csv",
+      "votedata/votedata/voteData/2022-111ª~ªañΦñ╜┬╛ñH¡√┐∩┴|/D2/elprof.csv"
+    ],
+    "sourceLicense": "https://data.gov.tw/license",
+    "additionalSources": [
+      "https://web.cec.gov.tw/api/file/fed2e7f8-37c1-4463-b12e-7c8ade536956.pdf",
+      "https://web.cec.gov.tw/cyec/article/37711"
+    ]
+  },
+  "unmatchedCandidates": [],
+  "ambiguousCandidates": [],
+  "unmatchedContestStats": []
+}

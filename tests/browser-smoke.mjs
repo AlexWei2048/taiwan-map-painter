@@ -1179,6 +1179,26 @@ test('Historical office comes before year, and town-level mayor results mark the
   for(const label of ['选举时现任','女性候选人','女性当选人'])assert.equal(labels.includes(label),false,label);
 });
 
+test('Official CEC 2022 snapshot fills all historical candidate profiles and turnout cards',async t=>{
+ const page=await pageFor(t);await page.locator('#categoryHistory').click();
+ await page.waitForFunction(()=>document.querySelector('#historySummary').textContent.includes('22席'));
+ await page.locator('#historyViewOverview').click();
+ const cards=await page.locator('#historyOverviewCards .history-overview-card').allTextContents();
+ assert.ok(cards.some(card=>card.includes('选举人数')&&!card.includes('暂无资料')));
+ assert.ok(cards.some(card=>card.includes('投票率')&&!card.includes('暂无资料')));
+ assert.ok(cards.some(card=>card.includes('有效率')&&!card.includes('暂无资料')));
+ await page.locator('#historyViewCandidates').click();
+ const profileRows=page.locator('#historyResults tbody tr:not(.history-district-divider)');
+ assert.ok(await profileRows.count()>0);
+ assert.ok(await profileRows.evaluateAll(rows=>rows.every(row=>['男','女'].includes(row.children[4].textContent.trim())&&['现任','非现任'].includes(row.children[5].textContent.trim()))));
+ await page.locator('#historyCounty').selectOption({label:'嘉义市'});
+ await page.locator('#historyViewCandidates').click();
+ await page.locator('#historySearch').fill('黄敏惠');
+ assert.equal(await page.locator('#historyResults tbody tr:not(.history-district-divider)').count(),1);
+ assert.equal(await page.locator('#historyResults tbody tr:not(.history-district-divider) td').nth(4).textContent(),'女');
+ assert.equal(await page.locator('#historyResults tbody tr:not(.history-district-divider) td').nth(5).textContent(),'现任');
+});
+
 test('Mobile historical result keeps ballot numbers and candidate names visible',async t=>{
  const page=await pageFor(t,{width:390,height:844});
  await page.locator('#categoryHistory').click();
@@ -1187,7 +1207,10 @@ test('Mobile historical result keeps ballot numbers and candidate names visible'
  await page.locator('#regions [data-region="63000"]').click();
  const dialog=page.locator('#historyResultDialog');
  assert.match(await dialog.locator('h2').textContent(),/台北市 · 2022 市长选举结果/);
- assert.equal(await dialog.getByRole('columnheader',{name:'性别',exact:true}).count(),0);
+ console.log('MOBILE_OFFICIAL_PROFILE_DIAG',JSON.stringify(await dialog.evaluate(d=>({thead:[...d.querySelectorAll('thead th')].map(x=>({text:x.textContent,hidden:x.hidden,visible:!!x.getClientRects().length})),rows:[...d.querySelectorAll('tbody tr')].slice(0,3).map(x=>x.textContent),missing:d.querySelector('#historyDialogMissing')?.textContent,loadStatus:document.querySelector('#historyLoadStatus')?.textContent}))));
+ assert.equal(await dialog.getByRole('columnheader',{name:'性别',exact:true}).count(),1);
+ assert.equal(await dialog.getByRole('columnheader',{name:'选举时现任',exact:true}).count(),1);
+ assert.equal(await dialog.locator('.history-elected-row td').nth(2).textContent(),'男');
  const name=dialog.locator('.history-elected-row td').nth(1);
  assert.equal(await name.textContent(),'蒋万安');
  const mark=dialog.getByRole('img',{name:'当选',exact:true});
