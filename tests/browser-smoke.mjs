@@ -1074,8 +1074,8 @@ test('2022 township and mayor maps navigate by county with actual numeric result
  assert.notEqual(await page.locator('#regions [data-region="63000010"]').getAttribute('fill'),'#edf1e9');
  await page.locator('#historyCounty').selectOption({label:'台北市'});
  assert.equal(await page.locator('#regions path[data-region]').count(),12);
- await page.locator('#historyMetric').selectOption('vote');await page.locator('#historyVoteUnit').selectOption('votes');assert.equal(await page.locator('#historyCandidateScope').isVisible(),true);
-  assert.equal(await page.locator('#historyVoteUnitBox').isVisible(),true);
+ await page.locator('#historyMetric').selectOption('vote');assert.equal(await page.locator('#historyCandidateScope').isVisible(),true);
+  assert.equal(await page.locator('#historyVoteUnit').count(),0);
  const gradients=page.locator('#legend [data-history-gradient-party]');
  assert.deepEqual((await gradients.evaluateAll(nodes=>nodes.map(n=>n.getAttribute('data-history-gradient-party')))).sort(),['中国国民党','民主进步党']);
  const gradientAudit=await page.evaluate(()=>{
@@ -1086,7 +1086,8 @@ test('2022 township and mayor maps navigate by county with actual numeric result
    const palette=predictionParty(party).color;
    return{party,width:Number(bar?.getAttribute('width')),frame,stops,
     low:ElectionCore.shade(palette,0,0,100),high:ElectionCore.shade(palette,100,0,100),
-    ticks:[...group.querySelectorAll('text')].map(node=>node.textContent)};
+    rates:[...group.querySelectorAll('[data-history-rate-tick]')].map(node=>node.textContent),
+    votes:[...group.querySelectorAll('[data-history-vote-tick]')].map(node=>node.textContent)};
   });
  });
  for(const row of gradientAudit){
@@ -1095,16 +1096,50 @@ test('2022 township and mayor maps navigate by county with actual numeric result
   assert.equal(row.stops[0],row.low,'Low-end color equals 2026 gradient: '+row.party);
   assert.equal(row.stops.at(-1),row.high,'High-end color equals 2026 gradient: '+row.party);
   assert.equal(new Set(row.stops).size,11,'Gradient has distinguishable shade steps: '+row.party);
-  assert.ok(row.ticks.some(t=>t.includes('票')),'Vote values are labeled: '+row.party);
+  assert.equal(row.rates.length,5,'Five share labels above the bar: '+row.party);
+  assert.equal(row.votes.length,3,'Three vote-count labels below the bar: '+row.party);
+  assert.ok(row.rates.every(t=>t.endsWith('%')),'Rate labels include percent units');
+  assert.ok(row.votes.every(t=>t.endsWith('票')),'Vote labels include vote units');
  }
 
- assert.match(await page.locator('#legend').textContent(),/乡镇市区最高票候选人.*69,266.*领先地区数/);
+ assert.match(await page.locator('#legend').textContent(),/乡镇市区最高票候选人.*选区有效票中位数换算，仅供参考.*领先地区数/);
  assert.match(await exportSvg(page),/data-history-gradient-party="中国国民党"/);
  await page.locator('#historyCandidateScope').selectOption('candidate');assert.equal(await page.locator('#historyCandidate').isVisible(),true);
  await page.locator('#labels [data-label]').first().click();await page.locator('#historyResultDialog').waitFor({state:'visible'});
  assert.match(await page.locator('#historyDialogRows').textContent(),/蒋万安/);
 });
 
+
+test('2022 single-district shared colorbar has exact percentage-to-vote labels and accurate hover details',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyCounty').selectOption({label:'台北市'});
+ await page.locator('#historyScale').selectOption('district');
+ await page.locator('#historyMetric').selectOption('vote');
+ const data=await page.evaluate(()=>{
+  const group=document.querySelector('#legend [data-history-gradient-party]');
+  const rateLabels=[...group.querySelectorAll('[data-history-rate-tick]')].map(node=>({
+   fraction:Number(node.getAttribute('data-history-rate-tick')),text:node.textContent,
+   value:Number(node.textContent.replace('%','').replaceAll(',',''))}));
+  const voteLabels=[...group.querySelectorAll('[data-history-vote-tick]')].map(node=>({
+   fraction:Number(node.getAttribute('data-history-vote-tick')),text:node.textContent}));
+  return{rateLabels,voteLabels,validVotes:HistoryWorkspace.overview().validVotes,
+   note:document.querySelector('[data-history-vote-note]')?.textContent||'',
+   fills:[...document.querySelectorAll('#regions path[data-region]')].filter(x=>x.getAttribute('fill')!=='#edf1e9').map(x=>x.getAttribute('fill')),
+   unitSelectorPresent:!!document.querySelector('#historyVoteUnit')};
+ });
+ assert.equal(data.unitSelectorPresent,false);
+ assert.ok(data.validVotes>0);
+ assert.match(data.note,/本选区实际有效票换算/);
+ assert.deepEqual(data.rateLabels.map(x=>x.fraction),[0,.25,.5,.75,1]);
+ assert.deepEqual(data.voteLabels.map(x=>x.fraction),[0,.5,1]);
+ for(const label of data.voteLabels){
+  const rate=data.rateLabels.find(x=>x.fraction===label.fraction);
+  assert.ok(rate,'Percentage axis must contain the vote label position');
+  assert.equal(label.text,Math.round(data.validVotes*rate.value/100).toLocaleString('zh-CN')+'票');
+ }
+ assert.ok(data.fills.length>0,'Vote-colored map should retain party shades');
+});
 
 test('Public history entry stays in the current workspace and displays the development notice',async t=>{
  const page=await pageFor(t,undefined,false);let historyRequests=0;page.on('request',r=>{if(r.url().includes('assets/history-'))historyRequests++});
@@ -1145,7 +1180,7 @@ test('2022 council result filters, regional search and historical export',async 
  await page.locator('#historyCounty').selectOption({label:'台北市'});
  await page.locator('#historyMetric').selectOption('seats');
  assert.equal(await page.locator('#historyParty').isVisible(),true);
- await page.locator('#historyMetric').selectOption('vote');await page.locator('#historyVoteUnit').selectOption('share');
+ await page.locator('#historyMetric').selectOption('vote');
  await page.locator('#historyCandidateScope').selectOption('candidate');
  assert.ok(await page.locator('#historyCandidate option').count()>1);
  await page.locator('#historyViewCandidates').click();

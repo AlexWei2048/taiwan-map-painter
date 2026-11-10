@@ -1002,6 +1002,9 @@ test('Unified historical workspace has one filter hierarchy and three result vie
  assert.match(index,/history-workspace\.js\?v=[\w-]+/);
  const controls=index.slice(index.indexOf('id="historyControls"'),index.indexOf('id="mapSettings"'));
  assert.doesNotMatch(controls,/>议员<\/option>/);
+ assert.doesNotMatch(index,/historyVoteUnitBox|id="historyVoteUnit"|得票显示单位/);
+ assert.doesNotMatch(read('map-v60.html'),/historyVoteUnitBox|id="historyVoteUnit"|得票显示单位/);
+ assert.doesNotMatch(read('history-workspace.js'),/historyVoteUnit/);
 });
 
 test('Historical actual-result dashboard exposes revised KPI labels, chart panels and responsive styling',()=>{
@@ -1050,7 +1053,13 @@ test('2022 history legend and map share the stronger 2026 gradient with a full-w
  assert.match(history,/const bx=x\+18,bw=width-36/);
  assert.match(history,/for\(let step=0;step<=10;step\+\+\)/);
  assert.match(history,/'data-history-gradient-bar':party/);
- assert.match(history,/metric==='votes'\|\|metric==='seats'\?\[0,\.5,1\]:\[0,\.25,\.5,\.75,1\]/);
+ assert.match(history,/const rateStops=\[0,\.25,\.5,\.75,1\],voteStops=\[0,\.5,1\]/);
+ assert.match(history,/'data-history-rate-tick'/);
+ assert.match(history,/'data-history-vote-tick'/);
+ assert.match(history,/referenceVotes=voteTotals\.length/);
+ assert.match(history,/region\.share,currentResult\.range/);
+ assert.match(history,/按选区有效票中位数换算，仅供参考/);
+ assert.doesNotMatch(history,/historyVoteUnit/);
  assert.doesNotMatch(history,/const strength=\.28\+\.72/);
  assert.doesNotMatch(history,/i<40;i\+\+/);
 });

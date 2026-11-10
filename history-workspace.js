@@ -4,7 +4,7 @@
  const Core=typeof module!=='undefined'&&module.exports?require('./history-core.js'):root.HistoryCore;
  const VIEWS=new Set(['map','candidates','overview']);
  const ELECTORATES=new Set(['all','regional','plains','mountain']);
- const METRICS={mayor:new Set(['party','share','votes']),council:new Set(['party','seats','share','votes']),township:new Set(['party','share','votes'])};
+ const METRICS={mayor:new Set(['party','vote']),council:new Set(['party','seats','vote']),township:new Set(['party','vote'])};
  const labels={regional:'区域议员',plains:'平地少数民族议员',mountain:'山地少数民族议员'};
  const rate=(valid,cast,invalid)=>Number.isFinite(valid)&&Number.isFinite(cast)&&cast>0?valid/cast*100:Number.isFinite(valid)&&Number.isFinite(invalid)&&valid+invalid>0?valid/(valid+invalid)*100:null;
  const levelOptions=office=>office==='mayor'?[['county','县市'],['town','乡镇市区']]:office==='council'?[['district','选举区']]:[['town','乡镇市区']];
@@ -17,7 +17,8 @@
   const defaultLevel=allowedLevels[0];
   const level=allowedLevels.includes(input.level)?input.level:defaultLevel;
   const electorate=office==='council'&&ELECTORATES.has(input.electorate)?input.electorate:'regional';
-  const metric=METRICS[office].has(input.metric)?input.metric:'party';
+  const requestedMetric=['share','votes'].includes(input.metric)?'vote':input.metric;
+  const metric=METRICS[office].has(requestedMetric)?requestedMetric:'party';
   const view=VIEWS.has(input.view)?input.view:'map';
   return{year,office,electorate,county:String(input.county||''),level,metric,candidate:String(input.candidate||''),party:String(input.party||''),view};
  }
@@ -122,7 +123,7 @@
   return{...selection,county,level:'town'};
  }
  function exportStem(selection={}){
-  const offices={mayor:'县市长',council:'县市议员',township:'乡镇市区长'},metrics={party:selection.office==='council'?'当选席次':selection.level==='town'?'得票领先':'当选政党',seats:'指定政党席次',share:'得票率',votes:'得票数'};
+  const offices={mayor:'县市长',council:'县市议员',township:'乡镇市区长'},metrics={party:selection.office==='council'?'当选席次':selection.level==='town'?'得票领先':'当选政党',seats:'指定政党席次',vote:'得票率与得票数',share:'得票率与得票数',votes:'得票率与得票数'};
   return[selection.year||2022,offices[selection.office]||'历史选举',selection.county||'全台',metrics[selection.metric]||selection.metric||'结果'].join('-').replace(/[\\/:*?"<>|]/g,'_');
  }
  function historyCsv(result={contests:[],candidacies:[]},selection={}){
@@ -150,7 +151,7 @@
    ...state,year:el('historyYear')?.value,office,
    electorate:el('historyElectorate')?.value,county:el('historyCounty')?.value,
    level:office==='mayor'?(scale==='town'?'town':'county'):office==='council'?'district':'town',
-   metric:el('historyMetric')?.value==='vote'?(el('historyVoteUnit')?.value||'share'):el('historyMetric')?.value
+   metric:el('historyMetric')?.value
   },[2022]);
  }
  function emit(){
@@ -251,7 +252,6 @@
  function render(){
   state=readSelection();
   currentResult=resultForSelection();currentOverview=currentResult&&root.HistoryCore?root.HistoryCore.overview(currentResult):null;
-  const voteUnitBox=el('historyVoteUnitBox');if(voteUnitBox)voteUnitBox.hidden=!['share','votes'].includes(state.metric);
    const electorateBox=el('historyElectorateBox');if(electorateBox)electorateBox.hidden=state.office!=='council';
   const electorate=el('historyElectorate');if(electorate){
    if(state.office==='council'){
@@ -270,7 +270,7 @@
   const target=normalizeSelection({...state,...initialSelection},[2022]);state=target;active=true;
   root.History2022View?.activate?.();
   if(el('historyYear'))el('historyYear').value=String(target.year);
-  const controls=[['historyOffice',target.office],['historyElectorate',target.electorate],['historyCounty',target.county],['historyScale',target.level==='town'?'town':'district'],['historyMetric',['share','votes'].includes(target.metric)?'vote':target.metric],['historyVoteUnit',target.metric==='votes'?'votes':'share']];
+  const controls=[['historyOffice',target.office],['historyElectorate',target.electorate],['historyCounty',target.county],['historyScale',target.level==='town'?'town':'district'],['historyMetric',target.metric]];
   for(const [id,value] of controls){const node=el(id);if(node&&node.value!==value){node.value=value;node.dispatchEvent(new Event('change',{bubbles:true}))}}
   render();return{...state};
  }
@@ -284,7 +284,7 @@
   if(!currentResult)return;
   const blob=new Blob([historyCsv(currentResult,state)],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),link=doc.createElement('a');link.href=url;link.download=exportStem(state)+'.csv';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
  }
- for(const id of ['historyYear','historyOffice','historyElectorate','historyCounty','historyScale','historyMetric','historyVoteUnit'])el(id)?.addEventListener('change',render);
+ for(const id of ['historyYear','historyOffice','historyElectorate','historyCounty','historyScale','historyMetric'])el(id)?.addEventListener('change',render);
  for(const [view,id] of [['map','historyViewMap'],['candidates','historyViewCandidates'],['overview','historyViewOverview']])el(id)?.addEventListener('click',()=>setView(view));
  el('workspaceHistory')?.addEventListener('click',()=>{active=true;render()});
  for(const id of ['workspacePrediction','workspaceFree'])el(id)?.addEventListener('click',()=>{active=false});
