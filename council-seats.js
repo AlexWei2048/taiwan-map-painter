@@ -2,6 +2,7 @@
 // One fixed-size symbol per statutory seat. Geography stays neutral.
 function councilSeatMode(){if(typeof History2022View!=='undefined'&&History2022View.seatMode())return true;return state.workspaceMode==='prediction'&&state.fillMode==='prediction'&&state.predictionOffice==='council'&&state.level==='council'&&!!state.county}
 function councilSeatDistrictFor(f){return typeof History2022View!=='undefined'&&History2022View.seatMode()?History2022View.districtFor(f):predictionDistrictFor(f)}
+function councilSeatDisplayCount(d){if(!d)return 1;return typeof History2022View!=='undefined'&&History2022View.seatMode()?Math.max(1,History2022View.seatRows(d).filter(Boolean).length):Math.max(1,Number(d.seats)||1)}
 function councilSeatRows(d){
  if(typeof History2022View!=='undefined'&&History2022View.seatMode())return History2022View.seatRows(d);
  const cs=directoryCandidates(d),record=state.predictions[d.id],picked=new Set(record?.winners||[]);
@@ -73,14 +74,14 @@ function councilSeatBoundaryTouchesRect(f,r){
 }
 const councilSeatPanelCache=new Map();
 function prepareCouncilSeatPanel(panel){
- const key=[state.county,panel.identity,panel.t.scale,panel.t.tx,panel.t.ty,panel.area.bottom,panel.items.map(f=>f.id+':'+councilSeatDistrictFor(f)?.seats).join(',')].join('/');
+ const key=[state.county,panel.identity,panel.t.scale,panel.t.tx,panel.t.ty,panel.area.bottom,panel.items.map(f=>f.id+':'+councilSeatDisplayCount(councilSeatDistrictFor(f))).join(',')].join('/');
  if(councilSeatPanelCache.has(key))return councilSeatPanelCache.get(key);
  const initial={...panel.t},cx=(panel.area.left+panel.area.right)/2,cy=(panel.area.top+panel.area.bottom)/2;
  for(let attempt=0;attempt<10;attempt++){
   const factor=Math.pow(.88,attempt);panel.t={...initial,scale:initial.scale*factor,tx:cx+(initial.tx-cx)*factor,ty:cy+(initial.ty-cy)*factor};
   const placements=new Map(),used=[];
   for(const f of [...panel.items].sort((a,b)=>(a.box[2]-a.box[0])*(a.box[3]-a.box[1])-(b.box[2]-b.box[0])*(b.box[3]-b.box[1]))){
-   const q=councilSeatPlacement(f,Number(councilSeatDistrictFor(f)?.seats)||1,panel.t,used,panel.items);if(!q)break;placements.set(f.id,q);
+   const q=councilSeatPlacement(f,councilSeatDisplayCount(councilSeatDistrictFor(f)),panel.t,used,panel.items);if(!q)break;placements.set(f.id,q);
   }
   if(placements.size===panel.items.length){panel.seatPlacements=placements;if(councilSeatPanelCache.size>60)councilSeatPanelCache.clear();councilSeatPanelCache.set(key,panel);return panel}
  }
@@ -114,9 +115,9 @@ function drawCouncilSeats(group,interactive){
   // Place the most constrained districts first.
   for(const f of [...panel.items].sort((a,b)=>(a.box[2]-a.box[0])*(a.box[3]-a.box[1])-(b.box[2]-b.box[0])*(b.box[3]-b.box[1]))){
    const d=councilSeatDistrictFor(f);if(!d)continue;
-   const seats=councilSeatRows(d),q=cached.get(f.id);
+   const seats=historical?councilSeatRows(d).filter(Boolean):councilSeatRows(d),q=cached.get(f.id);
    const badgeRows=historical?[...seats.filter(Boolean).reduce((map,c)=>map.set(c.party,(map.get(c.party)||0)+1),new Map())].map(([party,count])=>({party,count})).sort((a,b)=>b.count-a.count||a.party.localeCompare(b.party,'zh')):[];
-   const g=svgEl('g',{'data-seat-district':d.id,'data-seat-region':f.id,'data-seat-count':seats.length,'data-seat-placement':q.outside?'outside':'inside','data-history-badge-mode':historical&&(q.outside||badgeRows.length>4)?'indexed':'badges'});layer.append(g);
+   const g=svgEl('g',{'data-seat-district':d.id,'data-seat-region':f.id,'data-seat-count':seats.length,'data-seat-placement':q.outside?'outside':'inside','data-history-badge-mode':historical?'seats':'predicted'});layer.append(g);
    if(q.outside){
     const points=councilSeatLeaderPoints(q,[...cached.values()].filter(other=>other!==q).map(other=>other.rect),routed),path=points.map((p,i)=>(i?'L':'M')+p[0]+','+p[1]).join('');routed.push(...mapLeaderSegments(points));
     leaders.append(svgEl('path',{d:path,fill:'none',style:'fill:none;stroke:#fff;stroke-width:2.1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.94','vector-effect':'non-scaling-stroke','data-seat-leader-halo':d.id}));
@@ -125,14 +126,10 @@ function drawCouncilSeats(group,interactive){
    }
    g.append(svgEl('rect',{x:q.rect[0],y:q.rect[1],width:q.w,height:q.h,rx:9,fill:q.outside?'#ffffffed':'#ffffff55',stroke:q.outside?'#dce5df':'none','data-seat-frame':d.id}));
    const name=svgEl('text',{x:q.x,y:q.rect[1]+22,'text-anchor':'middle','font-size':24,fill:'#294a3a','paint-order':'stroke',stroke:'#fff','stroke-width':4,'data-label':f.id,'data-placement':'district-number'});name.textContent=districtMapNumber(f)||f.name;if(state.labels)g.append(name);
-   if(historical){
-    const cols=Math.max(1,Math.min(q.cols,badgeRows.length));badgeRows.forEach((item,i)=>{
-     const row=Math.floor(i/cols),col=i%cols,rowCount=Math.min(cols,badgeRows.length-row*cols),x=q.x+(col-(rowCount-1)/2)*q.pitch-q.size/2,y=q.rect[1]+33+row*q.pitch,p=predictionParty(item.party),emblem=!['其他','其他政党'].includes(item.party)?logoFor(p):'',badge=svgEl('g',{'data-history-seat-badge':item.party,'data-history-seat-count':item.count,role:'img','aria-label':item.party+'当选'+item.count+'席'}),title=svgEl('title');title.textContent=item.party+' · '+item.count+'席';badge.append(title);badge.append(svgEl('circle',{cx:x+q.size/2,cy:y+q.size/2,r:q.size/2,fill:emblem?'#fff':p.color||'#91999f',stroke:'#8b9c92','stroke-width':1.8}));if(emblem)appendCircularPartyLogo(badge,emblem,x,y,q.size,{'data-seat-logo':p.id});badge.append(svgEl('circle',{cx:x+q.size-2,cy:y+q.size-2,r:10,fill:'#17684f',stroke:'#fff','stroke-width':2}));const count=svgEl('text',{x:x+q.size-2,y:y+q.size+2,'text-anchor':'middle','font-size':13,'font-weight':700,fill:'#fff','pointer-events':'none'});count.textContent=item.count;badge.append(count);g.append(badge)
-    });
-    seats.filter(Boolean).forEach((c,i)=>g.append(svgEl('g',{'data-seat-status':'elected','data-seat-party':predictionParty(c.party).id,'data-seat-candidate':c.id,visibility:'hidden','aria-hidden':'true'})));
-   }else seats.forEach((c,i)=>{
+   seats.forEach((c,i)=>{
+
     const row=Math.floor(i/q.cols),col=i%q.cols,rowCount=Math.min(q.cols,seats.length-row*q.cols),x=q.x+(col-(rowCount-1)/2)*q.pitch-q.size/2,y=q.rect[1]+33+row*q.pitch;
-    const p=c?predictionParty(c.party):null,emblem=p&&!['其他','其他政党'].includes(c.party)?logoFor(p):'',slot=svgEl('g',{'data-seat-slot':i,'data-seat-status':c?(c.history?'elected':'predicted'):'empty','data-seat-party':p?.id||'','data-seat-candidate':c?.id||''});
+    const p=c?predictionParty(c.party):null,emblem=p&&!['其他','其他政党'].includes(c.party)?logoFor(p):'',slot=svgEl('g',{'data-seat-slot':i,'data-seat-status':c?(c.history?'elected':'predicted'):'empty','data-seat-party':p?.id||'','data-seat-candidate':c?.id||'',...(historical&&c?{'data-history-seat-badge':c.party,'data-history-seat-count':1,role:'img','aria-label':c.party+'当选1席'}:{})});
     const title=svgEl('title');title.textContent=c?candidateDisplayName(c)+' · '+c.party:'尚未预测';slot.append(title);
     slot.append(svgEl('circle',{cx:x+q.size/2,cy:y+q.size/2,r:q.size/2,fill:c&&!emblem?'#91999f':'#fff',stroke:c&&!emblem?'#91999f':'#8b9c92','stroke-width':1.8}));
     if(emblem)appendCircularPartyLogo(slot,emblem,x,y,q.size,{'data-seat-logo':p.id});g.append(slot);
