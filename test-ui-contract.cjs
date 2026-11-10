@@ -1032,6 +1032,17 @@ test('Historical snapshot cache and exports carry schema and provenance metadata
  assert.match(app,/data-export-history-metadata/);assert.match(app,/History2022View\.exportMetadata/);
 });
 
+test('2022 history legend and map share the stronger 2026 gradient with a full-width scale',()=>{
+ const history=read('history-2022.js');
+ assert.match(history,/ElectionCore\.shade\(color,value,range\.min,range\.max\)/);
+ assert.match(history,/const bx=x\+18,bw=width-36/);
+ assert.match(history,/for\(let step=0;step<=10;step\+\+\)/);
+ assert.match(history,/'data-history-gradient-bar':party/);
+ assert.match(history,/metric==='votes'\|\|metric==='seats'\?\[0,\.5,1\]:\[0,\.25,\.5,\.75,1\]/);
+ assert.doesNotMatch(history,/const strength=\.28\+\.72/);
+ assert.doesNotMatch(history,/i<40;i\+\+/);
+});
+
 test('Historical data tools are removed and footer credits use separate lines',()=>{
  for(const name of ['index.html','map-v60.html']){
   const html=read(name);
