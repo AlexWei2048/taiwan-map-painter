@@ -32,6 +32,14 @@ def intcol(value):
 def district_number(value):
     m=re.search(r'第\s*0*(\d+)\s*选(?:举)?区',CC.convert(str(value or '')))
     return str(int(m.group(1))) if m else ''
+def damaged_cec_name_matches(official, recorded):
+    """CEC 2022 ZIP contains a few PUA replacement glyphs; preserve known other characters."""
+    source=norm(official)
+    target=norm(recorded)
+    return (len(source)==len(target) and
+            sum(0xE000<=ord(ch)<=0xF8FF for ch in source) in (1,2) and
+            all(a==b or 0xE000<=ord(a)<=0xF8FF for a,b in zip(source,target)))
+
 def download():
     req=urllib.request.Request(URL,headers={'User-Agent':'IslandPalette/CEC-validation'})
     with urllib.request.urlopen(req,timeout=150) as stream: payload=stream.read()
@@ -90,6 +98,26 @@ def enrich(snapshot,tables,checksum):
             if not county:continue
             candidate_key=(office,county,norm(name),str(int(number)) if number.isdigit() else number)
             possibilities=[(cand,ct) for cand,ct in by_name.get(candidate_key,[]) if ct['electorate']==electorate]
+            if not possibilities and any(0xE000<=ord(ch)<=0xF8FF for ch in name):
+                # The CEC ZIP has five names corrupted with private-use glyphs.
+                # Require every surviving character plus ballot, county, office, identity and district.
+                choices=[]
+                for (other_office,other_county,other_name,other_number),items in by_name.items():
+                    if (other_office,other_county,other_number)!=(office,county,candidate_key[3]):
+                        continue
+                    if not damaged_cec_name_matches(name,other_name):
+                        continue
+                    choices.extend((c,ct) for c,ct in items if ct['electorate']==electorate)
+                if office=='council':
+                    d=district_number(region_names.get((p,city,region),''))
+                    choices=[(c,ct) for c,ct in choices if d and district_number(ct['district_name'])==d]
+                if office=='township':
+                    town_name=town_names.get((p,city,region,town),'')
+                    choices=[(c,ct) for c,ct in choices if town_name and norm(ct['district_name'])==town_name]
+                if len(choices)==1:
+                    possibilities=choices
+                    tally['cec_pua_name_reconciled']+=1
+
             if len(possibilities)>1:
                 if office=='council':
                     official_district=district_number(region_names.get((p,city,region),''))
