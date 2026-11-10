@@ -1025,7 +1025,7 @@ test('Historical councillor identity state stays aligned between the adapter and
 
 test('Historical snapshot cache and exports carry schema and provenance metadata',()=>{
  const historyView=read('history-2022.js');
- assert.match(historyView,/assets\/history-2022\.json\?v=20261110-schema-v2/);
+ assert.match(historyView,/assets\/history-2022\.json\?v=20261110-cec-enriched-v1/);
  assert.match(historyView,/obj\.schemaVersion!==2/);
  assert.doesNotMatch(historyView,/officialWinnerCorrections/);
  assert.match(historyView,/exportMetadata/);assert.match(historyView,/行政区边界版本/);
