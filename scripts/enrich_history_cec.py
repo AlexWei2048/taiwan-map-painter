@@ -216,6 +216,8 @@ def enrich_stats(snapshot, matches, stats):
         contest["registered_voters"] = registered
         contest["ballots_cast"] = cast
         contest["invalid_votes"] = invalid
+        if contest["contest_id"] == "2022-mayor:10020":
+            contest["election_date"] = "2022-12-18"
         stats_updated.append(contest["contest_id"])
     return stats_updated, stats_missing
 
