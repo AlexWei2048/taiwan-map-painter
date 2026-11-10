@@ -257,7 +257,7 @@
   if(!active)savedMapScope=clone(state);
   active=true;document.body.classList.add('history-mode');document.querySelector('.intro h1').textContent='回看2022选举结果';document.querySelector('.intro > p').textContent='选一类选举，点击地图查看实际得票与当选结果。';
   el('historyControls').hidden=false;el('mapSettings').hidden=true;
-  el('workspaceHistory').classList.add('active');el('workspaceHistory').setAttribute('aria-pressed','true');
+  
   el('workspacePrediction').classList.remove('active');el('workspaceFree').classList.remove('active');
   switchMode();render();snapshot().then(success=>{if(active&&success){render()}})
  }
@@ -265,7 +265,7 @@
   active=false;document.body.classList.remove('history-mode');document.querySelector('.intro h1').textContent='画出你的选举预测';document.querySelector('.intro > p').textContent='选一场选举，点选区，开始预测。';
   if(savedMapScope){state=clone(savedMapScope);savedMapScope=null;}currentResult=null;districtTableKey='';el('headerExportPredictions').hidden=false;
   el('historyControls').hidden=true;el('historyResultSection').hidden=true;el('mapSettings').hidden=false;
-  el('workspaceHistory').classList.remove('active');el('workspaceHistory').setAttribute('aria-pressed','false');if(data){syncInputs();render()}
+  if(data){syncInputs();render()}
  }
  function mayorTownView(){return kind==='mayor'&&scale==='town'}
  function historyOverview(){return active&&!county&&kind!=='mayor'}
@@ -403,7 +403,6 @@
   el('historyDialogScroll').hidden=historyTableWrap.scrollWidth<=historyTableWrap.clientWidth;
  }).observe(historyTableWrap);
  el('closeHistoryResult').onclick=()=>el('historyResultDialog').close();
- el('workspaceHistory').onclick=activate;
  for(const id of ['workspacePrediction','workspaceFree'])el(id).addEventListener('click',()=>{if(active)deactivate()},{capture:true});
  el('historyOffice').onchange=()=>{kind=el('historyOffice').value;candidateScope='top';selectedCandidate='';resultPage=0;switchMode();render()};
  if(el('historyElectorate'))el('historyElectorate').onchange=()=>{electorate=el('historyElectorate').value;resultPage=0;switchMode();render()};

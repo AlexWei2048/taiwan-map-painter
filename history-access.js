@@ -20,7 +20,7 @@
  })();
  window.HistoryAccess={ready,canAccess:()=>allowed,notice};
  document.addEventListener('click',event=>{
-  const target=event.target.closest('#categoryHistory,#workspaceHistory');if(!target||allowed)return;
+  const target=event.target.closest('#categoryHistory');if(!target||allowed)return;
   event.preventDefault();event.stopImmediatePropagation();ready.then(ok=>ok?target.click():notice());
  },true);
 })();
