@@ -1,67 +1,21 @@
-name: Inspect official CEC 2022 archive
+name: Validate official CEC 2022 historical enrichment
 on:
   push:
     branches: [feature/2022-cec-official-enrichment-20261110]
-    paths: ['.github/workflows/inspect-cec-2022.yml']
+    paths: ['scripts/enrich_history_cec.py', '.github/workflows/inspect-cec-2022.yml']
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
-  inspect:
+  audit:
     runs-on: ubuntu-24.04
-    timeout-minutes: 12
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-      - name: Download and inspect official election archive
-        run: |
-          python3 - <<'PY'
-          import urllib.request,zipfile,io,collections
-          from pathlib import Path
-          url='https://data.cec.gov.tw/%E9%81%B8%E8%88%89%E8%B3%87%E6%96%99%E5%BA%AB/votedata.zip'
-          path=Path('/tmp/votedata2022-official.zip')
-          req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0'})
-          with urllib.request.urlopen(req,timeout=180) as rsp:
-              path.write_bytes(rsp.read())
-          print('DOWNLOADED_BYTES',path.stat().st_size,flush=True)
-          with zipfile.ZipFile(path) as z:
-              names=z.namelist()
-              print('ENTRIES',len(names))
-              print('FIRST',repr(names[:70]))
-              related=[n for n in names if '111' in n or '2022' in n]
-              print('MATCHING_111',len(related),'SAMPLE',repr(related[:100]))
-              candidates=[n for n in names if n.lower().endswith(('elcand.csv','elprof.csv'))]
-              print('CAND_AND_PROF',len(candidates),'SAMPLE',repr(candidates[:40]))
-              sample=[n for n in related if n.lower().endswith(('elcand.csv','elprof.csv'))][:18]
-              for n in sample:
-                  raw=z.read(n)[:1100]
-                  for enc in ('utf-8-sig','big5','cp950'):
-                      try: decoded=raw.decode(enc);break
-                      except UnicodeError:continue
-                  else: decoded=repr(raw[:300]);enc='raw'
-                  print('SAMPLE_FILE',repr(n),'ENC',enc,'TEXT',repr(decoded[:750]))
-              for category in ('C1/city','C1/prv','R1','R2','R3','D1','D2'):
-                  f=next((n for n in names if '2022-111年' in n and n.endswith(category+'/elbase.csv')),None)
-                  c=next((n for n in names if '2022-111年' in n and n.endswith(category+'/elcand.csv')),None)
-                  if not f:continue
-                  base=z.read(f).decode('utf-8-sig')
-                  b=[x.split(',') for x in base.splitlines() if x.strip()]
-                  cnt=z.read(c).decode('utf-8-sig').splitlines() if c else []
-                  print('CATEGORY',category,'ELBASE_COUNT',len(b),'ELCAND_COUNT',len(cnt))
-                  print('BASE_EXAMPLE',repr(b[:5]))
-                  print('COUNTY_EXAMPLE',repr([x for x in b if len(x)>=6 and x[2]=='00' and x[3]=='000' and x[4]=='0000'][:8]))
-                  print('DISTRICT_EXAMPLE',repr([x for x in b if len(x)>=6 and x[2]!='00' and x[3]=='000' and x[4]=='0000'][:5]))
-                  print('TOWN_EXAMPLE',repr([x for x in b if len(x)>=6 and x[3]!='000' and x[4]=='0000'][:4]))
-              selected=[n for n in names if '2022-111年地方公職人員選舉/' in n and n.endswith('/elcand.csv')]
-              for n in selected:
-                  lines=z.read(n).decode('utf-8-sig').splitlines()
-                  print('ALL_CAND_FILES',n.split('2022-111年地方公職人員選舉/')[1],len(lines),repr(lines[:1]))
-              other=[n for n in names if n.startswith('votedata/votedata/2022年_嘉義市長重行選舉/') and n.endswith('.csv')]
-              for n in other:
-                  print('CHIAYI_FILE',n,repr(z.read(n).decode('utf-8-sig').splitlines()[:2]))
-          import json
-          snap=json.loads(Path('assets/history-2022.json').read_text())
-          for key in ('candidacies','contests','rows'):
-              items=snap[key];print('SNAP',key,'COUNT',len(items),'SAMPLE',repr(items[:2]))
-              fields={'candidacies':['gender','incumbent_at_election'],'contests':['registered_voters','ballots_cast','valid_votes','invalid_votes'],'rows':['gender','incumbent']}[key]
-              print('MISSING',key,{k:sum(x.get(k) is None or x.get(k)=='' for x in items) for k in fields})
-          PY
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install builder dependencies
+        run: pip install -r requirements-build.txt
+      - name: Match 2022 official CEC profiles and vote totals
+        run: python scripts/enrich_history_cec.py --audit-only
