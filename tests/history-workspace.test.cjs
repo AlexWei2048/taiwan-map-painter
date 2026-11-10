@@ -73,12 +73,51 @@ test('candidate result rows search and filter by stable candidacy data without i
  assert.equal(Workspace.candidateRows(rows,{party:'甲党'})[1].elected_official,false);
 });
 
-test('overview cards expose available totals and keep unavailable ballot fields explicit',()=>{
+test('overview cards have eight ordered metrics and never combine overlapping electorates',()=>{
  const cards=Workspace.overviewCards({candidateCount:12,electedCount:3,validVotes:1234,invalidVotes:null,incumbentCount:2});
- assert.deepEqual(cards.map(card=>card.label),['候选人','官方当选','选举人数','投票率','有效率','有效票','无效票']);
- assert.deepEqual(cards.map(card=>card.value),['12','3','暂无资料','暂无资料','暂无资料','1,234','暂无资料']);
- assert.equal(Workspace.overviewCards({registeredVoters:100,ballotsCast:73,validVotes:70,invalidVotes:3,turnout:73})[4].value,'95.89%');
- assert.equal(Workspace.overviewCards({turnoutGroups:[{electorate:'regional'},{electorate:'mountain'}]})[2].value,'按选举类型分别统计');
+ assert.deepEqual(cards.map(card=>card.label),['选举人数','投票人数','投票率','有效票','无效票','有效率','候选人数','当选人数']);
+ assert.deepEqual(cards.map(card=>card.value),['暂无资料','暂无资料','暂无资料','1,234','暂无资料','暂无资料','12','3']);
+ const complete=Workspace.overviewCards({candidateCount:12,electedCount:3,registeredVoters:100,ballotsCast:73,validVotes:70,invalidVotes:3,turnout:73});
+ assert.deepEqual(complete.map(card=>card.value),['100','73','73.00%','70','3','95.89%','12','3']);
+ const separated=Workspace.overviewCards({candidateCount:12,electedCount:3,turnoutGroups:[{electorate:'regional'},{electorate:'mountain'}]});
+ assert.ok(separated.slice(0,6).every(card=>card.value==='按类别分别统计'));
+ assert.equal(separated[6].value,'12');
+ assert.equal(separated[7].value,'3');
+});
+
+test('overview chart models use real ratios and never draw guessed vote segments',()=>{
+ const single=Workspace.overviewCharts({candidateCount:12,electedCount:3,
+  turnoutGroups:[{electorate:'regional',registeredVoters:100,ballotsCast:73,validVotes:70,invalidVotes:3,turnout:73}]},
+  {office:'mayor',electorate:'regional'});
+ assert.deepEqual(single.map(c=>c.type),['participation','ballots','candidates']);
+ assert.equal(single[0].bars[0].percent,73);
+ assert.equal(Number(single[1].bars[0].percent.toFixed(2)),95.89);
+ assert.equal(single[0].bars[0].first+single[0].bars[0].second,100);
+ assert.equal(single[1].bars[0].first+single[1].bars[0].second,73);
+ assert.equal(single[2].percent,25);
+ const unknown=Workspace.overviewCharts({candidateCount:3,electedCount:1,
+  turnoutGroups:[{electorate:'regional',registeredVoters:100,ballotsCast:null,validVotes:70,invalidVotes:3}]},
+  {office:'mayor',electorate:'regional'});
+ assert.equal(unknown[0].bars[0].percent,null);
+ assert.equal(unknown[1].bars[0].percent,null);
+ const inconsistent=Workspace.overviewCharts({candidateCount:3,electedCount:1,
+  turnoutGroups:[{electorate:'regional',registeredVoters:100,ballotsCast:73,validVotes:75,invalidVotes:3}]},
+  {office:'mayor',electorate:'regional'});
+ assert.equal(inconsistent[1].bars[0].percent,null);
+});
+
+test('all council electorates have distinct vote charts and one candidate comparison',()=>{
+ const summary={candidateCount:7,electedCount:3,turnoutGroups:[
+  {electorate:'regional',registeredVoters:100,ballotsCast:70,validVotes:68,invalidVotes:2,turnout:70},
+  {electorate:'plains',registeredVoters:40,ballotsCast:30,validVotes:29,invalidVotes:1,turnout:75},
+  {electorate:'mountain',registeredVoters:20,ballotsCast:18,validVotes:18,invalidVotes:0,turnout:90}
+ ]};
+ const charts=Workspace.overviewCharts(summary,{office:'council',electorate:'all'});
+ assert.deepEqual(charts.map(c=>c.title),['区域议员','平地少数民族议员','山地少数民族议员','候选与当选对比']);
+ assert.deepEqual(charts.slice(0,3).map(c=>c.bars[0].percent),[70,75,90]);
+ assert.deepEqual(charts.slice(0,3).map(c=>c.bars[1].percent.toFixed(2)),['97.14','96.67','100.00']);
+ assert.equal(charts.at(-1).percent,3/7*100);
+ assert.equal(charts.filter(c=>c.type==='participation'||c.type==='ballots').length,0);
 });
 
 test('county mayor drill-down changes only the map level and county scope',()=>{
