@@ -44,9 +44,9 @@ def ballot(value):
 
 
 def source_rows(archive, category, basename):
-    matches = [n for n in archive.namelist() if PREFIX in n and n.endswith("/" + category + "/" + basename)]
+    matches = [n for n in archive.namelist() if "2022" in n and n.endswith("/" + category + "/" + basename)]
     if len(matches) != 1:
-        raise ValueError(f"Expected exactly one {category}/{basename}, got {len(matches)}: {matches[:3]}")
+        raise ValueError(f"Expected exactly one {category}/{basename}, got {len(matches)}: {matches[:3]}; 2022 samples: {[n for n in archive.namelist() if '2022' in n and n.endswith(basename)][:7]}")
     data = archive.read(matches[0]).decode("utf-8-sig")
     return [row for row in __import__("csv").reader(io.StringIO(data)) if row], matches[0]
 
