@@ -92,7 +92,7 @@ body{font-size:15px}.sidebar .label,.settings-panel summary,#freeMapTools>.free-
 .sidebar .project-actions p{margin:0;text-align:center;color:#986b68;font-size:11px;line-height:1.5}
 
 /* 2022 historical election explorer */
-.workspace-switch{flex-wrap:wrap}.workspace-switch #workspaceHistory{flex:1 1 100%;margin-top:7px;border:1px solid #96ada2;border-radius:9px;background:#ecf4ef;color:#36594a;font-weight:650;min-height:39px}.workspace-switch #workspaceHistory.active{background:#147d68;color:#fff;border-color:#147d68}
+.workspace-switch{flex-wrap:wrap}
 #historyControls .history-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}#historyControls .history-actions button{flex:1 1 130px;white-space:normal}#historyControls #historyStatus{line-height:1.65;overflow-wrap:anywhere;margin:10px 0}#historySummary{font-size:12px;font-weight:600;margin:12px 0;color:#385747}.history-results{max-height:380px;overflow:auto;border:1px solid #dce6dd;border-radius:9px;background:#fff}.history-entry{display:flex;gap:7px;align-items:center;padding:9px 8px;border-bottom:1px solid #e8eee8;font-size:11px;line-height:1.45}.history-entry:last-child{border-bottom:0}.history-entry span:nth-child(2){flex:1;min-width:0}.history-entry strong{font-size:10px;white-space:nowrap;font-weight:650}.history-party{width:9px;height:9px;min-width:9px;border-radius:50%}
 
 /* Historical results are read-only: hide prediction painting and clearing tools. */
@@ -104,12 +104,12 @@ body.history-mode #workspaceFree,body.history-mode #workspacePrediction{opacity:
 .workspace-categories button{min-height:43px;border:0;border-radius:8px;background:transparent;color:#587064;font-size:14px;font-weight:650;cursor:pointer}
 .workspace-categories button.active{background:#216b54;color:#fff;box-shadow:0 2px 6px #244a3e22}
 .workspace-categories button:focus-visible{outline:3px solid #7fc9b4;outline-offset:2px}
-#futureModes,#historyModes{display:flex;gap:7px;padding:6px;background:#f4f7f3;border-radius:10px;margin-bottom:16px}
-#futureModes[hidden],#historyModes[hidden]{display:none!important}
-#futureModes button,#historyModes button{flex:1 1 0;min-height:40px;font-size:12px;font-weight:600;border:1px solid transparent;border-radius:8px;background:transparent;color:#476453}
-#futureModes button.active,#historyModes button.active{color:#16664e;background:#fff;border-color:#c9dfd1;box-shadow:0 1px 4px #284e3920}
-#historyModes #workspaceHistory{margin:0;width:100%;flex:1;background:transparent;border:1px solid transparent;color:#476453}
-#historyModes #workspaceHistory.active{background:#fff;color:#16664e;border-color:#c9dfd1}
+#futureModes{display:flex;gap:7px;padding:6px;background:#f4f7f3;border-radius:10px;margin-bottom:16px}
+#futureModes[hidden]{display:none!important}
+#futureModes button{flex:1 1 0;min-height:40px;font-size:12px;font-weight:600;border:1px solid transparent;border-radius:8px;background:transparent;color:#476453}
+#futureModes button.active{color:#16664e;background:#fff;border-color:#c9dfd1;box-shadow:0 1px 4px #284e3920}
+
+
 
 /* 2022 historical tables share the 2026 reference-table visual language. */
 .history-table-wrap{max-height:430px;overflow:auto;border:1px solid #dce6dd;border-radius:9px;background:#fff}.history-candidate-table{width:100%;border-collapse:separate;border-spacing:0;font-size:11px;white-space:nowrap}.history-candidate-table th{position:sticky;top:0;z-index:1;background:#f1f6f1;color:#496355;font-weight:650;text-align:center;padding:9px 8px;border-bottom:1px solid #dce6dd}.history-candidate-table td{padding:8px;border-bottom:1px solid #edf1ed;text-align:center;color:#425c4e}.history-candidate-table tbody tr:hover{background:#f7faf7}.history-candidate-table td:nth-child(4){font-weight:650;text-align:left}.history-party-cell{display:flex;align-items:center;justify-content:center;gap:6px}.history-party-cell img{width:17px;height:17px;object-fit:contain}.history-number{font-variant-numeric:tabular-nums}.history-winner{color:#147b60!important;font-weight:700}.history-loser{color:#829087}.history-map-match{color:#16805f;font-weight:650}.history-map-mismatch{color:#a36b27;font-weight:650}
