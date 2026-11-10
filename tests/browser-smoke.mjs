@@ -1043,7 +1043,9 @@ test('2022 council uses all historical district geometries and actual elected se
  assert.equal(await page.locator('#historySeatBadges').count(),1);assert.equal(await page.locator('#historySeatBadgeLeaders').count(),1);
  assert.ok(await page.locator('[data-history-seat-badge]').count()>0);assert.equal(await page.locator('[data-history-seat-count]').evaluateAll(nodes=>nodes.every(node=>Number(node.dataset.historySeatCount)>0)),true);
  assert.equal(await page.locator('[data-seat-district]').evaluateAll(nodes=>nodes.every(node=>/席/.test(node.getAttribute('aria-label')||''))),true);
- assert.equal(await page.locator('#historyMetric option').count(),4);
+ assert.equal(await page.locator('#historyMetric option').count(),3);
+  assert.equal(await page.locator('[data-history-seat-badge]').count(),34);
+  assert.equal(await page.locator('[data-history-seat-count]').evaluateAll(nodes=>nodes.every(node=>node.dataset.historySeatCount==='1')),true);
  await page.locator('[data-seat-district]').first().click();await page.locator('#historyResultDialog').waitFor({state:'visible'});
  assert.ok(await page.locator('#historyDialogRows tr').count()>0);assert.equal(await page.locator('#predictionDialog').isVisible(),false);
  await page.locator('#closeHistoryResult').click();
@@ -1065,7 +1067,8 @@ test('2022 township and mayor maps navigate by county with actual numeric result
  assert.notEqual(await page.locator('#regions [data-region="63000010"]').getAttribute('fill'),'#edf1e9');
  await page.locator('#historyCounty').selectOption({label:'台北市'});
  assert.equal(await page.locator('#regions path[data-region]').count(),12);
- await page.locator('#historyMetric').selectOption('votes');assert.equal(await page.locator('#historyCandidateScope').isVisible(),true);
+ await page.locator('#historyMetric').selectOption('vote');await page.locator('#historyVoteUnit').selectOption('votes');assert.equal(await page.locator('#historyCandidateScope').isVisible(),true);
+  assert.equal(await page.locator('#historyVoteUnitBox').isVisible(),true);
  const gradients=page.locator('#legend [data-history-gradient-party]');
  assert.deepEqual((await gradients.evaluateAll(nodes=>nodes.map(n=>n.getAttribute('data-history-gradient-party')))).sort(),['中国国民党','民主进步党']);
  assert.match(await page.locator('#legend').textContent(),/乡镇市区最高票候选人.*69,266.*领先地区数/);
@@ -1115,12 +1118,13 @@ test('2022 council result filters, regional search and historical export',async 
  await page.locator('#historyCounty').selectOption({label:'台北市'});
  await page.locator('#historyMetric').selectOption('seats');
  assert.equal(await page.locator('#historyParty').isVisible(),true);
- await page.locator('#historyMetric').selectOption('share');
+ await page.locator('#historyMetric').selectOption('vote');await page.locator('#historyVoteUnit').selectOption('share');
  await page.locator('#historyCandidateScope').selectOption('candidate');
  assert.ok(await page.locator('#historyCandidate option').count()>1);
  await page.locator('#historyViewCandidates').click();
  await page.locator('#historySearch').fill('王世坚');
- assert.equal(await page.locator('#historyResults tbody tr').count(),1);
+ assert.equal(await page.locator('#historyResults tbody tr').count(),2);
+  assert.equal(await page.locator('#historyResults tr.history-district-divider').count(),1);
  await page.locator('#historyMetric').selectOption('party');
  const svg=await exportSvg(page);
  assert.match(svg,/实际得票率/);
@@ -1136,6 +1140,23 @@ test('2022 council result filters, regional search and historical export',async 
   assert.ok(previous.district<current.district||(previous.district===current.district&&previous.votes>=current.votes));
  }
 
+});
+
+test('Historical office comes before year, and town-level mayor results mark the county-wide winner',async t=>{
+  const page=await pageFor(t);await page.locator('#categoryHistory').click();
+  const controls=await page.locator('#historyControls').evaluate(el=>[...el.querySelectorAll('select')].map(item=>item.id));
+  assert.ok(controls.indexOf('historyOffice')<controls.indexOf('historyYear'));
+  await page.locator('#historyCounty').selectOption({label:'台北市'});
+  await page.locator('#historyScale').selectOption('town');
+  await page.locator('#historyViewCandidates').click();
+  await page.locator('#historySearch').fill('蒋万安');
+  assert.ok(await page.locator('#historyResults img[alt="当选"]').count()>1);
+  await page.locator('#historySearch').fill('');
+  assert.ok(await page.locator('#historyResults tr.history-district-divider').count()>1);
+  await page.locator('#historyViewOverview').click();
+  const labels=await page.locator('#historyOverviewCards .history-overview-card span').allTextContents();
+  for(const label of ['选举人数','投票率','有效率'])assert.ok(labels.includes(label),label);
+  for(const label of ['选举时现任','女性候选人','女性当选人'])assert.equal(labels.includes(label),false,label);
 });
 
 test('Mobile historical result keeps ballot numbers and candidate names visible',async t=>{
