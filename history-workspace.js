@@ -5,6 +5,7 @@
  const ELECTORATES=new Set(['all','regional','plains','mountain']);
  const METRICS={mayor:new Set(['party','share','votes']),council:new Set(['party','seats','share','votes']),township:new Set(['party','share','votes'])};
  const labels={regional:'区域议员',plains:'平地少数民族议员',mountain:'山地少数民族议员'};
+ const rate=(valid,cast,invalid)=>Number.isFinite(valid)&&Number.isFinite(cast)&&cast>0?valid/cast*100:Number.isFinite(valid)&&Number.isFinite(invalid)&&valid+invalid>0?valid/(valid+invalid)*100:null;
  const levelOptions=office=>office==='mayor'?[['county','县市'],['town','乡镇市区']]:office==='council'?[['district','选举区']]:[['town','乡镇市区']];
  const electorateOptions=office=>office==='council'?[['all','全部类型（分别统计）'],['regional','区域议员'],['plains','平地少数民族议员'],['mountain','山地少数民族议员']]:[['regional','区域选举']];
  function normalizeSelection(input={},years=[2022]){
@@ -29,7 +30,8 @@
    ballotsCast:group.ballotsCast??null,
    validVotes:group.validVotes??null,
    invalidVotes:group.invalidVotes??null,
-   turnout:group.turnout??null
+   turnout:group.turnout??null,
+   validRate:rate(group.validVotes,group.ballotsCast,group.invalidVotes)
   }));
  }
  function featurePresentation({office='mayor',level='county',metric='party',region=null,partyColor=()=> '#edf1e9'}={}){
@@ -55,15 +57,16 @@
  }
  function overviewCards(overview={}){
   const value=number=>Number.isFinite(number)?Number(number).toLocaleString('zh-CN'):'暂无资料';
-  const genderValue=(group,label)=>group&&Number.isFinite(group[label])?value(group[label]):'暂无资料';
+  const percent=number=>Number.isFinite(number)?number.toFixed(2)+'%':'暂无资料';
+  const separated=Array.isArray(overview.turnoutGroups)&&overview.turnoutGroups.length>1;
   return[
    {label:'候选人',value:value(overview.candidateCount)},
    {label:'官方当选',value:value(overview.electedCount)},
-   {label:'有效票',value:value(overview.validVotes)},
-   {label:'无效票',value:value(overview.invalidVotes)},
-   {label:'选举时现任',value:value(overview.incumbentCount)},
-   {label:'女性候选人',value:genderValue(overview.gender,'女')},
-   {label:'女性当选人',value:genderValue(overview.electedGender,'女')}
+   {label:'选举人数',value:separated?'按选举类型分别统计':value(overview.registeredVoters)},
+   {label:'投票率',value:separated?'按选举类型分别统计':percent(overview.turnout)},
+   {label:'有效率',value:separated?'按选举类型分别统计':percent(rate(overview.validVotes,overview.ballotsCast,overview.invalidVotes))},
+   {label:'有效票',value:separated?'按选举类型分别统计':value(overview.validVotes)},
+   {label:'无效票',value:separated?'按选举类型分别统计':value(overview.invalidVotes)}
   ];
  }
  function drilldownSelection(selection={},county){
@@ -98,7 +101,7 @@
    ...state,year:el('historyYear')?.value,office,
    electorate:el('historyElectorate')?.value,county:el('historyCounty')?.value,
    level:office==='mayor'?(scale==='town'?'town':'county'):office==='council'?'district':'town',
-   metric:el('historyMetric')?.value
+   metric:el('historyMetric')?.value==='vote'?(el('historyVoteUnit')?.value||'share'):el('historyMetric')?.value
   },[2022]);
  }
  function emit(){
@@ -114,13 +117,14 @@
   rootNode.replaceChildren();
   if(!currentOverview){const note=doc.createElement('p');note.className='history-overview-placeholder';note.textContent='概况数据正在载入。';rootNode.append(note);return}
   for(const card of overviewCards(currentOverview)){const article=doc.createElement('article');article.className='history-overview-card';const label=doc.createElement('span'),strong=doc.createElement('strong');label.textContent=card.label;strong.textContent=card.value;article.append(label,strong);rootNode.append(article)}
-  for(const card of turnoutCards(currentOverview,state)){const article=doc.createElement('article');article.className='history-overview-card history-turnout-card';const label=doc.createElement('span'),strong=doc.createElement('strong'),detail=doc.createElement('small');label.textContent=card.title+'投票率';strong.textContent=card.turnout===null?'暂无资料':card.turnout.toFixed(2)+'%';const totals=card.registeredVoters===null?'选举人数与投票人数暂无资料':'选举人数 '+card.registeredVoters.toLocaleString('zh-CN')+' · 投票人数 '+card.ballotsCast.toLocaleString('zh-CN');const ballots='有效票 '+(card.validVotes===null?'暂无资料':card.validVotes.toLocaleString('zh-CN'))+' · 无效票 '+(card.invalidVotes===null?'暂无资料':card.invalidVotes.toLocaleString('zh-CN'));detail.textContent=totals+'；'+ballots;article.append(label,strong,detail);rootNode.append(article)}
+  if(state.office==='council'&&state.electorate==='all')for(const card of turnoutCards(currentOverview,state)){const article=doc.createElement('article');article.className='history-overview-card history-turnout-card';const label=doc.createElement('span'),strong=doc.createElement('strong'),detail=doc.createElement('small');label.textContent=card.title;strong.textContent='选举人数 '+(card.registeredVoters===null?'暂无资料':card.registeredVoters.toLocaleString('zh-CN'));const turnout='投票率 '+(card.turnout===null?'暂无资料':card.turnout.toFixed(2)+'%'),valid='有效率 '+(card.validRate===null?'暂无资料':card.validRate.toFixed(2)+'%');const ballots='有效票 '+(card.validVotes===null?'暂无资料':card.validVotes.toLocaleString('zh-CN'))+' · 无效票 '+(card.invalidVotes===null?'暂无资料':card.invalidVotes.toLocaleString('zh-CN'));detail.textContent=turnout+' · '+valid+'；'+ballots;article.append(label,strong,detail);rootNode.append(article)}
   if(state.office==='council'&&state.electorate==='all'){const note=doc.createElement('p');note.className='history-overview-placeholder';note.textContent='区域、平地少数民族、山地少数民族分别统计，不合并可能重叠的选民。';rootNode.append(note)}
  }
  function render(){
   state=readSelection();
   currentResult=resultForSelection();currentOverview=currentResult&&root.HistoryCore?root.HistoryCore.overview(currentResult):null;
-  const electorateBox=el('historyElectorateBox');if(electorateBox)electorateBox.hidden=state.office!=='council';
+  const voteUnitBox=el('historyVoteUnitBox');if(voteUnitBox)voteUnitBox.hidden=!['share','votes'].includes(state.metric);
+   const electorateBox=el('historyElectorateBox');if(electorateBox)electorateBox.hidden=state.office!=='council';
   const electorate=el('historyElectorate');if(electorate){
    if(state.office==='council'){
     const options=electorateOptions(state.office);
@@ -138,7 +142,7 @@
   const target=normalizeSelection({...state,...initialSelection},[2022]);state=target;active=true;
   root.History2022View?.activate?.();
   if(el('historyYear'))el('historyYear').value=String(target.year);
-  const controls=[['historyOffice',target.office],['historyElectorate',target.electorate],['historyCounty',target.county],['historyScale',target.level==='town'?'town':'district'],['historyMetric',target.metric]];
+  const controls=[['historyOffice',target.office],['historyElectorate',target.electorate],['historyCounty',target.county],['historyScale',target.level==='town'?'town':'district'],['historyMetric',['share','votes'].includes(target.metric)?'vote':target.metric],['historyVoteUnit',target.metric==='votes'?'votes':'share']];
   for(const [id,value] of controls){const node=el(id);if(node&&node.value!==value){node.value=value;node.dispatchEvent(new Event('change',{bubbles:true}))}}
   render();return{...state};
  }
@@ -152,7 +156,7 @@
   if(!currentResult)return;
   const blob=new Blob([historyCsv(currentResult,state)],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),link=doc.createElement('a');link.href=url;link.download=exportStem(state)+'.csv';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
  }
- for(const id of ['historyYear','historyOffice','historyElectorate','historyCounty','historyScale','historyMetric'])el(id)?.addEventListener('change',render);
+ for(const id of ['historyYear','historyOffice','historyElectorate','historyCounty','historyScale','historyMetric','historyVoteUnit'])el(id)?.addEventListener('change',render);
  for(const [view,id] of [['map','historyViewMap'],['candidates','historyViewCandidates'],['overview','historyViewOverview']])el(id)?.addEventListener('click',()=>setView(view));
  el('workspaceHistory')?.addEventListener('click',()=>{active=true;render()});
  for(const id of ['workspacePrediction','workspaceFree'])el(id)?.addEventListener('click',()=>{active=false});
