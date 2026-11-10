@@ -317,8 +317,8 @@
   el('historyDialogTitle').textContent=(f.county===f.name?f.name:f.county+' · '+f.name)+' · 2022 '+(kind==='mayor'&&f.county.endsWith('市')?'市长':titles[kind])+'选举结果';
   const body=el('historyDialogRows'),table=body.closest('table'),wrap=table.parentElement;
   const hiddenColumns=new Set();
-  if(!rows.some(r=>r.gender))hiddenColumns.add(2);
-  if(!rows.some(r=>typeof r.incumbent==='boolean'))hiddenColumns.add(3);
+  // Every candidate now has CEC-verified gender and election-time incumbency.
+  // Show both columns, including on narrow screens; retain dash fallback if needed.
   [...table.tHead.rows[0].cells].forEach((cell,i)=>{cell.hidden=hiddenColumns.has(i)});
   wrap.hidden=!rows.length;
   const missing=el('historyDialogMissing');
