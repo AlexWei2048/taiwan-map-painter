@@ -1004,6 +1004,18 @@ test('Unified historical workspace has one filter hierarchy and three result vie
  assert.doesNotMatch(controls,/>议员<\/option>/);
 });
 
+test('Historical actual-result dashboard exposes revised KPI labels, chart panels and responsive styling',()=>{
+ const workspaceHistory=read('history-workspace.js'),css=read('style.css');
+ const labels=['选举人数','投票人数','投票率','有效票','无效票','有效率','候选人数','当选人数'];
+ for(const label of labels)assert.match(workspaceHistory,new RegExp("label:'"+label+"'"));
+ for(const legacy of ["label:'候选人'","label:'官方当选'"])assert.doesNotMatch(workspaceHistory,new RegExp(legacy));
+ for(const id of ['historyOverviewCharts','historyOverviewNote'])assert.equal(index.split('id="'+id+'"').length-1,1);
+ assert.match(workspaceHistory,/function overviewCharts\(/);
+ assert.match(workspaceHistory,/function renderOverviewCharts\(/);
+ assert.match(css,/history-overview-charts--grouped/);
+ assert.match(css,/@media\(max-width:720px\)/);
+});
+
 test('Historical exports use normalized metadata without entering saved prediction state',()=>{
  const historyWorkspace=read('history-workspace.js'),historyView=read('history-2022.js'),access=read('history-access.js');
  assert.match(app,/HistoryWorkspace\.exportStem\(HistoryWorkspace\.selection\(\)\)/);
