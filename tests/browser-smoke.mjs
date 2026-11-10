@@ -1187,8 +1187,11 @@ test('Mobile historical result keeps ballot numbers and candidate names visible'
  await page.locator('#regions [data-region="63000"]').click();
  const dialog=page.locator('#historyResultDialog');
  assert.match(await dialog.locator('h2').textContent(),/台北市 · 2022 市长选举结果/);
- assert.equal(await dialog.getByRole('columnheader',{name:'性别',exact:true}).count(),1);
- assert.equal(await dialog.getByRole('columnheader',{name:'选举时现任',exact:true}).count(),1);
+ const header=dialog.locator('.history-candidate-table thead th');
+ assert.equal((await header.nth(2).textContent()).trim(),'性别');
+ assert.equal((await header.nth(3).textContent()).trim(),'选举时现任');
+ assert.equal(await header.nth(2).evaluate(node=>node.hidden),false);
+ assert.equal(await header.nth(3).evaluate(node=>node.hidden),false);
  assert.equal(await dialog.locator('tbody tr').first().locator('td').nth(2).textContent(),'男');
  const name=dialog.locator('.history-elected-row td').nth(1);
  assert.equal(await name.textContent(),'蒋万安');
