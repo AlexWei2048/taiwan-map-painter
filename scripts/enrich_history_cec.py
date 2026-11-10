@@ -114,6 +114,30 @@ def source_profiles(archive):
             if k in stats and stats[k] != vals:
                 raise ValueError("Conflicting official aggregate " + repr(k))
             stats[k] = vals
+
+    # Chiayi City's mayoral election was cancelled and rerun on 2022-12-18.
+    # These five profiles and totals are from the official city election commission:
+    # https://web.cec.gov.tw/api/file/fed2e7f8-37c1-4463-b12e-7c8ade536956.pdf
+    # https://web.cec.gov.tw/cyec/article/37711
+    chiayi = [
+        ("1", "黃敏惠", "女", True),
+        ("2", "李俊俋", "男", False),
+        ("3", "陳泰山", "男", False),
+        ("4", "黃宏成台灣阿成世界偉人財神總統", "男", False),
+        ("5", "鄭凱升", "男", False),
+    ]
+    for number, name, gender, incumbent in chiayi:
+        key = ("mayor", "regional", "嘉义市", norm(name), number)
+        if key in profiles:
+            raise ValueError("Duplicate official Chiayi rerun candidate")
+        profiles[key].append({
+            "gender": gender, "incumbent": incumbent, "town": "",
+            "source_category": "CHIAYI-RERUN",
+            "geo": ("10", "020", "00", "000", "0000"),
+            "raw_name": name,
+        })
+    stats[("CHIAYI-RERUN", "10", "020", "00", "000")] = (93813, 375, 94188, 214130)
+
     return profiles, stats, expected, source_files
 
 
@@ -126,6 +150,18 @@ def match_profiles(snapshot, profiles):
         key = (office, contest["electorate"], norm(contest["county_name"]),
                norm(cand["candidate_name"]), ballot(cand["ballot_number"]))
         found = profiles.get(key, [])
+        if not found:
+            # CEC encodes some uncommon Chinese glyphs as private-use Unicode
+            # characters. Accept a one-character wildcard ONLY when county,
+            # election type, electorate and ballot number also match exactly.
+            def same_with_private_glyph(source, target):
+                if len(source) != len(target) or not any(0xE000 <= ord(ch) <= 0xF8FF for ch in source):
+                    return False
+                return all(a == b or 0xE000 <= ord(a) <= 0xF8FF for a, b in zip(source, target))
+            for candidate_key, records in profiles.items():
+                if (candidate_key[:3] == key[:3] and candidate_key[4] == key[4]
+                        and same_with_private_glyph(candidate_key[3], key[3])):
+                    found.extend(records)
         if len(found) > 1 and office == "township":
             found = [x for x in found if x["town"] == norm(contest["district_name"])]
         if len(found) != 1:
@@ -239,6 +275,10 @@ def run(archive_path=None, output=SNAPSHOT, report_path=REPORT, audit_only=False
         "source": ARCHIVE_URL, "sha256": digest,
         "downloadedAt": dt.datetime.now(dt.timezone.utc).isoformat(),
         "archivePaths": files, "sourceLicense": "https://data.gov.tw/license",
+        "additionalSources": [
+            "https://web.cec.gov.tw/api/file/fed2e7f8-37c1-4463-b12e-7c8ade536956.pdf",
+            "https://web.cec.gov.tw/cyec/article/37711",
+        ],
     }
     report = {"schemaVersion": 1, "year": 2022, "summary": totals, "provenance": provenance,
               "unmatchedCandidates": missing[:100], "ambiguousCandidates": ambiguous[:100],
