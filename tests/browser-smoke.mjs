@@ -1050,7 +1050,7 @@ test('2022 council uses all historical district geometries and actual elected se
  assert.equal(await page.locator('#historySeatBadges').count(),1);assert.equal(await page.locator('#historySeatBadgeLeaders').count(),1);
  assert.ok(await page.locator('[data-history-seat-badge]').count()>0);assert.equal(await page.locator('[data-history-seat-count]').evaluateAll(nodes=>nodes.every(node=>Number(node.dataset.historySeatCount)>0)),true);
  assert.equal(await page.locator('[data-seat-district]').evaluateAll(nodes=>nodes.every(node=>/席/.test(node.getAttribute('aria-label')||''))),true);
- assert.equal(await page.locator('#historyMetric option').count(),3);
+ assert.equal(await page.locator('#historyMetric option').count(),4);
   assert.equal(await page.locator('[data-history-seat-badge]').count(),34);
   assert.equal(await page.locator('[data-history-seat-count]').evaluateAll(nodes=>nodes.every(node=>node.dataset.historySeatCount==='1')),true);
  await page.locator('[data-seat-district]').first().click();await page.locator('#historyResultDialog').waitFor({state:'visible'});
