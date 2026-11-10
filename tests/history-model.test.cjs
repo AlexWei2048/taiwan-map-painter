@@ -22,6 +22,28 @@ test('historical constituency order is numeric within each county and electorate
  assert.deepEqual(mixed.sort((a,b)=>H.compareResultRows(a,b,'council')).map(x=>x.district_name),['第1選舉區','第2選舉區','第11選舉區']);
 });
 
+test('All 2022 candidate and contest fields are complete and reconciled to official CEC files',()=>{
+ assert.equal(snapshot.candidacies.length,2280);
+ assert.equal(snapshot.contests.length,441);
+ assert.equal(snapshot.rows.length,9062);
+ assert.ok(snapshot.candidacies.every(c=>c.gender==='男'||c.gender==='女'));
+ assert.ok(snapshot.candidacies.every(c=>typeof c.incumbent_at_election==='boolean'));
+ assert.ok(snapshot.rows.every(r=>(r.gender==='男'||r.gender==='女')&&typeof r.incumbent==='boolean'));
+ assert.ok(snapshot.contests.every(c=>Number.isInteger(c.registered_voters)&&Number.isInteger(c.ballots_cast)&&Number.isInteger(c.invalid_votes)));
+ for(const c of snapshot.contests){
+  assert.equal(c.valid_votes+c.invalid_votes,c.ballots_cast,c.contest_id);
+  assert.ok(c.ballots_cast<=c.registered_voters,c.contest_id);
+ }
+ const chiayi=snapshot.contests.find(c=>c.contest_id==='2022-mayor:10020');
+ assert.deepEqual([chiayi.registered_voters,chiayi.ballots_cast,chiayi.invalid_votes,chiayi.valid_votes],[214130,94188,375,93813]);
+ assert.equal(chiayi.election_date,'2022-12-18');
+ const winner=snapshot.candidacies.find(c=>c.contest_id===chiayi.contest_id&&c.candidate_name==='黄敏惠');
+ assert.ok(winner);
+ assert.equal(winner.gender,'女');assert.equal(winner.incumbent_at_election,true);
+ const enrichment=snapshot.provenance.enrichments?.find(item=>item.source.includes('data.cec.gov.tw'));
+ assert.match(enrichment?.sha256||'',/^[a-f0-9]{64}$/);
+});
+
 test('2022 snapshot exposes a versioned entity model with stable identifiers',()=>{
  assert.equal(snapshot.schemaVersion,2);
  assert.ok(Array.isArray(snapshot.elections)&&snapshot.elections.length===3);
