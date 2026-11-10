@@ -2,7 +2,7 @@ name: Audit 2022 CEC source archive
 on:
   push:
     branches: [data/cec-2022-fill-missing-20261110]
-    paths: [.github/workflows/audit-cec-2022.yml, scripts/audit_cec_2022.py]
+    paths: [.github/workflows/audit-cec-2022.yml, scripts/audit_cec_2022.py, scripts/enrich_history_2022_cec.py]
   workflow_dispatch:
 permissions:
   contents: read
@@ -15,4 +15,5 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: python scripts/audit_cec_2022.py
+      - run: pip install opencc-python-reimplemented requests beautifulsoup4
+      - run: python scripts/enrich_history_2022_cec.py
