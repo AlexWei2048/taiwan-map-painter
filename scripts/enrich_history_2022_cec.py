@@ -153,6 +153,11 @@ def main():
     payload=download()
     tables=load_sources(zipfile.ZipFile(io.BytesIO(payload)))
     tally=enrich(snapshot,tables,hashlib.sha256(payload).hexdigest())
+    remaining=[(contests['contest_id'],c['candidate_name'],c['ballot_number']) for c in snapshot['candidacies'] if c.get('incumbent_at_election') is None for contests in [next(k for k in snapshot['contests'] if k['contest_id']==c['contest_id'])]]
+    missing_profiles=[(c['contest_id'],c['county_name'],c['district_name'],c['electorate']) for c in snapshot['contests'] if c.get('registered_voters') is None]
+    print('REMAINING_CANDIDATES',json.dumps(remaining,ensure_ascii=False),flush=True)
+    print('REMAINING_PROFILES',json.dumps(missing_profiles,ensure_ascii=False),flush=True)
+
     validate_snapshot(snapshot)
     print('AUDIT',json.dumps(tally,ensure_ascii=False,sort_keys=True),flush=True)
     if args.write:
