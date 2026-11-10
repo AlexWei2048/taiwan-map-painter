@@ -201,7 +201,6 @@
   const seats=rows.reduce((n,d)=>n+d.seats,0);
   el('districtReferenceTitle').textContent=(county||'全台')+'2022议员选区范围与名额';
   el('districtReferenceSummary').textContent=rows.length+'个历史选区 · '+seats+'个应选席次'+(county?'':' · 全台215个选区、910席');
-  el('districtReferenceNote').textContent='此表使用2022年独立选区资料，不沿用2026年席次。范围依据2022年乡镇市区层级得票记录整理，作为选区范围核对辅助；法定范围以中选会2022年公告为准。地图按2022年选区范围组合行政区边界，新竹市分里选区按2022年公告重建；席次及当选人均采用2022年资料。妇女保障名额按2022年各选区应选名额列示。';
   const root=el('districtTableGroups');root.replaceChildren();
   const groups=new Map();for(const d of rows){if(!groups.has(d.county))groups.set(d.county,[]);groups.get(d.county).push(d)}
   for(const [name,list]of groups){
@@ -223,7 +222,6 @@
    }
    table.append(tbody);wrap.append(table);details.append(wrap);root.append(details)
   }
-  const source=el('districtReferenceSource');source.replaceChildren(document.createTextNode('资料来源：中选会111年8月18日中选务字第1113150255号公告及2022年选举结果。'));const officialLink=document.createElement('a');officialLink.href='https://web.cec.gov.tw/api/file/72529fa8-25c6-4260-bcbc-7de268017766.pdf';officialLink.target='_blank';officialLink.rel='noopener';officialLink.textContent='查看中选会2022选区划分公告';source.append(officialLink);
  }
  function update(){if(!active||!data)return;const result=currentResult;showRows(result);showComparison(result);paintHistory(result);renderHistoryDistrictReference();el('predictionScopeLabel').textContent='2022 历史选举结果';el('brushName').textContent=historyOverview()?'点击县市查看2022实际结果':'2022实际结果 · 点击区域查看候选人与得票';el('returnTaiwanMap').hidden=!county;el('historyResultSection').hidden=false;el('headerExportPredictions').hidden=true;el('undo').disabled=true;el('redo').disabled=true;window.HistoryWorkspace?.render()}
  function switchMode(){

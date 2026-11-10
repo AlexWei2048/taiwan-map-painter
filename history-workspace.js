@@ -263,7 +263,7 @@
   const panels={map:'historyMapPanel',candidates:'historyCandidatesPanel',overview:'historyOverviewPanel'};
   for(const [view,id] of Object.entries(panels)){const node=el(id);if(node)node.hidden=state.view!==view}
   for(const view of VIEWS){const button=el('historyView'+view[0].toUpperCase()+view.slice(1));if(button){const selected=state.view===view;button.classList.toggle('active',selected);button.setAttribute('aria-pressed',String(selected))}}
-  renderTurnoutCards();if(el('historyCoverage')&&currentResult)el('historyCoverage').textContent='当前范围：'+currentResult.contests.length+'个选举区 · '+currentResult.candidacies.length+'条候选人记录。资料来源：台湾地区选举事务主管机构公开资料。';emit();return{...state};
+  renderTurnoutCards();if(el('historyCoverage')&&currentResult)el('historyCoverage').textContent='当前范围：'+currentResult.contests.length+'个选举区 · '+currentResult.candidacies.length+'条候选人记录。';emit();return{...state};
  }
  function setView(view){state=normalizeSelection({...readSelection(),view},[2022]);render()}
  function activate(initialSelection={}){

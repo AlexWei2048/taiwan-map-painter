@@ -1033,6 +1033,9 @@ test('2022 council uses all historical district geometries and actual elected se
  await page.locator('#historyViewCandidates').click();assert.equal(await page.locator('#historyCandidatesPanel').isVisible(),true);assert.equal(await page.locator('#historyResultParty').count(),1);
  await page.locator('#historyViewCandidates').click();
  assert.equal(await page.locator('#historyMapPanel').isVisible(),true);
+ assert.equal(await page.locator('#districtReferenceNote').count(),0);
+ assert.equal(await page.locator('#districtReferenceSource').count(),0);
+ assert.doesNotMatch(await page.locator('#historyCoverage').textContent(),/资料来源：/);
  assert.equal(await page.locator('#regions path[data-region]').count(),22);
  assert.equal(await page.locator('#regions path[data-region]').evaluateAll(nodes=>nodes.every(node=>node.getAttribute('fill')==='#f0f3ed')),true);
  const geometry=await page.evaluate(()=>({count:History2022View.features().length,seats:History2022View.features().reduce((n,f)=>n+f.seats,0),missing:History2022View.features().filter(f=>!f.d).length}));

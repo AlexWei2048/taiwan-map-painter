@@ -1022,6 +1022,19 @@ test('Unified historical workspace keeps the map and has two toggleable result d
  assert.doesNotMatch(read('history-workspace.js'),/historyVoteUnit/);
 });
 
+test('Historical detail tables omit visible provenance and 2022 district explanation without deleting data',()=>{
+ for(const page of ['index.html','map-v60.html']){
+  const markup=read(page);
+  assert.doesNotMatch(markup,/id="districtReferenceNote"|id="districtReferenceSource"/);
+  assert.match(markup,/id="districtTableGroups"/);
+ }
+ const history=read('history-2022.js');
+ for(const phrase of ['此表使用2022年独立选区资料','中选务字第1113150255号公告及2022年选举结果','查看中选会2022选区划分公告'])assert.equal(history.includes(phrase),false,phrase);
+ assert.match(history,/renderHistoryDistrictReference\(\)/);
+ assert.doesNotMatch(read('history-workspace.js'),/资料来源：台湾地区选举事务主管机构公开资料。/);
+ assert.match(read('history-workspace.js'),/条候选人记录。/);
+});
+
 test('Historical actual-result dashboard exposes revised KPI labels, chart panels and responsive styling',()=>{
  const workspaceHistory=read('history-workspace.js'),css=read('style.css');
  const labels=['选举人数','投票人数','投票率','有效票','无效票','有效率','候选人数','当选人数'];
