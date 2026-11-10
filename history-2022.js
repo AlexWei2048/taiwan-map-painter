@@ -29,7 +29,7 @@
   loading=(async()=>{
    if(el('historyLoadStatus'))el('historyLoadStatus').textContent='正在载入 2022 年历史选举数据…';if(el('historyRetry'))el('historyRetry').hidden=true;
    try{
-    const [resp,metaResp,geoResp]=await Promise.all([fetch('assets/history-2022.json?v=20261110-schema-v2',{cache:'default'}),fetch('assets/history-council-districts-2022.json?v=20261031-districts-v2',{cache:'default'}),fetch('assets/history-hsinchu-geography-2022.json?v=20261103-history-v103')]);
+    const [resp,metaResp,geoResp]=await Promise.all([fetch('assets/history-2022.json?v=20261110-cec-enriched-v1',{cache:'default'}),fetch('assets/history-council-districts-2022.json?v=20261031-districts-v2',{cache:'default'}),fetch('assets/history-hsinchu-geography-2022.json?v=20261103-history-v103')]);
     if(!resp.ok)throw Error('历史投票数据 HTTP '+resp.status);if(!metaResp.ok)throw Error('2022议员选区资料 HTTP '+metaResp.status);
     const obj=await resp.json(),meta=await metaResp.json();
     if(meta.year!==2022||meta.districtCount!==215||!Array.isArray(meta.rows)||meta.rows.reduce((n,x)=>n+x.seats,0)!==910)throw Error('2022议员选区资料未通过完整性核验');
