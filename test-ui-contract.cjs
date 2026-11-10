@@ -1056,21 +1056,26 @@ test('Historical snapshot cache and exports carry schema and provenance metadata
  assert.match(app,/data-export-history-metadata/);assert.match(app,/History2022View\.exportMetadata/);
 });
 
-test('2022 history legend and map share the stronger 2026 gradient with a full-width scale',()=>{
- const history=read('history-2022.js');
+test('2022 history has separate vote-share and vote-count gradients with full width',()=>{
+ const history=read('history-2022.js'),workspace=read('history-workspace.js');
  assert.match(history,/ElectionCore\.shade\(color,value,range\.min,range\.max\)/);
  assert.match(history,/const bx=x\+18,bw=width-36/);
  assert.match(history,/for\(let step=0;step<=10;step\+\+\)/);
  assert.match(history,/'data-history-gradient-bar':party/);
- assert.match(history,/const rateStops=\[0,\.25,\.5,\.75,1\],voteStops=\[0,\.5,1\]/);
- assert.match(history,/'data-history-rate-tick'/);
+ assert.match(history,/const stops=metric==='votes'\|\|metric==='seats'\?\[0,\.5,1\]:\[0,\.25,\.5,\.75,1\]/);
  assert.match(history,/'data-history-vote-tick'/);
- assert.match(history,/referenceVotes=voteTotals\.length/);
- assert.match(history,/region\.share,currentResult\.range/);
- assert.match(history,/按选区有效票中位数换算，仅供参考/);
- assert.doesNotMatch(history,/historyVoteUnit/);
+ assert.match(history,/'data-history-rate-tick'/);
+ assert.match(history,/metric==='votes'\?r\.top\?\.votes\|\|0:r\.share/);
+ assert.match(history,/metric==='votes'\?region\.top\?\.votes\|\|0:region\.share/);
+ assert.doesNotMatch(history,/referenceVotes|referenceExact|中位数换算|historyVoteUnit/);
+ assert.match(history,/metrics\.push\(\['share','得票率'\],\['votes','得票数'\]\)/);
+ assert.match(workspace,/new Set\(\['party','share','votes'\]\)/);
  assert.doesNotMatch(history,/const strength=\.28\+\.72/);
  assert.doesNotMatch(history,/i<40;i\+\+/);
+ for(const page of ['index.html','map-v60.html']){
+  const html=read(page);
+  assert.match(html,/<option value="share">得票率<\/option><option value="votes">得票数<\/option>/);
+ }
 });
 
 test('Historical data tools are removed and footer credits use separate lines',()=>{

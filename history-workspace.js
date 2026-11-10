@@ -4,7 +4,7 @@
  const Core=typeof module!=='undefined'&&module.exports?require('./history-core.js'):root.HistoryCore;
  const VIEWS=new Set(['map','candidates','overview']);
  const ELECTORATES=new Set(['all','regional','plains','mountain']);
- const METRICS={mayor:new Set(['party','vote']),council:new Set(['party','seats','vote']),township:new Set(['party','vote'])};
+ const METRICS={mayor:new Set(['party','share','votes']),council:new Set(['party','seats','share','votes']),township:new Set(['party','share','votes'])};
  const labels={regional:'区域议员',plains:'平地少数民族议员',mountain:'山地少数民族议员'};
  const rate=(valid,cast,invalid)=>Number.isFinite(valid)&&Number.isFinite(cast)&&cast>0?valid/cast*100:Number.isFinite(valid)&&Number.isFinite(invalid)&&valid+invalid>0?valid/(valid+invalid)*100:null;
  const levelOptions=office=>office==='mayor'?[['county','县市'],['town','乡镇市区']]:office==='council'?[['district','选举区']]:[['town','乡镇市区']];
@@ -17,7 +17,7 @@
   const defaultLevel=allowedLevels[0];
   const level=allowedLevels.includes(input.level)?input.level:defaultLevel;
   const electorate=office==='council'&&ELECTORATES.has(input.electorate)?input.electorate:'regional';
-  const requestedMetric=['share','votes'].includes(input.metric)?'vote':input.metric;
+  const requestedMetric=input.metric==='vote'?'share':input.metric;
   const metric=METRICS[office].has(requestedMetric)?requestedMetric:'party';
   const view=VIEWS.has(input.view)?input.view:'map';
   return{year,office,electorate,county:String(input.county||''),level,metric,candidate:String(input.candidate||''),party:String(input.party||''),view};
@@ -123,7 +123,7 @@
   return{...selection,county,level:'town'};
  }
  function exportStem(selection={}){
-  const offices={mayor:'县市长',council:'县市议员',township:'乡镇市区长'},metrics={party:selection.office==='council'?'当选席次':selection.level==='town'?'得票领先':'当选政党',seats:'指定政党席次',vote:'得票率与得票数',share:'得票率与得票数',votes:'得票率与得票数'};
+  const offices={mayor:'县市长',council:'县市议员',township:'乡镇市区长'},metrics={party:selection.office==='council'?'当选席次':selection.level==='town'?'得票领先':'当选政党',seats:'指定政党席次',vote:'得票率',share:'得票率',votes:'得票数'};
   return[selection.year||2022,offices[selection.office]||'历史选举',selection.county||'全台',metrics[selection.metric]||selection.metric||'结果'].join('-').replace(/[\\/:*?"<>|]/g,'_');
  }
  function historyCsv(result={contests:[],candidacies:[]},selection={}){

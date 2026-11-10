@@ -1050,7 +1050,7 @@ test('2022 council uses all historical district geometries and actual elected se
  assert.equal(await page.locator('#historySeatBadges').count(),1);assert.equal(await page.locator('#historySeatBadgeLeaders').count(),1);
  assert.ok(await page.locator('[data-history-seat-badge]').count()>0);assert.equal(await page.locator('[data-history-seat-count]').evaluateAll(nodes=>nodes.every(node=>Number(node.dataset.historySeatCount)>0)),true);
  assert.equal(await page.locator('[data-seat-district]').evaluateAll(nodes=>nodes.every(node=>/席/.test(node.getAttribute('aria-label')||''))),true);
- assert.equal(await page.locator('#historyMetric option').count(),3);
+ assert.equal(await page.locator('#historyMetric option').count(),4);
   assert.equal(await page.locator('[data-history-seat-badge]').count(),34);
   assert.equal(await page.locator('[data-history-seat-count]').evaluateAll(nodes=>nodes.every(node=>node.dataset.historySeatCount==='1')),true);
  await page.locator('[data-seat-district]').first().click();await page.locator('#historyResultDialog').waitFor({state:'visible'});
@@ -1074,7 +1074,7 @@ test('2022 township and mayor maps navigate by county with actual numeric result
  assert.notEqual(await page.locator('#regions [data-region="63000010"]').getAttribute('fill'),'#edf1e9');
  await page.locator('#historyCounty').selectOption({label:'台北市'});
  assert.equal(await page.locator('#regions path[data-region]').count(),12);
- await page.locator('#historyMetric').selectOption('vote');assert.equal(await page.locator('#historyCandidateScope').isVisible(),true);
+ await page.locator('#historyMetric').selectOption('share');assert.equal(await page.locator('#historyCandidateScope').isVisible(),true);
   assert.equal(await page.locator('#historyVoteUnit').count(),0);
  const gradients=page.locator('#legend [data-history-gradient-party]');
  assert.deepEqual((await gradients.evaluateAll(nodes=>nodes.map(n=>n.getAttribute('data-history-gradient-party')))).sort(),['中国国民党','民主进步党']);
@@ -1096,13 +1096,13 @@ test('2022 township and mayor maps navigate by county with actual numeric result
   assert.equal(row.stops[0],row.low,'Low-end color equals 2026 gradient: '+row.party);
   assert.equal(row.stops.at(-1),row.high,'High-end color equals 2026 gradient: '+row.party);
   assert.equal(new Set(row.stops).size,11,'Gradient has distinguishable shade steps: '+row.party);
-  assert.equal(row.rates.length,5,'Five share labels above the bar: '+row.party);
-  assert.equal(row.votes.length,3,'Three vote-count labels below the bar: '+row.party);
+  assert.equal(row.rates.length,5,'Five share labels for percentage mode: '+row.party);
+  assert.equal(row.votes.length,0,'Do not mix vote-count labels into percentage mode: '+row.party);
   assert.ok(row.rates.every(t=>t.endsWith('%')),'Rate labels include percent units');
-  assert.ok(row.votes.every(t=>t.endsWith('票')),'Vote labels include vote units');
+  assert.ok(row.rates.every(t=>t.endsWith('%')),'Rate labels include percent units');
  }
 
- assert.match(await page.locator('#legend').textContent(),/乡镇市区最高票候选人.*选区有效票中位数换算，仅供参考.*领先地区数/);
+ assert.match(await page.locator('#legend').textContent(),/乡镇市区最高票候选人.*按得票率着色.*领先地区数/);
  assert.match(await exportSvg(page),/data-history-gradient-party="中国国民党"/);
  await page.locator('#historyCandidateScope').selectOption('candidate');assert.equal(await page.locator('#historyCandidate').isVisible(),true);
  await page.locator('#labels [data-label]').first().click();await page.locator('#historyResultDialog').waitFor({state:'visible'});
@@ -1110,35 +1110,63 @@ test('2022 township and mayor maps navigate by county with actual numeric result
 });
 
 
-test('2022 single-district shared colorbar has exact percentage-to-vote labels and accurate hover details',async t=>{
+test('2022 vote percentage and absolute-count maps have distinct color ranges and export labels',async t=>{
  const page=await pageFor(t);
  await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('mayor');
  await page.locator('#historyCounty').selectOption({label:'台北市'});
- await page.locator('#historyScale').selectOption('district');
- await page.locator('#historyMetric').selectOption('vote');
- const data=await page.evaluate(()=>{
+ await page.locator('#historyScale').selectOption('town');
+ assert.deepEqual(await page.locator('#historyMetric option').allTextContents(),
+  ['当地最高票','得票率','得票数']);
+ await page.locator('#historyMetric').selectOption('share');
+ const share=await page.evaluate(()=>{
   const group=document.querySelector('#legend [data-history-gradient-party]');
-  const rateLabels=[...group.querySelectorAll('[data-history-rate-tick]')].map(node=>({
-   fraction:Number(node.getAttribute('data-history-rate-tick')),text:node.textContent,
-   value:Number(node.textContent.replace('%','').replaceAll(',',''))}));
-  const voteLabels=[...group.querySelectorAll('[data-history-vote-tick]')].map(node=>({
-   fraction:Number(node.getAttribute('data-history-vote-tick')),text:node.textContent}));
-  return{rateLabels,voteLabels,validVotes:HistoryWorkspace.overview().validVotes,
-   note:document.querySelector('[data-history-vote-note]')?.textContent||'',
-   fills:[...document.querySelectorAll('#regions path[data-region]')].filter(x=>x.getAttribute('fill')!=='#edf1e9').map(x=>x.getAttribute('fill')),
-   unitSelectorPresent:!!document.querySelector('#historyVoteUnit')};
+  const rates=[...group.querySelectorAll('[data-history-rate-tick]')].map(x=>x.textContent);
+  const votes=[...group.querySelectorAll('[data-history-vote-tick]')].map(x=>x.textContent);
+  return{rates,votes,fill:document.querySelector('#regions [data-region="63000010"]')?.getAttribute('fill'),
+   summary:document.querySelector('#historySummary').textContent,
+   legend:document.querySelector('#legend').textContent,
+   exportName:exportFilename(),
+   range:document.querySelector('[data-history-rate-tick="1"]')?.textContent,
+   stops:[...group.querySelectorAll('stop')].map(node=>node.getAttribute('stop-color'))};
  });
- assert.equal(data.unitSelectorPresent,false);
- assert.ok(data.validVotes>0);
- assert.match(data.note,/本选区实际有效票换算/);
- assert.deepEqual(data.rateLabels.map(x=>x.fraction),[0,.25,.5,.75,1]);
- assert.deepEqual(data.voteLabels.map(x=>x.fraction),[0,.5,1]);
- for(const label of data.voteLabels){
-  const rate=data.rateLabels.find(x=>x.fraction===label.fraction);
-  assert.ok(rate,'Percentage axis must contain the vote label position');
-  assert.equal(label.text,Math.round(data.validVotes*rate.value/100).toLocaleString('zh-CN')+'票');
- }
- assert.ok(data.fills.length>0,'Vote-colored map should retain party shades');
+ assert.equal(share.rates.length,5);
+ assert.equal(share.votes.length,0);
+ assert.ok(share.rates.every(t=>/%$/.test(t)));
+ assert.match(share.summary,/得票率渐变/);
+ assert.match(share.legend,/按得票率着色/);
+ assert.doesNotMatch(share.legend,/参考|中位数换算/);
+ assert.match(share.exportName,/得票率/);
+ assert.notEqual(share.fill,'#edf1e9');
+ assert.equal(share.stops.length,11);
+ const shareExport=await exportSvg(page);
+ assert.match(shareExport,/得票率/);
+ await page.locator('#historyMetric').selectOption('votes');
+ const votes=await page.evaluate(()=>{
+  const group=document.querySelector('#legend [data-history-gradient-party]');
+  const rates=[...group.querySelectorAll('[data-history-rate-tick]')].map(x=>x.textContent);
+  const voteTicks=[...group.querySelectorAll('[data-history-vote-tick]')].map(x=>x.textContent);
+  return{rates,voteTicks,fill:document.querySelector('#regions [data-region="63000010"]')?.getAttribute('fill'),
+   summary:document.querySelector('#historySummary').textContent,legend:document.querySelector('#legend').textContent,
+   exportName:exportFilename(),stops:[...group.querySelectorAll('stop')].map(node=>node.getAttribute('stop-color'))};
+ });
+ assert.equal(votes.rates.length,0,'Vote-count map must not show a percentage axis');
+ assert.equal(votes.voteTicks.length,3,'Vote-count legend uses absolute vote ticks');
+ assert.ok(votes.voteTicks.every(t=>/票$/.test(t)));
+ assert.ok(votes.voteTicks.some(t=>Number(t.replaceAll(',','').replace('票',''))>1000));
+ assert.match(votes.summary,/得票数渐变/);
+ assert.match(votes.legend,/按得票数着色/);
+ assert.doesNotMatch(votes.legend,/%|参考|中位数换算/);
+ assert.match(votes.exportName,/得票数/);
+ assert.equal(votes.stops.length,11);
+ assert.notEqual(votes.fill,'#edf1e9');
+ assert.notEqual(share.fill,votes.fill,'Different vote bases must shade the same region differently');
+ assert.notEqual(share.range,votes.voteTicks.at(-1));
+ const voteExport=await exportSvg(page);
+ assert.match(voteExport,/得票数/);
+ assert.match(voteExport,/data-history-vote-tick/);
+ assert.doesNotMatch(voteExport,/data-history-rate-tick/);
+ assert.equal(await page.locator('#historyVoteUnit').count(),0);
 });
 
 test('Public history entry stays in the current workspace and displays the development notice',async t=>{
@@ -1180,7 +1208,7 @@ test('2022 council result filters, regional search and historical export',async 
  await page.locator('#historyCounty').selectOption({label:'台北市'});
  await page.locator('#historyMetric').selectOption('seats');
  assert.equal(await page.locator('#historyParty').isVisible(),true);
- await page.locator('#historyMetric').selectOption('vote');
+ await page.locator('#historyMetric').selectOption('share');
  await page.locator('#historyCandidateScope').selectOption('candidate');
  assert.ok(await page.locator('#historyCandidate option').count()>1);
  await page.locator('#historyViewCandidates').click();
