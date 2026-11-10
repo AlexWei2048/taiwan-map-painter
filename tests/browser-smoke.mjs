@@ -1071,6 +1071,26 @@ test('2022 township and mayor maps navigate by county with actual numeric result
   assert.equal(await page.locator('#historyVoteUnitBox').isVisible(),true);
  const gradients=page.locator('#legend [data-history-gradient-party]');
  assert.deepEqual((await gradients.evaluateAll(nodes=>nodes.map(n=>n.getAttribute('data-history-gradient-party')))).sort(),['中国国民党','民主进步党']);
+ const gradientAudit=await page.evaluate(()=>{
+  const frame=Number(document.querySelector('#legend > rect').getAttribute('width'));
+  return [...document.querySelectorAll('#legend [data-history-gradient-party]')].map(group=>{
+   const party=group.getAttribute('data-history-gradient-party'),bar=group.querySelector('[data-history-gradient-bar]');
+   const stops=[...group.querySelectorAll('stop')].map(node=>node.getAttribute('stop-color'));
+   const palette=predictionParty(party).color;
+   return{party,width:Number(bar?.getAttribute('width')),frame,stops,
+    low:ElectionCore.shade(palette,0,0,100),high:ElectionCore.shade(palette,100,0,100),
+    ticks:[...group.querySelectorAll('text')].map(node=>node.textContent)};
+  });
+ });
+ for(const row of gradientAudit){
+  assert.ok(row.width/row.frame>.85,'2022 legend uses a nearly full-width color bar: '+row.party);
+  assert.equal(row.stops.length,11,'11 nonlinear color stops: '+row.party);
+  assert.equal(row.stops[0],row.low,'Low-end color equals 2026 gradient: '+row.party);
+  assert.equal(row.stops.at(-1),row.high,'High-end color equals 2026 gradient: '+row.party);
+  assert.equal(new Set(row.stops).size,11,'Gradient has distinguishable shade steps: '+row.party);
+  assert.ok(row.ticks.some(t=>t.includes('票')),'Vote values are labeled: '+row.party);
+ }
+
  assert.match(await page.locator('#legend').textContent(),/乡镇市区最高票候选人.*69,266.*领先地区数/);
  assert.match(await exportSvg(page),/data-history-gradient-party="中国国民党"/);
  await page.locator('#historyCandidateScope').selectOption('candidate');assert.equal(await page.locator('#historyCandidate').isVisible(),true);
