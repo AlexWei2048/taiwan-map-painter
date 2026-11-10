@@ -110,28 +110,46 @@
   let rowY=y+67;
   if(gradients.length){
    const bx=x+18,bw=width-36,range=metric==='seats'?result.seatRange:result.range;
-   const stops=metric==='votes'||metric==='seats'?[0,.5,1]:[0,.25,.5,.75,1];
+   const rateStops=[0,.25,.5,.75,1],voteStops=[0,.5,1],seatStops=[0,.5,1];
    for(const [index,party] of gradients.entries()){
     const group=svg('g',{'data-history-gradient-party':party});
     group.append(svg('rect',{x:bx,y:rowY+3,width:font,height:font,rx:3,fill:partyColor(party)}));
     const label=svg('text',{x:bx+font*1.35,y:rowY+font,'font-size':font*.88,'font-weight':600,fill:'#426052'});
     label.textContent=party;group.append(label);
-    const gy=rowY+font*1.35,barHeight=font*1.4;
+    const rateMode=metric==='vote',gy=rowY+font*(rateMode?2.22:1.35),barHeight=font*1.16;
     const id='history-gradient-'+index,defs=svg('defs'),gradient=svg('linearGradient',{id,x1:'0%',x2:'100%',y1:'0%',y2:'0%'});
-    // Sample the actual 2026 nonlinear shade at 11 points, matching historical map colors.
+    // Sample exactly the map's nonlinear color scale.
     for(let step=0;step<=10;step++){
      const fraction=step/10,value=range.min+(range.max-range.min)*fraction;
      gradient.append(svg('stop',{offset:(fraction*100)+'%','stop-color':tone(partyColor(party),value,range)}));
     }
     defs.append(gradient);group.append(defs);
     group.append(svg('rect',{x:bx,y:gy,width:bw,height:barHeight,rx:4,fill:'url(#'+id+')',stroke:'#b0bcb1','stroke-width':.55,'data-history-gradient-bar':party}));
-    for(const fraction of stops){
+    for(const fraction of (rateMode?rateStops:seatStops)){
      const value=range.min+(range.max-range.min)*fraction,tx=bx+bw*fraction;
      if(fraction>0&&fraction<1)group.append(svg('line',{x1:tx,x2:tx,y1:gy+1,y2:gy+barHeight-1,stroke:'#526355','stroke-width':1,opacity:.36}));
-     const tick=svg('text',{x:tx,y:rowY+font*3.55,'text-anchor':fraction===0?'start':fraction===1?'end':'middle','font-size':font*.7,fill:'#526c60'});
-     tick.textContent=value.toLocaleString('zh-CN',{maximumFractionDigits:metric==='votes'||metric==='seats'?0:1})+unit;group.append(tick);
+     const tick=svg('text',{x:tx,y:rateMode?gy-font*.3:rowY+font*3.55,'text-anchor':fraction===0?'start':fraction===1?'end':'middle','font-size':font*.7,fill:'#526c60'});
+     tick.textContent=value.toLocaleString('zh-CN',{maximumFractionDigits:rateMode?1:0})+unit;
+     if(rateMode)tick.setAttribute('data-history-rate-tick',String(fraction));
+     group.append(tick);
     }
-    root.append(group);rowY+=font*4.3;
+    if(rateMode){
+     // A percentage has no unique absolute-vote equivalent across districts.
+     // Use the actual electorate total for a single district; for multi-district
+     // maps, mark the median valid-vote total as an explicitly labeled reference.
+     for(const fraction of voteStops){
+      const value=range.min+(range.max-range.min)*fraction,tx=bx+bw*fraction;
+      const tick=svg('text',{x:tx,y:gy+barHeight+font*.95,'text-anchor':fraction===0?'start':fraction===1?'end':'middle','font-size':font*.73,fill:'#526c60','data-history-vote-tick':String(fraction)});
+      tick.textContent=result.referenceVotes===null?'—':Math.round(result.referenceVotes*value/100).toLocaleString('zh-CN')+'票';
+      group.append(tick);
+     }
+    }
+    root.append(group);rowY+=font*(rateMode?5:4.3);
+   }
+   if(metric==='vote'){
+    const note=svg('text',{x:bx,y:rowY+font*.65,'font-size':font*.72,fill:'#70867b','data-history-vote-note':'true'});
+    note.textContent=result.referenceExact?'下方票数：按本选区实际有效票换算':'下方票数：按选区有效票中位数换算，仅供参考';
+    root.append(note);rowY+=font*1.4;
    }
    const summary=svg('text',{x:x+18,y:rowY+font,'font-size':font*.88,'font-weight':600,fill:'#294a3a'});
    summary.textContent=mayorTownView()?'领先地区数（共 '+count+' 个）':'当选席次（共 '+count+' 席）';
