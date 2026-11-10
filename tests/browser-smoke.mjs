@@ -1150,13 +1150,13 @@ test('2022 council constituency lists and CSV use 1, 2, 3 numeric ordering',asyn
  await page.locator('#historyElectorate').selectOption('regional');
  await page.locator('#historyViewCandidates').click();
  const groups=await page.locator('#historyResults tr.history-district-divider th').allTextContents();
- const ids=groups.map(title=>Number((title.match(/第(\d+)选区/)||[])[1]));
+ const ids=groups.map(title=>Number((title.match(/第\s*0*(\d+)\s*选(?:举)?区/)||[])[1]));
  assert.ok(ids.length>2,'more than two constituency sections');
  assert.ok(ids.every(Number.isFinite),'all group headings have numbered constituencies');
  assert.equal(ids[0],1);
  assert.deepEqual(ids,[...ids].sort((a,b)=>a-b),'numeric order on candidate result table');
  const csvData=await page.evaluate(()=>HistoryWorkspace.historyCsv(HistoryWorkspace.result(),HistoryWorkspace.selection()));
- const csvDistricts=csvData.split('\r\n').slice(1).map(line=>Number((line.match(/"第(\d+)选区"/)||[])[1])).filter(Number.isFinite);
+ const csvDistricts=csvData.split('\r\n').slice(1).map(line=>Number((line.match(/"第\s*0*(\d+)\s*选(?:举)?区"/)||[])[1])).filter(Number.isFinite);
  assert.ok(csvDistricts.length>10);
  assert.equal(csvDistricts[0],1);
  assert.deepEqual(csvDistricts,[...csvDistricts].sort((a,b)=>a-b),'numeric order in CSV');
