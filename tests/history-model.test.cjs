@@ -6,6 +6,22 @@ const H=require('../history-core.js');
 
 const snapshot=JSON.parse(fs.readFileSync('assets/history-2022.json','utf8'));
 
+test('historical constituency order is numeric within each county and electorate, then highest vote first',()=>{
+ const rows=[
+  {county:'台北市',electorate:'regional',district:'第10选区',name:'十',votes:900},
+  {county:'台北市',electorate:'mountain',district:'第1选区',name:'山',votes:40},
+  {county:'新北市',electorate:'regional',district:'第1选区',name:'新北',votes:110},
+  {county:'台北市',electorate:'regional',district:'第2选区',name:'乙',votes:10},
+  {county:'台北市',electorate:'regional',district:'第1选区',name:'甲次',votes:80},
+  {county:'台北市',electorate:'regional',district:'第1选区',name:'甲首',votes:150},
+  {county:'台北市',electorate:'plains',district:'第1选区',name:'平',votes:20}
+ ];
+ rows.sort((a,b)=>H.compareResultRows(a,b,'council'));
+ assert.deepEqual(rows.map(x=>x.name),['甲首','甲次','乙','十','平','山','新北']);
+ const mixed=['第11選舉區','第2選舉區','第1選舉區'].map(district=>({county_name:'台北市',electorate:'regional',district_name:district}));
+ assert.deepEqual(mixed.sort((a,b)=>H.compareResultRows(a,b,'council')).map(x=>x.district_name),['第1選舉區','第2選舉區','第11選舉區']);
+});
+
 test('2022 snapshot exposes a versioned entity model with stable identifiers',()=>{
  assert.equal(snapshot.schemaVersion,2);
  assert.ok(Array.isArray(snapshot.elections)&&snapshot.elections.length===3);
