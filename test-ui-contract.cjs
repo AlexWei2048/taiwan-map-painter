@@ -87,7 +87,7 @@ test('Map coastline switches with scope for counties, towns and islands',()=>{
  assert.match(group.children[0].d,/L2,0L2,1/);
 });
 test('All runtime JavaScript parses cleanly',()=>{
- for(const name of ['app.js','town-prediction-ui.js','town-prediction-core.js','workspace-ui.js','prediction-ui.js','prediction-core.js','candidate-directory.js','election-core.js','district-core.js','district-details.js'])assert.doesNotThrow(()=>new Function(read(name)),name);
+ for(const name of ['app.js','town-prediction-ui.js','town-prediction-core.js','workspace-ui.js','prediction-ui.js','prediction-core.js','candidate-directory.js','election-core.js','district-core.js','district-details.js','history-workspace.js'])assert.doesNotThrow(()=>new Function(read(name)),name);
 });
 test('Councillor national scope has single-map choices and remains stored in project',()=>{
  assert.match(index,/id="councilViewScope"/);assert.match(app,/councilViewScope:'all'/);
@@ -785,7 +785,7 @@ test('Administrative lookup sits above the legend and exports every entry',()=>{
  assert.match(index,/style\.css\?v=[\w-]+/);
  const canvasStart=index.indexOf('<div class="canvas" id="canvas">');
  const key=index.indexOf('<aside class="map-number-key"',canvasStart);
- const canvasEnd=index.indexOf('</div></div>\n<section aria-labelledby="districtReferenceTitle"',canvasStart);
+ const canvasEnd=index.indexOf('</div></div>\n<section class="history-result-section"',canvasStart);
  assert.ok(canvasStart>=0&&key>canvasStart&&key<canvasEnd,'Map key must be inside canvas');
  const css=read('style.css');
  assert.match(css,/\.canvas>\.map-number-key\{/);
@@ -990,6 +990,45 @@ test('Both historical entry pages include the controls wired by history JavaScri
   const html=read(name);
   for(const id of ids)assert.equal(html.split('id="'+id+'"').length-1,1,name+': '+id);
  }
+});
+
+test('Unified historical workspace has one filter hierarchy and three result views',()=>{
+ const ids=['historyYear','historyOffice','historyElectorate','historyCounty','historyScale','historyMetric',
+  'historyCandidate','historyParty','historyViewMap','historyViewCandidates','historyViewOverview',
+  'historyMapPanel','historyCandidatesPanel','historyOverviewPanel','historyLoadStatus','historyRetry','historyCoverage'];
+ for(const id of ids)assert.equal(index.split('id="'+id+'"').length-1,1,id+' must be unique');
+ for(const label of ['结果地图','候选人结果','选举概况','县市议员','平地少数民族议员','山地少数民族议员'])assert.match(index,new RegExp(label));
+ assert.match(index,/history-workspace\.js\?v=[\w-]+/);
+ const controls=index.slice(index.indexOf('id="historyControls"'),index.indexOf('id="mapSettings"'));
+ assert.doesNotMatch(controls,/>议员<\/option>/);
+});
+
+test('Historical exports use normalized metadata without entering saved prediction state',()=>{
+ const historyWorkspace=read('history-workspace.js'),historyView=read('history-2022.js'),access=read('history-access.js');
+ assert.match(app,/HistoryWorkspace\.exportStem\(HistoryWorkspace\.selection\(\)\)/);
+ assert.match(historyWorkspace,/id='historyExportCsv'/);
+ assert.match(historyWorkspace,/县市规范名称/);assert.match(historyWorkspace,/县市官方名称/);
+ assert.match(historyWorkspace,/候选人规范姓名/);assert.match(historyWorkspace,/候选人官方姓名/);
+ assert.match(historyView,/projectStateForSave=function\(\)\{return active&&savedMapScope\?savedMapScope:defaultSaveState\(\)\}/);
+ assert.doesNotMatch(historyWorkspace,/localStorage\.setItem\([^,]+JSON\.stringify\(state/);
+ assert.match(access,/开发中，敬请期待/);assert.match(access,/event\.preventDefault\(\);event\.stopImmediatePropagation\(\)/);
+});
+
+test('Historical councillor identity state stays aligned between the adapter and overview',()=>{
+ const workspaceHistory=read('history-workspace.js');
+ assert.match(workspaceHistory,/if\(state\.office==='council'\)\{/);
+ assert.match(workspaceHistory,/else electorate\.value='regional'/);
+ assert.match(workspaceHistory,/node\.dispatchEvent\(new Event\('change',\{bubbles:true\}\)\)/);
+ assert.match(read('history-2022.js'),/el\('historyElectorate'\)\.onchange=\(\)=>\{electorate=el\('historyElectorate'\)\.value/);
+});
+
+test('Historical snapshot cache and exports carry schema and provenance metadata',()=>{
+ const historyView=read('history-2022.js');
+ assert.match(historyView,/assets\/history-2022\.json\?v=20261110-schema-v2/);
+ assert.match(historyView,/obj\.schemaVersion!==2/);
+ assert.doesNotMatch(historyView,/officialWinnerCorrections/);
+ assert.match(historyView,/exportMetadata/);assert.match(historyView,/行政区边界版本/);
+ assert.match(app,/data-export-history-metadata/);assert.match(app,/History2022View\.exportMetadata/);
 });
 
 test('Historical data tools are removed and footer credits use separate lines',()=>{

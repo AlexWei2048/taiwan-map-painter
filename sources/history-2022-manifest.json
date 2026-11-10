@@ -1,0 +1,647 @@
+{
+  "schemaVersion": 2,
+  "year": 2022,
+  "fetchedAt": "2026-11-10T01:39:04.428151+00:00",
+  "catalog": "https://www.taiwanvotes.tw/download/",
+  "files": [
+    {
+      "filename": "縣市長_2022_臺北市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E9%95%B7_2022_%E8%87%BA%E5%8C%97%E5%B8%82.csv?v=20260914103616",
+      "sha256": "9a4479a648cd50d913ce8e6d594745505755cdcc3552abf8368f1e20bc23c352",
+      "office": "mayor",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市長_2022_新北市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E9%95%B7_2022_%E6%96%B0%E5%8C%97%E5%B8%82.csv?v=20260914103616",
+      "sha256": "ae6bdf67e669f1145f02f7ceed64c3819edff69d9371a0f461c7b3abade0b35e",
+      "office": "mayor",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市長_2022_桃園市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E9%95%B7_2022_%E6%A1%83%E5%9C%92%E5%B8%82.csv?v=20260914103616",
+      "sha256": "29302d453bdf2ee8c05b41f5df189864df0f2b213a385fa07a1c7f70feca8fea",
+      "office": "mayor",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市長_2022_臺中市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E9%95%B7_2022_%E8%87%BA%E4%B8%AD%E5%B8%82.csv?v=20260914103616",
+      "sha256": "e80154a6a9f8031baf007f4f7ed354972d4888f863a2325b121bf87a52100879",
+      "office": "mayor",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市長_2022_臺南市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E9%95%B7_2022_%E8%87%BA%E5%8D%97%E5%B8%82.csv?v=20260914103616",
+      "sha256": "4d3753cd95566e81575a0974b48820e00c0b006cec9406aac71f0f1984cf59f5",
+      "office": "mayor",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市長_2022_高雄市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E9%95%B7_2022_%E9%AB%98%E9%9B%84%E5%B8%82.csv?v=20260914103616",
+      "sha256": "e6c54fca31a3a222e554aedc08306edf9ae3285ec102c7018afe8dccfdf93a7a",
+      "office": "mayor",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市長_2022_基隆市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E9%95%B7_2022_%E5%9F%BA%E9%9A%86%E5%B8%82.csv?v=20260914103616",
+      "sha256": "8fa6d2c6705c2cc8c571099b87cd5c71e825de082213c4998ecae342d3d21f2a",
+      "office": "mayor",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市長_2022_新竹市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E9%95%B7_2022_%E6%96%B0%E7%AB%B9%E5%B8%82.csv?v=20260914103616",
+      "sha256": "4b371da8a7198d9b520f7bb8eafe450c7bcfbe66a279648aecf0982e3cbe0d08",
+      "office": "mayor",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市長_2022_新竹縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E9%95%B7_2022_%E6%96%B0%E7%AB%B9%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "5a7b8ab256a3baf5d6024f6933af2839f9d5f607f362aa36beb8822f854f870c",
+      "office": "mayor",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市長_2022_苗栗縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E9%95%B7_2022_%E8%8B%97%E6%A0%97%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "554b6cc54c17fb83683f502c2f8776317ea3b465a638f8ef8ef2f9f7976812a2",
+      "office": "mayor",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市長_2022_彰化縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E9%95%B7_2022_%E5%BD%B0%E5%8C%96%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "312ae60e683787025d41205bc3b8e8f1b232437c7b17b86cdc1d1f03ec12b45d",
+      "office": "mayor",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市長_2022_南投縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E9%95%B7_2022_%E5%8D%97%E6%8A%95%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "1f1c5eccdacaa2c9a6c3b6db1f2365131e0ad637b39127906d96c3a136c805a3",
+      "office": "mayor",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市長_2022_雲林縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E9%95%B7_2022_%E9%9B%B2%E6%9E%97%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "66ed8c5efd6b07d5e0f09f9de7334488305006a3ea2c70c69be18b7f965d121a",
+      "office": "mayor",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市長_2022_嘉義市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E9%95%B7_2022_%E5%98%89%E7%BE%A9%E5%B8%82.csv?v=20260914103616",
+      "sha256": "ea7cfd2e6467566dae3322ced1f2c693c0bc023b94b6b18e66a1544a09c2a392",
+      "office": "mayor",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市長_2022_嘉義縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E9%95%B7_2022_%E5%98%89%E7%BE%A9%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "64b981a68e8d85aa40b62249cf20a027f3df494054e052605a3bd98830114c29",
+      "office": "mayor",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市長_2022_屏東縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E9%95%B7_2022_%E5%B1%8F%E6%9D%B1%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "1e27f6e9549250bc47b9de8d1021a5f18623fe442405915ebb46f14ca4b1b4d5",
+      "office": "mayor",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市長_2022_宜蘭縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E9%95%B7_2022_%E5%AE%9C%E8%98%AD%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "b599338be0b0969652a526a62494eb32dd49a2bfa737160f4ae887a98a8cb618",
+      "office": "mayor",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市長_2022_花蓮縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E9%95%B7_2022_%E8%8A%B1%E8%93%AE%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "0227ef73c8e2a6f85520775adeb4a9d697d4ebd3d4bd4a4f800fd0954328cf85",
+      "office": "mayor",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市長_2022_臺東縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E9%95%B7_2022_%E8%87%BA%E6%9D%B1%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "53f996298da90c7b25514338f735eccfd6820e93cb933e736f18ce8903038f63",
+      "office": "mayor",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市長_2022_澎湖縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E9%95%B7_2022_%E6%BE%8E%E6%B9%96%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "a6ac44a2201bd6d6467ebd1701c37f4b8be870a14ae9e28c9a94866bc2972260",
+      "office": "mayor",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市長_2022_金門縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E9%95%B7_2022_%E9%87%91%E9%96%80%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "679f7772ae42209fcb8477e5d26cb81df872353892a60098715be4e7d6824d5c",
+      "office": "mayor",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市長_2022_連江縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E9%95%B7_2022_%E9%80%A3%E6%B1%9F%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "a47949b9b1652c3014cd6b0371b7a8b3e136cfb9170f4de45ce193977c9a3f36",
+      "office": "mayor",
+      "electorate": "regional"
+    },
+    {
+      "filename": "鄉鎮市長_2022_新竹縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7_2022_%E6%96%B0%E7%AB%B9%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "115cd81955a6ebf164c089aa168273703df5495ce4c650963cda0a59311f0f27",
+      "office": "township",
+      "electorate": "regional"
+    },
+    {
+      "filename": "鄉鎮市長_2022_苗栗縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7_2022_%E8%8B%97%E6%A0%97%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "156adfd1482c0745c1e514a141ae950b931fde56c5e8d18caae0c32d945fcbf3",
+      "office": "township",
+      "electorate": "regional"
+    },
+    {
+      "filename": "鄉鎮市長_2022_彰化縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7_2022_%E5%BD%B0%E5%8C%96%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "bc3f1c6023005c726f54eaf9139209a73e60e89067e4a78c51bc634e40734581",
+      "office": "township",
+      "electorate": "regional"
+    },
+    {
+      "filename": "鄉鎮市長_2022_南投縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7_2022_%E5%8D%97%E6%8A%95%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "647d2594c1355c4a8c9abf8206760b32c5c8103a5b3e0844c083df8aca274b19",
+      "office": "township",
+      "electorate": "regional"
+    },
+    {
+      "filename": "鄉鎮市長_2022_雲林縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7_2022_%E9%9B%B2%E6%9E%97%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "688686e07cd2f93114c9c09f999b9e6448ea1e9fbb188c42d17c54ae6a4e3891",
+      "office": "township",
+      "electorate": "regional"
+    },
+    {
+      "filename": "鄉鎮市長_2022_嘉義縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7_2022_%E5%98%89%E7%BE%A9%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "2ff6b6f65da9bcaad7293b765358b6c9c9ae2a590977b22b2f06b6574970d747",
+      "office": "township",
+      "electorate": "regional"
+    },
+    {
+      "filename": "鄉鎮市長_2022_屏東縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7_2022_%E5%B1%8F%E6%9D%B1%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "5a00943524e6282fc96ea99c118995d53f0f6d58674605009404463ad3d634a3",
+      "office": "township",
+      "electorate": "regional"
+    },
+    {
+      "filename": "鄉鎮市長_2022_宜蘭縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7_2022_%E5%AE%9C%E8%98%AD%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "d8707ee24ac34fb4ef334971f6efe36fe9bd66fc383a2dfe4ac667314f3b799e",
+      "office": "township",
+      "electorate": "regional"
+    },
+    {
+      "filename": "鄉鎮市長_2022_花蓮縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7_2022_%E8%8A%B1%E8%93%AE%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "42de9360c8d7f18a8fc0e27e37e15822c1bbc176cdb9d2b9417840f102601bcc",
+      "office": "township",
+      "electorate": "regional"
+    },
+    {
+      "filename": "鄉鎮市長_2022_臺東縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7_2022_%E8%87%BA%E6%9D%B1%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "5026e05f58ec6a80fc4d5f8b63a8bd7891c29ab30f25bf0b798d3da88c61e9a9",
+      "office": "township",
+      "electorate": "regional"
+    },
+    {
+      "filename": "鄉鎮市長_2022_澎湖縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7_2022_%E6%BE%8E%E6%B9%96%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "0d26385518cc9fbbd792dd003a6b121731d16165d61a91682da1e2416a4de067",
+      "office": "township",
+      "electorate": "regional"
+    },
+    {
+      "filename": "鄉鎮市長_2022_金門縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7_2022_%E9%87%91%E9%96%80%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "18785fd4b8a050e967447e3bcb17d53c3dbc51d1613d919cb8a36609acc482a7",
+      "office": "township",
+      "electorate": "regional"
+    },
+    {
+      "filename": "鄉鎮市長_2022_連江縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7_2022_%E9%80%A3%E6%B1%9F%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "c8d5d779a9aea086d6d6743139d044712e41c42aecca13e1a59daf13431acb64",
+      "office": "township",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市議員_2022_臺北市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1_2022_%E8%87%BA%E5%8C%97%E5%B8%82.csv?v=20260914103616",
+      "sha256": "a089bb334cd77f3cb8e93b274e1c04ba26cf592ecf32957a8f2c35e25304f764",
+      "office": "council",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市議員_2022_新北市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1_2022_%E6%96%B0%E5%8C%97%E5%B8%82.csv?v=20260914103616",
+      "sha256": "c28242c1a063d8eb1f86e352d7dc9798b32da8f3886eb583c45a769055426c13",
+      "office": "council",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市議員_2022_桃園市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1_2022_%E6%A1%83%E5%9C%92%E5%B8%82.csv?v=20260914103616",
+      "sha256": "8e35b81ea665ea1654ceffd6d5bfffa46aa8c354aa864e732852c31aa042ce05",
+      "office": "council",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市議員_2022_臺中市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1_2022_%E8%87%BA%E4%B8%AD%E5%B8%82.csv?v=20260914103616",
+      "sha256": "4c541628b575f51bc1156be2b3481a2f50f3f8ef9a73a51600c4ca3bac844d98",
+      "office": "council",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市議員_2022_臺南市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1_2022_%E8%87%BA%E5%8D%97%E5%B8%82.csv?v=20260914103616",
+      "sha256": "e288c3e010f4166f370963152bcaec51168a2dc8e3b1cc8c566f8bb54b8a0271",
+      "office": "council",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市議員_2022_高雄市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1_2022_%E9%AB%98%E9%9B%84%E5%B8%82.csv?v=20260914103616",
+      "sha256": "130803d2df07a84380482d099f69bd1bd0015b07b4e778b2487fef5f4b7afc94",
+      "office": "council",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市議員_2022_基隆市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1_2022_%E5%9F%BA%E9%9A%86%E5%B8%82.csv?v=20260914103616",
+      "sha256": "9d29028905e996d06c9ecb731ae10024b6fabf2bba1d995a8cb4a95c6b6ef8e6",
+      "office": "council",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市議員_2022_新竹市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1_2022_%E6%96%B0%E7%AB%B9%E5%B8%82.csv?v=20260914103616",
+      "sha256": "6ab2d246d0b2dc12b50c8f90b363135b00da47bfa8986fcc078c2e69dccd1da6",
+      "office": "council",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市議員_2022_新竹縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1_2022_%E6%96%B0%E7%AB%B9%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "0593e2b3cb9e414bd406911f983d4badf5c7494a1f53cfc4668e51b4a5702b50",
+      "office": "council",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市議員_2022_苗栗縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1_2022_%E8%8B%97%E6%A0%97%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "bba1c36de62ca6ca405c96aa329f506d4a8856e2f31e1943ff2452fa5be7d312",
+      "office": "council",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市議員_2022_彰化縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1_2022_%E5%BD%B0%E5%8C%96%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "1e08b5028a4490d3539bc93e999fd70f257d4098a652aaa607dbdaa2e9b0d941",
+      "office": "council",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市議員_2022_南投縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1_2022_%E5%8D%97%E6%8A%95%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "3a874300a0e628ffda4a7a27e91a3c928a7185a9b537204a9e9114a7c66c9838",
+      "office": "council",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市議員_2022_雲林縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1_2022_%E9%9B%B2%E6%9E%97%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "5f6971eaa13dc9c52960e31ab6f9f3f477cb4a1eb6c4b4b0a4022ce9457f71ed",
+      "office": "council",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市議員_2022_嘉義市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1_2022_%E5%98%89%E7%BE%A9%E5%B8%82.csv?v=20260914103616",
+      "sha256": "b0144b0411c4a5128d2c20e7f36a4a768703f5bbf27275eeb8bd51f82dc5d291",
+      "office": "council",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市議員_2022_嘉義縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1_2022_%E5%98%89%E7%BE%A9%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "064de8b9b2c42b4b686ab0383ffe0fbbec0823fd2747e75e859cff678a4e2696",
+      "office": "council",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市議員_2022_屏東縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1_2022_%E5%B1%8F%E6%9D%B1%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "ecb67175947e498f77fe7d9be46b2496f86bb1ecc428d9d580fd97f5dcea0cc7",
+      "office": "council",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市議員_2022_宜蘭縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1_2022_%E5%AE%9C%E8%98%AD%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "1fe48312c9d21fbb7b8dec1811eb4b4cef88c5e589c96f1299a8c0fabd480330",
+      "office": "council",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市議員_2022_花蓮縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1_2022_%E8%8A%B1%E8%93%AE%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "19c889a070c6162a38e217c5ddc5ad40109c5296327f908925c11ea3cd9b89c8",
+      "office": "council",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市議員_2022_臺東縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1_2022_%E8%87%BA%E6%9D%B1%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "ae98b7e631c1ce6172c721ec7b7792783715c2a9069c96aa70df3c8443557fd3",
+      "office": "council",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市議員_2022_澎湖縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1_2022_%E6%BE%8E%E6%B9%96%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "3e82b8c2f636c66465b2cbba83d30fdf10aa2052ac31238c79993075f0362e1a",
+      "office": "council",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市議員_2022_金門縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1_2022_%E9%87%91%E9%96%80%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "c2e3fa47b14180975b92454b7eb8ddda349e2973d453d76506c8029bf736f225",
+      "office": "council",
+      "electorate": "regional"
+    },
+    {
+      "filename": "縣市議員_2022_連江縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1_2022_%E9%80%A3%E6%B1%9F%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "9a87ae1ee2b65631e21ed4c2e8afa672e3b17ed99c4b0eeb43c453ba943dd24d",
+      "office": "council",
+      "electorate": "regional"
+    },
+    {
+      "filename": "原住民區長_2022_新北市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%8E%9F%E4%BD%8F%E6%B0%91%E5%8D%80%E9%95%B7_2022_%E6%96%B0%E5%8C%97%E5%B8%82.csv?v=20260914103616",
+      "sha256": "45e4fe7add538e18ad3f2260646bbd25684871f79fb87e47664b96740886fcaa",
+      "office": "township",
+      "electorate": "mountain"
+    },
+    {
+      "filename": "原住民區長_2022_桃園市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%8E%9F%E4%BD%8F%E6%B0%91%E5%8D%80%E9%95%B7_2022_%E6%A1%83%E5%9C%92%E5%B8%82.csv?v=20260914103616",
+      "sha256": "b0499026d5e538ea5d9ff12f94c5956e637be015c7160370a43564b08cd97350",
+      "office": "township",
+      "electorate": "mountain"
+    },
+    {
+      "filename": "原住民區長_2022_臺中市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%8E%9F%E4%BD%8F%E6%B0%91%E5%8D%80%E9%95%B7_2022_%E8%87%BA%E4%B8%AD%E5%B8%82.csv?v=20260914103616",
+      "sha256": "2f45a8638bef5f1a3b4ba36d83d4374c10f82d612fac69f034c3d9f50e63af96",
+      "office": "township",
+      "electorate": "mountain"
+    },
+    {
+      "filename": "原住民區長_2022_高雄市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%8E%9F%E4%BD%8F%E6%B0%91%E5%8D%80%E9%95%B7_2022_%E9%AB%98%E9%9B%84%E5%B8%82.csv?v=20260914103616",
+      "sha256": "6fd58f1b8a1ddd8ec3ba0a73755d327614e169cf2e2a20605a6e00424780473f",
+      "office": "township",
+      "electorate": "mountain"
+    },
+    {
+      "filename": "平地原住民議員_2022_臺北市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B9%B3%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E8%87%BA%E5%8C%97%E5%B8%82.csv?v=20260914103616",
+      "sha256": "5f8018c0ea3dafa853db5b721b6167ba0f8fb22ee1059e34aebaebe0eeb0a98b",
+      "office": "council",
+      "electorate": "plains"
+    },
+    {
+      "filename": "平地原住民議員_2022_新北市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B9%B3%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E6%96%B0%E5%8C%97%E5%B8%82.csv?v=20260914103616",
+      "sha256": "6568e86f350616df5245dfb048f62e3aed25c332016818503c60492f392e8394",
+      "office": "council",
+      "electorate": "plains"
+    },
+    {
+      "filename": "平地原住民議員_2022_桃園市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B9%B3%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E6%A1%83%E5%9C%92%E5%B8%82.csv?v=20260914103616",
+      "sha256": "7755a1c40eee8bc7a279dbe136f66e9673a30257dac1e62fd3084844ca0a1c8b",
+      "office": "council",
+      "electorate": "plains"
+    },
+    {
+      "filename": "平地原住民議員_2022_臺中市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B9%B3%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E8%87%BA%E4%B8%AD%E5%B8%82.csv?v=20260914103616",
+      "sha256": "8b55f0ba570e165f972588d0bc356a0713cbc41bb2a79fd1daa35a19df9ddb1e",
+      "office": "council",
+      "electorate": "plains"
+    },
+    {
+      "filename": "平地原住民議員_2022_臺南市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B9%B3%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E8%87%BA%E5%8D%97%E5%B8%82.csv?v=20260914103616",
+      "sha256": "42ebec4f0a2c13a9f4801ccdaa3d3fe2be901ee1db3626f820b6e1c1ba94b150",
+      "office": "council",
+      "electorate": "plains"
+    },
+    {
+      "filename": "平地原住民議員_2022_高雄市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B9%B3%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E9%AB%98%E9%9B%84%E5%B8%82.csv?v=20260914103616",
+      "sha256": "a934e54b7225a9dcae21c0d030df5e5867ed2c57df0cbc4855a1dc64d4d005ea",
+      "office": "council",
+      "electorate": "plains"
+    },
+    {
+      "filename": "平地原住民議員_2022_基隆市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B9%B3%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E5%9F%BA%E9%9A%86%E5%B8%82.csv?v=20260914103616",
+      "sha256": "e43da3203be2012e93cc12afbde4c73af30adb2b60b6e49af07947a03d9d4696",
+      "office": "council",
+      "electorate": "plains"
+    },
+    {
+      "filename": "平地原住民議員_2022_新竹市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B9%B3%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E6%96%B0%E7%AB%B9%E5%B8%82.csv?v=20260914103616",
+      "sha256": "bda06d74684a9951424dc5591b7d6b6918e9d8fb133b77b2c7dfddfb07be4184",
+      "office": "council",
+      "electorate": "plains"
+    },
+    {
+      "filename": "平地原住民議員_2022_新竹縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B9%B3%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E6%96%B0%E7%AB%B9%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "87c13357525342c9c40cf5df84765933314f9a7bd5acfa6f49b29a6b37ea669c",
+      "office": "council",
+      "electorate": "plains"
+    },
+    {
+      "filename": "平地原住民議員_2022_苗栗縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B9%B3%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E8%8B%97%E6%A0%97%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "4551dfd4fb39eccbf8d2e31067fc2da9253858fcd6df77fbd8f6bf4cf7702552",
+      "office": "council",
+      "electorate": "plains"
+    },
+    {
+      "filename": "平地原住民議員_2022_彰化縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B9%B3%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E5%BD%B0%E5%8C%96%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "a232411d383d032b208defbfa40bdeaa9251d4ce5c4d2095711cb8c96b8932ca",
+      "office": "council",
+      "electorate": "plains"
+    },
+    {
+      "filename": "平地原住民議員_2022_南投縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B9%B3%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E5%8D%97%E6%8A%95%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "0ed0373d55c3d4906d40fee9c73ff58c062c43fd29713867a6567d0c37a91c13",
+      "office": "council",
+      "electorate": "plains"
+    },
+    {
+      "filename": "平地原住民議員_2022_屏東縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B9%B3%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E5%B1%8F%E6%9D%B1%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "bff02a59b1a177ed36976c790a40e98cb007dcfe9dbbce512882808927c5ebe9",
+      "office": "council",
+      "electorate": "plains"
+    },
+    {
+      "filename": "平地原住民議員_2022_宜蘭縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B9%B3%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E5%AE%9C%E8%98%AD%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "b922a6e20eaa2109fd7063688dcf5e8397ecd57823065dbd7780d63757472ed5",
+      "office": "council",
+      "electorate": "plains"
+    },
+    {
+      "filename": "平地原住民議員_2022_花蓮縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B9%B3%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E8%8A%B1%E8%93%AE%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "7cbea8362cc8dabd11225d2a3e08d68f4b1e4cc176e833c689230cb561e68fc0",
+      "office": "council",
+      "electorate": "plains"
+    },
+    {
+      "filename": "平地原住民議員_2022_臺東縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B9%B3%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E8%87%BA%E6%9D%B1%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "aedac38c0f0e30b1644bece41444da67d9038897328351f9f0c2fd2f5de85de1",
+      "office": "council",
+      "electorate": "plains"
+    },
+    {
+      "filename": "山地原住民議員_2022_臺北市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B1%B1%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E8%87%BA%E5%8C%97%E5%B8%82.csv?v=20260914103616",
+      "sha256": "06d96a40f93e44c7a2db452d6cab7fdb3c724f74fb3668e8fa55555c5c1a44bd",
+      "office": "council",
+      "electorate": "mountain"
+    },
+    {
+      "filename": "山地原住民議員_2022_新北市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B1%B1%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E6%96%B0%E5%8C%97%E5%B8%82.csv?v=20260914103616",
+      "sha256": "40f988551bf2d9be0b86f95a2e9f21d7e225cb5a5cb89aeea50f51f0eb300a69",
+      "office": "council",
+      "electorate": "mountain"
+    },
+    {
+      "filename": "山地原住民議員_2022_桃園市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B1%B1%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E6%A1%83%E5%9C%92%E5%B8%82.csv?v=20260914103616",
+      "sha256": "029db178b3c74c19277f26b91998150bc8387f8f98653e3579dffe2755c204d3",
+      "office": "council",
+      "electorate": "mountain"
+    },
+    {
+      "filename": "山地原住民議員_2022_臺中市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B1%B1%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E8%87%BA%E4%B8%AD%E5%B8%82.csv?v=20260914103616",
+      "sha256": "6086bf304b48b458e1d7f7a655d34c2b1609925ec13badef36bf648dcfc44826",
+      "office": "council",
+      "electorate": "mountain"
+    },
+    {
+      "filename": "山地原住民議員_2022_臺南市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B1%B1%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E8%87%BA%E5%8D%97%E5%B8%82.csv?v=20260914103616",
+      "sha256": "2d527e6019a2a0448824306baaf624593f2e0c638489a10925f3af0346514473",
+      "office": "council",
+      "electorate": "mountain"
+    },
+    {
+      "filename": "山地原住民議員_2022_高雄市.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B1%B1%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E9%AB%98%E9%9B%84%E5%B8%82.csv?v=20260914103616",
+      "sha256": "0b85dd6ae0a7d78c3ce23e976e27c32002c1d4cde4e516b51ad35d27e77ef6f0",
+      "office": "council",
+      "electorate": "mountain"
+    },
+    {
+      "filename": "山地原住民議員_2022_新竹縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B1%B1%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E6%96%B0%E7%AB%B9%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "40f23bb4bf6e5d3fe8a6a9a52593a3ed00c815c80b411411187da514b377271b",
+      "office": "council",
+      "electorate": "mountain"
+    },
+    {
+      "filename": "山地原住民議員_2022_苗栗縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B1%B1%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E8%8B%97%E6%A0%97%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "ff6f3852e0b917a81daaae954f6ce07d1bef6889c44d1bf225f67fa63cb549b9",
+      "office": "council",
+      "electorate": "mountain"
+    },
+    {
+      "filename": "山地原住民議員_2022_南投縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B1%B1%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E5%8D%97%E6%8A%95%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "c9683307f4b806617457cdd1b0accccced916889fe69562591c797ddc5d03b10",
+      "office": "council",
+      "electorate": "mountain"
+    },
+    {
+      "filename": "山地原住民議員_2022_嘉義縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B1%B1%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E5%98%89%E7%BE%A9%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "8b03a912cf50d808b2f1a54b3c8c39bf1ac5633a16c9cbb1c7a62bbea0394ab1",
+      "office": "council",
+      "electorate": "mountain"
+    },
+    {
+      "filename": "山地原住民議員_2022_屏東縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B1%B1%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E5%B1%8F%E6%9D%B1%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "10027b7574b39ce249e58d82bf3bfbc7fdebe378e36bddd005c4f42e8613378a",
+      "office": "council",
+      "electorate": "mountain"
+    },
+    {
+      "filename": "山地原住民議員_2022_宜蘭縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B1%B1%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E5%AE%9C%E8%98%AD%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "9b8373333f30ff348a268f02bd64e6a81a6a393b541619de90d89edac5041ff2",
+      "office": "council",
+      "electorate": "mountain"
+    },
+    {
+      "filename": "山地原住民議員_2022_花蓮縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B1%B1%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E8%8A%B1%E8%93%AE%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "2b50297b6492fdac44a0fcce2f5e09b654a4afb5a88c7117f15d527c81cb8f30",
+      "office": "council",
+      "electorate": "mountain"
+    },
+    {
+      "filename": "山地原住民議員_2022_臺東縣.csv",
+      "url": "https://www.taiwanvotes.tw/data/csv/%E5%B1%B1%E5%9C%B0%E5%8E%9F%E4%BD%8F%E6%B0%91%E8%AD%B0%E5%93%A1_2022_%E8%87%BA%E6%9D%B1%E7%B8%A3.csv?v=20260914103616",
+      "sha256": "e206f91b0177f89673c251e14b2ca0ddb1354521dbb8d715d91eeebc0762f393",
+      "office": "council",
+      "electorate": "mountain"
+    }
+  ],
+  "sourceLicense": "https://data.gov.tw/license",
+  "derivedLicense": "https://creativecommons.org/licenses/by/4.0/"
+}

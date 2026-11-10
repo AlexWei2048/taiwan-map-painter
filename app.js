@@ -1853,6 +1853,14 @@ function appendExportLabelCoverage(root,rows,x,y,width){
  root.append(g);return m.height;
 }
 
+function appendHistoryExportMetadata(root,lines,x,y,width){
+ if(!Array.isArray(lines)||!lines.length)return 0;
+ const height=24+lines.length*19,g=svgEl('g',{'data-export-history-metadata':'true'});
+ g.append(svgEl('rect',{x,y,width,height,rx:8,fill:'#f7faf7',stroke:'#dbe6dc','stroke-width':1}));
+ lines.forEach((line,index)=>{const text=svgEl('text',{x:x+14,y:y+20+index*19,'font-size':12.5,fill:'#526c60'});text.textContent=line;g.append(text)});
+ root.append(g);return height;
+}
+
 function exportSvg(){
  const spec=sceneSpec(),winnerRows=exportPredictionWinnerRows(),tableLayout=winnerRows.length?exportPredictionTableLayout(winnerRows):null;
  const coreWidth=tableLayout?tableLayout.width+80:1200,contentWidth=coreWidth-80,contentHeight=Math.round(contentWidth*spec.height/spec.width);
@@ -1904,7 +1912,9 @@ function exportSvg(){
   const coverageHeight=appendExportLabelCoverage(root,coverageRows,40,coverageY,contentWidth);
   const tableY=Math.max(mapY+contentHeight+40,coverageY+coverageHeight+30);
   if(winnerRows.length)appendExportPredictionTable(root,winnerRows,tableY);
-  const height=Math.max(sidebarHeight,mapY+contentHeight+72,coverageY+coverageHeight+32,winnerRows.length?tableY+tableLayout.height+32:0);
+  let height=Math.max(sidebarHeight,mapY+contentHeight+72,coverageY+coverageHeight+32,winnerRows.length?tableY+tableLayout.height+32:0);
+  const metadata=typeof History2022View!=='undefined'&&History2022View.active()?History2022View.exportMetadata?.()||[]:[];
+  if(metadata.length)height+=appendHistoryExportMetadata(root,metadata,40,height,contentWidth)+20;
   const actualWidth=coreWidth+sidebarWidth;
   root.setAttribute('width',actualWidth);root.setAttribute('height',height);root.setAttribute('viewBox','0 0 '+actualWidth+' '+height);
   root.firstChild?.setAttribute('width',actualWidth);root.firstChild?.setAttribute('height',height);
@@ -1914,12 +1924,12 @@ function exportSvg(){
 
 function preparedExportSvg(){const oldFilter=exportPanelFilter,oldLegend=state.legend.show,oldCouncilView=state.councilViewScope,oldLabels=state.labels;state.councilViewScope='all';exportPanelFilter=state.level==='council'&&state.exportSettings.councilScope!=='all'?state.exportSettings.councilScope:'';state.legend.show=true;state.labels=true;render();try{return exportSvg()}finally{exportPanelFilter=oldFilter;state.legend.show=oldLegend;state.councilViewScope=oldCouncilView;state.labels=oldLabels;render()}}
 function exportElectionType(){
- if(typeof History2022View!=='undefined'&&History2022View.active())return '2022 '+({mayor:'县市长',council:'议员',township:'乡镇市区长'}[History2022View.kind()]);
+ if(typeof History2022View!=='undefined'&&History2022View.active())return '2022 '+({mayor:'县市长',council:'县市议员',township:'乡镇市区长'}[History2022View.kind()]);
  if(state.workspaceMode==='prediction')return '2026 '+directoryOfficeName[state.predictionOffice];
  return {counties:'县市地图',towns:'乡镇市区地图',council:'议员选区',legislative:'立法机构区域民代',villages:'村里地图'}[state.level]||'行政区地图';
 }
 function exportMapTitle(){const type=exportElectionType();if(typeof History2022View!=='undefined'&&History2022View.active())return type+'实际选举结果 · '+(state.county||'全台')+' · '+History2022View.metricLabel();const custom=String(state.title||'').trim();if(custom)return custom.includes(type)?custom:type+' · '+custom;return type+' · '+(state.county||'全台')+(state.workspaceMode==='prediction'?'预测地图':'地图')}
-function exportFilename(){const suffix=state.level==='council'&&state.exportSettings.councilScope!=='all'?'_'+electorateName(state.exportSettings.councilScope):'';return exportMapTitle().replace(/[\\/:*?"<>|]/g,'_').slice(0,120)+suffix}
+function exportFilename(){if(typeof History2022View!=='undefined'&&History2022View.active()&&window.HistoryWorkspace)return HistoryWorkspace.exportStem(HistoryWorkspace.selection());const suffix=state.level==='council'&&state.exportSettings.councilScope!=='all'?'_'+electorateName(state.exportSettings.councilScope):'';return exportMapTitle().replace(/[\\/:*?"<>|]/g,'_').slice(0,120)+suffix}
 $('exportWinnerTable').onchange=()=>{state.exportSettings.winnerTable=$('exportWinnerTable').checked;persist()};$('exportNote').oninput=()=>{state.exportSettings.note=simplify($('exportNote').value).trim().slice(0,500);persist()};$('councilExportScope').onchange=()=>{state.exportSettings.councilScope=$('councilExportScope').value;persist()};$('exportSvg').onclick=async()=>{try{await ensureExportMapReady();download(new Blob([preparedExportSvg()],{type:'image/svg+xml;charset=utf-8'}),exportFilename()+'.svg');toast('SVG 矢量图已导出，包含比例尺、指北针和对应图例')}catch(e){toast(e.message||'SVG 导出失败')}};$('exportPng').onclick=async()=>{const b=$('exportPng');b.disabled=true;const old=b.textContent;b.textContent='正在导出…';let url;try{await ensureExportMapReady();const source=preparedExportSvg(),doc=new DOMParser().parseFromString(source,'image/svg+xml'),height=Number(doc.documentElement.getAttribute('height')),width=Number(doc.documentElement.getAttribute('width'));if(!width||!height)throw Error('图片尺寸无效');const scale=Math.min(3,Math.floor(16000/Math.max(width,height)),Math.floor(Math.sqrt(55000000/(width*height))));if(scale<1)throw Error('图片过大，请取消当选名单表格，或使用 SVG 矢量图完整导出');url=URL.createObjectURL(new Blob([source],{type:'image/svg+xml;charset=utf-8'}));const img=new Image();img.src=url;await new Promise((ok,no)=>{img.onload=ok;img.onerror=no});const c=document.createElement('canvas');c.width=width*scale;c.height=height*scale;const ctx=c.getContext('2d');if(!ctx)throw Error('设备无法创建图片画布，请改用 SVG');ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(img,0,0,c.width,c.height);const blob=await new Promise(ok=>c.toBlob(ok,'image/png'));if(!blob)throw Error('图片生成失败，请改用 SVG');download(blob,exportFilename()+'.png');toast(scale===3?'已导出 3 倍清晰度 PNG 图片':'大图已自动调整为 '+scale+' 倍清晰度 PNG')}catch(e){toast(e.message||'导出失败，请尝试导出 SVG 矢量图')}finally{if(url)URL.revokeObjectURL(url);b.disabled=false;b.textContent=old}};
 // Retry large static map downloads without losing locally saved election projects.
 // The retry URL bypasses stale/corrupt intermediary caches while remaining same-origin.

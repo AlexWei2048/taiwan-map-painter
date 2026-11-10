@@ -1021,7 +1021,12 @@ test('Free regional legislators use a single unframed regional-only map and show
 test('2022 council uses all historical district geometries and actual elected seat symbols',async t=>{
  const page=await pageFor(t);await page.locator('#categoryHistory').click();await page.locator('#historyOffice').selectOption('council');
  await page.waitForFunction(()=>document.querySelector('#historySummary').textContent.includes('910席'));
+ await page.locator('#historyViewOverview').click();await page.waitForFunction(()=>document.querySelectorAll('.history-overview-card').length>=7);
+ assert.match(await page.locator('#historyOverviewPanel').textContent(),/分别统计，不合并/);
+ await page.locator('#historyViewCandidates').click();assert.equal(await page.locator('#historyCandidatesPanel').isVisible(),true);assert.equal(await page.locator('#historyResultParty').count(),1);
+ await page.locator('#historyViewMap').click();
  assert.equal(await page.locator('#regions path[data-region]').count(),22);
+ assert.equal(await page.locator('#regions path[data-region]').evaluateAll(nodes=>nodes.every(node=>node.getAttribute('fill')==='#f0f3ed')),true);
  const geometry=await page.evaluate(()=>({count:History2022View.features().length,seats:History2022View.features().reduce((n,f)=>n+f.seats,0),missing:History2022View.features().filter(f=>!f.d).length}));
  assert.deepEqual(geometry,{count:215,seats:910,missing:0});
  let total=0;
@@ -1032,12 +1037,17 @@ test('2022 council uses all historical district geometries and actual elected se
  }
  assert.equal(total,910);
  await page.locator('#historyCounty').selectOption({label:'新竹市'});
+ assert.equal(await page.evaluate(()=>exportFilename()),'2022-县市议员-新竹市-当选席次');
+ assert.match(await page.evaluate(()=>HistoryWorkspace.historyCsv(HistoryWorkspace.result(),HistoryWorkspace.selection())),/县市官方名称/);
  assert.equal(await page.locator('#regions path[data-region]').count(),6);assert.equal(await page.locator('[data-seat-status="elected"]').count(),34);
+ assert.equal(await page.locator('#historySeatBadges').count(),1);assert.equal(await page.locator('#historySeatBadgeLeaders').count(),1);
+ assert.ok(await page.locator('[data-history-seat-badge]').count()>0);assert.equal(await page.locator('[data-history-seat-count]').evaluateAll(nodes=>nodes.every(node=>Number(node.dataset.historySeatCount)>0)),true);
+ assert.equal(await page.locator('[data-seat-district]').evaluateAll(nodes=>nodes.every(node=>/席/.test(node.getAttribute('aria-label')||''))),true);
  assert.equal(await page.locator('#historyMetric option').count(),4);
  await page.locator('[data-seat-district]').first().click();await page.locator('#historyResultDialog').waitFor({state:'visible'});
  assert.ok(await page.locator('#historyDialogRows tr').count()>0);assert.equal(await page.locator('#predictionDialog').isVisible(),false);
  await page.locator('#closeHistoryResult').click();
- const svg=await exportSvg(page);assert.match(svg,/data-seat-status="elected"/);assert.match(svg,/2022/);
+ const svg=await exportSvg(page);assert.match(svg,/data-seat-status="elected"/);assert.match(svg,/id="historySeatBadges"/);assert.match(svg,/data-history-seat-count/);assert.match(svg,/2022/);
  await page.locator('.export-menu summary').click();await page.locator('#returnTaiwanMap').click();assert.equal(await page.locator('#regions path[data-region]').count(),22);
 });
 test('2022 township and mayor maps navigate by county with actual numeric results',async t=>{
@@ -1047,7 +1057,10 @@ test('2022 township and mayor maps navigate by county with actual numeric result
  assert.equal(await page.locator('#regions [data-region="63000010"]').getAttribute('fill'),'#ffffff');
  await page.locator('#historyCounty').selectOption({label:'屏东县'});assert.ok(await page.locator('#regions path[data-region]').count()>1);
  await page.locator('#returnTaiwanMap').click();assert.equal(await page.locator('#historyCounty').inputValue(),'');
- await page.locator('#historyOffice').selectOption('mayor');await page.locator('#historyScale').selectOption('town');
+ await page.locator('#historyOffice').selectOption('mayor');await page.locator('#historyScale').selectOption('district');
+ await page.locator('#regions path[data-region]').first().click();await page.locator('#historyResultDialog').waitFor({state:'visible'});assert.equal(await page.locator('#historyDialogDrilldown').isVisible(),true);
+ await page.locator('#historyDialogDrilldown').click();assert.equal(await page.locator('#historyScale').inputValue(),'town');assert.notEqual(await page.locator('#historyCounty').inputValue(),'');
+ await page.locator('#returnTaiwanMap').click();await page.locator('#historyScale').selectOption('town');
  assert.equal(await page.locator('#regions path[data-region]').count(),368);
  assert.notEqual(await page.locator('#regions [data-region="63000010"]').getAttribute('fill'),'#edf1e9');
  await page.locator('#historyCounty').selectOption({label:'台北市'});

@@ -450,6 +450,8 @@ dialog.floating-prediction-dialog > .floating-dialog-scroll{
 
 #labels [data-seat-district].seat-region-highlighted [data-seat-frame]{stroke:#cf9e35;stroke-width:3;fill:#fff9e5}
 #labels [data-seat-district]:focus-visible{outline:none}
+#historySeatBadges [data-history-seat-badge]:focus-visible,#historySeatBadges [data-seat-district]:focus-visible [data-seat-frame]{outline:none;stroke:#cf9e35;stroke-width:3}
+#historySeatBadgeLeaders path{pointer-events:none}
 
 /* Four clear map layers, using the same hierarchy as the prediction workspace. */
 #freeMapTools>.free-layer-title{margin:0;font-size:12px;font-weight:600;color:var(--ink);padding:0 0 12px}
@@ -461,12 +463,25 @@ dialog.floating-prediction-dialog > .floating-dialog-scroll{
 
 /* Historical results use the same map navigation and a roomy, read-only result table. */
 .history-result-section{margin:22px 0;padding:20px;background:#fff;border:1px solid var(--line);border-radius:13px}
+.history-result-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:14px}
+.history-result-heading h2{margin:3px 0 0;font-size:20px}
+.history-view-switch{display:flex;gap:6px;padding:5px;background:#f3f7f4;border-radius:10px;flex-wrap:wrap}
+.history-view-switch button{border:1px solid transparent;border-radius:8px;background:transparent;color:#476453;padding:8px 12px;font-size:12px;font-weight:650;cursor:pointer}
+.history-view-switch button.active{background:#fff;border-color:#c9dfd1;color:#16664e;box-shadow:0 1px 4px #284e3920}
+.history-view-switch button:focus-visible{outline:2px solid #25775a;outline-offset:2px}
+.history-view-panel[hidden]{display:none!important}
+.history-view-panel{border-top:1px solid #e5ece7;padding-top:14px}
+.history-overview-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.history-overview-placeholder{margin:0;padding:14px;border:1px solid #dce6dd;border-radius:9px;background:#f8fbf9;color:#526c60;font-size:13px;line-height:1.6}
+.history-overview-card{display:flex;flex-direction:column;gap:5px;padding:14px;border:1px solid #dce6dd;border-radius:10px;background:#fff}.history-overview-card span{font-size:12px;color:#647c70}.history-overview-card strong{font-size:22px;color:#234d3b}.history-overview-card small{color:#6f8278;line-height:1.45}
+.history-dialog-navigation{display:flex;justify-content:flex-end;gap:9px;margin-top:18px;flex-wrap:wrap}
 .history-result-section #historySummary{margin-bottom:14px;color:#567365;font-size:13px}
 .history-result-section .history-table-wrap{max-height:460px;overflow:auto}
 .history-result-dialog{width:min(960px,94vw);max-height:88dvh;overflow:auto;border:1px solid var(--line);border-radius:16px;padding:26px;color:var(--ink)}
 .history-result-dialog::backdrop{background:#193b3166}
 .history-result-dialog .history-table-wrap{max-height:65dvh;overflow:auto}
 .history-mode #historyControls select{margin-bottom:15px}
+@media(max-width:700px){.history-result-heading{display:block}.history-view-switch{margin-top:12px}.history-view-switch button{flex:1 1 100px}}
 
 .history-development-notice{width:min(420px,90vw);border:1px solid #dce5df;border-radius:18px;padding:28px;color:#294a3a}.history-development-notice::backdrop{background:#173b3155}.history-development-notice h2{font-size:21px;margin:0 0 12px}.history-development-notice p{color:#62796c;margin-bottom:24px}.history-development-notice form{text-align:right}
 

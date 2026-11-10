@@ -106,14 +106,17 @@ function councilSeatLeaderPoints(q,frames,existing=[]){
 }
 function drawCouncilSeats(group,interactive){
  group.replaceChildren();
+ const historical=typeof History2022View!=='undefined'&&History2022View.seatMode(),badgeRoot=historical?svgEl('g',{id:'historySeatBadges'}):group,leaderRoot=historical?svgEl('g',{id:'historySeatBadgeLeaders','pointer-events':'none'}):group;
+ if(historical)group.append(leaderRoot,badgeRoot);
  for(const panel of identityPanelLayouts()){
   const cached=panel.seatPlacements,routed=[];
-  const layer=svgEl('g',{'data-council-seat-panel':panel.identity}),leaders=svgEl('g',{'data-seat-leaders':panel.identity,'pointer-events':'none'});layer.append(leaders);group.append(layer);
+  const layer=svgEl('g',{'data-council-seat-panel':panel.identity}),leaders=svgEl('g',{'data-seat-leaders':panel.identity,'pointer-events':'none'});if(historical){leaderRoot.append(leaders);badgeRoot.append(layer)}else{layer.append(leaders);group.append(layer)}
   // Place the most constrained districts first.
   for(const f of [...panel.items].sort((a,b)=>(a.box[2]-a.box[0])*(a.box[3]-a.box[1])-(b.box[2]-b.box[0])*(b.box[3]-b.box[1]))){
    const d=councilSeatDistrictFor(f);if(!d)continue;
    const seats=councilSeatRows(d),q=cached.get(f.id);
-   const g=svgEl('g',{'data-seat-district':d.id,'data-seat-region':f.id,'data-seat-count':seats.length,'data-seat-placement':q.outside?'outside':'inside'});layer.append(g);
+   const badgeRows=historical?[...seats.filter(Boolean).reduce((map,c)=>map.set(c.party,(map.get(c.party)||0)+1),new Map())].map(([party,count])=>({party,count})).sort((a,b)=>b.count-a.count||a.party.localeCompare(b.party,'zh')):[];
+   const g=svgEl('g',{'data-seat-district':d.id,'data-seat-region':f.id,'data-seat-count':seats.length,'data-seat-placement':q.outside?'outside':'inside','data-history-badge-mode':historical&&(q.outside||badgeRows.length>4)?'indexed':'badges'});layer.append(g);
    if(q.outside){
     const points=councilSeatLeaderPoints(q,[...cached.values()].filter(other=>other!==q).map(other=>other.rect),routed),path=points.map((p,i)=>(i?'L':'M')+p[0]+','+p[1]).join('');routed.push(...mapLeaderSegments(points));
     leaders.append(svgEl('path',{d:path,fill:'none',style:'fill:none;stroke:#fff;stroke-width:2.1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.94','vector-effect':'non-scaling-stroke','data-seat-leader-halo':d.id}));
@@ -122,14 +125,19 @@ function drawCouncilSeats(group,interactive){
    }
    g.append(svgEl('rect',{x:q.rect[0],y:q.rect[1],width:q.w,height:q.h,rx:9,fill:q.outside?'#ffffffed':'#ffffff55',stroke:q.outside?'#dce5df':'none','data-seat-frame':d.id}));
    const name=svgEl('text',{x:q.x,y:q.rect[1]+22,'text-anchor':'middle','font-size':24,fill:'#294a3a','paint-order':'stroke',stroke:'#fff','stroke-width':4,'data-label':f.id,'data-placement':'district-number'});name.textContent=districtMapNumber(f)||f.name;if(state.labels)g.append(name);
-   seats.forEach((c,i)=>{
+   if(historical){
+    const cols=Math.max(1,Math.min(q.cols,badgeRows.length));badgeRows.forEach((item,i)=>{
+     const row=Math.floor(i/cols),col=i%cols,rowCount=Math.min(cols,badgeRows.length-row*cols),x=q.x+(col-(rowCount-1)/2)*q.pitch-q.size/2,y=q.rect[1]+33+row*q.pitch,p=predictionParty(item.party),emblem=!['其他','其他政党'].includes(item.party)?logoFor(p):'',badge=svgEl('g',{'data-history-seat-badge':item.party,'data-history-seat-count':item.count,role:'img','aria-label':item.party+'当选'+item.count+'席'}),title=svgEl('title');title.textContent=item.party+' · '+item.count+'席';badge.append(title);badge.append(svgEl('circle',{cx:x+q.size/2,cy:y+q.size/2,r:q.size/2,fill:emblem?'#fff':p.color||'#91999f',stroke:'#8b9c92','stroke-width':1.8}));if(emblem)appendCircularPartyLogo(badge,emblem,x,y,q.size,{'data-seat-logo':p.id});badge.append(svgEl('circle',{cx:x+q.size-2,cy:y+q.size-2,r:10,fill:'#17684f',stroke:'#fff','stroke-width':2}));const count=svgEl('text',{x:x+q.size-2,y:y+q.size+2,'text-anchor':'middle','font-size':13,'font-weight':700,fill:'#fff','pointer-events':'none'});count.textContent=item.count;badge.append(count);g.append(badge)
+    });
+    seats.filter(Boolean).forEach((c,i)=>g.append(svgEl('g',{'data-seat-status':'elected','data-seat-party':predictionParty(c.party).id,'data-seat-candidate':c.id,visibility:'hidden','aria-hidden':'true'})));
+   }else seats.forEach((c,i)=>{
     const row=Math.floor(i/q.cols),col=i%q.cols,rowCount=Math.min(q.cols,seats.length-row*q.cols),x=q.x+(col-(rowCount-1)/2)*q.pitch-q.size/2,y=q.rect[1]+33+row*q.pitch;
     const p=c?predictionParty(c.party):null,emblem=p&&!['其他','其他政党'].includes(c.party)?logoFor(p):'',slot=svgEl('g',{'data-seat-slot':i,'data-seat-status':c?(c.history?'elected':'predicted'):'empty','data-seat-party':p?.id||'','data-seat-candidate':c?.id||''});
     const title=svgEl('title');title.textContent=c?candidateDisplayName(c)+' · '+c.party:'尚未预测';slot.append(title);
     slot.append(svgEl('circle',{cx:x+q.size/2,cy:y+q.size/2,r:q.size/2,fill:c&&!emblem?'#91999f':'#fff',stroke:c&&!emblem?'#91999f':'#8b9c92','stroke-width':1.8}));
     if(emblem)appendCircularPartyLogo(slot,emblem,x,y,q.size,{'data-seat-logo':p.id});g.append(slot);
    });
-   if(interactive){g.setAttribute('role','button');g.setAttribute('tabindex','0');g.setAttribute('aria-label',shortDirectoryName(d)+'，应选'+seats.length+'席，'+(typeof History2022View!=='undefined'&&History2022View.seatMode()?'实际当选':'已预测')+seats.filter(Boolean).length+'席');g.style.cursor='pointer';g.setAttribute('pointer-events','all');g.onpointerenter=()=>toggleLabelRegionHighlight(f,true);g.onpointerleave=()=>toggleLabelRegionHighlight(f,false);g.onfocus=()=>toggleLabelRegionHighlight(f,true);g.onblur=()=>toggleLabelRegionHighlight(f,false);g.onclick=()=>{if(typeof History2022View!=='undefined'&&History2022View.seatMode())History2022View.openRegion(f);else openPredictionDistrict(d)};g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();g.onclick()}}}
+   if(interactive){g.setAttribute('role','button');g.setAttribute('tabindex','0');const composition=badgeRows.map(item=>item.party+' '+item.count+'席').join('、');g.setAttribute('aria-label',historical?shortDirectoryName(d)+'，'+(composition||'暂无当选席次资料'):shortDirectoryName(d)+'，应选'+seats.length+'席，已预测'+seats.filter(Boolean).length+'席');g.style.cursor='pointer';g.setAttribute('pointer-events','all');g.onpointerenter=()=>toggleLabelRegionHighlight(f,true);g.onpointerleave=()=>toggleLabelRegionHighlight(f,false);g.onfocus=()=>toggleLabelRegionHighlight(f,true);g.onblur=()=>toggleLabelRegionHighlight(f,false);g.onclick=()=>{if(typeof History2022View!=='undefined'&&History2022View.seatMode())History2022View.openRegion(f);else openPredictionDistrict(d)};g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();g.onclick()}}}
   }
  }
 }
