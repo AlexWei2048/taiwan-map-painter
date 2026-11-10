@@ -175,6 +175,7 @@
   };
   function appendBar(container,bar){
    const block=make('div','history-chart-stat');
+   block.dataset.kind=bar.title==='有效率'?'valid':'turnout';
    const heading=make('div','history-chart-stat-head');
    heading.append(make('span','history-chart-stat-label',bar.title),
     make('strong','history-chart-stat-value',bar.percent===null?'暂无资料':bar.percent.toFixed(2)+'%'));
