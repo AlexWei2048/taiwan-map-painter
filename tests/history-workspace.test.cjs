@@ -12,9 +12,9 @@ test('history selection normalizes incompatible office, level, electorate and me
   year:2022,office:'council',electorate:'mountain',county:'',level:'district',metric:'seats',candidate:'',party:'',view:'overview'
  });
  assert.equal(Workspace.normalizeSelection({office:'township',level:'county',electorate:'plains'},[2022]).level,'town');
- assert.equal(Workspace.normalizeSelection({office:'mayor',metric:'vote'},[2022]).metric,'vote');
- for(const legacy of ['share','votes'])assert.equal(Workspace.normalizeSelection({office:'mayor',metric:legacy},[2022]).metric,'vote','Old unit selection must collapse into one scale');
- assert.equal(Workspace.normalizeSelection({office:'council',metric:'vote'},[2022]).metric,'vote');
+ assert.equal(Workspace.normalizeSelection({office:'mayor',metric:'vote'},[2022]).metric,'share','Old combined view defaults to vote share');
+ for(const metric of ['share','votes'])assert.equal(Workspace.normalizeSelection({office:'mayor',metric},[2022]).metric,metric,'Restore distinct color scales');
+ for(const metric of ['share','votes'])assert.equal(Workspace.normalizeSelection({office:'council',metric},[2022]).metric,metric);
 });
 
 test('workspace offers the correct geography levels and electorate choices',()=>{
@@ -130,7 +130,8 @@ test('county mayor drill-down changes only the map level and county scope',()=>{
 
 test('historical export stem includes year, normalized office, scope and metric',()=>{
  assert.equal(Workspace.exportStem({year:2022,office:'council',county:'台北市',metric:'party'}),'2022-县市议员-台北市-当选席次');
- assert.equal(Workspace.exportStem({year:2022,office:'mayor',county:'',level:'town',metric:'vote'}),'2022-县市长-全台-得票率与得票数');
+ assert.equal(Workspace.exportStem({year:2022,office:'mayor',county:'',level:'town',metric:'share'}),'2022-县市长-全台-得票率');
+ assert.equal(Workspace.exportStem({year:2022,office:'mayor',county:'',level:'town',metric:'votes'}),'2022-县市长-全台-得票数');
 });
 
 test('historical CSV keeps normalized and original official labels and protects formulas',()=>{
