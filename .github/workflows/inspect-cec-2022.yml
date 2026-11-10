@@ -39,4 +39,22 @@ jobs:
                       except UnicodeError:continue
                   else: decoded=repr(raw[:300]);enc='raw'
                   print('SAMPLE_FILE',repr(n),'ENC',enc,'TEXT',repr(decoded[:750]))
+              for category in ('C1/city','C1/prv','R1','R2','R3','D1','D2'):
+                  f=next((n for n in names if '2022-111年' in n and n.endswith(category+'/elbase.csv')),None)
+                  c=next((n for n in names if '2022-111年' in n and n.endswith(category+'/elcand.csv')),None)
+                  if not f:continue
+                  base=z.read(f).decode('utf-8-sig')
+                  b=[x.split(',') for x in base.splitlines() if x.strip()]
+                  cnt=z.read(c).decode('utf-8-sig').splitlines() if c else []
+                  print('CATEGORY',category,'ELBASE_COUNT',len(b),'ELCAND_COUNT',len(cnt))
+                  print('BASE_EXAMPLE',repr(b[:5]))
+                  print('COUNTY_EXAMPLE',repr([x for x in b if len(x)>=6 and x[2]=='00' and x[3]=='000' and x[4]=='0000'][:8]))
+                  print('DISTRICT_EXAMPLE',repr([x for x in b if len(x)>=6 and x[2]!='00' and x[3]=='000' and x[4]=='0000'][:5]))
+                  print('TOWN_EXAMPLE',repr([x for x in b if len(x)>=6 and x[3]!='000' and x[4]=='0000'][:4]))
+          import json
+          snap=json.loads(Path('assets/history-2022.json').read_text())
+          for key in ('candidacies','contests','rows'):
+              items=snap[key];print('SNAP',key,'COUNT',len(items),'SAMPLE',repr(items[:2]))
+              fields={'candidacies':['gender','incumbent_at_election'],'contests':['registered_voters','ballots_cast','valid_votes','invalid_votes'],'rows':['gender','incumbent']}[key]
+              print('MISSING',key,{k:sum(x.get(k) is None or x.get(k)=='' for x in items) for k in fields})
           PY
