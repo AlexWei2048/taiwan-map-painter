@@ -34,11 +34,12 @@ test('all councillor identities keep separate turnout cards and never create a c
  assert.equal(cards.some(card=>card.electorate==='all'),false);
  assert.equal(cards.length,3);
  assert.deepEqual(cards.map(card=>card.validVotes),[68,29,18]);
+ assert.deepEqual(cards.map(card=>Number(card.validRate.toFixed(2))),[97.14,96.67,100]);
 });
 
 test('single-electorate overview produces one explicit card even when turnout is unavailable',()=>{
  const cards=Workspace.turnoutCards({turnout:null,turnoutGroups:[{electorate:'regional',registeredVoters:null,ballotsCast:null,turnout:null}]},{office:'mayor',electorate:'regional'});
- assert.deepEqual(cards,[{electorate:'regional',title:'区域选举',registeredVoters:null,ballotsCast:null,validVotes:null,invalidVotes:null,turnout:null}]);
+ assert.deepEqual(cards,[{electorate:'regional',title:'区域选举',registeredVoters:null,ballotsCast:null,validVotes:null,invalidVotes:null,turnout:null,validRate:null}]);
 });
 
 test('historical feature presentation keeps councillor geography neutral and every party visible',()=>{
@@ -74,7 +75,10 @@ test('candidate result rows search and filter by stable candidacy data without i
 
 test('overview cards expose available totals and keep unavailable ballot fields explicit',()=>{
  const cards=Workspace.overviewCards({candidateCount:12,electedCount:3,validVotes:1234,invalidVotes:null,incumbentCount:2});
- assert.deepEqual(cards.map(card=>card.value),['12','3','1,234','暂无资料','2','暂无资料','暂无资料']);
+ assert.deepEqual(cards.map(card=>card.label),['候选人','官方当选','选举人数','投票率','有效率','有效票','无效票']);
+ assert.deepEqual(cards.map(card=>card.value),['12','3','暂无资料','暂无资料','暂无资料','1,234','暂无资料']);
+ assert.equal(Workspace.overviewCards({registeredVoters:100,ballotsCast:73,validVotes:70,invalidVotes:3,turnout:73})[4].value,'95.89%');
+ assert.equal(Workspace.overviewCards({turnoutGroups:[{electorate:'regional'},{electorate:'mountain'}]})[2].value,'按选举类型分别统计');
 });
 
 test('county mayor drill-down changes only the map level and county scope',()=>{

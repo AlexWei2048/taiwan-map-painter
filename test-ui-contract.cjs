@@ -937,7 +937,8 @@ test('Historical maps build independent 2022 geography and seat records',()=>{
  assert.match(history,/HistoryCore\.mergePaths/);
  assert.match(history,/history-hsinchu-geography-2022/);
  assert.match(history,/historicalFeatures=\s*districtMetadata\.map/);
- assert.match(history,/每个党徽代表一席实际当选席次/);
+ assert.doesNotMatch(history,/每个党徽代表一席实际当选席次/);
+ assert.match(read('council-seats.js'),/data-history-seat-count':1/);
 });
 test('Main UI language avoids restricted expression',()=>{
  for(const file of ['index.html','app.js','workspace-ui.js','history-2022.js','candidate-directory.js'])assert.equal(read(file).includes('\u5168\u56fd'),false,file);

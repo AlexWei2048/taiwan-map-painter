@@ -17,11 +17,11 @@ test('2022 district metadata and Hsinchu village reconstruction are complete',()
  assert.equal(h.features.length,5);const ids=h.features.flatMap(f=>f.villageIds);
  assert.equal(ids.length,122);assert.equal(new Set(ids).size,122);assert.ok(h.features.every(f=>f.d&&f.box.length===4));
 });
-test('Historical councillor map uses dedicated accessible seat-count badge layers',()=>{
+test('Historical councillor map renders one accessible emblem per elected seat',()=>{
  const seats=fs.readFileSync('council-seats.js','utf8'),history=fs.readFileSync('history-2022.js','utf8');
  assert.match(seats,/id:'historySeatBadges'/);assert.match(seats,/id:'historySeatBadgeLeaders'/);
  assert.match(seats,/'data-history-seat-badge'/);assert.match(seats,/'data-history-seat-count'/);
- assert.match(seats,/role:'img'/);assert.match(seats,/'aria-label':item\.party\+'当选'\+item\.count\+'席'/);
- assert.match(seats,/'data-history-badge-mode'.*'indexed':'badges'/);
+ assert.match(seats,/role:'img'/);assert.match(seats,/'aria-label':c\.party\+'当选1席'/);
+ assert.match(seats,/'data-history-badge-mode':historical\?'seats':'predicted'/);
  assert.match(history,/kind==='council'&&metric==='party'\)return featurePresentation\(feature\)\.fill/);
 });
