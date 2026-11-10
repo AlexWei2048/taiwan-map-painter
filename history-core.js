@@ -8,6 +8,31 @@
   const match=direct.match(/第\s*0*(\d+)\s*(?:选|選)(?:举|舉)?(?:区|區)/);
   return match?String(Number(match[1])):'';
  }
+ const COUNTY_ORDER=['台北市','新北市','桃园市','台中市','台南市','高雄市','基隆市','宜兰县','新竹县','新竹市','苗栗县','彰化县','南投县','云林县','嘉义县','嘉义市','屏东县','花莲县','台东县','澎湖县','金门县','连江县'];
+ const ELECTORATE_ORDER=['regional','plains','mountain'];
+ const naturalCompare=(a,b)=>String(a||'').localeCompare(String(b||''),'zh',{numeric:true});
+ function compareResultRows(a,b,office='council'){
+  const county=row=>String(row.county??row.county_name??'');
+  const district=row=>String(row.district??row.district_name??row.contest_name??'');
+  const ca=county(a),cb=county(b),ia=COUNTY_ORDER.indexOf(ca),ib=COUNTY_ORDER.indexOf(cb);
+  const countyDiff=(ia<0?COUNTY_ORDER.length:ia)-(ib<0?COUNTY_ORDER.length:ib)||naturalCompare(ca,cb);
+  if(countyDiff)return countyDiff;
+  if(office==='council'){
+   const ea=ELECTORATE_ORDER.indexOf(identity(a.electorate)),eb=ELECTORATE_ORDER.indexOf(identity(b.electorate));
+   const electorDiff=(ea<0?ELECTORATE_ORDER.length:ea)-(eb<0?ELECTORATE_ORDER.length:eb);
+   if(electorDiff)return electorDiff;
+   const da=district(a),db=district(b),na=Number(districtNumber(da)),nb=Number(districtNumber(db));
+   const districtDiff=(na||Number.MAX_SAFE_INTEGER)-(nb||Number.MAX_SAFE_INTEGER)||naturalCompare(da,db);
+   if(districtDiff)return districtDiff;
+  }else if(office==='township'||office==='mayor'){
+   const town=row=>String(row.town??(office==='township'?district(row):''));
+   const townDiff=naturalCompare(town(a),town(b));
+   if(townDiff)return townDiff;
+  }
+  return Number(b.votes||0)-Number(a.votes||0)||
+   naturalCompare(a.ballot_number??a.number,b.ballot_number??b.number)||
+   naturalCompare(a.candidate_name??a.name,b.candidate_name??b.name);
+ }
  function key(county,electorate,number,normalize=String){return[normalize(county).trim(),identity(electorate),districtNumber(number)].join('|')}
  function sameScope(historical,current,feature,towns,normalize=String){
   if(!current||identity(historical.electorate)!==identity(current.electorate))return false;
@@ -137,6 +162,6 @@
   }
   return rings.join('');
  }
- const api={identity,districtNumber,key,sameScope,csv,index,filter,contestSummary,overview,councilBadges,mergePaths};
+ const api={identity,districtNumber,compareResultRows,key,sameScope,csv,index,filter,contestSummary,overview,councilBadges,mergePaths};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.HistoryCore=api;
 })(typeof window==='undefined'?{}:window);

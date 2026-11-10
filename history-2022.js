@@ -156,7 +156,7 @@
   const search=norm(el('historySearch').value);
   const partySelect=el('historyResultParty'),parties=[...new Set(result.rows.map(r=>r.party))].sort((a,b)=>a.localeCompare(b,'zh')),priorParty=partySelect?.value||'';
   if(partySelect){partySelect.replaceChildren(new Option('全部政党',''),...parties.map(p=>new Option(p,p)));partySelect.value=parties.includes(priorParty)?priorParty:''}
-  const partyFilter=partySelect?.value||'',rows=result.rows.filter(r=>(!partyFilter||r.party===partyFilter)&&(!search||[r.county,r.town,r.district,r.name,r.party].some(v=>v.includes(search)))).sort((a,b)=>a.county.localeCompare(b.county,'zh')||areaKey(a).localeCompare(areaKey(b),'zh')||b.votes-a.votes);
+  const partyFilter=partySelect?.value||'',rows=result.rows.filter(r=>(!partyFilter||r.party===partyFilter)&&(!search||[r.county,r.town,r.district,r.name,r.party].some(v=>v.includes(search)))).sort((a,b)=>HistoryCore.compareResultRows(a,b,kind));
   const root=el('historyResults');root.replaceChildren();
   resultPage=Math.min(resultPage,Math.max(0,Math.ceil(rows.length/100)-1));
   el('historyPage').textContent='';el('historyPrev').disabled=true;el('historyNext').disabled=true;
@@ -359,13 +359,7 @@
   if(!state.exportSettings.winnerTable||!result||metric==='seats'||(historyOverview()&&kind==='mayor'))return [];
   const rows=voteMetric()?[...result.regions.values()].map(r=>r.top).filter(Boolean):[...result.regions.values()].flatMap(r=>r.leaders);
   const ordered=rows.filter(r=>!exportPanelFilter||kind!=='council'||r.electorate===exportPanelFilter);
-  ordered.sort((a,b)=>
-   COUNTY_ORDER.indexOf(a.county)-COUNTY_ORDER.indexOf(b.county)||
-   a.county.localeCompare(b.county,'zh')||
-   (kind==='council'?Number(districtNumber(a.district))-Number(districtNumber(b.district))||
-    ELECTORATE_ORDER.indexOf(a.electorate)-ELECTORATE_ORDER.indexOf(b.electorate):
-    a.town.localeCompare(b.town,'zh',{numeric:true}))||
-   b.votes-a.votes||Number(a.number)-Number(b.number));
+  ordered.sort((a,b)=>HistoryCore.compareResultRows(a,b,kind));
   return ordered.map(r=>{
    const party=predictionParty(r.party);
    return {historical:true,estimated:true,district:[r.county,r.town||r.district].filter(Boolean).join(' · '),

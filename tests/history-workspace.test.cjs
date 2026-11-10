@@ -96,3 +96,25 @@ test('historical CSV keeps normalized and original official labels and protects 
  const csv=Workspace.historyCsv(result,{year:2022,office:'mayor'});
  assert.match(csv,/县市规范名称/);assert.match(csv,/县市官方名称/);assert.match(csv,/张甲/);assert.match(csv,/張甲/);assert.match(csv,/"'=危险"/);assert.match(csv,/"是"/);
 });
+
+
+test('CSV historical export orders districts numerically and candidates by votes',()=>{
+ const contests=[
+  {contest_id:'d10',county_name:'台北市',county_name_official:'臺北市',district_name:'第10选区',district_name_official:'第10選區',electorate:'regional'},
+  {contest_id:'d2',county_name:'台北市',county_name_official:'臺北市',district_name:'第2选区',district_name_official:'第2選區',electorate:'regional'},
+  {contest_id:'d1',county_name:'台北市',county_name_official:'臺北市',district_name:'第1选区',district_name_official:'第1選區',electorate:'regional'}
+ ];
+ const candidacies=[
+  {contest_id:'d10',candidate_name:'张十',votes:300},
+  {contest_id:'d1',candidate_name:'张低',votes:1},
+  {contest_id:'d2',candidate_name:'张二',votes:400},
+  {contest_id:'d1',candidate_name:'张高',votes:500}
+ ];
+ const csv=Workspace.historyCsv({contests,candidacies},{year:2022,office:'council'});
+ assert.deepEqual([...csv.matchAll(/"张(高|低|二|十)"/g)].map(match=>match[1]),['高','低','二','十']);
+ const ordered=Workspace.candidateRows([
+  {candidate_name:'张十',county_name:'台北市',district_name:'第10选区',electorate:'regional',votes:300},
+  {candidate_name:'张二',county_name:'台北市',district_name:'第2选区',electorate:'regional',votes:400}
+ ],{office:'council'});
+ assert.deepEqual(ordered.map(row=>row.candidate_name),['张二','张十']);
+});
