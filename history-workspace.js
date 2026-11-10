@@ -286,7 +286,6 @@
  }
  for(const id of ['historyYear','historyOffice','historyElectorate','historyCounty','historyScale','historyMetric'])el(id)?.addEventListener('change',render);
  for(const [view,id] of [['map','historyViewMap'],['candidates','historyViewCandidates'],['overview','historyViewOverview']])el(id)?.addEventListener('click',()=>setView(view));
- el('workspaceHistory')?.addEventListener('click',()=>{active=true;render()});
  for(const id of ['workspacePrediction','workspaceFree'])el(id)?.addEventListener('click',()=>{active=false});
  function setSnapshot(snapshot){try{indexed=root.HistoryCore.index(snapshot);render();return true}catch(error){indexed=null;currentResult=null;currentOverview=null;if(el('historyLoadStatus'))el('historyLoadStatus').textContent='历史数据版本不兼容，请重新载入。';if(el('historyRetry'))el('historyRetry').hidden=false;return false}}
  root.addEventListener('historysnapshotready',event=>setSnapshot(event.detail.snapshot));
