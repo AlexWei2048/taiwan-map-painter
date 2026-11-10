@@ -1853,14 +1853,6 @@ function appendExportLabelCoverage(root,rows,x,y,width){
  root.append(g);return m.height;
 }
 
-function appendHistoryExportMetadata(root,lines,x,y,width){
- if(!Array.isArray(lines)||!lines.length)return 0;
- const height=24+lines.length*19,g=svgEl('g',{'data-export-history-metadata':'true'});
- g.append(svgEl('rect',{x,y,width,height,rx:8,fill:'#f7faf7',stroke:'#dbe6dc','stroke-width':1}));
- lines.forEach((line,index)=>{const text=svgEl('text',{x:x+14,y:y+20+index*19,'font-size':12.5,fill:'#526c60'});text.textContent=line;g.append(text)});
- root.append(g);return height;
-}
-
 function exportSvg(){
  const spec=sceneSpec(),winnerRows=exportPredictionWinnerRows(),tableLayout=winnerRows.length?exportPredictionTableLayout(winnerRows):null;
  const coreWidth=tableLayout?tableLayout.width+80:1200,contentWidth=coreWidth-80,contentHeight=Math.round(contentWidth*spec.height/spec.width);
@@ -1913,8 +1905,6 @@ function exportSvg(){
   const tableY=Math.max(mapY+contentHeight+40,coverageY+coverageHeight+30);
   if(winnerRows.length)appendExportPredictionTable(root,winnerRows,tableY);
   let height=Math.max(sidebarHeight,mapY+contentHeight+72,coverageY+coverageHeight+32,winnerRows.length?tableY+tableLayout.height+32:0);
-  const metadata=typeof History2022View!=='undefined'&&History2022View.active()?History2022View.exportMetadata?.()||[]:[];
-  if(metadata.length)height+=appendHistoryExportMetadata(root,metadata,40,height,contentWidth)+20;
   const actualWidth=coreWidth+sidebarWidth;
   root.setAttribute('width',actualWidth);root.setAttribute('height',height);root.setAttribute('viewBox','0 0 '+actualWidth+' '+height);
   root.firstChild?.setAttribute('width',actualWidth);root.firstChild?.setAttribute('height',height);
