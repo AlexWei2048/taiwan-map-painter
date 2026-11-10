@@ -3,27 +3,36 @@ on:
   push:
     paths:
       - scripts/build_history_2022.py
+      - scripts/enrich_history_cec.py
       - .github/workflows/history-2022.yml
   workflow_dispatch:
 permissions:
   contents: write
 jobs:
   build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 25
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - run: python -m pip install requests beautifulsoup4 opencc-python-reimplemented
-      - run: python scripts/build_history_2022.py
-      - name: Commit completed snapshot
+          python-version: '3.11'
+      - run: python -m pip install -r requirements-build.txt
+      - name: Build original historical election snapshot
+        run: python scripts/build_history_2022.py
+      - name: Enrich candidate profiles and turnout with official CEC archive
+        run: python scripts/enrich_history_cec.py
+      - name: Verify completed history snapshot and compiler
+        run: |
+          python scripts/build_history_2022.py --verify-existing
+          python -m unittest discover -s tests -p test_history_builder.py
+      - name: Commit checked snapshot and source audit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/history-2022.json
+          git add assets/history-2022.json sources/history-2022-manifest.json sources/history-2022-cec-enrichment-report.json
+          git diff --cached --check
           if ! git diff --cached --quiet; then
-            git commit -m "Add official-source 2022 historical election results snapshot"
+            git commit -m "Enrich 2022 history with verified official CEC candidate profiles and turnout"
             git push
           fi
