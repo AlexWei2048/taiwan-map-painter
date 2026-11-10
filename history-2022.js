@@ -84,7 +84,7 @@
  const historyLegendFont=()=>state.legend.fontSize*(isNationwide()?1.4:1)*(identityPanelsActive()?2:1);
  function legendHeight(result){
   const font=historyLegendFont(),gradients=gradientParties(result);
-  return 86+(result.partySeats.size+(kind==='township'?1:0))*font*2.05+
+  return 71+(result.partySeats.size+(kind==='township'?1:0))*font*2.05+
    (gradients.length?gradients.length*font*4.3+font*2.3:0);
  }
  function drawLegend(result){
@@ -100,12 +100,9 @@
   const count=entries.reduce((sum,[,n])=>sum+n,0);
   heading.textContent=mayorTownView()?'2022 县市长选举 · '+(localLeaders?'乡镇市区最高票候选人':'乡镇市区得票'):'2022 '+titles[kind]+'实际结果';
   root.append(heading);
-  const caption=svg('text',{x:x+18,y:y+47,'font-size':font*.78,fill:'#728477'});
   const unit=metric==='seats'?'席':metric==='votes'?'票':'%';
-  caption.textContent=voteMetric()?(candidateScope==='candidate'?'指定':'最高票')+'候选人 · '+(metric==='votes'?'按得票数着色':'按得票率着色'):metric==='seats'?selectedParty+' · 当选席次':kind==='council'?'按实际当选人统计':mayorTownView()?'显示乡镇市区得票领先政党':'按实际当选人统计';
-  root.append(caption);
-  root.append(svg('line',{x1:x+18,y1:y+58,x2:x+width-18,y2:y+58,stroke:'#e5ece6'}));
-  let rowY=y+67;
+  root.append(svg('line',{x1:x+18,y1:y+43,x2:x+width-18,y2:y+43,stroke:'#e5ece6'}));
+  let rowY=y+52;
   if(gradients.length){
    const bx=x+18,bw=width-36,range=metric==='seats'?result.seatRange:result.range;
    const stops=metric==='votes'||metric==='seats'?[0,.5,1]:[0,.25,.5,.75,1];

@@ -1053,7 +1053,24 @@ test('Historical snapshot cache and exports carry schema and provenance metadata
  assert.match(historyView,/obj\.schemaVersion!==2/);
  assert.doesNotMatch(historyView,/officialWinnerCorrections/);
  assert.match(historyView,/exportMetadata/);assert.match(historyView,/行政区边界版本/);
- assert.match(app,/data-export-history-metadata/);assert.match(app,/History2022View\.exportMetadata/);
+ assert.doesNotMatch(app,/data-export-history-metadata|appendHistoryExportMetadata|History2022View\.exportMetadata/);
+ assert.doesNotMatch(app,/if\(metadata\.length\)height\+=/);
+});
+
+test('Historical map legend has no subtitle and export images omit provenance panel',()=>{
+ const history=read('history-2022.js'),app=read('app.js');
+ assert.doesNotMatch(history,/caption\.textContent=voteMetric\(\)/);
+ assert.doesNotMatch(history,/root\.append\(caption\)/);
+ assert.match(history,/let rowY=y\+52/);
+ assert.match(history,/y1:y\+43.*y2:y\+43/);
+ assert.match(history,/return 71\+/);
+ assert.doesNotMatch(app,/data-export-history-metadata/);
+ assert.doesNotMatch(app,/appendHistoryExportMetadata/);
+ for(const file of ['index.html','map-v60.html']){
+  const html=read(file);
+  assert.match(html,/history-2022\.js\?v=20261110-history-clean-export-v1/);
+  assert.match(html,/app\.js\?v=20261110-history-clean-export-v1/);
+ }
 });
 
 test('2022 history has separate vote-share and vote-count gradients with full width',()=>{

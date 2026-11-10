@@ -1102,7 +1102,9 @@ test('2022 township and mayor maps navigate by county with actual numeric result
   assert.ok(row.rates.every(t=>t.endsWith('%')),'Rate labels include percent units');
  }
 
- assert.match(await page.locator('#legend').textContent(),/乡镇市区最高票候选人.*按得票率着色.*领先地区数/);
+ const compactLegend=await page.locator('#legend').textContent();
+ assert.match(compactLegend,/乡镇市区最高票候选人.*领先地区数/);
+ assert.doesNotMatch(compactLegend,/按得票率着色|按得票数着色|按实际当选人统计/);
  assert.match(await exportSvg(page),/data-history-gradient-party="中国国民党"/);
  await page.locator('#historyCandidateScope').selectOption('candidate');assert.equal(await page.locator('#historyCandidate').isVisible(),true);
  await page.locator('#labels [data-label]').first().click();await page.locator('#historyResultDialog').waitFor({state:'visible'});
@@ -1134,13 +1136,14 @@ test('2022 vote percentage and absolute-count maps have distinct color ranges an
  assert.equal(share.votes.length,0);
  assert.ok(share.rates.every(t=>/%$/.test(t)));
  assert.match(share.summary,/得票率渐变/);
- assert.match(share.legend,/按得票率着色/);
+ assert.doesNotMatch(share.legend,/按得票率着色|按得票数着色/);
  assert.doesNotMatch(share.legend,/参考|中位数换算/);
  assert.match(share.exportName,/得票率/);
  assert.notEqual(share.fill,'#edf1e9');
  assert.equal(share.stops.length,11);
  const shareExport=await exportSvg(page);
  assert.match(shareExport,/得票率/);
+ assert.doesNotMatch(shareExport,/data-export-history-metadata|资料来源：|行政区边界版本：|历史数据架构版本：|按得票率着色/);
  await page.locator('#historyMetric').selectOption('votes');
  const votes=await page.evaluate(()=>{
   const group=document.querySelector('#legend [data-history-gradient-party]');
@@ -1155,7 +1158,7 @@ test('2022 vote percentage and absolute-count maps have distinct color ranges an
  assert.ok(votes.voteTicks.every(t=>/票$/.test(t)));
  assert.ok(votes.voteTicks.some(t=>Number(t.replaceAll(',','').replace('票',''))>1000));
  assert.match(votes.summary,/得票数渐变/);
- assert.match(votes.legend,/按得票数着色/);
+ assert.doesNotMatch(votes.legend,/按得票率着色|按得票数着色/);
  assert.doesNotMatch(votes.legend,/%|参考|中位数换算/);
  assert.match(votes.exportName,/得票数/);
  assert.equal(votes.stops.length,11);
@@ -1164,6 +1167,7 @@ test('2022 vote percentage and absolute-count maps have distinct color ranges an
  assert.notEqual(share.range,votes.voteTicks.at(-1));
  const voteExport=await exportSvg(page);
  assert.match(voteExport,/得票数/);
+ assert.doesNotMatch(voteExport,/data-export-history-metadata|资料来源：|行政区边界版本：|历史数据架构版本：|按得票数着色/);
  assert.match(voteExport,/data-history-vote-tick/);
  assert.doesNotMatch(voteExport,/data-history-rate-tick/);
  assert.equal(await page.locator('#historyVoteUnit').count(),0);
