@@ -8,6 +8,8 @@ vote totals. This script enriches only fields absent in the existing snapshot.
 from __future__ import annotations
 import argparse, collections, csv, hashlib, io, json, re, urllib.request, zipfile
 from pathlib import Path
+import sys
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from opencc import OpenCC
 from scripts.build_history_2022 import validate_snapshot, write_snapshot_atomic
 
