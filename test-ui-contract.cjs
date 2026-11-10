@@ -1056,7 +1056,7 @@ test('2022 history legend and map share the stronger 2026 gradient with a full-w
  assert.match(history,/const rateStops=\[0,\.25,\.5,\.75,1\],voteStops=\[0,\.5,1\]/);
  assert.match(history,/'data-history-rate-tick'/);
  assert.match(history,/'data-history-vote-tick'/);
- assert.match(history,/referenceVotes:voteTotals\.length/);
+ assert.match(history,/referenceVotes=voteTotals\.length/);
  assert.match(history,/region\.share,currentResult\.range/);
  assert.match(history,/按选区有效票中位数换算，仅供参考/);
  assert.doesNotMatch(history,/historyVoteUnit/);
