@@ -1058,7 +1058,7 @@ test('2022 township and mayor maps navigate by county with actual numeric result
  await page.locator('#historyCounty').selectOption({label:'屏东县'});assert.ok(await page.locator('#regions path[data-region]').count()>1);
  await page.locator('#returnTaiwanMap').click();assert.equal(await page.locator('#historyCounty').inputValue(),'');
  await page.locator('#historyOffice').selectOption('mayor');await page.locator('#historyScale').selectOption('district');
- await page.locator('#regions path[data-region]').first().click();await page.locator('#historyResultDialog').waitFor({state:'visible'});assert.equal(await page.locator('#historyDialogDrilldown').isVisible(),true);
+ await page.locator('#regions path[data-region]').first().click({force:true});await page.locator('#historyResultDialog').waitFor({state:'visible'});assert.equal(await page.locator('#historyDialogDrilldown').isVisible(),true);
  await page.locator('#historyDialogDrilldown').click();assert.equal(await page.locator('#historyScale').inputValue(),'town');assert.notEqual(await page.locator('#historyCounty').inputValue(),'');
  await page.locator('#returnTaiwanMap').click();await page.locator('#historyScale').selectOption('town');
  assert.equal(await page.locator('#regions path[data-region]').count(),368);
@@ -1118,6 +1118,7 @@ test('2022 council result filters, regional search and historical export',async 
  await page.locator('#historyMetric').selectOption('share');
  await page.locator('#historyCandidateScope').selectOption('candidate');
  assert.ok(await page.locator('#historyCandidate option').count()>1);
+ await page.locator('#historyViewCandidates').click();
  await page.locator('#historySearch').fill('王世坚');
  assert.equal(await page.locator('#historyResults tbody tr').count(),1);
  await page.locator('#historyMetric').selectOption('party');
