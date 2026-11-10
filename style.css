@@ -508,3 +508,11 @@ body.history-mode .regions-panel{display:block!important}
 .history-result-dialog .history-candidate-table td:nth-child(4){font-weight:inherit;text-align:center}
 .history-result-dialog .history-elected-row td{background:#eaf5ee;font-weight:650}
 .history-result-dialog .history-elected-row td:nth-child(-n+2){background:#eaf5ee}
+
+/* Distinct groups in the paginated historical candidate results. */
+#historyResults .history-district-divider th{position:sticky;top:32px;z-index:2;min-width:100%;padding:10px 12px;background:#eaf3ed;color:#245d46;font-size:12px;text-align:left;font-weight:750;border-top:2px solid #c4d9cd;border-bottom:1px solid #c4d9cd;white-space:normal}
+#historyResults .history-district-divider:first-child th{border-top:0}
+#historyResults .history-district-divider+tr td{border-top:0}
+#historyResults .history-candidate-table tbody tr:not(.history-district-divider):nth-child(2n) td{background:#fbfdfa}
+.history-overview-card.history-turnout-card{background:#f7fbf8;border-color:#cbded1}
+.history-overview-card.history-turnout-card small{line-height:1.65;color:#4d6959}
