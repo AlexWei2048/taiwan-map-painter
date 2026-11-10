@@ -316,7 +316,7 @@
   if(el('historyElectorateBox'))el('historyElectorateBox').hidden=kind!=='council';if(el('historyElectorate'))el('historyElectorate').value=electorate;
   const metrics=[['party',kind==='council'?'实际当选席次':mayorTownView()?'当地最高票':'实际当选结果']];
   if(kind==='council')metrics.push(['seats','指定政党席次']);
-  if(kind!=='council'||county)metrics.push(['vote','得票']);
+  if(kind!=='council'||county)metrics.push(['vote','得票率 / 得票数']);
   if(!metrics.some(([id])=>id===metric))metric='party';
   const parties=[...new Set(db.council.filter(r=>r.level==='district'&&r.elected).map(r=>r.party))].sort();
   if(!parties.includes(selectedParty))selectedParty=parties[0]||'';
