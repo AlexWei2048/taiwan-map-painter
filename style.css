@@ -582,3 +582,6 @@ body.history-mode .intro > h1,body.history-mode .intro > p{display:none!importan
  .history-overview-card>strong{font-size:17px}
  .history-overview-card--separated>strong{font-size:12px}
 }
+
+/* Historical district source explanations are intentionally suppressed; keep placeholders for 2026 reference tables. */
+body.history-mode #districtReferenceNote,body.history-mode #districtReferenceSource{display:none!important}
