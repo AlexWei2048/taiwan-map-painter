@@ -166,6 +166,9 @@ def enrich(snapshot,tables,checksum):
     tally['total_candidates']=len(snapshot['candidacies'])
     tally['contests_with_profile']=len(contest_profiles)
     tally['total_contests']=len(snapshot['contests'])
+    for election in snapshot['elections']:
+        election['source_name']='中央选举委员会选举资料库'
+        election['source_url']='https://data.cec.gov.tw/'
     snapshot.setdefault('provenance',{})['cecArchiveEnrichment']={
         'source':URL,'sha256':checksum,
         'fields':['gender','incumbent_at_election','registered_voters','ballots_cast','invalid_votes'],
@@ -259,11 +262,21 @@ def main():
     print('REMAINING_PROFILES',json.dumps(missing_profiles,ensure_ascii=False),flush=True)
 
     validate_snapshot(snapshot)
+    candidates=snapshot['candidacies']
+    contests=snapshot['contests']
+    rows=snapshot['rows']
+    full_candidates=sum(c.get('gender') in ('男','女') and isinstance(c.get('incumbent_at_election'),bool) for c in candidates)
+    full_contests=sum(all(isinstance(c.get(field),int) for field in ('registered_voters','ballots_cast','valid_votes','invalid_votes')) for c in contests)
+    full_rows=sum(r.get('gender') in ('男','女') and isinstance(r.get('incumbent'),bool) for r in rows)
+    print('COVERAGE',json.dumps({'candidates':[full_candidates,len(candidates)],
+         'contests':[full_contests,len(contests)],'displayRows':[full_rows,len(rows)]}),flush=True)
+    if full_candidates!=len(candidates) or full_contests!=len(contests) or full_rows!=len(rows):
+        raise RuntimeError('Official source coverage still incomplete; refusing publication')
+    for c in contests:
+        if c['valid_votes']+c['invalid_votes']!=c['ballots_cast'] or c['ballots_cast']>c['registered_voters']:
+            raise RuntimeError('Official ballots inconsistent: '+c['contest_id'])
     print('AUDIT',json.dumps(tally,ensure_ascii=False,sort_keys=True),flush=True)
     if args.write:
-        # Require sizable coverage before replacing the trusted published snapshot.
-        if tally['matched_candidates']<1500 or tally['registered_voters_filled']<100:
-            raise RuntimeError('Coverage too low; refusing to replace history snapshot')
         write_snapshot_atomic(snapshot,OUTPUT)
         print('PUBLISHED',OUTPUT,flush=True)
 if __name__=='__main__': main()
