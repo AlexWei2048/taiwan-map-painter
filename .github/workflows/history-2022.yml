@@ -30,7 +30,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/history-2022.json sources/history-2022-manifest.json sources/history-2022-cec-enrichment-report.json
+          git add assets/history-2022.json sources/history-2022-manifest.json
+          git add -f sources/history-2022-cec-enrichment-report.json
           git diff --cached --check
           if ! git diff --cached --quiet; then
             git commit -m "Enrich 2022 history with verified official CEC candidate profiles and turnout"
