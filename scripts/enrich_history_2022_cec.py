@@ -145,6 +145,75 @@ def enrich(snapshot,tables,checksum):
         'statistics':dict(tally)}
     return tally
 
+def complete_chiayi_rerun(snapshot,tally):
+    """Official Chiayi City Election Commission 2022-12-18 rerun (not in 11/26 CEC ZIP)."""
+    c=next(c for c in snapshot['contests'] if c['election_id']=='2022-mayor' and c['county_name']=='嘉义市')
+    # Exact numbers, genders and vote counts from official county election commission.
+    official={1:('黄敏惠','女',59874,True),
+              2:('李俊俋','男',32790,False),
+              3:('陈泰山','男',246,False),
+              4:('黄宏成台湾阿成世界伟人财神总统','男',535,False),
+              5:('郑凯升','男',368,False)}
+    candidates=[x for x in snapshot['candidacies'] if x['contest_id']==c['contest_id']]
+    if len(candidates)!=5 or {int(x['ballot_number']) for x in candidates}!=set(official):
+        raise RuntimeError('Chiayi rerun candidate roster does not match official results')
+    for x in candidates:
+        name,gender,votes,incumbent=official[int(x['ballot_number'])]
+        if norm(x['candidate_name'])!=norm(name) or x['votes']!=votes:
+            raise RuntimeError('Chiayi official roster/votes mismatch '+x['candidate_name'])
+        if not x.get('gender'):x['gender']=gender;tally['gender_filled']+=1
+        if x.get('incumbent_at_election') is None:x['incumbent_at_election']=incumbent;tally['incumbent_filled']+=1
+    if c['valid_votes']!=93813 or 93813+375!=94188:
+        raise RuntimeError('Chiayi rerun official ballots do not reconcile')
+    for field,value in [('registered_voters',214130),('ballots_cast',94188),('invalid_votes',375)]:
+        if c.get(field) is None:c[field]=value;tally[field+'_filled']+=1
+        elif c[field]!=value:raise RuntimeError('Chiayi rerun field mismatch '+field)
+    c['election_date']='2022-12-18'
+    snapshot['provenance']['chiayi2022Rerun']={
+       'source':'https://web.cec.gov.tw/cyec/article/37711',
+       'candidateDetails':'https://db.cec.gov.tw/ElecTable/Election/ElecTickets?areaCode=00&cityCode=000&dataLevel=C&dataType=tickets&deptCode=000&legisId=00&liCode=0000&prvCode=00&subjectId=C2&themeId=1275d73551f2c0caf202e803b1766057&typeId=ELC',
+       'date':'2022-12-18','verified_candidate_count':5}
+    tally['official_chiayi_rerun']=5
+
+def propagate_official_candidate_fields(snapshot,tally):
+    """Populate all geography-level display rows, not just normalized candidate entities."""
+    contests={c['contest_id']:c for c in snapshot['contests']}
+    by_candidate=collections.defaultdict(list)
+    for cand in snapshot['candidacies']:
+        ct=contests[cand['contest_id']]
+        group=ct['election_id'].split('-')[-1]
+        key=(group,norm(ct['county_name']),norm(cand['candidate_name']),
+             str(int(cand['ballot_number'])) if str(cand['ballot_number']).isdigit() else cand['ballot_number'],
+             ct['electorate'])
+        by_candidate[key].append((cand,ct))
+    for row in snapshot['rows']:
+        key=(row['type'],norm(row['county']),norm(row['name']),
+             str(int(row['number'])) if str(row['number']).isdigit() else row['number'],
+             row['electorate'])
+        matches=by_candidate.get(key,[])
+        if len(matches)>1:
+            matches=[(c,ct) for c,ct in matches if row['type']=='mayor' or
+                (row['type']=='council' and district_number(ct['district_name'])==district_number(row['district']) and district_number(row['district'])) or
+                (row['type']=='township' and norm(ct['district_name'])==norm(row['town']))]
+        if len(matches)!=1:
+            tally['display_rows_unmatched']+=1
+            continue
+        cand,_=matches[0]
+        if cand.get('gender') and not row.get('gender'):row['gender']=cand['gender'];tally['display_gender_filled']+=1
+        if cand.get('incumbent_at_election') is not None and row.get('incumbent') is None:
+            row['incumbent']=cand['incumbent_at_election'];tally['display_incumbent_filled']+=1
+
+def show_unmatched_source_names(tables):
+    targets=[('mayor','5','江'),('township','1','严'),('township','1','蓝'),('council','17','陈'),('council','10','欧')]
+    for office,ballot,surname in targets:
+        found=[]
+        for group,(o,e) in FILES.items():
+            if o!=office:continue
+            for row in tables[(group,'elcand.csv')]:
+                if len(row)>14 and row[5]==ballot and norm(row[6]).startswith(surname):
+                    found.append((group,row[0],row[1],row[2],row[3],row[6],row[8],row[13]))
+        print('UNMATCHED_CEC_SOURCE',office,ballot,surname,json.dumps(found[:15],ensure_ascii=False),flush=True)
+
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--write',action='store_true')
@@ -153,6 +222,9 @@ def main():
     payload=download()
     tables=load_sources(zipfile.ZipFile(io.BytesIO(payload)))
     tally=enrich(snapshot,tables,hashlib.sha256(payload).hexdigest())
+    complete_chiayi_rerun(snapshot,tally)
+    propagate_official_candidate_fields(snapshot,tally)
+    show_unmatched_source_names(tables)
     remaining=[(contests['contest_id'],c['candidate_name'],c['ballot_number']) for c in snapshot['candidacies'] if c.get('incumbent_at_election') is None for contests in [next(k for k in snapshot['contests'] if k['contest_id']==c['contest_id'])]]
     missing_profiles=[(c['contest_id'],c['county_name'],c['district_name'],c['electorate']) for c in snapshot['contests'] if c.get('registered_voters') is None]
     print('REMAINING_CANDIDATES',json.dumps(remaining,ensure_ascii=False),flush=True)
