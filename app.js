@@ -1773,8 +1773,6 @@ function appendNumberTableExport(root,entries,x,y,columns=1){
  panel.append(svgEl('rect',{x:x+1,y:y+1,width:m.width-2,height:4,rx:2,fill:'#2a805d'}));
  const heading=svgEl('text',{x:x+16,y:y+31,'font-size':19,'font-weight':700,fill:'#254b3b'});
  heading.textContent='行政区索引';panel.append(heading);
- const count=svgEl('text',{x:x+m.width-17,y:y+31,'text-anchor':'end','font-size':12,'font-weight':600,fill:'#6d8b76'});
- count.textContent=rows.length+' 项';panel.append(count);
  panel.append(svgEl('line',{x1:x+14,y1:y+46,x2:x+m.width-14,y2:y+46,stroke:'#e2ece4','stroke-width':1}));
  for(let i=0;i<rows.length;i++){
   const row=rows[i],col=Math.floor(i/m.perColumn),index=i%m.perColumn;
