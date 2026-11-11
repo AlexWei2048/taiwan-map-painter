@@ -1,18 +1,20 @@
 (function(root){
  'use strict';
- const OFFICES=new Set(['mayor','council','township']);
+ const OFFICES=new Set(['mayor','council','township','president']);
+ const PRESIDENT_YEARS=[1996,2000,2004,2008,2012,2016,2020,2024];
+ const yearsForOffice=office=>office==='president'?PRESIDENT_YEARS:[2022];
  const Core=typeof module!=='undefined'&&module.exports?require('./history-core.js'):root.HistoryCore;
  const VIEWS=new Set(['map','candidates','overview']);
  const ELECTORATES=new Set(['all','regional','plains','mountain']);
- const METRICS={mayor:new Set(['party','share','votes']),council:new Set(['party','seats','share','votes']),township:new Set(['party','share','votes'])};
+ const METRICS={mayor:new Set(['party','share','votes']),president:new Set(['party','share','votes']),council:new Set(['party','seats','share','votes']),township:new Set(['party','share','votes'])};
  const labels={regional:'区域议员',plains:'平地少数民族议员',mountain:'山地少数民族议员'};
  const rate=(valid,cast,invalid)=>Number.isFinite(valid)&&Number.isFinite(cast)&&cast>0?valid/cast*100:Number.isFinite(valid)&&Number.isFinite(invalid)&&valid+invalid>0?valid/(valid+invalid)*100:null;
- const levelOptions=office=>office==='mayor'?[['county','县市'],['town','乡镇市区']]:office==='council'?[['district','选举区']]:[['town','乡镇市区']];
+ const levelOptions=office=>office==='mayor'||office==='president'?[['county','县市'],['town','乡镇市区']]:office==='council'?[['district','选举区']]:[['town','乡镇市区']];
  const electorateOptions=office=>office==='council'?[['all','全部类型（分别统计）'],['regional','区域议员'],['plains','平地少数民族议员'],['mountain','山地少数民族议员']]:[['regional','区域选举']];
- function normalizeSelection(input={},years=[2022]){
-  const available=years.map(Number).filter(Number.isFinite),requested=Number(input.year);
-  const year=available.includes(requested)?requested:(available[0]||2022);
+ function normalizeSelection(input={},years=null){
   const office=OFFICES.has(input.office)?input.office:'mayor';
+  const available=(years||yearsForOffice(office)).map(Number).filter(Number.isFinite),requested=Number(input.year);
+  const year=available.includes(requested)?requested:(office==='president'?2024:2022);
   const allowedLevels=levelOptions(office).map(item=>item[0]);
   const defaultLevel=allowedLevels[0];
   const level=allowedLevels.includes(input.level)?input.level:defaultLevel;
@@ -44,7 +46,7 @@
   }
   const top=region?.top;
   if(!top)return{fill:'#edf1e9',badgeItems:[],tooltip:'暂无该层级数据',ariaLabel:'暂无该层级数据'};
-  const leading=level==='town';
+  const leading=level==='town'||office==='president';
   const description=top.name+' · '+top.party+' · '+(leading?'得票领先':'实际当选')+' · '+Number(top.votes||0).toLocaleString('zh-CN')+'票'+(Number.isFinite(region.share)?' · '+region.share.toFixed(2)+'%':'');
   return{fill:metric==='party'?partyColor(top.party):region.fill||partyColor(top.party),badgeItems:[],tooltip:description,ariaLabel:description};
  }
@@ -123,19 +125,19 @@
   return{...selection,county,level:'town'};
  }
  function exportStem(selection={}){
-  const offices={mayor:'县市长',council:'县市议员',township:'乡镇市区长'},metrics={party:selection.office==='council'?'当选席次':selection.level==='town'?'得票领先':'当选政党',seats:'指定政党席次',vote:'得票率',share:'得票率',votes:'得票数'};
+  const offices={mayor:'县市长',council:'县市议员',township:'乡镇市区长',president:'台湾地区领导人'},metrics={party:selection.office==='council'?'当选席次':selection.office==='president'||selection.level==='town'?'得票领先':'当选政党',seats:'指定政党席次',vote:'得票率',share:'得票率',votes:'得票数'};
   return[selection.year||2022,offices[selection.office]||'历史选举',selection.county||'全台',metrics[selection.metric]||selection.metric||'结果'].join('-').replace(/[\\/:*?"<>|]/g,'_');
  }
  function historyCsv(result={contests:[],candidacies:[]},selection={}){
   const contests=new Map((result.contests||[]).map(item=>[item.contest_id,item])),rows=[['年份','选举类别','县市规范名称','县市官方名称','选区规范名称','选区官方名称','候选人规范姓名','候选人官方姓名','政党规范名称','政党官方名称','号次','得票数','得票率','官方当选']];
-  const offices={mayor:'县市长',council:'县市议员',township:'乡镇市区长'};
+  const offices={mayor:'县市长',council:'县市议员',township:'乡镇市区长',president:'台湾地区领导人'};
   const ordered=[...(result.candidacies||[])].sort((a,b)=>{const ca=contests.get(a.contest_id)||{},cb=contests.get(b.contest_id)||{};return Core.compareResultRows({...a,county_name:ca.county_name,district_name:ca.district_name,electorate:ca.electorate},{...b,county_name:cb.county_name,district_name:cb.district_name,electorate:cb.electorate},selection.office)});
   for(const item of ordered){const contest=contests.get(item.contest_id)||{};rows.push([selection.year||2022,offices[selection.office]||selection.office,contest.county_name,contest.county_name_official,contest.district_name,contest.district_name_official,item.candidate_name,item.candidate_name_official,item.party_name,item.party_name_official,item.ballot_number,item.votes,item.vote_share,item.elected_official?'是':''])}
   const cell=value=>{let text=String(value??'');if(/^[=+@\t\r-]/.test(text))text="'"+text;return'"'+text.replace(/"/g,'""')+'"'};
   return'\uFEFF'+rows.map(row=>row.map(cell).join(',')).join('\r\n');
  }
 
- const api={normalizeSelection,levelOptions,electorateOptions,turnoutCards,featurePresentation,badgeFallback,candidateRows,overviewCards,overviewCharts,drilldownSelection,exportStem,historyCsv};
+ const api={normalizeSelection,yearsForOffice,levelOptions,electorateOptions,turnoutCards,featurePresentation,badgeFallback,candidateRows,overviewCards,overviewCharts,drilldownSelection,exportStem,historyCsv};
  if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
 
  const doc=root.document;
@@ -144,7 +146,17 @@
  let state=normalizeSelection();
  let active=false;
  let indexed=null,currentResult=null,currentOverview=null;
+ function refreshYearOptions(){
+  const select=el('historyYear');if(!select)return;
+  const office=el('historyOffice')?.value||state.office,years=yearsForOffice(office);
+  const current=Number(select.value),preferred=years.includes(current)?current:(office==='president'?2024:2022);
+  if(select.options.length!==years.length||years.some((y,i)=>Number(select.options[i]?.value)!==y)){
+   select.replaceChildren(...years.map(y=>new Option(String(y),String(y))));
+  }
+  select.value=String(preferred);
+ }
  function readSelection(){
+  refreshYearOptions();
   const scale=el('historyScale')?.value;
   const office=el('historyOffice')?.value||state.office;
   return normalizeSelection({
@@ -152,13 +164,14 @@
    electorate:el('historyElectorate')?.value,county:el('historyCounty')?.value,
    level:office==='mayor'?(scale==='town'?'town':'county'):office==='council'?'district':'town',
    metric:el('historyMetric')?.value
-  },[2022]);
+  });
  }
  function emit(){
   root.dispatchEvent(new CustomEvent('historyselectionchange',{detail:{...state}}));
  }
  function resultForSelection(){
-  if(!indexed||!root.HistoryCore)return null;
+  if(!indexed||!root.HistoryCore||Number(indexed.snapshot?.year)!==state.year||
+     !indexed.snapshot?.elections?.some(e=>e.office===state.office))return null;
   const contests=[...indexed.contestsById.values()],countyId=state.county?contests.find(contest=>contest.county_name===state.county)?.county_id:'';
   return root.HistoryCore.filter(indexed,{year:state.year,office:state.office,electorate:state.electorate,countyId});
  }
@@ -265,9 +278,9 @@
   for(const view of VIEWS){const button=el('historyView'+view[0].toUpperCase()+view.slice(1));if(button){const selected=state.view===view;button.classList.toggle('active',selected);button.setAttribute('aria-pressed',String(selected))}}
   renderTurnoutCards();if(el('historyCoverage')&&currentResult)el('historyCoverage').textContent='当前范围：'+currentResult.contests.length+'个选举区 · '+currentResult.candidacies.length+'条候选人记录。';emit();return{...state};
  }
- function setView(view){state=normalizeSelection({...readSelection(),view},[2022]);render()}
+ function setView(view){state=normalizeSelection({...readSelection(),view});render()}
  function activate(initialSelection={}){
-  const target=normalizeSelection({...state,...initialSelection},[2022]);state=target;active=true;
+  const target=normalizeSelection({...state,...initialSelection});state=target;active=true;
   root.History2022View?.activate?.();
   if(el('historyYear'))el('historyYear').value=String(target.year);
   const controls=[['historyOffice',target.office],['historyElectorate',target.electorate],['historyCounty',target.county],['historyScale',target.level==='town'?'town':'district'],['historyMetric',target.metric]];
@@ -287,7 +300,7 @@
  for(const id of ['historyYear','historyOffice','historyElectorate','historyCounty','historyScale','historyMetric'])el(id)?.addEventListener('change',render);
  for(const [view,id] of [['candidates','historyViewCandidates'],['overview','historyViewOverview']])el(id)?.addEventListener('click',()=>setView(state.view===view?'map':view));
  for(const id of ['workspacePrediction','workspaceFree'])el(id)?.addEventListener('click',()=>{active=false});
- function setSnapshot(snapshot){try{indexed=root.HistoryCore.index(snapshot);render();return true}catch(error){indexed=null;currentResult=null;currentOverview=null;if(el('historyLoadStatus')){el('historyLoadStatus').hidden=false;el('historyLoadStatus').textContent='历史数据版本不兼容，请重新载入。'};if(el('historyRetry'))el('historyRetry').hidden=false;return false}}
+ function setSnapshot(snapshot){try{indexed=root.HistoryCore.index(snapshot);render();return true}catch(error){if(el('historyLoadStatus')){el('historyLoadStatus').hidden=false;el('historyLoadStatus').textContent='历史数据版本不兼容，请重新载入。'};if(el('historyRetry'))el('historyRetry').hidden=false;return false}}
  root.addEventListener('historysnapshotready',event=>setSnapshot(event.detail.snapshot));
  const existing=root.History2022View?.snapshot?.();if(existing)setSnapshot(existing);
  const heading=el('historyResultSection')?.querySelector('.history-result-heading');if(heading&&!el('historyExportCsv')){const button=doc.createElement('button');button.type='button';button.id='historyExportCsv';button.className='button quiet';button.textContent='导出当前结果 CSV';button.onclick=exportCsv;heading.append(button)}
