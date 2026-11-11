@@ -126,7 +126,7 @@
  }
  function exportStem(selection={}){
   const offices={mayor:'县市长',council:'县市议员',township:'乡镇市区长',president:'台湾地区领导人'},metrics={party:selection.office==='council'?'当选席次':selection.office==='president'||selection.level==='town'?'得票领先':'当选政党',seats:'指定政党席次',vote:'得票率',share:'得票率',votes:'得票数'};
-  return[selection.year||2022,offices[selection.office]||'历史选举',selection.county||'全台',metrics[selection.metric]||selection.metric||'结果'].join('-').replace(/[\\/:*?"<>|]/g,'_');
+  return[selection.year||2022,offices[selection.office]||'历史选举',selection.office==='president'?(selection.level==='town'?'乡镇市区':'县市'):null,selection.county||'全台',metrics[selection.metric]||selection.metric||'结果'].filter(Boolean).join('-').replace(/[\\/:*?"<>|]/g,'_');
  }
  function historyCsv(result={contests:[],candidacies:[]},selection={}){
   const contests=new Map((result.contests||[]).map(item=>[item.contest_id,item])),rows=[['年份','选举类别','县市规范名称','县市官方名称','选区规范名称','选区官方名称','候选人规范姓名','候选人官方姓名','政党规范名称','政党官方名称','号次','得票数','得票率','官方当选']];
@@ -137,6 +137,21 @@
   return'\uFEFF'+rows.map(row=>row.map(cell).join(',')).join('\r\n');
  }
 
+ function presidentialTownCsv(snapshot={},selection={}){
+  const rows=(snapshot.rows||[]).filter(r=>r.level==='town'&&r.type==='president'&&(!selection.county||r.county===selection.county));
+  const totals=new Map();
+  for(const r of rows){const k=r.county+'|'+r.town;totals.set(k,(totals.get(k)||0)+r.votes)}
+  const output=[['年份','选举类别','县市规范名称','县市官方名称','乡镇市区规范名称','乡镇市区官方名称','候选人规范姓名','候选人官方姓名','政党规范名称','政党官方名称','号次','得票数','得票率','官方当选']];
+  rows.sort((a,b)=>a.county.localeCompare(b.county,'zh')||a.town.localeCompare(b.town,'zh')||b.votes-a.votes);
+  for(const r of rows){
+   const total=totals.get(r.county+'|'+r.town)||0;
+   output.push([selection.year,'台湾地区领导人',r.county,r.county_official,r.town,r.town_official,
+     r.name,r.name_official,r.party,r.party_official,r.number,r.votes,
+     total?Number((r.votes/total*100).toFixed(8)):0,r.elected?'是':'']);
+  }
+  const cell=v=>{let text=String(v??'');if(/^[=+@\t\r-]/.test(text))text="'"+text;return'"'+text.replace(/"/g,'""')+'"'};
+  return'\uFEFF'+output.map(row=>row.map(cell).join(',')).join('\r\n');
+ }
  const api={normalizeSelection,yearsForOffice,levelOptions,electorateOptions,turnoutCards,featurePresentation,badgeFallback,candidateRows,overviewCards,overviewCharts,drilldownSelection,exportStem,historyCsv};
  if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
 
@@ -295,7 +310,8 @@
  }
  function exportCsv(){
   if(!currentResult)return;
-  const blob=new Blob([historyCsv(currentResult,state)],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),link=doc.createElement('a');link.href=url;link.download=exportStem(state)+'.csv';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  const content=state.office==='president'&&state.level==='town'?presidentialTownCsv(indexed?.snapshot||{},state):historyCsv(currentResult,state);
+  const blob=new Blob([content],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),link=doc.createElement('a');link.href=url;link.download=exportStem(state)+'.csv';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
  }
  for(const id of ['historyYear','historyOffice','historyElectorate','historyCounty','historyScale','historyMetric'])el(id)?.addEventListener('change',render);
  for(const [view,id] of [['candidates','historyViewCandidates'],['overview','historyViewOverview']])el(id)?.addEventListener('click',()=>setView(state.view===view?'map':view));
