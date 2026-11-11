@@ -156,7 +156,7 @@ test('Nationwide mayor map identifies all 22 counties by an interior name or its
  }).map(el=>el.textContent));
  assert.deepEqual(invalid,[]);
  const svg=await exportSvg(page);
- const names=await page.evaluate(()=>data.counties.map(f=>f.name));
+ const names=await page.evaluate(()=>data.counties.map(f=>XinhuaWording.normalize(f.name)));
  for(const name of names)assert.ok(svg.includes(name),'Export identifies '+name);
 });
 test('Nationwide mayor township map colours each town from its own saved forecast, without inheriting county results',async t=>{
@@ -222,7 +222,7 @@ test('Mayor township county return control restores the full national map with e
  assert.ok(await page.locator('#regions path[data-region]').count()>300);
  await page.locator('#county').selectOption({label:'台北市'});
  assert.equal(await back.isVisible(),true);
- assert.equal(await page.getByRole('button',{name:'返回全台地图',exact:true}).count(),1);
+ assert.equal(await page.getByRole('button',{name:'返回全部地区地图',exact:true}).count(),1);
  const geometry=await page.evaluate(()=>{
   const r=document.querySelector('#returnTaiwanMap').getBoundingClientRect();
   const canvas=document.querySelector('#canvas').getBoundingClientRect();
@@ -488,10 +488,10 @@ async function missingLabels(page,selector='#regions [data-region]'){
 test('Every council and regional legislative district is labelled in all 22 county views',async t=>{
  const page=await pageFor(t);await page.locator('#predictionOffice').selectOption('council');
  await page.locator('#county').selectOption({label:'台北市'});await page.waitForFunction(()=>document.querySelectorAll('#regions [data-region]').length===8);
- for(const county of counties){await page.locator('#county').selectOption({label:county});assert.deepEqual(await missingLabels(page),[],county+' council')}
+ for(const county of counties){await page.locator('#county').selectOption({value:county});assert.deepEqual(await missingLabels(page),[],county+' council')}
  await page.locator('#workspaceFree').click();await page.locator('#legislativeLevel').click();
  await page.waitForFunction(()=>document.querySelector('#regions [data-region][data-electorate="regional"]'));
- for(const county of counties){await page.locator('#county').selectOption({label:county});assert.deepEqual(await missingLabels(page,'#regions [data-region][data-electorate="regional"]'),[],county+' legislative')}
+ for(const county of counties){await page.locator('#county').selectOption({value:county});assert.deepEqual(await missingLabels(page,'#regions [data-region][data-electorate="regional"]'),[],county+' legislative')}
 });
 async function assertAdministrativeKey(page){
  const r=await page.evaluate(()=>{
@@ -588,7 +588,7 @@ test('Town label hover highlights the matching polygon and restores its predicti
 test('All 22 mayoral township views keep every name or its matching number',async t=>{
  const page=await pageFor(t);await page.locator('#predictionScale').selectOption('overlay');
  for(const county of counties){
-  await page.locator('#county').selectOption({label:county});await assertAdministrativeKey(page);
+  await page.locator('#county').selectOption({value:county});await assertAdministrativeKey(page);
  }
 });
 test('Township-chief maps use the same name-or-number rule in every eligible county',async t=>{
@@ -601,9 +601,9 @@ test('National council overview labels counties while county views retain all of
  await page.waitForFunction(()=>document.querySelectorAll('#regions [data-region]').length===22);
  assert.equal(await page.locator('#insetFrames [data-electorate]').count(),0);
  const national=()=>page.locator('#labels text[data-label]').evaluateAll(els=>els.map(e=>({text:e.textContent,official:e.dataset.placement==='district-number'})));
- for(const q of await national()){assert.equal(q.official,false);assert.match(q.text,/[县市]$/)}
+ for(const q of await national()){assert.equal(q.official,false);assert.match(q.text,/(?:[县市]|金门|马祖)$/)}
  await page.locator('#zoomIn').click();await page.locator('#fit').click();
- for(const q of await national())assert.match(q.text,/[县市]$/);
+ for(const q of await national())assert.match(q.text,/(?:[县市]|金门|马祖)$/);
  const saved=await page.evaluate(()=>JSON.stringify(state.predictions));
  await page.locator('#regions path[aria-label^="高雄市"]').click({force:true});
  assert.equal(await page.locator('#county').inputValue(),'高雄市');
@@ -634,7 +634,7 @@ test('Map and county selector use Xinhua display names without changing source k
   const values=await page.locator('#county option').evaluateAll(nodes=>nodes.filter(n=>n.value==='金门县'||n.value==='连江县').map(n=>({value:n.value,text:n.textContent.trim()})));
   assert.deepEqual(values.find(row=>row.value===key)?.text,label);
   await page.locator('#county').selectOption(key);
-  await page.waitForFunction(key=>window.state?.county===key,key);
+  await page.waitForFunction(key=>state.county===key,key);
   const title=await page.locator('#scopeTitle').textContent();
   assert.ok(title.includes(label),title);
   assert.doesNotMatch(title,/金门县|连江县|金門縣|連江縣/);
@@ -671,7 +671,7 @@ test('Nationwide administrative labels keep mainland references outside island f
 test('Offshore township maps omit inset frames and identify all townships with interior or nearby labels',async t=>{
  const page=await pageFor(t);await page.locator('#predictionScale').selectOption('overlay');
  for(const county of ['金门县','连江县','澎湖县']){
-  await page.locator('#county').selectOption({label:county});
+  await page.locator('#county').selectOption({value:county});
   await assertAdministrativeKey(page);
   assert.equal(await page.locator('#insetFrames [data-inset]').count(),0,county+' must not have island frames');
   const near=await page.locator('#labels text[data-callout-lane="island-near"]').count();assert.ok(near>0,county+' uses nearby island names');
@@ -694,7 +694,7 @@ test('Administrative index supports bidirectional hover, keyboard focus and the 
 test('Taitung and Pingtung island townships have centred full-name captions below the island in screen and export',async t=>{
  const page=await pageFor(t);await page.locator('#predictionScale').selectOption('overlay');
  for(const [county,names]of [['台东县',['绿岛乡','兰屿乡']],['屏东县',['琉球乡']]]){
-  await page.locator('#county').selectOption({label:county});
+  await page.locator('#county').selectOption({value:county});
   const metrics=await page.evaluate(names=>{
    const items=currentItems(),t=geometryLayout(items,true);
    return names.map(name=>{
@@ -783,7 +783,7 @@ test('Council forecasts only offer winners and county overview uses saved party 
 test('Council seat maps show one same-size symbol per seat across all counties, with grouped party emblems and grey fallback',async t=>{
  const page=await pageFor(t);await page.locator('#predictionOffice').selectOption('council');
  for(const county of counties){
-  await page.locator('#county').selectOption({label:county});
+  await page.locator('#county').selectOption({value:county});
   const r=await page.evaluate(()=>{
    const expected=predictionDistricts().map(d=>({id:d.id,seats:Number(d.seats)}));
    const groups=[...document.querySelectorAll('#labels [data-seat-district]')];
@@ -939,7 +939,7 @@ test('Free nationwide council is regional-only with county labels and drills int
    numberedKey:!document.querySelector('#mapNumberKey').hidden
   }));
   assert.ok(facts.names.length>=18,'National map must label the counties');
-  assert.ok(facts.names.every(name=>/[县市]$/.test(name)),JSON.stringify(facts.names));
+  assert.ok(facts.names.every(name=>/(?:[县市]|金门|马祖)$/.test(name)),JSON.stringify(facts.names));
   assert.equal(facts.numbers,0,'No district numbers on national map');
   assert.equal(facts.leaders,0,'No national label leader lines');
   assert.equal(facts.numberedKey,false,'No numeric district key on national map');
@@ -1073,7 +1073,7 @@ test('2022 council uses all historical district geometries and actual elected se
  assert.deepEqual(geometry,{count:215,seats:910,missing:0});
  let total=0;
  for(const county of counties){
-  await page.locator('#historyCounty').selectOption({label:county});
+  await page.locator('#historyCounty').selectOption({value:county});
   const result=await page.evaluate(()=>({expected:currentItems().reduce((n,f)=>n+f.seats,0),elected:document.querySelectorAll('[data-seat-status="elected"]').length,empty:document.querySelectorAll('[data-seat-status="empty"]').length}));
   assert.equal(result.elected,result.expected,county);assert.equal(result.empty,0,county);total+=result.elected;
  }
