@@ -1262,6 +1262,8 @@ test('2022 council constituency lists and CSV use 1, 2, 3 numeric ordering',asyn
 
 test('Historical office comes before year, and town-level mayor results mark the county-wide winner',async t=>{
   const page=await pageFor(t);await page.locator('#categoryHistory').click();
+  await page.locator('#historyOffice').selectOption('mayor');
+  await page.waitForFunction(()=>History2022View.office()==='mayor'&&History2022View.year()===2022);
   const controls=await page.locator('#historyControls').evaluate(el=>[...el.querySelectorAll('select')].map(item=>item.id));
   assert.ok(controls.indexOf('historyOffice')<controls.indexOf('historyYear'));
   await page.locator('#historyCounty').selectOption({label:'台北市'});
@@ -1280,6 +1282,8 @@ test('Historical office comes before year, and town-level mayor results mark the
 test('2022 actual result overview has responsive metrics and turnout visualizations',async t=>{
  const page=await pageFor(t,{width:390,height:844});
  await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('mayor');
+ await page.waitForFunction(()=>History2022View.office()==='mayor'&&History2022View.year()===2022);
  await page.locator('#historyCounty').selectOption({label:'台北市'});
  await page.locator('#historyViewOverview').click();
  await page.waitForFunction(()=>document.querySelectorAll('#historyOverviewCards .history-overview-card').length===8);
