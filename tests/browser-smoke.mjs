@@ -1374,7 +1374,7 @@ test('Presidential history loads real 2024 and 1996 shards, navigates historical
  await page.locator('#historyScale').selectOption('town');
  await page.locator('#historyCounty').selectOption({label:'台南市'});
  await page.waitForFunction(()=>document.querySelector('#historySummary').textContent.includes('个地区'));
- assert.match(await page.locator('#regions').textContent(),/中区、西区（合并）|中西/);
+ assert.ok((await page.evaluate(()=>History2022View.items().map(f=>f.name))).includes('中区、西区（合并）'));
  await page.locator('#historyMetric').selectOption('share');
  const normalized=await page.evaluate(()=>HistoryWorkspace.selection());
  assert.equal(normalized.year,1996);
