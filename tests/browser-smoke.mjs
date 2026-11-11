@@ -502,8 +502,8 @@ async function assertAdministrativeKey(page){
    const f=items.find(f=>String(f.id)===el.dataset.label);if(!f)continue;
    if(el.dataset.numberKey){
     const row=rows.find(row=>row.number===el.dataset.numberKey);
-    if(!row||!row.name.includes(f.name))bad.push(f.name+' missing from key');
-   }else if(el.textContent!==f.name)bad.push(f.name+' wrong name');
+    if(!row||!row.name.includes(window.XinhuaWording.normalize(f.name)))bad.push(f.name+' missing from key');
+   }else if(el.textContent!==window.XinhuaWording.normalize(f.name))bad.push(f.name+' wrong name');
   }
   const key=document.querySelector('#mapNumberKey'),canvas=document.querySelector('#canvas');
    const k=key.getBoundingClientRect(),m=canvas.getBoundingClientRect();
@@ -628,7 +628,7 @@ test('Nationwide administrative labels keep mainland references outside island f
   const hsinchu=labels.find(el=>el.dataset.label==='10018');
   return{hsinchu:!!hsinchu,clear:!!hsinchu&&frames.every(f=>!overlap(hsinchu.getBoundingClientRect(),f.box)),
    offshore:[['金门县','金门'],['连江县','马祖'],['澎湖县','澎湖']].map(([name,inset])=>{
-    const el=labels.find(el=>el.textContent===name),frame=frames.find(f=>f.name===inset)?.box,b=el?.getBoundingClientRect();
+    const el=labels.find(el=>el.textContent===window.XinhuaWording.normalize(name)),frame=frames.find(f=>f.name===inset)?.box,b=el?.getBoundingClientRect();
     return{name,number:el?.dataset.numberKey||'',placement:el?.dataset.placement,
      inside:!!b&&b.left>=frame.left&&b.right<=frame.right&&b.top>=frame.top&&b.bottom<=frame.bottom,
      centred:!!b&&Math.abs((b.left+b.right-frame.left-frame.right)/2)<2};

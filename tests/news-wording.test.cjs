@@ -31,9 +31,13 @@ test('2502 clauses 49–86 normalize Taiwan-related public wording without disto
   ['小三通','“小三通”'],
   ['台语','台湾闽南语'],
   ['全台 · 含离岛','全部地区（含金门、马祖）'],
-  ['台湾金门县','金门县'],
-  ['台湾连江县','连江县'],
-  ['台湾离岛','金门、马祖等岛屿'],
+  ['台湾金门县','金门'],
+  ['台湾连江县','马祖'],
+  ['台湾离岛','福建外岛'],
+  ['金门县','金门'],
+  ['连江县','马祖'],
+  ['金門縣','金门'],
+  ['連江縣','马祖'],
   ['台湾省','台湾地区'],
   ['台湾省政府','台湾省政府'],
   ['国小、国中','小学、初中'],
@@ -44,7 +48,7 @@ test('2502 clauses 49–86 normalize Taiwan-related public wording without disto
   assert.equal(result,wanted,input);
   assert.equal(W.normalize(result),result,'normalization is idempotent: '+input);
  }
- for(const name of ['公民党','民国党','中华统一促进党','台湾团结联盟','台联党','台湾民众党','金门县','连江县','张国立']){
+ for(const name of ['公民党','民国党','中华统一促进党','台湾团结联盟','台联党','台湾民众党','金门','马祖','张国立']){
   assert.equal(W.normalize(name),name,'preserve registered names and personal names: '+name);
  }
 });
@@ -79,4 +83,6 @@ test('public site source wording and export call sites have the 2502 guards wire
  assert.ok(app.includes('function csvCell(v){v=mainlandTerms(v);'));
  assert.ok(app.includes("replace(/^[“「](.*)[”」]$/,'$1')"),'CSV import accepts published party spelling');
  assert.ok(hist.includes("mainlandTerms(election?.source_name"),'historical source labels are normalized');
+ assert.ok(fs.readFileSync('news-wording.js','utf8').includes("new DOMParser().parseFromString(original,'image/svg+xml')"),
+  'exported SVG text is normalized without rewriting geographic source IDs');
 });
