@@ -777,19 +777,20 @@ test('Specified-candidate export selects one ID and only includes entered vote m
  assert.match(app,/heading\.textContent=layout\.specified\?'指定候选人得票预测'/);
 });
 
-test('Administrative lookup sits above the legend and exports every entry',()=>{
+test('Administrative lookup is outside canvas and exports every entry',()=>{
  assert.match(index,/id="mapWithKey"/);
  assert.match(index,/id="mapNumberKey"/);
  assert.match(index,/id="mapNumberKeyRows"/);
  assert.match(index,/app\.js\?v=[\w-]+/);
  assert.match(index,/style\.css\?v=[\w-]+/);
  const canvasStart=index.indexOf('<div class="canvas" id="canvas">');
+ const split=index.indexOf('</div><aside class="map-number-key"',canvasStart);
  const key=index.indexOf('<aside class="map-number-key"',canvasStart);
- const canvasEnd=index.indexOf('</div></div>\n<section class="history-result-section"',canvasStart);
- assert.ok(canvasStart>=0&&key>canvasStart&&key<canvasEnd,'Map key must be inside canvas');
+ const end=index.indexOf('</aside></div>',key);
+ assert.ok(canvasStart>=0&&split>canvasStart&&key>split&&end>key,'Index is a sibling after canvas');
  const css=read('style.css');
- assert.match(css,/\.canvas>\.map-number-key\{/);
- assert.doesNotMatch(css,/grid-template-columns:minmax\(0,1fr\) minmax\(180px,225px\)/);
+ assert.match(css,/#mapWithKey>\.map-number-key\{/);
+ assert.match(app,/panel\.parentElement!==layout/);
  assert.match(app,/function mapNumberDisplayName\(/);
  const table=app.slice(app.indexOf('function renderMapNumberTable(){'),app.indexOf('\nfunction mapLabelCandidatePoints('));
  assert.doesNotMatch(table,/number-key-group|th\.colSpan/);

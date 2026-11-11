@@ -505,14 +505,15 @@ async function assertAdministrativeKey(page){
     if(!row||!row.name.includes(f.name))bad.push(f.name+' missing from key');
    }else if(el.textContent!==f.name)bad.push(f.name+' wrong name');
   }
-  const key=document.querySelector('#mapNumberKey'),legend=document.querySelector('#legend');
-  return{total:items.length,labelled:labels.length,numbers:labels.filter(el=>el.dataset.numberKey).length,
-   rows:rows.length,bad,above:key.hidden||key.getBoundingClientRect().bottom<=legend.getBoundingClientRect().top+1};
- });
- assert.equal(r.labelled,r.total);assert.deepEqual(r.bad,[]);assert.equal(r.rows,r.numbers);assert.ok(r.above);
- return r;
+  const key=document.querySelector('#mapNumberKey'),canvas=document.querySelector('#canvas');
+   const k=key.getBoundingClientRect(),m=canvas.getBoundingClientRect();
+   return{total:items.length,labelled:labels.length,numbers:labels.filter(el=>el.dataset.numberKey).length,
+    rows:rows.length,bad,clear:key.hidden||(key.parentElement.id==='mapWithKey'&&k.top>=m.bottom+2)};
+  });
+  assert.equal(r.labelled,r.total);assert.deepEqual(r.bad,[]);assert.equal(r.rows,r.numbers);assert.ok(r.clear);
+  return r;
 }
-test('Dense administrative names fall back to numbers with a complete key above the legend and in exports',async t=>{
+test('Dense administrative names have a separate card and complete export references',async t=>{
  const page=await pageFor(t);await page.locator('#county').selectOption({label:'高雄市'});
  await page.locator('#predictionScale').selectOption('overlay');
  const r=await assertAdministrativeKey(page);assert.equal(r.total,38);assert.ok(r.numbers>0);
@@ -608,7 +609,7 @@ test('National council overview labels counties while county views retain all of
  assert.equal(await page.locator('#regions path[data-region]').count(),22);
  assert.equal(await page.evaluate(()=>JSON.stringify(state.predictions)),saved);
 });
-test('Mobile administrative keys stay inside the screen above the legend',async t=>{
+test('Mobile administrative keys stay inside the screen and outside the map',async t=>{
  const page=await pageFor(t,{width:390,height:844});
  await page.locator('#county').selectOption({label:'高雄市'});await page.locator('#predictionScale').selectOption('overlay');
  const r=await assertAdministrativeKey(page);assert.ok(r.numbers>0);
