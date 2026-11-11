@@ -157,27 +157,48 @@
   const identity=featureElectorate(feature),number=districtNumber(feature.number||feature.name);if(unmatchedDistricts.has(norm(feature.county)+'|'+identity+'|'+number))return '__2022_unmatched__';
   return feature.county+'|'+identity+'|'+number;
  }
+ // Presidential tickets need separate legend entries even when their
+ // candidates share a nomination label (1996 and 2000 independents).
+ // County mayor legends include names only when one county is selected.
+ const detailedLegend=()=>presidentialMode||(kind==='mayor'&&!!county);
+ const legendCandidateName=name=>presidentialMode?HistoryPresidential.ticketName(presidentialYear,name):name;
+ function legendLabel(entry){return entry.name?entry.party+'｜'+legendCandidateName(entry.name):entry.party}
+ function legendEntries(result){
+  if(!detailedLegend())return [...result.partySeats].map(([party,count])=>({party,name:'',count}));
+  const entries=new Map();
+  for(const region of result.regions.values()){
+   if(!region.party)continue;
+   const candidate=voteMetric()?region.top:region.leaders[0]||region.top;
+   if(!candidate?.name)continue;
+   const key=[region.party,candidate.number,candidate.name].join('|');
+   if(!entries.has(key))entries.set(key,{party:region.party,name:candidate.name,number:candidate.number,count:0});
+   entries.get(key).count++;
+  }
+  return [...entries.values()];
+ }
  function gradientParties(result){
-  if(metric==='seats')return selectedParty?[selectedParty]:[];
-  return voteMetric()?[...new Set([...result.regions.values()].map(r=>r.top?.party).filter(Boolean))]:[];
+  if(metric==='seats')return selectedParty?[{party:selectedParty,name:''}]:[];
+  if(!voteMetric())return [];
+  if(detailedLegend())return legendEntries(result);
+  return [...new Set([...result.regions.values()].map(r=>r.top?.party).filter(Boolean))].map(party=>({party,name:''}));
  }
  const historyLegendFont=()=>state.legend.fontSize*(isNationwide()?1.4:1)*(identityPanelsActive()?2:1);
  function legendHeight(result){
-  const font=historyLegendFont(),gradients=gradientParties(result);
-  return 71+(result.partySeats.size+(kind==='township'?1:0))*font*2.05+
+  const font=historyLegendFont(),gradients=gradientParties(result),entries=legendEntries(result);
+  return 71+(entries.length+(kind==='township'?1:0))*font*2.05+
    (gradients.length?gradients.length*font*4.3+font*2.3:0);
  }
  function drawLegend(result){
   const root=el('legend');if(!root)return;root.replaceChildren();delete root.dataset.historyBox;if(!state.legend.show)return;
-  const entries=[...result.partySeats].sort((a,b)=>b[1]-a[1]);if(!entries.length&&kind!=='township')return;
-  const spec=sceneSpec(),font=historyLegendFont(),rowH=font*2.05,width=identityPanelsActive()?560:isNationwide()?350:300;
+  const entries=legendEntries(result).sort((a,b)=>b.count-a.count);if(!entries.length&&kind!=='township')return;
+  const spec=sceneSpec(),font=historyLegendFont(),rowH=font*2.05,width=identityPanelsActive()?560:detailedLegend()?480:isNationwide()?350:300;
   const gradients=gradientParties(result),height=legendHeight(result),x=spec.width-width-25,y=spec.height-furnitureFooterHeight()+20;
   const svg=(tag,attrs)=>{const node=document.createElementNS(NS,tag);for(const [k,v]of Object.entries(attrs||{}))node.setAttribute(k,v);return node};
   root.dataset.historyBox=[x,y,width,height].join(',');
   root.append(svg('rect',{x,y,width,height,rx:12,fill:'#fff',stroke:'#dce5df','stroke-width':1}));
   const heading=svg('text',{x:x+18,y:y+27,'font-size':font+1,'font-weight':600,fill:'#294a3a'});
   const localLeaders=areaLeading()&&(!voteMetric()||candidateScope==='top');
-  const count=entries.reduce((sum,[,n])=>sum+n,0);
+  const count=entries.reduce((sum,entry)=>sum+entry.count,0);
   heading.textContent=presidentialMode?yearLabel()+' 台湾地区领导人选举 · '+(localLeaders?'当地最高票候选人':'候选人得票'):mayorTownView()?'2022 县市长选举 · '+(localLeaders?'乡镇市区最高票候选人':'乡镇市区得票'):'2022 '+titles[kind]+'实际结果';
   root.append(heading);
   const unit=metric==='seats'?'席':metric==='votes'?'票':'%';
@@ -186,11 +207,12 @@
   if(gradients.length){
    const bx=x+18,bw=width-36,range=metric==='seats'?result.seatRange:result.range;
    const stops=metric==='votes'||metric==='seats'?[0,.5,1]:[0,.25,.5,.75,1];
-   for(const [index,party] of gradients.entries()){
-    const group=svg('g',{'data-history-gradient-party':party});
+   for(const [index,entry] of gradients.entries()){
+    const party=entry.party;
+    const group=svg('g',{'data-history-gradient-party':party,'data-history-gradient-candidate':entry.name||''});
     group.append(svg('rect',{x:bx,y:rowY+3,width:font,height:font,rx:3,fill:partyColor(party)}));
     const label=svg('text',{x:bx+font*1.35,y:rowY+font,'font-size':font*.88,'font-weight':600,fill:'#426052'});
-    label.textContent=party;group.append(label);
+    label.textContent=legendLabel(entry);group.append(label);
     const gy=rowY+font*1.35,barHeight=font*1.4;
     const id='history-gradient-'+index,defs=svg('defs'),gradient=svg('linearGradient',{id,x1:'0%',x2:'100%',y1:'0%',y2:'0%'});
     // Sample the metric-specific range used to shade map regions.
@@ -214,11 +236,11 @@
    summary.textContent=areaLeading()?'领先地区数（共 '+count+' 个）':'当选席次（共 '+count+' 席）';
    root.append(summary);rowY+=font*2;
   }
-  for(const [party,count]of entries){
-   const p=predictionParty(party),logo=logoFor(p);
+  for(const entry of entries){
+   const {party,count}=entry,p=predictionParty(party),logo=logoFor(p);
    root.append(svg('rect',{x:x+18,y:rowY+3,width:font,height:font,rx:3,fill:partyColor(party)}));
    if(logo)appendCircularPartyLogo(root,logo,x+38,rowY,font*1.55);
-   const label=svg('text',{x:x+font+48,y:rowY+font+1,'font-size':font,fill:'#426052'});label.textContent=party+'（'+count+(areaLeading()?'个地区':'席')+'）';root.append(label);rowY+=rowH;
+   const label=svg('text',{x:x+font+48,y:rowY+font+1,'font-size':font,fill:'#426052','data-history-legend-candidate':entry.name||''});label.textContent=legendLabel(entry)+'（'+count+(areaLeading()?'个地区':'席')+'）';root.append(label);rowY+=rowH;
   }
   if(kind==='township'){root.append(svg('rect',{x:x+18,y:rowY+3,width:font,height:font,fill:'#fff',stroke:'#9eaaa2'}));const t=svg('text',{x:x+font+48,y:rowY+font+1,'font-size':font,fill:'#426052','data-no-township-election-legend':'true'});t.textContent='无乡镇市区长选举';root.append(t)}
  }
