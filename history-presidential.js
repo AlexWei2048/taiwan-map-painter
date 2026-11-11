@@ -7,6 +7,24 @@
  'use strict';
  const YEARS=[1996,2000,2004,2008,2012,2016,2020,2024];
  const YEAR_SET=new Set(YEARS);
+ // Verified running mates for every officially recorded presidential ticket.
+ // Indexed by election year and presidential candidate, not party: independent
+ // tickets may share the same party/nomination label in the source vote data.
+ const RUNNING_MATES={
+  1996:{'陈履安':'王清峰','李登辉':'连战','彭明敏':'谢长廷','林洋港':'郝柏村'},
+  2000:{'宋楚瑜':'张昭雄','连战':'萧万长','李敖':'冯沪祥','许信良':'朱惠良','陈水扁':'吕秀莲'},
+  2004:{'陈水扁':'吕秀莲','连战':'宋楚瑜'},
+  2008:{'谢长廷':'苏贞昌','马英九':'萧万长'},
+  2012:{'蔡英文':'苏嘉全','马英九':'吴敦义','宋楚瑜':'林瑞雄'},
+  2016:{'朱立伦':'王如玄','蔡英文':'陈建仁','宋楚瑜':'徐欣莹'},
+  2020:{'宋楚瑜':'余湘','韩国瑜':'张善政','蔡英文':'赖清德'},
+  2024:{'柯文哲':'吴欣盈','赖清德':'萧美琴','侯友宜':'赵少康'}
+ };
+ const ticketName=(year,name)=>{
+  const candidate=String(name||'').trim();
+  const deputy=RUNNING_MATES[Number(year)]?.[candidate];
+  return deputy?candidate+' & '+deputy:candidate;
+ };
  const LEGACY_COUNTY={
   '台北县':'新北市','桃园县':'桃园市',
   '台中县':'台中市','台南县':'台南市','高雄县':'高雄市'
@@ -98,7 +116,7 @@
   }
   return{counties,towns,missing,merges,countyNames:historicCountyNames};
  }
- const api={YEARS,modernCounty,baseTown,load,geometry,clearPending};
+ const api={YEARS,RUNNING_MATES,ticketName,modernCounty,baseTown,load,geometry,clearPending};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;
  else root.HistoryPresidential=api;
 })(typeof window==='undefined'?{}:window);
