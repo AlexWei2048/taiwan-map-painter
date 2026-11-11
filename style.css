@@ -589,3 +589,27 @@ body.history-mode #districtReferenceNote,body.history-mode #districtReferenceSou
 .sidebar-footer .site-about{margin-top:10px;padding-top:12px;border-top:1px solid var(--line)}
 .sidebar-footer .site-about h2{margin:0 0 5px;font-size:12px;line-height:1.5;font-weight:650;color:#456b57}
 .sidebar-footer .site-about p{margin:0;font-size:11.5px;line-height:1.8;color:#61766b;overflow-wrap:anywhere}
+
+/* Administrative reference: out of the drawing surface on all map types. */
+#mapWithKey.has-number-key{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+#mapWithKey>.canvas{min-width:0;width:100%}
+#mapWithKey.has-number-key>.canvas:not(.atlas-mode){height:clamp(630px,72dvh,880px);min-height:540px}
+#mapWithKey.has-number-key>.canvas.council-seats-mode:not(.atlas-mode){height:max(900px,calc(90vw - 230px));min-height:900px}
+#mapWithKey>.map-number-key{position:relative;inset:auto;display:flex;flex-direction:column;min-width:0;width:100%;max-width:none;max-height:none;margin:0;padding:0;overflow:hidden;border:1px solid #d9e5dd;border-radius:14px;background:#fff;box-shadow:0 3px 16px #1d46360e}
+#mapWithKey>.map-number-key[hidden]{display:none!important}
+#mapWithKey>.map-number-key::before{content:"";height:4px;flex:none;background:linear-gradient(90deg,#176c54,#80b99d 48%,#ecf4ed)}
+#mapWithKey>.map-number-key .map-number-key-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:15px 20px 12px;border-bottom:1px solid #e7eee8}
+#mapWithKey>.map-number-key h3{margin:0;color:#254b3b;font-size:16px;font-weight:700}
+#mapWithKey>.map-number-key .map-number-key-heading span{font-size:12px;font-weight:600;color:#577264;background:#eef4ef;padding:4px 11px;border-radius:99px}
+#mapWithKey>.map-number-key .map-number-key-scroll{min-height:0;max-height:clamp(175px,34vh,340px);padding:11px 14px 15px;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin}
+#mapWithKey>.map-number-key table{display:block;width:100%;border:0;border-collapse:separate}
+#mapWithKey>.map-number-key tbody{display:grid;grid-template-columns:repeat(auto-fill,minmax(174px,1fr));gap:6px 10px}
+#mapWithKey>.map-number-key tr{display:grid;grid-template-columns:34px minmax(0,1fr);gap:8px;align-items:center;min-width:0;padding:5px 8px;border:1px solid transparent;border-radius:8px;background:#f6f9f6;transition:background .15s,border-color .15s}
+#mapWithKey>.map-number-key tr:nth-child(odd){background:#f1f6f1}
+#mapWithKey>.map-number-key th,#mapWithKey>.map-number-key td{display:block;min-width:0;width:auto;margin:0;padding:0;border:0;line-height:1.45;font-size:12px}
+#mapWithKey>.map-number-key .number-key-number{display:grid;place-items:center;min-width:31px;min-height:28px;border-radius:6px;background:#e1ede3;color:#28614c;font-weight:700;font-variant-numeric:tabular-nums}
+#mapWithKey>.map-number-key .number-key-action{padding:3px 0;font-size:12px;line-height:1.45;overflow-wrap:anywhere}
+#mapWithKey>.map-number-key tr:hover,#mapWithKey>.map-number-key tr.number-key-highlighted,#mapWithKey>.map-number-key tr:focus-within{background:#dcefe2;border-color:#a3cbb3;box-shadow:inset 3px 0 #267657}
+#mapWithKey>.map-number-key .number-key-action:focus-visible{outline:2px solid #267657;outline-offset:1px}
+@media(max-width:700px){#mapWithKey.has-number-key>.canvas:not(.atlas-mode){height:clamp(490px,72dvh,710px);min-height:480px}#mapWithKey.has-number-key>.canvas.council-seats-mode:not(.atlas-mode){height:850px;min-height:850px}#mapWithKey>.map-number-key .map-number-key-heading{padding:12px 14px 10px}#mapWithKey>.map-number-key h3{font-size:14px}#mapWithKey>.map-number-key .map-number-key-scroll{max-height:280px;padding:9px}#mapWithKey>.map-number-key tbody{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:5px}#mapWithKey>.map-number-key tr{grid-template-columns:30px minmax(0,1fr);padding:4px 5px;gap:6px}}
+@media(max-width:390px){#mapWithKey>.map-number-key tbody{grid-template-columns:minmax(0,1fr)}#mapWithKey>.map-number-key .map-number-key-scroll{max-height:245px}}

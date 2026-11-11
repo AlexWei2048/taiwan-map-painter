@@ -445,16 +445,10 @@ function renderMapNumberTable(){
 }
 
 function positionMapNumberTable(){
- const panel=$('mapNumberKey'),canvas=$('canvas'),legend=$('legend'),map=$('map');
- if(!panel||panel.hidden||!canvas||!map)return;
- const frame=canvas.getBoundingClientRect(),bounds=map.getBoundingClientRect();
- const box=state.legend.show&&legend?.childElementCount?legend.getBoundingClientRect():null;
- const bottom=box&&box.height?box.top-frame.top-10:bounds.bottom-frame.top-32;
- const right=box&&box.width?frame.right-box.right:20;
- panel.style.right=Math.max(10,right)+'px';
- panel.style.bottom=Math.max(36,frame.height-bottom)+'px';
- panel.style.width=Math.max(155,Math.min(260,box?.width||220,frame.width*.36))+'px';
- panel.style.maxHeight=Math.max(110,bottom-65)+'px';
+ const panel=$('mapNumberKey'),layout=$('mapWithKey');
+ if(!panel||!layout)return;
+ if(panel.parentElement!==layout)layout.append(panel);
+ if(panel.hasAttribute('style'))panel.removeAttribute('style');
 }
 if(typeof window!=='undefined')window.addEventListener('resize',()=>positionMapNumberTable());
 
