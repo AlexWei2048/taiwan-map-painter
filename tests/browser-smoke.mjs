@@ -857,7 +857,7 @@ test('Free-paint nationwide township map displays the same township edges as the
   county:document.querySelector('#borders path[data-shared-boundary="counties"]')?.getAttribute('d'),
   innerStroke:document.querySelector('#districtBorders path[data-shared-boundary="towns"]')?.getAttribute('stroke'),
   outerStroke:document.querySelector('#borders path[data-shared-boundary="counties"]')?.getAttribute('stroke'),
-  requestedInner:state.borderColor,requestedOuter:state.countyBorderColor
+  requestedInner:state.townBorderColor,requestedOuter:state.countyBorderColor
  }));
  assert.equal(baseline.overview,true);
  assert.equal(baseline.regions,22,'Keep the existing county-colour navigation overview');
