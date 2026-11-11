@@ -167,7 +167,7 @@ function applyView(){
 }
 function fit(){view=fittedView();baseView={...view};flushView();renderLabels()}
 
-function geometryLayout(items,labels=true){if(!items.length)items=data.counties.filter(f=>!state.county||f.name===state.county);const spec=sceneSpec(),area=contentArea(spec),b=bounds(items);if(items.some(belowIslandTown))area.bottom-=48;const historicalPresidential=typeof History2022View!=='undefined'&&History2022View.active()&&History2022View.office?.()==='president';const visibleOutlines=historicalPresidential?[]:state.level==='villages'&&state.villageTown?data.towns.filter(f=>f.id===state.villageTown):state.level!=='counties'?data.counties.filter(f=>!state.county||f.name===state.county):[];for(const outline of visibleOutlines){b[0]=Math.min(b[0],outline.box[0]);b[1]=Math.min(b[1],outline.box[1]);b[2]=Math.max(b[2],outline.box[2]);b[3]=Math.max(b[3],outline.box[3])}for(const q of activeInsetDefinitions()){b[0]=Math.min(b[0],q.box[0]);b[1]=Math.min(b[1],q.box[1]);b[2]=Math.max(b[2],q.box[2]);b[3]=Math.max(b[3],q.box[3])}const gutter=labels?(isNationwide()?250:state.level==='villages'?95:directTownNameLabels()?(mayorTownBoundaryOverlay()?90:116):state.level==='counties'||mayorTownBoundaryOverlay()?100:140):20,left=area.left+gutter,right=Math.min(area.right-gutter,state.labels&&(['counties','towns','villages'].includes(state.level)||identityPanelsActive())?spec.width-mapKeyRailWidth(spec):area.right-gutter),w=right-left,h=area.bottom-area.top,scale=Math.min(w/Math.max(.0001,b[2]-b[0]),h/Math.max(.0001,b[3]-b[1]));return{scale,tx:(left+right)/2-(b[0]+b[2])/2*scale,ty:(area.top+area.bottom)/2-(b[1]+b[3])/2*scale,labelLeft:left-22,labelRight:right+22,area}}
+function geometryLayout(items,labels=true){if(!items.length)items=data.counties.filter(f=>!state.county||f.name===state.county);const spec=sceneSpec(),area=contentArea(spec),b=bounds(items);if(items.some(belowIslandTown))area.bottom-=48;const historicalPresidential=typeof History2022View!=='undefined'&&History2022View.active()&&History2022View.office?.()==='president';const visibleOutlines=historicalPresidential?[]:state.level==='villages'&&state.villageTown?data.towns.filter(f=>f.id===state.villageTown):state.level!=='counties'?data.counties.filter(f=>!state.county||f.name===state.county):[];for(const outline of visibleOutlines){b[0]=Math.min(b[0],outline.box[0]);b[1]=Math.min(b[1],outline.box[1]);b[2]=Math.max(b[2],outline.box[2]);b[3]=Math.max(b[3],outline.box[3])}for(const q of activeInsetDefinitions()){b[0]=Math.min(b[0],q.box[0]);b[1]=Math.min(b[1],q.box[1]);b[2]=Math.max(b[2],q.box[2]);b[3]=Math.max(b[3],q.box[3])}const gutter=labels?(isNationwide()?250:state.level==='villages'?95:directTownNameLabels()?(mayorTownBoundaryOverlay()?90:116):state.level==='counties'||mayorTownBoundaryOverlay()?100:140):20,left=area.left+gutter,right=Math.min(area.right-gutter,state.labels?spec.width-mapKeyRailWidth(spec)-10:area.right-gutter),w=right-left,h=area.bottom-area.top,scale=Math.min(w/Math.max(.0001,b[2]-b[0]),h/Math.max(.0001,b[3]-b[1]));return{scale,tx:(left+right)/2-(b[0]+b[2])/2*scale,ty:(area.top+area.bottom)/2-(b[1]+b[3])/2*scale,labelLeft:left-22,labelRight:Math.min(right+22,spec.width-mapKeyRailWidth(spec)-8),area:{...area,right:state.labels?Math.min(area.right,spec.width-mapKeyRailWidth(spec)-8):area.right}}}
 function identityPanelLayouts(){
  if(!identityPanelsActive()||!data)return[];
  const identities=panelIdentities(),spec=sceneSpec(),area=contentArea(spec),gap=26,left=area.left+8,right=Math.min(area.right-8,spec.width-mapKeyRailWidth(spec)),top=area.top+52,bottom=area.bottom-12,columns=identities.length===4?2:identities.length,rows=Math.ceil(identities.length/columns),panelWidth=(right-left-gap*(columns-1))/columns,panelHeight=(bottom-top-gap*(rows-1))/rows;
@@ -445,11 +445,40 @@ function renderMapNumberTable(){
 }
 
 function positionMapNumberTable(){
- const panel=$('mapNumberKey'),layout=$('mapWithKey');
- if(!panel||!layout)return;
- if(panel.parentElement!==layout)layout.append(panel);
- if(panel.hasAttribute('style'))panel.removeAttribute('style');
+ const panel=$('mapNumberKey'),canvas=$('canvas'),map=$('map');
+ if(!panel||!canvas||!map)return;
+ if(panel.parentElement!==canvas)canvas.append(panel);
+ if(panel.hidden||canvas.classList.contains('atlas-mode')){
+  panel.removeAttribute('style');return;
+ }
+ const frame=canvas.getBoundingClientRect(),svg=map.getBoundingClientRect();
+ if(!frame.width||!frame.height||!svg.width||!svg.height)return;
+ // Overlay uses the fixed unzoomed SVG frame; labels/geometry reserve this rail.
+ const spec=sceneSpec(),scale=Math.min(svg.width/spec.width,svg.height/spec.height);
+ const x0=svg.left-frame.left+(svg.width-spec.width*scale)/2;
+ const y0=svg.top-frame.top+(svg.height-spec.height*scale)/2;
+ const railStart=x0+(spec.width-mapKeyRailWidth(spec)+12)*scale;
+ const railEnd=x0+(spec.width-18)*scale;
+ const width=Math.min(252,Math.max(100,railEnd-railStart));
+ const left=Math.min(frame.width-width-7,Math.max(railStart,railEnd-width));
+ const controls=$('zoomIn')?.parentElement?.getBoundingClientRect();
+ const controlsBottom=controls?controls.bottom-frame.top+12:58;
+ const desiredTop=Math.max(controlsBottom,y0+125*scale,61);
+ const legendRect=$('legend')?.querySelector(':scope > rect')?.getBoundingClientRect();
+ const fallbackTop=y0+(spec.height-furnitureFooterHeight()-15)*scale;
+ const end=Math.min(frame.height-38,legendRect?.height?legendRect.top-frame.top-14:fallbackTop);
+ const top=Math.max(controlsBottom,Math.min(desiredTop,end-55));
+ const maxHeight=Math.max(35,Math.floor(end-top));
+ panel.style.left=Math.round(Math.max(4,left))+'px';
+ panel.style.right='auto';
+ panel.style.top=Math.round(top)+'px';
+ panel.style.bottom='auto';
+ panel.style.width=Math.round(Math.min(width,frame.width-12))+'px';
+ panel.style.maxHeight=maxHeight+'px';
+ panel.style.height='auto';
+ panel.classList.toggle('map-number-key--compact',maxHeight<135);
 }
+
 if(typeof window!=='undefined')window.addEventListener('resize',()=>positionMapNumberTable());
 
 function mapLabelCandidatePoints(f,t){

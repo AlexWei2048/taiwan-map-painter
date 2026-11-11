@@ -613,3 +613,65 @@ body.history-mode #districtReferenceNote,body.history-mode #districtReferenceSou
 #mapWithKey>.map-number-key .number-key-action:focus-visible{outline:2px solid #267657;outline-offset:1px}
 @media(max-width:700px){#mapWithKey.has-number-key>.canvas:not(.atlas-mode){height:clamp(490px,72dvh,710px);min-height:480px}#mapWithKey.has-number-key>.canvas.council-seats-mode:not(.atlas-mode){height:850px;min-height:850px}#mapWithKey>.map-number-key .map-number-key-heading{padding:12px 14px 10px}#mapWithKey>.map-number-key h3{font-size:14px}#mapWithKey>.map-number-key .map-number-key-scroll{max-height:280px;padding:9px}#mapWithKey>.map-number-key tbody{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:5px}#mapWithKey>.map-number-key tr{grid-template-columns:30px minmax(0,1fr);padding:4px 5px;gap:6px}}
 @media(max-width:390px){#mapWithKey>.map-number-key tbody{grid-template-columns:minmax(0,1fr)}#mapWithKey>.map-number-key .map-number-key-scroll{max-height:245px}}
+
+
+/* Map overlay index: positioned within reserved right-side SVG rail, never
+   over geographic labels, north arrow or the actual SVG legend. */
+#mapWithKey,#mapWithKey.has-number-key{display:block;min-width:0}
+#mapWithKey>.canvas{position:relative;isolation:isolate;min-width:0;width:100%}
+#mapWithKey>.canvas>.map-number-key{
+ position:absolute;z-index:5;display:flex;flex-direction:column;
+ margin:0;padding:0;overflow:hidden;min-width:0;max-width:none;
+ border:1px solid #d5e4d9;border-radius:12px;background:#fffefa;
+ box-shadow:0 6px 20px rgba(34,75,55,.12);
+}
+#mapWithKey>.canvas>.map-number-key[hidden]{display:none!important}
+#mapWithKey>.canvas>.map-number-key::before{
+ content:"";display:block;flex:none;height:4px;background:linear-gradient(90deg,#267657,#7fb59a);
+}
+#mapWithKey>.canvas>.map-number-key .map-number-key-heading{
+ display:flex;flex:none;align-items:center;justify-content:space-between;gap:7px;
+ margin:0;padding:10px 12px 9px;border-bottom:1px solid #e5eee6;
+}
+#mapWithKey>.canvas>.map-number-key h3{margin:0;font-size:13px;line-height:1.3;font-weight:700;color:#2a5641}
+#mapWithKey>.canvas>.map-number-key .map-number-key-heading span{
+ white-space:nowrap;font-size:10px;font-weight:600;color:#537562;
+ padding:2px 6px;border-radius:99px;background:#e9f3eb;
+}
+#mapWithKey>.canvas>.map-number-key .map-number-key-scroll{
+ display:block;min-height:0;flex:1;max-height:none;overflow:auto;
+ padding:7px;scrollbar-width:thin;scrollbar-color:#c0d7c8 transparent;overscroll-behavior:contain;
+}
+#mapWithKey>.canvas>.map-number-key table{display:block;border:0;width:100%;border-collapse:separate}
+#mapWithKey>.canvas>.map-number-key tbody{display:grid;grid-template-columns:minmax(0,1fr);gap:4px}
+#mapWithKey>.canvas>.map-number-key tr,#mapWithKey>.canvas>.map-number-key tr:nth-child(odd){
+ display:grid;grid-template-columns:28px minmax(0,1fr);gap:6px;align-items:center;
+ min-width:0;padding:3px 4px;border:1px solid transparent;border-radius:6px;background:#f3f8f3;
+}
+#mapWithKey>.canvas>.map-number-key tr:nth-child(even){background:#fafbf8}
+#mapWithKey>.canvas>.map-number-key th,#mapWithKey>.canvas>.map-number-key td{
+ display:block;min-width:0;width:auto;margin:0;padding:0;border:0;font-size:11px;line-height:1.45;
+}
+#mapWithKey>.canvas>.map-number-key .number-key-number{
+ display:grid;place-items:center;width:27px;min-height:24px;border-radius:5px;
+ background:#e3efe5;color:#276047;font-size:10px;font-weight:700;font-variant-numeric:tabular-nums;
+}
+#mapWithKey>.canvas>.map-number-key .number-key-action{
+ padding:2px 0;font-size:11px;line-height:1.35;overflow-wrap:anywhere;
+}
+#mapWithKey>.canvas>.map-number-key tr:hover,
+#mapWithKey>.canvas>.map-number-key tr.number-key-highlighted,
+#mapWithKey>.canvas>.map-number-key tr:focus-within{
+ background:#d9eee1;border-color:#9dcab0;box-shadow:inset 3px 0 #267657;
+}
+#mapWithKey>.canvas>.map-number-key.map-number-key--compact .map-number-key-heading{padding:7px 9px 6px}
+#mapWithKey>.canvas>.map-number-key.map-number-key--compact .map-number-key-scroll{padding:4px;min-height:0}
+@media(max-width:700px){
+ #mapWithKey>.canvas>.map-number-key .map-number-key-heading{padding:7px 7px 6px}
+ #mapWithKey>.canvas>.map-number-key h3{font-size:11px}
+ #mapWithKey>.canvas>.map-number-key .map-number-key-heading span{font-size:9px;padding:2px 4px}
+ #mapWithKey>.canvas>.map-number-key .map-number-key-scroll{padding:4px}
+ #mapWithKey>.canvas>.map-number-key tr{grid-template-columns:24px minmax(0,1fr);gap:3px;padding:2px}
+ #mapWithKey>.canvas>.map-number-key .number-key-number{width:24px;min-height:22px;font-size:9px}
+ #mapWithKey>.canvas>.map-number-key .number-key-action{font-size:10px}
+}
