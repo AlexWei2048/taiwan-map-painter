@@ -11,7 +11,7 @@
   '台北县':'新北市','桃园县':'桃园市',
   '台中县':'台中市','台南县':'台南市','高雄县':'高雄市'
  };
- const norm=value=>String(value||'').trim().replaceAll('臺','台');
+ const norm=value=>String(value||'').trim().replaceAll('臺','台').replaceAll('縣','县').replaceAll('鄉','乡').replaceAll('鎮','镇').replaceAll('區','区');
  const baseTown=value=>norm(value).replace(/[乡镇市区]$/u,'').replace(/^(?:(?:台|臺)湾省)/u,'');
  const modernCounty=name=>LEGACY_COUNTY[norm(name)]||norm(name);
  const exceptions=new Set(['金门县|乌丘乡','金门县|乌坵乡']);
