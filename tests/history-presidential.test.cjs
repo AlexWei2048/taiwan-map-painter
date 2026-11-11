@@ -48,3 +48,20 @@ test('failed shard load is retryable; successful load is cached by year',async()
  await P.load(2024,async()=>{attempts++;throw Error('should be cached')});
  assert.equal(attempts,2);
 });
+
+test('all eight election shards have a verified vice-presidential candidate for each ticket',()=>{
+ const fs=require('node:fs'),path=require('node:path');
+ for(const year of P.YEARS){
+  const data=JSON.parse(fs.readFileSync(path.join(__dirname,'..','assets','history-president-'+year+'.json'),'utf8'));
+  const known=P.RUNNING_MATES[year];
+  assert.equal(Object.keys(known).length,data.national.candidate_totals.length,year+' complete ticket directory');
+  for(const row of data.national.candidate_totals){
+   assert.ok(known[row.name],year+' missing deputy for '+row.name);
+   assert.equal(P.ticketName(year,row.name),row.name+' & '+known[row.name]);
+  }
+ }
+ assert.equal(P.ticketName(1996,'李登辉'),'李登辉 & 连战');
+ assert.equal(P.ticketName(2000,'宋楚瑜'),'宋楚瑜 & 张昭雄');
+ assert.notEqual(P.ticketName(1996,'林洋港'),P.ticketName(1996,'陈履安'));
+ assert.equal(P.ticketName(2024,'尚未确认候选人'),'尚未确认候选人','no invented running mates');
+});
