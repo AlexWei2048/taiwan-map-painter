@@ -1393,3 +1393,69 @@ test('Presidential history loads real 2024 and 1996 shards, navigates historical
  assert.equal(await page.locator('#historyYear option').count(),1);
  assert.equal(await page.locator('#historyYear').inputValue(),'2022');
 });
+
+
+test('Historical county selectors exclude every neighboring district and draw only pre-merger county borders',async t=>{
+ const page=await pageFor(t,{width:1440,height:920});
+ const officeOptions=await page.locator('#historyOffice option').allTextContents();
+ assert.equal(officeOptions[0],'台湾地区领导人','presidential office goes first');
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('president');
+ await page.locator('#historyYear').selectOption('2008');
+ await page.waitForFunction(()=>History2022View.office()==='president'&&History2022View.year()===2008&&History2022View.items()?.length===25);
+ assert.equal(await page.locator('#historyCounty option').count(),26);
+ const expectedCounts={'台中市':8,'台中县':21,'台南市':6,'台南县':31,'高雄市':11,'高雄县':27};
+ const seen={};
+ for(const [name,count] of Object.entries(expectedCounts)){
+  await page.locator('#historyCounty').selectOption({label:name});
+  const countyMap=await page.evaluate(()=>{
+   const items=History2022View.items(),scope=document.querySelector('#historyCounty').value;
+   const paths=[...document.querySelectorAll('#regions path[data-region]')];
+   const borders=[...document.querySelectorAll('#districtBorders path[data-shared-boundary="counties"]')];
+   const mesh=sharedBoundaryGeometry(History2022View.historicTownFeatures(),true,true);
+   const expected=mesh.byCounty[scope];
+   const own=History2022View.historicTownFeatures().filter(f=>f.county===scope);
+   const sourceIds=own.map(f=>f.sourceId);
+   return{county:scope,shapes:items.length,pathIds:paths.map(p=>p.getAttribute('data-region')),
+    itemIds:items.map(f=>f.id),memberCount:items[0]?.memberCount,
+    sources:sourceIds,uniqueSources:new Set(sourceIds).size,
+    actualBorder:borders.length===1?borders[0].getAttribute('d'):null,expectedBorder:expected||null};
+  });
+  assert.equal(countyMap.county,name);
+  assert.equal(countyMap.shapes,1,'one historical county polygon should appear: '+name);
+  assert.deepEqual(countyMap.pathIds,countyMap.itemIds,'no modern county or neighbor polygon is present');
+  assert.equal(countyMap.memberCount,count,name+' historical district count');
+  assert.equal(countyMap.sources.length,count,name+' source district count');
+  assert.equal(countyMap.uniqueSources,count,name+' each district used once');
+  assert.ok(countyMap.actualBorder?.length>100,name+' has visible boundary outline');
+  assert.equal(countyMap.actualBorder,countyMap.expectedBorder,name+' border must be derived from historical county, not modern merged county');
+  seen[name]=new Set(countyMap.sources);
+  await page.locator('#historyScale').selectOption('town');
+  const townMap=await page.evaluate(()=>{
+   const scope=document.querySelector('#historyCounty').value;
+   const items=History2022View.items();
+   const ids=[...document.querySelectorAll('#regions path[data-region]')].map(p=>p.dataset.region);
+   const border=document.querySelector('#borders path[data-shared-boundary="counties"]')?.getAttribute('d');
+   return{count:items.length,foreign:items.filter(f=>f.county!==scope).map(f=>f.name),
+    ids,expectedIds:items.map(f=>f.id),boundary:border,
+    expectedBoundary:sharedBoundaryGeometry(History2022View.historicTownFeatures(),true,true).byCounty[scope]};
+  });
+  assert.equal(townMap.count,count,'only '+name+' townships should be visible');
+  assert.deepEqual(townMap.foreign,[],'no outside district is in '+name+' map');
+  assert.deepEqual(townMap.ids,townMap.expectedIds,'DOM shows exactly the selected county towns');
+  assert.equal(townMap.boundary,townMap.expectedBoundary,'township map county outline matches historical county');
+  await page.locator('#historyScale').selectOption('district');
+ }
+ for(const name of ['台中','台南','高雄']){
+  const city=seen[name+'市'],county=seen[name+'县'];
+  assert.ok([...city].every(id=>!county.has(id)),name+' old city must exclude every old county township');
+ }
+ await page.locator('#historyCounty').selectOption({label:'台中市'});
+ await page.locator('#historyScale').selectOption('town');
+ const extent=await page.evaluate(()=>{
+  const historic=geometryLayout(History2022View.items(),true).scale;
+  const merged=geometryLayout(data.counties.filter(f=>f.name==='台中市'),true).scale;
+  return{historic,merged};
+ });
+ assert.ok(extent.historic>extent.merged*2,'old city map must fit to old city extent, not large modern Taichung');
+});

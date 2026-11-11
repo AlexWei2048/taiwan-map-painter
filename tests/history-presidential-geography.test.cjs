@@ -36,3 +36,49 @@ test('2008 historical Taichung, Tainan and Kaohsiung county and city remain sepa
   assert.notEqual(county.d,districtCity.d);
  }
 });
+
+
+test('every historical county is an exact union of its own nonoverlapping towns',()=>{
+ const modern=new Map(data.towns.map(t=>[t.id,t]));
+ for(const year of P.YEARS){
+  const geom=P.geometry(shards(year),data,x=>x,Core.mergePaths);
+  const used=new Set();
+  for(const f of geom.towns){
+   assert.ok(modern.has(f.sourceId),year+': unrecognized modern source town '+f.county+' '+f.town);
+   assert.equal(f.d,modern.get(f.sourceId).d,year+': historical polygon differs from source');
+   assert.equal(P.modernCounty(f.county),f.modernCounty,year+': historic county assigned to wrong modern municipality');
+   assert.ok(!used.has(f.sourceId),year+': same polygon drawn in two historic administrative areas: '+f.sourceId);
+   used.add(f.sourceId);
+  }
+  for(const county of geom.counties){
+   const own=geom.towns.filter(t=>t.county===county.name);
+   assert.equal(own.length,county.memberCount,year+': county member count incorrect: '+county.name);
+   assert.equal(county.d,Core.mergePaths(own.map(t=>t.d)),year+': county outline includes extraneous town '+county.name);
+   const boxes=own.map(t=>t.box);
+   const exact=[Math.min(...boxes.map(x=>x[0])),Math.min(...boxes.map(x=>x[1])),
+                Math.max(...boxes.map(x=>x[2])),Math.max(...boxes.map(x=>x[3]))];
+   assert.deepEqual(county.box,exact,year+': bounds include another county: '+county.name);
+  }
+ }
+});
+
+test('pre-merger Taichung/Tainan/Kaohsiung city and county never share polygon sources',()=>{
+ const counts={
+   '台中市':8,'台中县':21,
+   '台南市':6,'台南县':31,
+   '高雄市':11,'高雄县':27,
+ };
+ for(const year of [2004,2008]){
+  const geom=P.geometry(shards(year),data,x=>x,Core.mergePaths);
+  for(const [county,count] of Object.entries(counts)){
+   assert.equal(geom.towns.filter(t=>t.county===county).length,count,year+' '+county+' count');
+  }
+  for(const city of ['台中','台南','高雄']){
+   const oldCity=new Set(geom.towns.filter(t=>t.county===city+'市').map(t=>t.sourceId));
+   const oldCounty=new Set(geom.towns.filter(t=>t.county===city+'县').map(t=>t.sourceId));
+   assert.ok([...oldCounty].every(id=>!oldCity.has(id)),year+' '+city+' includes neighboring county');
+   const currentCounty=data.towns.filter(t=>P.modernCounty(city+'县')===t.county);
+   assert.equal(oldCity.size+oldCounty.size,currentCounty.length,year+' '+city+' current shape does not partition into old city/county');
+  }
+ }
+});

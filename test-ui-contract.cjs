@@ -1088,7 +1088,7 @@ test('Historical map legend has no subtitle and export images omit provenance pa
  for(const file of ['index.html','map-v60.html']){
   const html=read(file);
   assert.match(html,/history-2022\.js\?v=[\w-]+/);
-  assert.match(html,/app\.js\?v=20261110-history-clean-export-v1/);
+  assert.match(html,file==='index.html'?/app\.js\?v=20261111-historic-borders-v2/:/app\.js\?v=20261110-history-clean-export-v1/);
  }
 });
 

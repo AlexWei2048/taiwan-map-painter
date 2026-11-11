@@ -71,7 +71,7 @@
    const label=historicTainan?'中区、西区（合并）':town;
    if(historicTainan)merges.push({county,formerTowns:['中区','西区'],displayTown:label,note:'旧中区与西区边界无法单独还原；两区得票合并显示'});
    towns.push({...source,id:'president:'+shard.year+':'+county+':'+label,
-               county,town:label,name:label,modernCounty:source.county,
+               sourceId:source.id,county,town:label,name:label,modernCounty:source.county,
                historical:true,historicalYear:shard.year,
                historicalBoundaryNote:historicTainan?'旧中区与西区在本地图合并展示，原始选区得票仍保留':null});
   }
@@ -92,6 +92,7 @@
    const box=[minX,minY,maxX,maxY],center=[(minX+maxX)/2,(minY+maxY)/2];
    counties.push({id:'president:'+shard.year+':'+name,county:name,name,
       d:mergePaths(members.map(f=>f.d)),box,center,historical:true,
+      boundaryBasis:'historical-town-affiliation/current-map-geometry',
       historicalYear:shard.year,modernCounty:modernCounty(name),
       memberCount:members.length});
   }

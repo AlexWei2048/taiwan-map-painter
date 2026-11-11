@@ -142,7 +142,7 @@ function applyView(){
 }
 function fit(){view=fittedView();baseView={...view};flushView();renderLabels()}
 
-function geometryLayout(items,labels=true){if(!items.length)items=data.counties.filter(f=>!state.county||f.name===state.county);const spec=sceneSpec(),area=contentArea(spec),b=bounds(items);if(items.some(belowIslandTown))area.bottom-=48;const visibleOutlines=state.level==='villages'&&state.villageTown?data.towns.filter(f=>f.id===state.villageTown):state.level!=='counties'?data.counties.filter(f=>!state.county||f.name===state.county):[];for(const outline of visibleOutlines){b[0]=Math.min(b[0],outline.box[0]);b[1]=Math.min(b[1],outline.box[1]);b[2]=Math.max(b[2],outline.box[2]);b[3]=Math.max(b[3],outline.box[3])}for(const q of activeInsetDefinitions()){b[0]=Math.min(b[0],q.box[0]);b[1]=Math.min(b[1],q.box[1]);b[2]=Math.max(b[2],q.box[2]);b[3]=Math.max(b[3],q.box[3])}const gutter=labels?(isNationwide()?250:state.level==='villages'?95:directTownNameLabels()?(mayorTownBoundaryOverlay()?90:116):state.level==='counties'||mayorTownBoundaryOverlay()?100:140):20,left=area.left+gutter,right=Math.min(area.right-gutter,state.labels&&(['counties','towns','villages'].includes(state.level)||identityPanelsActive())?spec.width-mapKeyRailWidth(spec):area.right-gutter),w=right-left,h=area.bottom-area.top,scale=Math.min(w/Math.max(.0001,b[2]-b[0]),h/Math.max(.0001,b[3]-b[1]));return{scale,tx:(left+right)/2-(b[0]+b[2])/2*scale,ty:(area.top+area.bottom)/2-(b[1]+b[3])/2*scale,labelLeft:left-22,labelRight:right+22,area}}
+function geometryLayout(items,labels=true){if(!items.length)items=data.counties.filter(f=>!state.county||f.name===state.county);const spec=sceneSpec(),area=contentArea(spec),b=bounds(items);if(items.some(belowIslandTown))area.bottom-=48;const historicalPresidential=typeof History2022View!=='undefined'&&History2022View.active()&&History2022View.office?.()==='president';const visibleOutlines=historicalPresidential?[]:state.level==='villages'&&state.villageTown?data.towns.filter(f=>f.id===state.villageTown):state.level!=='counties'?data.counties.filter(f=>!state.county||f.name===state.county):[];for(const outline of visibleOutlines){b[0]=Math.min(b[0],outline.box[0]);b[1]=Math.min(b[1],outline.box[1]);b[2]=Math.max(b[2],outline.box[2]);b[3]=Math.max(b[3],outline.box[3])}for(const q of activeInsetDefinitions()){b[0]=Math.min(b[0],q.box[0]);b[1]=Math.min(b[1],q.box[1]);b[2]=Math.max(b[2],q.box[2]);b[3]=Math.max(b[3],q.box[3])}const gutter=labels?(isNationwide()?250:state.level==='villages'?95:directTownNameLabels()?(mayorTownBoundaryOverlay()?90:116):state.level==='counties'||mayorTownBoundaryOverlay()?100:140):20,left=area.left+gutter,right=Math.min(area.right-gutter,state.labels&&(['counties','towns','villages'].includes(state.level)||identityPanelsActive())?spec.width-mapKeyRailWidth(spec):area.right-gutter),w=right-left,h=area.bottom-area.top,scale=Math.min(w/Math.max(.0001,b[2]-b[0]),h/Math.max(.0001,b[3]-b[1]));return{scale,tx:(left+right)/2-(b[0]+b[2])/2*scale,ty:(area.top+area.bottom)/2-(b[1]+b[3])/2*scale,labelLeft:left-22,labelRight:right+22,area}}
 function identityPanelLayouts(){
  if(!identityPanelsActive()||!data)return[];
  const identities=panelIdentities(),spec=sceneSpec(),area=contentArea(spec),gap=26,left=area.left+8,right=Math.min(area.right-8,spec.width-mapKeyRailWidth(spec)),top=area.top+52,bottom=area.bottom-12,columns=identities.length===4?2:identities.length,rows=Math.ceil(identities.length/columns),panelWidth=(right-left-gap*(columns-1))/columns,panelHeight=(bottom-top-gap*(rows-1))/rows;
@@ -1323,6 +1323,7 @@ function regionPath(f){const identity=identityPanelsActive()?' · '+electorateNa
 // Nationwide views show shared internal borders only; county views restore
 // complete polygon outlines, including coastal and isolated-island edges.
 function sharedBoundaryGeometry(features,includeCoast=false){
+ const countyBoundaryOnly=arguments[2]===true;
  const edges=new Map();
  const rounded=n=>{const v=Math.round(n*100)/100;return Object.is(v,-0)?0:v};
  const point=(x,y)=>[rounded(x),rounded(y)];
@@ -1369,6 +1370,7 @@ function sharedBoundaryGeometry(features,includeCoast=false){
  const write=(arr,a,b)=>{if(arr.last===a)arr.push('L'+b);else arr.push('M'+a+'L'+b);arr.last=b};
  for(const edge of edges.values()){
   if(!edge.other&&!includeCoast)continue;
+  if(countyBoundaryOnly&&edge.other&&edge.county===edge.other.county)continue;
   write(all,edge.a,edge.b);
   for(const county of new Set([edge.county,edge.other?.county])){
    if(!county)continue;
@@ -1386,6 +1388,18 @@ function sharedBoundaryGeometry(features,includeCoast=false){
 const EMPTY_SHARED_BORDER_FEATURES=[];
 const sharedBorderCache=new Map();
 function sharedMapBorders(level,identity='regional',includeCoast=false){
+ // Historical presidential borders must use the original year's township assignment.
+ // In particular, do not draw post-2010 merged county outlines over old county maps.
+ const historicTowns=typeof History2022View!=='undefined'&&History2022View.active()&&History2022View.office?.()==='president'?History2022View.historicTownFeatures():null;
+ if(historicTowns&&['counties','towns'].includes(level)){
+  const countyOnly=level==='counties',coast=includeCoast||countyOnly;
+  const key='presidential:'+level+':'+(coast?'complete':'internal');
+  const prior=sharedBorderCache.get(key);
+  if(prior?.source===historicTowns)return prior.mesh;
+  const mesh=sharedBoundaryGeometry(historicTowns,coast,countyOnly);
+  sharedBorderCache.set(key,{source:historicTowns,mesh});
+  return mesh;
+ }
  if(level==='council'&&typeof History2022View!=='undefined'&&History2022View.active()&&History2022View.kind()==='council'){const features=History2022View.features(),key='2022:'+identity+':'+includeCoast,prior=sharedBorderCache.get(key);if(prior?.source===features)return prior.mesh;const mesh=sharedBoundaryGeometry(features.filter(f=>featureElectorate(f)===identity),includeCoast);sharedBorderCache.set(key,{source:features,mesh});return mesh}
  const regional=data[level]||[],indigenous=['council','legislative'].includes(level)?data[level+'Indigenous']||EMPTY_SHARED_BORDER_FEATURES:null;
  const key=level+':'+identity+':'+(includeCoast?'complete':'internal'),prior=sharedBorderCache.get(key);
@@ -1398,7 +1412,7 @@ function sharedMapBorders(level,identity='regional',includeCoast=false){
 function appendSharedBorders(group,level,identity='regional',filterTown=false){
  const mesh=sharedMapBorders(level,identity,!!state.county);
  const d=filterTown&&state.villageTown?mesh.byTown[state.villageTown]||'':state.county?mesh.byCounty[state.county]||'':mesh.all;
- if(d)group.append(svgEl('path',{d,fill:'none','vector-effect':'non-scaling-stroke','data-shared-boundary':level}));
+ if(d){const historicCounty=level==='counties'&&typeof History2022View!=='undefined'&&History2022View.active()&&History2022View.office?.()==='president';group.append(svgEl('path',{d,fill:'none','vector-effect':'non-scaling-stroke','data-shared-boundary':level,...(historicCounty?{'data-historical-county-outline':'true'}:{})}));}
 }
 
 
@@ -2048,7 +2062,7 @@ function syncBorderControls(){
 }
 function applyBorders(){
  for(const [selector,color,width]of [['#regions path','none',0],['#districtBorders path',state.borderColor,state.borderWidth],['#borders path',state.countyBorderColor,state.countyBorderWidth],['#townBorders path',state.townBorderColor,state.townBorderWidth]])
- for(const p of document.querySelectorAll(selector)){p.setAttribute('stroke',color);p.setAttribute('stroke-width',width);p.style.stroke=color;p.style.strokeWidth=width;}
+ for(const p of document.querySelectorAll(selector)){const historicCounty=p.hasAttribute('data-historical-county-outline');const lineColor=historicCounty?state.countyBorderColor:color,lineWidth=historicCounty?state.countyBorderWidth:width;p.setAttribute('stroke',lineColor);p.setAttribute('stroke-width',lineWidth);p.style.stroke=lineColor;p.style.strokeWidth=lineWidth;}
  $('townBorders').style.display=state.showTownBoundaries?'':'none';syncBorderControls();
 }
 for(const [id,key]of borderControls){let edited=false;$(id).addEventListener('focus',()=>edited=false);$(id).addEventListener('pointerdown',()=>edited=false);$(id).addEventListener('input',()=>{const value=$(id).value;if(id.endsWith('Hex')&&!/^#[\da-f]{6}$/i.test(value))return;if(!edited){pushHistory();edited=true}state[key]=id.endsWith('Width')?Number(value):value;applyBorders();persist()});$(id).addEventListener('change',()=>syncBorderControls())}
