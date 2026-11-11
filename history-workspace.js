@@ -177,7 +177,7 @@
   return normalizeSelection({
    ...state,year:el('historyYear')?.value,office,
    electorate:el('historyElectorate')?.value,county:el('historyCounty')?.value,
-   level:office==='mayor'?(scale==='town'?'town':'county'):office==='council'?'district':'town',
+   level:office==='mayor'||office==='president'?(scale==='town'?'town':'county'):office==='council'?'district':'town',
    metric:el('historyMetric')?.value
   });
  }
