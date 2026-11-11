@@ -79,9 +79,9 @@ test('primary boundary UI controls and SVG tier follow the selected map layer',(
   assert.equal(ui.key('countyBoundaryWidth','countyBorderWidth'),'countyBorderWidth');
  }
  assert.equal(readTier('council',true).tier,'county','county overview uses county rather than electorate style');
- assert.match(app,/\\['#districtBorders path',state\\[primary\.color\\],state\\[primary\.width\\]\\]/);
- assert.match(app,/\\['#borders path',state\.countyBorderColor,state\.countyBorderWidth\\]/);
- assert.match(app,/\\['#townBorders path',state\.townBorderColor,state\.townBorderWidth\\]/);
- assert.match(app,/state\\[borderControlKey\\(id,key\\)\\]=/);
- assert.match(app,/const historicCounty=p\.hasAttribute\\('data-historical-county-outline'\\)/);
+ assert.ok(app.includes("['#districtBorders path',state[primary.color],state[primary.width]]"));
+ assert.ok(app.includes("['#borders path',state.countyBorderColor,state.countyBorderWidth]"));
+ assert.ok(app.includes("['#townBorders path',state.townBorderColor,state.townBorderWidth]"));
+ assert.ok(app.includes('state[borderControlKey(id,key)]='));
+ assert.ok(app.includes("const historicCounty=p.hasAttribute('data-historical-county-outline')"));
 });
