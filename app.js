@@ -1412,7 +1412,7 @@ function sharedMapBorders(level,identity='regional',includeCoast=false){
 function appendSharedBorders(group,level,identity='regional',filterTown=false){
  const mesh=sharedMapBorders(level,identity,!!state.county);
  const d=filterTown&&state.villageTown?mesh.byTown[state.villageTown]||'':state.county?mesh.byCounty[state.county]||'':mesh.all;
- if(d)group.append(svgEl('path',{d,fill:'none','vector-effect':'non-scaling-stroke','data-shared-boundary':level}));
+ if(d){const historicCounty=level==='counties'&&typeof History2022View!=='undefined'&&History2022View.active()&&History2022View.office?.()==='president';group.append(svgEl('path',{d,fill:'none','vector-effect':'non-scaling-stroke','data-shared-boundary':level,...(historicCounty?{'data-historical-county-outline':'true'}:{})}));}
 }
 
 
@@ -2062,7 +2062,7 @@ function syncBorderControls(){
 }
 function applyBorders(){
  for(const [selector,color,width]of [['#regions path','none',0],['#districtBorders path',state.borderColor,state.borderWidth],['#borders path',state.countyBorderColor,state.countyBorderWidth],['#townBorders path',state.townBorderColor,state.townBorderWidth]])
- for(const p of document.querySelectorAll(selector)){p.setAttribute('stroke',color);p.setAttribute('stroke-width',width);p.style.stroke=color;p.style.strokeWidth=width;}
+ for(const p of document.querySelectorAll(selector)){const historicCounty=p.hasAttribute('data-historical-county-outline');const lineColor=historicCounty?state.countyBorderColor:color,lineWidth=historicCounty?state.countyBorderWidth:width;p.setAttribute('stroke',lineColor);p.setAttribute('stroke-width',lineWidth);p.style.stroke=lineColor;p.style.strokeWidth=lineWidth;}
  $('townBorders').style.display=state.showTownBoundaries?'':'none';syncBorderControls();
 }
 for(const [id,key]of borderControls){let edited=false;$(id).addEventListener('focus',()=>edited=false);$(id).addEventListener('pointerdown',()=>edited=false);$(id).addEventListener('input',()=>{const value=$(id).value;if(id.endsWith('Hex')&&!/^#[\da-f]{6}$/i.test(value))return;if(!edited){pushHistory();edited=true}state[key]=id.endsWith('Width')?Number(value):value;applyBorders();persist()});$(id).addEventListener('change',()=>syncBorderControls())}
