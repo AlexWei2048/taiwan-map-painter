@@ -17,7 +17,8 @@ test('all eight shards preserve historical boundaries and reconcile vote totals'
   assert.equal(shard.national.valid_votes,shard.contests.reduce((sum,c)=>sum+c.valid_votes,0));
   const joined=P.geometry(shard,data,x=>x,Core.mergePaths);
   assert.equal(joined.counties.length,countyCounts[year],year+' historical county shapes');
-  assert.equal(joined.towns.length,shard.geography.town_count-joined.missing.length,year+' township coverage');
+  assert.equal(joined.towns.length,shard.geography.town_count-joined.missing.length-joined.merges.length,year+' township coverage');
+  assert.equal(joined.merges.length,year<=2000?1:0,year+' documented historical Tainan boundary merges');
   assert.ok(joined.missing.every(m=>m.exception),year+' unexpected missing township: '+JSON.stringify(joined.missing));
   assert.equal(new Set(joined.towns.map(t=>t.id)).size,joined.towns.length,'historical town IDs must be unique');
   assert.ok(joined.counties.every(c=>c.d&&c.memberCount>0),'all old county geometries built from towns');
