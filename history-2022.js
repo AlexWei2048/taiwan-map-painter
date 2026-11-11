@@ -344,7 +344,7 @@
 
  function incumbentLabel(r){return r.incumbent===true?'现任':r.incumbent===false?'非现任':'—'}
  let resultPage=0;
- function candidateKey(r){return[r.county,r.electorate,r.district,kind==='township'?r.town:'',r.number,r.name].join('|')}
+ function candidateKey(r){return presidentialMode?['president',presidentialYear,r.number,r.name].join('|'):[r.county,r.electorate,r.district,kind==='township'?r.town:'',r.number,r.name].join('|')}
  function ensureHistoryGeometry(){
   if(historicalFeatures.length||!data?.towns?.length||!districtMetadata.length||!hsinchuGeometry)return;
   historicalFeatures=districtMetadata.map(h=>{
@@ -387,7 +387,7 @@
   if(!voteMetric()||candidateScope!=='candidate')return;
   const choices=new Map();for(const r of recordsInView())choices.set(candidateKey(r),r);
   if(!choices.has(selectedCandidate))selectedCandidate=choices.keys().next().value||'';
-  el('historyCandidate').replaceChildren(...[...choices].map(([id,r])=>new Option(r.county+' · '+r.name+' · '+r.party,id)));el('historyCandidate').value=selectedCandidate;
+  el('historyCandidate').replaceChildren(...[...choices].map(([id,r])=>new Option((presidentialMode?'':r.county+' · ')+r.name+' · '+r.party,id)));el('historyCandidate').value=selectedCandidate;
  }
  function openHistoryRegion(f){
   lastOpenedFeature=f;
