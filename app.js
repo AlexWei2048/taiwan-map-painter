@@ -1322,7 +1322,8 @@ function regionPath(f){const identity=identityPanelsActive()?' · '+electorateNa
 
 // Nationwide views show shared internal borders only; county views restore
 // complete polygon outlines, including coastal and isolated-island edges.
-function sharedBoundaryGeometry(features,includeCoast=false,countyBoundaryOnly=false){
+function sharedBoundaryGeometry(features,includeCoast=false){
+ const countyBoundaryOnly=arguments[2]===true;
  const edges=new Map();
  const rounded=n=>{const v=Math.round(n*100)/100;return Object.is(v,-0)?0:v};
  const point=(x,y)=>[rounded(x),rounded(y)];
