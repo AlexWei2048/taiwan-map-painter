@@ -1914,7 +1914,7 @@ function exportSvg(){
 
 function preparedExportSvg(){const oldFilter=exportPanelFilter,oldLegend=state.legend.show,oldCouncilView=state.councilViewScope,oldLabels=state.labels;state.councilViewScope='all';exportPanelFilter=state.level==='council'&&state.exportSettings.councilScope!=='all'?state.exportSettings.councilScope:'';state.legend.show=true;state.labels=true;render();try{return exportSvg()}finally{exportPanelFilter=oldFilter;state.legend.show=oldLegend;state.councilViewScope=oldCouncilView;state.labels=oldLabels;render()}}
 function exportElectionType(){
- if(typeof History2022View!=='undefined'&&History2022View.active())return '2022 '+({mayor:'县市长',council:'县市议员',township:'乡镇市区长'}[History2022View.kind()]);
+ if(typeof History2022View!=='undefined'&&History2022View.active())return History2022View.year()+' '+({mayor:'县市长',council:'县市议员',township:'乡镇市区长',president:'台湾地区领导人'}[History2022View.office()]);
  if(state.workspaceMode==='prediction')return '2026 '+directoryOfficeName[state.predictionOffice];
  return {counties:'县市地图',towns:'乡镇市区地图',council:'议员选区',legislative:'立法机构区域民代',villages:'村里地图'}[state.level]||'行政区地图';
 }
