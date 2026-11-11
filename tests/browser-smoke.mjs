@@ -1589,11 +1589,13 @@ test('2502 wording policy covers live UI, SVG image export and 2026/2022 CSV dow
  await page.waitForFunction(()=>document.querySelector('#palette')?.textContent.includes('“时代力量”'));
  assert.equal(await page.evaluate(()=>partyMatch('“时代力量”')?.id),'npp');
  assert.equal(await page.evaluate(()=>PARTY_PRESETS.find(p=>p.id==='npp')?.name),'时代力量','source identity remains unchanged');
+ await page.evaluate(()=>document.querySelector('#directoryDialog').showModal());
  await page.locator('#directoryOffice').selectOption('council');
  await page.locator('#directoryCounty').selectOption({label:'台北市'});
  const directory=await download(page,'#downloadCandidateData');
  assert.match(directory,/少数民族/,'directory CSV has normalized electorate scope');
  assert.doesNotMatch(directory,/原住民|中选会|总统|全国/,'directory CSV contains no unnormalized election terminology');
+ await page.locator('#closeDirectory').click();
  // Validate SVG/PNG serialization path, including user-provided image captions.
  await page.evaluate(()=>{
   state.title='中选会总统选举';
