@@ -253,6 +253,7 @@
   }
   el('scopeTitle').textContent=(county||'全台')+' · '+yearLabel()+' '+officeTitle()+' · '+metricLabel();
   drawLegend(result);
+  positionMapNumberTable();
  }
  function showRows(result){
   const search=norm(el('historySearch').value);

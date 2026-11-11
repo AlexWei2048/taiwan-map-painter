@@ -507,13 +507,19 @@ async function assertAdministrativeKey(page){
   }
   const key=document.querySelector('#mapNumberKey'),canvas=document.querySelector('#canvas');
    const k=key.getBoundingClientRect(),m=canvas.getBoundingClientRect();
+   const overlap=(a,b)=>a.left<b.right-1&&a.right>b.left+1&&a.top<b.bottom-1&&a.bottom>b.top+1;
+   const obstacles=[...document.querySelectorAll('#labels [data-label],#mapFurniture [data-decoration],#legend > rect')];
+   const blocked=!key.hidden&&obstacles.some(el=>overlap(k,el.getBoundingClientRect()));
    return{total:items.length,labelled:labels.length,numbers:labels.filter(el=>el.dataset.numberKey).length,
-    rows:rows.length,bad,clear:key.hidden||(key.parentElement.id==='mapWithKey'&&k.top>=m.bottom+2)};
+    rows:rows.length,bad,inside:key.hidden||(key.parentElement.id==='canvas'&&k.top>=m.top-1&&k.bottom<=m.bottom+1&&k.left>=m.left-1&&k.right<=m.right+1),
+    unblocked:!blocked};
   });
-  assert.equal(r.labelled,r.total);assert.deepEqual(r.bad,[]);assert.equal(r.rows,r.numbers);assert.ok(r.clear);
+  assert.equal(r.labelled,r.total);assert.deepEqual(r.bad,[]);assert.equal(r.rows,r.numbers);
+  assert.ok(r.inside,'index must be rendered on the map canvas');
+  assert.ok(r.unblocked,'index must avoid all labels, legend and map furniture');
   return r;
 }
-test('Dense administrative names have a separate card and complete export references',async t=>{
+test('Dense administrative names use an on-map index without covering labels or furniture',async t=>{
  const page=await pageFor(t);await page.locator('#county').selectOption({label:'高雄市'});
  await page.locator('#predictionScale').selectOption('overlay');
  const r=await assertAdministrativeKey(page);assert.equal(r.total,38);assert.ok(r.numbers>0);
@@ -609,7 +615,7 @@ test('National council overview labels counties while county views retain all of
  assert.equal(await page.locator('#regions path[data-region]').count(),22);
  assert.equal(await page.evaluate(()=>JSON.stringify(state.predictions)),saved);
 });
-test('Mobile administrative keys stay inside the screen and outside the map',async t=>{
+test('Mobile administrative keys remain on the map without overlap',async t=>{
  const page=await pageFor(t,{width:390,height:844});
  await page.locator('#county').selectOption({label:'高雄市'});await page.locator('#predictionScale').selectOption('overlay');
  const r=await assertAdministrativeKey(page);assert.ok(r.numbers>0);
@@ -617,6 +623,30 @@ test('Mobile administrative keys stay inside the screen and outside the map',asy
   const key=document.querySelector('#mapNumberKey').getBoundingClientRect();
   return key.left>=0&&key.right<=innerWidth&&document.documentElement.scrollWidth<=innerWidth;
  }));
+});
+
+test('Map and county selector use Xinhua display names without changing source keys',async t=>{
+ const page=await pageFor(t);
+ for(const [key,label] of [['金门县','金门'],['连江县','马祖']]){
+  await page.waitForFunction(key=>!!document.querySelector('#county option[value="'+key+'"]'),key);
+  const option=page.locator('#county option').filter({hasText:label}).first();
+  assert.ok(await option.count(),label+' selectable');
+  const values=await page.locator('#county option').evaluateAll(nodes=>nodes.filter(n=>n.value==='金门县'||n.value==='连江县').map(n=>({value:n.value,text:n.textContent.trim()})));
+  assert.deepEqual(values.find(row=>row.value===key)?.text,label);
+  await page.locator('#county').selectOption(key);
+  await page.waitForFunction(key=>window.state?.county===key,key);
+  const title=await page.locator('#scopeTitle').textContent();
+  assert.ok(title.includes(label),title);
+  assert.doesNotMatch(title,/金门县|连江县|金門縣|連江縣/);
+  const mapTexts=await page.locator('#labels').textContent();
+  assert.doesNotMatch(mapTexts,/金门县|连江县|金門縣|連江縣/);
+ }
+ const exported=await exportSvg(page);
+ const parsed=await page.evaluate(source=>{
+  const doc=new DOMParser().parseFromString(source,'image/svg+xml');
+  return {words:doc.documentElement.textContent,hasIndex:!!doc.querySelector('[data-map-number-key]')};
+ },exported);
+ assert.doesNotMatch(parsed.words,/金门县|连江县|金門縣|連江縣/);
 });
 
 test('Nationwide administrative labels keep mainland references outside island frames and centre offshore county titles at frame bottoms',async t=>{

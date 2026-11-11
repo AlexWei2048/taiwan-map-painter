@@ -784,13 +784,13 @@ test('Administrative lookup is outside canvas and exports every entry',()=>{
  assert.match(index,/app\.js\?v=[\w-]+/);
  assert.match(index,/style\.css\?v=[\w-]+/);
  const canvasStart=index.indexOf('<div class="canvas" id="canvas">');
- const split=index.indexOf('</div><aside class="map-number-key"',canvasStart);
  const key=index.indexOf('<aside class="map-number-key"',canvasStart);
- const end=index.indexOf('</aside></div>',key);
- assert.ok(canvasStart>=0&&split>canvasStart&&key>split&&end>key,'Index is a sibling after canvas');
+ const end=index.indexOf('</aside></div></div>',key);
+ assert.ok(canvasStart>=0&&key>canvasStart&&end>key,
+  'Map index is inside the canvas in reserved empty space');
  const css=read('style.css');
- assert.match(css,/#mapWithKey>\.map-number-key\{/);
- assert.match(app,/panel\.parentElement!==layout/);
+ assert.match(css,/#mapWithKey>\.canvas>\.map-number-key\{/);
+ assert.match(app,/const railStart=x0\+/);
  assert.match(app,/function mapNumberDisplayName\(/);
  const table=app.slice(app.indexOf('function renderMapNumberTable(){'),app.indexOf('\nfunction mapLabelCandidatePoints('));
  assert.doesNotMatch(table,/number-key-group|th\.colSpan/);
