@@ -1264,6 +1264,8 @@ test('Historical office comes before year, and town-level mayor results mark the
   const page=await pageFor(t);await page.locator('#categoryHistory').click();
   await page.locator('#historyOffice').selectOption('mayor');
   await page.waitForFunction(()=>History2022View.office()==='mayor'&&History2022View.year()===2022);
+  assert.deepEqual(await page.locator('#historyOffice option').evaluateAll(nodes=>nodes.slice(0,2).map(node=>node.value)),['president','mayor']);
+  assert.equal(await page.locator('#historyOffice').inputValue(),'mayor','ordering should not silently change the selected 2022 default');
   const controls=await page.locator('#historyControls').evaluate(el=>[...el.querySelectorAll('select')].map(item=>item.id));
   assert.ok(controls.indexOf('historyOffice')<controls.indexOf('historyYear'));
   await page.locator('#historyCounty').selectOption({label:'台北市'});
