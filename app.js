@@ -1218,14 +1218,20 @@ function labelLayout(items,t,font=15){
 // Highlight the exact corresponding polygon on name hover. CSS controls
 // the temporary colour so underlying prediction/party fills are untouched.
 function toggleLabelRegionHighlight(f,active){
- const layer=$('regions');
- const featureId=String(f.id);
+ const layer=$('regions'),key=$('mapNumberKeyRows');
+ const featureId=String(f.id),focused=document.activeElement;
+ // Moving focus into the lower index scrolls the page, which can dispatch a
+ // pointerleave *after* focusin. Keyboard focus must remain authoritative.
+ const focusedInKey=!!focused&&!!key&&[...key.querySelectorAll('tr[data-region]')]
+  .some(row=>row.dataset.region===featureId&&row.contains(focused));
+ const focusedInMap=!!focused&&!!layer&&[...layer.querySelectorAll('path[data-region]')]
+  .some(path=>path.dataset.region===featureId&&path===focused);
+ const highlighted=active||focusedInKey||focusedInMap;
  for(const path of layer.querySelectorAll('path[data-region]')){
-  if(path.dataset.region===featureId)path.classList.toggle('label-region-highlighted',active);
+  if(path.dataset.region===featureId)path.classList.toggle('label-region-highlighted',highlighted);
  }
- const key=$('mapNumberKeyRows');
  if(key)for(const row of key.querySelectorAll('tr[data-region]'))
-  if(row.dataset.region===featureId)row.classList.toggle('number-key-highlighted',active);
+  if(row.dataset.region===featureId)row.classList.toggle('number-key-highlighted',highlighted);
 }
 
 function drawLabels(group,items,t,font=15,interactive=false,countyNamesOnly=false,omitLeaderLines=false){
