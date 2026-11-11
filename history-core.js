@@ -1,6 +1,8 @@
 /* Stable history/map joins. Display names never serve as electoral identifiers. */
 (function(root){
  'use strict';
+  // Apply publication wording at CSV serialization time only; archive data and IDs remain unchanged.
+  const exportedWording=value=>{const text=String(value??'');return (typeof module!=='undefined'&&module.exports?require('./news-wording.js'):root.XinhuaWording)?.normalize(text)||text};
  const identity=value=>({plainsIndigenous:'plains',mountainIndigenous:'mountain'}[value]||value||'regional');
  function districtNumber(value){
   const direct=String(value??'').trim();
@@ -48,7 +50,7 @@
   return old.length>0&&old.length===present.length&&old.every((name,i)=>name===present[i]);
  }
  function csv(rows){
-  const cell=value=>{let text=String(value??'');if(/^[=+@\t\r-]/.test(text))text="'"+text;return'"'+text.replace(/"/g,'""')+'"'};
+  const cell=value=>{let text=exportedWording(value);if(/^[=+@\t\r-]/.test(text))text="'"+text;return'"'+text.replace(/"/g,'""')+'"'};
   return'\uFEFF'+rows.map(row=>row.map(cell).join(',')).join('\r\n');
  }
 
