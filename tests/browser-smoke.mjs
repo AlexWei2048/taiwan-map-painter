@@ -1459,3 +1459,47 @@ test('Historical county selectors exclude every neighboring district and draw on
  });
  assert.ok(extent.historic>extent.merged*2,'old city map must fit to old city extent, not large modern Taichung');
 });
+
+test('Presidential map legends identify president and running mate in screen and exported SVG',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('president');
+ await page.waitForFunction(()=>History2022View.office()==='president'&&History2022View.year()===2024&&document.querySelector('#legend').textContent.includes('赖清德 & 萧美琴'));
+ let legend=await page.locator('#legend').textContent();
+ assert.match(legend,/民主进步党｜赖清德 & 萧美琴/);
+ assert.match(legend,/中国国民党｜侯友宜 & 赵少康/);
+ const svg=await exportSvg(page);
+ assert.match(svg,/民主进步党｜赖清德 &amp; 萧美琴/);
+ await page.locator('#historyYear').selectOption('1996');
+ await page.waitForFunction(()=>History2022View.year()===1996&&document.querySelector('#legend').textContent.includes('李登辉 & 连战'));
+ legend=await page.locator('#legend').textContent();
+ assert.match(legend,/中国国民党｜李登辉 & 连战/);
+ await page.locator('#historyMetric').selectOption('share');
+ const gradient=page.locator('#legend [data-history-gradient-party]');
+ assert.ok(await gradient.count()>0);
+ assert.ok((await gradient.allTextContents()).some(text=>text.includes(' & ')),'vote-gradient legend also uses presidential ticket names');
+ const votesSvg=await exportSvg(page);
+ assert.match(votesSvg,/李登辉 &amp; 连战/);
+});
+
+test('2022 mayor legend shows candidate name only in a specific county and stays in SVG exports',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('mayor');
+ assert.doesNotMatch(await page.locator('#legend').textContent(),/蒋万安/,'nationwide county mayor party map remains party-only');
+ await page.locator('#historyCounty').selectOption({label:'台北市'});
+ let legend=await page.locator('#legend').textContent();
+ assert.match(legend,/中国国民党｜蒋万安（1席）/);
+ assert.match(await exportSvg(page),/中国国民党｜蒋万安/);
+ await page.locator('#historyMetric').selectOption('share');
+ legend=await page.locator('#legend').textContent();
+ assert.match(legend,/中国国民党｜蒋万安/);
+ assert.match(await exportSvg(page),/中国国民党｜蒋万安/);
+ await page.locator('#historyScale').selectOption('town');
+ assert.ok((await page.locator('#legend').textContent()).includes('｜'),'township-leading candidate names are shown when county selected');
+ await page.locator('#historyCounty').selectOption({label:'新北市'});
+ assert.ok((await page.locator('#legend').textContent()).includes('｜'),'name remains after selecting a different county');
+ await page.locator('#historyCounty').selectOption('');
+ await page.locator('#historyScale').selectOption('district');
+ assert.doesNotMatch(await page.locator('#legend').textContent(),/｜/,'nationwide county mayor legend returns to party only');
+});
