@@ -857,7 +857,7 @@ test('Free-paint nationwide township map displays the same township edges as the
   county:document.querySelector('#borders path[data-shared-boundary="counties"]')?.getAttribute('d'),
   innerStroke:document.querySelector('#districtBorders path[data-shared-boundary="towns"]')?.getAttribute('stroke'),
   outerStroke:document.querySelector('#borders path[data-shared-boundary="counties"]')?.getAttribute('stroke'),
-  requestedInner:state.borderColor,requestedOuter:state.countyBorderColor
+  requestedInner:state.townBorderColor,requestedOuter:state.countyBorderColor
  }));
  assert.equal(baseline.overview,true);
  assert.equal(baseline.regions,22,'Keep the existing county-colour navigation overview');
@@ -1508,4 +1508,73 @@ test('2022 mayor legend shows candidate name only in a specific county and stays
  await page.locator('#historyCounty').selectOption('');
  await page.locator('#historyScale').selectOption('district');
  assert.doesNotMatch(await page.locator('#legend').textContent(),/｜/,'nationwide county mayor legend returns to party only');
+});
+
+
+test('County, township and constituency boundaries maintain visual hierarchy across map modules and export',async t=>{
+ const page=await pageFor(t,{width:1440,height:920});
+ const inspect=async selector=>page.locator(selector).first().evaluate(path=>({
+  color:path.getAttribute('stroke'),width:Number(path.getAttribute('stroke-width'))
+ }));
+ const expected={
+  county:{color:'#3C5D53',width:1.4},
+  district:{color:'#738B82',width:0.8},
+  town:{color:'#B1C3B9',width:0.5}
+ };
+ // County-only maps show the bold county tier, including coastlines in one-county mode.
+ assert.equal(await page.evaluate(()=>state.level),'counties');
+ assert.deepEqual(await inspect('#districtBorders path'),expected.county);
+ assert.equal(await page.locator('#boundaryColor').inputValue(),expected.county.color.toLowerCase());
+ assert.equal(await page.locator('#boundaryWidth').inputValue(),'1.4');
+ await page.locator('#county').selectOption({label:'台北市'});
+ assert.deepEqual(await inspect('#districtBorders path'),expected.county);
+ // Township maps use finer internal outlines and retain a stronger parent county line.
+ await page.locator('#predictionScale').selectOption('overlay');
+ assert.equal(await page.evaluate(()=>state.level),'towns');
+ assert.deepEqual(await inspect('#districtBorders path'),expected.town);
+ assert.deepEqual(await inspect('#borders path'),expected.county);
+ assert.equal(await page.locator('#boundaryColor').inputValue(),expected.town.color.toLowerCase());
+ assert.equal(await page.locator('#boundaryWidth').inputValue(),'0.5');
+ const source=await exportSvg(page);
+ const exported=await page.evaluate(source=>{
+  const doc=new DOMParser().parseFromString(source,'image/svg+xml');
+  const line=selector=>{
+   const path=doc.querySelector(selector);
+   return path?{color:path.getAttribute('stroke'),width:Number(path.getAttribute('stroke-width'))}:null;
+  };
+  return{town:line('[data-shared-boundary="towns"]'),county:line('[data-shared-boundary="counties"]')};
+ },source);
+ assert.deepEqual(exported,{town:expected.town,county:expected.county},'exported vector must retain screen stroke colors and widths');
+ // Electorate maps use the intermediate tier; their county boundaries remain prominent.
+ await page.locator('#predictionOffice').selectOption('council');
+ await page.locator('#county').selectOption({label:'台北市'});
+ assert.equal(await page.evaluate(()=>state.level),'council');
+ assert.deepEqual(await inspect('#districtBorders path'),expected.district);
+ assert.deepEqual(await inspect('#borders path'),expected.county);
+ assert.equal(await page.locator('#boundaryWidth').inputValue(),'0.8');
+ // A manually changed township style never changes the county tier.
+ await page.locator('#predictionOffice').selectOption('mayor');
+ await page.locator('#predictionScale').selectOption('overlay');
+ await page.locator('#boundaryColor').evaluate(input=>{
+  input.value='#849f91';input.dispatchEvent(new Event('input',{bubbles:true}));
+ });
+ assert.equal(await page.evaluate(()=>state.townBorderColor),'#849f91');
+ assert.equal(await page.evaluate(()=>state.countyBorderColor),expected.county.color);
+ assert.equal((await inspect('#districtBorders path')).color,'#849f91');
+ // The free-coloring workspace uses the same outline settings.
+ await page.locator('#workspaceFree').click();
+ await page.locator('#townLevel').click();
+ await page.locator('#county').selectOption({label:'台北市'});
+ assert.deepEqual(await inspect('#borders path'),expected.county);
+ assert.equal((await inspect('#districtBorders path')).color,'#849f91');
+ // Historical county-only maps reuse the county line, including pre-2010 boundaries.
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('president');
+ await page.locator('#historyYear').selectOption('2008');
+ await page.waitForFunction(()=>History2022View.office()==='president'&&History2022View.year()===2008&&History2022View.items()?.length===25);
+ await page.locator('#historyCounty').selectOption({label:'台中县'});
+ assert.deepEqual(await inspect('#districtBorders path[data-historical-county-outline="true"]'),expected.county);
+ await page.locator('#historyScale').selectOption('town');
+ assert.equal((await inspect('#districtBorders path')).color,'#849f91');
+ assert.deepEqual(await inspect('#borders path'),expected.county);
 });
