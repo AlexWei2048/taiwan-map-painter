@@ -1381,7 +1381,9 @@ test('Presidential history loads real 2024 and 1996 shards, navigates historical
  assert.equal(normalized.office,'president');
  assert.equal(normalized.level,'town');
  assert.equal(normalized.metric,'share');
- const csv=await page.evaluate(()=>HistoryWorkspace.presidentialTownCsv?HistoryWorkspace.presidentialTownCsv(History2022View.snapshot(),HistoryWorkspace.selection()):'');
+ const csv=await download(page,'#historyExportCsv');
+ assert.match(csv,/中区/);assert.match(csv,/西区/);
+ assert.match(csv,/台湾地区领导人/);
  await page.locator('#historyOffice').selectOption('mayor');
  await page.waitForFunction(()=>History2022View.office()==='mayor'&&History2022View.year()===2022&&
   document.querySelector('#historySummary').textContent.includes('个地区'));
