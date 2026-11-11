@@ -52,9 +52,13 @@
    const key=norm(r.county)+'|'+norm(r.town);
    scope.set(key,{county:norm(r.county),town:norm(r.town)});
   }
-  const towns=[],missing=[],usedIds=new Set();
+  const towns=[],missing=[],merges=[],usedIds=new Set(),usedMerges=new Set();
   for(const {county,town} of scope.values()){
-   const alias=norm(county)==='高雄县'&&baseTown(town)==='三民'?'那玛夏':town;
+   const historicTainan=shard.year<=2000&&norm(county)==='台南市'&&['中区','西区'].includes(norm(town));
+   const mergeKey=historicTainan?'台南市|中区、西区（合并）':'';
+   if(mergeKey&&usedMerges.has(mergeKey))continue;
+   if(mergeKey)usedMerges.add(mergeKey);
+   const alias=historicTainan?'中西区':norm(county)==='高雄县'&&baseTown(town)==='三民'?'那玛夏':town;
    const lookup=simplify(modernCounty(county))+'|'+baseTown(simplify(alias));
    const source=byTown.get(lookup);
    if(!source){
@@ -64,9 +68,12 @@
    }
    if(usedIds.has(source.id))throw Error('历史乡镇与地图出现多对一对应：'+county+' '+town);
    usedIds.add(source.id);
-   towns.push({...source,id:'president:'+shard.year+':'+county+':'+town,
-               county,town,name:town,modernCounty:source.county,
-               historical:true,historicalYear:shard.year});
+   const label=historicTainan?'中区、西区（合并）':town;
+   if(historicTainan)merges.push({county,formerTowns:['中区','西区'],displayTown:label,note:'旧中区与西区边界无法单独还原；两区得票合并显示'});
+   towns.push({...source,id:'president:'+shard.year+':'+county+':'+label,
+               county,town:label,name:label,modernCounty:source.county,
+               historical:true,historicalYear:shard.year,
+               historicalBoundaryNote:historicTainan?'旧中区与西区在本地图合并展示，原始选区得票仍保留':null});
   }
   const unresolved=missing.filter(item=>!item.exception);
   if(unresolved.length){
@@ -88,7 +95,7 @@
       historicalYear:shard.year,modernCounty:modernCounty(name),
       memberCount:members.length});
   }
-  return{counties,towns,missing,countyNames:historicCountyNames};
+  return{counties,towns,missing,merges,countyNames:historicCountyNames};
  }
  const api={YEARS,modernCounty,baseTown,load,geometry,clearPending};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;
