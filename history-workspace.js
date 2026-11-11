@@ -1,5 +1,7 @@
 (function(root){
  'use strict';
+  // Apply publication wording at CSV serialization time only; archive data and IDs remain unchanged.
+  const exportedWording=value=>{const text=String(value??'');return (typeof module!=='undefined'&&module.exports?require('./news-wording.js'):root.XinhuaWording)?.normalize(text)||text};
  const OFFICES=new Set(['mayor','council','township','president']);
  const PRESIDENT_YEARS=[1996,2000,2004,2008,2012,2016,2020,2024];
  const yearsForOffice=office=>office==='president'?PRESIDENT_YEARS:[2022];
@@ -133,7 +135,7 @@
   const offices={mayor:'县市长',council:'县市议员',township:'乡镇市区长',president:'台湾地区领导人'};
   const ordered=[...(result.candidacies||[])].sort((a,b)=>{const ca=contests.get(a.contest_id)||{},cb=contests.get(b.contest_id)||{};return Core.compareResultRows({...a,county_name:ca.county_name,district_name:ca.district_name,electorate:ca.electorate},{...b,county_name:cb.county_name,district_name:cb.district_name,electorate:cb.electorate},selection.office)});
   for(const item of ordered){const contest=contests.get(item.contest_id)||{};rows.push([selection.year||2022,offices[selection.office]||selection.office,contest.county_name,contest.county_name_official,contest.district_name,contest.district_name_official,item.candidate_name,item.candidate_name_official,item.party_name,item.party_name_official,item.ballot_number,item.votes,item.vote_share,item.elected_official?'是':''])}
-  const cell=value=>{let text=String(value??'');if(/^[=+@\t\r-]/.test(text))text="'"+text;return'"'+text.replace(/"/g,'""')+'"'};
+  const cell=value=>{let text=exportedWording(value);if(/^[=+@\t\r-]/.test(text))text="'"+text;return'"'+text.replace(/"/g,'""')+'"'};
   return'\uFEFF'+rows.map(row=>row.map(cell).join(',')).join('\r\n');
  }
 
@@ -149,7 +151,7 @@
      r.name,r.name_official,r.party,r.party_official,r.number,r.votes,
      total?Number((r.votes/total*100).toFixed(8)):0,r.elected?'是':'']);
   }
-  const cell=v=>{let text=String(v??'');if(/^[=+@\t\r-]/.test(text))text="'"+text;return'"'+text.replace(/"/g,'""')+'"'};
+  const cell=v=>{let text=exportedWording(v);if(/^[=+@\t\r-]/.test(text))text="'"+text;return'"'+text.replace(/"/g,'""')+'"'};
   return'\uFEFF'+output.map(row=>row.map(cell).join(',')).join('\r\n');
  }
  const api={normalizeSelection,yearsForOffice,levelOptions,electorateOptions,turnoutCards,featurePresentation,badgeFallback,candidateRows,overviewCards,overviewCharts,drilldownSelection,exportStem,historyCsv};
