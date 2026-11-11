@@ -1578,3 +1578,37 @@ test('County, township and constituency boundaries maintain visual hierarchy acr
  assert.equal((await inspect('#districtBorders path')).color,'#849f91');
  assert.deepEqual(await inspect('#borders path'),expected.county);
 });
+
+
+test('2502 wording policy covers live UI, SVG image export and 2026/2022 CSV downloads',async t=>{
+ const page=await pageFor(t,{width:1440,height:920});
+ const source=await page.locator('.footer-data-source').textContent();
+ assert.match(source,/台湾地区选举事务主管机构/);
+ assert.doesNotMatch(source,/中选会/);
+ await page.locator('#workspaceFree').click();
+ await page.waitForFunction(()=>document.querySelector('#palette')?.textContent.includes('“时代力量”'));
+ assert.equal(await page.evaluate(()=>partyMatch('“时代力量”')?.id),'npp');
+ assert.equal(await page.evaluate(()=>PARTY_PRESETS.find(p=>p.id==='npp')?.name),'时代力量','source identity remains unchanged');
+ await page.locator('#directoryOffice').selectOption('council');
+ await page.locator('#directoryCounty').selectOption({label:'台北市'});
+ const directory=await download(page,'#downloadCandidateData');
+ assert.match(directory,/少数民族/,'directory CSV has normalized electorate scope');
+ assert.doesNotMatch(directory,/原住民|中选会|总统|全国/,'directory CSV contains no unnormalized election terminology');
+ // Validate SVG/PNG serialization path, including user-provided image captions.
+ await page.evaluate(()=>{
+  state.title='中选会总统选举';
+  state.exportSettings.note='平地原住民、时代力量及全台 · 含离岛';
+  render();
+ });
+ const svg=await exportSvg(page);
+ const svgText=await page.evaluate(svg=>new DOMParser().parseFromString(svg,'image/svg+xml').documentElement.textContent,svg);
+ assert.match(svgText,/台湾地区选举事务主管机构台湾地区领导人选举/);
+ assert.match(svgText,/“时代力量”/);
+ assert.doesNotMatch(svgText,/原住民|中选会|总统|全台 · 含离岛/);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('council');
+ await page.waitForFunction(()=>History2022View.office()==='council'&&document.querySelector('#historySummary')?.textContent.includes('个'));
+ const historical=await download(page,'#historyExportCsv');
+ assert.match(historical,/县市规范名称/);
+ assert.doesNotMatch(historical,/原住民|中选会|总统|全国/,'historical CSV uses normalized labels while source remains archived');
+});
