@@ -28,7 +28,7 @@ function migrateBoundaryStyle(out,source){
  const legacy=Number(source.boundaryStyleRevision||0)<2;
  for(const [key,max] of fields){
   const raw=source[key],isColor=key.endsWith('Color');
-  const valid=isColor?/^#[\\da-f]{6}$/i.test(raw||''):Number.isFinite(raw);
+  const valid=isColor?/^#[\da-f]{6}$/i.test(raw||''):Number.isFinite(raw);
   let value=valid?(isColor?raw:Math.max(0,Math.min(max,raw))):BOUNDARY_PRESET[key];
   if(legacy&&(isColor?String(value).toLowerCase()===String(PREVIOUS_BOUNDARY_PRESET[key]).toLowerCase():value===PREVIOUS_BOUNDARY_PRESET[key]))value=BOUNDARY_PRESET[key];
   out[key]=value;
