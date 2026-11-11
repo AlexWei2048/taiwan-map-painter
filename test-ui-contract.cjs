@@ -1118,7 +1118,7 @@ test('Historical data tools are removed and footer credits use separate lines',(
  for(const name of ['index.html','map-v60.html']){
   const html=read(name);
   assert.doesNotMatch(html,/id="history(?:Browse|Load|Import|CsvExport|Files|Status)"/);
-  assert.match(html,name==='index.html'?/数据来源：台湾地区选举事务主管机构公开选举资料、政治大学历届公职人员选举资料、Taiwan Votes（张进逸先生开发制作）。/:/数据来源：中选会选举资料库、政治大学历届公职人员选举资料、Taiwan Votes（张进逸先生开发制作）。/);
+  assert.match(html,/数据来源：台湾地区选举事务主管机构公开选举资料、政治大学历届公职人员选举资料、Taiwan Votes（张进逸先生开发制作）。/);
   assert.ok(html.indexOf('class="footer-data-source"')<html.indexOf('class="footer-credits"'),'Data source precedes author credits');
   assert.match(html,/class="footer-credits">网页开发：Alex Wei<br>测试和推广：星夜长街/);
  }
