@@ -116,6 +116,25 @@
  }
 
  function overview(result){
+  if(result.selection?.office==='president'){
+    const national=!result.selection.countyId?result.index?.snapshot?.national:null;
+    const summaries=result.summaries||[];
+    const validVotes=summaries.reduce((n,item)=>n+item.validVotes,0);
+    const uniq=new Map();
+    for(const candidate of result.candidacies||[]){
+      const key=String(candidate.ballot_number||'')+'|'+String(candidate.candidate_name||'');
+      if(!uniq.has(key))uniq.set(key,candidate);
+    }
+    const candidates=[...uniq.values()];
+    const registeredVoters=Number.isInteger(national?.registered_voters)?national.registered_voters:null;
+    const ballotsCast=Number.isInteger(national?.ballots_cast)?national.ballots_cast:null;
+    const invalidVotes=Number.isInteger(national?.invalid_votes)?national.invalid_votes:null;
+    const group={electorate:'regional',registeredVoters,ballotsCast,validVotes,invalidVotes,
+      turnout:registeredVoters&&ballotsCast!==null?ballotsCast/registeredVoters*100:null};
+    return{...group,turnoutGroups:[group],candidateCount:candidates.length,
+      electedCount:candidates.filter(c=>c.elected_official===true).length,
+      gender:{},electedGender:{},incumbentCount:null};
+  }
   const groups=new Map();
   for(const summary of result.summaries){
    const electorate=identity(summary.contest.electorate);
