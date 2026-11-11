@@ -371,6 +371,7 @@
   return Array.from({length:d.seats},(_,i)=>cs[i]||null);
  }
  function syncHistoryControls(){
+  if(el('historyBoundaryNote'))el('historyBoundaryNote').hidden=!presidentialMode;
   el('historyCounty').value=county;el('historyScaleBox').hidden=kind!=='mayor';el('historyScale').value=scale;
   if(el('historyElectorateBox'))el('historyElectorateBox').hidden=kind!=='council';if(el('historyElectorate'))el('historyElectorate').value=electorate;
   const metrics=[['party',kind==='council'?'实际当选席次':presidentialMode?'得票领先政党':mayorTownView()?'当地最高票':'实际当选结果']];
