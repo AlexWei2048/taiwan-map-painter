@@ -1755,23 +1755,29 @@ function appendExportPredictionTable(root,rows,y){
 }
 
 function numberTableExportMetrics(entries,columns=1){
- const rows=mapNumberSorted(entries),cols=Math.max(1,columns),perColumn=Math.ceil(rows.length/cols);
- return{width:cols*210+22,height:53+perColumn*22,columns:cols,perColumn};
+ const rows=mapNumberSorted(entries),cols=Math.max(1,Math.min(4,Math.round(columns))),perColumn=Math.ceil(rows.length/cols);
+ const cellWidth=238,rowHeight=29,headerHeight=65;
+ return{width:cols*cellWidth+22,height:headerHeight+perColumn*rowHeight+12,columns:cols,perColumn,cellWidth,rowHeight,headerHeight};
 }
 function appendNumberTableExport(root,entries,x,y,columns=1){
  const rows=mapNumberSorted(entries);if(!rows.length)return 0;
  const m=numberTableExportMetrics(rows,columns);
- const panel=svgEl('g',{'data-map-number-key':'true'});
- panel.append(svgEl('rect',{x,y,width:m.width,height:m.height,rx:11,fill:'#fff',stroke:'#dce5df','stroke-width':1}));
- const heading=svgEl('text',{x:x+13,y:y+28,'font-size':17,'font-weight':650,fill:'#294a3a'});
+ const panel=svgEl('g',{'data-map-number-key':'true','data-export-layout':'separate-sidebar'});
+ panel.append(svgEl('rect',{x,y,width:m.width,height:m.height,rx:14,fill:'#fff',stroke:'#dce5df','stroke-width':1.15}));
+ panel.append(svgEl('rect',{x:x+1,y:y+1,width:m.width-2,height:4,rx:2,fill:'#2a805d'}));
+ const heading=svgEl('text',{x:x+16,y:y+31,'font-size':19,'font-weight':700,fill:'#254b3b'});
  heading.textContent='行政区索引';panel.append(heading);
+ const count=svgEl('text',{x:x+m.width-17,y:y+31,'text-anchor':'end','font-size':12,'font-weight':600,fill:'#6d8b76'});
+ count.textContent=rows.length+' 项';panel.append(count);
+ panel.append(svgEl('line',{x1:x+14,y1:y+46,x2:x+m.width-14,y2:y+46,stroke:'#e2ece4','stroke-width':1}));
  for(let i=0;i<rows.length;i++){
   const row=rows[i],col=Math.floor(i/m.perColumn),index=i%m.perColumn;
-  const bx=x+10+col*210,by=y+48+index*22;
-  if(index%2===0)panel.append(svgEl('rect',{x:bx,y:by-3,width:207,height:21,fill:'#f5f8f5'}));
-  const num=svgEl('text',{x:bx+8,y:by+12,'font-size':12,'font-weight':700,fill:'#235443'});
+  const bx=x+11+col*m.cellWidth,by=y+m.headerHeight+index*m.rowHeight;
+  panel.append(svgEl('rect',{x:bx,y:by-3,width:m.cellWidth-8,height:m.rowHeight-2,rx:5,fill:index%2?'#f6f9f6':'#eff5ef'}));
+  panel.append(svgEl('rect',{x:bx+6,y:by+1,width:33,height:m.rowHeight-10,rx:5,fill:'#dfeee2'}));
+  const num=svgEl('text',{x:bx+22.5,y:by+15,'text-anchor':'middle','font-size':12,'font-weight':700,fill:'#2b664e'});
   num.textContent=row.number;panel.append(num);
-  const value=svgEl('text',{x:bx+39,y:by+12,'font-size':12,fill:'#365344'});
+  const value=svgEl('text',{x:bx+47,y:by+15,'font-size':12,fill:'#365344'});
   value.textContent=mapNumberDisplayName(row,rows);panel.append(value);
  }
  root.append(panel);return m.height;
@@ -1914,15 +1920,16 @@ function exportSvg(){
   root.append(map);
   let appendixHeight=0,sidebarHeight=0,sidebarWidth=0;
   if(keyRows.length){
-   const keyColumns=Math.max(1,Math.ceil(keyRows.length/38));
+   const keyColumns=Math.min(4,Math.max(1,Math.ceil(keyRows.length/34)));
    const keyMetrics=numberTableExportMetrics(keyRows,keyColumns);
    const box=legendBox(spec),factor=contentWidth/spec.width;
-   const inRail=keyColumns===1&&keyMetrics.width<mapKeyRailWidth(spec)*factor-20;
-   const lx=inRail?coreWidth-Math.max(keyMetrics.width,box.width*factor)-25:coreWidth+12,ly=mapY;
+   // Keep export reference and legend in a dedicated sidebar, outside the
+   // complete geographical viewBox, so neither obscures map labels or furniture.
+   const lx=coreWidth+16,ly=mapY;
    const keyHeight=appendNumberTableExport(root,keyRows,lx,ly,keyColumns);
    const legend=map.querySelector('[data-export-map-legend]');
-   sidebarWidth=inRail?0:Math.max(keyMetrics.width,state.legend.show?box.width*factor:0)+32;
-   sidebarHeight=ly+keyHeight+24;
+   sidebarWidth=Math.max(keyMetrics.width,state.legend.show?box.width*factor:0)+38;
+   sidebarHeight=ly+keyHeight+20;
    if(legend&&state.legend.show){
     legend.remove();
     const wrapper=svgEl('g',{transform:`translate(${lx-box.x*factor},${sidebarHeight-box.y*factor}) scale(${factor})`,'data-export-legend-below-key':'true'});
