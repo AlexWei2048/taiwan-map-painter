@@ -54,7 +54,8 @@
   }
   const towns=[],missing=[],usedIds=new Set();
   for(const {county,town} of scope.values()){
-   const lookup=simplify(modernCounty(county))+'|'+baseTown(simplify(town));
+   const alias=norm(county)==='高雄县'&&baseTown(town)==='三民'?'那玛夏':town;
+   const lookup=simplify(modernCounty(county))+'|'+baseTown(simplify(alias));
    const source=byTown.get(lookup);
    if(!source){
     const exception=exceptions.has(simplify(county)+'|'+simplify(town));
