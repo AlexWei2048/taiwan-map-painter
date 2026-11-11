@@ -1354,3 +1354,37 @@ test('Historical result windows share prediction drag and resize controls',async
  await dialog.getByRole('button',{name:'关闭历史结果'}).click();
  assert.equal(await dialog.isVisible(),false);
 });
+
+
+test('Presidential history loads real 2024 and 1996 shards, navigates historical county geometry and restores 2022',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('president');
+ await page.waitForFunction(()=>window.History2022View?.office()==='president'&&
+  window.History2022View?.year()===2024&&
+  document.querySelector('#historySummary').textContent.includes('22个'),{timeout:30000});
+ assert.equal(await page.locator('#historyYear option').count(),8);
+ assert.equal(await page.locator('#historyYear').inputValue(),'2024');
+ assert.equal(await page.locator('#historyCounty option').count(),23);
+ assert.equal(await page.locator('#regions path[data-region]').count(),22);
+ await page.locator('#historyYear').selectOption('1996');
+ await page.waitForFunction(()=>window.History2022View?.office()==='president'&&window.History2022View?.year()===1996&&
+  document.querySelector('#historySummary').textContent.includes('25个'),{timeout:30000});
+ assert.equal(await page.locator('#historyCounty option').count(),26);
+ await page.locator('#historyScale').selectOption('town');
+ await page.locator('#historyCounty').selectOption({label:'台南市'});
+ await page.waitForFunction(()=>document.querySelector('#historySummary').textContent.includes('个地区'));
+ assert.match(await page.locator('#regions').textContent(),/中区、西区（合并）|中西/);
+ await page.locator('#historyMetric').selectOption('share');
+ const normalized=await page.evaluate(()=>HistoryWorkspace.selection());
+ assert.equal(normalized.year,1996);
+ assert.equal(normalized.office,'president');
+ assert.equal(normalized.level,'town');
+ assert.equal(normalized.metric,'share');
+ const csv=await page.evaluate(()=>HistoryWorkspace.presidentialTownCsv?HistoryWorkspace.presidentialTownCsv(History2022View.snapshot(),HistoryWorkspace.selection()):'');
+ await page.locator('#historyOffice').selectOption('mayor');
+ await page.waitForFunction(()=>History2022View.office()==='mayor'&&History2022View.year()===2022&&
+  document.querySelector('#historySummary').textContent.includes('个地区'));
+ assert.equal(await page.locator('#historyYear option').count(),1);
+ assert.equal(await page.locator('#historyYear').inputValue(),'2022');
+});
