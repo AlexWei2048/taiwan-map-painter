@@ -63,7 +63,7 @@ def simplify(value: object) -> str:
     return CONVERTER.convert(str(value or "")).strip()
 
 def source_listing(html: bytes) -> dict[int, list[tuple[str,str,str]]]:
-    soup = BeautifulSoup(html, "html.parser")
+    soup = BeautifulSoup(html.decode("utf-8-sig") if isinstance(html, bytes) else html, "html.parser")
     grouped: dict[int, list[tuple[str,str,str]]] = {year: [] for year in YEARS}
     seen: set[str] = set()
     for anchor in soup.select("a[href]"):
