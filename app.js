@@ -10,7 +10,32 @@ function pruneUnusedAutoPredictionPalette(project){const linked=new Set();for(co
 const COUNTY_ORDER=['台北市','新北市','桃园市','台中市','台南市','高雄市','基隆市','宜兰县','新竹县','新竹市','苗栗县','彰化县','南投县','云林县','嘉义县','嘉义市','屏东县','花莲县','台东县','澎湖县','金门县','连江县'];
 const LEVELS=['towns','counties','council','legislative','villages'];
 const levelLabel=level=>({villages:'村里',towns:'乡镇市区',counties:'县市',council:'议员',legislative:'立法机构区域民代'})[level];
-const defaults=()=>({version:1,title:'',legendTitle:'图例',county:'',villageTown:'',districtLeaders:false,level:'counties',workspaceMode:'prediction',electorate:{council:'regional',legislative:'regional'},predictionOffice:'mayor',predictionDisplay:'composition',predictionCandidateScope:'topVote',predictionVoteMetric:'share',predictionScale:'district',councilViewScope:'all',localPredictions:{},localPredictionDisplay:'',localDisplayCandidate:'',localTown:'',predictions:{},labels:true,borderColor:'#80978d',borderWidth:0.6,countyBorderColor:'#385d4b',countyBorderWidth:1.5,townBorderColor:'#b6c4ba',townBorderWidth:0.4,showTownBoundaries:true,selected:'blue',palette:presetPalette(),settingsRevision:2,paletteRevision:3,fills:{towns:{},counties:{},council:{},legislative:{},villages:{}},legislativeTownFills:{party:{},plains:{},mountain:{}},fillMode:'prediction',gradient:{groupBy:'candidate',metric:'share',min:0,max:null,marginManual:false},legend:{show:true,onlyUsed:false,fontSize:12,caption:'',hidden:[]},exportSettings:{winnerTable:true,note:'',councilScope:'all',layout:'compact'},elections:{towns:{},counties:{},council:{},legislative:{},villages:{}}});
+// Calm three-tier outline hierarchy shared by predictions, history and free coloring.
+// All strokes are non-scaling SVG strokes, so screen and exported maps stay consistent.
+const BOUNDARY_PRESET=Object.freeze({
+ borderColor:'#738B82',borderWidth:0.8,           // electoral constituencies
+ countyBorderColor:'#3C5D53',countyBorderWidth:1.4, // counties and municipalities
+ townBorderColor:'#B1C3B9',townBorderWidth:0.5      // township and district subdivisions
+});
+const PREVIOUS_BOUNDARY_PRESET=Object.freeze({
+ borderColor:'#80978d',borderWidth:0.6,
+ countyBorderColor:'#385d4b',countyBorderWidth:1.5,
+ townBorderColor:'#b6c4ba',townBorderWidth:0.4
+});
+function migrateBoundaryStyle(out,source){
+ const fields=[['borderColor',3],['borderWidth',3],['countyBorderColor',5],
+  ['countyBorderWidth',5],['townBorderColor',3],['townBorderWidth',3]];
+ const legacy=Number(source.boundaryStyleRevision||0)<2;
+ for(const [key,max] of fields){
+  const raw=source[key],isColor=key.endsWith('Color');
+  const valid=isColor?/^#[\\da-f]{6}$/i.test(raw||''):Number.isFinite(raw);
+  let value=valid?(isColor?raw:Math.max(0,Math.min(max,raw))):BOUNDARY_PRESET[key];
+  if(legacy&&(isColor?String(value).toLowerCase()===String(PREVIOUS_BOUNDARY_PRESET[key]).toLowerCase():value===PREVIOUS_BOUNDARY_PRESET[key]))value=BOUNDARY_PRESET[key];
+  out[key]=value;
+ }
+ out.boundaryStyleRevision=2;
+}
+const defaults=()=>({version:1,title:'',legendTitle:'图例',county:'',villageTown:'',districtLeaders:false,level:'counties',workspaceMode:'prediction',electorate:{council:'regional',legislative:'regional'},predictionOffice:'mayor',predictionDisplay:'composition',predictionCandidateScope:'topVote',predictionVoteMetric:'share',predictionScale:'district',councilViewScope:'all',localPredictions:{},localPredictionDisplay:'',localDisplayCandidate:'',localTown:'',predictions:{},labels:true,...BOUNDARY_PRESET,boundaryStyleRevision:2,showTownBoundaries:true,selected:'blue',palette:presetPalette(),settingsRevision:2,paletteRevision:3,fills:{towns:{},counties:{},council:{},legislative:{},villages:{}},legislativeTownFills:{party:{},plains:{},mountain:{}},fillMode:'prediction',gradient:{groupBy:'candidate',metric:'share',min:0,max:null,marginManual:false},legend:{show:true,onlyUsed:false,fontSize:12,caption:'',hidden:[]},exportSettings:{winnerTable:true,note:'',councilScope:'all',layout:'compact'},elections:{towns:{},counties:{},council:{},legislative:{},villages:{}}});
 let state=defaults(),data=null,undo=[],redo=[],view=null,baseView=null,erase=false,drag=null,moved=false,toastTimer,persistTimer;
 const clone=x=>JSON.parse(JSON.stringify(x));
 function cleanProject(s){
@@ -18,7 +43,7 @@ function cleanProject(s){
  const out=defaults(),ids=new Set();out.palette=s.palette.map(p=>{if(typeof p.id!=='string'||!p.id||p.id.length>80||ids.has(p.id)||!/^#[\da-f]{6}$/i.test(p.color))throw Error('颜色信息不正确');ids.add(p.id);return{id:p.id,name:simplify(String(p.name||'未命名')).slice(0,40),color:p.color,...(Object.hasOwn(p,'logo')?{logo:cleanLogo(p.logo)}:{})}});
  for(const level of LEVELS){out.fills[level]={};for(const [k,v]of Object.entries(s.fills[level]||{})){if(/^\d{5,11}(?:-\d{2})?$/.test(k)&&ids.has(v))out.fills[level][k]=v}}
  for(const identity of ['party','plains','mountain'])for(const [k,v]of Object.entries(s.legislativeTownFills?.[identity]||{}))if(/^\d{8}$/.test(k)&&ids.has(v))out.legislativeTownFills[identity][k]=v;
- out.title=simplify(String(s.title||'')).slice(0,80);out.legendTitle=simplify(String(s.legendTitle||'图例')).slice(0,40);out.county=simplify(String(s.county||''));out.level=LEVELS.includes(s.level)?s.level:'towns';out.labels=s.labels!==false;out.selected=ids.has(s.selected)?s.selected:out.palette[0].id;if(s.settingsRevision!==2){for(const p of out.palette){const preset=partyMatch(p.name)||PARTY_PRESETS.find(x=>x.id===p.id&&['blue','green','aqua','gray','red'].includes(x.id));if(preset){p.name=preset.name;p.color=preset.color}}for(const p of presetPalette())if(!out.palette.some(x=>partyMatch(x.name)?.id===p.id))out.palette.push(p);out.labels=true;}out.settingsRevision=2;if(![2,3].includes(Number(s.paletteRevision)))out.palette=upgradeDefaultPalette(out.palette);out.paletteRevision=Number(s.paletteRevision)===3?3:2;out.borderColor=/^#[\da-f]{6}$/i.test(s.borderColor)?s.borderColor:'#80978d';out.borderWidth=Number.isFinite(s.borderWidth)?Math.max(0,Math.min(3,s.borderWidth)):0.6;out.countyBorderColor=/^#[\da-f]{6}$/i.test(s.countyBorderColor)?s.countyBorderColor:'#385d4b';out.countyBorderWidth=Number.isFinite(s.countyBorderWidth)?Math.max(0,Math.min(5,s.countyBorderWidth)):1.5;out.townBorderColor=/^#[\da-f]{6}$/i.test(s.townBorderColor)?s.townBorderColor:'#b6c4ba';out.townBorderWidth=Number.isFinite(s.townBorderWidth)?Math.max(0,Math.min(3,s.townBorderWidth)):0.4;out.showTownBoundaries=s.showTownBoundaries!==false;out.villageTown=String(s.villageTown||'').slice(0,11);out.districtLeaders=s.districtLeaders===true;const cleaned=sanitizeElectionState(out,s);if(cleaned.paletteRevision!==3){pruneUnusedAutoPredictionPalette(cleaned);cleaned.paletteRevision=3}return cleaned;
+ out.title=simplify(String(s.title||'')).slice(0,80);out.legendTitle=simplify(String(s.legendTitle||'图例')).slice(0,40);out.county=simplify(String(s.county||''));out.level=LEVELS.includes(s.level)?s.level:'towns';out.labels=s.labels!==false;out.selected=ids.has(s.selected)?s.selected:out.palette[0].id;if(s.settingsRevision!==2){for(const p of out.palette){const preset=partyMatch(p.name)||PARTY_PRESETS.find(x=>x.id===p.id&&['blue','green','aqua','gray','red'].includes(x.id));if(preset){p.name=preset.name;p.color=preset.color}}for(const p of presetPalette())if(!out.palette.some(x=>partyMatch(x.name)?.id===p.id))out.palette.push(p);out.labels=true;}out.settingsRevision=2;if(![2,3].includes(Number(s.paletteRevision)))out.palette=upgradeDefaultPalette(out.palette);out.paletteRevision=Number(s.paletteRevision)===3?3:2;migrateBoundaryStyle(out,s);out.showTownBoundaries=s.showTownBoundaries!==false;out.villageTown=String(s.villageTown||'').slice(0,11);out.districtLeaders=s.districtLeaders===true;const cleaned=sanitizeElectionState(out,s);if(cleaned.paletteRevision!==3){pruneUnusedAutoPredictionPalette(cleaned);cleaned.paletteRevision=3}return cleaned;
 }
 try{const s=localStorage.getItem(KEY);if(s)state=cleanProject(JSON.parse(s))}catch(e){console.warn('浏览器保存的方案未载入',e.message)}
 function projectStateForSave(){return state}
@@ -2053,19 +2078,42 @@ $('partyPreset').onchange=()=>{const preset=PARTY_PRESETS.find(p=>p.id===$('part
 $('applyStandard').onclick=()=>{pushHistory();for(const p of state.palette){const preset=partyMatch(p.name);if(preset){p.name=preset.name;p.color=preset.color}}renderPalette();recolor();renderLegend();renderList();persist();toast('已按指定模板应用政党标准配色')};
 
 const borderControls=[['boundaryColor','borderColor'],['boundaryHex','borderColor'],['boundaryWidth','borderWidth'],['countyBoundaryColor','countyBorderColor'],['countyBoundaryHex','countyBorderColor'],['countyBoundaryWidth','countyBorderWidth'],['townBoundaryColor','townBorderColor'],['townBoundaryHex','townBorderColor'],['townBoundaryWidth','townBorderWidth']];
+// The primary outline follows the visible map layer: county > constituency > township.
+// Editing the primary control edits that same boundary tier, not an unrelated
+// hidden setting. County/town overlay controls share the corresponding setting.
+function primaryBoundaryTier(){
+ if(state.level==='counties'||mayorTownBoundaryOverlay()||councilCountyOverview())return 'county';
+ if(state.level==='towns'||state.level==='villages')return 'town';
+ return 'district';
+}
+function primaryBoundaryKeys(){
+ const tier=primaryBoundaryTier();
+ return tier==='county'?{color:'countyBorderColor',width:'countyBorderWidth'}:
+  tier==='town'?{color:'townBorderColor',width:'townBorderWidth'}:
+  {color:'borderColor',width:'borderWidth'};
+}
+function borderControlKey(id,original){
+ if(id!=='boundaryColor'&&id!=='boundaryHex'&&id!=='boundaryWidth')return original;
+ const keys=primaryBoundaryKeys();
+ return id==='boundaryWidth'?keys.width:keys.color;
+}
 function syncBorderControls(){
- $('primaryBoundaryLabel').textContent=(mayorTownBoundaryOverlay()?'县市':levelLabel(state.level))+'边界';
- $('countyBoundarySettings').hidden=state.level==='counties'||mayorTownBoundaryOverlay();$('townBoundarySettings').hidden=!['legislative','council','villages'].includes(state.level)&&!mayorTownBoundaryOverlay();$('showTownBoundaries').checked=state.showTownBoundaries;
- for(const [id,key]of borderControls)$(id).value=id.endsWith('Hex')?state[key].toUpperCase():state[key];
- $('boundaryWidthValue').value=Number(state.borderWidth).toFixed(1)+' px';
+ const tier=primaryBoundaryTier();
+ $('primaryBoundaryLabel').textContent=(tier==='county'?'县市':tier==='town'?'乡镇市区':levelLabel(state.level))+'边界';
+ $('countyBoundarySettings').hidden=tier==='county'||mayorTownBoundaryOverlay();
+ $('townBoundarySettings').hidden=!['legislative','council','villages'].includes(state.level)&&!mayorTownBoundaryOverlay();
+ $('showTownBoundaries').checked=state.showTownBoundaries;
+ for(const [id,key]of borderControls){const value=state[borderControlKey(id,key)];$(id).value=id.endsWith('Hex')?value.toUpperCase():value;}
+ $('boundaryWidthValue').value=Number(state[primaryBoundaryKeys().width]).toFixed(1)+' px';
  $('countyBoundaryWidthValue').value=Number(state.countyBorderWidth).toFixed(1)+' px';$('townBoundaryWidthValue').value=Number(state.townBorderWidth).toFixed(1)+' px';
 }
 function applyBorders(){
- for(const [selector,color,width]of [['#regions path','none',0],['#districtBorders path',state.borderColor,state.borderWidth],['#borders path',state.countyBorderColor,state.countyBorderWidth],['#townBorders path',state.townBorderColor,state.townBorderWidth]])
+ const primary=primaryBoundaryKeys();
+ for(const [selector,color,width]of [['#regions path','none',0],['#districtBorders path',state[primary.color],state[primary.width]],['#borders path',state.countyBorderColor,state.countyBorderWidth],['#townBorders path',state.townBorderColor,state.townBorderWidth]])
  for(const p of document.querySelectorAll(selector)){const historicCounty=p.hasAttribute('data-historical-county-outline');const lineColor=historicCounty?state.countyBorderColor:color,lineWidth=historicCounty?state.countyBorderWidth:width;p.setAttribute('stroke',lineColor);p.setAttribute('stroke-width',lineWidth);p.style.stroke=lineColor;p.style.strokeWidth=lineWidth;}
  $('townBorders').style.display=state.showTownBoundaries?'':'none';syncBorderControls();
 }
-for(const [id,key]of borderControls){let edited=false;$(id).addEventListener('focus',()=>edited=false);$(id).addEventListener('pointerdown',()=>edited=false);$(id).addEventListener('input',()=>{const value=$(id).value;if(id.endsWith('Hex')&&!/^#[\da-f]{6}$/i.test(value))return;if(!edited){pushHistory();edited=true}state[key]=id.endsWith('Width')?Number(value):value;applyBorders();persist()});$(id).addEventListener('change',()=>syncBorderControls())}
+for(const [id,key]of borderControls){let edited=false;$(id).addEventListener('focus',()=>edited=false);$(id).addEventListener('pointerdown',()=>edited=false);$(id).addEventListener('input',()=>{const value=$(id).value;if(id.endsWith('Hex')&&!/^#[\da-f]{6}$/i.test(value))return;if(!edited){pushHistory();edited=true}state[borderControlKey(id,key)]=id.endsWith('Width')?Number(value):value;applyBorders();persist()});$(id).addEventListener('change',()=>syncBorderControls())}
 
 function toggleCustomParty(open){if(state.palette.length>=64)return toast('最多可添加64个类别');const form=$('customPartyForm');form.hidden=typeof open==='boolean'?!open:!form.hidden;$('customPartyError').textContent='';if(!form.hidden)$('customPartyName').focus()}
 $('showCustomParty').onclick=()=>toggleCustomParty();$('cancelCustomParty').onclick=()=>toggleCustomParty(false);
