@@ -453,32 +453,44 @@ function positionMapNumberTable(){
  }
  const frame=canvas.getBoundingClientRect(),svg=map.getBoundingClientRect();
  if(!frame.width||!frame.height||!svg.width||!svg.height)return;
- // Overlay uses the fixed unzoomed SVG frame; labels/geometry reserve this rail.
- const spec=sceneSpec(),scale=Math.min(svg.width/spec.width,svg.height/spec.height);
- const x0=svg.left-frame.left+(svg.width-spec.width*scale)/2;
- const y0=svg.top-frame.top+(svg.height-spec.height*scale)/2;
- const railStart=x0+(spec.width-mapKeyRailWidth(spec)+12)*scale;
- const railEnd=x0+(spec.width-18)*scale;
- const width=Math.min(252,Math.max(100,railEnd-railStart));
- const left=Math.min(frame.width-width-7,Math.max(railStart,railEnd-width));
+ const spec=sceneSpec(),world=view||fittedView();
+ // HTML index is anchored in the *same map coordinates* as the geographic
+ // paths. Each viewBox change moves and scales it by the SVG's exact mapping.
+ // Do not clamp the transformed screen rectangle, or the index will detach
+ // from the map during dragging and zooming.
+ const baseScale=Math.min(svg.width/spec.width,svg.height/spec.height);
+ const zoomScale=Math.min(svg.width/world.w,svg.height/world.h);
+ const baseY0=svg.top-frame.top+(svg.height-spec.height*baseScale)/2;
+ const zoomX0=svg.left-frame.left+(svg.width-world.w*zoomScale)/2;
+ const zoomY0=svg.top-frame.top+(svg.height-world.h*zoomScale)/2;
+ const anchorX=spec.width-mapKeyRailWidth(spec)+12;
+ const endX=spec.width-18;
  const controls=$('zoomIn')?.parentElement?.getBoundingClientRect();
  const controlsBottom=controls?controls.bottom-frame.top+12:58;
- const desiredTop=Math.max(controlsBottom,y0+125*scale,61);
- const legendRect=$('legend')?.querySelector(':scope > rect')?.getBoundingClientRect();
- const fallbackTop=y0+(spec.height-furnitureFooterHeight()-15)*scale;
- const end=Math.min(frame.height-38,legendRect?.height?legendRect.top-frame.top-14:fallbackTop);
- const top=Math.max(controlsBottom,Math.min(desiredTop,end-55));
- const maxHeight=Math.max(35,Math.floor(end-top));
- panel.style.left=Math.round(Math.max(4,left))+'px';
+ // The reference table starts below screen-fixed toolbar controls at fit.
+ // Thereafter the anchor is stable in world space, even when panned.
+ const anchorY=Math.max(125,(Math.max(controlsBottom,61)-baseY0)/baseScale);
+ const legendRect=$('legend')?.querySelector(':scope > rect');
+ const legendY=legendRect?Number(legendRect.getAttribute('y')):NaN;
+ const endY=Math.min(spec.height-furnitureFooterHeight()-15,
+  Number.isFinite(legendY)?legendY-14:Infinity);
+ const availableWorldHeight=Math.max(56/baseScale,endY-anchorY);
+ const maxBaseHeight=Math.min(availableWorldHeight*baseScale,
+  frame.width<=700?265:340);
+ const baseWidth=Math.max(76,(endX-anchorX)*baseScale);
+ const pxLeft=zoomX0+(anchorX-world.x)*zoomScale;
+ const pxTop=zoomY0+(anchorY-world.y)*zoomScale;
+ panel.style.left='0px';
  panel.style.right='auto';
- panel.style.top=Math.round(top)+'px';
+ panel.style.top='0px';
  panel.style.bottom='auto';
- panel.style.width=Math.round(Math.min(width,frame.width-12))+'px';
- panel.style.maxHeight=maxHeight+'px';
+ panel.style.width=baseWidth+'px';
+ panel.style.maxHeight=maxBaseHeight+'px';
  panel.style.height='auto';
- panel.classList.toggle('map-number-key--compact',maxHeight<135);
+ panel.style.transformOrigin='top left';
+ panel.style.transform=`translate3d(${pxLeft}px,${pxTop}px,0) scale(${zoomScale/baseScale})`;
+ panel.classList.toggle('map-number-key--compact',maxBaseHeight<135);
 }
-
 if(typeof window!=='undefined')window.addEventListener('resize',()=>positionMapNumberTable());
 
 function mapLabelCandidatePoints(f,t){

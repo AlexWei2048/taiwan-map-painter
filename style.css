@@ -675,3 +675,13 @@ body.history-mode #districtReferenceNote,body.history-mode #districtReferenceSou
  #mapWithKey>.canvas>.map-number-key .number-key-number{width:24px;min-height:22px;font-size:9px}
  #mapWithKey>.canvas>.map-number-key .number-key-action{font-size:10px}
 }
+
+
+/* Administrative index uses geographic map coordinates. The JavaScript
+   applies the same viewBox transform as the map to this interactive HTML
+   overlay. It zooms and pans with the geography instead of staying pinned
+   to the browser viewport. Do not animate transform: it must remain in sync. */
+#mapWithKey>.canvas>.map-number-key{
+ transform-origin:top left;transition:none;will-change:transform;
+ contain:layout style;
+}

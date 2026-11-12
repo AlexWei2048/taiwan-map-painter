@@ -790,7 +790,9 @@ test('Administrative lookup is outside canvas and exports every entry',()=>{
   'Map index is inside the canvas in reserved empty space');
  const css=read('style.css');
  assert.match(css,/#mapWithKey>\.canvas>\.map-number-key\{/);
- assert.match(app,/const railStart=x0\+/);
+ assert.match(app,/const anchorX=spec\.width-mapKeyRailWidth\(spec\)\+12/);
+ assert.match(app,/scale\(\$\{zoomScale\/baseScale\}\)/);
+ assert.match(app,/const world=view\|\|fittedView\(\)/);
  assert.match(app,/function mapNumberDisplayName\(/);
  const table=app.slice(app.indexOf('function renderMapNumberTable(){'),app.indexOf('\nfunction mapLabelCandidatePoints('));
  assert.doesNotMatch(table,/number-key-group|th\.colSpan/);

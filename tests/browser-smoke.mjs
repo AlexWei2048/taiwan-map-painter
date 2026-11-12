@@ -535,6 +535,44 @@ test('Dense administrative names use an on-map index without covering labels or 
  assert.ok(exported.text.includes('行政区索引'));
 });
 
+test('Administrative index zooms and pans in map coordinates and resets with fit',async t=>{
+ const page=await pageFor(t);await page.locator('#county').selectOption({value:'高雄市'});
+ await page.locator('#predictionScale').selectOption('overlay');
+ const measure=()=>page.evaluate(()=>{
+  const el=document.querySelector('#mapNumberKey'),rect=el.getBoundingClientRect();
+  const svg=document.querySelector('#map'),box=svg.getBoundingClientRect();
+  return{left:rect.left,top:rect.top,width:rect.width,height:rect.height,
+   view:{...view},svg:{width:box.width,height:box.height},
+   style:el.style.transform};
+ });
+ const initial=await measure();
+ assert.ok(initial.width>60,'in-map key should be readable at fit');
+ assert.match(initial.style,/translate3d\(.+\) scale\(/);
+ await page.locator('#zoomIn').click();
+ await page.waitForFunction(width=>document.querySelector('#mapNumberKey').getBoundingClientRect().width>width*1.05,initial.width);
+ const enlarged=await measure();
+ const ratio=initial.view.w/enlarged.view.w;
+ assert.ok(Math.abs(enlarged.width/initial.width-ratio)<.025,'index width follows SVG zoom scale');
+ assert.ok(Math.abs(enlarged.height/initial.height-ratio)<.025,'index height follows SVG zoom scale');
+ const panX=35,panY=50;
+ await page.evaluate(({panX,panY})=>{view.x+=panX;view.y+=panY;flushView()}, {panX,panY});
+ const shifted=await measure();
+ const pxPerUnit=Math.min(shifted.svg.width/shifted.view.w,shifted.svg.height/shifted.view.h);
+ assert.ok(Math.abs((shifted.left-enlarged.left)+panX*pxPerUnit)<1.5,'index pans horizontally with map');
+ assert.ok(Math.abs((shifted.top-enlarged.top)+panY*pxPerUnit)<1.5,'index pans vertically with map');
+ await page.locator('#fit').click();
+ const restored=await measure();
+ assert.ok(Math.abs(restored.width-initial.width)<1.5,'fit restores index scale');
+ assert.ok(Math.abs(restored.left-initial.left)<1.5,'fit restores index placement');
+ assert.ok(Math.abs(restored.top-initial.top)<1.5,'fit restores index vertical placement');
+ const svg=await exportSvg(page);
+ const exported=await page.evaluate(source=>{
+  const doc=new DOMParser().parseFromString(source,'image/svg+xml');
+  return{key:doc.querySelectorAll('[data-map-number-key]').length,side:!!doc.querySelector('[data-export-legend-below-key]')};
+ },svg);
+ assert.equal(exported.key,1,'export keeps exactly one index in the separate sidebar');
+ assert.equal(exported.side,true);
+});
 test('Town label hover highlights the matching polygon and restores its prediction fill',async t=>{
  const page=await pageFor(t);
  await page.locator('#county').selectOption({label:'高雄市'});
