@@ -676,12 +676,12 @@ test('Export index and legend descend to the scale-bar bottom',async t=>{
   const geo=await page.evaluate(source=>{
    const doc=new DOMParser().parseFromString(source,'image/svg+xml');
    const map=doc.querySelector('svg[x][y][viewBox]');
-   const f=Number(map.getAttribute('width'))/Number(map.getAttribute('viewBox').split(/\\s+/)[2]);
+   const f=Number(map.getAttribute('width'))/Number(map.getAttribute('viewBox').split(/\s+/)[2]);
    const y0=Number(map.getAttribute('y'));
    const bars=[...doc.querySelectorAll('[data-decoration="scale-bar"] > rect')].slice(1);
    const scaleBottom=y0+Math.max(...bars.map(el=>Number(el.getAttribute('y'))+Number(el.getAttribute('height'))))*f;
    const wrapper=doc.querySelector('[data-export-legend-below-key]');
-   const match=wrapper?.getAttribute('transform').match(/^translate\\(([-+.\\deE]+),([-+.\\deE]+)\\) scale\\(([-+.\\deE]+)\\)$/);
+   const match=wrapper?.getAttribute('transform').match(/^translate\(([-+.\deE]+),([-+.\deE]+)\) scale\(([-+.\deE]+)\)$/);
    const rect=wrapper?.querySelector(':scope > g > rect');
    const legendTop=Number(match?.[2])+Number(rect?.getAttribute('y'))*Number(match?.[3]);
    const legendBottom=legendTop+Number(rect?.getAttribute('height'))*Number(match?.[3]);
