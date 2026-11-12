@@ -535,6 +535,33 @@ test('Dense administrative names use an on-map index without covering labels or 
  assert.ok(exported.text.includes('行政区索引'));
 });
 
+test('Compact administrative index matches map label typography and stays within right rail',async t=>{
+ const page=await pageFor(t);
+ for(const width of [1280,390]){
+  await page.setViewportSize({width,height:850});
+  await page.locator('#county').selectOption({value:'高雄市'});
+  await page.locator('#predictionScale').selectOption('overlay');
+  const result=await page.evaluate(()=>{
+   const panel=document.querySelector('#mapNumberKey'),box=panel.getBoundingClientRect();
+   const svg=document.querySelector('#map'),spec=sceneSpec();
+   const baseScale=Math.min(svg.getBoundingClientRect().width/spec.width,svg.getBoundingClientRect().height/spec.height);
+   const source=Number(panel.dataset.referenceFont)||spec.font;
+   const indexFont=parseFloat(getComputedStyle(document.querySelector('#mapNumberKeyRows button')).fontSize);
+   const expected=Math.max(7.5,Math.min(11,source*baseScale));
+   const legend=document.querySelector('#legend>rect')?.getBoundingClientRect();
+   const north=document.querySelector('#mapFurniture [data-decoration="north-arrow"]')?.getBoundingClientRect();
+   const overlap=(a,b)=>!!b&&a.left<b.right-1&&a.right>b.left+1&&a.top<b.bottom-1&&a.bottom>b.top+1;
+   return {width:box.width,height:box.height,indexFont,expected,legendOverlap:overlap(box,legend),northOverlap:overlap(box,north)};
+  });
+  assert.ok(result.width<=135,result.width+'px: index should be compact');
+  assert.ok(result.width>=60,result.width+'px: index must remain usable');
+  assert.ok(result.height<=190,result.height+'px: index should be a small reference');
+  assert.ok(Math.abs(result.indexFont-result.expected)<.25,'index text follows map text size');
+  assert.equal(result.legendOverlap,false,'keep legend clear');
+  assert.equal(result.northOverlap,false,'keep north arrow clear');
+ }
+});
+
 test('Administrative index zooms and pans in map coordinates and resets with fit',async t=>{
  const page=await pageFor(t);await page.locator('#county').selectOption({value:'高雄市'});
  await page.locator('#predictionScale').selectOption('overlay');

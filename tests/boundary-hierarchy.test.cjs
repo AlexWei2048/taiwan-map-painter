@@ -33,7 +33,7 @@ test('county > electoral > township boundaries use a balanced color and thicknes
  ]){
   assert.ok(html.includes('id="'+input+'" type="color" value="'+preset[field]+'"'),input+' should have consistent HTML fallback');
  }
- assert.match(html,/app\.js\?v=20261112-map-linked-key-v1/);
+ assert.match(html,/app\.js\?v=20261112-compact-index-v1/);
 });
 
 test('legacy saved default styles adopt the new initial appearance without changing custom colors',()=>{

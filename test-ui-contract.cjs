@@ -790,7 +790,8 @@ test('Administrative lookup is outside canvas and exports every entry',()=>{
   'Map index is inside the canvas in reserved empty space');
  const css=read('style.css');
  assert.match(css,/#mapWithKey>\.canvas>\.map-number-key\{/);
- assert.match(app,/const anchorX=spec\.width-mapKeyRailWidth\(spec\)\+12/);
+ assert.match(app,/const anchorX=Math\.max\(railStartX,endX-baseWidth\/baseScale\)/);
+ assert.match(app,/panel\.style\.setProperty\('--index-font-size',textSize\.toFixed\(2\)\+'px'\)/);
  assert.match(app,/scale\(\$\{zoomScale\/baseScale\}\)/);
  assert.match(app,/world=view\|\|fittedView\(\)/);
  assert.match(app,/function mapNumberDisplayName\(/);
@@ -1091,7 +1092,7 @@ test('Historical map legend has no subtitle and export images omit provenance pa
  for(const file of ['index.html','map-v60.html']){
   const html=read(file);
   assert.match(html,/history-2022\.js\?v=[\w-]+/);
-  assert.match(html,file==='index.html'?/app\.js\?v=20261112-map-linked-key-v1/:/app\.js\?v=20261112-map-linked-key-v1/);
+  assert.match(html,file==='index.html'?/app\.js\?v=20261112-compact-index-v1/:/app\.js\?v=20261112-compact-index-v1/);
  }
 });
 

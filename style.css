@@ -685,3 +685,74 @@ body.history-mode #districtReferenceNote,body.history-mode #districtReferenceSou
  transform-origin:top left;transition:none;will-change:transform;
  contain:layout style;
 }
+
+
+/* The in-map administrative index matches nearby map labels in both
+   typography and visual density. It intentionally looks like a subtle
+   cartographic reference, not a separate floating settings window. */
+#mapWithKey>.canvas>.map-number-key{
+ font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif;
+ font-size:var(--index-font-size,9px);
+ font-weight:500;
+ color:#385647;
+ border:1px solid rgba(178,199,185,.68);
+ border-radius:8px;
+ background:rgba(255,255,252,.96);
+ box-shadow:0 2px 9px rgba(31,70,46,.075);
+}
+#mapWithKey>.canvas>.map-number-key::before{
+ height:2px;background:#86b99a;
+}
+#mapWithKey>.canvas>.map-number-key .map-number-key-heading,
+#mapWithKey>.canvas>.map-number-key.map-number-key--compact .map-number-key-heading{
+ gap:4px;padding:5px 6px 4px;border-bottom:1px solid #ecf1eb;
+}
+#mapWithKey>.canvas>.map-number-key h3{
+ font-size:calc(var(--index-font-size,9px) * 1.08);
+ line-height:1.25;font-weight:650;letter-spacing:.01em;color:#375d47;
+}
+#mapWithKey>.canvas>.map-number-key .map-number-key-heading span{
+ font-size:calc(var(--index-font-size,9px) * .88);
+ font-weight:500;color:#819489;background:transparent;border-radius:0;padding:0;
+}
+#mapWithKey>.canvas>.map-number-key .map-number-key-scroll,
+#mapWithKey>.canvas>.map-number-key.map-number-key--compact .map-number-key-scroll{
+ padding:3px 4px 5px;max-height:none;scrollbar-width:thin;
+}
+#mapWithKey>.canvas>.map-number-key tbody{gap:1px}
+#mapWithKey>.canvas>.map-number-key tr,
+#mapWithKey>.canvas>.map-number-key tr:nth-child(odd),
+#mapWithKey>.canvas>.map-number-key tr:nth-child(even){
+ grid-template-columns:calc(var(--index-font-size,9px) * 1.6) minmax(0,1fr);
+ gap:3px;padding:1px 2px;background:transparent;border:0;border-radius:3px;
+}
+#mapWithKey>.canvas>.map-number-key tr:nth-child(odd){background:rgba(235,244,237,.4)}
+#mapWithKey>.canvas>.map-number-key th,
+#mapWithKey>.canvas>.map-number-key td{
+ font-size:var(--index-font-size,9px);line-height:1.24;
+ font-weight:500;
+}
+#mapWithKey>.canvas>.map-number-key .number-key-number{
+ width:auto;min-width:0;min-height:0;padding:1px 0;
+ border-radius:3px;background:transparent;
+ color:#426b54;font-size:var(--index-font-size,9px);
+ font-weight:650;
+}
+#mapWithKey>.canvas>.map-number-key .number-key-action{
+ padding:1px 0;font-size:var(--index-font-size,9px);
+ line-height:1.24;font-weight:500;color:#385647;
+ overflow-wrap:anywhere;
+}
+#mapWithKey>.canvas>.map-number-key tr:hover,
+#mapWithKey>.canvas>.map-number-key tr.number-key-highlighted,
+#mapWithKey>.canvas>.map-number-key tr:focus-within{
+ background:#dceee1;border-color:transparent;box-shadow:inset 2px 0 #49946d;
+}
+@media(max-width:700px){
+ #mapWithKey>.canvas>.map-number-key .map-number-key-heading,
+ #mapWithKey>.canvas>.map-number-key.map-number-key--compact .map-number-key-heading{padding:4px 5px 3px}
+ #mapWithKey>.canvas>.map-number-key .map-number-key-scroll{padding:3px}
+ #mapWithKey>.canvas>.map-number-key tr{gap:2px;padding:1px}
+ #mapWithKey>.canvas>.map-number-key .number-key-number,
+ #mapWithKey>.canvas>.map-number-key .number-key-action{font-size:var(--index-font-size,9px)}
+}

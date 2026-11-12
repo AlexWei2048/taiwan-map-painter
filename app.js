@@ -424,7 +424,6 @@ function renderMapNumberTable(){
  const rows=state.labels?mapNumberSorted(mapNumberRows):[];
  panel.hidden=!rows.length;layout.classList.toggle('has-number-key',!!rows.length);body.replaceChildren();
  $('mapNumberKeyCount').textContent=rows.length+'项';
- positionMapNumberTable();
  for(const row of rows){
   const tr=document.createElement('tr'),code=document.createElement('th'),name=document.createElement('td');
   code.scope='row';code.className='number-key-number';code.textContent=row.number;
@@ -442,6 +441,12 @@ function renderMapNumberTable(){
   }
   tr.append(code,name);body.append(tr);
  }
+ // Use actual label typography as the index's baseline, rather than an
+ // unrelated fixed HTML size. Cache this at label render time so panning is cheap.
+ const sizes=[...document.querySelectorAll('#labels text[data-label]')].slice(0,80)
+  .map(node=>Number(node.getAttribute('font-size'))).filter(size=>size>0).sort((a,b)=>a-b);
+ panel.dataset.referenceFont=String(sizes.length?sizes[Math.floor(sizes.length/2)]:sceneSpec().font);
+ positionMapNumberTable();
 }
 
 function positionMapNumberTable(){
@@ -463,21 +468,29 @@ function positionMapNumberTable(){
  const baseY0=svg.top-frame.top+(svg.height-spec.height*baseScale)/2;
  const zoomX0=svg.left-frame.left+(svg.width-world.w*zoomScale)/2;
  const zoomY0=svg.top-frame.top+(svg.height-world.h*zoomScale)/2;
- const anchorX=spec.width-mapKeyRailWidth(spec)+12;
- const endX=spec.width-18;
+ const referenceFont=Number(panel.dataset.referenceFont)||spec.font;
+ const textSize=Math.max(7.5,Math.min(11,referenceFont*baseScale));
+ const longest=mapNumberRows.reduce((m,row)=>Math.max(m,Array.from(row.name).length),0);
+ // A compact, unobtrusive index: labels resemble map captions instead of
+ // full-sized application controls. Long names can wrap inside the scroll area.
+ const naturalWidth=Math.round(34+Math.min(8,Math.max(5,longest))*textSize);
+ const railStartX=spec.width-mapKeyRailWidth(spec)+14;
+ const endX=spec.width-27;
+ const railPx=(endX-railStartX)*baseScale;
+ const baseWidth=Math.min(Math.max(65,railPx),Math.max(85,Math.min(135,naturalWidth)));
+ // Right align in the protected map rail; this avoids the north arrow,
+ // geographic names and labels on the landward side of the rail.
+ const anchorX=Math.max(railStartX,endX-baseWidth/baseScale);
  const controls=$('zoomIn')?.parentElement?.getBoundingClientRect();
- const controlsBottom=controls?controls.bottom-frame.top+12:58;
- // The reference table starts below screen-fixed toolbar controls at fit.
- // Thereafter the anchor is stable in world space, even when panned.
- const anchorY=Math.max(125,(Math.max(controlsBottom,61)-baseY0)/baseScale);
+ const controlsBottom=controls?controls.bottom-frame.top+10:58;
+ const anchorY=Math.max(132,(Math.max(controlsBottom,57)-baseY0)/baseScale);
  const legendRect=$('legend')?.querySelector(':scope > rect');
  const legendY=legendRect?Number(legendRect.getAttribute('y')):NaN;
- const endY=Math.min(spec.height-furnitureFooterHeight()-15,
-  Number.isFinite(legendY)?legendY-14:Infinity);
- const availableWorldHeight=Math.max(56/baseScale,endY-anchorY);
- const maxBaseHeight=Math.min(availableWorldHeight*baseScale,
-  frame.width<=700?265:340);
- const baseWidth=Math.max(76,(endX-anchorX)*baseScale);
+ const endY=Math.min(spec.height-furnitureFooterHeight()-18,
+  Number.isFinite(legendY)?legendY-16:Infinity);
+ const availableWorldHeight=Math.max(48/baseScale,endY-anchorY);
+ const maxBaseHeight=Math.max(54,Math.min(availableWorldHeight*baseScale,
+  frame.width<=700?132:184,frame.height*.31));
  const pxLeft=zoomX0+(anchorX-world.x)*zoomScale;
  const pxTop=zoomY0+(anchorY-world.y)*zoomScale;
  panel.style.left='0px';
@@ -487,9 +500,10 @@ function positionMapNumberTable(){
  panel.style.width=baseWidth+'px';
  panel.style.maxHeight=maxBaseHeight+'px';
  panel.style.height='auto';
+ panel.style.setProperty('--index-font-size',textSize.toFixed(2)+'px');
  panel.style.transformOrigin='top left';
  panel.style.transform=`translate3d(${pxLeft}px,${pxTop}px,0) scale(${zoomScale/baseScale})`;
- panel.classList.toggle('map-number-key--compact',maxBaseHeight<135);
+ panel.classList.toggle('map-number-key--compact',maxBaseHeight<105);
 }
 if(typeof window!=='undefined')window.addEventListener('resize',()=>positionMapNumberTable());
 
