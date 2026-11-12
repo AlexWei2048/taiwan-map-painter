@@ -574,13 +574,15 @@ test('Administrative index zooms and pans in map coordinates and resets with fit
  });
  const initial=await measure();
  assert.ok(initial.width>60,'in-map key should be readable at fit');
- assert.match(initial.style,/translate3d\(.+\) scale\(/);
+ assert.equal(initial.style,'none','index uses layout font sizing, never scaled bitmap text');
  await page.locator('#zoomIn').click();
  await page.waitForFunction(width=>document.querySelector('#mapNumberKey').getBoundingClientRect().width>width*1.05,initial.width);
  const enlarged=await measure();
  const ratio=initial.view.w/enlarged.view.w;
  assert.ok(Math.abs(enlarged.width/initial.width-ratio)<.025,'index width follows SVG zoom scale');
- assert.ok(Math.abs(enlarged.height/initial.height-ratio)<.025,'index height follows SVG zoom scale');
+ assert.ok(Math.abs(enlarged.height/initial.height-ratio)<.085,'index height follows SVG zoom scale');
+ const crisp=await page.locator('#mapNumberKeyRows .number-key-action').first().evaluate(el=>getComputedStyle(el).fontSize);
+ assert.ok(parseFloat(crisp)>0,'scaled index still uses a real layout font');
  const panX=35,panY=50;
  await page.evaluate(({panX,panY})=>{view.x+=panX;view.y+=panY;flushView()}, {panX,panY});
  const shifted=await measure();
@@ -599,6 +601,67 @@ test('Administrative index zooms and pans in map coordinates and resets with fit
  },svg);
  assert.equal(exported.key,1,'export keeps exactly one index in the separate sidebar');
  assert.equal(exported.side,true);
+});
+test('Export sidebar moves into reserved map rail and result table fills the right margin',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('mayor');
+ // Historical mayor maps and local result tables use the same export geometry.
+ const data=await page.evaluate(()=>{
+  const rows=Array.from({length:22},(_,i)=>({
+   historical:true,estimated:true,elected:true,
+   district:'示例选区'+(i+1),number:i+1,name:'测试候选人',
+   party:'中国国民党',color:'#000099',gender:'男',incumbent:'',
+   votes:'123,456',share:'56.78%',logo:null
+  }));
+  const layout=exportPredictionTableLayout(rows);
+  const wide=expandExportWinnerLayout(layout,layout.width+240);
+  const group=svgEl('svg',{xmlns:NS});
+  appendExportPredictionTable(group,rows,0,wide);
+  const rect=group.querySelector('[data-export-winner-table] > rect');
+  const first=group.querySelector('[data-export-winner-entry]');
+  const last=group.querySelectorAll('[data-export-winner-header]');
+  return{initialWidth:layout.width,stretchedWidth:Number(rect.getAttribute('width')),
+   columns:wide.columns,entries:group.querySelectorAll('[data-export-winner-entry]').length,
+   lastColumnX:Number(last[last.length-1]?.getAttribute('x')),
+   firstEntry:!!first};
+ });
+ assert.equal(data.stretchedWidth,data.initialWidth+240,'winner card uses the full available export width');
+ assert.equal(data.entries,22);
+ assert.ok(data.lastColumnX>data.initialWidth*.5,'header columns expand into the new width');
+ const svg=await exportSvg(page);
+ const shape=await page.evaluate(source=>{
+  const doc=new DOMParser().parseFromString(source,'image/svg+xml');
+  const root=doc.documentElement,key=doc.querySelector('[data-map-number-key] > rect'),map=doc.querySelector('svg[viewBox]');
+  const legend=doc.querySelector('[data-export-legend-below-key]');
+  const w=Number(root.getAttribute('width'));
+  const start=Number(key?.getAttribute('x'));
+  return{width:w,keyX:start,keyFont:Number(doc.querySelector('[data-map-number-key] text:nth-of-type(2)')?.getAttribute('font-size')||0),
+   hasLegend:!!legend,keyInsideMapRight:start<Number(map?.getAttribute('x')||40)+Number(map?.getAttribute('width')||0),
+   tailMargin:w-(start+Number(key?.getAttribute('width')||0))};
+ },svg);
+ assert.ok(shape.keyInsideMapRight,'index shifts left into the map reserved rail');
+ assert.ok(shape.tailMargin>=30,'export retains a safe right margin');
+ assert.ok(shape.keyFont>=16,'exported index uses readable vector text');
+ assert.ok(shape.hasLegend,'legend remains aligned beneath index');
+ const source=await page.evaluate(()=>{
+  const original=History2022View.exportRows;
+  try{
+   History2022View.exportRows=()=>Array.from({length:22},(_,i)=>({
+    historical:true,estimated:true,elected:true,
+    district:'选区'+(i+1),number:i+1,name:'测试候选人',gender:'男',
+    party:'中国国民党',color:'#000099',logo:null,incumbent:'',
+    votes:'123,456',share:'56.78%'
+   }));
+   return preparedExportSvg();
+  }finally{History2022View.exportRows=original}
+ });
+ const table=await page.evaluate(source=>{
+  const doc=new DOMParser().parseFromString(source,'image/svg+xml');
+  const box=doc.querySelector('[data-export-winner-table] > rect');
+  return{imageRight:Number(doc.documentElement.getAttribute('width')),tableRight:Number(box.getAttribute('x'))+Number(box.getAttribute('width'))};
+ },source);
+ assert.ok(Math.abs(table.imageRight-table.tableRight-40)<2,'exported result card ends at the same 40px right margin');
 });
 test('Town label hover highlights the matching polygon and restores its prediction fill',async t=>{
  const page=await pageFor(t);

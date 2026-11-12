@@ -493,16 +493,21 @@ function positionMapNumberTable(){
   frame.width<=700?132:184,frame.height*.31));
  const pxLeft=zoomX0+(anchorX-world.x)*zoomScale;
  const pxTop=zoomY0+(anchorY-world.y)*zoomScale;
- panel.style.left='0px';
+ // Position and lay out text directly at its FINAL screen resolution.
+ // Scaling an already-rasterized HTML panel makes small index text look fuzzy.
+ // Reflowing the font and dimensions keeps pixels crisp while preserving the
+ // identical world-space anchor, zoom factor and pan motion of the SVG map.
+ const ratio=zoomScale/baseScale;
+ panel.style.left=Math.round(pxLeft)+'px';
  panel.style.right='auto';
- panel.style.top='0px';
+ panel.style.top=Math.round(pxTop)+'px';
  panel.style.bottom='auto';
- panel.style.width=baseWidth+'px';
- panel.style.maxHeight=maxBaseHeight+'px';
+ panel.style.width=(baseWidth*ratio).toFixed(2)+'px';
+ panel.style.maxHeight=(maxBaseHeight*ratio).toFixed(2)+'px';
  panel.style.height='auto';
- panel.style.setProperty('--index-font-size',textSize.toFixed(2)+'px');
- panel.style.transformOrigin='top left';
- panel.style.transform=`translate3d(${pxLeft}px,${pxTop}px,0) scale(${zoomScale/baseScale})`;
+ panel.style.setProperty('--index-zoom',ratio.toFixed(4));
+ panel.style.setProperty('--index-font-size',(textSize*ratio).toFixed(2)+'px');
+ panel.style.transform='none';
  panel.classList.toggle('map-number-key--compact',maxBaseHeight<105);
 }
 if(typeof window!=='undefined')window.addEventListener('resize',()=>positionMapNumberTable());
@@ -1800,8 +1805,8 @@ function appendExportPolishedWinnerTable(root,rows,y,layout){
   y2:currentY,stroke:'#d6e4da','stroke-width':1}));
  return layout.height;
 }
-function appendExportPredictionTable(root,rows,y){
- if(!rows.length)return 0;const layout=exportPredictionTableLayout(rows);
+function appendExportPredictionTable(root,rows,y,layout=exportPredictionTableLayout(rows)){
+ if(!rows.length)return 0;
  if(layout.polished)return appendExportPolishedWinnerTable(root,rows,y,layout);
  const card=svgEl('g',{'data-export-winner-table':'true'});root.append(card);card.append(svgEl('rect',{x:40,y,width:layout.width,height:layout.height,rx:14,fill:'#fff',stroke:'#dce5df','stroke-width':1.2}));const heading=svgEl('text',{x:60,y:y+31,'font-size':19,'font-weight':600,fill:'#294a3a'});heading.textContent=layout.specified?'指定候选人得票预测':rows.some(row=>row.estimated)?'预测得票候选人':rows.some(row=>row.local)?'乡镇市区预测胜出候选人':'预测当选候选人';if(rows[0]?.historical)heading.textContent='2022 实际选举结果';card.append(heading);card.append(svgEl('line',{x1:60,y1:y+46,x2:layout.width+20,y2:y+46,stroke:'#e5ece6'}));
  const bodyY=y+59,{widths}=layout;for(let column=0;column<layout.columns;column++){const block=layout.blocks[column];if(!block.length)continue;const x=60+column*(layout.blockWidth+layout.gap),xs=[x],blockHeight=layout.rowHeight+block.reduce((n,r)=>n+r.height,0);for(const w of widths)xs.push(xs.at(-1)+w);card.append(svgEl('rect',{x,y:bodyY,width:layout.blockWidth,height:blockHeight,rx:7,fill:'#fff',stroke:'#dfe8e1','stroke-width':1}));card.append(svgEl('path',{d:`M${x},${bodyY+7}Q${x},${bodyY} ${x+7},${bodyY}H${x+layout.blockWidth-7}Q${x+layout.blockWidth},${bodyY} ${x+layout.blockWidth},${bodyY+7}V${bodyY+layout.rowHeight}H${x}Z`,fill:'#edf5f0'}));
@@ -1815,9 +1820,29 @@ function appendExportPredictionTable(root,rows,y){
  return layout.height
 }
 
+// Extend the candidate table to the export's actual right margin, including
+// space previously left unused below the detached index/legend sidebar.
+// Keep every information column; distribute extra width across text fields.
+function expandExportWinnerLayout(layout,targetWidth){
+ if(!layout||targetWidth<=layout.width)return layout;
+ const added=targetWidth-layout.width,perSlot=added/layout.columns;
+ const widths=[...layout.widths];
+ if(layout.polished){
+  widths[0]+=perSlot*.22;
+  widths[1]+=perSlot*.26;
+  widths[2]+=perSlot*.52;
+  return{...layout,width:targetWidth,innerWidth:layout.innerWidth+added,
+   slotWidth:layout.slotWidth+perSlot,widths};
+ }
+ // Legacy winner-table layout is also supported.
+ const flex=[0,2,4].filter(index=>index<widths.length);
+ for(const index of flex)widths[index]+=perSlot/flex.length;
+ return{...layout,width:targetWidth,blockWidth:layout.blockWidth+perSlot,widths};
+}
+
 function numberTableExportMetrics(entries,columns=1){
  const rows=mapNumberSorted(entries),cols=Math.max(1,Math.min(4,Math.round(columns))),perColumn=Math.ceil(rows.length/cols);
- const cellWidth=238,rowHeight=29,headerHeight=65;
+ const cellWidth=264,rowHeight=34,headerHeight=70;
  return{width:cols*cellWidth+22,height:headerHeight+perColumn*rowHeight+12,columns:cols,perColumn,cellWidth,rowHeight,headerHeight};
 }
 function appendNumberTableExport(root,entries,x,y,columns=1){
@@ -1826,17 +1851,17 @@ function appendNumberTableExport(root,entries,x,y,columns=1){
  const panel=svgEl('g',{'data-map-number-key':'true','data-export-layout':'separate-sidebar'});
  panel.append(svgEl('rect',{x,y,width:m.width,height:m.height,rx:14,fill:'#fff',stroke:'#dce5df','stroke-width':1.15}));
  panel.append(svgEl('rect',{x:x+1,y:y+1,width:m.width-2,height:4,rx:2,fill:'#2a805d'}));
- const heading=svgEl('text',{x:x+16,y:y+31,'font-size':19,'font-weight':700,fill:'#254b3b'});
+ const heading=svgEl('text',{x:x+16,y:y+32,'font-size':22,'font-weight':700,fill:'#254b3b'});
  heading.textContent='行政区索引';panel.append(heading);
- panel.append(svgEl('line',{x1:x+14,y1:y+46,x2:x+m.width-14,y2:y+46,stroke:'#e2ece4','stroke-width':1}));
+ panel.append(svgEl('line',{x1:x+14,y1:y+50,x2:x+m.width-14,y2:y+50,stroke:'#e2ece4','stroke-width':1}));
  for(let i=0;i<rows.length;i++){
   const row=rows[i],col=Math.floor(i/m.perColumn),index=i%m.perColumn;
   const bx=x+11+col*m.cellWidth,by=y+m.headerHeight+index*m.rowHeight;
   panel.append(svgEl('rect',{x:bx,y:by-3,width:m.cellWidth-8,height:m.rowHeight-2,rx:5,fill:index%2?'#f6f9f6':'#eff5ef'}));
-  panel.append(svgEl('rect',{x:bx+6,y:by+1,width:33,height:m.rowHeight-10,rx:5,fill:'#dfeee2'}));
-  const num=svgEl('text',{x:bx+22.5,y:by+15,'text-anchor':'middle','font-size':12,'font-weight':700,fill:'#2b664e'});
+  panel.append(svgEl('rect',{x:bx+6,y:by+1,width:36,height:m.rowHeight-9,rx:5,fill:'#dfeee2'}));
+  const num=svgEl('text',{x:bx+24,y:by+19,'text-anchor':'middle','font-size':16,'font-weight':700,fill:'#2b664e'});
   num.textContent=row.number;panel.append(num);
-  const value=svgEl('text',{x:bx+47,y:by+15,'font-size':12,fill:'#365344'});
+  const value=svgEl('text',{x:bx+51,y:by+19,'font-size':16,'font-weight':550,fill:'#365344'});
   value.textContent=mapNumberDisplayName(row,rows);panel.append(value);
  }
  root.append(panel);return m.height;
@@ -1981,18 +2006,25 @@ function exportSvg(){
   if(keyRows.length){
    const keyColumns=Math.min(4,Math.max(1,Math.ceil(keyRows.length/34)));
    const keyMetrics=numberTableExportMetrics(keyRows,keyColumns);
-   const box=legendBox(spec),factor=contentWidth/spec.width;
-   // Keep export reference and legend in a dedicated sidebar, outside the
-   // complete geographical viewBox, so neither obscures map labels or furniture.
-   const lx=coreWidth+16,ly=mapY;
-   const keyHeight=appendNumberTableExport(root,keyRows,lx,ly,keyColumns);
+   const factor=contentWidth/spec.width;
    const legend=map.querySelector('[data-export-map-legend]');
-   sidebarWidth=Math.max(keyMetrics.width,state.legend.show?box.width*factor:0)+38;
+   const historyBox=legend?.dataset.historyBox?.split(',').map(Number);
+   const box=historyBox?.length===4&&historyBox.every(Number.isFinite)?
+    {x:historyBox[0],y:historyBox[1],width:historyBox[2],height:historyBox[3]}:legendBox(spec);
+   const legendScale=factor*1.06;
+   const sidebarContentWidth=Math.max(keyMetrics.width,state.legend.show?box.width*legendScale:0);
+   // The geographic layout already reserves a right rail. Place the export
+   // index and legend partly IN that empty rail instead of outside the map.
+   // Reserve the remaining width for the sidebar only when genuinely needed.
+   const railStart=40+(spec.width-mapKeyRailWidth(spec))*factor;
+   const lx=Math.max(railStart+12,coreWidth-Math.min(196,mapKeyRailWidth(spec)*factor*.62)),ly=mapY;
+   const keyHeight=appendNumberTableExport(root,keyRows,lx,ly,keyColumns);
+   sidebarWidth=Math.max(0,Math.ceil(lx+sidebarContentWidth+40-coreWidth));
    sidebarHeight=ly+keyHeight+20;
    if(legend&&state.legend.show){
     legend.remove();
-    const wrapper=svgEl('g',{transform:`translate(${lx-box.x*factor},${sidebarHeight-box.y*factor}) scale(${factor})`,'data-export-legend-below-key':'true'});
-    wrapper.append(legend);root.append(wrapper);sidebarHeight+=box.height*factor+24;
+    const wrapper=svgEl('g',{transform:`translate(${lx-box.x*legendScale},${sidebarHeight-box.y*legendScale}) scale(${legendScale})`,'data-export-legend-below-key':'true'});
+    wrapper.append(legend);root.append(wrapper);sidebarHeight+=box.height*legendScale+24;
    }
   }
   const originalItems=currentItems();
@@ -2002,9 +2034,10 @@ function exportSvg(){
   const coverageY=detailY+(details.height?details.height+22:0);
   const coverageHeight=appendExportLabelCoverage(root,coverageRows,40,coverageY,contentWidth);
   const tableY=Math.max(mapY+contentHeight+40,coverageY+coverageHeight+30);
-  if(winnerRows.length)appendExportPredictionTable(root,winnerRows,tableY);
-  let height=Math.max(sidebarHeight,mapY+contentHeight+72,coverageY+coverageHeight+32,winnerRows.length?tableY+tableLayout.height+32:0);
   const actualWidth=coreWidth+sidebarWidth;
+  const winnerLayout=tableLayout?expandExportWinnerLayout(tableLayout,actualWidth-80):null;
+  if(winnerRows.length)appendExportPredictionTable(root,winnerRows,tableY,winnerLayout);
+  let height=Math.max(sidebarHeight,mapY+contentHeight+72,coverageY+coverageHeight+32,winnerRows.length?tableY+tableLayout.height+32:0);
   root.setAttribute('width',actualWidth);root.setAttribute('height',height);root.setAttribute('viewBox','0 0 '+actualWidth+' '+height);
   root.firstChild?.setAttribute('width',actualWidth);root.firstChild?.setAttribute('height',height);
   return new XMLSerializer().serializeToString(root);

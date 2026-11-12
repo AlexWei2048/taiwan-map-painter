@@ -756,3 +756,38 @@ body.history-mode #districtReferenceNote,body.history-mode #districtReferenceSou
  #mapWithKey>.canvas>.map-number-key .number-key-number,
  #mapWithKey>.canvas>.map-number-key .number-key-action{font-size:var(--index-font-size,9px)}
 }
+
+
+/* Keep administrative-reference glyphs sharp during map zoom. Rescale the
+   HTML box by layout, NOT a compositor transform of already-rendered text. */
+#mapWithKey>.canvas>.map-number-key{
+ transform:none;will-change:auto;
+ border-radius:calc(8px * var(--index-zoom,1));
+}
+#mapWithKey>.canvas>.map-number-key .map-number-key-heading,
+#mapWithKey>.canvas>.map-number-key.map-number-key--compact .map-number-key-heading{
+ gap:calc(4px * var(--index-zoom,1));
+ padding:calc(5px * var(--index-zoom,1)) calc(6px * var(--index-zoom,1)) calc(4px * var(--index-zoom,1));
+}
+#mapWithKey>.canvas>.map-number-key .map-number-key-scroll,
+#mapWithKey>.canvas>.map-number-key.map-number-key--compact .map-number-key-scroll{
+ padding:calc(3px * var(--index-zoom,1)) calc(4px * var(--index-zoom,1)) calc(5px * var(--index-zoom,1));
+}
+#mapWithKey>.canvas>.map-number-key tbody{gap:calc(1px * var(--index-zoom,1))}
+#mapWithKey>.canvas>.map-number-key tr,
+#mapWithKey>.canvas>.map-number-key tr:nth-child(odd),
+#mapWithKey>.canvas>.map-number-key tr:nth-child(even){
+ gap:calc(3px * var(--index-zoom,1));
+ padding:calc(1px * var(--index-zoom,1)) calc(2px * var(--index-zoom,1));
+}
+#mapWithKey>.canvas>.map-number-key .number-key-action,
+#mapWithKey>.canvas>.map-number-key .number-key-number{
+ padding-top:calc(1px * var(--index-zoom,1));
+ padding-bottom:calc(1px * var(--index-zoom,1));
+}
+@media(max-width:700px){
+ #mapWithKey>.canvas>.map-number-key .map-number-key-heading{
+  padding:calc(4px * var(--index-zoom,1)) calc(5px * var(--index-zoom,1)) calc(3px * var(--index-zoom,1));
+ }
+ #mapWithKey>.canvas>.map-number-key tr{gap:calc(2px * var(--index-zoom,1))}
+}

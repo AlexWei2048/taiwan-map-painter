@@ -792,7 +792,8 @@ test('Administrative lookup is outside canvas and exports every entry',()=>{
  assert.match(css,/#mapWithKey>\.canvas>\.map-number-key\{/);
  assert.match(app,/const anchorX=Math\.max\(railStartX,endX-baseWidth\/baseScale\)/);
  assert.match(app,/panel\.style\.setProperty\('--index-font-size',textSize\.toFixed\(2\)\+'px'\)/);
- assert.match(app,/scale\(\$\{zoomScale\/baseScale\}\)/);
+ assert.match(app,/panel\.style\.transform='none'/);
+ assert.match(app,/const ratio=zoomScale\/baseScale/);
  assert.match(app,/world=view\|\|fittedView\(\)/);
  assert.match(app,/function mapNumberDisplayName\(/);
  const table=app.slice(app.indexOf('function renderMapNumberTable(){'),app.indexOf('\nfunction mapLabelCandidatePoints('));
@@ -1092,7 +1093,7 @@ test('Historical map legend has no subtitle and export images omit provenance pa
  for(const file of ['index.html','map-v60.html']){
   const html=read(file);
   assert.match(html,/history-2022\.js\?v=[\w-]+/);
-  assert.match(html,file==='index.html'?/app\.js\?v=20261112-compact-index-v1/:/app\.js\?v=20261112-compact-index-v1/);
+  assert.match(html,file==='index.html'?/app\.js\?v=20261112-crisp-export-v1/:/app\.js\?v=20261112-crisp-export-v1/);
  }
 });
 
