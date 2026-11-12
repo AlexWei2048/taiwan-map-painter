@@ -791,7 +791,7 @@ test('Administrative lookup is outside canvas and exports every entry',()=>{
  const css=read('style.css');
  assert.match(css,/#mapWithKey>\.canvas>\.map-number-key\{/);
  assert.match(app,/const anchorX=Math\.max\(railStartX,endX-baseWidth\/baseScale\)/);
- assert.match(app,/panel\.style\.setProperty\('--index-font-size',textSize\.toFixed\(2\)\+'px'\)/);
+ assert.match(app,/panel\.style\.setProperty\('--index-font-size',\(textSize\*ratio\)\.toFixed\(2\)\+'px'\)/);
  assert.match(app,/panel\.style\.transform='none'/);
  assert.match(app,/const ratio=zoomScale\/baseScale/);
  assert.match(app,/world=view\|\|fittedView\(\)/);
