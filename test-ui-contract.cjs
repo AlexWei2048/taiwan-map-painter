@@ -802,7 +802,7 @@ test('Administrative lookup is outside canvas and exports every entry',()=>{
  assert.match(app,/appendNumberTableExport\(root,keyRows,lx,ly,keyColumns\)/);
  assert.match(app,/data-export-legend-below-key/);
  assert.match(app,/actualWidth=coreWidth/);
- assert.match(app,/appendExportPredictionTable\(root,winnerRows,tableY\)/);
+ assert.match(app,/appendExportPredictionTable\(root,winnerRows,tableY,winnerLayout\)/);
  assert.match(app,/if\(state\.labels&&view\)/);
  assert.match(read('workspace-ui.js'),/The main renderer now synchronizes region numbers and their adjacent table/);
 });
