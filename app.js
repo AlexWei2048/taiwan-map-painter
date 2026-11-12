@@ -2004,28 +2004,43 @@ function exportSvg(){
   root.append(map);
   let appendixHeight=0,sidebarHeight=0,sidebarWidth=0;
   if(keyRows.length){
-   const keyColumns=Math.min(4,Math.max(1,Math.ceil(keyRows.length/34)));
-   const keyMetrics=numberTableExportMetrics(keyRows,keyColumns);
    const factor=contentWidth/spec.width;
    const legend=map.querySelector('[data-export-map-legend]');
    const historyBox=legend?.dataset.historyBox?.split(',').map(Number);
    const box=historyBox?.length===4&&historyBox.every(Number.isFinite)?
     {x:historyBox[0],y:historyBox[1],width:historyBox[2],height:historyBox[3]}:legendBox(spec);
    const legendScale=factor*1.06;
+   // Align the bottom of the exported legend with the visible scale-bar
+   // segments, not the padded white background around the scale bar.
+   const scaleBars=[...map.querySelectorAll('[data-decoration="scale-bar"] > rect')].slice(1);
+   const scaleBottom=scaleBars.length?
+    mapY+Math.max(...scaleBars.map(rect=>Number(rect.getAttribute('y'))+Number(rect.getAttribute('height'))))*factor:
+    mapY+(spec.height-furnitureFooterHeight()-2)*factor;
+   const legendHeight=legend&&state.legend.show?box.height*legendScale:0;
+   const sideGap=18,topLimit=mapY+12;
+   const targetLegendTop=scaleBottom-legendHeight;
+   // Allow a denser, multi-column index if necessary to clear the header.
+   let keyColumns=Math.min(4,Math.max(1,Math.ceil(keyRows.length/34)));
+   let keyMetrics=numberTableExportMetrics(keyRows,keyColumns);
+   while(keyColumns<4&&targetLegendTop-keyMetrics.height-sideGap<topLimit){
+    keyColumns++;
+    keyMetrics=numberTableExportMetrics(keyRows,keyColumns);
+   }
    const sidebarContentWidth=Math.max(keyMetrics.width,state.legend.show?box.width*legendScale:0);
-   // The geographic layout already reserves a right rail. Place the export
-   // index and legend partly IN that empty rail instead of outside the map.
-   // Reserve the remaining width for the sidebar only when genuinely needed.
    const railStart=40+(spec.width-mapKeyRailWidth(spec))*factor;
-   const lx=Math.max(railStart+12,coreWidth-Math.min(196,mapKeyRailWidth(spec)*factor*.62)),ly=mapY;
+   const lx=Math.max(railStart+12,coreWidth-Math.min(196,mapKeyRailWidth(spec)*factor*.62));
+   // Exceptional very long lists keep all rows without overlapping title.
+   const legendTop=Math.max(targetLegendTop,topLimit+keyMetrics.height+sideGap);
+   const ly=legendTop-keyMetrics.height-sideGap;
    const keyHeight=appendNumberTableExport(root,keyRows,lx,ly,keyColumns);
    sidebarWidth=Math.max(0,Math.ceil(lx+sidebarContentWidth+40-coreWidth));
-   sidebarHeight=ly+keyHeight+20;
+   sidebarHeight=ly+keyHeight+sideGap;
    if(legend&&state.legend.show){
     legend.remove();
-    const wrapper=svgEl('g',{transform:`translate(${lx-box.x*legendScale},${sidebarHeight-box.y*legendScale}) scale(${legendScale})`,'data-export-legend-below-key':'true'});
-    wrapper.append(legend);root.append(wrapper);sidebarHeight+=box.height*legendScale+24;
-   }
+    const wrapper=svgEl('g',{transform:`translate(${lx-box.x*legendScale},${legendTop-box.y*legendScale}) scale(${legendScale})`,'data-export-legend-below-key':'true'});
+    wrapper.append(legend);root.append(wrapper);
+    sidebarHeight=legendTop+legendHeight+24;
+   }else sidebarHeight=ly+keyHeight+24;
   }
   const originalItems=currentItems();
   const detailY=mapY+contentHeight+(appendixHeight?appendixHeight+24:14);

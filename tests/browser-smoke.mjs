@@ -663,6 +663,40 @@ test('Export sidebar moves into reserved map rail and result table fills the rig
  },source);
  assert.ok(Math.abs(table.imageRight-table.tableRight-40)<2,'exported result card ends at the same 40px right margin');
 });
+test('Export index and legend descend to the scale-bar bottom',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('mayor');
+ for(const scenario of ['all','county']){
+  if(scenario==='county'){
+   await page.locator('#historyCounty').selectOption({value:'高雄市'});
+   await page.locator('#historyScale').selectOption('town');
+  }
+  const source=await exportSvg(page);
+  const geo=await page.evaluate(source=>{
+   const doc=new DOMParser().parseFromString(source,'image/svg+xml');
+   const map=doc.querySelector('svg[x][y][viewBox]');
+   const f=Number(map.getAttribute('width'))/Number(map.getAttribute('viewBox').split(/\\s+/)[2]);
+   const y0=Number(map.getAttribute('y'));
+   const bars=[...doc.querySelectorAll('[data-decoration="scale-bar"] > rect')].slice(1);
+   const scaleBottom=y0+Math.max(...bars.map(el=>Number(el.getAttribute('y'))+Number(el.getAttribute('height'))))*f;
+   const wrapper=doc.querySelector('[data-export-legend-below-key]');
+   const match=wrapper?.getAttribute('transform').match(/^translate\\(([-+.\\deE]+),([-+.\\deE]+)\\) scale\\(([-+.\\deE]+)\\)$/);
+   const rect=wrapper?.querySelector(':scope > g > rect');
+   const legendTop=Number(match?.[2])+Number(rect?.getAttribute('y'))*Number(match?.[3]);
+   const legendBottom=legendTop+Number(rect?.getAttribute('height'))*Number(match?.[3]);
+   const key=doc.querySelector('[data-map-number-key] > rect');
+   const keyTop=Number(key?.getAttribute('y'));
+   const keyBottom=keyTop+Number(key?.getAttribute('height'));
+   return{scaleBottom,legendTop,legendBottom,keyTop,keyBottom,mapY:y0};
+  },source);
+  assert.ok(Number.isFinite(geo.legendBottom)&&Number.isFinite(geo.scaleBottom),scenario+' has export geometry');
+  assert.ok(Math.abs(geo.legendBottom-geo.scaleBottom)<1.5,
+   scenario+' legend foot aligns to scale bar '+JSON.stringify(geo));
+  assert.ok(geo.keyTop>=geo.mapY+10,scenario+' index clears the heading');
+  assert.ok(geo.keyBottom+14<=geo.legendTop,scenario+' index remains above legend');
+ }
+});
 test('Town label hover highlights the matching polygon and restores its prediction fill',async t=>{
  const page=await pageFor(t);
  await page.locator('#county').selectOption({label:'高雄市'});
