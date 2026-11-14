@@ -752,7 +752,7 @@ test('Export images retain candidate data but not redundant subheadings, counts 
  assert.doesNotMatch(numberKey,/count\.textContent|项';panel\.append/);
  assert.match(coverage,/密集区域完整标注/);
  assert.doesNotMatch(coverage,/count\.textContent|note\.textContent|主地图空间不足/);
- assert.match(app,/const headingHeight=18,tableHeaderHeight=44/);
+ assert.match(app,/const headingHeight=10,tableHeaderHeight=37/);
  assert.match(app,/let rowY=y\+49/);
 });
 

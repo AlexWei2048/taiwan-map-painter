@@ -83,6 +83,6 @@ test('historical exports do not contain a duplicated fixed-year table title',()=
  const fs=require('node:fs'),path=require('node:path');
  const app=fs.readFileSync(path.join(__dirname,'..','app.js'),'utf8');
  assert.doesNotMatch(app,/2022 实际选举结果/);
- assert.match(app,/const headingHeight=18,tableHeaderHeight=44/);
+ assert.match(app,/const headingHeight=10,tableHeaderHeight=37/);
  assert.match(app,/data-export-title/);
 });

@@ -1677,7 +1677,7 @@ function polishedPredictionTableLayout(rows,targetWidth=null){
  // Keep both names and their connector on ONE SVG text line. Allow for a
  // full 39px incumbent badge and font-metric variation without truncation.
  const ticketWidth=tickets.length?Math.max(214,...tickets.map(r=>
-  Math.ceil(exportTextWidth(String(r.name||'').replace(/\\s+/g,' ').trim())*font*1.09+(r.incumbent?58:0)+26))):0;
+  Math.ceil(exportTextWidth(String(r.name||'').replace(/\s+/g,' ').trim())*font*1.09+(r.incumbent?58:0)+26))):0;
  const districtWidth=112,nameWidth=tickets.length?ticketWidth:172;
  const baseSlotWidth=Math.max(512+extraWidth,districtWidth+nameWidth+186+extraWidth);
  const baseWidth=columns*baseSlotWidth+(columns-1)*gap+36;
@@ -1688,7 +1688,7 @@ function polishedPredictionTableLayout(rows,targetWidth=null){
  const headingHeight=10,tableHeaderHeight=37,paddingBottom=11;
  const entries=rows.map(row=>{
   const district=wrapExportText(row.district,Math.max(3,(widths[0]-20)/14.2));
-  const name=row.presidentialTicket?[String(row.name||'').replace(/\\s+/g,' ').trim()]:
+  const name=row.presidentialTicket?[String(row.name||'').replace(/\s+/g,' ').trim()]:
    wrapExportText(row.name,Math.max(3,(widths[1]-(row.incumbent?62:22))/font));
   const party=wrapExportText(row.party,Math.max(3,(widths[2]-59)/14));
   const meta=wrapExportText([row.number?'号次 '+row.number:'',row.gender||''].filter(Boolean).join(' · '),(widths[1]-22)/11.5).filter(Boolean);
