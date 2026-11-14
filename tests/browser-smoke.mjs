@@ -1940,18 +1940,25 @@ test('2502 wording policy covers live UI, SVG image export and 2026/2022 CSV dow
 });
 
 
-test('Historical council overview names the selected constituency and uses its own verified turnout',async t=>{
+test('Historical council overview switches all regions, counties and individual districts',async t=>{
  const page=await pageFor(t);
  await page.locator('#categoryHistory').click();
  await page.locator('#historyOffice').selectOption('council');
  await page.locator('#historyCounty').selectOption({label:'高雄市'});
  await page.locator('#historyViewOverview').click();
- const picker=page.locator('#historyOverviewContest');
- assert.equal(await picker.isVisible(),true);
- const first=picker.locator('option').nth(1);
+ const scope=page.locator('#historyOverviewScope'),county=page.locator('#historyOverviewCounty'),area=page.locator('#historyOverviewContest');
+ assert.deepEqual(await scope.locator('option').allTextContents(),['全部地区（含金门、马祖）','县市','议员选区']);
+ assert.equal(await scope.inputValue(),'county');
+ assert.equal(await county.inputValue(),'高雄市');
+ assert.equal(await area.isVisible(),false);
+ let data=await page.evaluate(()=>({count:HistoryWorkspace.result().contests.length,title:document.querySelector('#historyOverviewTitle').textContent}));
+ assert.ok(data.count>1);assert.match(data.title,/高雄市/);
+ await scope.selectOption('district');
+ assert.equal(await area.isVisible(),true);
+ const first=area.locator('option').first();
  const contestId=await first.getAttribute('value'),label=await first.innerText();
  assert.ok(contestId&&label.includes('高雄市'));
- await picker.selectOption(contestId);
+ await area.selectOption(contestId);
  const scoped=await page.evaluate(()=>({
   title:document.querySelector('#historyOverviewTitle').textContent,
   detail:document.querySelector('#historyOverviewDescription').textContent,
@@ -1963,13 +1970,47 @@ test('Historical council overview names the selected constituency and uses its o
  assert.equal(scoped.selected,contestId);
  assert.equal(scoped.contests.length,1);
  assert.ok(scoped.title.includes(scoped.contests[0].district_name),scoped.title);
- assert.match(scoped.detail,/单一议员选区/);
+ assert.match(scoped.detail,/当前统计范围：高雄市/);
  assert.equal(scoped.overview.registeredVoters,scoped.contests[0].registered_voters);
  assert.equal(scoped.overview.ballotsCast,scoped.contests[0].ballots_cast);
  assert.ok(scoped.metrics.slice(0,6).every(value=>!value.includes('暂无资料')));
- await picker.selectOption('');
- assert.ok((await page.locator('#historyOverviewTitle').textContent()).includes('高雄市'));
- assert.ok((await page.evaluate(()=>HistoryWorkspace.result().contests.length))>1);
+ await scope.selectOption('all');
+ const all=await page.evaluate(()=>({
+  title:document.querySelector('#historyOverviewTitle').textContent,
+  counties:[...new Set(HistoryWorkspace.result().contests.map(c=>c.county_name))],
+  records:HistoryWorkspace.result().contests.length
+ }));
+ assert.match(all.title,/全部地区（含金门、马祖）/);
+ assert.ok(all.counties.includes('金门县')&&all.counties.includes('连江县'));
+ assert.ok(all.records>100);
+ assert.equal(await county.isVisible(),false);
+ assert.equal(await area.isVisible(),false);
+});
+test('Council headline figures sum separate electorates but charts preserve three groups',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('council');
+ await page.locator('#historyViewOverview').click();
+ const numbers=await page.evaluate(()=>{
+  const overview=HistoryWorkspace.overview();
+  const sum=key=>overview.turnoutGroups.reduce((a,b)=>a+b[key],0);
+  return{groups:overview.turnoutGroups.map(g=>g.electorate),
+   registered:overview.registeredVoters,expectedRegistered:sum('registeredVoters'),
+   ballots:overview.ballotsCast,expectedBallots:sum('ballotsCast'),
+   valid:overview.validVotes,expectedValid:sum('validVotes'),
+   invalid:overview.invalidVotes,expectedInvalid:sum('invalidVotes'),
+   rate:overview.turnout,expectedRate:sum('ballotsCast')/sum('registeredVoters')*100,
+   cards:[...document.querySelectorAll('#historyOverviewCards strong')].map(x=>x.textContent),
+   charts:[...document.querySelectorAll('#historyOverviewCharts h4')].map(x=>x.textContent),
+   note:document.querySelector('#historyOverviewNote')?.textContent};
+ });
+ assert.deepEqual(numbers.groups,['regional','plains','mountain']);
+ for(const pair of [['registered','expectedRegistered'],['ballots','expectedBallots'],
+  ['valid','expectedValid'],['invalid','expectedInvalid']])assert.equal(numbers[pair[0]],numbers[pair[1]]);
+ assert.equal(numbers.rate.toFixed(6),numbers.expectedRate.toFixed(6));
+ assert.ok(numbers.cards.slice(0,6).every(value=>value!=='按类别分别统计'&&value!=='暂无资料'));
+ assert.deepEqual(numbers.charts,['区域议员','平地少数民族议员','山地少数民族议员','候选与当选对比']);
+ assert.match(numbers.note,/选民可能被重复计入/);
 });
 test('2024 presidential county overview fills voter turnout from reconciled county records',async t=>{
  const page=await pageFor(t);
@@ -1990,4 +2031,47 @@ test('2024 presidential county overview fills voter turnout from reconciled coun
  assert.equal(scoped.data.ballotsCast,1552592);
  assert.equal(scoped.data.invalidVotes,10581);
  assert.ok(scoped.metrics.slice(0,6).every(value=>!value.includes('暂无资料')));
+});
+
+
+test('Presidential, mayor and township overviews expose all/county/town levels without guessed local turnout',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ for(const office of ['president','mayor','township']){
+  await page.locator('#historyOffice').selectOption(office);
+  await page.waitForFunction(office=>History2022View.office()===office,office);
+  await page.locator('#historyViewOverview').click().catch(()=>{});
+  const scope=page.locator('#historyOverviewScope'),county=page.locator('#historyOverviewCounty'),area=page.locator('#historyOverviewContest');
+  assert.deepEqual(await scope.locator('option').allTextContents(),['全部地区（含金门、马祖）','县市','乡镇市区']);
+  await scope.selectOption('all');
+  const all=await page.evaluate(()=>({
+   counties:[...new Set(HistoryWorkspace.result().contests.map(c=>c.county_name))],
+   count:HistoryWorkspace.result().contests.length}));
+  assert.ok(all.count>1);
+  if(office!=='township')assert.ok(all.counties.includes('金门县')&&all.counties.includes('连江县'));
+  await scope.selectOption('county');
+  await county.selectOption({label:office==='township'?'金门县':'台北市'});
+  assert.equal(await page.evaluate(()=>new Set(HistoryWorkspace.result().contests.map(c=>c.county_name)).size),1);
+  await scope.selectOption('town');
+  assert.equal(await area.isVisible(),true);
+  assert.ok(await area.locator('option').count()>0);
+  const local=await page.evaluate(()=>({
+   selection:HistoryWorkspace.selectedOverviewScope(),
+   data:HistoryWorkspace.overview(),
+   contests:HistoryWorkspace.result().contests.length,
+   title:document.querySelector('#historyOverviewTitle').textContent}));
+  assert.equal(local.selection.scope,'town');
+  assert.match(local.title,office==='township'?/金门县/:/台北市/);
+  assert.ok(local.contests>=1);
+  if(office==='president'||office==='mayor'){
+   assert.equal(local.data.registeredVoters,null,'local voter roll is not inferred from votes');
+   assert.equal(local.data.ballotsCast,null,'local turnout is not inferred from votes');
+   assert.ok(local.data.validVotes>0,'actual local candidate votes remain available');
+  }else{
+   assert.ok(Number.isInteger(local.data.registeredVoters));
+   assert.ok(Number.isInteger(local.data.ballotsCast));
+  }
+  await scope.selectOption('all');
+  // Switching office preserves its loaded snapshot but resets geographic controls.
+ }
 });
