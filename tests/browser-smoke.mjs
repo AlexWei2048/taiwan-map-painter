@@ -1388,6 +1388,40 @@ test('All exported image titles and filenames preserve the office even with a cu
  });
  for(const row of result){const type={mayor:'县市长',council:'议员',township:'乡镇市区长',legislative:'立法机构区域民代',towns:'乡镇市区'}[row.office||row.level];assert.ok(row.title.includes(type));assert.ok(row.file.includes(type));assert.ok(row.title.includes('我的判断'))}
 });
+test('Image export candidate range switches between elected and all historical candidates',async t=>{
+ const page=await pageFor(t);await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('mayor');
+ const winners=await page.evaluate(()=>History2022View.exportRows());
+ assert.ok(winners.length>0&&winners.every(r=>r.elected));
+ await page.locator('#exportCandidateScope').selectOption('all');
+ const all=await page.evaluate(()=>History2022View.exportRows());
+ assert.ok(all.length>winners.length&&all.some(r=>!r.elected));
+ const fullSvg=await exportSvg(page);
+ const count=await page.evaluate(s=>new DOMParser().parseFromString(s,'image/svg+xml').querySelectorAll('[data-export-winner-entry]').length,fullSvg);
+ assert.equal(count,all.length);
+ await page.locator('#exportCandidateScope').selectOption('winners');
+ const shortSvg=await exportSvg(page);
+ const selectedCount=await page.evaluate(s=>new DOMParser().parseFromString(s,'image/svg+xml').querySelectorAll('[data-export-winner-entry]').length,shortSvg);
+ assert.equal(selectedCount,winners.length);
+ await page.locator('#exportWinnerTable').uncheck();
+ assert.equal(await page.locator('#exportCandidateScope').isDisabled(),true);
+ const none=await exportSvg(page);
+ assert.doesNotMatch(none,/data-export-winner-entry/);
+});
+test('Candidate export range is persisted and full forecast roster includes candidates not predicted yet',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#county').selectOption({value:'台北市'});
+ await page.locator('#exportCandidateScope').selectOption('all');
+ const data=await page.evaluate(()=>{
+  const result=exportPredictionWinnerRows();
+  return {count:result.length,withElection:result.filter(r=>r.allCandidates).length};
+ });
+ assert.ok(data.count>1&&data.count===data.withElection);
+ const full=await exportSvg(page);
+ assert.match(full,/data-export-winner-entry/);
+ await page.reload();
+ assert.equal(await page.locator('#exportCandidateScope').inputValue(),'all');
+});
 test('Council and township winner tables use the mayor design without losing long lists or numeric data',async t=>{
  const page=await pageFor(t);
  const result=await page.evaluate(()=>{

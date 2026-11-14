@@ -465,15 +465,25 @@
  }
  function exportRows(){
   const result=currentResult;
-  if(!state.exportSettings.winnerTable||!result||metric==='seats'||(historyOverview()&&kind==='mayor'))return [];
-  const rows=voteMetric()?[...result.regions.values()].map(r=>r.top).filter(Boolean):[...result.regions.values()].flatMap(r=>r.leaders);
-  const ordered=rows.filter(r=>!exportPanelFilter||kind!=='council'||r.electorate===exportPanelFilter);
+  if(!state.exportSettings.winnerTable||!result||(metric==='seats'&&state.exportSettings.candidateScope!=='all')||(historyOverview()&&kind==='mayor'))return [];
+  const showAll=state.exportSettings.candidateScope==='all';
+  const records=recordsInView().filter(r=>!exportPanelFilter||kind!=='council'||r.electorate===exportPanelFilter);
+  const seen=new Set();
+  const ordered=(showAll?records:records.filter(isOfficialWinner)).filter(r=>{
+   // A city-wide elected mayor must not appear once per township in
+   // the elected-only table; each winner is a single election result.
+   if(!showAll&&mayorTownView()){
+    const key=[r.county,r.name,r.number].join('|');
+    if(seen.has(key))return false;seen.add(key);
+   }
+   return true;
+  });
   ordered.sort((a,b)=>HistoryCore.compareResultRows(a,b,kind));
   return ordered.map(r=>{
    const party=predictionParty(r.party);
    return {historical:true,estimated:true,district:[r.county,r.town||r.district].filter(Boolean).join(' · '),
     number:r.number,name:displayedCandidateName(r),gender:displayedGender(r),incumbent:r.incumbent===true?'现任':'',party:r.party,color:party.color,logo:logoFor(party),
-    votes:r.votes.toLocaleString('zh-CN'),share:(r._share||0).toFixed(2)+'%',elected:isOfficialWinner(r)};
+    votes:r.votes.toLocaleString('zh-CN'),share:(r._share||0).toFixed(2)+'%',elected:isOfficialWinner(r),allCandidates:showAll};
   });
  }
  function featurePresentation(feature){
