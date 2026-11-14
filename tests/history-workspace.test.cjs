@@ -76,16 +76,16 @@ test('candidate result rows search and filter by stable candidacy data without i
  assert.equal(Workspace.candidateRows(rows,{party:'甲党'})[1].elected_official,false);
 });
 
-test('overview cards have eight ordered metrics and never combine overlapping electorates',()=>{
+test('overview cards expose eight ordered combined metrics while charts group electorates',()=>{
  const cards=Workspace.overviewCards({candidateCount:12,electedCount:3,validVotes:1234,invalidVotes:null,incumbentCount:2});
  assert.deepEqual(cards.map(card=>card.label),['选举人数','投票人数','投票率','有效票','无效票','有效率','候选人数','当选人数']);
  assert.deepEqual(cards.map(card=>card.value),['暂无资料','暂无资料','暂无资料','1,234','暂无资料','暂无资料','12','3']);
  const complete=Workspace.overviewCards({candidateCount:12,electedCount:3,registeredVoters:100,ballotsCast:73,validVotes:70,invalidVotes:3,turnout:73});
  assert.deepEqual(complete.map(card=>card.value),['100','73','73.00%','70','3','95.89%','12','3']);
- const separated=Workspace.overviewCards({candidateCount:12,electedCount:3,turnoutGroups:[{electorate:'regional'},{electorate:'mountain'}]});
- assert.ok(separated.slice(0,6).every(card=>card.value==='按类别分别统计'));
- assert.equal(separated[6].value,'12');
- assert.equal(separated[7].value,'3');
+ const summed=Workspace.overviewCards({candidateCount:12,electedCount:3,registeredVoters:160,ballotsCast:118,validVotes:115,invalidVotes:3,turnout:73.75,
+  turnoutGroups:[{electorate:'regional'},{electorate:'mountain'}]});
+ assert.deepEqual(summed.map(card=>card.value),['160','118','73.75%','115','3','97.46%','12','3']);
+ assert.match(summed[0].detail,/类别加总/);
 });
 
 test('overview chart models use real ratios and never draw guessed vote segments',()=>{
