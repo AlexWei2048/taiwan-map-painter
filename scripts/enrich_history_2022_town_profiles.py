@@ -112,6 +112,20 @@ def main():
     entries=official_profiles(load_sources(zipfile.ZipFile(io.BytesIO(payload))))
     profiles=[entries[k] for k in sorted(entries)]
     stats=verify(snapshot,profiles)
+    # Archive display rows preserve original traditional spelling, while
+    # controls/map use simplified names. Persist a validated, unique source
+    # alias for EVERY ward, including the later Chiayi City rerun.
+    town_aliases={}
+    for row in snapshot['rows']:
+        if row['type']!='mayor' or row['level']!='town':continue
+        key=(norm(row['county']),norm(row['town']))
+        source=(row['county'],row['town'])
+        if key in town_aliases and town_aliases[key]!=source:
+            raise ValueError(f'Ambiguous traditional/simplified town name mapping: {key}: {town_aliases[key]} != {source}')
+        town_aliases[key]=source
+    if len(town_aliases)!=368:raise ValueError(f'Expected 368 place name aliases, got {len(town_aliases)}')
+    snapshot['mayorTownNames']=[dict(county=k[0],town=k[1],county_official=v[0],town_official=v[1])
+        for k,v in sorted(town_aliases.items())]
     snapshot['townProfiles']=profiles
     snapshot['provenance']['cecTownProfiles']={'source':URL,'sha256':sha,
       'scope':'2022 mayor, township/ward level; excluding separate Chiayi City rerun',
