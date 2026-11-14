@@ -178,7 +178,64 @@
  const el=id=>doc.getElementById(id);
  let state=normalizeSelection();
  let active=false;
- let indexed=null,currentResult=null,currentOverview=null;
+ let indexed=null,currentResult=null,currentOverview=null,overviewContestId='';
+
+ function syncOverviewContestChoices(result){
+  const box=el('historyOverviewContestBox'),select=el('historyOverviewContest');
+  if(!box||!select)return;
+  const contests=result?.contests||[];
+  if(!contests.some(contest=>contest.contest_id===overviewContestId))overviewContestId='';
+  const office=state.office,scope=office==='president'||office==='mayor'?'县市':'选区';
+  const label=contest=>{
+   const county=contest.county_name||'';
+   const district=contest.district_name||county;
+   const identity=office==='council'?({regional:'区域议员',plains:'平地少数民族议员',mountain:'山地少数民族议员'}[contest.electorate]||'议员'):'';
+   return [county,district!==county?district:'',identity].filter(Boolean).join(' · ');
+  };
+  const entries=contests.slice().sort((a,b)=>Core.compareResultRows(a,b,office));
+  select.replaceChildren(new Option('全部'+scope,''),
+   ...entries.map(contest=>new Option(label(contest),contest.contest_id)));
+  select.value=overviewContestId;
+  box.hidden=entries.length<=1;
+ }
+ function renderOverviewScope(fullResult){
+  const title=el('historyOverviewTitle'),description=el('historyOverviewDescription');
+  if(!title)return;
+  const chosen=overviewContestId?
+   fullResult?.contests?.find(contest=>contest.contest_id===overviewContestId):
+   fullResult?.contests?.length===1?fullResult.contests[0]:null;
+  const officeLabel={mayor:'县市长',council:'议员',township:'乡镇市区长',president:'台湾地区领导人'}[state.office]||'选举';
+  const identity=state.office==='council'?({
+   all:'全部类型',regional:'区域',plains:'平地少数民族',mountain:'山地少数民族'
+  }[chosen?.electorate||state.electorate]||'区域')+'议员':'';
+  const county=chosen?.county_name||state.county||'全台';
+  const district=chosen?.district_name&&chosen.district_name!==county?chosen.district_name:'';
+  title.textContent=[state.year+'年',county,district,identity||officeLabel].filter(Boolean).join(' · ')+'选举概况';
+  if(description)description.textContent=chosen?
+   '当前统计范围：'+[county,district,identity||officeLabel].filter(Boolean).join(' · ')+
+    '（单一'+(state.office==='council'?'议员选区':state.office==='township'?'乡镇市区':'县市')+'）':
+   '当前统计范围：'+county+' · '+(identity||officeLabel)+' · '+(fullResult?.contests?.length||0)+'个选区';
+ }
+ function openContestOverview(contestId){
+  const base=resultForSelection();
+  if(!base?.contests?.some(contest=>contest.contest_id===contestId))return false;
+  overviewContestId=contestId;
+  state=normalizeSelection({...readSelection(),view:'overview'});
+  render();return true;
+ }
+ function contestForFeature(feature){
+  if(!feature)return null;
+  const base=resultForSelection();if(!base?.contests?.length)return null;
+  const county=feature.county||feature.name;
+  const office=state.office;
+  return base.contests.find(contest=>{
+   if(contest.county_name!==county)return false;
+   if(office==='council')return Core.identity(contest.electorate)===Core.identity(feature.electorate)&&
+    Core.districtNumber(contest.district_name)===String(feature.number);
+   if(office==='township')return contest.district_name===feature.name;
+   return feature.name===county; // Township presidential/mayor views have no township-specific turnout contest.
+  })?.contest_id||null;
+ }
  function refreshYearOptions(){
   const select=el('historyYear');if(!select)return;
   const office=el('historyOffice')?.value||state.office,years=yearsForOffice(office);
@@ -297,7 +354,12 @@
  }
  function render(){
   state=readSelection();
-  currentResult=resultForSelection();currentOverview=currentResult&&root.HistoryCore?root.HistoryCore.overview(currentResult):null;
+  const fullResult=resultForSelection();
+  syncOverviewContestChoices(fullResult);
+  currentResult=state.view==='overview'&&overviewContestId?
+   root.HistoryCore.filter(indexed,{year:state.year,office:state.office,contestId:overviewContestId}):fullResult;
+  currentOverview=currentResult&&root.HistoryCore?root.HistoryCore.overview(currentResult):null;
+  renderOverviewScope(fullResult);
    const electorateBox=el('historyElectorateBox');if(electorateBox)electorateBox.hidden=state.office!=='council';
   const electorate=el('historyElectorate');if(electorate){
    if(state.office==='council'){
@@ -332,11 +394,14 @@
   const blob=new Blob([content],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),link=doc.createElement('a');link.href=url;link.download=exportStem(state)+'.csv';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
  }
  for(const id of ['historyYear','historyOffice','historyElectorate','historyCounty','historyScale','historyMetric'])el(id)?.addEventListener('change',render);
+ el('historyOverviewContest')?.addEventListener('change',event=>{overviewContestId=event.target.value||'';render()});
  for(const [view,id] of [['candidates','historyViewCandidates'],['overview','historyViewOverview']])el(id)?.addEventListener('click',()=>setView(state.view===view?'map':view));
  for(const id of ['workspacePrediction','workspaceFree'])el(id)?.addEventListener('click',()=>{active=false});
  function setSnapshot(snapshot){try{indexed=root.HistoryCore.index(snapshot);render();return true}catch(error){if(el('historyLoadStatus')){el('historyLoadStatus').hidden=false;el('historyLoadStatus').textContent='历史数据版本不兼容，请重新载入。'};if(el('historyRetry'))el('historyRetry').hidden=false;return false}}
  root.addEventListener('historysnapshotready',event=>setSnapshot(event.detail.snapshot));
  const existing=root.History2022View?.snapshot?.();if(existing)setSnapshot(existing);
  const heading=el('historyResultSection')?.querySelector('.history-result-heading');if(heading&&!el('historyExportCsv')){const button=doc.createElement('button');button.type='button';button.id='historyExportCsv';button.className='button quiet';button.textContent='导出当前结果 CSV';button.onclick=exportCsv;heading.append(button)}
- root.HistoryWorkspace={...api,activate,deactivate,selection:()=>({...state}),render,openContest,setSnapshot,exportCsv,result:()=>currentResult,overview:()=>currentOverview,active:()=>active};
+ root.HistoryWorkspace={...api,activate,deactivate,selection:()=>({...state}),render,openContest,
+  openContestOverview,contestForFeature,selectedOverviewContest:()=>overviewContestId,
+  setSnapshot,exportCsv,result:()=>currentResult,overview:()=>currentOverview,active:()=>active};
 })(typeof window==='undefined'?{}:window);
