@@ -126,19 +126,21 @@ test('councillor badges preserve every party and tied seat composition',()=>{
  assert.equal(summary.winners.length,4);
 });
 
-test('filter uses stable IDs and overview keeps overlapping electorates separate',()=>{
+test('filter uses stable IDs and overview sums electorates in headline metrics',()=>{
  const index=H.index(fixture());
  const result=H.filter(index,{year:2022,office:'council',countyId:'a',electorate:'all'});
  assert.equal(result.contests.length,2);
  const overview=H.overview(result);
- assert.equal(overview.turnout,null,'no misleading combined turnout');
+ assert.equal(overview.registeredVoters,240,'register counts are summed across electorates');
+ assert.equal(overview.ballotsCast,180);
+ assert.equal(overview.turnout,75);
  assert.deepEqual(overview.turnoutGroups.map(x=>[x.electorate,x.registeredVoters,x.ballotsCast,x.turnout]),[
   ['regional',200,150,75],['plains',40,30,75]
  ]);
  assert.equal(overview.candidateCount,5);
  assert.equal(overview.electedCount,5);
- assert.equal(overview.validVotes,null,'overlapping electorates must not publish one combined valid-vote total');
- assert.equal(overview.invalidVotes,null,'overlapping electorates must not publish one combined invalid-vote total');
+ assert.equal(overview.validVotes,168,'headline vote totals sum both electorate records');
+ assert.equal(overview.invalidVotes,12,'headline invalid votes sum both electorate records');
 });
 
 test('missing ballot statistics stay unavailable while candidate totals remain usable',()=>{
