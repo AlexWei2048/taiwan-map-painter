@@ -111,7 +111,12 @@ function syncCountyChoices(){
  }
 
 }
-function syncInputs(){if(regionalLegislativeOnly())state.electorate.legislative='regional';if(state.workspaceMode==='free'&&state.level==='villages'){state.level='towns';state.villageTown=''}syncCountyChoices();$('county').value=state.county;syncBorderControls();$('showLabels').checked=state.labels;$('mapTitle').value=state.title;$('legendTitle').value=state.legendTitle;if($('exportWinnerTable'))$('exportWinnerTable').checked=state.exportSettings.winnerTable;if($('exportCandidateScope')){$('exportCandidateScope').value=state.exportSettings.candidateScope||'winners';$('exportCandidateScope').disabled=!state.exportSettings.winnerTable}if($('exportNote'))$('exportNote').value=state.exportSettings.note;if($('councilExportScope'))$('councilExportScope').value=state.exportSettings.councilScope;if($('councilExportScopeBox'))$('councilExportScopeBox').hidden=state.level!=='council';$('townLevel').classList.toggle('active',state.level==='towns');$('countyLevel').classList.toggle('active',state.level==='counties');$('townLevel').setAttribute('aria-pressed',state.level==='towns');$('countyLevel').setAttribute('aria-pressed',state.level==='counties');for(const [id,level]of [['councilLevel','council'],['legislativeLevel','legislative']]){$(id).classList.toggle('active',state.level===level);$(id).setAttribute('aria-pressed',state.level===level)}syncVillageControls();syncElectorateControls();syncElectionControls();updateHistory()}
+function syncCouncilExportScopeVisibility(){
+ const box=$('councilExportScopeBox');if(!box)return;
+ const historical=typeof History2022View!=='undefined'&&History2022View.active();
+ box.hidden=!(historical?History2022View.office()==='council':state.workspaceMode==='prediction'&&state.predictionOffice==='council');
+}
+function syncInputs(){if(regionalLegislativeOnly())state.electorate.legislative='regional';if(state.workspaceMode==='free'&&state.level==='villages'){state.level='towns';state.villageTown=''}syncCountyChoices();$('county').value=state.county;syncBorderControls();$('showLabels').checked=state.labels;$('mapTitle').value=state.title;$('legendTitle').value=state.legendTitle;if($('exportWinnerTable'))$('exportWinnerTable').checked=state.exportSettings.winnerTable;if($('exportCandidateScope')){$('exportCandidateScope').value=state.exportSettings.candidateScope||'winners';$('exportCandidateScope').disabled=!state.exportSettings.winnerTable}if($('exportNote'))$('exportNote').value=state.exportSettings.note;if($('councilExportScope'))$('councilExportScope').value=state.exportSettings.councilScope;syncCouncilExportScopeVisibility();$('townLevel').classList.toggle('active',state.level==='towns');$('countyLevel').classList.toggle('active',state.level==='counties');$('townLevel').setAttribute('aria-pressed',state.level==='towns');$('countyLevel').setAttribute('aria-pressed',state.level==='counties');for(const [id,level]of [['councilLevel','council'],['legislativeLevel','legislative']]){$(id).classList.toggle('active',state.level===level);$(id).setAttribute('aria-pressed',state.level===level)}syncVillageControls();syncElectorateControls();syncElectionControls();updateHistory()}
 function setBrush(id){state.selected=id;erase=false;renderPalette();renderLegend();updateBrush();persist()}
 function updateBrush(){if(freeNationwideDistrictMap()){$('brushName').textContent='全台'+(state.level==='council'?'议员':'区域民代')+'选区 · 点击进入县市后填色';return}if(state.fillMode==='prediction'){$('brushName').textContent='2026 用户预测 · 点击选区选择预测当选者';return}if($('inspectElection')?.checked){$('brushName').textContent='查询 2026 资料 · 点击地图选择选区';return}if(state.fillMode==='gradient'){$('brushName').textContent=erase?'橡皮擦 · 点击区域清除投票数据':'点击区域，录入或编辑投票数据';$('eraser').classList.toggle('active',erase);$('eraser').setAttribute('aria-pressed',erase);return;}const p=paletteById(state.selected);$('brushName').textContent=erase?'橡皮擦 · 点击区域恢复未填色':`${p?.name||'画笔'} · 点击区域填色`;$('eraser').classList.toggle('active',erase);$('eraser').setAttribute('aria-pressed',erase)}
 function renderPalette(){const root=$('palette');root.replaceChildren();const c=counts();state.palette.forEach((p,index)=>{const row=document.createElement('div');row.dataset.party=p.id;row.className='palette-row'+(!erase&&state.selected===p.id?' selected':'');const sw=document.createElement('button');sw.className='swatch';sw.style.background=p.color;sw.setAttribute('aria-label',`选择${p.name}画笔`);sw.setAttribute('aria-pressed',!erase&&state.selected===p.id);sw.onclick=()=>setBrush(p.id);const input=document.createElement('input');input.className='palette-name';input.value=mainlandTerms(p.name);input.maxLength=40;input.setAttribute('aria-label',`修改${p.name}图例名称`);input.onfocus=()=>{input.dataset.before=input.value;delete input.dataset.history};input.oninput=()=>{if(!input.dataset.history){pushHistory();input.dataset.history='1'}p.name=simplify(input.value)||'未命名';renderLegend();updateBrush();persist()};input.onchange=()=>{const name=simplify(input.value.trim())||'未命名';if(p.name!==name){pushHistory();p.name=name;persist();renderLegend();renderList();updateBrush()}};const count=document.createElement('span');count.className='palette-count';count.textContent=c[p.id]||'0';const edit=document.createElement('label');edit.className='color-edit';edit.title='修改颜色';const color=document.createElement('input');color.type='color';color.value=p.color;color.setAttribute('aria-label',`修改${p.name}颜色`);color.onchange=()=>{if(p.color!==color.value){pushHistory();p.color=color.value;recolor();renderPalette();renderLegend();renderList();persist()}};edit.append(color);const del=document.createElement('button');del.className='remove-color';del.textContent='×';del.title='删除类别（可撤销）';del.setAttribute('aria-label',`删除${p.name}类别`);del.onclick=()=>{if(LEVELS.some(level=>Object.values(state.elections[level]).some(r=>r.rows.some(row=>row.partyId===p.id)))||(typeof predictionPaletteInUse==='function'&&predictionPaletteInUse(p)))return toast('此类别已用于投票数据，可在图例编辑中隐藏；删除前请先修改关联数据');if(state.palette.length===1)return toast('至少保留一个颜色类别');pushHistory();state.palette=state.palette.filter(x=>x.id!==p.id);for(const level of LEVELS)for(const k in state.fills[level])if(state.fills[level][k]===p.id)delete state.fills[level][k];if(state.selected===p.id)state.selected=state.palette[0].id;renderPalette();recolor();renderLegend();renderList();updateProgress();updateBrush();persist()};const logo=logoFor(p);if(logo){const img=document.createElement('img');img.className='party-logo';img.src=logo;img.alt=p.name+'党徽';row.append(img)}row.append(sw,input,count,edit);const order=document.createElement('div');order.className='party-order';for(const [direction,label]of [[-1,'上移'],[1,'下移']]){const b=document.createElement('button');b.className='move-party';b.type='button';b.textContent=direction<0?'↑':'↓';b.dataset.direction=direction;b.title=label+p.name;b.setAttribute('aria-label',label+'画笔：'+p.name);b.disabled=index+direction<0||index+direction>=state.palette.length;b.onclick=()=>moveParty(p.id,direction);order.append(b)}row.append(order,del);root.append(row)});updateBrush()}
@@ -1502,6 +1507,7 @@ function appendSharedBorders(group,level,identity='regional',filterTown=false){
 
 
 function render(){
+ syncCouncilExportScopeVisibility();
  if(!data)return;ensureMapDetails();syncMapLayerStatus();$('canvas').classList.toggle('nationwide-mode',isNationwide());$('canvas').classList.toggle('county-mode',state.level==='counties'||mayorTownBoundaryOverlay());
  const regionGroup=$('regions'),borderGroup=$('borders'),districtGroup=$('districtBorders'),townGroup=$('townBorders');
  for(const group of [regionGroup,borderGroup,districtGroup,townGroup]){group.replaceChildren();group.removeAttribute('transform')}
@@ -1663,6 +1669,58 @@ function exportTextWidth(value){let n=0;for(const c of Array.from(String(value||
 function truncateExportText(value,max){const text=String(value||'');if(exportTextWidth(text)<=max)return text;let out='',width=0;for(const c of Array.from(text)){const step=/[\u0000-\u00ff]/.test(c)?.55:1;if(width+step>max-1)break;out+=c;width+=step}return out+'…'}
 function wrapExportText(value,max=82){const lines=[];for(const paragraph of String(value||'').split(/\r?\n/)){if(!paragraph){lines.push('');continue}let line='',width=0;for(const token of paragraph.match(/[A-Za-z0-9]+(?:[’'-][A-Za-z0-9]+)*|[\s\S]/gu)||[]){for(const part of exportTextWidth(token)>max?Array.from(token):[token]){const step=exportTextWidth(part);if(line&&width+step>max){lines.push(line);line='';width=0}line+=part;width+=step}}if(line)lines.push(line)}return lines}
 function appendExportNote(root,lines,y){if(!lines.length)return 0;const height=26+lines.length*19;root.append(svgEl('rect',{x:40,y,width:1120,height,rx:10,fill:'#f3f7f3',stroke:'#e0e8e1','stroke-width':1}));const label=svgEl('text',{x:60,y:y+21,'font-size':11,'font-weight':600,fill:'#557064'});label.textContent='说明';root.append(label);lines.forEach((line,index)=>{const text=svgEl('text',{x:102,y:y+21+index*19,'font-size':11.5,fill:'#60766b'});text.textContent=line;root.append(text)});return height}
+// Keep every constituency in a vertical run, ordered from highest to lowest
+// vote count. Prefer whole constituencies per column; split only when a
+// constituency would otherwise make the exported image excessively tall.
+function exportCandidateColumns(entries,columnCount){
+ const groups=new Map();
+ for(const [index,entry] of entries.entries()){
+  const key=String(entry.row?.district||'');
+  if(!groups.has(key))groups.set(key,[]);
+  groups.get(key).push({entry,index});
+ }
+ function score(row){
+  for(const [field,kind] of [['votes',2],['share',1]]){
+   const raw=String(row?.[field]??'').trim().replace(/[,\\s%票]/g,'');
+   if(raw&&Number.isFinite(Number(raw)))return{kind,value:Number(raw)};
+  }
+  return{kind:0,value:0};
+ }
+ const sections=[...groups.values()].map(group=>group.sort((a,b)=>{
+  const va=score(a.entry.row),vb=score(b.entry.row);
+  return vb.kind-va.kind||(va.kind?vb.value-va.value:0)||a.index-b.index;
+ }).map(item=>item.entry));
+ const buckets=Array.from({length:columnCount},()=>[]);
+ const heights=Array(columnCount).fill(0);
+ let column=0,remainingHeight=entries.reduce((sum,entry)=>sum+entry.height,0);
+ for(const section of sections){
+  const sectionHeight=section.reduce((sum,entry)=>sum+entry.height,0);
+  let target=remainingHeight/Math.max(1,columnCount-column);
+  if(column<columnCount-1&&buckets[column].length&&
+   heights[column]>=target*.55&&heights[column]+sectionHeight>target*1.15){
+   column++;
+   target=remainingHeight/Math.max(1,columnCount-column);
+  }
+  const oversized=sectionHeight>target*1.45;
+  let placed=0;
+  for(const entry of section){
+   if(oversized&&column<columnCount-1&&buckets[column].length&&heights[column]>=target){
+    column++;
+    target=Math.max(1,(remainingHeight-placed)/(columnCount-column));
+   }
+   buckets[column].push(entry);
+   heights[column]+=entry.height;
+   placed+=entry.height;
+  }
+  remainingHeight-=sectionHeight;
+ }
+ const rowCount=Math.max(0,...buckets.map(bucket=>bucket.length));
+ return Array.from({length:rowCount},(_,index)=>{
+  // Preserve empty slots: the renderer uses each array index as the column.
+  const rowEntries=buckets.map(bucket=>bucket[index]||null);
+  return{entries:rowEntries,height:Math.max(...rowEntries.filter(Boolean).map(entry=>entry.height))};
+ });
+}
 function polishedPredictionTableLayout(rows,targetWidth=null){
  // Compact SVG/PNG table: compute text wraps AFTER the final export width
  // is known. Otherwise names remain split even when expanded columns fit.
@@ -1697,14 +1755,10 @@ function polishedPredictionTableLayout(rows,targetWidth=null){
    name.length*lineHeight+meta.length*16+(meta.length?5:0)+8);
   return{row,cells,meta,height};
  });
- const pairs=[];
- for(let i=0;i<entries.length;i+=columns){
-  const entriesInRow=entries.slice(i,i+columns);
-  pairs.push({entries:entriesInRow,height:Math.max(...entriesInRow.map(e=>e.height))});
- }
+ const pairs=exportCandidateColumns(entries,columns);
  return{polished:true,columns,width,innerWidth,slotWidth,gap,widths,font,lineHeight,rowHeight,
   headers:['选区','姓名','政党',...metricFields.map(k=>metricHeaders[k])],metricFields,specified,pairs,chunk:Math.ceil(rows.length/columns),
-  tableHeaderHeight,headingHeight,height:headingHeight+tableHeaderHeight+
+  sourceRows:rows,tableHeaderHeight,headingHeight,height:headingHeight+tableHeaderHeight+
    pairs.reduce((sum,pair)=>sum+pair.height,0)+paddingBottom};
 }
 function exportPredictionTableLayout(rows){
@@ -1759,6 +1813,7 @@ function appendExportPolishedWinnerTable(root,rows,y,layout){
    height:pair.height,fill:'#f7faf8'}));
   const mid=currentY+pair.height/2;
   for(const [slotIndex,entry]of pair.entries.entries()){
+   if(!entry)continue;
    const x=slotX(slotIndex),row=entry.row;
    const previousDistrict=previousDistricts[slotIndex];
    const districtStart=previousDistrict!==null&&previousDistrict!==row.district;
@@ -1855,8 +1910,7 @@ function expandExportWinnerLayout(layout,targetWidth){
  if(layout.polished){
   // Re-wrap at the ACTUAL printable width and recalculate the physical
   // row heights. This also prevents invisible space below the last row.
-  const rows=layout.pairs.flatMap(pair=>pair.entries.map(entry=>entry.row));
-  return polishedPredictionTableLayout(rows,targetWidth);
+  return polishedPredictionTableLayout(layout.sourceRows,targetWidth);
  }
  const added=targetWidth-layout.width,perSlot=added/layout.columns;
  const widths=[...layout.widths];
