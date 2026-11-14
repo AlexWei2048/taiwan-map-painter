@@ -20,6 +20,37 @@
   2020:{'宋楚瑜':'余湘','韩国瑜':'张善政','蔡英文':'赖清德'},
   2024:{'柯文哲':'吴欣盈','赖清德':'萧美琴','侯友宜':'赵少康'}
  };
+
+ // Gender and running-mate metadata checked against DGBAS Statistical Yearbook
+ // table 16-1 (CEC data) and the 1996 election gazette.
+ const FEMALE_PRESIDENTS=new Set(['蔡英文']);
+ const FEMALE_DEPUTIES=new Set(['王清峰','吕秀莲','王如玄','徐欣莹','余湘','吴欣盈','萧美琴']);
+ const INCUMBENT_PRESIDENTS={1996:'李登辉',2004:'陈水扁',2012:'马英九',2020:'蔡英文'};
+ function ticketProfile(year,name){
+  const candidate=String(name||'').trim(),deputy=RUNNING_MATES[Number(year)]?.[candidate];
+  if(!deputy)return null;
+  return{candidate,deputy_name:deputy,gender:FEMALE_PRESIDENTS.has(candidate)?'女':'男',
+   deputy_gender:FEMALE_DEPUTIES.has(deputy)?'女':'男',
+   incumbent:INCUMBENT_PRESIDENTS[Number(year)]===candidate};
+ }
+ function enrichCandidateProfiles(shard){
+  // Minimal test fixtures omit candidacies and do not need enrichment.
+  if(!Array.isArray(shard.candidacies))return shard;
+  const requireProfile=name=>{
+   const p=ticketProfile(shard.year,name);
+   if(!p)throw Error(shard.year+'年候选人组合未经核实：'+name);
+   return p;
+  };
+  return{...shard,
+   candidacies:shard.candidacies.map(row=>{
+    const p=requireProfile(row.candidate_name);
+    return{...row,gender:p.gender,deputy_name:p.deputy_name,deputy_gender:p.deputy_gender,incumbent_at_election:p.incumbent};
+   }),
+   rows:shard.rows.map(row=>{
+    const p=requireProfile(row.name);
+    return{...row,gender:p.gender,deputy_name:p.deputy_name,deputy_gender:p.deputy_gender,incumbent:p.incumbent};
+   })};
+ }
  const ticketName=(year,name)=>{
   const candidate=String(name||'').trim();
   const deputy=RUNNING_MATES[Number(year)]?.[candidate];
@@ -50,7 +81,7 @@
    }
    const totals=shard.contests.reduce((n,c)=>n+Number(c.valid_votes||0),0);
    if(totals!==shard.national.valid_votes)throw Error(year+'年县市与全台得票数不一致');
-   return shard;
+   return enrichCandidateProfiles(shard);
   })();
   activeLoad.set(year,promise);
   try{return await promise}catch(error){activeLoad.delete(year);throw error}
@@ -116,7 +147,7 @@
   }
   return{counties,towns,missing,merges,countyNames:historicCountyNames};
  }
- const api={YEARS,RUNNING_MATES,ticketName,modernCounty,baseTown,load,geometry,clearPending};
+ const api={YEARS,RUNNING_MATES,ticketName,ticketProfile,enrichCandidateProfiles,modernCounty,baseTown,load,geometry,clearPending};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;
  else root.HistoryPresidential=api;
 })(typeof window==='undefined'?{}:window);

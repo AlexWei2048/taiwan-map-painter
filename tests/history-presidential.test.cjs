@@ -58,10 +58,31 @@ test('all eight election shards have a verified vice-presidential candidate for 
   for(const row of data.national.candidate_totals){
    assert.ok(known[row.name],year+' missing deputy for '+row.name);
    assert.equal(P.ticketName(year,row.name),row.name+' & '+known[row.name]);
+   const p=P.ticketProfile(year,row.name);
+   assert.equal(p.deputy_name,known[row.name]);
+   assert.ok(['男','女'].includes(p.gender));
+   assert.ok(['男','女'].includes(p.deputy_gender));
+   assert.equal(typeof p.incumbent,'boolean');
   }
  }
  assert.equal(P.ticketName(1996,'李登辉'),'李登辉 & 连战');
  assert.equal(P.ticketName(2000,'宋楚瑜'),'宋楚瑜 & 张昭雄');
  assert.notEqual(P.ticketName(1996,'林洋港'),P.ticketName(1996,'陈履安'));
  assert.equal(P.ticketName(2024,'尚未确认候选人'),'尚未确认候选人','no invented running mates');
+ assert.equal(P.ticketProfile(2024,'尚未确认候选人'),null);
+ assert.equal(P.ticketProfile(1996,'陈履安').deputy_gender,'女');
+ assert.equal(P.ticketProfile(2000,'许信良').deputy_gender,'男');
+ assert.equal(P.ticketProfile(2024,'赖清德').deputy_gender,'女');
+ assert.equal(P.ticketProfile(1996,'李登辉').incumbent,true);
+ assert.equal(P.ticketProfile(2000,'连战').incumbent,false);
+ assert.equal(P.ticketProfile(2020,'蔡英文').incumbent,true);
+ assert.equal(P.ticketProfile(2024,'赖清德').incumbent,false);
+});
+
+test('historical exports do not contain a duplicated fixed-year table title',()=>{
+ const fs=require('node:fs'),path=require('node:path');
+ const app=fs.readFileSync(path.join(__dirname,'..','app.js'),'utf8');
+ assert.doesNotMatch(app,/2022 实际选举结果/);
+ assert.match(app,/const headingHeight=18,tableHeaderHeight=44/);
+ assert.match(app,/data-export-title/);
 });

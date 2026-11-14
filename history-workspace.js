@@ -131,10 +131,11 @@
   return[selection.year||2022,offices[selection.office]||'历史选举',selection.office==='president'?(selection.level==='town'?'乡镇市区':'县市'):null,selection.county||'全台',metrics[selection.metric]||selection.metric||'结果'].filter(Boolean).join('-').replace(/[\\/:*?"<>|]/g,'_');
  }
  function historyCsv(result={contests:[],candidacies:[]},selection={}){
-  const contests=new Map((result.contests||[]).map(item=>[item.contest_id,item])),rows=[['年份','选举类别','县市规范名称','县市官方名称','选区规范名称','选区官方名称','候选人规范姓名','候选人官方姓名','政党规范名称','政党官方名称','号次','得票数','得票率','官方当选']];
+  const presidential=selection.office==='president',extraColumns=presidential?['副领导人候选人','正职性别','副职性别','选举时现任']:[];
+  const contests=new Map((result.contests||[]).map(item=>[item.contest_id,item])),rows=[['年份','选举类别','县市规范名称','县市官方名称','选区规范名称','选区官方名称','候选人规范姓名','候选人官方姓名',...extraColumns,'政党规范名称','政党官方名称','号次','得票数','得票率','官方当选']];
   const offices={mayor:'县市长',council:'县市议员',township:'乡镇市区长',president:'台湾地区领导人'};
   const ordered=[...(result.candidacies||[])].sort((a,b)=>{const ca=contests.get(a.contest_id)||{},cb=contests.get(b.contest_id)||{};return Core.compareResultRows({...a,county_name:ca.county_name,district_name:ca.district_name,electorate:ca.electorate},{...b,county_name:cb.county_name,district_name:cb.district_name,electorate:cb.electorate},selection.office)});
-  for(const item of ordered){const contest=contests.get(item.contest_id)||{};rows.push([selection.year||2022,offices[selection.office]||selection.office,contest.county_name,contest.county_name_official,contest.district_name,contest.district_name_official,item.candidate_name,item.candidate_name_official,item.party_name,item.party_name_official,item.ballot_number,item.votes,item.vote_share,item.elected_official?'是':''])}
+  for(const item of ordered){const contest=contests.get(item.contest_id)||{};rows.push([selection.year||2022,offices[selection.office]||selection.office,contest.county_name,contest.county_name_official,contest.district_name,contest.district_name_official,item.candidate_name,item.candidate_name_official,...(presidential?[item.deputy_name||'',item.gender||'',item.deputy_gender||'',item.incumbent_at_election===true?'是':'']:[]),item.party_name,item.party_name_official,item.ballot_number,item.votes,item.vote_share,item.elected_official?'是':''])}
   const cell=value=>{let text=exportedWording(value);if(/^[=+@\t\r-]/.test(text))text="'"+text;return'"'+text.replace(/"/g,'""')+'"'};
   return'\uFEFF'+rows.map(row=>row.map(cell).join(',')).join('\r\n');
  }
@@ -143,12 +144,12 @@
   const rows=(snapshot.rows||[]).filter(r=>r.level==='town'&&r.type==='president'&&(!selection.county||r.county===selection.county));
   const totals=new Map();
   for(const r of rows){const k=r.county+'|'+r.town;totals.set(k,(totals.get(k)||0)+r.votes)}
-  const output=[['年份','选举类别','县市规范名称','县市官方名称','乡镇市区规范名称','乡镇市区官方名称','候选人规范姓名','候选人官方姓名','政党规范名称','政党官方名称','号次','得票数','得票率','官方当选']];
+  const output=[['年份','选举类别','县市规范名称','县市官方名称','乡镇市区规范名称','乡镇市区官方名称','候选人规范姓名','候选人官方姓名','副领导人候选人','正职性别','副职性别','选举时现任','政党规范名称','政党官方名称','号次','得票数','得票率','官方当选']];
   rows.sort((a,b)=>a.county.localeCompare(b.county,'zh')||a.town.localeCompare(b.town,'zh')||b.votes-a.votes);
   for(const r of rows){
    const total=totals.get(r.county+'|'+r.town)||0;
    output.push([selection.year,'台湾地区领导人',r.county,r.county_official,r.town,r.town_official,
-     r.name,r.name_official,r.party,r.party_official,r.number,r.votes,
+     r.name,r.name_official,r.deputy_name||'',r.gender||'',r.deputy_gender||'',r.incumbent===true?'是':'',r.party,r.party_official,r.number,r.votes,
      total?Number((r.votes/total*100).toFixed(8)):0,r.elected?'是':'']);
   }
   const cell=v=>{let text=exportedWording(v);if(/^[=+@\t\r-]/.test(text))text="'"+text;return'"'+text.replace(/"/g,'""')+'"'};

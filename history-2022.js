@@ -17,7 +17,7 @@
  const dbIds=new Set();
  const addRows=rows=>{let added=0;for(const src of rows){
   if(!['mayor','council','township'].includes(src.type))continue;
-  const r={type:src.type,electorate:HistoryCore.identity(src.electorate),level:src.level||'raw',county:norm(src.county),town:norm(src.town),village:norm(src.village),district:norm(src.district),number:String(src.number||''),name:norm(src.name),gender:norm(src.gender),incumbent:src.incumbent,party:normalizeParty(src.party),votes:Number(src.votes),elected:src.elected===true||src.elected==='true'};
+  const r={type:src.type,electorate:HistoryCore.identity(src.electorate),level:src.level||'raw',county:norm(src.county),town:norm(src.town),village:norm(src.village),district:norm(src.district),number:String(src.number||''),name:norm(src.name),gender:norm(src.gender),deputyName:norm(src.deputy_name),deputyGender:norm(src.deputy_gender),incumbent:src.incumbent,party:normalizeParty(src.party),votes:Number(src.votes),elected:src.elected===true||src.elected==='true'};
   if(!r.county||!r.name||!Number.isFinite(r.votes)||r.votes<0)continue;
   const key=electionKey(r);if(dbIds.has(key))continue;dbIds.add(key);db[r.type].push(r);added++;
  }return added};
@@ -162,6 +162,8 @@
  // County mayor legends include names only when one county is selected.
  const detailedLegend=()=>presidentialMode||(kind==='mayor'&&!!county);
  const legendCandidateName=name=>presidentialMode?HistoryPresidential.ticketName(presidentialYear,name):name;
+ const displayedCandidateName=row=>presidentialMode?legendCandidateName(row.name):row.name;
+ const displayedGender=row=>presidentialMode?[row.gender,row.deputyGender].map(s=>s||'—').join(' / '):(row.gender||'—');
  function legendLabel(entry){return entry.name?entry.party+'｜'+legendCandidateName(entry.name):entry.party}
  function legendEntries(result){
   if(!detailedLegend())return [...result.partySeats].map(([party,count])=>({party,name:'',count}));
@@ -269,7 +271,7 @@
   const wrap=document.createElement('div');wrap.className='history-table-wrap';
   const table=document.createElement('table');table.className='history-candidate-table';
   const head=document.createElement('thead'),hr=document.createElement('tr');
-  for(const label of ['县市','选区／乡镇市区','号次','候选人','性别','选举时现任','政党','得票数','得票率','当选']){const th=document.createElement('th');th.textContent=label;hr.append(th)}
+  for(const label of ['县市','选区／乡镇市区','号次','候选人',presidentialMode?'性别（正/副）':'性别','选举时现任','政党','得票数','得票率','当选']){const th=document.createElement('th');th.textContent=label;hr.append(th)}
   head.append(hr);table.append(head);const body=document.createElement('tbody');
   let previousArea='';
   for(const r of rows.slice(resultPage*100,(resultPage+1)*100)){
@@ -280,7 +282,7 @@
     divider.append(heading);body.append(divider);previousArea=area;
    }
    const tr=document.createElement('tr');
-   const values=[r.county,mayorTownView()?r.town:kind==='council'?r.district:kind==='township'?r.town:(r.district||''),r.number||'—',r.name,r.gender||'—',incumbentLabel(r)];
+   const values=[r.county,mayorTownView()?r.town:kind==='council'?r.district:kind==='township'?r.town:(r.district||''),r.number||'—',displayedCandidateName(r),displayedGender(r),incumbentLabel(r)];
    for(const value of values){const td=document.createElement('td');td.textContent=value||'—';tr.append(td)}
    const partyCell=document.createElement('td');partyCell.className='history-party-cell';
    const party=predictionParty(r.party),logo=logoFor(party);
@@ -394,6 +396,9 @@
   return Array.from({length:d.seats},(_,i)=>cs[i]||null);
  }
  function syncHistoryControls(){
+  const titleEyebrow=el('historyResultSection')?.querySelector('.eyebrow');
+  if(titleEyebrow)titleEyebrow.textContent=yearLabel()+' 历史数据';
+  if(el('historyWorkspaceTitle'))el('historyWorkspaceTitle').textContent=yearLabel()+' '+officeTitle()+'选举结果';
   if(el('historyBoundaryNote'))el('historyBoundaryNote').hidden=!presidentialMode;
   el('historyCounty').value=county;el('historyScaleBox').hidden=kind!=='mayor';el('historyScale').value=scale;
   if(el('historyElectorateBox'))el('historyElectorateBox').hidden=kind!=='council';if(el('historyElectorate'))el('historyElectorate').value=electorate;
@@ -411,7 +416,7 @@
   if(!voteMetric()||candidateScope!=='candidate')return;
   const choices=new Map();for(const r of recordsInView())choices.set(candidateKey(r),r);
   if(!choices.has(selectedCandidate))selectedCandidate=choices.keys().next().value||'';
-  el('historyCandidate').replaceChildren(...[...choices].map(([id,r])=>new Option((presidentialMode?'':r.county+' · ')+r.name+' · '+r.party,id)));el('historyCandidate').value=selectedCandidate;
+  el('historyCandidate').replaceChildren(...[...choices].map(([id,r])=>new Option((presidentialMode?'':r.county+' · ')+displayedCandidateName(r)+' · '+r.party,id)));el('historyCandidate').value=selectedCandidate;
  }
  function openHistoryRegion(f){
   lastOpenedFeature=f;
@@ -419,7 +424,8 @@
   el('historyDialogTitle').textContent=(f.county===f.name?f.name:f.county+' · '+f.name)+' · '+yearLabel()+' '+(presidentialMode?'台湾地区领导人':kind==='mayor'&&f.county.endsWith('市')?'市长':titles[kind])+'选举结果';
   const body=el('historyDialogRows'),table=body.closest('table'),wrap=table.parentElement;
   const hiddenColumns=new Set();
-  // Every candidate now has CEC-verified gender and election-time incumbency.
+  // Display both offices' verified genders for presidential tickets.
+  if(table.tHead.rows[0]?.cells[2])table.tHead.rows[0].cells[2].textContent=presidentialMode?'性别（正/副）':'性别';
   // Show both columns, including on narrow screens; retain dash fallback if needed.
   [...table.tHead.rows[0].cells].forEach((cell,i)=>{cell.hidden=hiddenColumns.has(i)});
   wrap.hidden=!rows.length;
@@ -430,7 +436,7 @@
   for(const r of [...rows].sort((a,b)=>b.votes-a.votes)){
    const tr=document.createElement('tr');
    if(isOfficialWinner(r))tr.className='history-elected-row';
-   for(const [i,value] of [r.number||'—',r.name,r.gender||'—',incumbentLabel(r),r.party,r.votes.toLocaleString('zh-CN'),(r._share||0).toFixed(2)+'%',''].entries()){
+   for(const [i,value] of [r.number||'—',displayedCandidateName(r),displayedGender(r),incumbentLabel(r),r.party,r.votes.toLocaleString('zh-CN'),(r._share||0).toFixed(2)+'%',''].entries()){
     if(hiddenColumns.has(i))continue;
     const td=document.createElement('td');
     const logo=i===4?logoFor(predictionParty(r.party)):'';
@@ -466,7 +472,7 @@
   return ordered.map(r=>{
    const party=predictionParty(r.party);
    return {historical:true,estimated:true,district:[r.county,r.town||r.district].filter(Boolean).join(' · '),
-    number:r.number,name:r.name,gender:r.gender||'—',incumbent:r.incumbent===true?'现任':'',party:r.party,color:party.color,logo:logoFor(party),
+    number:r.number,name:displayedCandidateName(r),gender:displayedGender(r),incumbent:r.incumbent===true?'现任':'',party:r.party,color:party.color,logo:logoFor(party),
     votes:r.votes.toLocaleString('zh-CN'),share:(r._share||0).toFixed(2)+'%',elected:isOfficialWinner(r)};
   });
  }
