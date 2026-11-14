@@ -49,7 +49,7 @@
    const title=svgEl('title');title.textContent=row.party+' · '+row.seats+'席';mark.append(title);card.append(mark);
   });
   card.style.cursor='pointer';card.style.pointerEvents='all';
-  card.onclick=e=>{e.stopPropagation();History2022View.openRegion(feature)};
+  card.onclick=e=>{e.stopPropagation();if(countyOverview){const countySelect=document.getElementById('historyCounty');countySelect.value=feature.county;countySelect.dispatchEvent(new Event('change',{bubbles:true}));}else History2022View.openRegion(feature)};
   card.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();card.onclick(e)}};
   group.append(card);
  }
