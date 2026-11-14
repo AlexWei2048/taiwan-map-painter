@@ -113,3 +113,21 @@ test('published legislative JSON shards are complete and match the source manife
   assert.ok(snapshot.rows.length>100,year+' should have candidate-level history');
  }
 });
+
+
+test('verified name corrections span source candidate IDs and all regional/map-level rows',()=>{
+ const fs=require('node:fs'),path=require('node:path');
+ const corrections=JSON.parse(fs.readFileSync(path.join(__dirname,'../sources/history-legislative-name-corrections.json'),'utf8')).corrections;
+ const shards=new Map();
+ for(const entry of corrections){
+  if(!shards.has(entry.year))shards.set(entry.year,JSON.parse(fs.readFileSync(path.join(__dirname,'../assets/history-legislative-'+entry.year+'.json'),'utf8')));
+  const snap=shards.get(entry.year);
+  const matches=snap.candidacies.filter(row=>row.contest_id.split(':')[2]===entry.electorate
+   &&row.candidate_name===entry.name&&row.votes===entry.votes&&String(row.ballot_number)===String(entry.ballot_number));
+  assert.equal(matches.length,1,entry.year+' '+entry.name+' must identify exactly one candidate');
+  assert.ok(matches[0].candidacy_id.endsWith(':'+entry.name));
+  assert.ok(snap.rows.some(row=>row.electorate===entry.electorate&&row.name===entry.name),'aggregated map rows must include corrected name');
+  assert.equal(snap.rows.some(row=>row.electorate===entry.electorate&&row.name===entry.old_name),false,'obsolete name in maps');
+  assert.equal(snap.candidacies.some(row=>row.candidate_name===entry.old_name),false,'obsolete name in candidacies');
+ }
+});
