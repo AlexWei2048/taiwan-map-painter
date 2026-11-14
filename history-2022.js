@@ -266,7 +266,7 @@
   const heading=svg('text',{x:x+18,y:y+27,'font-size':font+1,'font-weight':600,fill:'#294a3a'});
   const localLeaders=areaLeading()&&(!voteMetric()||candidateScope==='top');
   const count=entries.reduce((sum,entry)=>sum+entry.count,0);
-  heading.textContent=presidentialMode?yearLabel()+' 台湾地区领导人选举 · '+(localLeaders?'各地区最高票候选人':'候选人得票'):mayorTownView()?'2022 县市长选举 · '+(localLeaders?'乡镇市区最高票候选人':'乡镇市区得票'):'2022 '+titles[kind]+'选举结果';
+  heading.textContent=presidentialMode?yearLabel()+' 台湾地区领导人选举 · '+(localLeaders?'各地区最高票候选人':'候选人得票'):mayorTownView()?'2022 县市长选举 · '+(localLeaders?'乡镇市区最高票候选人':'乡镇市区得票'):yearLabel()+' '+officeTitle()+'选举结果';
   root.append(heading);
   const unit=metric==='seats'?'席':metric==='votes'?'票':'%';
   root.append(svg('line',{x1:x+18,y1:y+43,x2:x+width-18,y2:y+43,stroke:'#e5ece6'}));
@@ -490,11 +490,12 @@
     focusSelect.replaceChildren(new Option(scale==='district'?'全部选举区':'全部乡镇市区',''),...options.map(name=>new Option(name,name)));
     focusSelect.value=legislativeFocus;
    }
-   if(el('historyLegislativeMapHint'))el('historyLegislativeMapHint').textContent=
+   if(el('historyLegislativeMapHint')){el('historyLegislativeMapHint').hidden=false;el('historyLegislativeMapHint').textContent=
     legislativeBallot==='regional'?(scale==='national'?'全国图只标县市名称；点击县市可查看各选举区。':scale==='county'?'县市图显示本届选区边界；点击选区聚焦并查看候选人结果。':'选定一个选区可查看完整候选人及当选席次。'):
     legislativeYear===1992&&['plains','mountain'].includes(legislativeBallot)?'1992年没有县市及乡镇得票记录，全国图仅显示行政区轮廓，不推算地方票数。':
-    scale==='national'?'按县市着色，点击县市可查看县市及乡镇市区结果。':scale==='county'?'县市得票分布；选择乡镇市区层级可继续下钻。':'点击乡镇市区查看得票分布。';
-  }else{if(el('historyFocusBox'))el('historyFocusBox').hidden=true;el('historyScale').replaceChildren(new Option('县市','district'),new Option('乡镇市区','town'));el('historyScale').value=scale;if(kind==='council')el('historyElectorate').replaceChildren(new Option('全部类型（分别统计）','all'),new Option('区域议员','regional'),new Option('平地少数民族议员','plains'),new Option('山地少数民族议员','mountain'))}
+    scale==='national'?'按县市着色，点击县市可查看县市及乡镇市区结果。':scale==='county'?'县市得票分布；选择乡镇市区层级可继续下钻。':'点击乡镇市区查看得票分布。';}
+
+  }else{if(el('historyFocusBox'))el('historyFocusBox').hidden=true;if(el('historyLegislativeMapHint'))el('historyLegislativeMapHint').hidden=true;el('historyScale').replaceChildren(new Option('县市','district'),new Option('乡镇市区','town'));el('historyScale').value=scale;if(kind==='council')el('historyElectorate').replaceChildren(new Option('全部类型（分别统计）','all'),new Option('区域议员','regional'),new Option('平地少数民族议员','plains'),new Option('山地少数民族议员','mountain'))}
   if(el('historyElectorateBox'))el('historyElectorateBox').hidden=kind!=='council'&&!legislativeMode;if(el('historyElectorate'))el('historyElectorate').value=electorate;
   if(el('historyLegislativeNote')){el('historyLegislativeNote').hidden=!legislativeMode;el('historyLegislativeNote').textContent=HistoryLegislative.note(legislativeYear,legislativeBallot)||'2008年起不分区采用独立政党票；区域选举为单一选区一席。'}
   const legislativeBadges=legislativeMode&&legislativeBallot==='regional'&&legislativeYear<2008;
@@ -654,12 +655,12 @@
    if(!counts)return '#edf1e9';
    const seats=counts.get(selectedParty)||0;return seats?tone(partyColor(selectedParty),seats,currentResult.seatRange):'#fff';
   }
-  if(kind==='council'&&metric==='party')return featurePresentation(feature).fill;
+  if(kind==='council'&&metric==='party'||legislativeMultiView())return featurePresentation(feature).fill;
   if(noElection(feature))return '#ffffff';
   const region=currentResult?.regions.get(featureKey(feature));
   return !region?'#edf1e9':!voteMetric()&&region.tie?'#aebdb4':region.party?tone(partyColor(region.party),metric==='votes'?region.top?.votes||0:region.share,currentResult.range):'#edf1e9';
  };
- const defaultDetail=regionDetail;regionDetail=function(feature){if(!active)return defaultDetail(feature);if(metric==='seats'){const counts=county?currentResult?.regions.get(featureKey(feature))?.partyCounts:currentResult?.countySeats.get(feature.county);return counts?selectedParty+' · '+(counts.get(selectedParty)||0)+'席':'暂无该层级数据'}if(kind==='council'&&metric==='party')return featurePresentation(feature).tooltip;if(historyOverview()){return '点击查看'+feature.county+'2022年结果'}if(noElection(feature))return '2022年本区域不举行乡镇市区长选举';const region=currentResult?.regions.get(featureKey(feature));if(voteMetric())return region?.top?region.top.name+' · '+(metric==='votes'?region.top.votes.toLocaleString('zh-CN')+'票 · '+region.share.toFixed(2)+'%':region.share.toFixed(2)+'% · '+region.top.votes.toLocaleString('zh-CN')+'票'):'暂无该候选人得票数据';if(areaLeading())return region?.top?region.top.name+' · 得票领先 · '+region.top.votes.toLocaleString('zh-CN')+'票 · '+region.share.toFixed(2)+'%'+(feature.historicalBoundaryNote?' · '+feature.historicalBoundaryNote:''):'暂无本地区得票资料';return !region?'历史数据未匹配':region.tie?'各党当选席次并列':region.party+' · '+region.seatCount+'席'};
+ const defaultDetail=regionDetail;regionDetail=function(feature){if(!active)return defaultDetail(feature);if(metric==='seats'){const counts=county?currentResult?.regions.get(featureKey(feature))?.partyCounts:currentResult?.countySeats.get(feature.county);return counts?selectedParty+' · '+(counts.get(selectedParty)||0)+'席':'暂无该层级数据'}if(kind==='council'&&metric==='party'||legislativeMultiView())return featurePresentation(feature).tooltip;if(historyOverview()){return '点击查看'+feature.county+'2022年结果'}if(noElection(feature))return '2022年本区域不举行乡镇市区长选举';const region=currentResult?.regions.get(featureKey(feature));if(voteMetric())return region?.top?region.top.name+' · '+(metric==='votes'?region.top.votes.toLocaleString('zh-CN')+'票 · '+region.share.toFixed(2)+'%':region.share.toFixed(2)+'% · '+region.top.votes.toLocaleString('zh-CN')+'票'):'暂无该候选人得票数据';if(areaLeading())return region?.top?region.top.name+' · 得票领先 · '+region.top.votes.toLocaleString('zh-CN')+'票 · '+region.share.toFixed(2)+'%'+(feature.historicalBoundaryNote?' · '+feature.historicalBoundaryNote:''):'暂无本地区得票资料';return !region?'历史数据未匹配':region.tie?'各党当选席次并列':region.party+' · '+region.seatCount+'席'};
  const defaultPushHistory=pushHistory;pushHistory=function(){if(!active)return defaultPushHistory()};
  const defaultPaint=paint;paint=function(feature){if(!active)return defaultPaint(feature);if(legislativeMode){
    if(legislativeYear===1992&&['plains','mountain'].includes(legislativeBallot))return toast('1992年没有县市得票分布，仅可查阅全国选举结果');
@@ -672,7 +673,7 @@
  const defaultRender=render;render=function(){if(active&&data){delete el('legend').dataset.historyBox;syncHistoryControls();currentResult=analyze()}defaultRender();if(active){update();for(const id of ['workspacePrediction','workspaceFree']){el(id).classList.remove('active');el(id).setAttribute('aria-pressed','false')}}};
  function showComparison(result){
   const root=el('historyCompare');
-  root.hidden=presidentialMode||mayorTownView()||historyOverview()&&kind==='mayor';
+  root.hidden=presidentialMode||legislativeMode||mayorTownView()||historyOverview()&&kind==='mayor';
   if(root.hidden)return;
   const parties=new Map(),districts=[...directoryDistrictById.values()].filter(d=>d.type===kind&&(!county||d.county===county));
   let completed=0;
