@@ -110,7 +110,7 @@
   year=Number(year);if(!YEAR_SET.has(year))throw Error('不支持的立法机构民代选举年份：'+year);
   if(loads.has(year))return loads.get(year);
   const promise=(async()=>{
-   const response=await fetcher('assets/history-legislative-'+year+'.json?v=20261114-legislative-v1',{cache:'default'});
+   const response=await fetcher('assets/history-legislative-'+year+'.json?v=20261114-legislative-v2',{cache:'default'});
    if(!response.ok)throw Error(year+'年立法机构民代历史数据 HTTP '+response.status);
    const shard=await response.json();
    if(shard.schemaVersion!==2||shard.year!==year||shard.office!=='legislative'||!Array.isArray(shard.rows)||!shard.rows.length)throw Error(year+'年立法机构民代历史数据校验未通过');
