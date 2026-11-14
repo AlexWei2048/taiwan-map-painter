@@ -100,3 +100,16 @@ test('separates former county and city into distinct historical geometry',()=>{
  assert.deepEqual(geo.counties.map(c=>c.d),['M1','M2']);
  assert.equal(geo.towns[0].county,'台中县');
 });
+
+test('published legislative JSON shards are complete and match the source manifest',()=>{
+ const fs=require('node:fs'),crypto=require('node:crypto'),path=require('node:path');
+ const manifest=JSON.parse(fs.readFileSync(path.join(__dirname,'../sources/history-legislative-manifest.json'),'utf8'));
+ for(const year of Legislative.YEARS){
+  const source=fs.readFileSync(path.join(__dirname,'../assets/history-legislative-'+year+'.json'));
+  const actual=crypto.createHash('sha256').update(source).digest('hex');
+  assert.equal(actual,manifest.shards[String(year)],year+' shard checksum must match the reproducible official-source build');
+  const snapshot=JSON.parse(source.toString('utf8'));
+  assert.equal(snapshot.year,year);
+  assert.ok(snapshot.rows.length>100,year+' should have candidate-level history');
+ }
+});
