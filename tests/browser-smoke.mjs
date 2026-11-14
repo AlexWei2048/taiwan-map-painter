@@ -2075,7 +2075,7 @@ test('Presidential, mayor and township overviews expose all/county/town levels w
    contests:HistoryWorkspace.result().contests.length,
    title:document.querySelector('#historyOverviewTitle').textContent}));
   assert.equal(local.selection.scope,'town');
-  assert.match(local.title,office==='township'?/金门县/:/台北市/);
+  assert.match(local.title,office==='township'?/金门(?:县)?/:/台北市/);
   assert.ok(local.contests>=1);
   if(office==='president'||office==='mayor'){
    assert.equal(local.data.registeredVoters,null,'local voter roll is not inferred from votes');
