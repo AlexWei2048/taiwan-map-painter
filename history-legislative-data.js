@@ -76,7 +76,10 @@
   const year=Number(selection.year||snapshot.year),electorate=selection.electorate||'regional',
    level=electorate==='regional'?'district':selection.level==='national'?'national':
     selection.level==='town'?'town':'county',county=selection.county||'';
-  const records=snapshot.rows.filter(r=>r.electorate===electorate&&r.level===level&&(!county||r.county===county));
+  const focus=String(selection.focus||'');
+  const records=snapshot.rows.filter(r=>r.electorate===electorate&&r.level===level&&(!county||r.county===county)&&
+   (!focus||level==='district'&&root.HistoryLegislative?.districtNumber(r.district)===root.HistoryLegislative?.districtNumber(focus)||
+    level==='town'&&r.town===focus));
   const area=r=>level==='national'?'全区':electorate==='regional'?r.county+'|'+r.district:
    level==='town'?r.county+'|'+r.town:r.county;
   const totals=new Map();
