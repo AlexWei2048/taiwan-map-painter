@@ -2074,7 +2074,9 @@ test('Presidential, mayor and township overviews expose all/county/town levels w
   if(office==='president'||office==='mayor'){
    assert.equal(local.data.registeredVoters,null,'local voter roll is not inferred from votes');
    assert.equal(local.data.ballotsCast,null,'local turnout is not inferred from votes');
-   assert.ok(local.data.validVotes>0,'actual local candidate votes remain available');
+   if(office==='president')assert.ok(local.data.validVotes>0,'verified presidential town votes remain available');
+   else assert.ok(local.data.validVotes===null||local.data.validVotes>0,
+    'mayor local vote totals are shown only when complete source rows exist');
   }else{
    assert.ok(Number.isInteger(local.data.registeredVoters));
    assert.ok(Number.isInteger(local.data.ballotsCast));
