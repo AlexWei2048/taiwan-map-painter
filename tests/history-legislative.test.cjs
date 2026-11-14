@@ -11,9 +11,15 @@ test('uses era-correct ballot labels',()=>{
  assert.equal(Legislative.ballots(2008).find(x=>x.value==='party').label,'不分区政党票');
 });
 
-test('1992 degrades to district level while later list votes offer three levels',()=>{
- assert.deepEqual(Legislative.levels(1992,'regional'),[['district','选举区']]);
- assert.deepEqual(Legislative.levels(2024,'party'),[['county','县市'],['town','乡镇市区']]);
+test('legislative map levels follow ballot geography, with no invented 1992 local votes',()=>{
+ const national=['national','全部地区（含金门、马祖）'];
+ assert.deepEqual(Legislative.levels(1992,'regional'),[national,['county','县市'],['district','选举区']]);
+ assert.deepEqual(Legislative.levels(2024,'regional'),[national,['county','县市'],['district','选举区']]);
+ assert.deepEqual(Legislative.levels(2024,'party'),[national,['county','县市'],['town','乡镇市区']]);
+ assert.deepEqual(Legislative.levels(2024,'mountain'),[national,['county','县市'],['town','乡镇市区']]);
+ assert.deepEqual(Legislative.levels(1992,'party'),[national,['county','县市']]);
+ assert.deepEqual(Legislative.levels(1992,'plains'),[national]);
+ assert.deepEqual(Legislative.levels(1992,'mountain'),[national]);
 });
 
 test('single-seat regional races use fills and old multi-seat races use badges',()=>{
@@ -130,4 +136,18 @@ test('verified name corrections span source candidate IDs and all regional/map-l
   assert.equal(snap.rows.some(row=>row.electorate===entry.electorate&&row.name===entry.old_name),false,'obsolete name in maps');
   assert.equal(snap.candidacies.some(row=>row.candidate_name===entry.old_name),false,'obsolete name in candidacies');
  }
+});
+
+
+test('Multi-member history composes party seats from actual winners, not top-vote party guesses',()=>{
+ const snap={rows:[
+  {electorate:'regional',level:'district',county:'台北市',district:'台北市第一选区',name:'甲',party:'中国国民党',elected:true,votes:9000},
+  {electorate:'regional',level:'district',county:'台北市',district:'台北市第一选区',name:'乙',party:'民主进步党',elected:true,votes:8500},
+  {electorate:'regional',level:'district',county:'台北市',district:'台北市第二选区',name:'丙',party:'民主进步党',elected:true,votes:7500},
+  {electorate:'regional',level:'district',county:'台北市',district:'台北市第二选区',name:'丁',party:'无党籍',elected:false,votes:7400}
+ ]};
+ assert.equal(Legislative.winners(snap,{county:'台北市'}).length,3);
+ assert.deepEqual(Legislative.composition(Legislative.winners(snap,{county:'台北市'})),
+  [{party:'民主进步党',seats:2},{party:'中国国民党',seats:1}]);
+ assert.equal(Legislative.winners(snap,{county:'台北市',district:'台北市第一选区'}).length,2);
 });
