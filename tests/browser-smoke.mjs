@@ -2040,7 +2040,7 @@ test('Presidential, mayor and township overviews expose all/county/town levels w
  for(const office of ['president','mayor','township']){
   await page.locator('#historyOffice').selectOption(office);
   await page.waitForFunction(office=>History2022View.office()===office,office);
-  await page.locator('#historyViewOverview').click().catch(()=>{});
+  if(await page.locator('#historyOverviewPanel').isHidden())await page.locator('#historyViewOverview').click();
   const scope=page.locator('#historyOverviewScope'),county=page.locator('#historyOverviewCounty'),area=page.locator('#historyOverviewContest');
   assert.deepEqual(await scope.locator('option').allTextContents(),['全部地区（含金门、马祖）','县市','乡镇市区']);
   await scope.selectOption('all');
