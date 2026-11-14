@@ -297,7 +297,7 @@
   positionMapNumberTable();
  }
  function showRows(result){
-  const search=norm(el('historySearch').value);
+  const search=normCandidate(el('historySearch').value);
   const partySelect=el('historyResultParty'),parties=[...new Set(result.rows.map(r=>r.party))].sort((a,b)=>a.localeCompare(b,'zh')),priorParty=partySelect?.value||'';
   if(partySelect){partySelect.replaceChildren(new Option('全部政党',''),...parties.map(p=>new Option(p,p)));partySelect.value=parties.includes(priorParty)?priorParty:''}
   const partyFilter=partySelect?.value||'',rows=result.rows.filter(r=>(!partyFilter||r.party===partyFilter)&&(!search||[r.county,r.town,r.district,r.name,r.party].some(v=>v.includes(search)))).sort((a,b)=>HistoryCore.compareResultRows(a,b,kind));
