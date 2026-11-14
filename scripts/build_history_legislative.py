@@ -43,6 +43,24 @@ def simplify(value: object) -> str:
     return CONVERTER.convert(str(value or "")).strip()
 
 
+NAME_CORRECTIONS_PATH = ROOT / "sources/history-legislative-name-corrections.json"
+VERIFIED_NAME_RULES = {
+    (entry["year"], entry["electorate"], entry["old_name"]): entry["name"]
+    for entry in json.loads(NAME_CORRECTIONS_PATH.read_text(encoding="utf8"))["corrections"]
+}
+PROTECTED_CANONICAL_NAMES = {"魏耀乾", "李乾龙", "陈民乾", "米甘幹．理佛克"}
+
+
+def simplify_person_name(value: object) -> str:
+    raw = str(value or "").strip()
+    return raw if raw in PROTECTED_CANONICAL_NAMES else simplify(raw)
+
+
+def verified_candidate_name(year: int, electorate: str, raw: object) -> str:
+    raw = simplify(raw)
+    return VERIFIED_NAME_RULES.get((year, electorate, raw), raw)
+
+
 def normalize_party(value: object) -> str:
     party = simplify(value)
     return "无党籍" if not party or "无党籍及未经政党推荐" in party else party
@@ -79,7 +97,7 @@ def aggregate_candidate_rows(rows: list[dict], electorate: str) -> list[dict]:
         town = simplify(source.get("鄉鎮市區"))
         district = simplify(source.get("選區")) or ("平地少数民族" if electorate == "plains" else "山地少数民族" if electorate == "mountain" else county)
         number = str(source.get("號次", "")).strip()
-        candidate = simplify(source.get("候選人"))
+        candidate = simplify_person_name(source.get("候選人"))
         party = normalize_party(source.get("政黨"))
         is_elected = elected(source.get("當選註記"))
         if not candidate:
@@ -199,6 +217,12 @@ def contests_and_candidacies(year: int, rows: list[dict]) -> tuple[list[dict], l
 
 
 def make_snapshot(year: int, source_rows: dict[str, list[dict]]) -> dict:
+    # Correct only separately verified names; never guess from name length.
+    for electorate in ("regional", "plains", "mountain"):
+        for source in source_rows.get(electorate, []):
+            corrected = verified_candidate_name(year, electorate, source.get("候選人"))
+            if corrected != simplify(source.get("候選人")):
+                source["候選人"] = corrected
     rows = []
     for electorate in ("regional", "plains", "mountain"):
         rows.extend(aggregate_candidate_rows(source_rows.get(electorate, []), electorate))
