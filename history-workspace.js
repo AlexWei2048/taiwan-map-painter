@@ -325,7 +325,7 @@
    description.textContent='当前统计范围：'+fullArea+
     (groups.length>1?' · 关键指标为各选举类别合计，图表保留分类统计':'')+
     (overviewScope==='town'&&['president','mayor'].includes(state.office)?
-     ' · 该层级仅有候选人有效票，缺乏已核实的选举人数和投票人数':'');
+     ' · 该层级仅展示可核实的候选人有效票；没有完整记录时保留缺值，不推算选举人数和投票人数':'');
   }
  }
  function openContestOverview(contestId){
