@@ -119,7 +119,12 @@
 
  function overview(result){
   if(result.selection?.office==='president'){
-    const national=!result.selection.countyId?result.index?.snapshot?.national:null;
+    // A single selected county/contest uses its own verified turnout record,
+    // never the national roll. This also supports drilling directly into a
+    // constituency from the historical results dialog.
+    const scoped=result.contests?.length===1?result.contests[0]:null;
+    const national=!scoped&&!result.selection.countyId&&!result.selection.contestId?
+     result.index?.snapshot?.national:null;
     const summaries=result.summaries||[];
     const validVotes=summaries.reduce((n,item)=>n+item.validVotes,0);
     const uniq=new Map();
@@ -128,9 +133,11 @@
       if(!uniq.has(key))uniq.set(key,candidate);
     }
     const candidates=[...uniq.values()];
-    const registeredVoters=Number.isInteger(national?.registered_voters)?national.registered_voters:null;
-    const ballotsCast=Number.isInteger(national?.ballots_cast)?national.ballots_cast:null;
-    const invalidVotes=Number.isInteger(national?.invalid_votes)?national.invalid_votes:null;
+    const count=field=>Number.isInteger(scoped?.[field])?scoped[field]:
+     Number.isInteger(national?.[field])?national[field]:null;
+    const registeredVoters=count('registered_voters');
+    const ballotsCast=count('ballots_cast');
+    const invalidVotes=count('invalid_votes');
     const group={electorate:'regional',registeredVoters,ballotsCast,validVotes,invalidVotes,
       turnout:registeredVoters&&ballotsCast!==null?ballotsCast/registeredVoters*100:null};
     return{...group,turnoutGroups:[group],candidateCount:candidates.length,
