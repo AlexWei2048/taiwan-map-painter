@@ -4,11 +4,11 @@
  const el=id=>document.getElementById(id), db={mayor:[],council:[],township:[],legislative:[]},titles={mayor:'县市长',council:'县市议员',township:'乡镇市区长',legislative:'立法机构民代'};
  let selectedParty='', active=false,kind='mayor',electorate='all',county='',metric='party',scale='district',candidateScope='top',selectedCandidate='',historicalFeatures=[],hsinchuGeometry=null,loaded=false,loading=null,lastResult=[],savedMapScope=null,unmatchedDistricts=new Set(),districtMetadata=[],currentResult=null,snapshotData=null,lastOpenedFeature=null;
  let presidentialMode=false,presidentialYear=2024,presidentialGeometry=null;
- let legislativeMode=false,legislativeYear=2024,legislativeBallot='regional',legislativeGeometry=[],legislativeAreaGeometry=null;
+ let legislativeMode=false,legislativeYear=2024,legislativeBallot='regional',legislativeGeometry=[],legislativeAreaGeometry=null,legislativeFocus='';
  let history2022Snapshot=null,originalMayorRows=null,loadingPresidentialId=0;
  const yearLabel=()=>String(presidentialMode?presidentialYear:legislativeMode?legislativeYear:2022);
  const officeTitle=()=>presidentialMode?'台湾地区领导人':titles[kind];
- const areaLeading=()=>presidentialMode||legislativeMode&&!(legislativeBallot==='regional'&&legislativeYear<2008)||mayorTownView();
+ const areaLeading=()=>presidentialMode||legislativeMode&&legislativeBallot!=='regional'||mayorTownView();
  const norm=x=>simplify(String(x||'')).trim();
  const protectedCandidateNames=new Set(['魏耀乾','李乾龙','陈民乾','米甘幹．理佛克']);
  const normCandidate=x=>protectedCandidateNames.has(String(x||'').trim())?String(x).trim():norm(x);
@@ -63,7 +63,7 @@
  function restoreStandardElection(office){
   loadingPresidentialId+=1;
   const wasPresidential=presidentialMode,wasLegislative=legislativeMode;
-  presidentialMode=false;presidentialGeometry=null;legislativeMode=false;legislativeAreaGeometry=null;
+  presidentialMode=false;presidentialGeometry=null;legislativeMode=false;legislativeAreaGeometry=null;legislativeFocus='';
   if(wasPresidential&&originalMayorRows){
    db.mayor.length=0;db.mayor.push(...originalMayorRows);
   }
@@ -87,6 +87,7 @@
    if(requestId!==loadingPresidentialId||!active||el('historyOffice').value!=='legislative')return;
    db.legislative.length=0;dbIds.clear();addRows(shard.rows);
    legislativeMode=true;presidentialMode=false;legislativeYear=year;kind='legislative';snapshotData=shard;
+    if(!['national','county','district','town'].includes(scale))scale='national';legislativeFocus='';
     legislativeAreaGeometry=HistoryLegislative.scopeGeometry(geometryReference||shard,data,norm,HistoryCore.mergePaths,HistoryPresidential.modernCounty,HistoryPresidential.baseTown);
     const legacyMap={...data,towns:legislativeAreaGeometry.towns,counties:legislativeAreaGeometry.counties};
    if(year<=2008)legislativeGeometry=HistoryLegislative.districtGeometry(shard,geometryReference||shard,legacyMap,norm,HistoryCore.mergePaths,HistoryPresidential.modernCounty,HistoryPresidential.baseTown);
@@ -98,6 +99,7 @@
    legislativeBallot=['regional','plains','mountain','party'].includes(electorate)?electorate:'regional';electorate=legislativeBallot;
    const available=HistoryLegislative.levels(year,legislativeBallot).map(item=>item[0]);
    scale=available.includes(scale)?scale:available[0];
+    if(scale==='national')county='';
    updateHistoricCounties([...new Set(shard.rows.filter(row=>row.level==='county'&&row.electorate==='regional').map(row=>row.county).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'zh-CN')));
    el('historyYear').value=String(year);candidateScope='top';selectedCandidate='';resultPage=0;
    indicator.hidden=true;indicator.textContent='';window.dispatchEvent(new CustomEvent('historysnapshotready',{detail:{snapshot:shard}}));
@@ -138,10 +140,32 @@
    toast(year+' 年历史结果载入失败：'+error.message);
   }
  }
+ function legislativeNationalRows(){
+  if(!legislativeMode)return [];
+  return(snapshotData?.rows||[]).filter(r=>r.electorate===legislativeBallot&&r.level==='national').map(src=>({
+   type:'legislative',electorate:src.electorate,level:'national',county:'全部地区（含金门、马祖）',town:'',
+   district:src.district||'',number:String(src.number||''),name:normCandidate(src.name),
+   party:normalizeParty(src.party),votes:Number(src.votes)||0,elected:src.elected===true,
+   gender:norm(src.gender),incumbent:src.incumbent
+  }));
+ }
+ function legislativeDisplayRows(){
+  if(legislativeMode&&scale==='national'&&legislativeBallot!=='regional'){
+   const national=legislativeNationalRows();if(national.length)return national;
+  }
+  return recordsInView();
+ }
+ function legislativeCurrentLevel(){
+  if(legislativeBallot==='regional')return 'district';
+  if(legislativeYear===1992&&['plains','mountain'].includes(legislativeBallot))return 'district';
+  return scale==='town'?'town':'county';
+ }
  function recordsInView(){
   if(legislativeMode){
-   const level=legislativeBallot==='regional'?'district':scale;
-   return db.legislative.filter(r=>r.electorate===legislativeBallot&&r.level===level&&(!county||r.county===county));
+   const level=legislativeCurrentLevel();
+   return db.legislative.filter(r=>r.electorate===legislativeBallot&&r.level===level&&(!county||r.county===county)&&
+    !(level==='district'&&legislativeBallot==='regional'&&scale==='district'&&legislativeFocus&&
+      HistoryLegislative.districtKey(r)!==HistoryLegislative.districtKey({county:r.county,district:legislativeFocus})));
   }
   const all=db[kind].filter(r=>!county||r.county===county);
   const level=kind==='mayor'?(mayorTownView()?'town':'county'):kind==='council'?'district':'town';
@@ -181,7 +205,7 @@
   let min=Math.floor(percentile(.05)/5)*5,max=Math.ceil(percentile(.95)/5)*5;
   if(metric==='votes'){min=0;max=Math.max(1,...values)}else if(max-min<15){const mid=(min+max)/2;min=Math.max(0,Math.floor((mid-10)/5)*5);max=Math.min(100,Math.ceil((mid+10)/5)*5)}
   lastResult=rows;
-  const countySeats=new Map();if(kind==='council'||legislativeMode&&legislativeBallot==='regional'&&legislativeYear<2008)for(const r of rows.filter(r=>r.elected)){if(!countySeats.has(r.county))countySeats.set(r.county,new Map());const counts=countySeats.get(r.county);counts.set(r.party,(counts.get(r.party)||0)+1)}
+  const countySeats=new Map();if(kind==='council'||legislativeMode&&legislativeBallot==='regional')for(const r of rows.filter(r=>r.elected)){if(!countySeats.has(r.county))countySeats.set(r.county,new Map());const counts=countySeats.get(r.county);counts.set(r.party,(counts.get(r.party)||0)+1)}
   const result={rows,regions,partySeats,countySeats,areas:groups.size,range:{min,max}};
   if(metric==='seats')result.seatRange=seatRange(result);
   return result
@@ -423,13 +447,8 @@
   if(!active)return null;
   if(presidentialMode&&presidentialGeometry)return(scale==='town'?presidentialGeometry.towns:presidentialGeometry.counties).filter(f=>!county||f.county===county);
   if(legislativeMode){
-   if(legislativeBallot==='regional')return legislativeGeometry.filter(f=>!county||f.county===county);
-   if(legislativeYear===1992&&['plains','mountain'].includes(legislativeBallot)){
-    const counties=legislativeAreaGeometry?.counties||[];
-    if(!counties.length)return [];
-    const box=counties.reduce((b,f)=>[Math.min(b[0],f.box[0]),Math.min(b[1],f.box[1]),Math.max(b[2],f.box[2]),Math.max(b[3],f.box[3])],[Infinity,Infinity,-Infinity,-Infinity]);
-    return[{id:'legislative:1992:'+legislativeBallot,county:'全部地区（含金门、马祖）',name:'全区选举',d:HistoryCore.mergePaths(counties.map(f=>f.d)),box,center:[(box[0]+box[2])/2,(box[1]+box[3])/2],historicalBoundaryNote:'仅有全区选区票数，无乡镇市区空间分布'}];
-   }
+   if(legislativeBallot==='regional')return legislativeGeometry.filter(f=>(!county||f.county===county)&&!(scale==='district'&&legislativeFocus&&HistoryLegislative.districtNumber(f.number||f.name)!==HistoryLegislative.districtNumber(legislativeFocus)));
+   if(legislativeYear===1992&&['plains','mountain'].includes(legislativeBallot))return legislativeAreaGeometry?.counties||[]; // No county-level figures: neutral national geography.
    return(scale==='town'?(legislativeAreaGeometry?.towns||data.towns):(legislativeAreaGeometry?.counties||data.counties)).filter(f=>!county||f.county===county);
   }
   if(historyOverview())return kind==='township'?data.towns:data.counties;
