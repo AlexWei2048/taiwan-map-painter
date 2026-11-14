@@ -10,6 +10,8 @@
 
 不分区政党票、平地少数民族及山地少数民族候选人票在来源具备明细时可按全部地区（含金门、马祖）、县市及乡镇市区查看。1992年政治大学选举研究数据库仅提供选区层候选人结果，因此该届区域及少数民族候选人票仅按选区展示；不分区席次计算票可由现有区域候选人票汇总至县市，但不推算乡镇市区票数。1995年以后数据由中选会开放资料的Taiwan Votes核对CSV构建；每个年度单独生成快照，来源文件、行数和SHA-256记录在 `sources/history-legislative-manifest.json`。
 
+已对十届立法机构民代选举的 3,632 条候选人记录进行字符异常初筛，并以中选会公告、机构资料和历届结果核实 11 条应修正记录。纠错来源与约束集中记录于 `sources/history-legislative-name-corrections.json`；保留人名中的「乾」「幹」，不因姓名较长就改写原住民或复姓候选人。可运行 `python scripts/audit_legislative_names.py` 重新生成审计清单。
+
 运行 `python scripts/build_history_legislative.py` 可重新下载、验证并生成十个年度分片；运行 `python scripts/build_history_legislative.py --verify-existing` 只核验仓库现有分片。
 
 ## 使用方式
