@@ -531,7 +531,7 @@
  }
  function mayorTownView(){return kind==='mayor'&&scale==='town'}
  function historyOverview(){return active&&!county&&kind!=='mayor'&&!legislativeMode}
- function legislativeNationalView(){return active&&legislativeMode&&scale==='national'&&!county}
+ function legislativeNationalView(){return active&&legislativeMode&&!county}
  function legislativeMultiView(){return active&&legislativeMode&&legislativeBallot==='regional'&&legislativeYear<2008&&metric==='party'}
  function historyCouncilSeats(){return active&&kind==='council'&&!!county&&metric==='party'}
  function voteMetric(){return metric==='share'||metric==='votes'}
