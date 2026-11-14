@@ -455,10 +455,10 @@
   const dialog=el('historyResultDialog'),hint=el('historyDialogScroll');
   const overviewButton=el('historyDialogOverview');
   if(overviewButton){
-   const contestId=window.HistoryWorkspace?.contestForFeature?.(f);
-   overviewButton.hidden=!contestId;
-   overviewButton.textContent='查看本选区概况';
-   overviewButton.onclick=()=>{dialog.close();window.HistoryWorkspace?.openContestOverview?.(contestId)};
+   overviewButton.hidden=!window.HistoryWorkspace?.openFeatureOverview;
+   overviewButton.textContent=kind==='council'?'查看本议员选区概况':
+    f.county===f.name?'查看本县市概况':'查看本乡镇市区概况';
+   overviewButton.onclick=()=>{dialog.close();window.HistoryWorkspace?.openFeatureOverview?.(f)};
   }
   hint.hidden=true;dialog.showModal();
   wrap.scrollLeft=0;wrap.scrollTop=0;
