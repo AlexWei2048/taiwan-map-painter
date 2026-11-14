@@ -3,7 +3,7 @@
   // Apply publication wording at CSV serialization time only; archive data and IDs remain unchanged.
   const csvSimplify=root.OpenCC?.Converter?root.OpenCC.Converter({from:'t',to:'cn'}):text=>String(text);
   const exportedWording=value=>{const text=csvSimplify(String(value??''));return (typeof module!=='undefined'&&module.exports?require('./news-wording.js'):root.XinhuaWording)?.normalize(text)||text};
-  const csvPercent=value=>{if(value===null||value===undefined||String(value).trim()==='')return '';const number=Number(String(value).trim().replace(/%$/,''));return Number.isFinite(number)?number.toFixed(2)+'%':''};
+  const csvPercent=value=>{if(value===null||value===undefined||String(value).trim()==='')return '';const number=Number(String(value).trim().replace(/%$/,''));return Number.isFinite(number)?(Math.round((number+1e-9)*100)/100).toFixed(2)+'%':''};
   const csvCell=value=>{let text=exportedWording(value);if(/^[=+@\t\r-]/.test(text))text="'"+text;return '"'+text.replace(/"/g,'""')+'"'};
  const OFFICES=new Set(['mayor','council','township','president']);
  const PRESIDENT_YEARS=[1996,2000,2004,2008,2012,2016,2020,2024];
@@ -52,7 +52,7 @@
   const top=region?.top;
   if(!top)return{fill:'#edf1e9',badgeItems:[],tooltip:'暂无该层级数据',ariaLabel:'暂无该层级数据'};
   const leading=level==='town'||office==='president';
-  const description=top.name+' · '+top.party+' · '+(leading?'得票领先':'当选')+' · '+Number(top.votes||0).toLocaleString('zh-CN')+'票'+(Number.isFinite(region.share)?' · '+region.share.toFixed(2)+'%':'');
+  const description=top.name+' · '+top.party+' · '+(leading?'本区最高票':'当选')+' · '+Number(top.votes||0).toLocaleString('zh-CN')+'票'+(Number.isFinite(region.share)?' · '+region.share.toFixed(2)+'%':'');
   return{fill:metric==='party'?partyColor(top.party):region.fill||partyColor(top.party),badgeItems:[],tooltip:description,ariaLabel:description};
  }
  function badgeFallback({districtNumber='',partyCount=0,inside=true}={}){
