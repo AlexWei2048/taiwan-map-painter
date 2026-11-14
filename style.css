@@ -801,3 +801,13 @@ body.history-mode #districtReferenceNote,body.history-mode #districtReferenceSou
  padding:8px 10px;border:1px solid #cadbd0;border-radius:8px;background:white;color:#244b38;font-size:13px}
 #historyOverviewTitle{overflow-wrap:anywhere;line-height:1.45}
 #historyOverviewDescription{overflow-wrap:anywhere}
+
+/* Historical overview: a consistent three-level geographic selector. */
+.history-overview-scope-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;
+ margin:0 0 15px;padding:12px;border:1px solid #dce8df;border-radius:12px;background:#f8fbf8}
+.history-overview-scope-controls label{display:flex;flex-direction:column;gap:6px;min-width:0;
+ color:#476c55;font-size:13px;font-weight:600}
+.history-overview-scope-controls label[hidden]{display:none!important}
+.history-overview-scope-controls select{width:100%;min-width:0;max-width:100%;padding:10px 9px;
+ border:1px solid #cadbd0;border-radius:8px;background:#fff;color:#244b38;font-size:13px}
+@media(max-width:750px){.history-overview-scope-controls{grid-template-columns:minmax(0,1fr)}}
