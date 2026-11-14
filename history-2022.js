@@ -10,6 +10,8 @@
  const officeTitle=()=>presidentialMode?'台湾地区领导人':titles[kind];
  const areaLeading=()=>presidentialMode||legislativeMode&&!(legislativeBallot==='regional'&&legislativeYear<2008)||mayorTownView();
  const norm=x=>simplify(String(x||'')).trim();
+ const protectedCandidateNames=new Set(['魏耀乾','李乾龙','陈民乾','米甘幹．理佛克']);
+ const normCandidate=x=>protectedCandidateNames.has(String(x||'').trim())?String(x).trim():norm(x);
  const normalizeParty=name=>{let s=norm(name||'无党籍');if(s.includes('无党籍及未经政党推荐')||s==='无党籍及未经政党推薦')s='无党籍';return s};
  const partyColor=p=>predictionParty(p).color;
  // Use the exact high-contrast nonlinear palette of the 2026 election view.
@@ -18,7 +20,7 @@
  const dbIds=new Set();
  const addRows=rows=>{let added=0;for(const src of rows){
   if(!['mayor','council','township','legislative'].includes(src.type))continue;
-  const r={type:src.type,electorate:HistoryCore.identity(src.electorate),level:src.level||'raw',county:norm(src.county),town:norm(src.town),village:norm(src.village),district:norm(src.district),number:String(src.number||''),name:norm(src.name),gender:norm(src.gender),deputyName:norm(src.deputy_name),deputyGender:norm(src.deputy_gender),incumbent:src.incumbent,party:normalizeParty(src.party),votes:Number(src.votes),elected:src.elected===true||src.elected==='true'};
+  const r={type:src.type,electorate:HistoryCore.identity(src.electorate),level:src.level||'raw',county:norm(src.county),town:norm(src.town),village:norm(src.village),district:norm(src.district),number:String(src.number||''),name:normCandidate(src.name),gender:norm(src.gender),deputyName:norm(src.deputy_name),deputyGender:norm(src.deputy_gender),incumbent:src.incumbent,party:normalizeParty(src.party),votes:Number(src.votes),elected:src.elected===true||src.elected==='true'};
   if(!r.county||!r.name||!Number.isFinite(r.votes)||r.votes<0)continue;
   const key=electionKey(r);if(dbIds.has(key))continue;dbIds.add(key);db[r.type].push(r);added++;
  }return added};
