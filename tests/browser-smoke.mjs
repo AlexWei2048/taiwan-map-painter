@@ -2106,7 +2106,7 @@ test('Ten legislative history years expose data and real historical electoral ma
  await page.waitForFunction(()=>History2022View.office()==='legislative'&&History2022View.year()===2024&&History2022View.snapshot()?.rows?.length>0,{timeout:20000});
  assert.ok(await page.evaluate(()=>History2022View.items().length>=65),'2024 single-member districts render');
  await page.locator('#historyElectorate').selectOption('party');
- await page.waitForFunction(()=>document.querySelector('#historyScale').value==='county');
+ await page.waitForFunction(()=>document.querySelector('#historyScale').value==='national');
  assert.ok(await page.evaluate(()=>History2022View.items().some(f=>f.county==='金门县')&&History2022View.items().some(f=>f.county==='连江县')),'outer islands are available');
  await page.locator('#historyYear').selectOption('2004');
  await page.waitForFunction(()=>History2022View.year()===2004&&History2022View.snapshot()?.year===2004,{timeout:20000});
@@ -2118,7 +2118,7 @@ test('Ten legislative history years expose data and real historical electoral ma
  await page.locator('#historyYear').selectOption('1992');
  await page.waitForFunction(()=>History2022View.year()===1992&&History2022View.snapshot()?.year===1992,{timeout:20000});
  await page.locator('#historyElectorate').selectOption('party');
- assert.equal(await page.locator('#historyScale').inputValue(),'county','1992 derived regional votes support county totals, not town estimates');
+ assert.equal(await page.locator('#historyScale').inputValue(),'national','1992 derived regional votes show the entire area first, with county detail available');
  assert.ok(await page.evaluate(()=>History2022View.items().length>=22));
  await page.locator('#historyOffice').selectOption('mayor');
  await page.waitForFunction(()=>History2022View.office()==='mayor'&&History2022View.year()===2022);
@@ -2148,4 +2148,63 @@ test('Verified historical proper names survive map UI, candidate search and CSV 
  const secondCsv=await page.evaluate(()=>HistoryWorkspace.historyCsv(HistoryWorkspace.result(),HistoryWorkspace.selection()));
  assert.match(secondCsv,/米甘幹．理佛克/);
  assert.doesNotMatch(secondCsv,/米甘干．理佛克/);
+});
+
+
+test('Legislative redesign: one national map with county names, county drilldown and no nationwide district numbers',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('legislative');
+ await page.waitForFunction(()=>History2022View.office()==='legislative'&&History2022View.snapshot()?.year===2024);
+ assert.deepEqual(await page.locator('#historyScale option').evaluateAll(a=>a.map(o=>o.value)),['national','county','district']);
+ assert.equal(await page.locator('#historyScale').inputValue(),'national');
+ assert.ok(await page.evaluate(()=>document.querySelectorAll('#regions path[data-region]').length>=65));
+ assert.ok(await page.evaluate(()=>document.querySelectorAll('#labels text[data-label]').length>=20));
+ assert.equal(await page.locator('#labels [data-placement="district-number"]').count(),0);
+ assert.equal(await page.locator('#labels [data-number-key]').count(),0);
+ assert.equal(await page.locator('#regions > g[data-electorate]').count(),0,'no parallel nationality panels');
+ await page.locator('#historyCounty').selectOption('台北市');
+ await page.waitForFunction(()=>document.querySelector('#historyScale').value==='county');
+ assert.equal(await page.locator('#labels [data-placement="district-number"]').count()>0,true,'county view shows district numbers');
+ await page.locator('#historyScale').selectOption('district');
+ assert.equal(await page.locator('#historyFocusBox').isVisible(),true);
+ const choices=await page.locator('#historyFocus option').allTextContents();
+ assert.ok(choices.length>=2);
+ await page.locator('#historyFocus').selectOption({index:1});
+ assert.equal(await page.locator('#regions path[data-region]').count(),1,'focus a single district');
+});
+test('Legislative redraw: pre-2008 winners use emblems instead of colored party regions',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('legislative');
+ await page.locator('#historyYear').selectOption('2004');
+ await page.waitForFunction(()=>History2022View.snapshot()?.year===2004);
+ assert.equal(await page.locator('#historyScale').inputValue(),'national');
+ assert.equal(await page.locator('#labels [data-placement="district-number"]').count(),0);
+ assert.ok(await page.locator('[data-national-legislative-seats="true"] [data-history-legislative-seats="county"]').count()>=15);
+ await page.locator('#historyCounty').selectOption('台北市');
+ assert.ok(await page.locator('[data-district-legislative-seats="true"] [data-history-legislative-seats="district"]').count()>=2);
+ await page.locator('#historyViewCandidates').click();
+ assert.ok(await page.locator('#historyLegislativeSummary').innerText().then(t=>t.includes('当选党派席次')));
+ assert.equal(await page.locator('#historyResults table[data-ballot="regional"]').count(),1);
+ assert.ok(await page.locator('#historyResults tr.history-elected-row').count()>0);
+});
+test('Legislative indigenous and party ballots have geography-appropriate levels and non-candidate result tables',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('legislative');
+ await page.locator('#historyElectorate').selectOption('party');
+ assert.deepEqual(await page.locator('#historyScale option').evaluateAll(a=>a.map(o=>o.value)),['national','county','town']);
+ assert.equal(await page.locator('#labels [data-placement="district-number"]').count(),0);
+ await page.locator('#historyViewCandidates').click();
+ assert.equal(await page.locator('#historyResults table[data-ballot="party"] thead th').count(),4);
+ await page.locator('#historyCounty').selectOption('金门县');
+ await page.locator('#historyScale').selectOption('town');
+ assert.ok(await page.locator('#regions path[data-region]').count()>0);
+ await page.locator('#historyElectorate').selectOption('mountain');
+ assert.equal(await page.locator('#historyScale').inputValue(),'national');
+ await page.locator('#historyYear').selectOption('1992');
+ await page.waitForFunction(()=>History2022View.snapshot()?.year===1992);
+ assert.deepEqual(await page.locator('#historyScale option').evaluateAll(a=>a.map(o=>o.value)),['national']);
+ assert.match(await page.locator('#historyLegislativeMapHint').innerText(),/不推算地方票数/);
 });
