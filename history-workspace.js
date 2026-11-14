@@ -68,6 +68,12 @@
     row.level==='town'&&row.county===county&&row.town&&
     (row.type===office||(office==='mayor'&&row.type==='council')))
     .map(row=>row.town));
+   // The map geometry supplies all valid township/ward names, including
+   // city districts without township-head elections. It is used only for
+   // geographic choice labels, never to infer unrecorded votes.
+   for(const item of selection.towns||[]){
+    if(item.county===county&&item.name)towns.add(item.name);
+   }
    // Some 2022 mayor source files provide only county-wide totals. Preserve
    // township choices from the same election's official township contests;
    // do not attribute those votes to the mayoral race.
@@ -268,7 +274,8 @@
   const {counties}=overviewRegionChoices(indexed,{year:state.year,office:state.office});
   if(overviewScope!=='all'&&!counties.includes(overviewCounty))
    overviewCounty=counties.includes(state.county)?state.county:counties[0]||'';
-  const choices=overviewRegionChoices(indexed,{year:state.year,office:state.office,county:overviewCounty});
+  const towns=root.History2022View?.allTowns?.()||[];
+  const choices=overviewRegionChoices(indexed,{year:state.year,office:state.office,county:overviewCounty,towns});
   const scopeSelect=el('historyOverviewScope');
   if(scopeSelect){
    const opts=[['all','全部地区（含金门、马祖）'],['county','县市'],[level,level==='district'?'议员选区':'乡镇市区']];
@@ -339,7 +346,8 @@
   if(!feature||!indexed)return false;
   const county=feature.county||feature.name;
   const level=state.office==='council'?'district':'town';
-  const choices=overviewRegionChoices(indexed,{year:state.year,office:state.office,county});
+  const choices=overviewRegionChoices(indexed,{year:state.year,office:state.office,county,
+   towns:root.History2022View?.allTowns?.()||[]});
   if(!choices.counties.includes(county))return false;
   overviewInitialized=true;overviewContext=overviewContextKey();
   overviewCounty=county;overviewMapCounty=state.county;
