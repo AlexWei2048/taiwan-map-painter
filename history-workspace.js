@@ -51,7 +51,9 @@
   const year=Number(selection.year||2022),office=selection.office||'mayor';
   if(!indexed||Number(indexed.snapshot?.year)!==year)return{counties:[],areas:[]};
   const source=Core.filter(indexed,{year,office,electorate:'all'});
-  const counties=[...new Set(source.contests.map(c=>c.county_name))].sort((a,b)=>
+  const counties=[...new Set((office==='township'?
+   [...source.contests,...Core.filter(indexed,{year,office:'mayor',electorate:'all'}).contests]:source.contests)
+   .map(c=>c.county_name))].sort((a,b)=>
    Core.compareResultRows({county_name:a},{county_name:b},office));
   const county=selection.county||'';
   let areas=[];
@@ -84,7 +86,9 @@
   const scope=['all','county','district','town'].includes(selection.scope)?selection.scope:'all';
   const county=String(selection.county||''),area=String(selection.area||'');
   const all=Core.filter(indexed,{year,office,electorate:'all'});
-  const countyContest=all.contests.find(c=>c.county_name===county);
+  const countyContest=all.contests.find(c=>c.county_name===county)||
+   (office==='township'?[...indexed.contestsById.values()].find(c=>
+    c.county_name===county&&c.election_id==='2022-mayor'):null);
   let query={year,office,electorate:'all'};
   if(scope!=='all'){
    if(!countyContest)return null;
