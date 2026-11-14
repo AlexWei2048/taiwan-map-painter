@@ -2,7 +2,8 @@
  'use strict';
   // Apply publication wording at CSV serialization time only; archive data and IDs remain unchanged.
   const csvSimplify=root.OpenCC?.Converter?root.OpenCC.Converter({from:'t',to:'cn'}):text=>String(text);
-  const exportedWording=value=>{const text=csvSimplify(String(value??''));return (typeof module!=='undefined'&&module.exports?require('./news-wording.js'):root.XinhuaWording)?.normalize(text)||text};
+  const protectedHistoricalNames=new Set(['魏耀乾','李乾龙','陈民乾','米甘幹．理佛克']);
+  const exportedWording=value=>{const raw=String(value??'');const text=protectedHistoricalNames.has(raw)?raw:csvSimplify(raw);return (typeof module!=='undefined'&&module.exports?require('./news-wording.js'):root.XinhuaWording)?.normalize(text)||text};
   const csvPercent=value=>{if(value===null||value===undefined||String(value).trim()==='')return '';const number=Number(String(value).trim().replace(/%$/,''));return Number.isFinite(number)?(Math.round((number+1e-9)*100)/100).toFixed(2)+'%':''};
   const csvCell=value=>{let text=exportedWording(value);if(/^[=+@\t\r-]/.test(text))text="'"+text;return '"'+text.replace(/"/g,'""')+'"'};
  const OFFICES=new Set(['mayor','council','township','president','legislative']);
