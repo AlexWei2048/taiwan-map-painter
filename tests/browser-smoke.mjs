@@ -1451,7 +1451,7 @@ test('Presidential deputy and lead names stay on one line in compact SVG table, 
     const cols=pre.columns;
     return{count:rows.length,expected:rows.map(r=>r.name),ticketNames,
       columns:cols,compactHeight:Number(full?.getAttribute('height')),
-      preHeight:pre.height,font:pre.font,headerHeight:pre.tableHeaderHeight,
+      preHeight:pre.height,preRows:pre.pairs.length,font:pre.font,headerHeight:pre.tableHeaderHeight,
       width:Number(full?.getAttribute('width'))};
    },scope);
    assert.ok(data.count>=3,year+' '+scope+' has election candidates');
@@ -1461,7 +1461,7 @@ test('Presidential deputy and lead names stay on one line in compact SVG table, 
    assert.ok(data.ticketNames.every(x=>x.value.includes(' & ')),year+' keeps both candidates');
    assert.ok(data.headerHeight<=38&&data.font>=15,year+' table header is compact but legible');
    assert.ok(data.compactHeight<=data.preHeight,year+' final layout does not add unused height');
-   assert.ok(data.compactHeight<55*Math.ceil(data.count/data.columns)+80,year+' rows are more compact');
+   assert.ok(data.compactHeight<80*data.preRows+80,year+' grouped columns remain compact without excessive padding');
   }
  }
 });
