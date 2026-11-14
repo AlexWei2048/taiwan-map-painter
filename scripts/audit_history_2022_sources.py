@@ -71,6 +71,33 @@ def official():
 
 
 
+
+def compare_nccu_2022_township():
+    """Crosscheck NCCU Election Study Center's 2022 H2022005/H2022006 totals.
+    Its township-head tables cover standard D1 contests, not D2 mountain wards.
+    """
+    cs={c['contest_id']:c for c in SNAP['contests']}
+    cand=[x for x in SNAP['candidacies'] if cs[x['contest_id']]['election_id']=='2022-township'
+          and cs[x['contest_id']]['electorate']=='regional']
+    votes=sum(int(x['votes']) for x in cand)
+    winners=sum(x['elected_official'] for x in cand)
+    party_votes=collections.Counter()
+    party_cands=collections.Counter()
+    party_wins=collections.Counter()
+    for x in cand:
+        key=norm(x['party_name'])
+        party_votes[key]+=x['votes']
+        party_cands[key]+=1
+        party_wins[key]+=x['elected_official']
+    printj('NCCU_TOWNSHIP_2022_TOTALS',{'urlVotes':'https://vote.nccu.edu.tw/cec/H2022005.PDF',
+        'urlSeats':'https://vote.nccu.edu.tw/cec/H2022006.PDF',
+        'regionalD1ValidVotes':votes,'nccuExpected':3109582,
+        'candidateCount':len(cand),'nccuExpectedCandidates':489,
+        'electedCount':winners,'nccuExpectedWinners':198,
+        'partyVotes':party_votes,'partyCandidates':party_cands,'partyWinners':party_wins})
+    if (votes,len(cand),winners)!=(3109582,489,198):
+        raise ValueError('NCCU 2022 D1 township heads national summary differs from snapshot')
+
 def compare_cec_candidate_towns():
     """Verify EVERY candidate's town-level vote against CEC elctks, not just sum.
     Exact county+town+electorate+seat district+ballot_number matching is mandatory.
@@ -219,3 +246,4 @@ if __name__=='__main__':
     compare_cec_towns(tables)
     nccu_deep()
     compare_cec_candidate_towns()
+    compare_nccu_2022_township()
