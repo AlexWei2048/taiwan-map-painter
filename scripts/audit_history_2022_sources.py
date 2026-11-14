@@ -95,8 +95,16 @@ def compare_nccu_2022_township():
         'candidateCount':len(cand),'nccuExpectedCandidates':489,
         'electedCount':winners,'nccuExpectedWinners':198,
         'partyVotes':party_votes,'partyCandidates':party_cands,'partyWinners':party_wins})
-    if (votes,len(cand),winners)!=(3109582,489,198):
-        raise ValueError('NCCU 2022 D1 township heads national summary differs from snapshot')
+    expected_party_votes={'中国国民党':988103,'劳动党':6625,'民主进步党':894792,
+        '台湾工党':502,'台湾民众党':11140,'无党籍及未经政党推荐':1208420}
+    expected_party_candidates={'中国国民党':120,'劳动党':1,'民主进步党':86,
+        '台湾工党':1,'台湾民众党':2,'无党籍及未经政党推荐':279}
+    expected_party_winners={'中国国民党':75,'劳动党':0,'民主进步党':35,
+        '台湾工党':0,'台湾民众党':0,'无党籍及未经政党推荐':88}
+    if ((votes,len(cand),winners)!=(3109582,489,198) or
+        dict(party_votes)!=expected_party_votes or dict(party_cands)!=expected_party_candidates or
+        dict(party_wins)!=expected_party_winners):
+        raise ValueError('NCCU 2022 D1 township heads candidate/party/winner totals differ from snapshot')
 
 def compare_cec_candidate_towns():
     """Verify EVERY candidate's town-level vote against CEC elctks, not just sum.
@@ -155,6 +163,10 @@ def compare_cec_candidate_towns():
       'mismatches':len(mismatches),'missingCEC':len(missing),'extraCEC':len(extra),'cecDuplicates':len(duplicate),'siteDuplicates':len(site_dupes),
       'mismatchExamples':mismatches[:35],'missingExamples':missing[:20],'extraExamples':extra[:20],
       'cecDuplicateExamples':duplicate[:8],'siteDuplicateExamples':site_dupes[:8]})
+    expected_missing={( 'mayor','regional','嘉义市',town,'',str(i)) for town in ('东区','西区') for i in range(1,6)}
+    if (mismatches or extra or duplicate or site_dupes or len(official)!=7281
+        or {tuple(item['key']) for item in missing}!=expected_missing):
+        raise ValueError('Official 2022 candidate-by-town audit detected a changed, missing, or misplaced record')
     return mismatches,missing,extra
 
 def compare_cec_towns(tables):
@@ -202,6 +214,10 @@ def compare_cec_towns(tables):
     for k,prof in cec_profiles.items():
         if k not in groups:extra.append([k,prof[0]])
     printj('CEC_TOWN_COMPARE',{'siteGroups':len(groups),'officialGroups':len(cec_profiles),'exactMatched':confirmed,'mismatches':len(mismatched),'missingOfficial':len(missing),'extraOfficial':len(extra),'collisions':len(collision),'mismatchExamples':mismatched[:25],'missingExamples':missing[:15],'extraExamples':extra[:15],'collisionExamples':collision[:5]})
+    expected_missing={('mayor','regional','嘉义市','东区',''),('mayor','regional','嘉义市','西区','')}
+    if (mismatched or extra or collision or len(cec_profiles)!=1546
+        or {tuple(item[0]) for item in missing}!=expected_missing):
+        raise ValueError('Official 2022 township effective-vote audit failed')
     return groups,cec_profiles,mismatched
 
 def nccu_deep():
