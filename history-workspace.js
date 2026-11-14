@@ -290,11 +290,10 @@
   if(!title)return;
   const name={mayor:'县市长',council:'议员',township:'乡镇市区长',president:'台湾地区领导人'}[state.office]||'选举';
   const all=overviewScope==='all',county=overviewCounty;
-  let district='';
-  if(overviewScope==='district'||overviewScope==='town'){
-   const option=el('historyOverviewContest')?.selectedOptions?.[0];
-   district=option?.textContent?.replace(county+' · ','')||overviewArea;
-  }
+  const district=overviewScope==='district'||overviewScope==='town'?
+   state.office==='council'||state.office==='township'?
+    scoped?.result?.contests?.[0]?.district_name||overviewArea:
+    overviewArea:'';
   const identity=scoped?.result?.contests?.length===1&&state.office==='council'?
    labels[scoped.result.contests[0].electorate]||'议员':name;
   title.textContent=[state.year+'年',all?'全部地区（含金门、马祖）':county,district,
