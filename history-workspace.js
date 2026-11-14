@@ -136,7 +136,7 @@
  function historyCsv(result={contests:[],candidacies:[]},selection={}){
   const presidential=selection.office==='president',council=selection.office==='council';
   const extra=presidential?['副领导人候选人','正职性别','副职性别','选举时现任']:[];
-  const headers=['年份','选举类别','县市','选区',...(council?['选区类型']:[]),'候选人',...extra,'政党','号次','得票数','得票率','当选'];
+  const headers=['年份','选举类别','县市','选区',...(council?['选区类型']:[]),presidential?'正领导人候选人':'候选人',...extra,'政党','号次','得票数','得票率','当选'];
   const contests=new Map((result.contests||[]).map(item=>[item.contest_id,item]));
   const offices={mayor:'县市长',council:'县市议员',township:'乡镇市区长',president:'台湾地区领导人'};
   const identities={regional:'区域',plains:'平地少数民族',mountain:'山地少数民族'};
@@ -161,7 +161,7 @@
   const rows=(snapshot.rows||[]).filter(r=>r.level==='town'&&r.type==='president'&&(!selection.county||r.county===selection.county));
   const totals=new Map();
   for(const r of rows){const k=r.county+'|'+r.town;totals.set(k,(totals.get(k)||0)+r.votes)}
-  const output=[['年份','选举类别','县市','乡镇市区','候选人','副领导人候选人','正职性别','副职性别','选举时现任','政党','号次','得票数','得票率','当选']];
+  const output=[['年份','选举类别','县市','乡镇市区','正领导人候选人','副领导人候选人','正职性别','副职性别','选举时现任','政党','号次','得票数','得票率','当选']];
   rows.sort((a,b)=>a.county.localeCompare(b.county,'zh')||a.town.localeCompare(b.town,'zh')||b.votes-a.votes);
   for(const r of rows){
    const total=totals.get(r.county+'|'+r.town)||0;

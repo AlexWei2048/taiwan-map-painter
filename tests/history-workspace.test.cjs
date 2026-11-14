@@ -143,6 +143,26 @@ test('historical CSV uses one simplified column per value, percent text and safe
  assert.match(csv,/"'=危险"/);assert.match(csv,/"是"/);
  assert.doesNotMatch(csv,/规范名称|官方名称|官方当选/);
 });
+test('presidential CSV differentiates lead and deputy candidates at both map levels',()=>{
+ const selection={year:2020,office:'president'};
+ const csv=Workspace.historyCsv({contests:[{contest_id:'pres-1',county_name:'台北市',district_name:'台北市'}],
+  candidacies:[{contest_id:'pres-1',candidate_name:'蔡英文',deputy_name:'赖清德',
+   party_name:'民主进步党',votes:100,vote_share:55.5,elected_official:true}]},selection);
+ const header=csv.replace(/^\uFEFF/,'').split('\r\n')[0];
+ assert.match(header,/"正领导人候选人","副领导人候选人"/);
+ assert.doesNotMatch(header,/"选区","候选人"/);
+ assert.match(csv,/"蔡英文","赖清德"/);
+ const town=Workspace.presidentialTownCsv({rows:[
+  {level:'town',type:'president',county:'台北市',town:'中正区',name:'蔡英文',deputy_name:'赖清德',
+   party:'民主进步党',votes:123,number:1,elected:true},
+  {level:'town',type:'president',county:'台北市',town:'中正区',name:'韩国瑜',deputy_name:'张善政',
+   party:'中国国民党',votes:77,number:2,elected:false}
+ ]},{...selection,county:'台北市'});
+ const townHeader=town.replace(/^\uFEFF/,'').split('\r\n')[0];
+ assert.match(townHeader,/"正领导人候选人","副领导人候选人"/);
+ assert.match(town,/"61.50%","是"/);
+ assert.doesNotMatch(townHeader,/"乡镇市区","候选人"/);
+});
 test('CSV historical export orders districts numerically and candidates by votes',()=>{
  const contests=[
   {contest_id:'d10',county_name:'台北市',county_name_official:'臺北市',district_name:'第10选区',district_name_official:'第10選區',electorate:'regional'},

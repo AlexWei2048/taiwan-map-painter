@@ -1671,15 +1671,15 @@ function polishedPredictionTableLayout(rows,targetWidth=null){
  const historical=rows[0]?.historical;
  const metricHeaders={votes:historical?'得票数':'预测得票数',share:historical?'得票率':'预测得票率',status:'当选'};
  const extraWidths=metricFields.map(k=>k==='status'?96:99),extraWidth=extraWidths.reduce((n,w)=>n+w,0);
- const columns=rows.length<=90?2:rows.length<=260?4:6,gap=10;
- const font=15.2,lineHeight=19,rowHeight=46;
+ const columns=rows.length<=90?2:rows.length<=260?4:6,gap=5;
+ const font=16.4,lineHeight=20.5,rowHeight=49;
  const tickets=rows.filter(r=>r.presidentialTicket);
  // Keep both names and their connector on ONE SVG text line. Allow for a
  // full 39px incumbent badge and font-metric variation without truncation.
- const ticketWidth=tickets.length?Math.max(214,...tickets.map(r=>
+ const ticketWidth=tickets.length?Math.max(208,...tickets.map(r=>
   Math.ceil(exportTextWidth(String(r.name||'').replace(/\s+/g,' ').trim())*font*1.09+(r.incumbent?58:0)+26))):0;
- const districtWidth=112,nameWidth=tickets.length?ticketWidth:172;
- const baseSlotWidth=Math.max(512+extraWidth,districtWidth+nameWidth+186+extraWidth);
+ const districtWidth=109,nameWidth=tickets.length?ticketWidth:174;
+ const baseSlotWidth=Math.max(504+extraWidth,districtWidth+nameWidth+182+extraWidth);
  const baseWidth=columns*baseSlotWidth+(columns-1)*gap+36;
  const extraPerSlot=Number.isFinite(Number(targetWidth))&&targetWidth>baseWidth?(targetWidth-baseWidth)/columns:0;
  const slotWidth=baseSlotWidth+extraPerSlot,innerWidth=columns*slotWidth+(columns-1)*gap,width=innerWidth+36;
@@ -1687,14 +1687,14 @@ function polishedPredictionTableLayout(rows,targetWidth=null){
   slotWidth-districtWidth-nameWidth-extraWidth-extraPerSlot*.62,...extraWidths];
  const headingHeight=10,tableHeaderHeight=37,paddingBottom=11;
  const entries=rows.map(row=>{
-  const district=wrapExportText(row.district,Math.max(3,(widths[0]-20)/14.2));
+  const district=wrapExportText(row.district,Math.max(3,(widths[0]-18)/15.1));
   const name=row.presidentialTicket?[String(row.name||'').replace(/\s+/g,' ').trim()]:
    wrapExportText(row.name,Math.max(3,(widths[1]-(row.incumbent?62:22))/font));
-  const party=wrapExportText(row.party,Math.max(3,(widths[2]-59)/14));
-  const meta=wrapExportText([row.number?'号次 '+row.number:'',row.gender||''].filter(Boolean).join(' · '),(widths[1]-22)/11.5).filter(Boolean);
+  const party=wrapExportText(row.party,Math.max(3,(widths[2]-55)/15));
+  const meta=wrapExportText([row.number?'号次 '+row.number:'',row.gender||''].filter(Boolean).join(' · '),(widths[1]-22)/12.3).filter(Boolean);
   const cells=[district,name,party,...metricFields.map((k,i)=>wrapExportText(row[k]||'—',(extraWidths[i]-22)/14))];
   const height=Math.max(rowHeight,Math.max(...cells.map(c=>c.length))*lineHeight+14,
-   name.length*lineHeight+meta.length*15+(meta.length?5:0)+8);
+   name.length*lineHeight+meta.length*16+(meta.length?5:0)+8);
   return{row,cells,meta,height};
  });
  const pairs=[];
@@ -1745,12 +1745,13 @@ function appendExportPolishedWinnerTable(root,rows,y,layout){
    rx:7,fill:'#eaf3ed'}));
   let tx=x;
   layout.headers.forEach((name,k)=>{
-   const label=svgEl('text',{x:tx+13,y:headerY+headerH/2,'font-size':14,'font-weight':650,
+   const label=svgEl('text',{x:tx+11,y:headerY+headerH/2,'font-size':15.2,'font-weight':650,
     fill:'#375d48','dominant-baseline':'middle','data-export-winner-header':name});
    label.textContent=name;card.append(label);tx+=layout.widths[k];
   });
  }
  let currentY=bodyY;
+ const previousDistricts=Array(layout.columns).fill(null);
  layout.pairs.forEach((pair,pairIndex)=>{
   const group=svgEl('g',{'data-export-winner-row':'true','data-export-row-index':pairIndex});
   card.append(group);
@@ -1759,6 +1760,18 @@ function appendExportPolishedWinnerTable(root,rows,y,layout){
   const mid=currentY+pair.height/2;
   for(const [slotIndex,entry]of pair.entries.entries()){
    const x=slotX(slotIndex),row=entry.row;
+   const previousDistrict=previousDistricts[slotIndex];
+   const districtStart=previousDistrict!==null&&previousDistrict!==row.district;
+   if(districtStart){
+    // Clear, understated separation for each new constituency, without
+    // increasing the row height or changing candidate sort order.
+    group.append(svgEl('line',{x1:x+7,x2:x+layout.slotWidth-7,
+     y1:currentY+2,y2:currentY+2,stroke:'#5f9a74','stroke-width':2.1,
+     'data-export-district-divider':'true'}));
+    group.append(svgEl('rect',{x:x+3,y:currentY+7,width:3,height:Math.min(17,pair.height-11),
+     rx:1.5,fill:'#8abd9a','data-export-district-accent':'true'}));
+   }
+   previousDistricts[slotIndex]=row.district;
    const item=svgEl('g',{'data-export-winner-entry':'true','data-export-slot':slotIndex,
     'data-export-district':row.district,...(row.presidentialTicket?{'data-export-presidential-ticket':'true'}:{})});
    group.append(item);
@@ -1774,11 +1787,11 @@ function appendExportPolishedWinnerTable(root,rows,y,layout){
     item.append(text);
    }
    const [districtWidth,nameWidth]=layout.widths;
-   linesAt(districtLines,x+13,14.2,450,'#536e60','district');
-   const nameX=x+districtWidth+12;
+   linesAt(districtLines,x+11,15.1,480,'#536e60','district');
+   const nameX=x+districtWidth+10;
    const nameOffset=entry.meta?.length?-(entry.meta.length*16+6)/2:0;
    linesAt(nameLines,nameX,layout.font,650,'#254a39','name',nameOffset);
-   (entry.meta||[]).forEach((line,i)=>{const meta=svgEl('text',{x:nameX,y:mid+nameOffset+(nameLines.length-1)*layout.lineHeight/2+20+i*16,'font-size':11.5,fill:'#708377','data-export-field':'candidate-meta'});meta.textContent=line;item.append(meta)});
+   (entry.meta||[]).forEach((line,i)=>{const meta=svgEl('text',{x:nameX,y:mid+nameOffset+(nameLines.length-1)*layout.lineHeight/2+21+i*16,'font-size':12.3,fill:'#708377','data-export-field':'candidate-meta'});meta.textContent=line;item.append(meta)});
    if(row.incumbent){
     const lastLine=nameLines.at(-1)||'';
     const lastLineY=mid+nameOffset+(nameLines.length-1)*layout.lineHeight/2;
@@ -1796,7 +1809,7 @@ function appendExportPolishedWinnerTable(root,rows,y,layout){
     fill:row.color||'#71867a'}));
    if(row.logo)appendCircularPartyLogo(item,row.logo,partyX+22,mid-12,24,
     {'data-export-party-logo':'true'});
-   linesAt(partyLines,partyX+55,14,500,'#526b5e','party');
+   linesAt(partyLines,partyX+52,15,500,'#526b5e','party');
    let metricX=partyX+layout.widths[2];
    (layout.metricFields||[]).forEach((field,i)=>{
     if(field==='status'&&(row.historical||row.allCandidates)){
@@ -1804,7 +1817,7 @@ function appendExportPolishedWinnerTable(root,rows,y,layout){
       const mark=svgEl('image',{href:exportElectedMark,x:metricX+13,y:mid-9,width:18,height:18,'aria-label':'当选','data-export-elected-mark':'true'});
       item.append(mark);
      }
-    }else linesAt(entry.cells[i+3],metricX+13,14,450,'#536e60',field);
+    }else linesAt(entry.cells[i+3],metricX+11,15,450,'#536e60',field);
     metricX+=layout.widths[i+3];
    });
   }

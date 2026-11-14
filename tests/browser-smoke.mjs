@@ -1463,6 +1463,34 @@ test('Presidential deputy and lead names stay on one line in compact SVG table, 
   }
  }
 });
+test('Candidate export distinguishes constituency groups with sharper larger labels and tight columns',async t=>{
+ const page=await pageFor(t);
+ const layout=await page.evaluate(()=>{
+  const districts=['台北市','台北市','台北市','新北市','新北市','新北市','高雄市','高雄市'];
+  const rows=districts.map((district,i)=>({district,name:'候选人'+i,party:'中国国民党',
+   gender:i%2?'男':'女',number:i+1,color:'#000099',incumbent:i===0?'现任':''}));
+  const layout=exportPredictionTableLayout(rows),svg=svgEl('g');
+  appendExportPredictionTable(svg,rows,0,layout);
+  const dividers=[...svg.querySelectorAll('[data-export-district-divider]')];
+  const accents=[...svg.querySelectorAll('[data-export-district-accent]')];
+  const districtLabels=[...svg.querySelectorAll('[data-export-field="district"]')];
+  const names=[...svg.querySelectorAll('[data-export-field="name"]')];
+  const partyLabels=[...svg.querySelectorAll('[data-export-field="party"]')];
+  return{gap:layout.gap,font:layout.font,dividers:dividers.length,accents:accents.length,
+   dividerCoords:dividers.map(line=>[Number(line.getAttribute('x1')),Number(line.getAttribute('x2'))]),
+   labels:districtLabels.map(el=>Number(el.getAttribute('font-size'))),
+   names:names.map(el=>Number(el.getAttribute('font-size'))),
+   parties:partyLabels.map(el=>Number(el.getAttribute('font-size'))),
+   count:svg.querySelectorAll('[data-export-winner-entry]').length};
+ });
+ assert.equal(layout.count,8);
+ assert.equal(layout.dividers,4,'one divider for every constituency change in each column');
+ assert.equal(layout.accents,4);
+ assert.ok(layout.dividerCoords.every(([x1,x2])=>x2>x1+30));
+ assert.ok(layout.font>=16&&layout.labels.every(v=>v>=15)&&layout.parties.every(v=>v>=15));
+ assert.ok(layout.names.every(v=>v>=16));
+ assert.ok(layout.gap<=5,'adjacent columns are closely spaced');
+});
 test('Council and township winner tables use the mayor design without losing long lists or numeric data',async t=>{
  const page=await pageFor(t);
  const result=await page.evaluate(()=>{
