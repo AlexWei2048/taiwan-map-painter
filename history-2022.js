@@ -453,6 +453,13 @@
   if(f.historicalBoundaryNote)el('historyDialogMessage').append(' · '+f.historicalBoundaryNote);
   if(kind==='mayor'&&f.county==='嘉义市')el('historyDialogMessage').append(' · 2022年12月18日重行投票');
   const dialog=el('historyResultDialog'),hint=el('historyDialogScroll');
+  const overviewButton=el('historyDialogOverview');
+  if(overviewButton){
+   const contestId=window.HistoryWorkspace?.contestForFeature?.(f);
+   overviewButton.hidden=!contestId;
+   overviewButton.textContent='查看本选区概况';
+   overviewButton.onclick=()=>{dialog.close();window.HistoryWorkspace?.openContestOverview?.(contestId)};
+  }
   hint.hidden=true;dialog.showModal();
   wrap.scrollLeft=0;wrap.scrollTop=0;
   hint.hidden=wrap.scrollWidth<=wrap.clientWidth;
@@ -461,6 +468,9 @@
  function openContestById(contestId,summary){
   if(!summary)return;lastOpenedFeature=null;const contest=summary.contest,rows=summary.candidacies,body=el('historyDialogRows');el('historyDialogTitle').textContent=contest.county_name+' · '+contest.district_name+' · '+yearLabel()+' '+officeTitle()+'选举结果';el('historyDialogMessage').textContent='有效票 '+summary.validVotes.toLocaleString('zh-CN')+' · '+rows.length+' 位候选人 · 按得票数排序';body.replaceChildren();
   for(const r of rows){const tr=document.createElement('tr');if(r.elected_official)tr.className='history-elected-row';for(const [i,value] of [r.ballot_number||'—',r.candidate_name,r.gender||'—',r.incumbent_at_election===true?'现任':r.incumbent_at_election===false?'非现任':'—',r.party_name,r.votes.toLocaleString('zh-CN'),Number(r.vote_share||0).toFixed(2)+'%',''].entries()){const td=document.createElement('td');if(i===7&&r.elected_official){const mark=document.createElement('img');mark.src='assets/elected-mark.png';mark.alt='当选';mark.width=18;mark.height=18;td.append(mark)}else td.textContent=value;tr.append(td)}body.append(tr)}
+  const overviewButton=el('historyDialogOverview');
+  if(overviewButton){overviewButton.hidden=false;overviewButton.textContent='查看本选区概况';
+   overviewButton.onclick=()=>{el('historyResultDialog').close();window.HistoryWorkspace?.openContestOverview?.(contestId)};}
   el('historyDialogDrilldown').hidden=true;el('historyDialogBack').hidden=!county;el('historyResultDialog').showModal();
  }
  function exportRows(){
