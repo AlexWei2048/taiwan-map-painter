@@ -28,7 +28,7 @@ def flagged(name: str) -> list[str]:
     hits = []
     if any(component in name for component in KNOWN_COMPONENTS):
         hits.append("possible-split-glyph")
-    if any(c in name for c in ("干", "乾")):
+    if "干" in name:
         hits.append("gan-name-verify")
     if SUSPICIOUS_UNICODE.search(name):
         hits.append("invalid-or-private-use-unicode")
