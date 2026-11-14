@@ -71,3 +71,18 @@ def test_indigenous_candidates_form_one_nationwide_contest_not_one_per_county():
     assert contests[0]["valid_votes"] == 50
     assert contests[0]["seats"] == 1
 
+
+
+def test_source_name_corrections_are_stable_on_rebuild():
+    module = load_module()
+    assert module.verified_candidate_name(1992, "regional", "王建火宣") == "王建煊"
+    assert module.verified_candidate_name(2012, "regional", "李乾龍") == "李乾龙"
+    assert module.verified_candidate_name(2024, "plains", "米甘幹．理佛克") == "米甘幹．理佛克"
+    assert module.simplify_person_name("魏耀乾") == "魏耀乾"
+    assert module.simplify_person_name("陈民乾") == "陈民乾"
+    source = {"regional": [{"縣市":"臺北市","鄉鎮市區":"","選區":"臺北市第一選區",
+              "號次":"05","候選人":"王建火宣","政黨":"無黨籍及未經政黨推薦",
+              "得票數":"129019","當選註記":"Y"}]}
+    snapshot = module.make_snapshot(1992, source)
+    assert any(item["candidate_name"] == "王建煊" for item in snapshot["candidacies"])
+    assert not any(item["candidate_name"] == "王建火宣" for item in snapshot["candidacies"])
