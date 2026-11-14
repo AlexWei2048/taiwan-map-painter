@@ -1058,8 +1058,9 @@ test('Historical exports use normalized metadata without entering saved predicti
  const historyWorkspace=read('history-workspace.js'),historyView=read('history-2022.js'),access=read('history-access.js');
  assert.match(app,/HistoryWorkspace\.exportStem\(HistoryWorkspace\.selection\(\)\)/);
  assert.match(historyWorkspace,/id='historyExportCsv'/);
- assert.match(historyWorkspace,/县市规范名称/);assert.match(historyWorkspace,/县市官方名称/);
- assert.match(historyWorkspace,/候选人规范姓名/);assert.match(historyWorkspace,/候选人官方姓名/);
+ assert.match(historyWorkspace,/csvPercent/);
+ assert.match(historyWorkspace,/const headers=\['年份','选举类别','县市','选区'/);
+ assert.doesNotMatch(historyWorkspace,/县市规范名称|县市官方名称|候选人规范姓名|候选人官方姓名|官方当选/);
  assert.match(historyView,/projectStateForSave=function\(\)\{return active&&savedMapScope\?savedMapScope:defaultSaveState\(\)\}/);
  assert.doesNotMatch(historyWorkspace,/localStorage\.setItem\([^,]+JSON\.stringify\(state/);
  assert.match(access,/开发中，敬请期待/);assert.match(access,/event\.preventDefault\(\);event\.stopImmediatePropagation\(\)/);

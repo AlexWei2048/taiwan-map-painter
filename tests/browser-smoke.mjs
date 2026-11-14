@@ -1242,7 +1242,7 @@ test('2022 council uses all historical district geometries and actual elected se
  assert.equal(total,910);
  await page.locator('#historyCounty').selectOption({label:'新竹市'});
  assert.equal(await page.evaluate(()=>exportFilename()),'2022-县市议员-新竹市-当选席次');
- assert.match(await page.evaluate(()=>HistoryWorkspace.historyCsv(HistoryWorkspace.result(),HistoryWorkspace.selection())),/县市官方名称/);
+ assert.match(await page.evaluate(()=>HistoryWorkspace.historyCsv(HistoryWorkspace.result(),HistoryWorkspace.selection())),/"县市","选区"/);
  assert.equal(await page.locator('#regions path[data-region]').count(),6);assert.equal(await page.locator('[data-seat-status="elected"]').count(),34);
  assert.equal(await page.locator('#historySeatBadges').count(),1);assert.equal(await page.locator('#historySeatBadgeLeaders').count(),1);
  assert.ok(await page.locator('[data-history-seat-badge]').count()>0);assert.equal(await page.locator('[data-history-seat-count]').evaluateAll(nodes=>nodes.every(node=>Number(node.dataset.historySeatCount)>0)),true);
@@ -1418,7 +1418,7 @@ test('2022 council result filters, regional search and historical export',async 
   assert.equal(await page.locator('#historyResults tr.history-district-divider').count(),1);
  await page.locator('#historyMetric').selectOption('party');
  const svg=await exportSvg(page);
- assert.match(svg,/实际得票率/);
+ assert.match(svg,/得票率/);
  assert.match(svg,/王世坚/);
  assert.equal((svg.match(/data-export-elected-mark="true"/g)||[]).length,61);
  const rows=await page.evaluate(()=>History2022View.exportRows().map(row=>({
@@ -1592,7 +1592,7 @@ test('Presidential history loads real 2024 and 1996 shards, navigates historical
  await page.locator('#historyCounty').selectOption('');
  await page.locator('#historyScale').selectOption('district');
  const historicalSvg=await exportSvg(page);
- assert.match(historicalSvg,/1996 台湾地区领导人实际选举结果/);
+ assert.match(historicalSvg,/1996 台湾地区领导人选举结果/);
  assert.match(historicalSvg,/李登辉 &amp; 连战/);
  assert.doesNotMatch(historicalSvg,/2022 实际选举结果/);
  const historicalTable=await page.evaluate(source=>{

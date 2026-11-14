@@ -54,7 +54,7 @@ test('historical feature presentation keeps councillor geography neutral and eve
 
 test('township distribution describes the vote leader without implying election',()=>{
  const view=Workspace.featurePresentation({office:'mayor',level:'town',metric:'party',region:{top:{name:'候选人甲',party:'甲党',votes:1200},share:55.5}});
- assert.match(view.ariaLabel,/得票领先/);
+ assert.match(view.ariaLabel,/最高票/);
  assert.doesNotMatch(view.ariaLabel,/当选/);
  assert.deepEqual(view.badgeItems,[]);
 });
@@ -134,13 +134,15 @@ test('historical export stem includes year, normalized office, scope and metric'
  assert.equal(Workspace.exportStem({year:2022,office:'mayor',county:'',level:'town',metric:'votes'}),'2022-县市长-全台-得票数');
 });
 
-test('historical CSV keeps normalized and original official labels and protects formulas',()=>{
- const result={contests:[{contest_id:'x',county_name:'台北市',county_name_official:'臺北市',district_name:'台北市',district_name_official:'臺北市'}],candidacies:[{contest_id:'x',candidate_name:'张甲',candidate_name_official:'張甲',party_name:'=危险',party_name_official:'＝危險',ballot_number:'1',votes:10,vote_share:50,elected_official:true}]};
+test('historical CSV uses one simplified column per value, percent text and safe escaped formulas',()=>{
+ const result={contests:[{contest_id:'1',county_name:'台北市',district_name:'台北市',electorate:'regional'}],
+  candidacies:[{contest_id:'1',candidate_name:'张甲',party_name:'=危险',ballot_number:'1',votes:500,vote_share:52.345,elected_official:true}]};
  const csv=Workspace.historyCsv(result,{year:2022,office:'mayor'});
- assert.match(csv,/县市规范名称/);assert.match(csv,/县市官方名称/);assert.match(csv,/张甲/);assert.match(csv,/張甲/);assert.match(csv,/"'=危险"/);assert.match(csv,/"是"/);
+ assert.match(csv,/"年份","选举类别","县市","选区","候选人","政党","号次","得票数","得票率","当选"/);
+ assert.match(csv,/张甲/);assert.match(csv,/52\.35%/);
+ assert.match(csv,/"'=危险"/);assert.match(csv,/"是"/);
+ assert.doesNotMatch(csv,/规范名称|官方名称|官方当选/);
 });
-
-
 test('CSV historical export orders districts numerically and candidates by votes',()=>{
  const contests=[
   {contest_id:'d10',county_name:'台北市',county_name_official:'臺北市',district_name:'第10选区',district_name_official:'第10選區',electorate:'regional'},
