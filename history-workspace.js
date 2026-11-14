@@ -244,7 +244,7 @@
   return{...selection,county,level:'town'};
  }
  function exportStem(selection={}){
-  const offices={mayor:'县市长',council:'县市议员',township:'乡镇市区长',president:'台湾地区领导人',legislative:'立法机构民代'},metrics={party:selection.office==='legislative'?(selection.electorate==='regional'?'当选席次':'领先政党'):selection.office==='council'?'当选席次':selection.office==='president'||selection.level==='town'?(selection.level==='town'?'各乡镇市区最高票候选人':'各县市最高票候选人'):'当选政党',seats:'指定政党席次',vote:'得票率',share:'得票率',votes:'得票数'};
+  const offices={mayor:'县市长',council:'县市议员',township:'乡镇市区长',president:'台湾地区领导人',legislative:'立法机构民代'},metrics={party:selection.office==='legislative'?((selection.electorate||'regional')==='regional'?'当选席次':'领先政党'):selection.office==='council'?'当选席次':selection.office==='president'||selection.level==='town'?(selection.level==='town'?'各乡镇市区最高票候选人':'各县市最高票候选人'):'当选政党',seats:'指定政党席次',vote:'得票率',share:'得票率',votes:'得票数'};
   return[selection.year||2022,offices[selection.office]||'历史选举',selection.office==='president'?(selection.level==='town'?'乡镇市区':'县市'):null,selection.county||'全台',metrics[selection.metric]||selection.metric||'结果'].filter(Boolean).join('-').replace(/[\\/:*?"<>|]/g,'_');
  }
  function historyCsv(result={contests:[],candidacies:[]},selection={}){
