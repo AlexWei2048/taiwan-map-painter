@@ -301,7 +301,7 @@ test('Independent-candidate emblem is bundled for sidebar, legend and standalone
 });
 test('Recording votes retains chosen winners and exports a complete vote table',async t=>{
  const page=await pageFor(t);await selectMayor(page);await enterRates(page);
- const svg=await exportSvg(page);assert.match(svg,/预测得票候选人/);assert.match(svg,/预测得票率/);assert.match(svg,/data-export-party-logo/);
+ const svg=await exportSvg(page);assert.doesNotMatch(svg,/预测得票候选人|2022 实际选举结果/);assert.match(svg,/预测得票率/);assert.match(svg,/data-export-party-logo/);
  assert.equal((svg.match(/data-export-winner-entry=/g)||[]).length,6);assert.equal((svg.match(/data-export-winner-row=/g)||[]).length,3);
  await page.locator('#predictionDisplay').selectOption('composition');assert.match(await page.locator('#predictionCoverage').innerText(),/已选当选人 1\/1/);
  assert.match(await page.locator('#legend').textContent(),/中国国民党（1席）/);
@@ -374,7 +374,7 @@ test('Specified candidate export contains only the chosen candidate and entered 
  const info=await page.evaluate(source=>{
   const doc=new DOMParser().parseFromString(source,'image/svg+xml');
   const table=doc.querySelector('[data-export-winner-table]');
-  return {title:table?.textContent?.includes('指定候选人得票预测'),text:table?.textContent||'',rowCount:table?.querySelectorAll('[data-export-winner-row]').length};
+  return {title:!!doc.querySelector('[data-export-title]'),text:table?.textContent||'',rowCount:table?.querySelectorAll('[data-export-winner-row]').length};
  },svg);
  assert.equal(info.title,true);
  assert.equal(info.rowCount,1);
@@ -1586,6 +1586,23 @@ test('Presidential history loads real 2024 and 1996 shards, navigates historical
  const csv=await download(page,'#historyExportCsv');
  assert.match(csv,/中区/);assert.match(csv,/西区/);
  assert.match(csv,/台湾地区领导人/);
+ assert.match(csv,/正职性别/);
+ assert.match(csv,/副职性别/);
+ assert.match(csv,/王清峰/);
+ await page.locator('#historyCounty').selectOption('');
+ await page.locator('#historyScale').selectOption('district');
+ const historicalSvg=await exportSvg(page);
+ assert.match(historicalSvg,/1996 台湾地区领导人实际选举结果/);
+ assert.match(historicalSvg,/李登辉 &amp; 连战/);
+ assert.doesNotMatch(historicalSvg,/2022 实际选举结果/);
+ const historicalTable=await page.evaluate(source=>{
+  const doc=new DOMParser().parseFromString(source,'image/svg+xml');
+  const content=doc.querySelector('[data-export-winner-table]')?.textContent||'';
+  return {name:content.includes('李登辉 & 连战'),sex:content.includes('男 / 男'),repeat:content.includes('2022 实际选举结果')};
+ },historicalSvg);
+ assert.equal(historicalTable.name,true);
+ assert.equal(historicalTable.sex,true);
+ assert.equal(historicalTable.repeat,false);
  await page.locator('#historyOffice').selectOption('mayor');
  await page.waitForFunction(()=>History2022View.office()==='mayor'&&History2022View.year()===2022&&
   document.querySelector('#historySummary').textContent.includes('个地区'));

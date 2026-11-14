@@ -731,7 +731,7 @@ test('Automatic export detail maps show each possible label without overlaps and
  assert.match(app,/exportLabelCoverage\(originalItems,map,details\.labelled\)/);
 });
 
-test('Export images keep table titles and all data, without subtitles, counts or notes',()=>{
+test('Export images retain candidate data but not redundant subheadings, counts or notes',()=>{
  const section=(start,end)=>{
   const first=app.indexOf(start),last=app.indexOf(end,first);
   assert.ok(first>=0&&last>first,start+' must exist');
@@ -741,26 +741,27 @@ test('Export images keep table titles and all data, without subtitles, counts or
  const standard=section('function appendExportPredictionTable(', 'function numberTableExportMetrics(');
  const numberKey=section('function appendNumberTableExport(', '// Every administrative area');
  const coverage=section('function appendExportLabelCoverage(', 'function exportSvg(){');
- assert.match(twoUp,/heading\.textContent=layout\.specified/);
+ assert.doesNotMatch(twoUp,/heading\.textContent|2022 实际选举结果/);
+ assert.match(app,/data-export-title/);
  assert.match(twoUp,/data-export-winner-row/);
  assert.doesNotMatch(twoUp,/已预测|选区 · 候选人 · 政党及党徽/);
- assert.match(standard,/预测得票候选人/);
+ assert.doesNotMatch(standard,/heading\.textContent|2022 实际选举结果/);
  assert.match(standard,/layout\.headers\.forEach/);
  assert.doesNotMatch(standard,/第一高票不等于|已预测/);
  assert.match(numberKey,/行政区索引/);
  assert.doesNotMatch(numberKey,/count\.textContent|项';panel\.append/);
  assert.match(coverage,/密集区域完整标注/);
  assert.doesNotMatch(coverage,/count\.textContent|note\.textContent|主地图空间不足/);
- assert.match(app,/const headingHeight=62,tableHeaderHeight=44/);
+ assert.match(app,/const headingHeight=18,tableHeaderHeight=44/);
  assert.match(app,/let rowY=y\+49/);
 });
 
-test('Township winner table export uses the full township-district title',()=>{
+test('Township winner table export has complete rows without a duplicate heading',()=>{
  const twoUp=app.slice(app.indexOf('function appendExportPolishedWinnerTable('),app.indexOf('function appendExportPredictionTable('));
  const standard=app.slice(app.indexOf('function appendExportPredictionTable('),app.indexOf('function numberTableExportMetrics('));
  for(const renderer of [twoUp,standard]){
-  assert.match(renderer,/乡镇市区预测胜出候选人/);
-  assert.doesNotMatch(renderer,/['"]乡镇预测胜出候选人['"]/);
+  assert.doesNotMatch(renderer,/乡镇市区预测胜出候选人|乡镇预测胜出候选人|2022 实际选举结果/);
+  assert.match(renderer,/data-export-winner/);
  }
 });
 
@@ -774,7 +775,8 @@ test('Specified-candidate export selects one ID and only includes entered vote m
  assert.match(layout,/metricFields=estimated\?\(specified\?/);
  assert.match(layout,/\['votes','share'\]\.filter/);
  assert.match(layout,/headers\.push\(\.\.\.metricFields\.map/);
- assert.match(app,/heading\.textContent=layout\.specified\?'指定候选人得票预测'/);
+ assert.doesNotMatch(app,/heading\.textContent=layout\.specified\?'指定候选人得票预测'/);
+ assert.match(app,/data-export-title/);
 });
 
 test('Administrative lookup is outside canvas and exports every entry',()=>{
@@ -1093,7 +1095,7 @@ test('Historical map legend has no subtitle and export images omit provenance pa
  for(const file of ['index.html','map-v60.html']){
   const html=read(file);
   assert.match(html,/history-2022\.js\?v=[\w-]+/);
-  assert.match(html,file==='index.html'?/app\.js\?v=20261112-footer-aligned-v1/:/app\.js\?v=20261112-footer-aligned-v1/);
+  assert.match(html,/app\.js\?v=[\w-]+/);
  }
 });
 
