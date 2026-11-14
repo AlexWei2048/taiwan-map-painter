@@ -59,8 +59,12 @@ test('2022 mayoral wards have 366 independently verified turnout profiles with n
  assert.equal(snapshot.townProfiles.length,366);
  assert.equal(snapshot.provenance.cecTownProfiles.statistics.coveredMayoralCounties,21);
  const towns=new Map(),sites=new Map(),countyProfiles=new Map();
+ assert.equal(snapshot.mayorTownNames.length,368);
+ const aliases=new Map(snapshot.mayorTownNames.map(p=>[p.county_official+'|'+p.town_official,p.county+'|'+p.town]));
  for(const row of snapshot.rows.filter(x=>x.type==='mayor'&&x.level==='town')){
-  const key=row.county+'|'+row.town;
+  const source=row.county+'|'+row.town;
+  const key=aliases.get(source);
+  assert.ok(key,'must have historical town alias: '+source);
   sites.set(key,(sites.get(key)||0)+row.votes);
  }
  for(const profile of snapshot.townProfiles){
