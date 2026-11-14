@@ -1397,16 +1397,16 @@ test('Image export candidate range switches between elected and all historical c
  await page.locator('#exportCandidateScope').selectOption('all');
  const all=await page.evaluate(()=>History2022View.exportRows());
  assert.ok(all.length>winners.length&&all.some(r=>!r.elected));
- const fullSvg=await exportSvg(page);
+ const fullSvg=await page.evaluate(()=>preparedExportSvg());
  const count=await page.evaluate(s=>new DOMParser().parseFromString(s,'image/svg+xml').querySelectorAll('[data-export-winner-entry]').length,fullSvg);
  assert.equal(count,all.length);
  await page.locator('#exportCandidateScope').selectOption('winners');
- const shortSvg=await exportSvg(page);
+ const shortSvg=await page.evaluate(()=>preparedExportSvg());
  const selectedCount=await page.evaluate(s=>new DOMParser().parseFromString(s,'image/svg+xml').querySelectorAll('[data-export-winner-entry]').length,shortSvg);
  assert.equal(selectedCount,winners.length);
  await page.locator('#exportWinnerTable').uncheck();
  assert.equal(await page.locator('#exportCandidateScope').isDisabled(),true);
- const none=await exportSvg(page);
+ const none=await page.evaluate(()=>preparedExportSvg());
  assert.doesNotMatch(none,/data-export-winner-entry/);
 });
 test('Candidate export range is persisted and full forecast roster includes candidates not predicted yet',async t=>{
@@ -1419,7 +1419,7 @@ test('Candidate export range is persisted and full forecast roster includes cand
   return {count:result.length,withElection:result.filter(r=>r.allCandidates).length};
  });
  assert.ok(data.count>1&&data.count===data.withElection);
- const full=await exportSvg(page);
+ const full=await page.evaluate(()=>preparedExportSvg());
  assert.match(full,/data-export-winner-entry/);
  await page.reload();
  assert.equal(await page.locator('#exportCandidateScope').inputValue(),'all');
