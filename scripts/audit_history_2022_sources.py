@@ -12,6 +12,8 @@ import urllib.parse
 from pathlib import Path
 from bs4 import BeautifulSoup
 from opencc import OpenCC
+import sys
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from scripts.enrich_history_2022_cec import download, load_sources, FILES, norm
 
 ROOT=Path(__file__).resolve().parents[1]
