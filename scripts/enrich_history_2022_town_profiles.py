@@ -74,7 +74,6 @@ def verify(snapshot,entries,full=True):
         if groups[key]!=entry['valid_votes']:raise ValueError(f'Official town vote mismatch: {key}: {groups[key]} versus {entry["valid_votes"]}')
         if entry['valid_votes']+entry['invalid_votes']!=entry['ballots_cast'] or entry['ballots_cast']>entry['registered_voters']:
             raise ValueError(f'Official turnout inconsistency: {key}')
-        by_county[entry['county']].update({k:entry[k] for k in []})
         for field in ('valid_votes','invalid_votes','ballots_cast','registered_voters'):
             by_county[entry['county']][field]+=entry[field]
     missing=sorted(set(groups)-keys)
