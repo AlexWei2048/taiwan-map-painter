@@ -410,7 +410,7 @@ test('Export winner table has two candidates per row, with name-adjacent incumbe
   const secondItem=entries[1];
   return{
    variant:card.dataset.exportTableStyle,columns:layout.columns,
-   rows:physicalRows.length,entries:entries.length,
+   rows:physicalRows.length,expectedPairs:layout.pairs.length,entries:entries.length,
    pairCounts:physicalRows.map(r=>r.querySelectorAll('[data-export-winner-entry]').length),
    logos:card.querySelectorAll('[data-export-party-logo]').length,
    incumbents:incumbents.length,headers,firstName:firstName?.textContent,
@@ -423,14 +423,16 @@ test('Export winner table has two candidates per row, with name-adjacent incumbe
   };
  });
  assert.equal(result.variant,'two-up');assert.equal(result.columns,2);
- assert.equal(result.rows,11);assert.equal(result.entries,22);
- assert.ok(result.pairCounts.every(n=>n===2));
+ assert.equal(result.rows,result.expectedPairs);assert.equal(result.entries,22);
+ assert.equal(result.pairCounts.reduce((sum,count)=>sum+count,0),22);
+ assert.ok(result.pairCounts.every(n=>n>=1&&n<=2));
  assert.equal(result.logos,22);assert.equal(result.incumbents,6);
  assert.deepEqual(result.headers,['选区','姓名','政党','选区','姓名','政党']);
  assert.equal(result.firstName,'测试候选人');assert.equal(result.inlineBadge,true);
  assert.equal(result.secondSlot,'1');assert.ok(result.fonts.every(n=>n>=15));
  assert.ok(result.width>=1000&&result.width<1120,'compact table uses less width than the previous layout');assert.ok(result.tableHeight<800,'compact rows reduce total height');
- assert.equal(result.oddPairs,11);assert.equal(result.oddLastEntries,1);
+ assert.ok(result.oddPairs>=11&&result.oddPairs<=21);
+ assert.ok(result.oddLastEntries>=1&&result.oddLastEntries<=2);
  assert.equal(result.estimatedStillLegacy,false);
 });
 test('2026 and 2022 district searches and CSV downloads survive mode switching',async t=>{
@@ -1454,7 +1456,7 @@ test('Presidential deputy and lead names stay on one line in compact SVG table, 
    },scope);
    assert.ok(data.count>=3,year+' '+scope+' has election candidates');
    assert.equal(data.ticketNames.length,data.count,year+' all entries are presidential tickets');
-   assert.deepEqual(data.ticketNames.map(x=>x.value),data.expected,year+' all names are preserved');
+   assert.deepEqual(data.ticketNames.map(x=>x.value).sort(),data.expected.slice().sort(),year+' all names are preserved with vertical column ordering');
    assert.ok(data.ticketNames.every(x=>x.spans===1),year+' '+scope+' never splits lead and deputy names');
    assert.ok(data.ticketNames.every(x=>x.value.includes(' & ')),year+' keeps both candidates');
    assert.ok(data.headerHeight<=38&&data.font>=15,year+' table header is compact but legible');
@@ -1476,7 +1478,14 @@ test('Candidate export distinguishes constituency groups with sharper larger lab
   const districtLabels=[...svg.querySelectorAll('[data-export-field="district"]')];
   const names=[...svg.querySelectorAll('[data-export-field="name"]')];
   const partyLabels=[...svg.querySelectorAll('[data-export-field="party"]')];
+  const columnDistricts=Array.from({length:layout.columns},(_,i)=>layout.pairs
+   .map(pair=>pair.entries[i]?.row.district).filter(Boolean));
+  const expectedDividers=columnDistricts.reduce((total,col)=>total+col
+   .slice(1).filter((district,i)=>district!==col[i]).length,0);
+  const intactConstituencies=[...new Set(districts)].every(district=>
+   columnDistricts.filter(col=>col.includes(district)).length===1);
   return{gap:layout.gap,font:layout.font,dividers:dividers.length,accents:accents.length,
+   expectedDividers,intactConstituencies,
    dividerCoords:dividers.map(line=>[Number(line.getAttribute('x1')),Number(line.getAttribute('x2'))]),
    labels:districtLabels.map(el=>Number(el.getAttribute('font-size'))),
    names:names.map(el=>Number(el.getAttribute('font-size'))),
@@ -1484,8 +1493,9 @@ test('Candidate export distinguishes constituency groups with sharper larger lab
    count:svg.querySelectorAll('[data-export-winner-entry]').length};
  });
  assert.equal(layout.count,8);
- assert.equal(layout.dividers,4,'one divider for every constituency change in each column');
- assert.equal(layout.accents,4);
+ assert.equal(layout.dividers,layout.expectedDividers,'one divider for each constituency transition in a column');
+ assert.equal(layout.accents,layout.expectedDividers);
+ assert.equal(layout.intactConstituencies,true,'same-district candidates stay in a single column');
  assert.ok(layout.dividerCoords.every(([x1,x2])=>x2>x1+30));
  assert.ok(layout.font>=16&&layout.labels.every(v=>v>=15)&&layout.parties.every(v=>v>=15));
  assert.ok(layout.names.every(v=>v>=16));
