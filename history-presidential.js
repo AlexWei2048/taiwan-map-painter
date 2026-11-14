@@ -81,7 +81,8 @@
    }
    const totals=shard.contests.reduce((n,c)=>n+Number(c.valid_votes||0),0);
    if(totals!==shard.national.valid_votes)throw Error(year+'年县市与全台得票数不一致');
-   return enrichCandidateProfiles(shard);
+   const enriched=enrichCandidateProfiles(shard);
+   return root.HistoryPresidentialTurnout?.enrich?.(enriched)||enriched;
   })();
   activeLoad.set(year,promise);
   try{return await promise}catch(error){activeLoad.delete(year);throw error}
