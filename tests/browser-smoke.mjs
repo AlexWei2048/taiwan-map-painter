@@ -1855,6 +1855,6 @@ test('2502 wording policy covers live UI, SVG image export and 2026/2022 CSV dow
  await page.locator('#historyOffice').selectOption('council');
  await page.waitForFunction(()=>History2022View.office()==='council'&&document.querySelector('#historySummary')?.textContent.includes('个'));
  const historical=await download(page,'#historyExportCsv');
- assert.match(historical,/县市规范名称/);
+ assert.match(historical,/"县市","选区"/);
  assert.doesNotMatch(historical,/原住民|中选会|总统|全国/,'historical CSV uses normalized labels while source remains archived');
 });
