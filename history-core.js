@@ -106,6 +106,7 @@
  }
 
  function aggregateBallots(summaries){
+  if(!summaries.length)return{registeredVoters:null,ballotsCast:null,validVotes:null,invalidVotes:null,turnout:null};
   const contests=summaries.map(item=>item.contest);
   const sum=key=>contests.every(item=>Number.isInteger(item[key]))?
    contests.reduce((total,item)=>total+item[key],0):null;
