@@ -1647,6 +1647,8 @@ function exportPredictionWinnerRows(){
    if(!candidateMode)try{result=PredictionCore.candidateVoteResult(candidates,record,c.id)}catch(e){}
    const status=selected?(local?'手选胜出':'手选当选'):leading?.candidate.id===c.id?(leading.partial?'暂时领先':d.type==='council'?'第一高票':'预测领先'):'已录入';
    rows.push({district,number:c.number||'待补',name:candidateDisplayName(c),gender:c.gender||'待补',party:c.party,color:party.color,logo:logoFor(party),incumbent:c.incumbent===true?'现任':'',elected:selected,allCandidates,
+    sortVotes:result?.votes??(hasVotes?Number(estimate.votes):null),
+    sortShare:result?.share??(hasShare?Number(estimate.share):null),
     ...(numeric?{estimated:true,specified:candidateMode,hasVotes,hasShare,
      votes:candidateMode?(hasVotes?Number(estimate.votes).toLocaleString('zh-CN'):'—'):result?.votes==null?'—':result.votes.toLocaleString('zh-CN'),
      share:candidateMode?(hasShare?Number(Number(estimate.share).toFixed(2))+'%':'—'):result?.share==null?'—':Number(result.share.toFixed(2))+'%'+(result.partial?'*':''),status}:{}),local});
@@ -1680,7 +1682,7 @@ function exportCandidateColumns(entries,columnCount){
   groups.get(key).push({entry,index});
  }
  function score(row){
-  for(const [field,kind] of [['votes',2],['share',1]]){
+  for(const [field,kind] of [['sortVotes',2],['votes',2],['sortShare',1],['share',1]]){
    const raw=String(row?.[field]??'').trim().replace(/[,\\s%票]/g,'');
    if(raw&&Number.isFinite(Number(raw)))return{kind,value:Number(raw)};
   }
