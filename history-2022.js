@@ -535,7 +535,7 @@
  function legislativeMultiView(){return active&&legislativeMode&&legislativeBallot==='regional'&&legislativeYear<2008&&metric==='party'}
  function historyCouncilSeats(){return active&&kind==='council'&&!!county&&metric==='party'}
  function voteMetric(){return metric==='share'||metric==='votes'}
- function metricLabel(){return metric==='seats'?selectedParty+'当选席次':metric==='share'?'得票率':metric==='votes'?'得票数':kind==='council'||legislativeMode&&legislativeBallot==='regional'&&legislativeYear<2008?'当选席次':presidentialMode?(scale==='town'?'各乡镇市区最高票候选人':'各县市最高票候选人'):legislativeMode?'各地区最高票候选人':mayorTownView()?'各乡镇市区最高票候选人':'当选结果'}
+ function metricLabel(){return metric==='seats'?selectedParty+'当选席次':metric==='share'?'得票率':metric==='votes'?'得票数':kind==='council'||legislativeMode&&legislativeBallot==='regional'&&legislativeYear<2008?'当选席次':presidentialMode?(scale==='town'?'各乡镇市区最高票候选人':'各县市最高票候选人'):legislativeMode?(legislativeBallot==='party'?'各地区领先政党':'各地区最高票候选人'):mayorTownView()?'各乡镇市区最高票候选人':'当选结果'}
  function seatRange(result){const counts=county?[...result.regions.values()].map(r=>r.partyCounts):[...result.countySeats.values()];return{min:0,max:Math.max(1,...counts.map(c=>c.get(selectedParty)||0))}}
  function isOfficialWinner(r){
   if(presidentialMode)return r.elected===true;
@@ -614,7 +614,7 @@
   if(el('historyElectorateBox'))el('historyElectorateBox').hidden=kind!=='council'&&!legislativeMode;if(el('historyElectorate'))el('historyElectorate').value=electorate;
   if(el('historyLegislativeNote')){el('historyLegislativeNote').hidden=!legislativeMode;el('historyLegislativeNote').textContent=HistoryLegislative.note(legislativeYear,legislativeBallot)||'2008年起不分区采用独立政党票；区域选举为单一选区一席。'}
   const legislativeBadges=legislativeMode&&legislativeBallot==='regional'&&legislativeYear<2008;
-  const metrics=[['party',kind==='council'||legislativeBadges?'当选席次':presidentialMode?(scale==='town'?'各乡镇市区最高票候选人所属政党':'各县市最高票候选人所属政党'):legislativeMode?'各地区最高票候选人所属政党':mayorTownView()?'各乡镇市区最高票候选人':'当选结果']];
+  const metrics=[['party',kind==='council'||legislativeBadges?'当选席次':presidentialMode?(scale==='town'?'各乡镇市区最高票候选人所属政党':'各县市最高票候选人所属政党'):legislativeMode?(legislativeBallot==='party'?'各地区领先政党':'各地区最高票候选人所属政党'):mayorTownView()?'各乡镇市区最高票候选人':'当选结果']];
   if(kind==='council'||legislativeBadges)metrics.push(['seats','指定政党席次']);
   if(kind!=='council'||county||legislativeMode)metrics.push(['share','得票率'],['votes','得票数']);
   if(!metrics.some(([id])=>id===metric))metric='party';
