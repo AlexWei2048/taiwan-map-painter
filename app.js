@@ -1671,9 +1671,8 @@ function exportTextWidth(value){let n=0;for(const c of Array.from(String(value||
 function truncateExportText(value,max){const text=String(value||'');if(exportTextWidth(text)<=max)return text;let out='',width=0;for(const c of Array.from(text)){const step=/[\u0000-\u00ff]/.test(c)?.55:1;if(width+step>max-1)break;out+=c;width+=step}return out+'…'}
 function wrapExportText(value,max=82){const lines=[];for(const paragraph of String(value||'').split(/\r?\n/)){if(!paragraph){lines.push('');continue}let line='',width=0;for(const token of paragraph.match(/[A-Za-z0-9]+(?:[’'-][A-Za-z0-9]+)*|[\s\S]/gu)||[]){for(const part of exportTextWidth(token)>max?Array.from(token):[token]){const step=exportTextWidth(part);if(line&&width+step>max){lines.push(line);line='';width=0}line+=part;width+=step}}if(line)lines.push(line)}return lines}
 function appendExportNote(root,lines,y){if(!lines.length)return 0;const height=26+lines.length*19;root.append(svgEl('rect',{x:40,y,width:1120,height,rx:10,fill:'#f3f7f3',stroke:'#e0e8e1','stroke-width':1}));const label=svgEl('text',{x:60,y:y+21,'font-size':11,'font-weight':600,fill:'#557064'});label.textContent='说明';root.append(label);lines.forEach((line,index)=>{const text=svgEl('text',{x:102,y:y+21+index*19,'font-size':11.5,fill:'#60766b'});text.textContent=line;root.append(text)});return height}
-// Keep every constituency in a vertical run, ordered from highest to lowest
-// vote count. Prefer whole constituencies per column; split only when a
-// constituency would otherwise make the exported image excessively tall.
+// Pack complete constituencies into independent, balanced vertical columns.
+// Long individual constituencies split only when otherwise very unbalanced.
 function exportCandidateColumns(entries,columnCount){
  const groups=new Map();
  for(const [index,entry] of entries.entries()){
@@ -1683,45 +1682,60 @@ function exportCandidateColumns(entries,columnCount){
  }
  function score(row){
   for(const [field,kind] of [['sortVotes',2],['votes',2],['sortShare',1],['share',1]]){
-   const raw=String(row?.[field]??'').trim().replace(/[,\\s%票]/g,'');
+   const raw=String(row?.[field]??'').trim().replace(/[,\s%票]/g,'');
    if(raw&&Number.isFinite(Number(raw)))return{kind,value:Number(raw)};
   }
   return{kind:0,value:0};
  }
- const sections=[...groups.values()].map(group=>group.sort((a,b)=>{
+ const groupsSorted=[...groups.values()].map(group=>group.sort((a,b)=>{
   const va=score(a.entry.row),vb=score(b.entry.row);
   return vb.kind-va.kind||(va.kind?vb.value-va.value:0)||a.index-b.index;
- }).map(item=>item.entry));
- const buckets=Array.from({length:columnCount},()=>[]);
- const heights=Array(columnCount).fill(0);
- let column=0,remainingHeight=entries.reduce((sum,entry)=>sum+entry.height,0);
- for(const section of sections){
-  const sectionHeight=section.reduce((sum,entry)=>sum+entry.height,0);
-  let target=remainingHeight/Math.max(1,columnCount-column);
-  if(column<columnCount-1&&buckets[column].length&&
-   heights[column]>=target*.55&&heights[column]+sectionHeight>target*1.15){
-   column++;
-   target=remainingHeight/Math.max(1,columnCount-column);
-  }
-  const oversized=sectionHeight>target*1.45;
-  let placed=0;
-  for(const entry of section){
-   if(oversized&&column<columnCount-1&&buckets[column].length&&heights[column]>=target){
-    column++;
-    target=Math.max(1,(remainingHeight-placed)/(columnCount-column));
+ }).map(x=>x.entry));
+ const count=Math.max(1,Math.floor(columnCount));
+ const total=entries.reduce((sum,e)=>sum+e.height,0),target=total/count,units=[];
+ for(const section of groupsSorted){
+  const height=section.reduce((sum,e)=>sum+e.height,0);
+  if(section.length>1&&height>target*1.55){
+   let part=[],partHeight=0;
+   for(const entry of section){
+    if(part.length&&partHeight+entry.height>target*1.12){
+     units.push(part);part=[];partHeight=0;
+    }
+    part.push(entry);partHeight+=entry.height;
    }
-   buckets[column].push(entry);
-   heights[column]+=entry.height;
-   placed+=entry.height;
-  }
-  remainingHeight-=sectionHeight;
+   if(part.length)units.push(part);
+  }else units.push(section);
  }
- const rowCount=Math.max(0,...buckets.map(bucket=>bucket.length));
- return Array.from({length:rowCount},(_,index)=>{
-  // Preserve empty slots: the renderer uses each array index as the column.
-  const rowEntries=buckets.map(bucket=>bucket[index]||null);
-  return{entries:rowEntries,height:Math.max(...rowEntries.filter(Boolean).map(entry=>entry.height))};
- });
+ const columnEntries=Array.from({length:count},()=>[]);
+ const columnHeights=Array(count).fill(0);
+ if(!units.length)return{columnEntries,columnHeights};
+ const k=Math.min(count,units.length),n=units.length,prefix=[0];
+ for(const group of units)prefix.push(prefix.at(-1)+group.reduce((sum,e)=>sum+e.height,0));
+ // Order-preserving minimax partition; prefer equal heights on ties.
+ const dp=Array.from({length:k+1},()=>Array(n+1).fill(Infinity));
+ const variance=Array.from({length:k+1},()=>Array(n+1).fill(Infinity));
+ const cuts=Array.from({length:k+1},()=>Array(n+1).fill(-1));
+ dp[0][0]=0;variance[0][0]=0;
+ for(let col=1;col<=k;col++)for(let end=col;end<=n;end++){
+  for(let start=col-1;start<end;start++){
+   const previous=dp[col-1][start];if(!Number.isFinite(previous))continue;
+   const height=prefix[end]-prefix[start],tallest=Math.max(previous,height);
+   const imbalance=variance[col-1][start]+(height-total/k)**2;
+   if(tallest<dp[col][end]-1e-7||
+    (Math.abs(tallest-dp[col][end])<=1e-7&&imbalance<variance[col][end])){
+    dp[col][end]=tallest;variance[col][end]=imbalance;cuts[col][end]=start;
+   }
+  }
+ }
+ let end=n;
+ for(let col=k;col>0;col--){
+  const start=cuts[col][end];if(start<0)throw Error('候选人表格分栏失败');
+  const column=units.slice(start,end).flat();
+  columnEntries[col-1]=column;
+  columnHeights[col-1]=column.reduce((sum,e)=>sum+e.height,0);
+  end=start;
+ }
+ return{columnEntries,columnHeights};
 }
 function polishedPredictionTableLayout(rows,targetWidth=null){
  // Compact SVG/PNG table: compute text wraps AFTER the final export width
@@ -1757,11 +1771,12 @@ function polishedPredictionTableLayout(rows,targetWidth=null){
    name.length*lineHeight+meta.length*16+(meta.length?5:0)+8);
   return{row,cells,meta,height};
  });
- const pairs=exportCandidateColumns(entries,columns);
+ const {columnEntries,columnHeights}=exportCandidateColumns(entries,columns);
+ const bodyHeight=Math.max(0,...columnHeights);
  return{polished:true,columns,width,innerWidth,slotWidth,gap,widths,font,lineHeight,rowHeight,
-  headers:['选区','姓名','政党',...metricFields.map(k=>metricHeaders[k])],metricFields,specified,pairs,chunk:Math.ceil(rows.length/columns),
-  sourceRows:rows,tableHeaderHeight,headingHeight,height:headingHeight+tableHeaderHeight+
-   pairs.reduce((sum,pair)=>sum+pair.height,0)+paddingBottom};
+  headers:['选区','姓名','政党',...metricFields.map(k=>metricHeaders[k])],metricFields,specified,
+  columnEntries,columnHeights,bodyHeight,sourceRows:rows,tableHeaderHeight,headingHeight,
+  height:headingHeight+tableHeaderHeight+bodyHeight+paddingBottom};
 }
 function exportPredictionTableLayout(rows){
  // With up to 28 non-numeric winners there is room for a true editorial table:
@@ -1806,29 +1821,28 @@ function appendExportPolishedWinnerTable(root,rows,y,layout){
    label.textContent=name;card.append(label);tx+=layout.widths[k];
   });
  }
- let currentY=bodyY;
- const previousDistricts=Array(layout.columns).fill(null);
- layout.pairs.forEach((pair,pairIndex)=>{
-  const group=svgEl('g',{'data-export-winner-row':'true','data-export-row-index':pairIndex});
-  card.append(group);
-  if(pairIndex%2===1)group.append(svgEl('rect',{x:innerX,y:currentY,width:innerWidth,
-   height:pair.height,fill:'#f7faf8'}));
-  const mid=currentY+pair.height/2;
-  for(const [slotIndex,entry]of pair.entries.entries()){
-   if(!entry)continue;
-   const x=slotX(slotIndex),row=entry.row;
-   const previousDistrict=previousDistricts[slotIndex];
-   const districtStart=previousDistrict!==null&&previousDistrict!==row.district;
-   if(districtStart){
-    // Clear, understated separation for each new constituency, without
-    // increasing the row height or changing candidate sort order.
+ // Independent vertical cursors avoid any cross-column row-height padding.
+ for(let slotIndex=0;slotIndex<layout.columns;slotIndex++){
+  const column=layout.columnEntries[slotIndex]||[];
+  const x=slotX(slotIndex);
+  let currentY=bodyY,previousDistrict=null;
+  for(const [rowIndex,entry] of column.entries()){
+   const row=entry.row;
+   const group=svgEl('g',{'data-export-winner-row':'true',
+    'data-export-row-index':rowIndex,'data-export-column':slotIndex});
+   card.append(group);
+   if(rowIndex%2===1)group.append(svgEl('rect',{x,y:currentY,
+    width:layout.slotWidth,height:entry.height,fill:'#f7faf8'}));
+   const mid=currentY+entry.height/2;
+   if(previousDistrict!==null&&previousDistrict!==row.district){
     group.append(svgEl('line',{x1:x+7,x2:x+layout.slotWidth-7,
      y1:currentY+2,y2:currentY+2,stroke:'#5f9a74','stroke-width':2.1,
      'data-export-district-divider':'true'}));
-    group.append(svgEl('rect',{x:x+3,y:currentY+7,width:3,height:Math.min(17,pair.height-11),
-     rx:1.5,fill:'#8abd9a','data-export-district-accent':'true'}));
+    group.append(svgEl('rect',{x:x+3,y:currentY+7,width:3,
+     height:Math.min(17,entry.height-11),rx:1.5,fill:'#8abd9a',
+     'data-export-district-accent':'true'}));
    }
-   previousDistricts[slotIndex]=row.district;
+   previousDistrict=row.district;
    const item=svgEl('g',{'data-export-winner-entry':'true','data-export-slot':slotIndex,
     'data-export-district':row.district,...(row.presidentialTicket?{'data-export-presidential-ticket':'true'}:{})});
    group.append(item);
@@ -1877,16 +1891,18 @@ function appendExportPolishedWinnerTable(root,rows,y,layout){
     }else linesAt(entry.cells[i+3],metricX+11,15,450,'#536e60',field);
     metricX+=layout.widths[i+3];
    });
+   if(rowIndex!==column.length-1)group.append(svgEl('line',{
+    x1:x+9,x2:x+layout.slotWidth-9,y1:currentY+entry.height,y2:currentY+entry.height,
+    stroke:'#dfe9e2','stroke-width':.8}));
+   currentY+=entry.height;
   }
-  if(pairIndex!==layout.pairs.length-1)group.append(svgEl('line',{x1:innerX+9,
-   x2:innerX+innerWidth-9,y1:currentY+pair.height,y2:currentY+pair.height,
-   stroke:'#dfe9e2','stroke-width':.8}));
-  currentY+=pair.height;
- });
- // A gentle middle divider distinguishes the two parallel candidates.
- for(let divider=1;divider<layout.columns;divider++)card.append(svgEl('line',{x1:innerX+divider*(layout.slotWidth+layout.gap)-layout.gap/2,
+ }
+ // Dividers do not require rows in adjacent columns to line up.
+ for(let divider=1;divider<layout.columns;divider++)card.append(svgEl('line',{
+  x1:innerX+divider*(layout.slotWidth+layout.gap)-layout.gap/2,
   y1:headerY+7,x2:innerX+divider*(layout.slotWidth+layout.gap)-layout.gap/2,
-  y2:currentY,stroke:'#d6e4da','stroke-width':1}));
+  y2:bodyY+Math.max(layout.columnHeights[divider-1],layout.columnHeights[divider]),
+  stroke:'#d6e4da','stroke-width':1}));
  return layout.height;
 }
 function appendExportPredictionTable(root,rows,y,layout=exportPredictionTableLayout(rows)){
