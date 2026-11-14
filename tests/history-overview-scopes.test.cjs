@@ -74,3 +74,16 @@ test('presidential overview shows real county turnout and town candidate votes w
  assert.equal(town.overview.invalidVotes,null);
  assert.equal(town.overview.turnout,null);
 });
+
+test('counties without township-head elections do not inherit statewide figures',()=>{
+ const county='台北市';
+ const choices=W.overviewRegionChoices(local,{year:2022,office:'township',county});
+ assert.ok(choices.counties.includes(county),'all counties remain selectable');
+ assert.equal(choices.areas.length,0,'Taipei has no township head constituencies');
+ const scoped=W.overviewRegionData(local,{year:2022,office:'township',scope:'town',county,area:''});
+ assert.equal(scoped.noElection,true);
+ assert.equal(scoped.result.contests.length,0);
+ assert.equal(scoped.overview.registeredVoters,null);
+ assert.equal(scoped.overview.ballotsCast,null);
+ assert.equal(scoped.overview.validVotes,null);
+});
