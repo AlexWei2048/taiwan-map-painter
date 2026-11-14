@@ -100,9 +100,14 @@
    if(!countyContest)return null;
    query.countyId=countyContest.county_id;
   }
+  let noElection=false;
   if(scope==='district'||scope==='town'&&office==='township'){
-   if(!all.contests.some(c=>c.contest_id===area&&c.county_name===county))return null;
-   query.contestId=area;
+   if(!all.contests.some(c=>c.contest_id===area&&c.county_name===county)){
+    if(office!=='township'||area)return null;
+    // A county without a township-head election is a real geographic choice,
+    // but it must never inherit results from the previous map selection.
+    noElection=true;query.contestId='__no_local_election__';
+   }else query.contestId=area;
   }
   const result=Core.filter(indexed,query);
   let overview=Core.overview(result),townVotesVerified=false;
@@ -121,7 +126,7 @@
    overview={...overview,registeredVoters:null,ballotsCast:null,validVotes,
     invalidVotes:null,turnout:null,turnoutGroups:[group]};
   }
-  return{result,overview,scope,county,area,townVotesVerified};
+  return{result,overview,scope,county,area,townVotesVerified,noElection};
  }
  function featurePresentation({office='mayor',level='county',metric='party',region=null,partyColor=()=> '#edf1e9'}={}){
   if(office==='council'){
@@ -291,7 +296,7 @@
   if(countyBox)countyBox.hidden=overviewScope==='all';
   const areaBox=el('historyOverviewContestBox'),areaSelect=el('historyOverviewContest');
   if(areaBox){
-   areaBox.hidden=overviewScope!==level;
+   areaBox.hidden=overviewScope!==level||!choices.areas.length;
    const firstText=areaBox.firstChild;
    if(firstText?.nodeType===3)firstText.textContent=level==='district'?'议员选区':'乡镇市区';
   }
@@ -323,6 +328,7 @@
     [county,district].filter(Boolean).join(' · ');
    const groups=scoped?.overview?.turnoutGroups||[];
    description.textContent='当前统计范围：'+fullArea+
+    (scoped?.noElection?' · 该县市没有举行此类乡镇市区长选举':'')+
     (groups.length>1?' · 关键指标为各选举类别合计，图表保留分类统计':'')+
     (overviewScope==='town'&&['president','mayor'].includes(state.office)?
      ' · 该层级仅展示可核实的候选人有效票；没有完整记录时保留缺值，不推算选举人数和投票人数':'');
