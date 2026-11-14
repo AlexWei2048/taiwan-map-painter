@@ -1569,7 +1569,7 @@ test('2022 council constituency lists and CSV use 1, 2, 3 numeric ordering',asyn
 
 test('Historical office comes before year, and town-level mayor results mark the county-wide winner',async t=>{
   const page=await pageFor(t);await page.locator('#categoryHistory').click();
-  assert.deepEqual(await page.locator('#historyOffice option').evaluateAll(nodes=>nodes.slice(0,2).map(node=>node.value)),['president','mayor']);
+  assert.deepEqual(await page.locator('#historyOffice option').evaluateAll(nodes=>nodes.slice(0,2).map(node=>node.value)),['president','legislative']);
   assert.equal(await page.locator('#historyOffice').inputValue(),'mayor','ordering should not silently change the selected 2022 default');
   await page.locator('#historyOffice').selectOption('mayor');
   await page.waitForFunction(()=>History2022View.office()==='mayor'&&History2022View.year()===2022);
@@ -2096,4 +2096,30 @@ test('Presidential, mayor and township overviews expose all/county/town levels w
   await scope.selectOption('all');
   // Switching office preserves its loaded snapshot but resets geographic controls.
  }
+});
+
+
+test('Ten legislative history years expose data and real historical electoral maps',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('legislative');
+ await page.waitForFunction(()=>History2022View.office()==='legislative'&&History2022View.year()===2024&&History2022View.snapshot()?.rows?.length>0,{timeout:20000});
+ assert.ok(await page.evaluate(()=>History2022View.items().length>=65),'2024 single-member districts render');
+ await page.locator('#historyElectorate').selectOption('party');
+ await page.waitForFunction(()=>document.querySelector('#historyScale').value==='county');
+ assert.ok(await page.evaluate(()=>History2022View.items().some(f=>f.county==='金门县')&&History2022View.items().some(f=>f.county==='连江县')),'outer islands are available');
+ await page.locator('#historyYear').selectOption('2004');
+ await page.waitForFunction(()=>History2022View.year()===2004&&History2022View.snapshot()?.year===2004,{timeout:20000});
+ assert.ok((await page.locator('#historyElectorate option').allTextContents()).includes('不分区席次计算票'));
+ await page.locator('#historyElectorate').selectOption('regional');
+ await page.waitForFunction(()=>History2022View.items().length>20);
+ await page.locator('#historyMetric').selectOption('seats');
+ assert.equal(await page.locator('#historyMetric').inputValue(),'seats','older multi-member races retain party seat maps');
+ await page.locator('#historyYear').selectOption('1992');
+ await page.waitForFunction(()=>History2022View.year()===1992&&History2022View.snapshot()?.year===1992,{timeout:20000});
+ await page.locator('#historyElectorate').selectOption('party');
+ assert.equal(await page.locator('#historyScale').inputValue(),'county','1992 derived regional votes support county totals, not town estimates');
+ assert.ok(await page.evaluate(()=>History2022View.items().length>=22));
+ await page.locator('#historyOffice').selectOption('mayor');
+ await page.waitForFunction(()=>History2022View.office()==='mayor'&&History2022View.year()===2022);
 });

@@ -62,3 +62,41 @@ test('maps single-member districts onto modern county names without losing histo
  assert.equal(features[0].name,'台北县第01选区');
  assert.equal(features[0].d,'M');
 });
+
+
+test('recognizes official long and Chinese-numeral constituency names without collapsing districts',()=>{
+ const Core=require('../history-core.js');
+ assert.equal(Core.districtNumber('台北市第一选区'),'1');
+ assert.equal(Core.districtNumber('台北市第02選舉區'),'2');
+ assert.equal(Legislative.districtNumber('台北市第01選舉區'),1);
+ assert.equal(Legislative.districtNumber('台北市第二选区'),2);
+ const target={year:2004,rows:[
+  {electorate:'regional',level:'district',county:'台北市',district:'台北市第1选举区'},
+  {electorate:'regional',level:'district',county:'台北市',district:'台北市第2选举区'}
+ ]};
+ const reference={rows:[
+  {electorate:'regional',level:'town',county:'台北市',district:'台北市第1选举区',town:'士林区'},
+  {electorate:'regional',level:'town',county:'台北市',district:'台北市第2选举区',town:'中正区'}
+ ]};
+ const map={towns:[{county:'台北市',name:'士林区',d:'M1',box:[0,0,1,1]},{county:'台北市',name:'中正区',d:'M2',box:[1,0,2,1]}]};
+ const features=Legislative.districtGeometry(target,reference,map);
+ assert.equal(features.length,2);
+ assert.deepEqual(features.map(x=>x.d),['M1','M2']);
+});
+
+test('separates former county and city into distinct historical geometry',()=>{
+ const snapshot={year:2004,rows:[
+  {electorate:'regional',level:'county',county:'台中县'},
+  {electorate:'regional',level:'county',county:'台中市'},
+  {electorate:'regional',level:'town',county:'台中县',town:'大雅乡'},
+  {electorate:'regional',level:'town',county:'台中市',town:'西区'}
+ ]};
+ const map={towns:[
+  {id:'t1',county:'台中市',name:'大雅区',d:'M1',box:[0,0,1,1]},
+  {id:'t2',county:'台中市',name:'西区',d:'M2',box:[1,0,2,1]}
+ ]};
+ const geo=Legislative.scopeGeometry(snapshot,map,s=>s,paths=>paths.join(' '),s=>s==='台中县'?'台中市':s,s=>s.replace(/[乡区]$/,''));
+ assert.equal(geo.counties.length,2);
+ assert.deepEqual(geo.counties.map(c=>c.d),['M1','M2']);
+ assert.equal(geo.towns[0].county,'台中县');
+});

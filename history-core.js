@@ -8,7 +8,14 @@
   const direct=String(value??'').trim();
   if(/^\d+$/.test(direct))return String(Number(direct));
   const match=direct.match(/第\s*0*(\d+)\s*(?:选|選)(?:举|舉)?(?:区|區)/);
-  return match?String(Number(match[1])):'';
+  if(match)return String(Number(match[1]));
+  const chinese=direct.match(/第([一二三四五六七八九十]+)(?:选(?:举)?区|選(?:舉)?區)/);
+  if(!chinese)return '';
+  const digit={'一':1,'二':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8,'九':9,'十':10},v=chinese[1];
+  if(v==='十')return '10';
+  if(v.startsWith('十'))return String(10+(digit[v[1]]||0));
+  if(v.endsWith('十'))return String((digit[v[0]]||0)*10);
+  return String(digit[v]||'');
  }
  const COUNTY_ORDER=['台北市','新北市','桃园市','台中市','台南市','高雄市','基隆市','宜兰县','新竹县','新竹市','苗栗县','彰化县','南投县','云林县','嘉义县','嘉义市','屏东县','花莲县','台东县','澎湖县','金门县','连江县'];
  const ELECTORATE_ORDER=['regional','plains','mountain'];
