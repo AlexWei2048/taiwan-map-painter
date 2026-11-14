@@ -2051,10 +2051,12 @@ test('Presidential, mayor and township overviews expose all/county/town levels w
   if(office!=='township')assert.ok(all.counties.includes('金门县')&&all.counties.includes('连江县'));
   await scope.selectOption('county');
   const countyLabel=office==='township'?'金门县':'台北市';
-  const countyOptions=await county.locator('option').allTextContents();
+  // UI wording may show "金门"/"马祖", but option values retain the
+  // canonical election county IDs; select by value rather than visible label.
+  const countyOptions=await county.locator('option').evaluateAll(nodes=>nodes.map(x=>x.value));
   assert.ok(countyOptions.includes(countyLabel),office+' missing '+countyLabel+
-   ' scope choices: '+JSON.stringify(countyOptions.slice(0,25)));
-  await county.selectOption({label:countyLabel});
+   ' scope values: '+JSON.stringify(countyOptions.slice(0,25)));
+  await county.selectOption(countyLabel);
   assert.equal(await page.evaluate(()=>new Set(HistoryWorkspace.result().contests.map(c=>c.county_name)).size),1);
   await scope.selectOption('town');
   assert.equal(await area.isVisible(),true);
