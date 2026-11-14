@@ -1480,10 +1480,20 @@ const sharedBorderCache=new Map();
 function sharedMapBorders(level,identity='regional',includeCoast=false){
  // Historical presidential borders must use the original year's township assignment.
  // In particular, do not draw post-2010 merged county outlines over old county maps.
- const historicTowns=typeof History2022View!=='undefined'&&History2022View.active()&&History2022View.office?.()==='president'?History2022View.historicTownFeatures():null;
+ const historicOffice=typeof History2022View!=='undefined'&&History2022View.active()?History2022View.office?.():null;
+ if(level==='legislative'&&historicOffice==='legislative'){
+  const features=History2022View.legislativeFeatures?.()||[];
+  const key='historic-legislative:'+History2022View.year()+':'+(includeCoast?'complete':'internal');
+  const prior=sharedBorderCache.get(key);
+  if(prior?.source===features)return prior.mesh;
+  const mesh=sharedBoundaryGeometry(features,includeCoast);
+  sharedBorderCache.set(key,{source:features,mesh});
+  return mesh;
+ }
+ const historicTowns=['president','legislative'].includes(historicOffice)?History2022View.historicTownFeatures():null;
  if(historicTowns&&['counties','towns'].includes(level)){
   const countyOnly=level==='counties',coast=includeCoast||countyOnly;
-  const key='presidential:'+level+':'+(coast?'complete':'internal');
+  const key='historical-'+historicOffice+':'+History2022View.year()+':'+level+':'+(coast?'complete':'internal');
   const prior=sharedBorderCache.get(key);
   if(prior?.source===historicTowns)return prior.mesh;
   const mesh=sharedBoundaryGeometry(historicTowns,coast,countyOnly);
@@ -1502,7 +1512,7 @@ function sharedMapBorders(level,identity='regional',includeCoast=false){
 function appendSharedBorders(group,level,identity='regional',filterTown=false){
  const mesh=sharedMapBorders(level,identity,!!state.county);
  const d=filterTown&&state.villageTown?mesh.byTown[state.villageTown]||'':state.county?mesh.byCounty[state.county]||'':mesh.all;
- if(d){const historicCounty=level==='counties'&&typeof History2022View!=='undefined'&&History2022View.active()&&History2022View.office?.()==='president';group.append(svgEl('path',{d,fill:'none','vector-effect':'non-scaling-stroke','data-shared-boundary':level,...(historicCounty?{'data-historical-county-outline':'true'}:{})}));}
+ if(d){const historicCounty=level==='counties'&&typeof History2022View!=='undefined'&&History2022View.active()&&['president','legislative'].includes(History2022View.office?.());group.append(svgEl('path',{d,fill:'none','vector-effect':'non-scaling-stroke','data-shared-boundary':level,...(historicCounty?{'data-historical-county-outline':'true'}:{})}));}
 }
 
 
