@@ -151,16 +151,19 @@
    groups.get(electorate).push(summary);
   }
   const turnoutGroups=[...groups].map(([electorate,summaries])=>({electorate,...aggregateBallots(summaries)}));
-  const combined=turnoutGroups.length===1?turnoutGroups[0]:null;
+  // Totals deliberately sum all applicable electoral rolls, including distinct
+  // indigenous electorates. They are counts of registration/ballot records,
+  // not distinct people; grouped charts retain the separate electorate totals.
+  const combined=aggregateBallots(result.summaries);
   const elected=result.candidacies.filter(item=>item.elected_official===true);
   const gender={};
   for(const item of result.candidacies)gender[item.gender||'未提供']=(gender[item.gender||'未提供']||0)+1;
   const electedGender={};
   for(const item of elected)electedGender[item.gender||'未提供']=(electedGender[item.gender||'未提供']||0)+1;
   return{
-   registeredVoters:combined?.registeredVoters??null,ballotsCast:combined?.ballotsCast??null,
-   validVotes:combined?.validVotes??null,invalidVotes:combined?.invalidVotes??null,
-   turnout:combined?.turnout??null,turnoutGroups,
+   registeredVoters:combined.registeredVoters,ballotsCast:combined.ballotsCast,
+   validVotes:combined.validVotes,invalidVotes:combined.invalidVotes,
+   turnout:combined.turnout,turnoutGroups,
    candidateCount:result.candidacies.length,electedCount:elected.length,
    gender,electedGender,
    incumbentCount:result.candidacies.some(item=>typeof item.incumbent_at_election==='boolean')?
