@@ -61,9 +61,18 @@
      [c.district_name,labels[c.electorate]||'区域议员'].filter(Boolean).join(' · '):
      [c.district_name,c.electorate==='mountain'?'山地少数民族区长':''].filter(Boolean).join(' · ')}));
   }else{
-   const towns=new Set((indexed.snapshot.rows||[]).filter(row=>
-    row.level==='town'&&row.county===county&&row.type===office&&row.town)
+   const snapshot=indexed.snapshot;
+   const towns=new Set((snapshot.rows||[]).filter(row=>
+    row.level==='town'&&row.county===county&&row.town&&
+    (row.type===office||(office==='mayor'&&row.type==='council')))
     .map(row=>row.town));
+   // Some 2022 mayor source files provide only county-wide totals. Preserve
+   // township choices from the same election's official township contests;
+   // do not attribute those votes to the mayoral race.
+   if(office==='mayor')for(const contest of snapshot.contests||[]){
+    if(contest.election_id==='2022-township'&&contest.county_name===county&&contest.district_name)
+     towns.add(contest.district_name);
+   }
    areas=[...towns].sort((a,b)=>a.localeCompare(b,'zh',{numeric:true}))
     .map(town=>({value:town,label:town}));
   }
