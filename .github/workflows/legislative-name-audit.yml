@@ -1,0 +1,31 @@
+name: Audit historic legislative candidate names
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/audit_legislative_names.py
+      - .github/workflows/legislative-name-audit.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Generate candidate name review report from all ten years
+        run: |
+          mkdir -p docs/audits
+          python scripts/audit_legislative_names.py > docs/audits/legislative-names.md
+      - name: Commit audit report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/audits/legislative-names.md
+          if ! git diff --cached --quiet; then
+            git commit -m "Audit candidate name anomalies across historical legislative elections"
+            git push origin HEAD:main
+          fi
