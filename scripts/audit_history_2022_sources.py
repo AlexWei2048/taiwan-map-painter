@@ -48,6 +48,16 @@ def official():
     from zipfile import ZipFile
     import hashlib
     archive=download()
+    with ZipFile(io.BytesIO(archive)) as z:
+        paths=[p for p in z.namelist() if '/2022-111/' in p and ('C1/prv/' in p or 'D1/' in p or 'T1/prv/' in p)]
+        printj('CEC_ARCHIVE_FILES',sorted(set(p.rsplit('/',1)[-1] for p in paths)))
+        printj('CEC_ARCHIVE_FILE_PATHS',paths[:25])
+        for suffix in sorted(set(p.rsplit('/',1)[-1] for p in paths)):
+            if suffix in ('elbase.csv','elcand.csv','elprof.csv'): continue
+            selected=next((p for p in paths if 'C1/prv/' in p and p.endswith('/'+suffix)), None)
+            if selected:
+                entries=list(csv.reader(io.StringIO(z.read(selected).decode('utf-8-sig',errors='replace'))))
+                printj('CEC_EXTRA_FILE_SAMPLE',{'path':selected,'rows':len(entries),'first':entries[:4]})
     tables=load_sources(ZipFile(io.BytesIO(archive)))
     printj('CEC_ARCHIVE',{'sha256':hashlib.sha256(archive).hexdigest(),'tables':len(tables)})
     for group in ['C1/city','C1/prv','T1/city','D1','D2']:
