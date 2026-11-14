@@ -1424,6 +1424,45 @@ test('Candidate export range is persisted and full forecast roster includes cand
  await page.reload();
  assert.equal(await page.locator('#exportCandidateScope').inputValue(),'all');
 });
+test('Presidential deputy and lead names stay on one line in compact SVG table, at both candidate ranges',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('president');
+ await page.waitForFunction(()=>History2022View.year()===2024);
+ const years=['2020','2024'];
+ for(const year of years){
+  await page.locator('#historyYear').selectOption(year);
+  await page.waitForFunction(y=>History2022View.year()===Number(y)&&History2022View.exportRows().length>0,year);
+  for(const scope of ['all','winners']){
+   const data=await page.evaluate(scope=>{
+    state.exportSettings.candidateScope=scope;
+    const rows=History2022View.exportRows(),pre=exportPredictionTableLayout(rows);
+    const svg=preparedExportSvg();
+    const doc=new DOMParser().parseFromString(svg,'image/svg+xml');
+    const items=[...doc.querySelectorAll('[data-export-presidential-ticket]')];
+    const ticketNames=items.map(el=>{
+     const title=el.querySelector('[data-export-field="name"]');
+     return{value:title?.textContent,spans:title?.querySelectorAll('tspan').length||0,
+      badge:!!el.querySelector('[data-export-incumbent]')};
+    });
+    const full=doc.querySelector('[data-export-winner-table]>rect');
+    const cols=pre.columns;
+    return{count:rows.length,expected:rows.map(r=>r.name),ticketNames,
+      columns:cols,compactHeight:Number(full?.getAttribute('height')),
+      preHeight:pre.height,font:pre.font,headerHeight:pre.tableHeaderHeight,
+      width:Number(full?.getAttribute('width'))};
+   },scope);
+   assert.ok(data.count>=3,year+' '+scope+' has election candidates');
+   assert.equal(data.ticketNames.length,data.count,year+' all entries are presidential tickets');
+   assert.deepEqual(data.ticketNames.map(x=>x.value),data.expected,year+' all names are preserved');
+   assert.ok(data.ticketNames.every(x=>x.spans===1),year+' '+scope+' never splits lead and deputy names');
+   assert.ok(data.ticketNames.every(x=>x.value.includes(' & ')),year+' keeps both candidates');
+   assert.ok(data.headerHeight<=38&&data.font>=15,year+' table header is compact but legible');
+   assert.ok(data.compactHeight<=data.preHeight,year+' final layout does not add unused height');
+   assert.ok(data.compactHeight<55*Math.ceil(data.count/data.columns)+80,year+' rows are more compact');
+  }
+ }
+});
 test('Council and township winner tables use the mayor design without losing long lists or numeric data',async t=>{
  const page=await pageFor(t);
  const result=await page.evaluate(()=>{

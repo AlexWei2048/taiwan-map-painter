@@ -1663,25 +1663,38 @@ function exportTextWidth(value){let n=0;for(const c of Array.from(String(value||
 function truncateExportText(value,max){const text=String(value||'');if(exportTextWidth(text)<=max)return text;let out='',width=0;for(const c of Array.from(text)){const step=/[\u0000-\u00ff]/.test(c)?.55:1;if(width+step>max-1)break;out+=c;width+=step}return out+'…'}
 function wrapExportText(value,max=82){const lines=[];for(const paragraph of String(value||'').split(/\r?\n/)){if(!paragraph){lines.push('');continue}let line='',width=0;for(const token of paragraph.match(/[A-Za-z0-9]+(?:[’'-][A-Za-z0-9]+)*|[\s\S]/gu)||[]){for(const part of exportTextWidth(token)>max?Array.from(token):[token]){const step=exportTextWidth(part);if(line&&width+step>max){lines.push(line);line='';width=0}line+=part;width+=step}}if(line)lines.push(line)}return lines}
 function appendExportNote(root,lines,y){if(!lines.length)return 0;const height=26+lines.length*19;root.append(svgEl('rect',{x:40,y,width:1120,height,rx:10,fill:'#f3f7f3',stroke:'#e0e8e1','stroke-width':1}));const label=svgEl('text',{x:60,y:y+21,'font-size':11,'font-weight':600,fill:'#557064'});label.textContent='说明';root.append(label);lines.forEach((line,index)=>{const text=svgEl('text',{x:102,y:y+21+index*19,'font-size':11.5,fill:'#60766b'});text.textContent=line;root.append(text)});return height}
-function polishedPredictionTableLayout(rows){
- // Two adjacent candidates per visual row; each candidate shows only
- // district, name (with an inline incumbent badge) and party + emblem.
+function polishedPredictionTableLayout(rows,targetWidth=null){
+ // Compact SVG/PNG table: compute text wraps AFTER the final export width
+ // is known. Otherwise names remain split even when expanded columns fit.
  const numeric=rows.some(row=>row.estimated),specified=rows.every(row=>row.specified),showAll=rows.some(row=>row.allCandidates);
  const metricFields=numeric?(specified&&!showAll?['votes','share'].filter(k=>rows.some(r=>k==='votes'?r.hasVotes:r.hasShare)):['votes','share','status']):showAll?['status']:[];
  const historical=rows[0]?.historical;
  const metricHeaders={votes:historical?'得票数':'预测得票数',share:historical?'得票率':'预测得票率',status:'当选'};
- const extraWidths=metricFields.map(k=>k==='status'?110:105),extraWidth=extraWidths.reduce((n,w)=>n+w,0);
- const columns=rows.length<=90?2:rows.length<=260?4:6,gap=14,slotWidth=535+extraWidth;
- const innerWidth=columns*slotWidth+(columns-1)*gap,width=innerWidth+36;
- const widths=[120,172,slotWidth-292-extraWidth,...extraWidths],font=15.5,lineHeight=21.5,rowHeight=55;
- const headingHeight=18,tableHeaderHeight=44,paddingBottom=18; // Only the page has a title.
+ const extraWidths=metricFields.map(k=>k==='status'?96:99),extraWidth=extraWidths.reduce((n,w)=>n+w,0);
+ const columns=rows.length<=90?2:rows.length<=260?4:6,gap=10;
+ const font=15.2,lineHeight=19,rowHeight=46;
+ const tickets=rows.filter(r=>r.presidentialTicket);
+ // Keep both names and their connector on ONE SVG text line. Allow for a
+ // full 39px incumbent badge and font-metric variation without truncation.
+ const ticketWidth=tickets.length?Math.max(214,...tickets.map(r=>
+  Math.ceil(exportTextWidth(String(r.name||'').replace(/\\s+/g,' ').trim())*font*1.09+(r.incumbent?58:0)+26))):0;
+ const districtWidth=112,nameWidth=tickets.length?ticketWidth:172;
+ const baseSlotWidth=Math.max(512+extraWidth,districtWidth+nameWidth+186+extraWidth);
+ const baseWidth=columns*baseSlotWidth+(columns-1)*gap+36;
+ const extraPerSlot=Number.isFinite(Number(targetWidth))&&targetWidth>baseWidth?(targetWidth-baseWidth)/columns:0;
+ const slotWidth=baseSlotWidth+extraPerSlot,innerWidth=columns*slotWidth+(columns-1)*gap,width=innerWidth+36;
+ const widths=[districtWidth+extraPerSlot*.14,nameWidth+extraPerSlot*.48,
+  slotWidth-districtWidth-nameWidth-extraWidth-extraPerSlot*.62,...extraWidths];
+ const headingHeight=10,tableHeaderHeight=37,paddingBottom=11;
  const entries=rows.map(row=>{
-  const district=wrapExportText(row.district,Math.max(3,(widths[0]-24)/14.2));
-  const name=wrapExportText(row.name,Math.max(3,(widths[1]-(row.incumbent?62:25))/font));
-  const party=wrapExportText(row.party,Math.max(3,(widths[2]-64)/14));
-  const meta=wrapExportText([row.number?'号次 '+row.number:'',row.gender||''].filter(Boolean).join(' · '),(widths[1]-24)/11.5).filter(Boolean);
-  const cells=[district,name,party,...metricFields.map((k,i)=>wrapExportText(row[k]||'—',(extraWidths[i]-24)/14))];
-  const height=Math.max(rowHeight,Math.max(...cells.map(c=>c.length))*lineHeight+23,name.length*lineHeight+meta.length*16+(meta.length?6:0)+23);
+  const district=wrapExportText(row.district,Math.max(3,(widths[0]-20)/14.2));
+  const name=row.presidentialTicket?[String(row.name||'').replace(/\\s+/g,' ').trim()]:
+   wrapExportText(row.name,Math.max(3,(widths[1]-(row.incumbent?62:22))/font));
+  const party=wrapExportText(row.party,Math.max(3,(widths[2]-59)/14));
+  const meta=wrapExportText([row.number?'号次 '+row.number:'',row.gender||''].filter(Boolean).join(' · '),(widths[1]-22)/11.5).filter(Boolean);
+  const cells=[district,name,party,...metricFields.map((k,i)=>wrapExportText(row[k]||'—',(extraWidths[i]-22)/14))];
+  const height=Math.max(rowHeight,Math.max(...cells.map(c=>c.length))*lineHeight+14,
+   name.length*lineHeight+meta.length*15+(meta.length?5:0)+8);
   return{row,cells,meta,height};
  });
  const pairs=[];
@@ -1722,7 +1735,7 @@ function appendExportPolishedWinnerTable(root,rows,y,layout){
  const outerX=40,innerX=58,innerWidth=layout.innerWidth;
  card.append(svgEl('rect',{x:outerX,y,width:layout.width,height:layout.height,rx:17,fill:'#fff',
   stroke:'#d9e5dd','stroke-width':1.3}));
- card.append(svgEl('rect',{x:outerX,y:y+18,width:4,height:28,rx:2,fill:'#3f8562'}));
+ card.append(svgEl('rect',{x:outerX,y:y+11,width:3,height:19,rx:1.5,fill:'#3f8562'}));
  // The year-aware title is already present at the top of the image.
  const headerY=y+layout.headingHeight,headerH=layout.tableHeaderHeight,bodyY=headerY+headerH;
  const slotX=i=>innerX+i*(layout.slotWidth+layout.gap);
@@ -1747,7 +1760,7 @@ function appendExportPolishedWinnerTable(root,rows,y,layout){
   for(const [slotIndex,entry]of pair.entries.entries()){
    const x=slotX(slotIndex),row=entry.row;
    const item=svgEl('g',{'data-export-winner-entry':'true','data-export-slot':slotIndex,
-    'data-export-district':row.district});
+    'data-export-district':row.district,...(row.presidentialTicket?{'data-export-presidential-ticket':'true'}:{})});
    group.append(item);
    const [districtLines,nameLines,partyLines]=entry.cells;
    function linesAt(lines,xPos,size,weight,color,kind,offset=0){
@@ -1826,16 +1839,14 @@ function appendExportPredictionTable(root,rows,y,layout=exportPredictionTableLay
 // Keep every information column; distribute extra width across text fields.
 function expandExportWinnerLayout(layout,targetWidth){
  if(!layout||targetWidth<=layout.width)return layout;
+ if(layout.polished){
+  // Re-wrap at the ACTUAL printable width and recalculate the physical
+  // row heights. This also prevents invisible space below the last row.
+  const rows=layout.pairs.flatMap(pair=>pair.entries.map(entry=>entry.row));
+  return polishedPredictionTableLayout(rows,targetWidth);
+ }
  const added=targetWidth-layout.width,perSlot=added/layout.columns;
  const widths=[...layout.widths];
- if(layout.polished){
-  widths[0]+=perSlot*.22;
-  widths[1]+=perSlot*.26;
-  widths[2]+=perSlot*.52;
-  return{...layout,width:targetWidth,innerWidth:layout.innerWidth+added,
-   slotWidth:layout.slotWidth+perSlot,widths};
- }
- // Legacy winner-table layout is also supported.
  const flex=[0,2,4].filter(index=>index<widths.length);
  for(const index of flex)widths[index]+=perSlot/flex.length;
  return{...layout,width:targetWidth,blockWidth:layout.blockWidth+perSlot,widths};
@@ -2053,7 +2064,7 @@ function exportSvg(){
   const actualWidth=coreWidth+sidebarWidth;
   const winnerLayout=tableLayout?expandExportWinnerLayout(tableLayout,actualWidth-80):null;
   if(winnerRows.length)appendExportPredictionTable(root,winnerRows,tableY,winnerLayout);
-  let height=Math.max(sidebarHeight,mapY+contentHeight+72,coverageY+coverageHeight+32,winnerRows.length?tableY+tableLayout.height+32:0);
+  let height=Math.max(sidebarHeight,mapY+contentHeight+72,coverageY+coverageHeight+32,winnerRows.length?tableY+winnerLayout.height+24:0);
   root.setAttribute('width',actualWidth);root.setAttribute('height',height);root.setAttribute('viewBox','0 0 '+actualWidth+' '+height);
   root.firstChild?.setAttribute('width',actualWidth);root.firstChild?.setAttribute('height',height);
   return new XMLSerializer().serializeToString(root);
