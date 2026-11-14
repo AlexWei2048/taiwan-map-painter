@@ -424,7 +424,7 @@
    }
    const tr=document.createElement('tr');
    if(r.elected&&!partyBallot)tr.className='history-elected-row';
-   const textFields=partyBallot?[area]:[r.level==='national'?'全区':r.county,r.level==='national'?'全区选举':(r.district||r.town||'—'),r.number||'—',displayedCandidateName(r)];
+   const textFields=partyBallot?[area]:[r.level==='national'?'全区':r.county,r.level==='national'?'全区选举':r.level==='town'?r.town:(r.district||r.town||'—'),r.number||'—',displayedCandidateName(r)];
    for(const value of textFields)tr.append(createHistoryElement('td','',value));
    const party=document.createElement('td');appendHistoryParty(party,r.party);tr.append(party);
    tr.append(createHistoryElement('td','history-number',r.votes.toLocaleString('zh-CN')));
