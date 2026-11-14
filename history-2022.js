@@ -322,7 +322,122 @@
   drawLegend(result);
   positionMapNumberTable();
  }
+ function legislativeRowArea(r){
+  if(r.level==='national')return '全部地区（含金门、马祖）';
+  if(legislativeBallot==='regional')return r.county+' · '+r.district;
+  return r.county+(r.level==='town'?' · '+r.town:'');
+ }
+ function legislativeResultRows(){
+  const rows=legislativeDisplayRows();
+  const totals=new Map();
+  for(const r of rows){const key=legislativeRowArea(r);totals.set(key,(totals.get(key)||0)+r.votes)}
+  return rows.map(r=>({...r,_share:totals.get(legislativeRowArea(r))?r.votes/totals.get(legislativeRowArea(r))*100:0}));
+ }
+ function createHistoryElement(tag,className='',text=''){
+  const node=document.createElement(tag);if(className)node.className=className;
+  if(text!==undefined)node.textContent=text;return node;
+ }
+ function appendHistoryParty(cell,party){
+  const p=predictionParty(party),logo=logoFor(p);
+  if(logo){const img=document.createElement('img');img.src=logo;img.alt='';img.loading='lazy';cell.append(img)}
+  cell.append(createHistoryElement('span','',party));cell.classList.add('history-party-cell');
+ }
+ function renderLegislativeSummary(){
+  const root=el('historyLegislativeSummary');if(!root)return;
+  root.hidden=!legislativeMode;root.replaceChildren();if(!legislativeMode)return;
+  const records=legislativeResultRows(),votes=records.reduce((sum,r)=>sum+r.votes,0),ballotName=HistoryLegislative.ballots(legislativeYear).find(x=>x.value===legislativeBallot)?.label||'选举';
+  const districtRecords=db.legislative.filter(r=>r.electorate===legislativeBallot&&r.level==='district'&&r.elected&&(!county||r.county===county));
+  const wins=legislativeBallot==='party'?[]:legislativeBallot==='regional'?records.filter(r=>r.elected):districtRecords;
+  const overallSeats=wins.length;
+  const head=createHistoryElement('div','history-legislative-head');
+  head.append(createHistoryElement('strong','',yearLabel()+' · '+ballotName),
+   createHistoryElement('span','',scale==='national'?'全部地区（含金门、马祖）':(county||'县市')+(legislativeFocus?' · '+legislativeFocus:'')));
+  root.append(head);
+  const tiles=createHistoryElement('div','history-legislative-stats');
+  const ranked=[...records].sort((a,b)=>b.votes-a.votes),first=ranked[0];
+  const cards=legislativeBallot==='regional'?
+   [['当选席次',overallSeats+' 席'],['涵盖选区',new Set(records.map(legislativeRowArea)).size+' 个'],['候选人',records.length+' 人']]:
+   [['候选人/政党',records.length+' 个'],['当前范围得票',votes.toLocaleString('zh-CN')+' 票'],
+    [legislativeBallot==='party'?'领先政党':'最高票候选人',first?first.name:'暂无资料']];
+  for(const [label,value] of cards){
+   const tile=createHistoryElement('div','history-legislative-stat');
+   tile.append(createHistoryElement('span','',label),createHistoryElement('strong','',value));tiles.append(tile);
+  }
+  root.append(tiles);
+  if(legislativeBallot==='regional'){
+   const partySeats=HistoryLegislative.composition(wins),list=createHistoryElement('div','history-legislative-seat-list');
+   list.append(createHistoryElement('h3','',legislativeYear<2008?'多席选区 · 当选党派席次':'单席选区 · 当选党派席次'));
+   const chips=createHistoryElement('div','history-legislative-seat-chips');
+   for(const item of partySeats){
+    const chip=createHistoryElement('div','history-legislative-seat-chip');
+    appendHistoryParty(chip,item.party);
+    chip.append(createHistoryElement('strong','',item.seats+'席'));chips.append(chip);
+   }
+   list.append(chips);root.append(list);
+   if(legislativeYear<2008&&county){
+    const winners=createHistoryElement('div','history-legislative-winners');
+    winners.append(createHistoryElement('h3','','当选名单'));
+    for(const entry of wins.slice().sort((a,b)=>a.district.localeCompare(b.district,'zh',{numeric:true})||b.votes-a.votes)){
+     const chip=createHistoryElement('span','history-legislative-winner',entry.name+' · '+entry.party);
+     winners.append(chip);
+    }
+    root.append(winners);
+   }
+  }else{
+   const note=createHistoryElement('p','history-legislative-source-note',
+    legislativeBallot==='party'?(legislativeYear<2008?'本届为依据候选人票汇总的席次计算票，不是独立政党票；无可靠席次资料时不推算席次。':
+     '政党票按当前地图范围统计；未收录的法定席次分配不从得票数推算。'):
+    legislativeYear===1992?'该届仅有全区候选人得票，县市及乡镇市区分布无法可靠还原。':
+    '各县市及乡镇市区按本地最高票候选人着色；当选标记表示全区法定当选，并非该乡镇选出。');
+   root.append(note);
+  }
+ }
+ function showLegislativeRows(){
+  renderLegislativeSummary();
+  const root=el('historyResults');root.replaceChildren();
+  const search=normCandidate(el('historySearch').value),partySelect=el('historyResultParty');
+  const all=legislativeResultRows(),parties=[...new Set(all.map(r=>r.party))].sort((a,b)=>a.localeCompare(b,'zh'));
+  const previous=partySelect?.value||'';
+  if(partySelect){partySelect.replaceChildren(new Option('全部政党',''),...parties.map(p=>new Option(p,p)));partySelect.value=parties.includes(previous)?previous:''}
+  const partyFilter=partySelect?.value||'';
+  const rows=all.filter(r=>(!partyFilter||r.party===partyFilter)&&(!search||[r.county,r.town,r.district,r.name,r.party].some(v=>String(v||'').includes(search))))
+   .sort((a,b)=>HistoryCore.compareResultRows(a,b,legislativeBallot==='regional'?'council':'mayor')||
+    legislativeRowArea(a).localeCompare(legislativeRowArea(b),'zh',{numeric:true})||b.votes-a.votes);
+  const national=scale==='national'&&legislativeBallot!=='regional';
+  el('historySummary').textContent=(county||'全部地区（含金门、马祖）')+' · '+HistoryLegislative.ballots(legislativeYear).find(x=>x.value===legislativeBallot)?.label+' · '+rows.length+'条结果'+(national?' · 全区总票':'');
+  if(!rows.length){
+   root.append(createHistoryElement('p','history-legislative-empty','该范围没有可核实的选举结果。'));el('historyPage').textContent='';el('historyPrev').disabled=true;el('historyNext').disabled=true;return
+  }
+  resultPage=Math.min(resultPage,Math.max(0,Math.ceil(rows.length/100)-1));
+  const wrap=createHistoryElement('div','history-table-wrap'),table=createHistoryElement('table','history-candidate-table history-legislative-table');
+  table.dataset.ballot=legislativeBallot;
+  const partyBallot=legislativeBallot==='party';
+  const headers=partyBallot?['地区','政党','得票数','得票率']:['县市','选区 / 地区','号次','候选人','政党','得票数','得票率','当选'];
+  const thead=document.createElement('thead'),heading=document.createElement('tr');
+  for(const name of headers){const th=document.createElement('th');th.textContent=name;heading.append(th)}thead.append(heading);table.append(thead);
+  const body=document.createElement('tbody');let previousArea='';
+  for(const r of rows.slice(resultPage*100,(resultPage+1)*100)){
+   const area=legislativeRowArea(r);
+   if(area!==previousArea){
+    const divider=createHistoryElement('tr','history-district-divider'),th=createHistoryElement('th','',area);
+    th.scope='rowgroup';th.colSpan=headers.length;divider.append(th);body.append(divider);previousArea=area;
+   }
+   const tr=document.createElement('tr');
+   if(r.elected&&!partyBallot)tr.className='history-elected-row';
+   const textFields=partyBallot?[area]:[r.level==='national'?'全区':r.county,r.level==='national'?'全区选举':(r.district||r.town||'—'),r.number||'—',displayedCandidateName(r)];
+   for(const value of textFields)tr.append(createHistoryElement('td','',value));
+   const party=document.createElement('td');appendHistoryParty(party,r.party);tr.append(party);
+   tr.append(createHistoryElement('td','history-number',r.votes.toLocaleString('zh-CN')));
+   tr.append(createHistoryElement('td','history-number',r._share.toFixed(2)+'%'));
+   if(!partyBallot){const mark=document.createElement('td');appendResultMark(mark,r);tr.append(mark)}
+   body.append(tr);
+  }
+  table.append(body);wrap.append(table);root.append(wrap);
+  el('historyPage').textContent=(resultPage+1)+' / '+Math.ceil(rows.length/100);
+  el('historyPrev').disabled=resultPage===0;el('historyNext').disabled=(resultPage+1)*100>=rows.length;
+ }
  function showRows(result){
+  if(legislativeMode){showLegislativeRows();return}
   const search=normCandidate(el('historySearch').value);
   const partySelect=el('historyResultParty'),parties=[...new Set(result.rows.map(r=>r.party))].sort((a,b)=>a.localeCompare(b,'zh')),priorParty=partySelect?.value||'';
   if(partySelect){partySelect.replaceChildren(new Option('全部政党',''),...parties.map(p=>new Option(p,p)));partySelect.value=parties.includes(priorParty)?priorParty:''}
