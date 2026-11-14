@@ -120,11 +120,25 @@
     present.size===expected.size&&[...expected].every(key=>present.has(key))&&
     rows.every(row=>Number.isSafeInteger(row.votes)&&row.votes>=0);
    const validVotes=townVotesVerified?rows.reduce((sum,row)=>sum+row.votes,0):null;
-   // These are county-wide offices; winner status refers to the county result.
-   const group={electorate:'regional',registeredVoters:null,ballotsCast:null,
-    validVotes,invalidVotes:null,turnout:null};
-   overview={...overview,registeredVoters:null,ballotsCast:null,validVotes,
-    invalidVotes:null,turnout:null,turnoutGroups:[group]};
+   // Only the 2022 mayoral race has official CEC township-level ballot profiles.
+   // Never substitute county-wide figures or 2022-11-26 data for Chiayi's
+   // separately held 2022-12-18 mayoral rerun.
+   const profile=office==='mayor'&&townVotesVerified?
+    (indexed.snapshot.townProfiles||[]).find(p=>p.office==='mayor'&&p.county===county&&p.town===area):null;
+   const verifiedProfile=profile&&Number.isSafeInteger(profile.registered_voters)&&
+    Number.isSafeInteger(profile.ballots_cast)&&Number.isSafeInteger(profile.invalid_votes)&&
+    Number.isSafeInteger(profile.valid_votes)&&profile.valid_votes===validVotes&&
+    profile.valid_votes+profile.invalid_votes===profile.ballots_cast&&
+    profile.ballots_cast<=profile.registered_voters?profile:null;
+   const registeredVoters=verifiedProfile?.registered_voters??null;
+   const ballotsCast=verifiedProfile?.ballots_cast??null;
+   const invalidVotes=verifiedProfile?.invalid_votes??null;
+   const turnout=registeredVoters&&ballotsCast!==null?ballotsCast/registeredVoters*100:null;
+   // Countywide winner status is unaffected by local vote totals or turnout.
+   const group={electorate:'regional',registeredVoters,ballotsCast,
+    validVotes,invalidVotes,turnout};
+   overview={...overview,registeredVoters,ballotsCast,validVotes,
+    invalidVotes,turnout,turnoutGroups:[group]};
   }
   return{result,overview,scope,county,area,townVotesVerified,noElection};
  }
@@ -331,7 +345,9 @@
     (scoped?.noElection?' · 该县市没有举行此类乡镇市区长选举':'')+
     (groups.length>1?' · 关键指标为各选举类别合计，图表保留分类统计':'')+
     (overviewScope==='town'&&['president','mayor'].includes(state.office)?
-     ' · 该层级仅展示可核实的候选人有效票；没有完整记录时保留缺值，不推算选举人数和投票人数':'');
+     (Number.isInteger(scoped?.overview?.registeredVoters)?
+      ' · 本区投票人数与选举人数来自中选会原始选举统计':
+      ' · 该层级没有完整且可核实的投票统计时保留缺值，不推算选举人数和投票人数'):'');
   }
  }
  function openContestOverview(contestId){
