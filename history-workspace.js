@@ -577,7 +577,7 @@
  }
  function exportCsv(){
   if(!currentResult)return;
-  const content=state.office==='legislative'?root.HistoryLegislativeData?.exportCsv(indexed?.snapshot||{},state):state.office==='president'&&state.level==='town'?presidentialTownCsv(indexed?.snapshot||{},state):historyCsv(currentResult,state);
+  const content=state.office==='legislative'?root.HistoryLegislativeData?.exportCsv(indexed?.snapshot||{},{...state,focus:el('historyFocus')?.value||''}):state.office==='president'&&state.level==='town'?presidentialTownCsv(indexed?.snapshot||{},state):historyCsv(currentResult,state);
   const blob=new Blob([content],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),link=doc.createElement('a');link.href=url;link.download=exportStem(state)+'.csv';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
  }
  for(const id of ['historyYear','historyOffice','historyElectorate','historyScale','historyMetric'])el(id)?.addEventListener('change',render);
