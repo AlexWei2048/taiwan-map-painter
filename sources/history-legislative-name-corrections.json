@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "description": "Verifiable per-candidate source corrections. Preserve canonical names, validate year/electorate/ballot/votes.",
+  "corrections": [
+    {
+      "year": 1992,
+      "electorate": "regional",
+      "old_name": "王建火宣",
+      "name": "王建煊",
+      "votes": 129019,
+      "ballot_number": "05",
+      "evidence": "https://zh.wikipedia.org/wiki/1992年中華民國立法委員選舉投票結果列表"
+    },
+    {
+      "year": 1992,
+      "electorate": "regional",
+      "old_name": "魏耀干",
+      "name": "魏耀乾",
+      "votes": 66406,
+      "ballot_number": "05",
+      "evidence": "https://multimedia.lib.ntu.edu.tw/Book?BMID=5518"
+    },
+    {
+      "year": 1995,
+      "electorate": "regional",
+      "old_name": "魏耀干",
+      "name": "魏耀乾",
+      "votes": 33,
+      "ballot_number": "2",
+      "evidence": "https://votetw.com/data/candidate/魏耀乾"
+    },
+    {
+      "year": 2024,
+      "electorate": "regional",
+      "old_name": "魏耀干",
+      "name": "魏耀乾",
+      "votes": 8978,
+      "ballot_number": "1",
+      "evidence": "https://votetw.com/data/candidate/魏耀乾"
+    },
+    {
+      "year": 2012,
+      "electorate": "regional",
+      "old_name": "李干龙",
+      "name": "李乾龙",
+      "votes": 94634,
+      "ballot_number": "1",
+      "evidence": "https://votetw.com/data/candidate/李乾龍"
+    },
+    {
+      "year": 2016,
+      "electorate": "regional",
+      "old_name": "李干龙",
+      "name": "李乾龙",
+      "votes": 62723,
+      "ballot_number": "3",
+      "evidence": "https://votetw.com/data/candidate/李乾龍"
+    },
+    {
+      "year": 2016,
+      "electorate": "regional",
+      "old_name": "陈民干",
+      "name": "陈民乾",
+      "votes": 865,
+      "ballot_number": "2",
+      "evidence": "https://gazette.nat.gov.tw/EG_FileManager/eguploadpub/eg022004/ch02/type3/gov15/num2/OEg.pdf"
+    },
+    {
+      "year": 2020,
+      "electorate": "regional",
+      "old_name": "陈民干",
+      "name": "陈民乾",
+      "votes": 1192,
+      "ballot_number": "4",
+      "evidence": "https://www.votetw.com/wiki/陳民乾"
+    },
+    {
+      "year": 2024,
+      "electorate": "plains",
+      "old_name": "米甘干．理佛克",
+      "name": "米甘幹．理佛克",
+      "votes": 863,
+      "ballot_number": "8",
+      "evidence": "https://web.cec.gov.tw/api/file/98042b19-1bd7-4d13-b948-77d387c6f26e.pdf"
+    },
+    {
+      "year": 2004,
+      "electorate": "regional",
+      "old_name": "刘ㄧ德",
+      "name": "刘一德",
+      "votes": 27691,
+      "ballot_number": "2",
+      "evidence": "https://zh.wikipedia.org/wiki/2004年中華民國立法委員選舉投票結果列表"
+    },
+    {
+      "year": 2020,
+      "electorate": "regional",
+      "old_name": "欧中慨",
+      "name": "欧中慨",
+      "votes": 22332,
+      "ballot_number": "2",
+      "evidence": "https://web.cec.gov.tw/api/file/6aec1cfe-e593-492b-82b9-86d44d9693ca.pdf"
+    }
+  ]
+}
