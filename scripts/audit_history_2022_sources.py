@@ -70,6 +70,66 @@ def official():
     return tables
 
 
+
+def compare_cec_candidate_towns():
+    """Verify EVERY candidate's town-level vote against CEC elctks, not just sum.
+    Exact county+town+electorate+seat district+ballot_number matching is mandatory.
+    """
+    from zipfile import ZipFile
+    from scripts.enrich_history_2022_cec import district_number
+    payload=download()
+    with ZipFile(io.BytesIO(payload)) as zipobj:
+        official={}
+        duplicate=[]
+        total_rows=0
+        for inf in zipobj.infolist():
+            parts=inf.filename.split('/2022-111',1)
+            if len(parts)!=2:continue
+            suffix=parts[1].split('/',1)[-1]
+            group='/'.join(suffix.split('/')[:-1])
+            if group not in FILES or suffix.rsplit('/',1)[-1]!='elctks.csv':continue
+            office,electorate=FILES[group]
+            base_file=inf.filename.rsplit('/',1)[0]+'/elbase.csv'
+            base=list(csv.reader(io.StringIO(zipobj.read(base_file).decode('utf-8-sig'))))
+            counties={};towns={};districts={}
+            for row in base:
+                if len(row)<6:continue
+                p,city,region,town,village,name=row[:6]
+                if region=='00' and town=='000' and village=='0000':counties[(p,city)]=norm(name)
+                if region!='00' and town=='000' and village=='0000':districts[(p,city,region)]=district_number(name)
+                if town!='000' and village=='0000':towns[(p,city,region,town)]=norm(name)
+            records=csv.reader(io.StringIO(zipobj.read(inf).decode('utf-8-sig')))
+            for row in records:
+                if len(row)<9 or row[3]=='000' or row[4]!='0000' or row[5]!='0000':continue
+                p,city,region,town=row[:4]
+                county=counties.get((p,city))
+                name=towns.get((p,city,region,town))
+                district=districts.get((p,city,region),'') if office=='council' else ''
+                if not county or not name or office=='council' and not district:continue
+                ballot=str(int(row[6])) if row[6].isdigit() else row[6]
+                key=(office,electorate,county,name,district,ballot)
+                votes=int(row[7])
+                if key in official:duplicate.append([key,official[key],votes])
+                else:official[key]=votes
+                total_rows+=1
+    site={}
+    site_dupes=[]
+    for row in SNAP['rows']:
+        if row['level']!='town':continue
+        district=district_number(row.get('district','')) if row['type']=='council' else ''
+        ballot=str(int(row['number'])) if str(row['number']).isdigit() else str(row['number'])
+        key=(row['type'],row['electorate'],norm(row['county']),norm(row['town']),district,ballot)
+        if key in site:site_dupes.append([key,site[key],row['votes']])
+        else:site[key]=int(row['votes'])
+    mismatches=[{'key':key,'site':votes,'official':official[key]} for key,votes in site.items() if key in official and official[key]!=votes]
+    missing=[{'key':key,'site':votes} for key,votes in site.items() if key not in official]
+    extra=[{'key':key,'official':votes} for key,votes in official.items() if key not in site]
+    printj('CEC_CANDIDATE_TOWN_COMPARE',{'siteRecords':len(site),'cecRecords':len(official),'matched':len(site)-len(missing)-len(mismatches),
+      'mismatches':len(mismatches),'missingCEC':len(missing),'extraCEC':len(extra),'cecDuplicates':len(duplicate),'siteDuplicates':len(site_dupes),
+      'mismatchExamples':mismatches[:35],'missingExamples':missing[:20],'extraExamples':extra[:20],
+      'cecDuplicateExamples':duplicate[:8],'siteDuplicateExamples':site_dupes[:8]})
+    return mismatches,missing,extra
+
 def compare_cec_towns(tables):
     """Compare sums of individual candidate town votes to official CEC elprof tables.
     Match exact county, electorate, contest number and township. Never use list position."""
@@ -158,3 +218,4 @@ if __name__=='__main__':
     tables=official()
     compare_cec_towns(tables)
     nccu_deep()
+    compare_cec_candidate_towns()
