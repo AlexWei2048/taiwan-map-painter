@@ -81,7 +81,7 @@ test('public site source wording and export call sites have the 2502 guards wire
  assert.doesNotMatch(html,/中选会|全台 · 含离岛/);
  assert.doesNotMatch(work,/中选会/);
  assert.doesNotMatch(hist,/全台 · 含离岛/);
- assert.ok(app.includes('function csvCell(v){v=mainlandTerms(v);'));
+ assert.ok(app.includes('function csvCell(v){v=mainlandTerms(simplify('));
  assert.ok(app.includes("replace(/^[“「](.*)[”」]$/,'$1')"),'CSV import accepts published party spelling');
  assert.ok(hist.includes("mainlandTerms(election?.source_name"),'historical source labels are normalized');
  assert.ok(fs.readFileSync('news-wording.js','utf8').includes("new DOMParser().parseFromString(original,'image/svg+xml')"),
