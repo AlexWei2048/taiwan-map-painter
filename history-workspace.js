@@ -68,6 +68,11 @@
     row.level==='town'&&row.county===county&&row.town&&
     (row.type===office||(office==='mayor'&&row.type==='council')))
     .map(row=>row.town));
+   // Official candidate sources use traditional spelling; normalize
+   // mayoral ward choices through the canonical bilingual name registry.
+   if(office==='mayor')for(const alias of snapshot.mayorTownNames||[]){
+    if(alias.county===county)towns.add(alias.town);
+   }
    // The map geometry supplies all valid township/ward names, including
    // city districts without township-head elections. It is used only for
    // geographic choice labels, never to infer unrecorded votes.
@@ -112,8 +117,16 @@
   const result=Core.filter(indexed,query);
   let overview=Core.overview(result),townVotesVerified=false;
   if(scope==='town'&&(office==='mayor'||office==='president')){
+   // TaiwanVotes preserves traditional source names in rows, but the map
+   // uses simplified locality labels. Join through the source-verified
+   // bilingual ward keys; never compare traditional and simplified labels raw.
+   const sourceWard=office==='mayor'?
+    (indexed.snapshot.mayorTownNames||[]).find(item=>item.county===county&&item.town===area):null;
    const rows=(indexed.snapshot.rows||[]).filter(row=>
-    row.type===office&&row.level==='town'&&row.county===county&&row.town===area);
+    row.type===office&&row.level==='town'&&
+    (sourceWard?
+     row.county===sourceWard.county_official&&row.town===sourceWard.town_official:
+     csvSimplify(row.county)===county&&csvSimplify(row.town)===area));
    const expected=new Set(result.candidacies.map(c=>String(c.ballot_number||'')));
    const present=new Set(rows.map(row=>String(row.number||'')));
    townVotesVerified=expected.size>0&&rows.length===expected.size&&
