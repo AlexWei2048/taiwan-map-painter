@@ -49,7 +49,7 @@ def official():
     import hashlib
     archive=download()
     with ZipFile(io.BytesIO(archive)) as z:
-        paths=[p for p in z.namelist() if '/2022-111/' in p and ('C1/prv/' in p or 'D1/' in p or 'T1/prv/' in p)]
+        paths=[p for p in z.namelist() if '2022-111' in p and ('C1/prv/' in p or 'D1/' in p or 'T1/prv/' in p)]
         printj('CEC_ARCHIVE_FILES',sorted(set(p.rsplit('/',1)[-1] for p in paths)))
         printj('CEC_ARCHIVE_FILE_PATHS',paths[:25])
         for suffix in sorted(set(p.rsplit('/',1)[-1] for p in paths)):
