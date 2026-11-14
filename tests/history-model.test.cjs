@@ -54,6 +54,35 @@ test('enriched 2022 history has verified complete candidate and turnout fields',
  assert.equal(chiayiCandidates.find(c=>c.candidate_name==='黄敏惠').gender,'女');
 });
 
+
+test('2022 mayoral wards have 366 independently verified turnout profiles with no shifted county sums',()=>{
+ assert.equal(snapshot.townProfiles.length,366);
+ assert.equal(snapshot.provenance.cecTownProfiles.statistics.coveredMayoralCounties,21);
+ const towns=new Map(),sites=new Map(),countyProfiles=new Map();
+ for(const row of snapshot.rows.filter(x=>x.type==='mayor'&&x.level==='town')){
+  const key=row.county+'|'+row.town;
+  sites.set(key,(sites.get(key)||0)+row.votes);
+ }
+ for(const profile of snapshot.townProfiles){
+  const key=profile.county+'|'+profile.town;
+  assert.equal(towns.has(key),false,'duplicate town profile '+key);
+  towns.set(key,profile);
+  assert.equal(sites.get(key),profile.valid_votes,key);
+  assert.equal(profile.valid_votes+profile.invalid_votes,profile.ballots_cast,key);
+  assert.ok(profile.ballots_cast<=profile.registered_voters,key);
+  const group=countyProfiles.get(profile.county)||{registered_voters:0,ballots_cast:0,valid_votes:0,invalid_votes:0};
+  for(const field of Object.keys(group))group[field]+=profile[field];
+  countyProfiles.set(profile.county,group);
+ }
+ for(const [county,stats] of countyProfiles){
+  const contest=snapshot.contests.find(x=>x.election_id==='2022-mayor'&&x.county_name===county);
+  assert.ok(contest,county);
+  for(const field of Object.keys(stats))assert.equal(stats[field],contest[field],county+' '+field);
+ }
+ assert.equal(sites.size,368);
+ assert.deepEqual([...sites.keys()].filter(key=>!towns.has(key)).sort(),['嘉义市|东区','嘉义市|西区']);
+});
+
 test('official result semantics and source labels survive normalization',()=>{
  const marks=new Set(snapshot.candidacies.map(c=>c.elected_mark));
  assert.ok(marks.has('*'),'ordinary official winners retained');
