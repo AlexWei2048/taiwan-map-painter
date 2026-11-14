@@ -1146,13 +1146,33 @@ test('Export candidate table keeps each constituency vertical and vote-ranked',(
   {district:'乙选区',votes:'8,000',name:'E'},
   {district:'丙选区',votes:'1,000',name:'F'}
  ];
- const pairs=arrange(source.map(row=>({row,height:48})),2);
- const columns=[0,1].map(i=>pairs.map(p=>p.entries[i]?.row).filter(Boolean));
+ const packed=arrange(source.map(row=>({row,height:48})),2);
+ const columns=packed.columnEntries.map(entries=>entries.map(entry=>entry.row));
  assert.deepEqual(columns[0].filter(row=>row.district==='甲选区').map(row=>row.name),['B','C','A']);
  assert.equal(columns.filter(col=>col.some(row=>row.district==='甲选区')).length,1);
  assert.deepEqual(columns[1].filter(row=>row.district==='乙选区').map(row=>row.name),['E','D']);
- assert.ok(app.includes('if(!entry)continue;'));
+ assert.deepEqual(packed.columnHeights,[144,144]);
+ assert.ok(app.includes('let currentY=bodyY,previousDistrict=null;'));
+ assert.ok(app.includes('height:headingHeight+tableHeaderHeight+bodyHeight+paddingBottom'));
  assert.ok(app.includes('polishedPredictionTableLayout(layout.sourceRows,targetWidth)'));
+});
+test('Independent export column packing balances variable-height rows without missing entries',()=>{
+ const start=app.indexOf('function exportCandidateColumns('),end=app.indexOf('function polishedPredictionTableLayout(',start);
+ const pack=new Function(app.slice(start,end)+';return exportCandidateColumns;')();
+ const entries=[
+  ...Array.from({length:5},(_,i)=>({row:{district:'第1选区',votes:String(900-i),name:'A'+i},height:72})),
+  ...Array.from({length:8},(_,i)=>({row:{district:'第2选区',votes:String(800-i),name:'B'+i},height:29})),
+  ...Array.from({length:4},(_,i)=>({row:{district:'第3选区',votes:String(700-i),name:'C'+i},height:65})),
+  ...Array.from({length:10},(_,i)=>({row:{district:'第4选区',votes:String(600-i),name:'D'+i},height:31}))
+ ];
+ const columns=pack(entries,4);
+ assert.equal(columns.columnEntries.flat().length,entries.length);
+ const allNames=new Set(columns.columnEntries.flat().map(e=>e.row.name));
+ assert.equal(allNames.size,entries.length);
+ const heights=columns.columnEntries.map(col=>col.reduce((sum,e)=>sum+e.height,0));
+ assert.deepEqual(columns.columnHeights,heights);
+ assert.ok(Math.max(...heights)<entries.reduce((sum,e)=>sum+e.height,0));
+ assert.deepEqual(columns.columnEntries.flat().filter(e=>e.row.district==='第1选区').map(e=>e.row.name),['A0','A1','A2','A3','A4']);
 });
 test('Council map export scope appears only for council election category',()=>{
  const start=app.indexOf('function syncCouncilExportScopeVisibility(){');
