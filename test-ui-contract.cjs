@@ -1131,3 +1131,41 @@ test('Historical data tools are removed and footer credits use separate lines',(
   assert.match(html,/class="footer-credits">网页开发：Alex Wei<br>测试和推广：星夜长街/);
  }
 });
+
+
+test('Export candidate table keeps each constituency vertical and vote-ranked',()=>{
+ const start=app.indexOf('function exportCandidateColumns(');
+ const end=app.indexOf('function polishedPredictionTableLayout(',start);
+ assert.ok(start>=0&&end>start);
+ const arrange=new Function(app.slice(start,end)+';return exportCandidateColumns;')();
+ const source=[
+  {district:'甲选区',votes:'12,000',name:'A'},
+  {district:'甲选区',votes:'30,000',name:'B'},
+  {district:'甲选区',votes:'20,000',name:'C'},
+  {district:'乙选区',votes:'4,000',name:'D'},
+  {district:'乙选区',votes:'8,000',name:'E'},
+  {district:'丙选区',votes:'1,000',name:'F'}
+ ];
+ const pairs=arrange(source.map(row=>({row,height:48})),2);
+ const columns=[0,1].map(i=>pairs.map(p=>p.entries[i]?.row).filter(Boolean));
+ assert.deepEqual(columns[0].filter(row=>row.district==='甲选区').map(row=>row.name),['B','C','A']);
+ assert.equal(columns.filter(col=>col.some(row=>row.district==='甲选区')).length,1);
+ assert.deepEqual(columns[1].filter(row=>row.district==='乙选区').map(row=>row.name),['E','D']);
+ assert.ok(app.includes('if(!entry)continue;'));
+ assert.ok(app.includes('polishedPredictionTableLayout(layout.sourceRows,targetWidth)'));
+});
+test('Council map export scope appears only for council election category',()=>{
+ const start=app.indexOf('function syncCouncilExportScopeVisibility(){');
+ const end=app.indexOf('function syncInputs(){',start);
+ assert.ok(start>=0&&end>start);
+ const box={hidden:false};
+ const state={workspaceMode:'prediction',predictionOffice:'mayor'};
+ const make=history=>new Function('state','History2022View','$',app.slice(start,end)+';return syncCouncilExportScopeVisibility;')
+ (state,history,()=>box);
+ const refresh=make({active:()=>false});
+ refresh();assert.equal(box.hidden,true);
+ state.predictionOffice='council';refresh();assert.equal(box.hidden,false);
+ state.workspaceMode='free';refresh();assert.equal(box.hidden,true);
+ make({active:()=>true,office:()=> 'mayor'})();assert.equal(box.hidden,true);
+ make({active:()=>true,office:()=> 'council'})();assert.equal(box.hidden,false);
+});
