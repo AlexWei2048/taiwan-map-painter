@@ -1,5 +1,12 @@
 # Taiwan map workbench progress
 
+## 2026-11-14 legislative history
+- Added 1992—2024 regular legislative election history as ten validated year shards.
+- Added regional, party/list-allocation, plains and mountain electorate modes with era-correct 2008 reform wording.
+- Added county/town aggregation for party and indigenous votes, multi-seat badge presentation before 2008, and single-seat fills from 2008 onward.
+- Added NCCU fallback for 1992 and explicit district-only degradation where no fine-grain official rows exist.
+- Added source manifest, builder tests, model tests, UI contract coverage and export naming.
+
 Latest working tree: GitHub Pages repository in this directory, based on 390e9582a84e04ce43f2d32782936946815f292e. Do not restore earlier source over this working tree.
 
 ## Completed and checked before interruption

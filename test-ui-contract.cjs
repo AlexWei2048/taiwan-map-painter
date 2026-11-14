@@ -1009,6 +1009,13 @@ test('Both historical entry pages include the controls wired by history JavaScri
  }
 });
 
+test('Historical workspace offers 1992-2024 legislative election modes',()=>{
+ assert.match(index,/<option value="legislative">立法机构民代<\/option>/);
+ assert.match(index,/id="historyElectorate"[\s\S]*不分区席次计算票/);
+ assert.match(index,/history-legislative\.js/);
+ assert.match(index,/1992—2004年为不分区席次计算票，并非独立政党票/);
+});
+
 test('Unified historical workspace keeps the map and has two toggleable result detail views',()=>{
  const ids=['historyYear','historyOffice','historyElectorate','historyCounty','historyScale','historyMetric',
   'historyCandidate','historyParty','historyViewCandidates','historyViewOverview',

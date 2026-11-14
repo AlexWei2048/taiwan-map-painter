@@ -5,25 +5,26 @@
   const exportedWording=value=>{const text=csvSimplify(String(value??''));return (typeof module!=='undefined'&&module.exports?require('./news-wording.js'):root.XinhuaWording)?.normalize(text)||text};
   const csvPercent=value=>{if(value===null||value===undefined||String(value).trim()==='')return '';const number=Number(String(value).trim().replace(/%$/,''));return Number.isFinite(number)?(Math.round((number+1e-9)*100)/100).toFixed(2)+'%':''};
   const csvCell=value=>{let text=exportedWording(value);if(/^[=+@\t\r-]/.test(text))text="'"+text;return '"'+text.replace(/"/g,'""')+'"'};
- const OFFICES=new Set(['mayor','council','township','president']);
+ const OFFICES=new Set(['mayor','council','township','president','legislative']);
  const PRESIDENT_YEARS=[1996,2000,2004,2008,2012,2016,2020,2024];
- const yearsForOffice=office=>office==='president'?PRESIDENT_YEARS:[2022];
+ const yearsForOffice=office=>office==='president'?PRESIDENT_YEARS:office==='legislative'?(root.HistoryLegislative?.YEARS||[1992,1995,1998,2001,2004,2008,2012,2016,2020,2024]):[2022];
  const Core=typeof module!=='undefined'&&module.exports?require('./history-core.js'):root.HistoryCore;
  const VIEWS=new Set(['map','candidates','overview']);
  const ELECTORATES=new Set(['all','regional','plains','mountain']);
- const METRICS={mayor:new Set(['party','share','votes']),president:new Set(['party','share','votes']),council:new Set(['party','seats','share','votes']),township:new Set(['party','share','votes'])};
+ const METRICS={mayor:new Set(['party','share','votes']),president:new Set(['party','share','votes']),legislative:new Set(['party','seats','share','votes']),council:new Set(['party','seats','share','votes']),township:new Set(['party','share','votes'])};
  const labels={regional:'区域议员',plains:'平地少数民族议员',mountain:'山地少数民族议员'};
  const rate=(valid,cast,invalid)=>Number.isFinite(valid)&&Number.isFinite(cast)&&cast>0?valid/cast*100:Number.isFinite(valid)&&Number.isFinite(invalid)&&valid+invalid>0?valid/(valid+invalid)*100:null;
- const levelOptions=office=>office==='mayor'||office==='president'?[['county','县市'],['town','乡镇市区']]:office==='council'?[['district','选举区']]:[['town','乡镇市区']];
- const electorateOptions=office=>office==='council'?[['all','全部类型（分别统计）'],['regional','区域议员'],['plains','平地少数民族议员'],['mountain','山地少数民族议员']]:[['regional','区域选举']];
+ const levelOptions=(office,year=2024,electorate='regional')=>office==='legislative'?(root.HistoryLegislative?.levels(year,electorate)||[['district','选举区']]):office==='mayor'||office==='president'?[['county','县市'],['town','乡镇市区']]:office==='council'?[['district','选举区']]:[['town','乡镇市区']];
+ const electorateOptions=(office,year=2024)=>office==='legislative'?(root.HistoryLegislative?.ballots(year)||[]).map(item=>[item.value,item.label]):office==='council'?[['all','全部类型（分别统计）'],['regional','区域议员'],['plains','平地少数民族议员'],['mountain','山地少数民族议员']]:[['regional','区域选举']];
  function normalizeSelection(input={},years=null){
   const office=OFFICES.has(input.office)?input.office:'mayor';
   const available=(years||yearsForOffice(office)).map(Number).filter(Number.isFinite),requested=Number(input.year);
-  const year=available.includes(requested)?requested:(office==='president'?2024:2022);
-  const allowedLevels=levelOptions(office).map(item=>item[0]);
+  const year=available.includes(requested)?requested:(office==='president'||office==='legislative'?2024:2022);
+  const requestedElectorate=['regional','plains','mountain','party'].includes(input.electorate)?input.electorate:'regional';
+  const allowedLevels=levelOptions(office,year,requestedElectorate).map(item=>item[0]);
   const defaultLevel=allowedLevels[0];
   const level=allowedLevels.includes(input.level)?input.level:defaultLevel;
-  const electorate=office==='council'&&ELECTORATES.has(input.electorate)?input.electorate:'regional';
+  const electorate=office==='legislative'?requestedElectorate:office==='council'&&ELECTORATES.has(input.electorate)?input.electorate:'regional';
   const requestedMetric=input.metric==='vote'?'share':input.metric;
   const metric=METRICS[office].has(requestedMetric)?requestedMetric:'party';
   const view=VIEWS.has(input.view)?input.view:'map';
@@ -240,15 +241,15 @@
   return{...selection,county,level:'town'};
  }
  function exportStem(selection={}){
-  const offices={mayor:'县市长',council:'县市议员',township:'乡镇市区长',president:'台湾地区领导人'},metrics={party:selection.office==='council'?'当选席次':selection.office==='president'||selection.level==='town'?(selection.level==='town'?'各乡镇市区最高票候选人':'各县市最高票候选人'):'当选政党',seats:'指定政党席次',vote:'得票率',share:'得票率',votes:'得票数'};
+  const offices={mayor:'县市长',council:'县市议员',township:'乡镇市区长',president:'台湾地区领导人',legislative:'立法机构民代'},metrics={party:['council','legislative'].includes(selection.office)?'当选席次':selection.office==='president'||selection.level==='town'?(selection.level==='town'?'各乡镇市区最高票候选人':'各县市最高票候选人'):'当选政党',seats:'指定政党席次',vote:'得票率',share:'得票率',votes:'得票数'};
   return[selection.year||2022,offices[selection.office]||'历史选举',selection.office==='president'?(selection.level==='town'?'乡镇市区':'县市'):null,selection.county||'全台',metrics[selection.metric]||selection.metric||'结果'].filter(Boolean).join('-').replace(/[\\/:*?"<>|]/g,'_');
  }
  function historyCsv(result={contests:[],candidacies:[]},selection={}){
-  const presidential=selection.office==='president',council=selection.office==='council';
+  const presidential=selection.office==='president',council=['council','legislative'].includes(selection.office);
   const extra=presidential?['副领导人候选人','正职性别','副职性别','选举时现任']:[];
   const headers=['年份','选举类别','县市','选区',...(council?['选区类型']:[]),presidential?'正领导人候选人':'候选人',...extra,'政党','号次','得票数','得票率','当选'];
   const contests=new Map((result.contests||[]).map(item=>[item.contest_id,item]));
-  const offices={mayor:'县市长',council:'县市议员',township:'乡镇市区长',president:'台湾地区领导人'};
+  const offices={mayor:'县市长',council:'县市议员',township:'乡镇市区长',president:'台湾地区领导人',legislative:'立法机构民代'};
   const identities={regional:'区域',plains:'平地少数民族',mountain:'山地少数民族'};
   const ordered=[...(result.candidacies||[])].sort((a,b)=>{
    const ca=contests.get(a.contest_id)||{},cb=contests.get(b.contest_id)||{};
@@ -417,7 +418,7 @@
  function refreshYearOptions(){
   const select=el('historyYear');if(!select)return;
   const office=el('historyOffice')?.value||state.office,years=yearsForOffice(office);
-  const current=Number(select.value),preferred=years.includes(current)?current:(office==='president'?2024:2022);
+  const current=Number(select.value),preferred=years.includes(current)?current:(office==='president'||office==='legislative'?2024:2022);
   if(select.options.length!==years.length||years.some((y,i)=>Number(select.options[i]?.value)!==y)){
    select.replaceChildren(...years.map(y=>new Option(String(y),String(y))));
   }
@@ -430,7 +431,7 @@
   return normalizeSelection({
    ...state,year:el('historyYear')?.value,office,
    electorate:el('historyElectorate')?.value,county:el('historyCounty')?.value,
-   level:office==='mayor'||office==='president'?(scale==='town'?'town':'county'):office==='council'?'district':'town',
+   level:office==='legislative'?(scale==='town'?'town':scale==='county'?'county':'district'):office==='mayor'||office==='president'?(scale==='town'?'town':'county'):office==='council'?'district':'town',
    metric:el('historyMetric')?.value
   });
  }
@@ -539,10 +540,10 @@
   currentResult=scoped?.result||fullResult;
   currentOverview=scoped?.overview||(currentResult&&root.HistoryCore?root.HistoryCore.overview(currentResult):null);
   renderOverviewScope(scoped);
-   const electorateBox=el('historyElectorateBox');if(electorateBox)electorateBox.hidden=state.office!=='council';
+   const electorateBox=el('historyElectorateBox');if(electorateBox)electorateBox.hidden=!['council','legislative'].includes(state.office);
   const electorate=el('historyElectorate');if(electorate){
-   if(state.office==='council'){
-    const options=electorateOptions(state.office);
+   if(state.office==='council'||state.office==='legislative'){
+    const options=electorateOptions(state.office,state.year);
     if(electorate.options.length!==options.length)electorate.replaceChildren(...options.map(([value,label])=>new Option(label,value)));
     electorate.value=state.electorate;
    }else electorate.value='regional';

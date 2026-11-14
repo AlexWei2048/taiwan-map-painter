@@ -132,6 +132,7 @@ test('historical export stem includes year, normalized office, scope and metric'
  assert.equal(Workspace.exportStem({year:2022,office:'council',county:'台北市',metric:'party'}),'2022-县市议员-台北市-当选席次');
  assert.equal(Workspace.exportStem({year:2022,office:'mayor',county:'',level:'town',metric:'share'}),'2022-县市长-全台-得票率');
  assert.equal(Workspace.exportStem({year:2022,office:'mayor',county:'',level:'town',metric:'votes'}),'2022-县市长-全台-得票数');
+ assert.equal(Workspace.exportStem({year:2004,office:'legislative',county:'',level:'district',metric:'party'}),'2004-立法机构民代-全台-当选席次');
 });
 
 test('historical CSV uses one simplified column per value, percent text and safe escaped formulas',()=>{

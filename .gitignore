@@ -1,12 +1,15 @@
 .openai/
 preview-dist/
 node_modules/
+.worktrees/
+.superpowers/
 release-source.zip
 test-results/
 __pycache__/
 sources/*
 !sources/README.md
 !sources/data-snapshot.json
+!sources/history-legislative-manifest.json
 !sources/election-2026/
 sources/election-2026/*
 !sources/election-2026/ballot-number-audit-20261029.json
