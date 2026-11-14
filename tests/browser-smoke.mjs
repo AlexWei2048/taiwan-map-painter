@@ -429,7 +429,7 @@ test('Export winner table has two candidates per row, with name-adjacent incumbe
  assert.deepEqual(result.headers,['选区','姓名','政党','选区','姓名','政党']);
  assert.equal(result.firstName,'测试候选人');assert.equal(result.inlineBadge,true);
  assert.equal(result.secondSlot,'1');assert.ok(result.fonts.every(n=>n>=15));
- assert.equal(result.width,1120);assert.ok(result.tableHeight<950);
+ assert.ok(result.width>=1000&&result.width<1120,'compact table uses less width than the previous layout');assert.ok(result.tableHeight<800,'compact rows reduce total height');
  assert.equal(result.oddPairs,11);assert.equal(result.oddLastEntries,1);
  assert.equal(result.estimatedStillLegacy,false);
 });
