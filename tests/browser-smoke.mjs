@@ -302,7 +302,7 @@ test('Independent-candidate emblem is bundled for sidebar, legend and standalone
 test('Recording votes retains chosen winners and exports a complete vote table',async t=>{
  const page=await pageFor(t);await selectMayor(page);await enterRates(page);
  const svg=await exportSvg(page);assert.doesNotMatch(svg,/预测得票候选人|2022 实际选举结果/);assert.match(svg,/预测得票率/);assert.match(svg,/data-export-party-logo/);
- assert.equal((svg.match(/data-export-winner-entry=/g)||[]).length,6);assert.equal((svg.match(/data-export-winner-row=/g)||[]).length,3);
+ assert.equal((svg.match(/data-export-winner-entry=/g)||[]).length,6);assert.equal((svg.match(/data-export-winner-row=/g)||[]).length,6);
  await page.locator('#predictionDisplay').selectOption('composition');assert.match(await page.locator('#predictionCoverage').innerText(),/已选当选人 1\/1/);
  assert.match(await page.locator('#legend').textContent(),/中国国民党（1席）/);
  await page.reload();await page.locator('#regions path').first().waitFor();assert.match(await page.locator('#predictionCoverage').innerText(),/已选当选人 1\/1/);
@@ -384,7 +384,7 @@ test('Specified candidate export contains only the chosen candidate and entered 
  assert.doesNotMatch(info.text,/蒋万安|56%|预测得票数|标记/);
 });
 
-test('Export winner table has two candidates per row, with name-adjacent incumbency and party logos',async t=>{
+test('Export candidate columns flow independently with name-adjacent incumbency and party logos',async t=>{
  const page=await pageFor(t);
  const result=await page.evaluate(()=>{
   const logo=logoFor({id:'blue',name:'中国国民党'});
