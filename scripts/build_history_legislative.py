@@ -234,11 +234,17 @@ def make_snapshot(year: int, source_rows: dict[str, list[dict]]) -> dict:
     }
 
 
-def build(*, verify_existing: bool = False) -> None:
+def build(*, verify_existing: bool = False, reuse_1992: bool = False) -> None:
     targets = {year: ROOT / f"assets/history-legislative-{year}.json" for year in YEARS}
+    manifest_path = ROOT / "sources/history-legislative-manifest.json"
     if verify_existing:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         for year, path in targets.items():
-            obj = json.loads(path.read_text(encoding="utf-8"))
+            source = path.read_bytes()
+            checksum = hashlib.sha256(source).hexdigest()
+            if checksum != manifest["shards"][str(year)]:
+                raise ValueError(f"{year}: SHA-256 differs from source manifest")
+            obj = json.loads(source.decode("utf-8"))
             if obj.get("schemaVersion") != 2 or obj.get("year") != year or obj.get("office") != "legislative":
                 raise ValueError(f"{year}: incompatible legislative shard")
             if not obj.get("contests") or not obj.get("rows"):
@@ -253,6 +259,15 @@ def build(*, verify_existing: bool = False) -> None:
     files = catalog["files"]
     manifest_files, shard_hashes = [], {}
     for year in YEARS:
+        if year == 1992 and reuse_1992:
+            original = targets[year].read_bytes()
+            previous = json.loads(manifest_path.read_text(encoding="utf-8"))
+            checksum = hashlib.sha256(original).hexdigest()
+            if checksum != previous["shards"]["1992"]:
+                raise ValueError("1992 original shard failed checksum; refusing to reuse")
+            shard_hashes["1992"] = checksum
+            print("1992: preserved verified NCCU election snapshot")
+            continue
         source_rows: dict[str, list[dict]] = {}
         for electorate in ("regional", "plains", "mountain"):
             if year == 1992:
@@ -298,5 +313,6 @@ def build(*, verify_existing: bool = False) -> None:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--verify-existing", action="store_true")
+    parser.add_argument("--reuse-1992", action="store_true", help="Keep verified NCCU 1992 shard while refreshing later CEC CSVs")
     args = parser.parse_args()
-    build(verify_existing=args.verify_existing)
+    build(verify_existing=args.verify_existing, reuse_1992=args.reuse_1992)

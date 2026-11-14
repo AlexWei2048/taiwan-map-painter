@@ -1,0 +1,40 @@
+name: Rebuild legislative history source shards
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/legislative-rebuild.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: legislative-history-shards
+  cancel-in-progress: false
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install source-data requirements
+        run: python -m pip install requests beautifulsoup4 opencc-python-reimplemented
+      - name: Rebuild complete annual snapshots from source CSVs
+        run: python -u scripts/build_history_legislative.py --reuse-1992
+      - name: Verify every snapshot against its SHA-256 manifest
+        run: python scripts/build_history_legislative.py --verify-existing
+      - name: Check browser-readable JSON data contracts
+        run: node --test tests/history-legislative.test.cjs
+      - name: Publish complete source-verified assets
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/history-legislative-*.json sources/history-legislative-manifest.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Rebuild source-verified 1995-2024 legislative election shards"
+            git push origin HEAD:main
+          fi
