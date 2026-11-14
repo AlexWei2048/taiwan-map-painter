@@ -2054,7 +2054,15 @@ test('Presidential, mayor and township overviews expose all/county/town levels w
   assert.equal(await page.evaluate(()=>new Set(HistoryWorkspace.result().contests.map(c=>c.county_name)).size),1);
   await scope.selectOption('town');
   assert.equal(await area.isVisible(),true);
-  assert.ok(await area.locator('option').count()>0);
+  const choicesCount=await area.locator('option').count();
+  const detail=await page.evaluate(()=>({
+   scope:HistoryWorkspace.selectedOverviewScope(),
+   historyOffice:History2022View.office(),
+   items:History2022View.allTowns?.().slice(0,2),
+   countyOptions:[...document.querySelector('#historyOverviewCounty').options].map(x=>x.value).slice(0,6),
+   resultCount:HistoryWorkspace.result()?.contests?.length
+  }));
+  assert.ok(choicesCount>0,office+' has no town options: '+JSON.stringify(detail));
   const local=await page.evaluate(()=>({
    selection:HistoryWorkspace.selectedOverviewScope(),
    data:HistoryWorkspace.overview(),
