@@ -9,9 +9,22 @@
   return items;
  }
  function levels(year,electorate){
-  if(Number(year)===1992)return electorate==='party'?[['county','县市']]:[['district','选举区']];
-  if(electorate==='regional')return [['district','选举区']];
-  return [['county','县市'],['town','乡镇市区']];
+  const national=['national','全部地区（含金门、马祖）'];
+  if(electorate==='regional')return [national,['county','县市'],['district','选举区']];
+  if(Number(year)===1992&&['plains','mountain'].includes(electorate))return [national];
+  if(Number(year)===1992)return [national,['county','县市']];
+  return [national,['county','县市'],['town','乡镇市区']];
+ }
+ const multiMember=(year,electorate)=>electorate==='regional'&&Number(year)<2008;
+ function districtKey(row){return String(row.county||'')+'|'+districtNumber(row.district||row.number||row.name)}
+ function winners(snapshot,{county='',district='',electorate='regional'}={}){
+  return(snapshot?.rows||[]).filter(row=>row.electorate===electorate&&row.level==='district'&&row.elected===true&&
+   (!county||row.county===county)&&(!district||districtKey(row)===districtKey({county:row.county,district})));
+ }
+ function composition(records){
+  const counts=new Map();
+  for(const row of records)counts.set(row.party,(counts.get(row.party)||0)+1);
+  return [...counts].map(([party,seats])=>({party,seats})).sort((a,b)=>b.seats-a.seats||a.party.localeCompare(b.party,'zh'));
  }
  function renderMode(year,electorate){
   if(electorate==='regional')return Number(year)>=2008?'fill':'badges';
@@ -123,7 +136,7 @@
   if(!mapLoad)mapLoad=(async()=>{const response=await fetcher('assets/map-legislative.json?v=20261031-split-v25',{cache:'default'});if(!response.ok)throw Error('立法机构民代选区地图 HTTP '+response.status);const map=await response.json();if(!Array.isArray(map.legislative)||map.legislative.length!==73)throw Error('立法机构民代选区地图校验未通过');return map})().catch(error=>{mapLoad=null;throw error});
   return mapLoad;
  }
- const api={YEARS,ballots,levels,renderMode,rows,note,districtNumber,districtGeometry,scopeGeometry,singleMemberGeometry,load,loadMap};
+ const api={YEARS,ballots,levels,multiMember,districtKey,winners,composition,renderMode,rows,note,districtNumber,districtGeometry,scopeGeometry,singleMemberGeometry,load,loadMap};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;
  else root.HistoryLegislative=api;
 })(typeof window==='undefined'?{}:window);
