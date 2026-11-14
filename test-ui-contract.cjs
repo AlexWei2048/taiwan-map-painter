@@ -1196,3 +1196,5 @@ test('Council map export scope appears only for council election category',()=>{
  make({active:()=>true,office:()=> 'mayor'})();assert.equal(box.hidden,true);
  make({active:()=>true,office:()=> 'council'})();assert.equal(box.hidden,false);
 });
+
+test('historical legislative export titles never show an undefined office',()=>{assert.match(app,/president:'台湾地区领导人',legislative:'立法机构民代'/);});
