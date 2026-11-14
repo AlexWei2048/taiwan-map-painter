@@ -1,0 +1,30 @@
+/* Historical legislative results: ballot-specific editorial hierarchy */
+.history-legislative-summary{margin:15px 0 20px;padding:18px 20px;border:1px solid #d9e6dd;background:linear-gradient(135deg,#fcfffd 0%,#f4f8f5 100%);border-radius:15px;color:#274b38}
+.history-legislative-summary[hidden]{display:none}
+.history-legislative-head{display:flex;align-items:center;flex-wrap:wrap;justify-content:space-between;gap:9px;border-bottom:1px solid #dde9e0;padding-bottom:12px;margin-bottom:14px}
+.history-legislative-head strong{font-size:1.03rem;letter-spacing:.01em}
+.history-legislative-head>span{font-size:.84rem;color:#597564}
+.history-legislative-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:13px}
+.history-legislative-stat{display:flex;flex-direction:column;gap:7px;padding:13px 14px;background:#fff;border:1px solid #e0eae3;border-radius:12px;min-width:0}
+.history-legislative-stat>span{font-size:.81rem;color:#658070}
+.history-legislative-stat strong{font-size:1.2rem;color:#284e3b;overflow-wrap:anywhere;line-height:1.25}
+.history-legislative-seat-list{margin-top:12px}
+.history-legislative-seat-list h3,.history-legislative-winners h3{margin:0 0 8px;color:#284e3b;font-size:.93rem}
+.history-legislative-seat-chips{display:flex;flex-wrap:wrap;gap:8px}
+.history-legislative-seat-chip{display:flex;align-items:center;gap:7px;padding:7px 11px;background:#fff;border:1px solid #dae5dd;border-radius:10px;min-height:35px}
+.history-legislative-seat-chip .history-party-cell{display:inline-flex;align-items:center;gap:6px}
+.history-legislative-seat-chip .history-party-cell img{width:22px;height:22px;object-fit:contain}
+.history-legislative-seat-chip strong{font-size:.86rem;color:#244733}
+.history-legislative-winners{margin-top:14px}
+.history-legislative-winner{display:inline-flex;vertical-align:middle;padding:5px 9px;margin:0 7px 7px 0;border-radius:8px;border:1px solid #e0eae3;background:#fff;font-size:.84rem}
+.history-legislative-source-note{font-size:.87rem;line-height:1.6;color:#577362;margin:11px 0 0}
+.history-legislative-empty{padding:16px;color:#607d6c}
+.history-legislative-table{width:100%;border-collapse:collapse}
+.history-legislative-table th{white-space:nowrap}
+.history-legislative-table td{vertical-align:middle}
+.history-legislative-table .history-party-cell{display:table-cell;white-space:nowrap}
+.history-legislative-table .history-party-cell img{display:inline-block;vertical-align:middle;width:22px;height:22px;margin-right:6px;object-fit:contain}
+.history-legislative-table tr.history-district-divider th{background:#edf5ef!important;color:#355b44;font-size:.85rem;text-align:left;padding:10px 13px}
+.history-legislative-table[data-ballot="party"] tbody tr:not(.history-district-divider):first-child td{font-weight:600}
+@media(max-width:760px){.history-legislative-summary{padding:13px 12px}.history-legislative-stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.history-legislative-stat{padding:10px}.history-legislative-stat strong{font-size:1.02rem}.history-legislative-seat-chips{gap:6px}}
+@media(max-width:440px){.history-legislative-stats{grid-template-columns:1fr 1fr}.history-legislative-head{align-items:flex-start;flex-direction:column}}
