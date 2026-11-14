@@ -31,10 +31,11 @@
  }
  function turnoutCards(overview={},selection={}){
   const groups=Array.isArray(overview.turnoutGroups)?overview.turnoutGroups:[];
-  const visible=selection.office==='council'&&selection.electorate==='all'?groups:groups.slice(0,1);
+  const visible=groups;
   return visible.map(group=>({
    electorate:group.electorate,
-   title:selection.office==='council'?(labels[group.electorate]||'其他议员'):'区域选举',
+   title:selection.office==='council'?(labels[group.electorate]||'其他议员'):
+    selection.office==='township'?(group.electorate==='mountain'?'山地少数民族区长':group.electorate==='plains'?'平地少数民族乡镇市长':'区域乡镇市长'):'区域选举',
    registeredVoters:group.registeredVoters??null,
    ballotsCast:group.ballotsCast??null,
    validVotes:group.validVotes??null,
@@ -42,6 +43,66 @@
    turnout:group.turnout??null,
    validRate:rate(group.validVotes,group.ballotsCast,group.invalidVotes)
   }));
+ }
+
+ // Source-backed geographic scope. Town-level mayor/presidential files have
+ // candidate vote totals only; do not manufacture registration or turnout.
+ function overviewRegionChoices(indexed,selection={}){
+  const year=Number(selection.year||2022),office=selection.office||'mayor';
+  if(!indexed||Number(indexed.snapshot?.year)!==year)return{counties:[],areas:[]};
+  const source=Core.filter(indexed,{year,office,electorate:'all'});
+  const counties=[...new Set(source.contests.map(c=>c.county_name))].sort((a,b)=>
+   Core.compareResultRows({county_name:a},{county_name:b},office));
+  const county=selection.county||'';
+  let areas=[];
+  if(office==='council'||office==='township'){
+   areas=source.contests.filter(c=>c.county_name===county).sort((a,b)=>Core.compareResultRows(a,b,office))
+    .map(c=>({value:c.contest_id,label:office==='council'?
+     [c.district_name,labels[c.electorate]||'区域议员'].filter(Boolean).join(' · '):
+     [c.district_name,c.electorate==='mountain'?'山地少数民族区长':''].filter(Boolean).join(' · ')}));
+  }else{
+   const towns=new Set((indexed.snapshot.rows||[]).filter(row=>
+    row.level==='town'&&row.county===county&&row.type===office&&row.town)
+    .map(row=>row.town));
+   areas=[...towns].sort((a,b)=>a.localeCompare(b,'zh',{numeric:true}))
+    .map(town=>({value:town,label:town}));
+  }
+  return{counties,areas};
+ }
+ function overviewRegionData(indexed,selection={}){
+  if(!indexed||Number(indexed.snapshot?.year)!==Number(selection.year))return null;
+  const year=Number(selection.year||2022),office=selection.office||'mayor';
+  const scope=['all','county','district','town'].includes(selection.scope)?selection.scope:'all';
+  const county=String(selection.county||''),area=String(selection.area||'');
+  const all=Core.filter(indexed,{year,office,electorate:'all'});
+  const countyContest=all.contests.find(c=>c.county_name===county);
+  let query={year,office,electorate:'all'};
+  if(scope!=='all'){
+   if(!countyContest)return null;
+   query.countyId=countyContest.county_id;
+  }
+  if(scope==='district'||scope==='town'&&office==='township'){
+   if(!all.contests.some(c=>c.contest_id===area&&c.county_name===county))return null;
+   query.contestId=area;
+  }
+  const result=Core.filter(indexed,query);
+  let overview=Core.overview(result),townVotesVerified=false;
+  if(scope==='town'&&(office==='mayor'||office==='president')){
+   const rows=(indexed.snapshot.rows||[]).filter(row=>
+    row.type===office&&row.level==='town'&&row.county===county&&row.town===area);
+   const expected=new Set(result.candidacies.map(c=>String(c.ballot_number||'')));
+   const present=new Set(rows.map(row=>String(row.number||'')));
+   townVotesVerified=expected.size>0&&rows.length===expected.size&&
+    present.size===expected.size&&[...expected].every(key=>present.has(key))&&
+    rows.every(row=>Number.isSafeInteger(row.votes)&&row.votes>=0);
+   const validVotes=townVotesVerified?rows.reduce((sum,row)=>sum+row.votes,0):null;
+   // These are county-wide offices; winner status refers to the county result.
+   const group={electorate:'regional',registeredVoters:null,ballotsCast:null,
+    validVotes,invalidVotes:null,turnout:null};
+   overview={...overview,registeredVoters:null,ballotsCast:null,validVotes,
+    invalidVotes:null,turnout:null,turnoutGroups:[group]};
+  }
+  return{result,overview,scope,county,area,townVotesVerified};
  }
  function featurePresentation({office='mayor',level='county',metric='party',region=null,partyColor=()=> '#edf1e9'}={}){
   if(office==='council'){
@@ -67,17 +128,15 @@
  function overviewCards(overview={}){
   const value=n=>Number.isFinite(n)?Number(n).toLocaleString('zh-CN'):'暂无资料';
   const percent=n=>Number.isFinite(n)?n.toFixed(2)+'%':'暂无资料';
-  // Overlapping council electorates must never be added into one electorate total.
-  const separated=Array.isArray(overview.turnoutGroups)&&overview.turnoutGroups.length>1;
-  const ballots=n=>separated?'按类别分别统计':value(n);
-  const rateValue=n=>separated?'按类别分别统计':percent(n);
+  // The key metrics show the sum of election records across identities.
+  // Separate charts keep their own denominators; this sum is not a distinct-voter count.
   return[
-   {label:'选举人数',value:ballots(overview.registeredVoters),group:'participation',detail:'登记选民'},
-   {label:'投票人数',value:ballots(overview.ballotsCast),group:'participation',detail:'已投票选民'},
-   {label:'投票率',value:rateValue(overview.turnout),group:'participation',detail:'投票人数占选举人数'},
-   {label:'有效票',value:ballots(overview.validVotes),group:'ballots',detail:'计入候选人得票'},
-   {label:'无效票',value:ballots(overview.invalidVotes),group:'ballots',detail:'未计入有效得票'},
-   {label:'有效率',value:rateValue(rate(overview.validVotes,overview.ballotsCast,overview.invalidVotes)),group:'ballots',detail:'有效票占投票人数'},
+   {label:'选举人数',value:value(overview.registeredVoters),group:'participation',detail:'登记选民（涉及不同类别时为各类别加总）'},
+   {label:'投票人数',value:value(overview.ballotsCast),group:'participation',detail:'投票记录数（涉及不同类别时为各类别加总）'},
+   {label:'投票率',value:percent(overview.turnout),group:'participation',detail:'各类别加总投票数／各类别加总选举人数'},
+   {label:'有效票',value:value(overview.validVotes),group:'ballots',detail:'各类别候选人有效票合计'},
+   {label:'无效票',value:value(overview.invalidVotes),group:'ballots',detail:'各类别无效票合计'},
+   {label:'有效率',value:percent(rate(overview.validVotes,overview.ballotsCast,overview.invalidVotes)),group:'ballots',detail:'各类别合计有效票／合计投票人数'},
    {label:'候选人数',value:value(overview.candidateCount),group:'people',detail:'本范围候选人'},
    {label:'当选人数',value:value(overview.electedCount),group:'people',detail:'当选人数'}
   ];
@@ -89,7 +148,7 @@
  }
  function overviewCharts(overview={},selection={}){
   const groups=turnoutCards(overview,selection);
-  const separated=selection.office==='council'&&selection.electorate==='all'&&groups.length>1;
+  const separated=groups.length>1;
   const breakdown=(title,part,other,total,firstLabel,secondLabel)=>{
    const valid=Number.isFinite(part)&&Number.isFinite(other)&&Number.isFinite(total)&&
     total>0&&part>=0&&other>=0&&part+other===total;
@@ -170,7 +229,7 @@
   }
   return '\uFEFF'+output.map(row=>row.map(csvCell).join(',')).join('\r\n');
  }
- const api={normalizeSelection,yearsForOffice,levelOptions,electorateOptions,turnoutCards,featurePresentation,badgeFallback,candidateRows,overviewCards,overviewCharts,drilldownSelection,exportStem,historyCsv,presidentialTownCsv};
+ const api={normalizeSelection,yearsForOffice,levelOptions,electorateOptions,turnoutCards,overviewRegionChoices,overviewRegionData,featurePresentation,badgeFallback,candidateRows,overviewCards,overviewCharts,drilldownSelection,exportStem,historyCsv,presidentialTownCsv};
  if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
 
  const doc=root.document;
