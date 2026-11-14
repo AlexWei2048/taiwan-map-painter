@@ -1391,6 +1391,7 @@ test('All exported image titles and filenames preserve the office even with a cu
 test('Image export candidate range switches between elected and all historical candidates',async t=>{
  const page=await pageFor(t);await page.locator('#categoryHistory').click();
  await page.locator('#historyOffice').selectOption('mayor');
+ await page.locator('.export-menu summary').click();
  const winners=await page.evaluate(()=>History2022View.exportRows());
  assert.ok(winners.length>0&&winners.every(r=>r.elected));
  await page.locator('#exportCandidateScope').selectOption('all');
@@ -1411,6 +1412,7 @@ test('Image export candidate range switches between elected and all historical c
 test('Candidate export range is persisted and full forecast roster includes candidates not predicted yet',async t=>{
  const page=await pageFor(t);
  await page.locator('#county').selectOption({value:'台北市'});
+ await page.locator('.export-menu summary').click();
  await page.locator('#exportCandidateScope').selectOption('all');
  const data=await page.evaluate(()=>{
   const result=exportPredictionWinnerRows();
