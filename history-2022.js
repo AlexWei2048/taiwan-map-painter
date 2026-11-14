@@ -635,14 +635,16 @@
   const key=featureKey(f),rows=currentResult?.rows.filter(r=>areaKey(r)===key)||[];
   el('historyDialogTitle').textContent=(f.county===f.name?f.name:f.county+' · '+f.name)+' · '+yearLabel()+' '+(presidentialMode?'台湾地区领导人':legislativeMode?(HistoryLegislative.ballots(legislativeYear).find(item=>item.value===legislativeBallot)?.label||'立法机构民代'):kind==='mayor'&&f.county.endsWith('市')?'市长':titles[kind])+'选举结果';
   const body=el('historyDialogRows'),table=body.closest('table'),wrap=table.parentElement;
-  const hiddenColumns=new Set();
+  const partyBallotDialog=legislativeMode&&legislativeBallot==='party';
+  const hiddenColumns=new Set(partyBallotDialog?[0,2,3,4,7]:[]);
+  if(table.tHead.rows[0]?.cells[1])table.tHead.rows[0].cells[1].textContent=partyBallotDialog?'政党':'候选人';
   // Display both offices' verified genders for presidential tickets.
   if(table.tHead.rows[0]?.cells[2])table.tHead.rows[0].cells[2].textContent=presidentialMode?'性别（正/副）':'性别';
   // Show both columns, including on narrow screens; retain dash fallback if needed.
   [...table.tHead.rows[0].cells].forEach((cell,i)=>{cell.hidden=hiddenColumns.has(i)});
   wrap.hidden=!rows.length;
   const missing=el('historyDialogMissing');
-  missing.hidden=!rows.length||!hiddenColumns.size;
+  missing.hidden=partyBallotDialog||!rows.length||!hiddenColumns.size;
   missing.textContent='本选区历史资料缺少'+[...hiddenColumns].map(i=>table.tHead.rows[0].cells[i].textContent).join('、')+'字段。';
   body.replaceChildren();
   for(const r of [...rows].sort((a,b)=>b.votes-a.votes)){
@@ -651,7 +653,7 @@
    for(const [i,value] of [r.number||'—',displayedCandidateName(r),displayedGender(r),incumbentLabel(r),r.party,r.votes.toLocaleString('zh-CN'),(r._share||0).toFixed(2)+'%',''].entries()){
     if(hiddenColumns.has(i))continue;
     const td=document.createElement('td');
-    const logo=i===4?logoFor(predictionParty(r.party)):'';
+    const logo=i===4||partyBallotDialog&&i===1?logoFor(predictionParty(r.party)):'';
     if(logo){const img=document.createElement('img');img.src=logo;img.alt='';const party=document.createElement('span');party.className='history-party-cell';party.append(img,value);td.append(party)}
     if(i===7)appendResultMark(td,r);else if(!logo)td.append(value);tr.append(td);
    }
@@ -660,8 +662,8 @@
   const district=historicalDistrictFor(f);
   el('historyDialogMessage').textContent=!rows.length?(noElection(f)?'2022年本区域不举行乡镇市区长选举。':'暂无该层级的历史数据。'):district?
    '应选 '+district.seats+' 席 · 妇保 '+district.womenReserved+' 席 · 有效票 '+rows.reduce((n,r)=>n+r.votes,0).toLocaleString('zh-CN'):
-   (mayorTownView()?'本地区得票':presidentialMode?'当地候选人得票与全台当选标记':'2022年得票与当选结果');
-  if(rows.length)el('historyDialogMessage').append(' · '+rows.length+' 位候选人 · 按得票数排序');
+   (legislativeMode?(partyBallotDialog?'本地区政党得票与得票率':legislativeBallot==='regional'&&legislativeYear<2008?'本届多席选区的当选者与得票':'本地区候选人得票及选举结果'):mayorTownView()?'本地区得票':presidentialMode?'当地候选人得票与全台当选标记':'2022年得票与当选结果');
+  if(rows.length)el('historyDialogMessage').append(' · '+rows.length+(partyBallotDialog?' 个政党':' 位候选人')+' · 按得票数排序');
   if(f.historicalBoundaryNote)el('historyDialogMessage').append(' · '+f.historicalBoundaryNote);
   if(kind==='mayor'&&f.county==='嘉义市')el('historyDialogMessage').append(' · 2022年12月18日重行投票');
   const dialog=el('historyResultDialog'),hint=el('historyDialogScroll');
@@ -693,17 +695,17 @@
   // elected county-wide. Use the county-wide result for elected-only tables
   // instead of misleadingly showing one township's tally as the winner total.
   const countyWinner=kind==='mayor'&&!presidentialMode&&mayorTownView()&&!showAll;
-  const records=(countyWinner?db.mayor.filter(r=>r.level==='county'&&(!county||r.county===county)):recordsInView())
+  const records=(countyWinner?db.mayor.filter(r=>r.level==='county'&&(!county||r.county===county)):legislativeMode&&legislativeBallot!=='regional'?legislativeResultRows():recordsInView())
    .filter(r=>!exportPanelFilter||kind!=='council'||r.electorate===exportPanelFilter);
   const totals=new Map();
   if(countyWinner)for(const row of records)totals.set(row.county,(totals.get(row.county)||0)+row.votes);
-  const ordered=(showAll?records:records.filter(isOfficialWinner));
+  const ordered=showAll||legislativeMode&&legislativeBallot==='party'?records:records.filter(isOfficialWinner);
   ordered.sort((a,b)=>HistoryCore.compareResultRows(a,b,kind));
   return ordered.map(r=>{
    const party=predictionParty(r.party);
    const scope=[r.county,r.town||r.district].filter(Boolean).filter((name,i,items)=>items.indexOf(name)===i).join(' · ');
    const share=countyWinner?(totals.get(r.county)?r.votes/totals.get(r.county)*100:0):(r._share||0);
-   return {historical:true,presidentialTicket:presidentialMode,estimated:true,district:scope,
+   return {historical:true,presidentialTicket:presidentialMode,estimated:false,district:scope,
     number:r.number,name:displayedCandidateName(r),gender:displayedGender(r),incumbent:r.incumbent===true?'现任':'',party:r.party,color:party.color,logo:logoFor(party),
     votes:r.votes.toLocaleString('zh-CN'),share:share.toFixed(2)+'%',elected:isOfficialWinner(r),allCandidates:showAll};
   });
