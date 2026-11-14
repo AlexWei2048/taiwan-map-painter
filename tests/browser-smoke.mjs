@@ -1938,3 +1938,56 @@ test('2502 wording policy covers live UI, SVG image export and 2026/2022 CSV dow
  assert.match(historical,/"县市","选区"/);
  assert.doesNotMatch(historical,/原住民|中选会|总统|全国/,'historical CSV uses normalized labels while source remains archived');
 });
+
+
+test('Historical council overview names the selected constituency and uses its own verified turnout',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('council');
+ await page.locator('#historyCounty').selectOption({label:'高雄市'});
+ await page.locator('#historyViewOverview').click();
+ const picker=page.locator('#historyOverviewContest');
+ assert.equal(await picker.isVisible(),true);
+ const first=picker.locator('option').nth(1);
+ const contestId=await first.getAttribute('value'),label=await first.innerText();
+ assert.ok(contestId&&label.includes('高雄市'));
+ await picker.selectOption(contestId);
+ const scoped=await page.evaluate(()=>({
+  title:document.querySelector('#historyOverviewTitle').textContent,
+  detail:document.querySelector('#historyOverviewDescription').textContent,
+  contests:HistoryWorkspace.result().contests,
+  overview:HistoryWorkspace.overview(),
+  selected:HistoryWorkspace.selectedOverviewContest(),
+  metrics:[...document.querySelectorAll('#historyOverviewCards strong')].map(n=>n.textContent)
+ }));
+ assert.equal(scoped.selected,contestId);
+ assert.equal(scoped.contests.length,1);
+ assert.ok(scoped.title.includes(scoped.contests[0].district_name),scoped.title);
+ assert.match(scoped.detail,/单一议员选区/);
+ assert.equal(scoped.overview.registeredVoters,scoped.contests[0].registered_voters);
+ assert.equal(scoped.overview.ballotsCast,scoped.contests[0].ballots_cast);
+ assert.ok(scoped.metrics.slice(0,6).every(value=>!value.includes('暂无资料')));
+ await picker.selectOption('');
+ assert.ok((await page.locator('#historyOverviewTitle').textContent()).includes('高雄市'));
+ assert.ok((await page.evaluate(()=>HistoryWorkspace.result().contests.length))>1);
+});
+test('2024 presidential county overview fills voter turnout from reconciled county records',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('president');
+ await page.waitForFunction(()=>History2022View.year()===2024&&HistoryWorkspace.result()?.contests?.length===22);
+ await page.locator('#historyCounty').selectOption({label:'台北市'});
+ await page.locator('#historyViewOverview').click();
+ const scoped=await page.evaluate(()=>({
+  title:document.querySelector('#historyOverviewTitle').textContent,
+  rows:HistoryWorkspace.result().contests.length,
+  data:HistoryWorkspace.overview(),
+  metrics:[...document.querySelectorAll('#historyOverviewCards strong')].map(e=>e.textContent)
+ }));
+ assert.match(scoped.title,/2024年.*台北市/);
+ assert.equal(scoped.rows,1);
+ assert.equal(scoped.data.registeredVoters,2090062);
+ assert.equal(scoped.data.ballotsCast,1552592);
+ assert.equal(scoped.data.invalidVotes,10581);
+ assert.ok(scoped.metrics.slice(0,6).every(value=>!value.includes('暂无资料')));
+});
