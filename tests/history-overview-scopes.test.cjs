@@ -49,9 +49,14 @@ test('2022 mayor and township offices cover all/county/town scopes without inven
   const town=W.overviewRegionData(local,{year:2022,office,scope:'town',county,area:choices.areas[0].value});
   assert.ok(town);
   if(office==='mayor'){
-   assert.equal(town.overview.registeredVoters,null);
-   assert.equal(town.overview.ballotsCast,null);
-   if(town.townVotesVerified)assert.ok(town.overview.validVotes>=0);
+   assert.equal(town.townVotesVerified,true);
+   const profile=local.snapshot.townProfiles.find(row=>row.county===county&&row.town===choices.areas[0].value);
+   assert.ok(profile,'CEC official township profile should be present');
+   assert.equal(town.overview.registeredVoters,profile.registered_voters);
+   assert.equal(town.overview.ballotsCast,profile.ballots_cast);
+   assert.equal(town.overview.invalidVotes,profile.invalid_votes);
+   assert.equal(town.overview.validVotes,profile.valid_votes);
+   assert.equal(town.overview.turnout,100*profile.ballots_cast/profile.registered_voters);
   }else{
    assert.equal(town.result.contests.length,1);
    assert.ok(Number.isInteger(town.overview.registeredVoters));
@@ -86,4 +91,18 @@ test('counties without township-head elections do not inherit statewide figures'
  assert.equal(scoped.overview.registeredVoters,null);
  assert.equal(scoped.overview.ballotsCast,null);
  assert.equal(scoped.overview.validVotes,null);
+});
+
+test('2022 Chiayi City rerun keeps ward turnout missing but exact local vote sums',()=>{
+ for(const [ward,total] of [['东区',42637],['西区',51176]]){
+  const result=W.overviewRegionData(local,{year:2022,office:'mayor',scope:'town',county:'嘉义市',area:ward});
+  assert.ok(result);
+  assert.equal(result.townVotesVerified,true);
+  assert.equal(result.overview.validVotes,total);
+  assert.equal(result.overview.registeredVoters,null);
+  assert.equal(result.overview.ballotsCast,null);
+  assert.equal(result.overview.invalidVotes,null);
+  assert.equal(result.overview.turnout,null);
+ }
+ assert.equal(local.snapshot.townProfiles.some(profile=>profile.county==='嘉义市'),false);
 });
