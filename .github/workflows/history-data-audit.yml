@@ -1,0 +1,22 @@
+name: Audit 2022 historical township data
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/audit_history_2022_sources.py
+      - .github/workflows/history-data-audit.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install requests beautifulsoup4 opencc-python-reimplemented
+      - run: python scripts/audit_history_2022_sources.py
+      - run: node --test tests/history-model.test.cjs tests/history-geography.test.cjs tests/history-overview-scopes.test.cjs
