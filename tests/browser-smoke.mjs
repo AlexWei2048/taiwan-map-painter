@@ -2123,3 +2123,29 @@ test('Ten legislative history years expose data and real historical electoral ma
  await page.locator('#historyOffice').selectOption('mayor');
  await page.waitForFunction(()=>History2022View.office()==='mayor'&&History2022View.year()===2022);
 });
+
+
+test('Verified historical proper names survive map UI, candidate search and CSV exports',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('legislative');
+ await page.waitForFunction(()=>History2022View.office()==='legislative'&&History2022View.year()===2024);
+ await page.locator('#historyYear').selectOption('1992');
+ await page.waitForFunction(()=>History2022View.year()===1992&&History2022View.snapshot()?.year===1992);
+ await page.locator('#historyViewCandidates').click();
+ await page.locator('#historySearch').fill('王建煊');
+ assert.match(await page.locator('#historyResults').innerText(),/王建煊/);
+ await page.locator('#historySearch').fill('魏耀乾');
+ assert.match(await page.locator('#historyResults').innerText(),/魏耀乾/);
+ assert.doesNotMatch(await page.locator('#historyResults').innerText(),/魏耀干/);
+ const firstCsv=await page.evaluate(()=>HistoryWorkspace.historyCsv(HistoryWorkspace.result(),HistoryWorkspace.selection()));
+ assert.match(firstCsv,/王建煊/);
+ assert.match(firstCsv,/魏耀乾/);
+ assert.doesNotMatch(firstCsv,/王建火宣|魏耀干/);
+ await page.locator('#historyYear').selectOption('2024');
+ await page.waitForFunction(()=>History2022View.year()===2024&&History2022View.snapshot()?.year===2024);
+ await page.locator('#historyElectorate').selectOption('plains');
+ const secondCsv=await page.evaluate(()=>HistoryWorkspace.historyCsv(HistoryWorkspace.result(),HistoryWorkspace.selection()));
+ assert.match(secondCsv,/米甘幹．理佛克/);
+ assert.doesNotMatch(secondCsv,/米甘干．理佛克/);
+});
