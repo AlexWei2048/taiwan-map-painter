@@ -791,3 +791,13 @@ body.history-mode #districtReferenceNote,body.history-mode #districtReferenceSou
  }
  #mapWithKey>.canvas>.map-number-key tr{gap:calc(2px * var(--index-zoom,1))}
 }
+
+/* Scoped historical overview: selected constituency stays explicit on mobile. */
+.history-overview-contest-selector{display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+ margin:0 0 14px;padding:9px 13px;border:1px solid #dce8df;border-radius:11px;
+ color:#476c55;background:#f8fbf8;font-size:13px;font-weight:600}
+.history-overview-contest-selector[hidden]{display:none!important}
+.history-overview-contest-selector select{flex:1 1 230px;max-width:100%;min-width:0;
+ padding:8px 10px;border:1px solid #cadbd0;border-radius:8px;background:white;color:#244b38;font-size:13px}
+#historyOverviewTitle{overflow-wrap:anywhere;line-height:1.45}
+#historyOverviewDescription{overflow-wrap:anywhere}
