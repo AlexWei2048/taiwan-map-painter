@@ -295,7 +295,7 @@
  let indexed=null,currentResult=null,currentOverview=null,overviewContestId='';
  let overviewScope='all',overviewCounty='',overviewArea='',overviewInitialized=false,overviewContext='',overviewMapCounty='';
 
- function overviewContextKey(){return state.office+'|'+state.year}
+ function overviewContextKey(){return state.office+'|'+state.year+(state.office==='legislative'?'|'+state.electorate:'')}
  function chooseOverviewOnMapChange(){
   const key=overviewContextKey();
   if(!overviewInitialized||overviewContext!==key){
@@ -385,15 +385,15 @@
  function openFeatureOverview(feature){
   if(!feature||!indexed)return false;
   const county=feature.county||feature.name;
-  const level=state.office==='council'?'district':'town';
-  const choices=overviewRegionChoices(indexed,{year:state.year,office:state.office,county,
+  const level=state.office==='council'||state.office==='legislative'&&state.electorate==='regional'?'district':'town';
+  const choices=overviewRegionChoices(indexed,{year:state.year,office:state.office,electorate:state.electorate,county,
    towns:root.History2022View?.allTowns?.()||[]});
   if(!choices.counties.includes(county))return false;
   overviewInitialized=true;overviewContext=overviewContextKey();
   overviewCounty=county;overviewMapCounty=state.county;
   overviewScope='county';overviewArea='';overviewContestId='';
   if(feature.name!==county){
-   const wanted=state.office==='council'?
+   const wanted=state.office==='council'||state.office==='legislative'&&state.electorate==='regional'?
     choices.areas.find(area=>area.value===contestForFeature(feature)):
     state.office==='township'?
      choices.areas.find(area=>area.value===contestForFeature(feature)):
@@ -413,7 +413,7 @@
   const office=state.office;
   return base.contests.find(contest=>{
    if(contest.county_name!==county)return false;
-   if(office==='council')return Core.identity(contest.electorate)===Core.identity(feature.electorate)&&
+   if(office==='council'||office==='legislative')return Core.identity(contest.electorate)===Core.identity(feature.electorate||state.electorate)&&
     Core.districtNumber(contest.district_name)===String(feature.number);
    if(office==='township')return contest.district_name===feature.name;
    return feature.name===county; // Township presidential/mayor views have no township-specific turnout contest.
