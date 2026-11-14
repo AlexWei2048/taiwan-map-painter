@@ -28,7 +28,7 @@ def internal():
     by_key=collections.defaultdict(list); primary=collections.defaultdict(list)
     for r in rows:
         if r['type'] not in ('mayor','council'): continue
-        stem=(r['type'],r['electorate'],r['county'],r['district'],r['number'],r['name'])
+        stem=(r['type'],r['electorate'],r['county'],'' if r['type']=='mayor' else r['district'],r['number'],r['name'])
         if r['level']=='town':by_key[stem].append(r)
         elif r['level']==('county' if r['type']=='mayor' else 'district'):primary[stem].append(r)
     inconsistent=[]
@@ -59,6 +59,68 @@ def official():
             printj('CEC_PROBE',{'group':group,'table':name,'rows':len(data),'first':x,'townRows':len(town_rows),'townSample':town_rows[:2]})
     return tables
 
+
+def compare_cec_towns(tables):
+    """Compare sums of individual candidate town votes to official CEC elprof tables.
+    Match exact county, electorate, contest number and township. Never use list position."""
+    from scripts.enrich_history_2022_cec import district_number
+    groups=collections.defaultdict(int)
+    for row in SNAP['rows']:
+        if row['level']!='town': continue
+        district=district_number(row.get('district','')) if row['type']=='council' else ''
+        k=(row['type'],row['electorate'],norm(row['county']),norm(row['town']),district)
+        groups[k]+=int(row['votes'])
+    cec_profiles={}
+    collision=[]
+    for folder,(office,electorate) in FILES.items():
+        base=tables[(folder,'elbase.csv')]
+        counties={}; towns={}; districts={}
+        for row in base:
+            if len(row)<6:continue
+            p,city,region,town,village,name=row[:6]
+            if region=='00' and town=='000' and village=='0000':counties[(p,city)]=norm(name)
+            if region!='00' and town=='000' and village=='0000':districts[(p,city,region)]=district_number(name)
+            if town!='000' and village=='0000':towns[(p,city,region,town)]=norm(name)
+        for row in tables[(folder,'elprof.csv')]:
+            if len(row)<10 or row[3]=='000' or row[4]!='0000' or row[5]!='0000':continue
+            p,city,region,town=row[:4]
+            county=counties.get((p,city))
+            tname=towns.get((p,city,region,town))
+            if not county or not tname:continue
+            district=districts.get((p,city,region),'') if office=='council' else ''
+            if office=='council' and not district:continue
+            k=(office,electorate,county,tname,district)
+            value=tuple(int(x) for x in row[6:10])
+            if k in cec_profiles and cec_profiles[k]!=value:
+                collision.append([k,cec_profiles[k],value])
+            cec_profiles[k]=value
+    missing=[]; extra=[]; mismatched=[]; confirmed=0
+    for k,reported in groups.items():
+        official=cec_profiles.get(k)
+        if official is None:missing.append([k,reported]);continue
+        valid,invalid,cast,registered=official
+        if reported!=valid or valid+invalid!=cast or registered<cast:
+            mismatched.append({'key':k,'siteVotes':reported,'cecValid':valid,'cecInvalid':invalid,'cecCast':cast,'cecRegistered':registered})
+        else:confirmed+=1
+    for k,prof in cec_profiles.items():
+        if k not in groups:extra.append([k,prof[0]])
+    printj('CEC_TOWN_COMPARE',{'siteGroups':len(groups),'officialGroups':len(cec_profiles),'exactMatched':confirmed,'mismatches':len(mismatched),'missingOfficial':len(missing),'extraOfficial':len(extra),'collisions':len(collision),'mismatchExamples':mismatched[:25],'missingExamples':missing[:15],'extraExamples':extra[:15],'collisionExamples':collision[:5]})
+    return groups,cec_profiles,mismatched
+
+def nccu_deep():
+    for family in ('H','F','DM','EM','G'):
+        url='https://vote.nccu.edu.tw/cec/ceclist.asp?t='+family
+        try:
+            with urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0'}),timeout=30) as fh:data=fh.read()
+            soup=BeautifulSoup(data,'html.parser')
+            trs=[tr for tr in soup.find_all('tr') if '2022' in tr.get_text(' ',strip=True)]
+            summary=[]
+            for tr in trs:
+                links=[urllib.parse.urljoin(url,a.get('href','')) for a in tr.select('a[href]')]
+                summary.append({'text':tr.get_text(' ',strip=True)[:180],'links':links})
+            printj('NCCU_2022_LINKS',{'family':family,'bytes':len(data),'rows':summary[:9]})
+        except Exception as e:printj('NCCU_2022_FETCH_ERROR',{'family':family,'error':str(e)})
+
 def nccu():
     url='https://vote.nccu.edu.tw/cec/cechead.asp'
     try:
@@ -83,4 +145,6 @@ if __name__=='__main__':
     internal()
     nccu()
     taiwanvotes()
-    official()
+    tables=official()
+    compare_cec_towns(tables)
+    nccu_deep()
