@@ -170,7 +170,7 @@
   }
   return '\uFEFF'+output.map(row=>row.map(csvCell).join(',')).join('\r\n');
  }
- const api={normalizeSelection,yearsForOffice,levelOptions,electorateOptions,turnoutCards,featurePresentation,badgeFallback,candidateRows,overviewCards,overviewCharts,drilldownSelection,exportStem,historyCsv};
+ const api={normalizeSelection,yearsForOffice,levelOptions,electorateOptions,turnoutCards,featurePresentation,badgeFallback,candidateRows,overviewCards,overviewCharts,drilldownSelection,exportStem,historyCsv,presidentialTownCsv};
  if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
 
  const doc=root.document;
