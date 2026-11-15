@@ -96,7 +96,7 @@
    const approximate=[...townNames].some(town=>[...membership].some(([other,names])=>
     other!==key&&other.startsWith(norm(row.county)+'|')&&names.has(town)));
    const box=sources.reduce((b,f)=>[Math.min(b[0],f.box[0]),Math.min(b[1],f.box[1]),Math.max(b[2],f.box[2]),Math.max(b[3],f.box[3])],[Infinity,Infinity,-Infinity,-Infinity]);
-   features.push({id:'legislative-'+target.year+'-'+key,county:norm(row.county),name:norm(row.district),number:districtNumber(row.district),electorate:'regional',d:mergePaths(sources.map(f=>f.d)),box,center:[(box[0]+box[2])/2,(box[1]+box[3])/2],...(approximate?{historicalBoundaryNote:'本届选区涉及乡镇市区内部村里分割；现有底图按乡镇市区近似，不代表精确村里界线',boundaryApproximate:true}:{})});
+   features.push({id:'legislative-'+target.year+'-'+key,county:norm(row.county),name:norm(row.district),number:districtNumber(row.district),electorate:'regional',sourceTownIds:sources.map(f=>f.sourceId||f.id).filter(Boolean),d:mergePaths(sources.map(f=>f.d)),box,center:[(box[0]+box[2])/2,(box[1]+box[3])/2],...(approximate?{historicalBoundaryNote:'本届选区涉及乡镇市区内部村里分割；现有底图按乡镇市区近似，不代表精确村里界线',boundaryApproximate:true}:{})});
   }
   return features;
  }
