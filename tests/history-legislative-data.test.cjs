@@ -53,8 +53,12 @@ test('old multi-seat district reports actual elected counts and unique candidate
 test('historic national maps suppress multi-member logos but county maps retain them',()=>{
  const app=fs.readFileSync(path.join(__dirname,'../app.js'),'utf8');
  const method=app.match(/function drawHistoricalLegislativeRegionalLabels\([\s\S]*?\n}\nfunction renderLabels\(/)?.[0]||'';
- assert.match(method,/if\(!nationwide\)appendHistoricalLegislativeBadges\(group,transform,false\)/);
- assert.match(app,/data-history-legislative-seat-layer/);
+ assert.match(method,/if\(!nationwide\)appendHistoricalLegislativeBadges\(group,transform,false,interactive\)/);
+ const councilSeats=fs.readFileSync(path.join(__dirname,'../council-seats.js'),'utf8');
+ assert.match(councilSeats,/data-history-legislative-seat-layer/);
+ assert.match(councilSeats,/councilSeatPlacement\(f,seats.length,t,used,all\)/);
+ assert.match(councilSeats,/data-seat-style':'council/);
+ assert.match(app,/drawHistoricalLegislativeSeats\(layer,transform,interactive\)/);
 });
 
 test('national legislative turnout is ballot-specific and all available figures reconcile',()=>{
