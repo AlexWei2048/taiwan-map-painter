@@ -10,7 +10,7 @@
  }
  function levels(year,electorate){
   const national=['national','全部地区（含金门、马祖）'];
-  if(electorate==='regional')return [['national','全国总览'],['county','县市'],['district','选举区']];
+  if(electorate==='regional')return [['national','全台总览'],['county','县市'],['district','选举区']];
   if(Number(year)===1992&&['plains','mountain'].includes(electorate))return [national];
   if(Number(year)===1992)return [national,['county','县市']];
   return [national,['county','县市'],['town','乡镇市区']];
