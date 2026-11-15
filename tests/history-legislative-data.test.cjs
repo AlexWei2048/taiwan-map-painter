@@ -79,3 +79,12 @@ test('national legislative turnout is ballot-specific and all available figures 
  const local=Data.localResult(Core.index(shard(2004)),{year:2004,electorate:'regional',scope:'county',county:'台北市'});
  assert.equal(local.overview.registeredVoters,null);
 });
+
+test('geographic legislative profiles enforce exact accepted-vote reconciliation',()=>{
+ const turnout=require('../history-legislative-turnout.js');
+ const base={validVotes:100,turnoutGroups:[{electorate:'regional',validVotes:100}]};
+ const unmatched=turnout.enrich(base,{year:1998,electorate:'regional',scope:'county',county:'台北县'});
+ assert.equal(unmatched.registeredVoters,undefined);
+ assert.equal(unmatched.historicalOverall,null);
+ assert.equal(turnout.national(2024,'regional').validVotes,13363780);
+});

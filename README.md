@@ -12,7 +12,7 @@
 
 **选举概况的数据口径**：历史区域民代、平地与山地少数民族民代及2008年起的不分区政党票，按票种读取已核验的历届投票统计（选举人数、投票人数、有效票、无效票、投票率、有效率）。1992、1998、2001年的部分资料只确认整届合计，此时在独立卡片显示“整届合计”，不将其当作某一票种的投票统计；2008年以前的“不分区席次计算票”不具有独立投票率。县市／乡镇市区层级没有对应可靠资料时保留缺值，不依候选人得票数推算登记选民或废票。内部选举识别码（如 `legislative:2004:regional`）只用于关联，不再作为页面文字。统计配置及出处见 `history-legislative-turnout.js`。
 
-已对十届立法机构民代选举的 3,632 条候选人记录进行字符异常初筛，并以中选会公告、机构资料和历届结果核实 11 条应修正记录。纠错来源与约束集中记录于 `sources/history-legislative-name-corrections.json`；保留人名中的「乾」「幹」，不因姓名较长就改写原住民或复姓候选人。可运行 `python scripts/audit_legislative_names.py` 重新生成审计清单。
+地方选举概况资料的拓展：已加入从中选会 `votedata.zip` 整理而来的 [MISNUK/CECDataSet](https://github.com/MISNUK/CECDataSet) 各地投票概况表，覆盖1995、1998、2001、2004、2008、2012、2016年的区域、平地少数民族和山地少数民族选举。自动构建脚本 `scripts/build_history_legislative_turnout.py` 将每个选区、县市和乡镇市区的**有效票**与本站单独整理的候选人有效票逐一核对：只保留票数完全一致的选举人数、投票人数、有效票、无效票和相应比例，防止跨年度、跨选区或新旧行政区名称错配。已发布的资料放在 `assets/history-legislative-turnout-YYYY.json`，来源文件与校验结果在分片的 `audit` 字段中。1992年没有该来源的地方数据，不能自行补齐。\n\n已对十届立法机构民代选举的 3,632 条候选人记录进行字符异常初筛，并以中选会公告、机构资料和历届结果核实 11 条应修正记录。纠错来源与约束集中记录于 `sources/history-legislative-name-corrections.json`；保留人名中的「乾」「幹」，不因姓名较长就改写原住民或复姓候选人。可运行 `python scripts/audit_legislative_names.py` 重新生成审计清单。
 
 运行 `python scripts/build_history_legislative.py` 可重新下载、验证并生成十个年度分片；运行 `python scripts/build_history_legislative.py --verify-existing` 只核验仓库现有分片。
 

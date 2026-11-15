@@ -82,7 +82,13 @@
   const requestId=++loadingPresidentialId,indicator=el('historyLoadStatus');
   indicator.hidden=false;indicator.textContent='正在载入 '+year+' 年立法机构民代选举结果…';el('historyRetry').hidden=true;
   try{
-   const [shard,ready,geometryReference,regionalMap]=await Promise.all([HistoryLegislative.load(year),snapshot(),year===1992?HistoryLegislative.load(1995):Promise.resolve(null),year>=2012?HistoryLegislative.loadMap():Promise.resolve(null)]);
+   const [shard,ready,geometryReference,regionalMap]=await Promise.all([
+    HistoryLegislative.load(year),snapshot(),
+    year===1992?HistoryLegislative.load(1995):Promise.resolve(null),
+    year>=2012?HistoryLegislative.loadMap():Promise.resolve(null),
+    // Profile failures must not prevent browsing valid election results.
+    HistoryLegislativeTurnout.load(year).catch(error=>{console.warn('历史投票统计暂未载入',error.message);return null})
+   ]);
    if(!ready)throw Error('历史工作台暂时不可用');
    if(requestId!==loadingPresidentialId||!active||el('historyOffice').value!=='legislative')return;
    db.legislative.length=0;dbIds.clear();addRows(shard.rows);

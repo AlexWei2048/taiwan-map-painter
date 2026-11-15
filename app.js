@@ -1445,7 +1445,7 @@ function appendHistoricalLegislativeBadges(layer,transform,nationwide){
    stroke:'#cdded2','stroke-width':1,'pointer-events':'none'}));
   const title=svgEl('text',{x:cx,y:top+26,'text-anchor':'middle',
    'font-size':23,'font-weight':800,fill:'#284f39',stroke:'#fff','stroke-width':.5,
-   'paint-order':'stroke','data-history-seat-number':String(number||feature.name)});
+   'paint-order':'stroke','data-history-seat-number':String(number||feature.name),'data-label':feature.id});
   title.textContent=number?'第'+number+'选区':feature.name;card.append(title);
   items.forEach((party,i)=>{
    const col=i%cols,row=Math.floor(i/cols);
