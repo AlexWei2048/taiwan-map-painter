@@ -1919,6 +1919,10 @@ test('2502 wording policy covers live UI, SVG image export and 2026/2022 CSV dow
  await page.locator('#workspaceFree').click();
  await page.waitForFunction(()=>document.querySelector('#palette')?.textContent.includes('“时代力量”'));
  assert.equal(await page.evaluate(()=>partyMatch('“时代力量”')?.id),'npp');
+ await page.waitForFunction(()=>document.querySelector('#palette')?.textContent.includes('“台湾团结联盟”'));
+ assert.equal(await page.evaluate(()=>partyMatch('“台湾团结联盟”')?.id),'tsu');
+ assert.equal(await page.evaluate(()=>partyMatch('“台联党”')?.id),'tsu');
+ assert.equal(await page.evaluate(()=>PARTY_PRESETS.find(p=>p.id==='tsu')?.name),'台湾团结联盟');
  assert.equal(await page.evaluate(()=>PARTY_PRESETS.find(p=>p.id==='npp')?.name),'时代力量','source identity remains unchanged');
  await page.evaluate(()=>document.querySelector('#directoryDialog').showModal());
  await page.locator('#directoryOffice').selectOption('council');

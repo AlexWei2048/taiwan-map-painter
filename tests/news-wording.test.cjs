@@ -30,10 +30,19 @@ test('2502 clauses 49–86 normalize Taiwan-related public wording without disto
   ['“台湾基进”','“台湾基进”'],
   ['台湾基进与时代力量','“台湾基进”与“时代力量”'],
   ['台湾民众党','台湾民众党'],
-  ['台湾团结联盟','台湾团结联盟'],
+  ['台湾团结联盟','“台湾团结联盟”'],
+  ['台灣團結聯盟','“台湾团结联盟”'],
+  ['臺灣團結聯盟','“台湾团结联盟”'],
+  ['“台湾团结联盟”','“台湾团结联盟”'],
+  ['台湾团结联盟（台联党）','“台湾团结联盟（台联党）”'],
+  ['台灣團結聯盟（臺聯黨）','“台湾团结联盟（台联党）”'],
+  ['“台湾团结联盟（台联党）”','“台湾团结联盟（台联党）”'],
   ['一边一国行动党','一边一国行动党'],
-  ['台联','台联党'],
-  ['台联党','台联党'],
+  ['台联','“台联党”'],
+  ['臺聯','“台联党”'],
+  ['台联党','“台联党”'],
+  ['臺聯黨','“台联党”'],
+  ['“台联党”','“台联党”'],
   ['台湾独立党','“台湾独立党”'],
   ['大爱宪改','“大爱宪改”'],
   ['台独','“台独”'],
@@ -57,16 +66,20 @@ test('2502 clauses 49–86 normalize Taiwan-related public wording without disto
   assert.equal(result,wanted,input);
   assert.equal(W.normalize(result),result,'normalization is idempotent: '+input);
  }
- for(const name of ['公民党','民国党','中华统一促进党','台湾团结联盟','台联党','台湾民众党','金门','马祖','张国立']){
+ for(const name of ['公民党','民国党','中华统一促进党','台湾民众党','金门','马祖','张国立']){
   assert.equal(W.normalize(name),name,'preserve registered names and personal names: '+name);
  }
 });
 
 test('CSV serializers apply public spelling and quotation marks while leaving the original values unchanged',()=>{
- const original=[['政党','地区'],['时代力量','全国平地原住民'],['台湾基进','台北市']];
+ const original=[['政党','地区'],['时代力量','全国平地原住民'],['台湾基进','台北市'],['台湾团结联盟','台北市'],['台联党','台北市']];
  const csv=HistoryCore.csv(original);
  assert.match(csv,/“时代力量”/);
  assert.match(csv,/“台湾基进”/);
+ assert.match(csv,/“台湾团结联盟”/);
+ assert.match(csv,/“台联党”/);
+ assert.equal(original[3][0],'台湾团结联盟','original registered name remains unchanged');
+ assert.equal(original[4][0],'台联党','original party alias remains unchanged');
  assert.equal(original[2][0],'台湾基进','source party name remains unmodified');
  assert.match(csv,/全部地区平地少数民族/);
  assert.doesNotMatch(csv,/原住民|全国/);
