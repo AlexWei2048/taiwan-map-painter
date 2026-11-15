@@ -1446,7 +1446,7 @@ function completeCountyLabelsWithLeaders(group,names,transform,interactive){
      // Last resort: a short unobstructed label lane outside the coast,
      // not a floating text item without any connection to the polygon.
      const anchor=townVisualCenter(countyFeature,transform);
-     const side=['台北市','基隆市'].includes(labelName)?'right':'left';
+     const side=labelName==='基隆市'?'right':'left';
      const font=15,w=Array.from(labelName).length*font*1.05+12,h=font*1.7+7;
      const coast=mapLabelColumnEdge(names.filter(f=>!isInsetIslandFeature(f)),transform,side,[anchor.y-h,anchor.y+h],font,anchor.x);
      const x=coast+(side==='left'?-1:1)*(w/2+30);
