@@ -2591,7 +2591,16 @@ $('cancelLegendEdit').onclick=()=>$('legendDialog').close();$('saveLegendEdit').
 // Village detail level and locally embedded party emblems.
 let customLogo='';
 function cleanLogo(value){if(value==='')return'';if(typeof value!=='string'||value.length>180000||!/^data:image\/(?:png|jpeg|webp);base64,[A-Za-z0-9+/]+=*$/.test(value))throw Error('党徽必须是内置的 PNG、JPG 或 WebP 图片');return value}
-function logoFor(p){if(Object.hasOwn(p,'logo'))return p.logo;const id=PARTY_PRESETS.find(x=>x.id===p.id||'party-'+x.id===p.id)?.id||partyMatch(p.name)?.id;return typeof PARTY_LOGOS!=='undefined'?PARTY_LOGOS[id]||'':''}
+function logoFor(p){
+ if(Object.hasOwn(p,'logo'))return p.logo;
+ const id=PARTY_PRESETS.find(x=>x.id===p.id||'party-'+x.id===p.id)?.id||partyMatch(p.name)?.id;
+ if(typeof PARTY_LOGOS!=='undefined'&&PARTY_LOGOS[id])return PARTY_LOGOS[id];
+ if(typeof SOURCED_PARTY_LOGOS_BY_ID!=='undefined'&&SOURCED_PARTY_LOGOS_BY_ID[id])
+  return SOURCED_PARTY_LOGOS_BY_ID[id];
+ const name=simplify(String(p.name||'').replace(/^[“「](.*)[”」]$/,'$1'));
+ return typeof SOURCED_PARTY_LOGOS_BY_NAME!=='undefined'?
+  SOURCED_PARTY_LOGOS_BY_NAME[name]||'':'';
+}
 async function readLogo(file){if(!file)throw Error('请选择图片');if(file.size>2*1024*1024)throw Error('党徽图片不能超过 2 MB');if(!['image/png','image/jpeg','image/webp','image/svg+xml'].includes(file.type))throw Error('请选择 PNG、JPG、WebP 或 SVG 图片');const url=URL.createObjectURL(file);try{const image=new Image();await new Promise((ok,no)=>{image.onload=ok;image.onerror=()=>no(Error('图片无法读取，请换一张图片'));image.src=url});if(image.naturalWidth>4096||image.naturalHeight>4096||!image.naturalWidth)throw Error('图片尺寸须在 4096 × 4096 以内');const c=document.createElement('canvas');c.width=c.height=128;
  const ctx=c.getContext('2d');if(!ctx)throw Error('浏览器不支持党徽裁剪');
  const scale=Math.max(128/image.naturalWidth,128/image.naturalHeight);
