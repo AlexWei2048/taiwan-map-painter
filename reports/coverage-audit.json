@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "total_preset_parties": 49,
-  "total_current_logo_ids": 41,
+  "total_current_logo_ids": 43,
   "original_logo_ids": 30,
-  "sourced_preset_logo_ids": 11,
-  "sourced_historical_logo_names": 35,
+  "sourced_preset_logo_ids": 13,
+  "sourced_historical_logo_names": 36,
   "total_party_names_in_archives": 125,
   "top_archive_parties": [
     {
@@ -155,7 +155,7 @@
       "name": "台澎党",
       "rows": 887,
       "id": null,
-      "has_logo": false
+      "has_logo": true
     },
     {
       "name": "台湾主义党",
@@ -425,7 +425,7 @@
       "name": "台湾动物保护党",
       "rows": 27,
       "id": "tapp",
-      "has_logo": false
+      "has_logo": true
     },
     {
       "name": "台湾前进党",
@@ -781,20 +781,6 @@
       ]
     },
     {
-      "id": "ssfpp",
-      "name": "台澎国际法法理建国党",
-      "aliases": [
-        "SSFPP"
-      ]
-    },
-    {
-      "id": "tapp",
-      "name": "台湾动物保护党",
-      "aliases": [
-        "TAPP"
-      ]
-    },
-    {
       "id": "tfnp",
       "name": "台湾第一民族党",
       "aliases": [
@@ -876,21 +862,6 @@
       ],
       "spellings": [
         "民主联盟"
-      ]
-    },
-    {
-      "name": "台澎党",
-      "rows": 887,
-      "total_votes_across_grains": 60063,
-      "known_preset": null,
-      "sources": [
-        "history-2022-candidacies",
-        "history-2022.json",
-        "history-legislative-2020.json"
-      ],
-      "spellings": [
-        "台澎党",
-        "台澎黨"
       ]
     },
     {
@@ -1150,21 +1121,6 @@
       ],
       "spellings": [
         "台湾革命党"
-      ]
-    },
-    {
-      "name": "台湾动物保护党",
-      "rows": 27,
-      "total_votes_across_grains": 51181,
-      "known_preset": "tapp",
-      "sources": [
-        "history-2022-candidacies",
-        "history-2022.json",
-        "history-legislative-2020.json"
-      ],
-      "spellings": [
-        "台湾动物保护党",
-        "台灣動物保護黨"
       ]
     },
     {

@@ -3,12 +3,12 @@
 本报告是来源数据自动盘点，**不把暂时没找到的图片误认成官方党徽**。得票记录含不同层级重复汇总，因此仅以记录出现次数作为优先级，绝不能把 total_votes_across_grains 视为实际选举总票数。
 
 - 已收录预设政党：49
-- 有党徽图档的标识（含无党籍标记）：41
-- 新增官方预设党徽：11
-- 新增官方历史名称图档：35
+- 有党徽图档的标识（含无党籍标记）：43
+- 新增官方预设党徽：13
+- 新增官方历史名称图档：36
 - 已归一化的历史党名种类：125
-- 没有内置党徽的预设政党：7
-- 没有匹配到已收录党徽的历史党名：51
+- 没有内置党徽的预设政党：5
+- 没有匹配到已收录党徽的历史党名：49
 
 ## 缺党徽的预设政党
 
@@ -17,8 +17,6 @@
 | 人民民主党 | `tpdp` |
 | 中华社会民主党 | `csdp` |
 | 中国青年党 | `ycp` |
-| 台澎国际法法理建国党 | `ssfpp` |
-| 台湾动物保护党 | `tapp` |
 | 台湾第一民族党 | `tfnp` |
 | 制度救世岛 | `iisw` |
 
@@ -31,7 +29,6 @@
 | 连署 | 1576 | history-president-1996.json |
 | 全国民主非政党联盟 | 1261 | history-legislative-1995.json |
 | 民主联盟 | 1175 | history-legislative-1998.json |
-| 台澎党 | 887 | history-2022-candidacies |
 | 台湾主义党 | 872 | history-legislative-2012.json |
 | 制宪联盟 | 864 | history-legislative-2008.json |
 | 中华民国台湾基本法连线 | 848 | history-legislative-2012.json |
@@ -53,7 +50,6 @@
 | 中国青年党 | 29 | history-legislative-1998.json |
 | 大中华统一阵线 | 29 | history-legislative-2001.json |
 | 台湾革命党 | 28 | history-legislative-2020.json |
-| 台湾动物保护党 | 27 | history-2022-candidacies |
 | 真理党 | 20 | history-legislative-1992.json |
 | 共和党 | 18 | history-2022-candidacies |
 | 国家民主党 | 17 | history-legislative-1998.json |
