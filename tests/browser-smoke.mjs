@@ -2535,12 +2535,18 @@ test('Historical presidential maps show county-local winning tickets and keep th
     return !best||!p||p.getAttribute('fill')!==expected(best.name,best.party);
    }).map(x=>x.name);
    const border=document.querySelector('#districtBorders path[data-shared-boundary="counties"]');
-   return{count:f.length,paths:paths.length,wrong,outline:border?.getAttribute('d')?.length||0,
+   const sample=f.slice(0,4).map(feature=>{
+    const best=records.filter(r=>r.level==='county'&&r.county===feature.county).sort((a,b)=>b.votes-a.votes)[0];
+    const path=paths.find(p=>p.dataset.region===feature.id);
+    return{county:feature.county,best:best?.name,party:best?.party,expected:best?expected(best.name,best.party):null,
+     actual:path?.getAttribute('fill')};
+   });
+   return{count:f.length,paths:paths.length,wrong,sample,outline:border?.getAttribute('d')?.length||0,
     stroke:border?.getAttribute('stroke'),level:document.querySelector('#historyScale').value};
   });
   assert.equal(result.count,Number(year)<=2008?25:22,year+' historical counties');
   assert.equal(result.paths,result.count,year+' regions');
-  assert.deepEqual(result.wrong,[],year+' local winner color');
+  assert.deepEqual(result.wrong,[],year+' local winner color: '+JSON.stringify(result.sample));
   assert.ok(result.outline>100&&result.stroke!=='none',year+' full historical county border');
   assert.equal(result.level,'district',year+' county scale');
  }
