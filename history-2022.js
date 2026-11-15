@@ -255,7 +255,11 @@
  const displayedGender=row=>presidentialMode?[row.gender,row.deputyGender].map(s=>s||'—').join(' / '):(row.gender||'—');
  function legendLabel(entry){return entry.name?entry.party+'｜'+legendCandidateName(entry.name):entry.party}
  function legendEntries(result){
-  if(!detailedLegend())return [...result.partySeats].map(([party,count])=>({party,name:'',count}));
+  if(legislativeMode&&legislativeBallot==='party'&&voteMetric()&&candidateScope==='candidate'){
+   const locals=[...result.regions.values()].filter(r=>r.top?.party),party=locals[0]?.top.party;
+   return party?[{party,name:'',count:locals.length}]:[];
+  }
+  if(!detailedLegend()return [...result.partySeats].map(([party,count])=>({party,name:'',count}));
   const entries=new Map();
   for(const region of result.regions.values()){
    if(!region.party)continue;
@@ -324,7 +328,7 @@
     root.append(group);rowY+=font*4.3;
    }
    const summary=svg('text',{x:x+18,y:rowY+font,'font-size':font*.88,'font-weight':600,fill:'#294a3a'});
-   summary.textContent=areaLeading()?'领先地区数（共 '+count+' 个）':'当选席次（共 '+count+' 席）';
+   summary.textContent=legislativeMode&&legislativeBallot==='party'&&candidateScope==='candidate'?'当前政党统计地区数（共 '+count+' 个）':areaLeading()?'领先地区数（共 '+count+' 个）':'当选席次（共 '+count+' 席）';
    root.append(summary);rowY+=font*2;
   }
   for(const entry of entries){
@@ -587,7 +591,8 @@
  function legislativeMultiView(){return active&&legislativeMode&&legislativeBallot==='regional'&&legislativeYear<2008&&metric==='party'}
  function historyCouncilSeats(){return active&&kind==='council'&&!!county&&metric==='party'}
  function voteMetric(){return metric==='share'||metric==='votes'}
- function metricLabel(){return metric==='seats'?selectedParty+'当选席次':metric==='share'?'得票率':metric==='votes'?'得票数':kind==='council'||legislativeMode&&legislativeBallot==='regional'&&legislativeYear<2008?'当选席次':presidentialMode?(scale==='town'?'各乡镇市区最高票候选人':'各县市最高票候选人'):legislativeMode?(legislativeBallot==='party'?'各地区领先政党':'各地区最高票候选人'):mayorTownView()?'各乡镇市区最高票候选人':'当选结果'}
+ const selectedPartyVoteLabel=()=>legislativeMode&&legislativeBallot==='party'&&candidateScope==='candidate'&&selectedCandidate?selectedCandidate.split('|').at(-1)+' · ':'';
+ function metricLabel(){return metric==='seats'?selectedParty+'当选席次':metric==='share'?selectedPartyVoteLabel()+'得票率':metric==='votes'?selectedPartyVoteLabel()+'得票数':kind==='council'||legislativeMode&&legislativeBallot==='regional'&&legislativeYear<2008?'当选席次':presidentialMode?(scale==='town'?'各乡镇市区最高票候选人':'各县市最高票候选人'):legislativeMode?(legislativeBallot==='party'?'各地区领先政党':'各地区最高票候选人'):mayorTownView()?'各乡镇市区最高票候选人':'当选结果'}
  function seatRange(result){const counts=county?[...result.regions.values()].map(r=>r.partyCounts):[...result.countySeats.values()];return{min:0,max:Math.max(1,...counts.map(c=>c.get(selectedParty)||0))}}
  function isOfficialWinner(r){
   if(presidentialMode)return r.elected===true;
