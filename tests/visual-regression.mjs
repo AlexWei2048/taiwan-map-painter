@@ -43,7 +43,7 @@ async function capture(base,scenario,suffix){
    await page.locator('#predictionOffice').selectOption(scenario.kind);
    if(scenario.county)await page.locator('#county').selectOption(scenario.county);
   }else if(scenario.kind==='free'){
-   await page.locator('#categoryFree').click();
+   await page.locator('#workspaceFree').click();
    await page.locator('#townLevel').click();
   }else if(scenario.kind==='history'){
    await page.locator('#categoryHistory').click();
