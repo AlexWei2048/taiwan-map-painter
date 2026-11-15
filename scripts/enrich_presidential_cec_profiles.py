@@ -111,9 +111,9 @@ def run(year):
   if pair in accepted_towns or pair not in town_votes:continue
   combined={field:sum(r[field] for r in station_rows)
    for field in ("registered_voters","ballots_cast","valid_votes","invalid_votes")}
-  if combined["valid_votes"]==town_votes[pair] and
-    combined["registered_voters"]>=combined["ballots_cast"] and
-    combined["ballots_cast"]==combined["valid_votes"]+combined["invalid_votes"]:
+  if (combined["valid_votes"]==town_votes[pair] and
+      combined["registered_voters"]>=combined["ballots_cast"] and
+      combined["ballots_cast"]==combined["valid_votes"]+combined["invalid_votes"]):
    accepted_towns[pair]=combined;audit["town_from_stations"]+=1
   else:audit["town_stations_mismatch"]+=1
  for name,group in accepted_county.items():
