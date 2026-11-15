@@ -1424,7 +1424,7 @@ function drawHistoricalLegislativeRegionalLabels(group,interactive=false){
 function renderLabels(){
  clearTimeout(navigationLabelTimer);navigationLabelTimer=0;
  const group=$('labels');group.replaceChildren();mapNumberRows=[];
- if((state.labels||historicalLegislativeMultiBadges())&&view){
+ if(state.labels&&view){
   if(historicalLegislativeNationalRegional()||historicalLegislativeMultiBadges())drawHistoricalLegislativeRegionalLabels(group,true);
   else if(identityPanelsActive())drawIdentityPanelLabels(group,true,false);
   else if(freeNationwideDistrictMap())drawFreeNationwideDistrictLabels(group);
