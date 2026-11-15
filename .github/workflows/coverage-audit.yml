@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - scripts/audit_site_coverage.py
+      - assets/party-logos-sourced.js
+      - reports/official-party-logos-import.json
       - .github/workflows/coverage-audit.yml
 permissions:
   contents: write

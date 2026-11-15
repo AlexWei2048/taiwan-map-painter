@@ -31,6 +31,9 @@ def parties():
     assert match, "party preset format changed"
     return json.loads(match.group(1))
 
+# Include both the original Wikimedia-style pack and source-verified party
+# emblems. Regenerate this report after imports; a stale gap count would
+# misleadingly suggest that newly added party images are still absent.
 def logo_keys():
     content=(ASSETS/"party-logos.js").read_text(encoding="utf-8")
     return sorted(set(re.findall(r'["\x27]([\w-]+)["\x27]\s*:\s*["\x27]data:image/',content)))

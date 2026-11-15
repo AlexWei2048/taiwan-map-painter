@@ -2431,6 +2431,23 @@ test('History sidebar office, year, electorate, county and selected focus update
 });
 
 
+test('Newly sourced historic political party logos are correctly linked to their party identity',async t=>{
+ const page=await pageFor(t);
+ const data=await page.evaluate(()=>{
+  const list=['中华统一促进党','安定力量','台澎国际法法理建国党','台湾动物保护党','喜乐岛联盟','台澎党'];
+  return list.map(name=>{
+   const p=predictionParty(name),logo=logoFor(p),known=partyMatch(name)?.id||null;
+   return{name,known,id:p.id,loaded:logo.startsWith('data:image/png;base64,'),length:logo.length}
+  })
+ });
+ assert.ok(data.every(x=>x.loaded&&x.length>300),
+  'every added official/Commons party emblem is available in PNG exports: '+JSON.stringify(data));
+ assert.equal(data.find(x=>x.name==='台澎国际法法理建国党').known,'ssfpp');
+ assert.equal(data.find(x=>x.name==='台湾动物保护党').known,'tapp');
+ const none=await page.evaluate(()=>logoFor(predictionParty('从未登记的未知党')));
+ assert.equal(none,'','unknown parties are never assigned fake logos');
+});
+
 test('Historic candidate results use exactly one vertical scrollbar and quote Taiwan Statebuilding Party only in visible/export text',async t=>{
  const page=await pageFor(t,{width:1290,height:880});
  await page.locator('#categoryHistory').click();
