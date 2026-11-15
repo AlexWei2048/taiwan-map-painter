@@ -197,7 +197,8 @@
    if(!source){missing.push({county,town});continue}
    towns.push({...source,id:'legislative-area:'+snapshot.year+':'+key,sourceId:source.id,
     county,name:town,town,modernCounty:source.county,historical:true,historicalYear:snapshot.year,
-    historicalBoundaryNote:alias!==town?'当届行政区边界按现有底图合并近似展示':null});
+    boundaryApproximate:true,historicalBoundaryQuality:'modern-outline',
+    historicalBoundaryNote:alias!==town?'当届行政区界采用现行合并后轮廓近似展示':'已匹配当届行政区名称与归属，图形轮廓采用现行底图近似展示'});
   }
   const names=[...new Set((snapshot?.rows||[]).filter(row=>row.level==='county'&&row.electorate==='regional'&&row.county)
    .map(row=>norm(row.county)).filter(name=>!name.includes('全部地区')&&!name.includes('台闽地区')))];
@@ -207,11 +208,14 @@
    if(members.length){
     const box=members.reduce((b,f)=>[Math.min(b[0],f.box[0]),Math.min(b[1],f.box[1]),Math.max(b[2],f.box[2]),Math.max(b[3],f.box[3])],[Infinity,Infinity,-Infinity,-Infinity]);
     counties.push({id:'legislative-county:'+snapshot.year+':'+name,county:name,name,d:mergePaths([...new Map(members.map(f=>[f.sourceId,f])).values()].map(f=>f.d)),box,
-     center:[(box[0]+box[2])/2,(box[1]+box[3])/2],historical:true,historicalYear:snapshot.year});
+     center:[(box[0]+box[2])/2,(box[1]+box[3])/2],historical:true,historicalYear:snapshot.year,
+     boundaryApproximate:true,historicalBoundaryQuality:'modern-outline',
+     historicalBoundaryNote:'县市范围按当届乡镇归属组合，地理轮廓仍使用现行行政区图形'});
    }else{
     const source=(map?.counties||[]).find(f=>norm(f.name||f.county)===norm(modernCounty(name)));
     if(source)counties.push({...source,id:'legislative-county:'+snapshot.year+':'+name,county:name,name,historical:true,
-     historicalYear:snapshot.year,historicalBoundaryNote:'历史县市缺少可核对的乡镇边界，使用现行县市底图近似展示'});
+     historicalYear:snapshot.year,boundaryApproximate:true,historicalBoundaryQuality:'county-fallback',
+     historicalBoundaryNote:'缺少可核对的历史乡镇边界，采用现行县市范围示意，不能视作当届精确边界'});
    }
   }
   return{towns,counties,missing};
