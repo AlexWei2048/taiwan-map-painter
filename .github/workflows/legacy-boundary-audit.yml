@@ -1,0 +1,36 @@
+name: Validate 1992-2004 legislative district provenance
+on:
+  push:
+    paths:
+      - history-legislative.js
+      - assets/history-legislative-1992.json
+      - assets/history-legislative-1995.json
+      - assets/history-legislative-1998.json
+      - assets/history-legislative-2001.json
+      - assets/history-legislative-2004.json
+      - scripts/audit_legacy_legislative_boundaries.cjs
+      - tests/history-legacy-boundary-quality.test.cjs
+      - .github/workflows/legacy-boundary-audit.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  boundary-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check historical geometry quality
+        run: |
+          node --test tests/history-legacy-boundary-quality.test.cjs
+          node scripts/audit_legacy_legislative_boundaries.cjs
+      - name: Preserve detailed per-district audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: historic-boundary-audit
+          path: reports/historic-legislative-boundary-audit.json
+          if-no-files-found: ignore
