@@ -14,6 +14,14 @@
  const normCandidate=x=>protectedCandidateNames.has(String(x||'').trim())?String(x).trim():norm(x);
  const normalizeParty=name=>{let s=norm(name||'无党籍');if(s.includes('无党籍及未经政党推荐')||s==='无党籍及未经政党推薦')s='无党籍';return s};
  const partyColor=p=>predictionParty(p).color;
+ // Different presidential candidate tickets share the “连署” nomination
+ // label in 1996/2000; use distinct visualization-only colors for them.
+ const independentTicketColors={
+  1996:{'林洋港':'#815F9D','陈履安':'#577B91'},
+  2000:{'宋楚瑜':'#815F9D','许信良':'#B46A52'}
+ };
+ const ticketMapColor=(party,candidate='')=>presidentialMode&&party==='连署'?
+  independentTicketColors[presidentialYear]?.[candidate]||partyColor(party):partyColor(party);
  // Use the exact high-contrast nonlinear palette of the 2026 election view.
  const tone=(color,value,range)=>metric==='party'?color:ElectionCore.shade(color,value,range.min,range.max);
  const electionKey=r=>[r.type,r.electorate,r.level,r.county,r.town,r.village,r.district,r.number,r.name].join('|');
@@ -126,7 +134,8 @@
    if(!data||!Array.isArray(data.towns))throw Error('地图几何尚未载入');
    const geometry=HistoryPresidential.geometry(shard,data,norm,HistoryCore.mergePaths);
    if(requestId!==loadingPresidentialId||!active||el('historyOffice').value!=='president')return;
-   db.mayor.length=0;dbIds.clear();
+   if(!presidentialMode||!['district','town'].includes(scale))scale='district';
+    db.mayor.length=0;dbIds.clear();
    addRows(shard.rows.map(row=>({...row,type:'mayor'})));
    presidentialMode=true;presidentialYear=year;presidentialGeometry=geometry;
    kind='mayor';snapshotData=shard;
@@ -283,7 +292,7 @@
    for(const [index,entry] of gradients.entries()){
     const party=entry.party;
     const group=svg('g',{'data-history-gradient-party':party,'data-history-gradient-candidate':entry.name||''});
-    group.append(svg('rect',{x:bx,y:rowY+3,width:font,height:font,rx:3,fill:partyColor(party)}));
+    group.append(svg('rect',{x:bx,y:rowY+3,width:font,height:font,rx:3,fill:ticketMapColor(party,entry.name)}));
     const label=svg('text',{x:bx+font*1.35,y:rowY+font,'font-size':font*.88,'font-weight':600,fill:'#426052'});
     label.textContent=legendLabel(entry);group.append(label);
     const gy=rowY+font*1.35,barHeight=font*1.4;
@@ -291,7 +300,7 @@
     // Sample the metric-specific range used to shade map regions.
     for(let step=0;step<=10;step++){
      const fraction=step/10,value=range.min+(range.max-range.min)*fraction;
-     gradient.append(svg('stop',{offset:(fraction*100)+'%','stop-color':tone(partyColor(party),value,range)}));
+     gradient.append(svg('stop',{offset:(fraction*100)+'%','stop-color':tone(ticketMapColor(party,entry.name),value,range)}));
     }
     defs.append(gradient);group.append(defs);
     group.append(svg('rect',{x:bx,y:gy,width:bw,height:barHeight,rx:4,fill:'url(#'+id+')',stroke:'#b0bcb1','stroke-width':.55,'data-history-gradient-bar':party}));
@@ -311,7 +320,7 @@
   }
   for(const entry of entries){
    const {party,count}=entry,p=predictionParty(party),logo=logoFor(p);
-   root.append(svg('rect',{x:x+18,y:rowY+3,width:font,height:font,rx:3,fill:partyColor(party)}));
+   root.append(svg('rect',{x:x+18,y:rowY+3,width:font,height:font,rx:3,fill:ticketMapColor(party,entry.name)}));
    if(logo)appendCircularPartyLogo(root,logo,x+38,rowY,font*1.55);
    const label=svg('text',{x:x+font+48,y:rowY+font+1,'font-size':font,fill:'#426052','data-history-legend-candidate':entry.name||''});label.textContent=legendLabel(entry)+'（'+count+(areaLeading()?'个地区':'席')+'）';root.append(label);rowY+=rowH;
   }
@@ -618,7 +627,12 @@
   const titleEyebrow=el('historyResultSection')?.querySelector('.eyebrow');
   if(titleEyebrow)titleEyebrow.textContent=yearLabel()+' 历史数据';
   if(el('historyWorkspaceTitle'))el('historyWorkspaceTitle').textContent=yearLabel()+' '+officeTitle()+'选举结果';
-  if(el('historyBoundaryNote')){el('historyBoundaryNote').hidden=!presidentialMode&&!legislativeMode;if(legislativeMode)el('historyBoundaryNote').textContent='历史选区按当届县市、乡镇市区归属重建；底图几何使用现行行政区近似，无法精确还原的旧里界不作推算。'}
+  if(el('historyBoundaryNote')){
+  el('historyBoundaryNote').hidden=!presidentialMode&&!legislativeMode;
+  if(legislativeMode)el('historyBoundaryNote').textContent='历史选区按当届县市、乡镇市区归属重建；底图几何使用现行行政区近似，无法精确还原的旧里界不作推算。';
+  else if(presidentialMode)el('historyBoundaryNote').textContent='县市和乡镇市区按当届归属显示，边界采用现行底图近似；'+
+   (presidentialYear<=2000?'不同“连署”候选人使用不同图示色，不代表政党。':'颜色表示各地区最高票候选人所属政党。');
+ }
   el('historyCounty').value=county;el('historyScaleBox').hidden=kind!=='mayor'&&!legislativeMode;
   if(legislativeMode){
    const ballot=el('historyElectorate');ballot.replaceChildren(...HistoryLegislative.ballots(legislativeYear).map(item=>new Option(item.label,item.value)));ballot.value=legislativeBallot;
@@ -848,6 +862,12 @@
    const seats=counts.get(selectedParty)||0;return seats?tone(partyColor(selectedParty),seats,currentResult.seatRange):'#fff';
   }
   if(nationwideHistoricalSeatColors())return countySeatFill(feature.county||feature.name);
+  if(presidentialMode){
+   const result=currentResult?.regions.get(featureKey(feature));
+   if(!result?.top)return '#edf1e9';
+   const color=ticketMapColor(result.party,result.top.name);
+   return metric==='party'?color:tone(color,metric==='votes'?result.top.votes||0:result.share,currentResult.range);
+  }
   if(kind==='council'&&metric==='party')return featurePresentation(feature).fill;
   if(legislativeMultiView())return featurePresentation(feature).fill;
   if(legislativeMode&&metric==='party'){
