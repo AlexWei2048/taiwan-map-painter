@@ -612,7 +612,7 @@
     // interaction and matches the labels shown on the map.
     if(legislativeYear<2008&&!county&&scale==='national')
      return legislativeAreaGeometry?.counties||data.counties;
-    return legislativeGeometry.filter(f=>(!county||f.county===county)&&!(scale==='district'&&legislativeFocus&&HistoryLegislative.districtNumber(f.number||f.name)!==HistoryLegislative.districtNumber(legislativeFocus)));
+    return [...legislativeGeometry,...(legislativeGeometry.unresolved||[])].filter(f=>(!county||f.county===county)&&!(scale==='district'&&legislativeFocus&&HistoryLegislative.districtNumber(f.number||f.name)!==HistoryLegislative.districtNumber(legislativeFocus)));
    }
    if(legislativeYear===1992&&['plains','mountain'].includes(legislativeBallot))return legislativeAreaGeometry?.counties||[]; // No county-level figures: neutral national geography.
    return(scale==='town'?(legislativeAreaGeometry?.towns||data.towns):(legislativeAreaGeometry?.counties||data.counties)).filter(f=>(!county||f.county===county)&&!(scale==='town'&&legislativeFocus&&f.name!==legislativeFocus));
@@ -864,6 +864,9 @@
  const formerReturn=el('returnTaiwanMap').onclick;el('returnTaiwanMap').onclick=()=>{if(!active)return formerReturn();county='';legislativeFocus='';if(legislativeMode)scale='national';el('historyCounty').value='';switchMode();render()};
  const defaultColor=fillColor;fillColor=function(feature){
   if(!active)return defaultColor(feature);
+  // Qianzhen was divided at village level in 2008–2016. Never attribute
+  // its unresolved whole-town geometry to either constituency's winner.
+  if(feature.unresolvedHistorical)return '#cbd3ce';
   if(metric==='seats'&&currentResult){
    const counts=county?currentResult.regions.get(featureKey(feature))?.partyCounts:currentResult.countySeats.get(feature.county);
    if(!counts)return '#edf1e9';
