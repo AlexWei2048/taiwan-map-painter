@@ -17,7 +17,7 @@
  const legislativeBallotLabel=(year,electorate)=>{
   const key=String(electorate||'').replace(/^legislative:\d{4}:/,'');
   return root.HistoryLegislative?.ballots(Number(year)).find(item=>item.value===key)?.label||
-   ({regional:'区域民代',plains:'平地少数民族民代',mountain:'山地少数民族民代',party:Number(year)<2008?'不分区席次计算票':'不分区政党票'}[key]||'立法机构民代');
+   ({regional:'区域民代',plains:'平地少数民族民代',mountain:'山地少数民族民代',party:'不分区民代'}[key]||'立法机构民代');
  };
  const readableElectionName=(value,year=2024)=>{
   const raw=String(value||''),match=/^legislative:(\d{4}):(regional|plains|mountain|party)$/.exec(raw);
