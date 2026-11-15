@@ -1,0 +1,30 @@
+name: Verify 2026 official result importer
+on:
+  push:
+    paths:
+      - scripts/build_2026_official_results.py
+      - tests/test_build_2026_official_results.py
+      - assets/history-2026-availability.json
+      - .github/workflows/2026-results-intake.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate-intake:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Source, vote, gender-reservation and publication-guard tests
+        run: |
+          python -m unittest discover -s tests -p test_build_2026_official_results.py -v
+          python scripts/build_2026_official_results.py --template /tmp/2026-cec-official-result-template.csv
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: official-2026-vote-import-template
+          path: /tmp/2026-cec-official-result-template.csv
+          if-no-files-found: warn
