@@ -40,7 +40,11 @@ def run():
     # URL, not from literal substring matching in a subsequent HTML response.
     if '/13073/254/' not in IMAGE_URL or not IMAGE_URL.startswith('https://ws.moi.gov.tw/001/Upload/'):
         raise RuntimeError('Unverified official party-195 image origin')
-    reply=session.get(IMAGE_URL,timeout=45);reply.raise_for_status()
+    reply=session.get(IMAGE_URL,timeout=45)
+    if reply.status_code==404:
+        print('UNVERIFIED_PARTY_195_IMAGE_UNAVAILABLE: original official image now returns 404; keep missing',flush=True)
+        return
+    reply.raise_for_status()
     binary=reply.content
     if len(binary)>2_000_000 or not reply.headers.get('Content-Type','').startswith('image/'):
         raise RuntimeError('Official registered emblem is not an acceptable image')
