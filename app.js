@@ -1436,7 +1436,7 @@ function drawHistoricalLegislativeRegionalLabels(group,interactive=false){
   if(nationwide){
    const counties=History2022View.legislativeCountyFeatures?.()||[];
    const names=counties.length?counties:data.counties;
-   drawLabels(group,names,transform,19,interactive,true,true);
+   drawLabels(group,names,transform,19,interactive,true,false);
    // Historical county polygons sometimes lack sufficiently wide label anchors.
    // Every county still receives its own visible *name*, never a district number.
    const placed=new Set([...group.querySelectorAll('text[data-label]')].map(node=>node.textContent.replaceAll('臺','台')));
@@ -2476,7 +2476,7 @@ function regionDetail(f){
  const r=regionResult(f);if(r.status!=='winner')return r.message;
  const p=paletteById(r.leader.partyId);return(state.gradient.groupBy==='party'?p?.name:r.leader.name+' · '+p?.name)+' · '+metricText(r.value);
 }
-function shownLabel(f){if((f.name==='乌坵'||f.name==='乌坵乡')&&!directTownNameLabels()&&!offshoreTownMap())return'';if(f.name===f.county)return f.name;if(f.parentDistrictId||f.legislativeTown)return f.name;const identity=identityPanelsActive()?featureElectorate(f):activeElectorate();if(['council','legislative'].includes(state.level)&&identity!=='regional')return state.county?f.name:f.county==='\u5168\u56fd'?f.name:f.county+f.name.replace(/^第/, '第');if(state.level==='legislative'&&data.legislative.filter(x=>x.county===f.county).length===1)return f.county;return !state.county&&['council','legislative'].includes(state.level)?f.county+f.number:f.name}
+function shownLabel(f){if(f.name===f.county)return f.name;if(f.parentDistrictId||f.legislativeTown)return f.name;const identity=identityPanelsActive()?featureElectorate(f):activeElectorate();if(['council','legislative'].includes(state.level)&&identity!=='regional')return state.county?f.name:f.county==='\u5168\u56fd'?f.name:f.county+f.name.replace(/^第/, '第');if(state.level==='legislative'&&data.legislative.filter(x=>x.county===f.county).length===1)return f.county;return !state.county&&['council','legislative'].includes(state.level)?f.county+f.number:f.name}
 function legendReserveEntries(){return legendEntries()}
 function legendVisiblePalette(){const palette=[...state.palette];if(state.fillMode==='prediction'&&typeof predictionPartyNamesInUse==='function')for(const name of predictionPartyNamesInUse()){const party=predictionParty(name);if(!palette.some(p=>p.id===party.id))palette.push(party)}return palette.filter(p=>!state.legend.hidden.includes(p.id))}
 function legendEntries(){if(state.fillMode==='prediction'&&typeof predictionCandidateLegendEntries==='function'){const entries=predictionCandidateLegendEntries();if(entries)return entries}const c=counts();return legendVisiblePalette().filter(p=>c[p.id])}
