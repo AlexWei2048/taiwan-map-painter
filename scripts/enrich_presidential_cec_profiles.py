@@ -78,6 +78,15 @@ def run(year):
   if row.get("level")=="town" and row.get("type")=="president":
    town_votes[(norm(row["county"]),norm(row["town"]))]+=int(row.get("votes") or 0)
  accepted_county={};accepted_towns={};audit=Counter()
+ if year in (2012,2024):
+  sample=parse(raw_prof)
+  print("PROFILE_DIAGNOSTIC",year,
+   "first_rows",sample[:4],
+   "rows",len(sample),
+   "county_codes",list(counties.items())[:3],
+   "town_codes",list(towns.items())[:3],
+   "record_code_examples",[(list(map(field,row[:6])),stats(row))
+      for row in sample[10:50:9]],flush=True)
  # CEC 2012+ sometimes omits explicit township totals. Build independent
  # candidate-verified township sums from polling-station lines when available.
  polling_rows=defaultdict(list)
