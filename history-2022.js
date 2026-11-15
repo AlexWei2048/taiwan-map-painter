@@ -578,7 +578,7 @@
  function historyOverview(){return active&&!county&&kind!=='mayor'&&!legislativeMode}
  function legislativeNationalView(){return active&&legislativeMode&&!county}
  function nationwideHistoricalSeatColors(){return active&&metric==='party'&&
-  (kind==='council'&&!county||legislativeMode&&legislativeBallot==='regional'&&!county&&scale==='county')}
+  (kind==='council'&&!county||legislativeMode&&legislativeBallot==='regional'&&legislativeYear<2008&&!county&&scale==='county')}
  function countySeatLeader(countyName){
   const counts=currentResult?.countySeats?.get(countyName);
   if(!counts?.size)return{party:null,seats:0,tied:false,counts:null};
@@ -631,7 +631,7 @@
     // 1992–2004 nationwide is a county seat-plurality map, not a pile of
     // constituency fills/badges. The county geometry also allows true county
     // interaction and matches the labels shown on the map.
-    if(!county&&scale==='county')
+    if(legislativeYear<2008&&!county&&scale==='county')
      return legislativeAreaGeometry?.counties||data.counties;
     return legislativeGeometry.filter(f=>(!county||f.county===county)&&!(scale==='district'&&legislativeFocus&&HistoryLegislative.districtNumber(f.number||f.name)!==HistoryLegislative.districtNumber(legislativeFocus)));
    }
@@ -682,7 +682,7 @@
    }
    if(el('historyLegislativeMapHint')){el('historyLegislativeMapHint').hidden=false;el('historyLegislativeMapHint').textContent=
     legislativePartyTownView()?(county?'各乡镇市区以当届实际政党票分别上色；可切换领先政党或指定政党的得票数、得票率，点击乡镇查看各党完整结果。':'全台368个乡镇市区直接按各地真实政党票上色，点击任一乡镇即可查看当地各党得票。2008年按当年行政区统计，不按现行县市比例推算。'):
-    legislativeBallot==='regional'?(!county?(legislativeYear<2008?'全台按各县市区域民代当选席次最多的政党填色；并列最多使用多党斜纹。点击县市进入后，各多席选区逐席显示党徽。':'全台按县市当选席次最多的政党填色，点击县市进入后查看具体选区结果。'):scale==='county'?(legislativeYear<2008?'县市图在各多席选区显示当选党徽，点击选区可查看候选人、得票率与当选结果。':'县市图显示当届选区和选区号；点击选区查看完整候选人、得票率与当选结果。'):'选举区图聚焦本区候选人及法定当选席次。'):
+    legislativeBallot==='regional'?(!county?(legislativeYear<2008?'全台按各县市区域民代当选席次最多的政党填色；并列最多使用多党斜纹。点击县市进入后，各多席选区逐席显示党徽。':'全台单席选区按当选政党填色，点击选区进入县市查看完整结果。'):scale==='county'?(legislativeYear<2008?'县市图在各多席选区显示当选党徽，点击选区可查看候选人、得票率与当选结果。':'县市图显示当届选区和选区号；点击选区查看完整候选人、得票率与当选结果。'):'选举区图聚焦本区候选人及法定当选席次。'):
     legislativeYear===1992&&['plains','mountain'].includes(legislativeBallot)?'1992年没有县市及乡镇得票记录，全区地图仅显示行政区轮廓，不推算地方票数。':
     !county?'按县市着色，点击县市可查看县市及乡镇市区结果。':scale==='county'?'县市得票分布；选择乡镇市区层级可继续下钻。':'点击乡镇市区查看得票分布。';}
 
