@@ -2181,7 +2181,7 @@ test('Legislative redesign: one national map with county names, county drilldown
  assert.equal(await page.locator('#historyCounty option').first().getAttribute('value'),'');
 
  assert.equal(await page.locator('#historyScale').inputValue(),'county');
- assert.ok(await page.evaluate(()=>document.querySelectorAll('#regions path[data-region]').length>=22));
+ assert.ok(await page.evaluate(()=>document.querySelectorAll('#regions path[data-region]').length>=73));
  assert.ok(await page.evaluate(()=>document.querySelectorAll('#labels text[data-label]').length>=20));
  assert.equal(await page.locator('#labels [data-placement="district-number"]').count(),0);
  assert.equal(await page.locator('#labels [data-number-key]').count(),0);
