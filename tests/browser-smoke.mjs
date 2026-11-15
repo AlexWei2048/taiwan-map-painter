@@ -2620,3 +2620,47 @@ test('Election-period legislative maps have no missing winners, all county names
  assert.equal(wu.hasGeometry,true,'Wuqiu has nonempty geometry');
  assert.equal(wu.visibleLabel,true,'Wuqiu township receives a visible label');
 });
+
+
+test('Official Kaohsiung 2008–2016 village splits fill exactly one historic constituency and town outlines toggle',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('legislative');
+ await page.waitForFunction(()=>History2022View.office()==='legislative'&&History2022View.year()===2024);
+ for(const year of [2008,2012,2016]){
+  await page.locator('#historyYear').selectOption(String(year));
+  await page.waitForFunction(y=>History2022View.year()===y&&History2022View.legislativeFeatures().length===73,year);
+  const result=await page.evaluate(async y=>{
+   const villages=await HistoryLegislative.loadKaohsiungVillages(y);
+   const north8=new Set(['复国里','竹中里','竹北里','兴东里','竹西里','竹东里','竹内里','竹南里']);
+   const west41=new Set(['川东里','德西里','裕民里','力行里','丰裕里','千秋里','千北里','立德里','千岁里','凤南里','兴德里','凤北里','德北里','十全里','十美里','安邦里','安宜里','安泰里','民享里','精华里','德行里','德东里','立诚里','立业里','安生里','安和里','安东里','达明里','达德里','达仁里','达勇里','德智里','德仁里','同德里','建东里','港西里','长明里','港东里','港新里','博爱里','博惠里']);
+   const numbers=y===2008?{前镇区:[4,5],三民区:[2,3]}:{前镇区:[7,9],三民区:[5,6]};
+   const misses=[];
+   for(const v of villages){
+    if(!['前镇区','三民区'].includes(v.town))continue;
+    const n=numbers[v.town],paths=n.map(num=>document.querySelector('#regions path[data-region="legislative-'+y+'-高雄市|'+num+'"]'));
+    if(paths.some(p=>!p)){misses.push(v.name+':missing district');continue}
+    const anchor=v.labelAnchor||v.center||[(v.box[0]+v.box[2])/2,(v.box[1]+v.box[3])/2];
+    const point=new DOMPoint(anchor[0],anchor[1]),inside=paths.map(p=>p.isPointInFill(point));
+    const selected=(v.town==='前镇区'?north8:west41).has(v.name)?0:1;
+    if(!inside[selected]||inside[1-selected])misses.push(v.town+v.name+':'+JSON.stringify(inside));
+   }
+   const town=document.querySelector('#townBorders path[data-shared-boundary="towns"]');
+   const start={exists:!!town,length:town?.getAttribute('d')?.length||0,visible:document.querySelector('#townBorders').style.display!=='none',stroke:town?.getAttribute('stroke')};
+   const check=document.getElementById('showTownBoundaries');
+   const before=check.checked;
+   if(!before){check.checked=true;check.dispatchEvent(new Event('change',{bubbles:true}));}
+   const shown=document.querySelector('#townBorders').style.display!=='none';
+   check.checked=false;check.dispatchEvent(new Event('change',{bubbles:true}));
+   const hidden=document.querySelector('#townBorders').style.display==='none';
+   check.checked=true;check.dispatchEvent(new Event('change',{bubbles:true}));
+   return{year:y,misses,scanned:villages.length,town:start,shown,hidden,restored:document.querySelector('#townBorders').style.display!=='none'};
+  },year);
+  assert.deepEqual(result.misses,[],year+' official Kaohsiung village-split fills must be disjoint and exhaustive');
+  assert.ok(result.scanned>120,year+' village polygons are loaded');
+  assert.ok(result.town.exists&&result.town.length>1000,year+' historical township boundary paths exist');
+  assert.equal(result.shown,true,year+' township overlay visible when enabled');
+  assert.equal(result.hidden,true,year+' township overlay hides when disabled');
+  assert.equal(result.restored,true,year+' township overlay restores without reloading');
+ }
+});
