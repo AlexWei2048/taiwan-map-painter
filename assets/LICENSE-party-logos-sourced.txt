@@ -231,3 +231,13 @@
 登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&s=172&sms=13073
 原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d0bc0f20012.jpg
 来源SHA256：985a484d255d4b3af56eff7fc624f4b1f68f58a200d5edb29689ebf6d96bfb4e
+
+台澎国际法法理建国党 [ssfpp]
+登记：https://commons.wikimedia.org/wiki/File:SSFPP_logo_2019.png
+原图：https://upload.wikimedia.org/wikipedia/commons/a/a5/SSFPP_logo_2019.png
+来源SHA256：540a4aa9506ed5b9ea5ca1d481cfad9e7c11a9a0f206ad06a33c0d416baba41b
+
+台湾动物保护党 [tapp]
+登记：https://www.tapp.org.tw/
+原图：https://static.wixstatic.com/media/f4b9b6_1d0a1482ceb24a8f85c64410c119f092~mv2.jpg/v1/fit/w_2500%2Ch_1330%2Cal_c/f4b9b6_1d0a1482ceb24a8f85c64410c119f092~mv2.jpg
+来源SHA256：59c1af32596ecd1df0db5aa4fc803cf450a1edeaca66f507887b03d90556a59a

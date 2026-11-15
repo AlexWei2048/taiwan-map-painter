@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "count_by_id": 11,
-  "count_by_historical_name": 35,
+  "count_by_id": 13,
+  "count_by_historical_name": 36,
   "official_sources": [
     {
       "name": "大爱宪改",
@@ -508,6 +508,35 @@
       "image_bytes": 9484,
       "size_after_fit": "116x74",
       "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "台澎国际法法理建国党",
+      "party_id": "ssfpp",
+      "official_registry": "https://commons.wikimedia.org/wiki/File:SSFPP_logo_2019.png",
+      "official_image": "https://upload.wikimedia.org/wikipedia/commons/a/a5/SSFPP_logo_2019.png",
+      "source_sha256": "540a4aa9506ed5b9ea5ca1d481cfad9e7c11a9a0f206ad06a33c0d416baba41b",
+      "rendered_sha256": "4aad99fcc952dc4cc29685a045be8a7bda91f061984fd0466c0d56544b7c800e",
+      "image_bytes": 9717,
+      "size_after_fit": "116x116",
+      "license": "Wikimedia Commons; attribution and license on source file page",
+      "source_alternative": [
+        "https://upload.wikimedia.org/wikipedia/commons/a/a5/SSFPP_logo_2019.png",
+        "https://www.ssfpp.tw/img2/logo-pyramid.png"
+      ]
+    },
+    {
+      "name": "台湾动物保护党",
+      "party_id": "tapp",
+      "official_registry": "https://www.tapp.org.tw/",
+      "official_image": "https://static.wixstatic.com/media/f4b9b6_1d0a1482ceb24a8f85c64410c119f092~mv2.jpg/v1/fit/w_2500%2Ch_1330%2Cal_c/f4b9b6_1d0a1482ceb24a8f85c64410c119f092~mv2.jpg",
+      "source_sha256": "59c1af32596ecd1df0db5aa4fc803cf450a1edeaca66f507887b03d90556a59a",
+      "rendered_sha256": "83751ec45ca60e9dc0b0bac099f31b0a66881afa8056b7e1a2cee45c3895940f",
+      "image_bytes": 6922,
+      "size_after_fit": "100x116",
+      "license": "Official party image; rights retained by party; identification only",
+      "source_alternative": [
+        "https://static.wixstatic.com/media/f4b9b6_1d0a1482ceb24a8f85c64410c119f092~mv2.jpg/v1/fit/w_2500%2Ch_1330%2Cal_c/f4b9b6_1d0a1482ceb24a8f85c64410c119f092~mv2.jpg"
+      ]
     }
   ],
   "unverified_or_unavailable": [
@@ -522,11 +551,6 @@
     {
       "name": "中国青年党",
       "reason": "ministry has no uploaded emblem image"
-    },
-    {
-      "name": "台湾动物保护党",
-      "reason": "unexpected image dimensions",
-      "source": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2022/8a428aff82345180018257fcd571004f.jpg"
     },
     {
       "name": "台湾第一民族党",
