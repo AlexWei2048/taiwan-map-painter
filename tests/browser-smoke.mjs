@@ -1232,12 +1232,14 @@ test('2022 council uses all historical district geometries and actual elected se
  assert.equal(await page.locator('#districtReferenceSource').isVisible(),false);
  assert.doesNotMatch(await page.locator('#historyCoverage').textContent(),/资料来源：/);
  assert.equal(await page.locator('#regions path[data-region]').count(),22);
- assert.equal(await page.locator('#regions path[data-region]').evaluateAll(nodes=>nodes.every(node=>{
-  const county=node.getAttribute('aria-label')?.split('，')[0]||'';
-  const leader=History2022View.countySeatLeader(county);
-  const expected=leader.tied?'#aebdb4':leader.party?predictionParty(leader.party).color:'#edf1e9';
-  return node.getAttribute('fill')===expected;
- })),true,'nationwide council county colors reflect the most elected seats');
+ assert.equal(await page.locator('#regions path[data-region]').evaluateAll(nodes=>{
+  const counties=new Map(currentItems().map(feature=>[String(feature.id),feature.county||feature.name]));
+  return nodes.every(node=>{
+   const leader=History2022View.countySeatLeader(counties.get(node.dataset.region));
+   const expected=leader.tied?'#aebdb4':leader.party?predictionParty(leader.party).color:'#edf1e9';
+   return node.getAttribute('fill')===expected;
+  });
+ }),true,'nationwide council county colors reflect the most elected seats');
  const geometry=await page.evaluate(()=>({count:History2022View.features().length,seats:History2022View.features().reduce((n,f)=>n+f.seats,0),missing:History2022View.features().filter(f=>!f.d).length}));
  assert.deepEqual(geometry,{count:215,seats:910,missing:0});
  let total=0;
@@ -2341,4 +2343,32 @@ test('Council and historic multi-member legislative nationwide maps use pluralit
  assert.equal(historical.isCounty,true);
  assert.equal(historical.fill,historical.expected);
  assert.equal(historical.logos,0);
+});
+
+test('2020/2024 legislative overviews show CEC-verified constituency and township turnout',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('legislative');
+ for(const year of ['2020','2024']){
+  await page.locator('#historyYear').selectOption(year);
+  await page.waitForFunction(year=>History2022View.snapshot()?.year===Number(year),year);
+  await page.locator('#historyViewOverview').click();
+  if(await page.locator('#historyOverviewPanel').isHidden())await page.locator('#historyViewOverview').click();
+  await page.locator('#historyOverviewScope').selectOption('district');
+  await page.locator('#historyOverviewCounty').selectOption('台北市');
+  const regional=await page.evaluate(()=>HistoryWorkspace.overview());
+  assert.ok(Number.isInteger(regional.registeredVoters)&&regional.registeredVoters>0,year+' regional constituency registered electors');
+  assert.ok(Number.isInteger(regional.invalidVotes)&&regional.invalidVotes>=0,year+' regional constituency invalid ballots');
+  assert.equal(regional.validVotes+regional.invalidVotes,regional.ballotsCast);
+  await page.locator('#historyElectorate').selectOption('party');
+  await page.locator('#historyViewOverview').click();
+  if(await page.locator('#historyOverviewPanel').isHidden())await page.locator('#historyViewOverview').click();
+  await page.locator('#historyOverviewScope').selectOption('town');
+  await page.locator('#historyOverviewCounty').selectOption('台北市');
+  const partyTown=await page.evaluate(()=>HistoryWorkspace.overview());
+  assert.ok(Number.isInteger(partyTown.registeredVoters)&&partyTown.registeredVoters>0,year+' party township registered electors');
+  assert.ok(Number.isInteger(partyTown.invalidVotes),year+' party township invalid ballots');
+  assert.equal(partyTown.validVotes+partyTown.invalidVotes,partyTown.ballotsCast);
+  await page.locator('#historyElectorate').selectOption('regional');
+ }
 });
