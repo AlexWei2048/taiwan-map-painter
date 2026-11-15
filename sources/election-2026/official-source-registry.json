@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "purpose": "监测中选会2026候选人名单、审定、号次和选举公报，不自动改写网站候选人数据或预测",
+  "sources": [
+    {
+      "id": "cec-election-portal",
+      "url": "https://info.cec.gov.tw/vote2026/",
+      "office": "all"
+    },
+    {
+      "id": "cec-qualification-decision",
+      "url": "https://web.cec.gov.tw/central/article/65212",
+      "office": "mayor,council"
+    },
+    {
+      "id": "cec-central-notices",
+      "url": "https://web.cec.gov.tw/central",
+      "office": "all"
+    }
+  ],
+  "knownOfficialDates": {
+    "2026-10-16": "候选人资格审定",
+    "2026-10-23": "抽签号次",
+    "2026-11-12": "直辖市长候选人名单公告",
+    "2026-11-17": "直辖市议员及县市长、县市议员候选人名单公告",
+    "2026-11-28": "投票"
+  }
+}
