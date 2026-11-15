@@ -6,6 +6,12 @@
  'use strict';
  const ERA_SEATS={1992:[30,6],1995:[30,6],1998:[41,8],2001:[41,8],2004:[41,8]};
  const WINNERS={
+  2001:{
+   '中国国民党':'饶颖奇 江丙坤 陈健治 黄昭顺 高育仁 王钟渝 黄德福 蔡铃兰 陈健民 郑逢时 侯彩凤 李和顺 陈建年',
+   '民主进步党':'洪奇昌 尤清 陈道明 刘世芳 张俊宏 林浊水 高志鹏 许荣淑 邱永仁 颜锦福 邱彰 郑贵莲 陈胜宏 陈忠信 刘俊雄',
+   '亲民党':'刘忆如 殷乃平 李桐豪 刘松藩 林惠官 顾崇廉 钟荣吉 蔡中涵 高明见',
+   '台湾团结联盟':'黄宗源 吴东昇 程振隆 黄政哲'
+  },
   2004:{
    '民主进步党':'蔡煌瑯 陈秀惠 洪奇昌 张俊雄 高志鹏 蔡英文 薛凌 王荣璋 尤清 张庆惠 林浊水 卢天麟 田秋堇 黄淑英 邱永仁 王涂发',
    '中国国民党':'王金平 江丙坤 黄志雄 李纪珠 曾永权 白添枝 黄昭顺 黄德福 郭素春 刘盛良 章仁香 曹寿民 苏起 侯彩凤 帅化民',
@@ -61,6 +67,16 @@
  };
  const SLATE_SOURCE_2024='https://zh.wikipedia.org/wiki/2024%E5%B9%B4%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E7%AB%8B%E6%B3%95%E5%A7%94%E5%93%A1%E9%81%B8%E8%88%89#全國不分區及僑居國外國民選舉';
 
+ const OVERSEAS_WINNERS={
+  2001:{
+   '中国国民党':'关沃暖 孙国华',
+   '民主进步党':'萧美琴 张秀珍 张旭成',
+   '亲民党':'林政义 杨富美',
+   '台湾团结联盟':'王政中'
+  }
+ };
+ const OVERSEAS_SOURCES={2001:'https://web.cec.gov.tw/api/file/80c0e18d-31cd-4104-a6c5-2b0a3dc2fc21.pdf'};
+
  const EXTRA={
   2016:{'民主进步党':[{rank:18,name:'施义芳',elected:false},{rank:19,name:'周春米',elected:true}],
         '中国国民党':[{rank:11,name:'曾永权',elected:false},{rank:12,name:'王育敏',elected:true}]},
@@ -80,7 +96,7 @@
  };
  const SOURCES={
   1992:'https://www.president.gov.tw/Page/294/36980',
-  1995:'https://www.npf.org.tw/2/648',1998:'https://www.npf.org.tw/2/648',2001:'https://www.npf.org.tw/2/648',
+  1995:'https://www.npf.org.tw/2/648',1998:'https://www.npf.org.tw/2/648',2001:'https://web.cec.gov.tw/api/file/80c0e18d-31cd-4104-a6c5-2b0a3dc2fc21.pdf',
   2004:'https://news.cts.com.tw/cts/general/200412/200412110163494.html',
   2008:'https://web.cec.gov.tw/api/file/f596f3d8-74bc-45b8-82fc-42ebce92c681.pdf',
   2012:'https://web.cec.gov.tw/api/file/ffb8f1b6-709e-40eb-aff7-ae98eb3d5da8.pdf',
@@ -127,7 +143,7 @@
    const first=primary.assigned.get(item.party)||0,second=overseas?.assigned.get(item.party)||0,seats=first+second;
    return {...item,seats,atLarge:first,overseas:second,expected:expected[item.party]??0,
     checked:Object.prototype.hasOwnProperty.call(expected,item.party)?seats===expected[item.party]:!seats,
-    winners:nominees(year,item.party)};
+    winners:nominees(year,item.party),overseasWinners:(OVERSEAS_WINNERS[year]?.[item.party]||'').split(/\s+/).filter(Boolean)};
   }).sort((a,b)=>b.seats-a.seats||b.votes-a.votes||a.party.localeCompare(b.party,'zh'));
   return {year,old,parts,total,eligibleTotal:primary.base,parties:result,
    totalAssigned:result.reduce((n,p)=>n+p.seats,0),
@@ -234,8 +250,18 @@
      grid.append(row);
     }
     body.append(grid);
+    if(model.old&&p.overseasWinners.length){
+     body.append(element('h5','','侨选原始当选名单 · '+p.overseasWinners.length+'人'));
+     const overseasGrid=element('div','history-list-nominees');
+     for(const [i,name] of p.overseasWinners.entries()){
+      const row=element('div','history-list-nominee elected');
+      row.append(element('span','history-list-rank',String(i+1)+'.'),element('span','history-list-person',name),element('span','history-list-result','★ 当选'));
+      overseasGrid.append(row);
+     }
+     body.append(overseasGrid);
+    }
     body.append(element('p','history-list-caveat',model.old?
-     '此处仅收录已核实的不分区当选人，尚未录入本届侨选名单及全部未当选提名人。':
+     model.year===2001?'本届已核对当选的不分区41人及侨选8人；尚未收录全部未当选提名人。':'此处仅收录已核实的不分区当选人，尚未录入本届侨选名单及全部未当选提名人。':
      model.year===2024&&SLATES_2024[p.party]?'2024年原始提名顺序与选举当晚当选名单；任期内递补不改变此处的原始当选标记。':'这里只展示已核实的原始当选名单及部分特殊提名顺序，不代表完整政党提名名单；任期内辞职、递补不计入本表。'));
    }else{
     body.append(element('p','history-list-caveat',p.seats?
