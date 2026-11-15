@@ -26,7 +26,7 @@ for(const g of geo){
  if(other)console.log('GAP',g.number,other.number,'normalized-width',Math.max(0,other.box[0]-b[2],b[0]-other.box[2]),'normalized-height',Math.max(0,other.box[1]-b[3],b[1]-other.box[3]));
 }
 
-function rings(d){return d.split(/M/i).filter(Boolean).map(part=>{const nums=part.match(/-?(?:[0-9]*[.])?[0-9]+(?:e[+-]?[0-9]+)?/gi)?\\d+(?:e[+-]?\\d+)?/gi)||[];return Array.from({length:Math.floor(nums.length/2)},(_,i)=>[+nums[2*i],+nums[2*i+1]])}).filter(v=>v.length>=3)}
+function rings(d){return d.split(/M/i).filter(Boolean).map(part=>{const nums=part.match(/-?(?:[0-9]*[.])?[0-9]+(?:e[+-]?[0-9]+)?/gi)||[];return Array.from({length:Math.floor(nums.length/2)},(_,i)=>[+nums[2*i],+nums[2*i+1]])}).filter(v=>v.length>=3)}
 function contains(rs,x,y){let inside=false;for(const poly of rs){for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[i],b=poly[j];if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])inside=!inside}}return inside}
 for(const g of geo){
  const names=[...(refTownNames.get(g.number)||[])];
