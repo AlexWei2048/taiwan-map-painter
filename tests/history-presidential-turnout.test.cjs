@@ -54,3 +54,25 @@ test('2022 individual council contest overview comes from its own original turno
  assert.equal(summary.invalidVotes,contest.invalid_votes);
  assert.notEqual(summary.registeredVoters,null);
 });
+
+test('1996–2024 verified CEC turnout profiles cover every archived presidential township exactly',()=>{
+ const expected={1996:369,2000:369,2004:368,2008:368,2012:368,2016:368,2020:368,2024:368};
+ for(const [rawYear,expectedTowns] of Object.entries(expected)){
+  const year=Number(rawYear),shard=snapshot(year),profiles=shard.townProfiles.filter(p=>p.office==='president');
+  assert.equal(profiles.length,expectedTowns,String(year)+' registered township profiles');
+  const votes=new Map();
+  for(const r of shard.rows){
+   if(r.type!=='president'||r.level!=='town')continue;
+   const key=r.county+'|'+r.town;
+   votes.set(key,(votes.get(key)||0)+r.votes);
+  }
+  assert.equal(votes.size,expectedTowns,String(year)+' unique source township vote records');
+  for(const p of profiles){
+   const key=p.county+'|'+p.town;
+   assert.equal(p.valid_votes,votes.get(key),year+' '+key+' CEC valid votes match candidate returns');
+   assert.ok(Number.isSafeInteger(p.registered_voters)&&p.registered_voters>=p.ballots_cast,
+    year+' '+key+' legal voter bounds');
+   assert.equal(p.valid_votes+p.invalid_votes,p.ballots_cast,year+' '+key+' valid+invalid');
+  }
+ }
+});

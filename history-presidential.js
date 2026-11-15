@@ -70,7 +70,7 @@
   year=Number(year);if(!YEAR_SET.has(year))throw Error('不支持的选举年份：'+year);
   if(activeLoad.has(year))return activeLoad.get(year);
   const promise=(async()=>{
-   const resp=await fetcher('assets/history-president-'+year+'.json?v=20261111-president-v1',{cache:'default'});
+   const resp=await fetcher('assets/history-president-'+year+'.json?v=20261115-cec-all-towns-v3',{cache:'default'});
    if(!resp.ok)throw Error(year+'年历史数据 HTTP '+resp.status);
    const shard=await resp.json();
    if(shard.schemaVersion!==2||shard.year!==year||shard.office!=='president'||

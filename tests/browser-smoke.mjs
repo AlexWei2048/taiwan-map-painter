@@ -2485,3 +2485,26 @@ test('Historic candidate results use exactly one vertical scrollbar and quote Ta
  assert.equal(await page.locator('#historyResults').evaluate(el=>getComputedStyle(el).overflowY),'visible',
   'council result lists also have only one scroll viewport');
 });
+
+test('2024 presidential township overview shows CEC-verified electors, ballots and invalid votes',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('president');
+ await page.waitForFunction(()=>History2022View.office()==='president'&&History2022View.year()===2024);
+ await page.locator('#historyCounty').selectOption('台北市');
+ await page.locator('#historyScale').selectOption('town');
+ await page.locator('#historyViewOverview').click();
+ if(await page.locator('#historyOverviewPanel').isHidden())await page.locator('#historyViewOverview').click();
+ await page.locator('#historyOverviewScope').selectOption('town');
+ await page.locator('#historyOverviewCounty').selectOption('台北市');
+ const overview=await page.evaluate(()=>{
+  const o=HistoryWorkspace.overview();
+  return{registered:o?.registeredVoters,cast:o?.ballotsCast,valid:o?.validVotes,invalid:o?.invalidVotes,
+   area:HistoryWorkspace.selectedOverviewScope().area};
+ });
+ assert.ok(overview.area);
+ assert.ok(Number.isInteger(overview.registered)&&overview.registered>0);
+ assert.ok(Number.isInteger(overview.invalid)&&overview.invalid>=0);
+ assert.equal(overview.cast,overview.valid+overview.invalid);
+ assert.ok(overview.cast<=overview.registered);
+});

@@ -34,6 +34,7 @@ jobs:
           # township denominators for later years.
           assert sum(x["town_matches"] for x in report["years"])>=1400,report["years"]
           for y in report["years"]:
+            assert y["town_matches"]==y["original_town_units"],y
             snapshot=json.loads(Path(f"assets/history-president-{y['year']}.json").read_text())
             assert len(snapshot["contests"])==y["original_counties"]
             for c in snapshot["contests"]:
