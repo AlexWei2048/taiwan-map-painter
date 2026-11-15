@@ -827,7 +827,7 @@ function countyCityCallout(f,t,name,font,used,area,reserve,items,leaders=[]){
  const anchor=townVisualCenter(f,t);
  const mainland=items.filter(item=>!isInsetIslandFeature(item));
  const width=Array.from(name).length*font*1.04+8,height=font*1.5+5;
- const preferred=['台北市','基隆市'].includes(name)?'right':'left';
+ const preferred=name==='基隆市'?'right':'left'; // Keelung east, Taipei west: never share the same label rail by default.
   // Reserve visibly separate callout lanes for the two adjacent northern cities.
   const northPair=name==='台北市'||name==='基隆市';
  const frames=leaderFrames(t,6);
