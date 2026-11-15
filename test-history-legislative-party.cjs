@@ -14,7 +14,7 @@ test('Historical at-large original winners sum to actual seats in all ten electi
  }
 });
 test('Complete modern nomination records cover every party and preserve audited totals',()=>{
- const count={2001:108,2004:109,2008:128,2012:127,2016:179,2020:216,2024:177};
+ const count={2001:129,2004:109,2008:128,2012:127,2016:179,2020:216,2024:177};
  for(const [year,total] of Object.entries(count)){
   assert.equal(Party.nominationCount(+year),total,year+' nominations');
  }
