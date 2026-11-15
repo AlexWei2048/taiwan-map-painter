@@ -81,6 +81,23 @@
    const key=norm(row.county)+'|'+districtNumber(row.district),town=norm(baseTown(row.town));
    if(!membership.has(key))membership.set(key,new Set());membership.get(key).add(town);
   }
+  // Official 2008–2016 whole-town constituencies omitted by some township
+  // vote rows. Restore *only* membership verified against period boundaries.
+  const verifiedMissing={
+   '桃园县|平镇':5,'桃园市|平镇':5,
+   '台南县|新市':2,'台南县|左镇':2,
+   '台南市|新市':2,'台南市|左镇':2
+  };
+  if(Number(target?.year)>=2008&&Number(target?.year)<=2016){
+   for(const town of map?.towns||[]){
+    const county=norm(town.county),base=norm(baseTown(town.name));
+    const district=verifiedMissing[county+'|'+base];
+    if(!district)continue;
+    const key=county+'|'+district;
+    if(!membership.has(key))membership.set(key,new Set());
+    membership.get(key).add(base);
+   }
+  }
   const seen=new Set(),features=[];
   for(const row of target?.rows||[]){
    if(row.electorate!=='regional'||row.level!=='district')continue;
@@ -97,6 +114,23 @@
     other!==key&&other.startsWith(norm(row.county)+'|')&&names.has(town)));
    const box=sources.reduce((b,f)=>[Math.min(b[0],f.box[0]),Math.min(b[1],f.box[1]),Math.max(b[2],f.box[2]),Math.max(b[3],f.box[3])],[Infinity,Infinity,-Infinity,-Infinity]);
    features.push({id:'legislative-'+target.year+'-'+key,county:norm(row.county),name:norm(row.district),number:districtNumber(row.district),electorate:'regional',sourceTownIds:sources.map(f=>f.sourceId||f.id).filter(Boolean),d:mergePaths(sources.map(f=>f.d)),box,center:[(box[0]+box[2])/2,(box[1]+box[3])/2],...(approximate?{historicalBoundaryNote:'本届选区涉及乡镇市区内部村里分割；现有底图按乡镇市区近似，不代表精确村里界线',boundaryApproximate:true}:{})});
+  }
+  // Kaohsiung's Qianzhen township was split among constituencies at
+  // village level, not a whole-town district. Preserve its shape as a neutral
+  // explicitly unresolved polygon instead of either a white hole or a falsely
+  // coloured winner. A village-accurate reconstruction can replace this.
+  if(Number(target?.year)>=2008&&Number(target?.year)<=2016){
+   for(const town of map?.towns||[]){
+    if(norm(town.county)!=='高雄市'||norm(baseTown(town.name))!=='前镇')continue;
+    features.push({id:'legislative-unresolved-'+target.year+'-qianzhen',
+     county:'高雄市',name:'前镇区（历史选区分割待核对）',
+     number:0,electorate:'regional',d:town.d,box:town.box,
+     center:town.center||[(town.box[0]+town.box[2])/2,(town.box[1]+town.box[3])/2],
+     sourceTownIds:[town.sourceId||town.id].filter(Boolean),
+     unresolvedHistorical:true,boundaryApproximate:true,
+     historicalBoundaryNote:'前镇区在本届由两个选区按村里分割，目前以中性底色示意，未将任何候选人得票错误归属'});
+    break;
+   }
   }
   return features;
  }
@@ -173,6 +207,8 @@
       '依当年乡镇市区投票归属重建；缺少村里级历史界线时为近似轮廓'}:{})});
   }
   if(missing.length)throw Error(snapshot.year+'年区域选区地图缺少：'+missing.join('、'));
+  // Carry the village-split city fallback into 2008–2016 national maps.
+  selected.push(...historical.filter(f=>f.unresolvedHistorical));
   return selected;
  }
  async function load(year,fetcher=root.fetch){
