@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "total_preset_parties": 49,
-  "total_current_logo_ids": 43,
+  "total_current_logo_ids": 44,
   "original_logo_ids": 30,
-  "sourced_preset_logo_ids": 13,
+  "sourced_preset_logo_ids": 14,
   "sourced_historical_logo_names": 36,
   "total_party_names_in_archives": 124,
   "top_archive_parties": [
@@ -401,7 +401,7 @@
       "name": "中国青年党",
       "rows": 29,
       "id": "ycp",
-      "has_logo": false
+      "has_logo": true
     },
     {
       "name": "大中华统一阵线",
@@ -768,13 +768,6 @@
       ]
     },
     {
-      "id": "ycp",
-      "name": "中国青年党",
-      "aliases": [
-        "YCP"
-      ]
-    },
-    {
       "id": "tfnp",
       "name": "台湾第一民族党",
       "aliases": [
@@ -1026,18 +1019,6 @@
       ],
       "spellings": [
         "泛盟党"
-      ]
-    },
-    {
-      "name": "中国青年党",
-      "rows": 29,
-      "total_votes_across_grains": 5061,
-      "known_preset": "ycp",
-      "sources": [
-        "history-legislative-1998.json"
-      ],
-      "spellings": [
-        "中国青年党"
       ]
     },
     {
@@ -1350,6 +1331,12 @@
     }
   ],
   "placeholder_code_locations": {
+    "site-updated.js": [
+      {
+        "phrase": "不可用",
+        "count": 1
+      }
+    ],
     "history-2022.js": [
       {
         "phrase": "暂无资料",
@@ -1369,12 +1356,6 @@
       },
       {
         "phrase": "无可核实",
-        "count": 1
-      }
-    ],
-    "site-updated.js": [
-      {
-        "phrase": "不可用",
         "count": 1
       }
     ],

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "count_by_id": 13,
+  "count_by_id": 14,
   "count_by_historical_name": 36,
   "official_sources": [
     {
@@ -537,6 +537,19 @@
       "source_alternative": [
         "https://static.wixstatic.com/media/f4b9b6_1d0a1482ceb24a8f85c64410c119f092~mv2.jpg/v1/fit/w_2500%2Ch_1330%2Cal_c/f4b9b6_1d0a1482ceb24a8f85c64410c119f092~mv2.jpg"
       ]
+    },
+    {
+      "name": "中国青年党",
+      "party_id": "ycp",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Flag_of_Chinese_Youth_Party.svg",
+      "source_file": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Flag_of_Chinese_Youth_Party.svg",
+      "party_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=3",
+      "asset_type": "documented political party FLAG (no separate logo validated)",
+      "source_sha256": "67fd51cf3bd393eeb9ba96e6fb3d795da878f6a525f937e6e4c39b12ef5e2a82",
+      "rendered_sha256": "2a366b48451b7260a2644f33d3d5d7ff195059160f8587301e2d716331a2cf3d",
+      "image_bytes": 489,
+      "license": "Public domain; basic geometric flag, documentation on Commons file page",
+      "author": "Ericmetro; Wikimedia Commons"
     }
   ],
   "unverified_or_unavailable": [

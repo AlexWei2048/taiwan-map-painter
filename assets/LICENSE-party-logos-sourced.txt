@@ -241,3 +241,9 @@
 登记：https://www.tapp.org.tw/
 原图：https://static.wixstatic.com/media/f4b9b6_1d0a1482ceb24a8f85c64410c119f092~mv2.jpg/v1/fit/w_2500%2Ch_1330%2Cal_c/f4b9b6_1d0a1482ceb24a8f85c64410c119f092~mv2.jpg
 来源SHA256：59c1af32596ecd1df0db5aa4fc803cf450a1edeaca66f507887b03d90556a59a
+
+中国青年党 [ycp]（党旗作身份标记，不称官方党徽）
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=3
+党旗：https://commons.wikimedia.org/wiki/File:Flag_of_Chinese_Youth_Party.svg
+授权：公共领域（几何图案）；作者 Ericmetro；来源 Commons
+原图SHA256：67fd51cf3bd393eeb9ba96e6fb3d795da878f6a525f937e6e4c39b12ef5e2a82
