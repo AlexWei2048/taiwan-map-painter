@@ -6,7 +6,7 @@
  */
 (function(root){
  'use strict';
- const trigger=/中华民国|中華民國|中选会|中選會|中央选举委员会|中央選舉委員會|台湾政府|台灣政府|台湾地区政府|总统|總統|立法院|行政院|立法委员|立法委員|原住民|原住民族|原住|全国|全國|全台|全臺|全台\s*[·・]\s*含离岛|台湾离岛|台灣離島|台湾金门|台湾连江|金门县|连江县|金門縣|連江縣|台湾团结联盟|台灣團結聯盟|臺灣團結聯盟|台联|臺聯|时代力量|時代力量|台湾基进|台灣基進|臺灣基進|台湾独立党|台灣獨立黨|台独|臺獨|宪改|憲改|小三通|台语|臺語|福摩萨|福爾摩莎|福尔摩莎|全民|国父纪念馆|國父紀念館|国小|國小|国中|國中|台湾省|臺灣省/;
+ const trigger=/中华民国|中華民國|中选会|中選會|中央选举委员会|中央選舉委員會|台湾政府|台灣政府|台湾地区政府|总统|總統|立法院|行政院|立法委员|立法委員|原住民|原住民族|原住|全国|全國|全台|全臺|全台\s*[·・]\s*含离岛|台湾离岛|台灣離島|台湾金门|台湾连江|金门县|连江县|金門縣|連江縣|台湾团结联盟|台灣團結聯盟|臺灣團結聯盟|台联|臺聯|时代力量|時代力量|台湾基进|台灣基進|臺灣基進|台湾独立党|台灣獨立黨|台独|臺獨|宪改|憲改|小三通|台语|臺語|福摩萨|福爾摩莎|福尔摩莎|全民|国父纪念馆|國父紀念館|国小|國小|国中|國中|台湾省|臺灣省|全国民主非政党联盟|全國民主非政黨聯盟|全部地区民主非政党联盟|一边一国行动党|一邊一國行動黨|自由台湾党|自由台灣黨|自由臺灣黨|建国党|建國黨|台澎国际法法理建国党|台澎國際法法理建國黨|台澎党|台澎黨|喜乐岛联盟|喜樂島聯盟/;
  const policy={reference:'新华社新闻信息报道中的禁用词和慎用词（2502），涉台用词第49—86条'};
  function normalize(input){
   let s=String(input??'');
@@ -38,7 +38,7 @@
   s=s.replace(/平地原住民族?|平地原住民/g,'平地少数民族')
    .replace(/山地原住民族?|山地原住民/g,'山地少数民族')
    .replace(/原住民族?|原住民/g,'少数民族')
-   .replace(/全国|全國/g,'全部地区')
+   .replace(/全国(?!民主非政党联盟)|全國(?!民主非政黨聯盟)/g,'全部地区')
    .replace(/台联(?!党)|臺聯(?!黨)/g,'台联党')
    // Uniform on-screen party labels, including the long and short names.
    // When both names appear together, quote the complete combined name,
@@ -66,6 +66,20 @@
    .replace(/全民(?!党)/g,'台湾民众')
    .replace(/国小|國小/g,'小学')
    .replace(/国中|國中/g,'初中');
+  // Exact party identities remain untouched in archived data and map keys.
+  // Only visible wording (including exported labels) receives editorial quotes.
+  // Public independence/constitutional state-building positions are documented
+  // in reports/party-identity-wording-20261115.md.
+  const extraPartyQuotes=[
+   [/(?<![“"「])(?:全国民主非政党联盟|全國民主非政黨聯盟|全部地区民主非政党联盟)(?![”"」])/g,'“全国民主非政党联盟”'],
+   [/(?<![“"「])(?:一边一国行动党|一邊一國行動黨)(?![”"」])/g,'“一边一国行动党”'],
+   [/(?<![“"「])(?:自由台湾党|自由台灣黨|自由臺灣黨)(?![”"」])/g,'“自由台湾党”'],
+   [/(?<![“"「])(?:台澎国际法法理建国党|台澎國際法法理建國黨)(?![”"」])/g,'“台澎国际法法理建国党”'],
+   [/(?<![“"「])(?:台澎党|台澎黨)(?![”"」])/g,'“台澎党”'],
+   [/(?<![“"「])(?:喜乐岛联盟|喜樂島聯盟)(?![”"」])/g,'“喜乐岛联盟”'],
+   [/(?<![“"「])(?<!法理)(?<!福利)(?:建国党|建國黨)(?![”"」])/g,'“建国党”']
+  ];
+  for(const [re,label] of extraPartyQuotes)s=s.replace(re,label);
   return s;
  }
  // Normalize visible text and accessible descriptions, not input values or data IDs.
