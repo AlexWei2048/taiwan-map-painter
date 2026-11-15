@@ -91,8 +91,12 @@
     if(countyFeature)sources.push(countyFeature);
    }
    if(!sources.length)continue;
+   // Village-split constituencies can share a township in historical returns.
+   // Township data alone cannot recreate the precise old village boundary.
+   const approximate=[...townNames].some(town=>[...membership].some(([other,names])=>
+    other!==key&&other.startsWith(norm(row.county)+'|')&&names.has(town)));
    const box=sources.reduce((b,f)=>[Math.min(b[0],f.box[0]),Math.min(b[1],f.box[1]),Math.max(b[2],f.box[2]),Math.max(b[3],f.box[3])],[Infinity,Infinity,-Infinity,-Infinity]);
-   features.push({id:'legislative-'+target.year+'-'+key,county:norm(row.county),name:norm(row.district),number:districtNumber(row.district),electorate:'regional',d:mergePaths(sources.map(f=>f.d)),box,center:[(box[0]+box[2])/2,(box[1]+box[3])/2]});
+   features.push({id:'legislative-'+target.year+'-'+key,county:norm(row.county),name:norm(row.district),number:districtNumber(row.district),electorate:'regional',d:mergePaths(sources.map(f=>f.d)),box,center:[(box[0]+box[2])/2,(box[1]+box[3])/2],...(approximate?{historicalBoundaryNote:'本届选区涉及乡镇市区内部村里分割；现有底图按乡镇市区近似，不代表精确村里界线',boundaryApproximate:true}:{})});
   }
   return features;
  }
@@ -105,7 +109,7 @@
    if(row.level!=='town'||!row.county||!row.town)continue;
    const county=norm(row.county),town=norm(row.town),key=county+'|'+town;
    if(seen.has(key))continue;seen.add(key);
-   if(/乌[坵丘]/.test(town))continue;
+   
    let alias=town;
    if(snapshot.year<=2001&&county==='台南市'&&['中区','西区'].includes(town))alias='中西区';
    if(county==='高雄县'&&norm(baseTown(town))==='三民')alias='那玛夏区';
@@ -142,6 +146,35 @@
   }
   return features;
  }
+ // The 2020 redistricting altered five counties; never assign their 2024
+ // polygons to 2008–2016 constituency numbers.
+ const REDISTRICTED_2020_COUNTIES=new Set(['台中市','台南市','高雄市','新竹县','屏东县']);
+ function periodSingleMemberGeometry(snapshot,modernMap,historicalMap,
+  normalize=s=>s,mergePaths=parts=>parts.join(' '),modernCounty=s=>s,baseTown=s=>s){
+  const norm=v=>normalize(String(v||''));
+  const modern=singleMemberGeometry(snapshot,modernMap,normalize,modernCounty);
+  if(snapshot.year>=2020)return modern;
+  const historical=districtGeometry(snapshot,snapshot,historicalMap,normalize,mergePaths,modernCounty,baseTown);
+  const a=new Map(modern.map(f=>[norm(f.county)+'|'+f.number,f]));
+  const b=new Map(historical.map(f=>[norm(f.county)+'|'+f.number,f]));
+  const expected=new Map();
+  for(const row of snapshot.rows||[]){
+   if(row.level!=='district'||row.electorate!=='regional')continue;
+   const key=norm(row.county)+'|'+districtNumber(row.district);
+   expected.set(key,norm(row.county));
+  }
+  const missing=[],selected=[];
+  for(const [key,county]of expected){
+   const changed=REDISTRICTED_2020_COUNTIES.has(norm(modernCounty(county)));
+   const feature=changed?b.get(key):a.get(key)||b.get(key);
+   if(!feature){missing.push(key);continue}
+   selected.push({...feature,geometryPeriod:'2008–2016',
+    ...(changed?{historicalBoundaryNote:feature.historicalBoundaryNote||
+      '依当年乡镇市区投票归属重建；缺少村里级历史界线时为近似轮廓'}:{})});
+  }
+  if(missing.length)throw Error(snapshot.year+'年区域选区地图缺少：'+missing.join('、'));
+  return selected;
+ }
  async function load(year,fetcher=root.fetch){
   year=Number(year);if(!YEAR_SET.has(year))throw Error('不支持的立法机构民代选举年份：'+year);
   if(loads.has(year))return loads.get(year);
@@ -159,7 +192,7 @@
   if(!mapLoad)mapLoad=(async()=>{const response=await fetcher('assets/map-legislative.json?v=20261031-split-v25',{cache:'default'});if(!response.ok)throw Error('立法机构民代选区地图 HTTP '+response.status);const map=await response.json();if(!Array.isArray(map.legislative)||map.legislative.length!==73)throw Error('立法机构民代选区地图校验未通过');return map})().catch(error=>{mapLoad=null;throw error});
   return mapLoad;
  }
- const api={YEARS,ballots,levels,multiMember,countyLabelsOnly,seatBadgeComposition,districtKey,winners,composition,renderMode,rows,note,districtNumber,districtGeometry,scopeGeometry,singleMemberGeometry,load,loadMap};
+ const api={YEARS,ballots,levels,multiMember,countyLabelsOnly,seatBadgeComposition,districtKey,winners,composition,renderMode,rows,note,districtNumber,districtGeometry,scopeGeometry,singleMemberGeometry,periodSingleMemberGeometry,load,loadMap};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;
  else root.HistoryLegislative=api;
 })(typeof window==='undefined'?{}:window);
