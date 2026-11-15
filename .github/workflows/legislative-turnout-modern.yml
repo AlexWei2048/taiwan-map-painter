@@ -1,0 +1,51 @@
+name: Reconcile CEC 2020/2024 legislative turnout by geography
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/build_history_legislative_turnout_2020_2024.py
+      - .github/workflows/legislative-turnout-modern.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: legislative-turnout-modern-build
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install historic locality normalizer
+        run: python -m pip install opencc-python-reimplemented
+      - name: Reconcile official geographic turnout against archived candidate votes
+        run: python scripts/build_history_legislative_turnout_2020_2024.py
+      - name: Validate profiles and independently verified totals
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          for year in (2020,2024):
+            item=json.loads(Path(f'assets/history-legislative-turnout-{year}.json').read_text())
+            assert item["schemaVersion"]==1 and item["year"]==year
+            for ballot, profiles in item["ballots"].items():
+              counts={scope:len(rows) for scope,rows in profiles.items()}
+              print(year, ballot, counts, flush=True)
+              assert len(profiles["county"])>=10,(year,ballot,counts)
+              assert sum(len(x) for x in profiles["town"].values())>=100,(year,ballot,counts)
+          PY
+      - name: Publish only reconciled source profiles
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/history-legislative-turnout-2020.json assets/history-legislative-turnout-2024.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish verified CEC 2020 and 2024 legislative geographic turnout"
+            git push origin HEAD:main
+          fi
