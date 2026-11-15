@@ -1401,7 +1401,7 @@ function appendHistoricalLegislativeBadges(layer,transform,nationwide){
   const g=svgEl('g',{'data-history-seat-district':feature.id,'aria-label':feature.name+'：'+parties.map(p=>p.party+p.seats+'席').join('，')});
   for(let i=0;i<shown.length;i++){
    const item=shown[i],x=cx+(i-(shown.length-1)/2)*step,y=cy+(nationwide?14:12);
-   g.append(svgEl('circle',{cx:x,cy:y,r:size*.59,fill:partyColor(item.party),stroke:'#fff','stroke-width':1.25}));
+   g.append(svgEl('circle',{cx:x,cy:y,r:size*.59,fill:predictionParty(item.party).color,stroke:'#fff','stroke-width':1.25}));
    const logo=logoFor(predictionParty(item.party));
    if(logo)appendCircularPartyLogo(g,logo,x-size*.54,y-size*.54,size*1.08,{'data-historical-party-logo':item.party});
    if(nationwide&&item.seats>1){const count=svgEl('text',{x:x+size*.45,y:y+size*.78,'font-size':size*.78,'font-weight':700,fill:'#244533',stroke:'#fff','stroke-width':2,'paint-order':'stroke'});count.textContent=String(item.seats);g.append(count)}
@@ -1792,8 +1792,8 @@ function polishedPredictionTableLayout(rows,targetWidth=null){
  // Compact SVG/PNG table: compute text wraps AFTER the final export width
  // is known. Otherwise names remain split even when expanded columns fit.
  const numeric=rows.some(row=>row.estimated),specified=rows.every(row=>row.specified),showAll=rows.some(row=>row.allCandidates);
- const metricFields=numeric?(specified&&!showAll?['votes','share'].filter(k=>rows.some(r=>k==='votes'?r.hasVotes:r.hasShare)):['votes','share','status']):showAll?['status']:[];
  const historical=rows[0]?.historical;
+ const metricFields=historical?['votes','share',...(showAll?['status']:[])]:numeric?(specified&&!showAll?['votes','share'].filter(k=>rows.some(r=>k==='votes'?r.hasVotes:r.hasShare)):['votes','share','status']):showAll?['status']:[];
  const metricHeaders={votes:historical?'得票数':'预测得票数',share:historical?'得票率':'预测得票率',status:'当选'};
  const extraWidths=metricFields.map(k=>k==='status'?96:99),extraWidth=extraWidths.reduce((n,w)=>n+w,0);
  const columns=rows.length<=90?2:rows.length<=260?4:6,gap=5;
