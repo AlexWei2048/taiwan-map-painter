@@ -153,7 +153,8 @@ test('Future reset offers a visible-scope clear and a full initial-state reset',
  assert.match(app,/predictionDistrictFor\(f\)/);
  assert.match(app,/state\.localPredictions\?\.\[districtId\]/);
  assert.match(app,/state=defaults\(\);undo\.length=0;redo\.length=0/);
- assert.match(app,/网站内置候选人名单、2022历史选举结果和地图底图不会被删除/);
+ assert.match(app,/网站内置候选人名单、历史选举结果和地图底图不会被删除/);
+ assert.doesNotMatch(app,/2022历史选举结果和地图底图不会被删除/);
 });
 test('Current reset is scoped to visible features and full reset restores the defaults',()=>{
  const clear=app.slice(app.indexOf('function clearCurrentMapData()'),app.indexOf('function currentResetScopeLabel()'));
