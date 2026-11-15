@@ -1,0 +1,2098 @@
+{
+  "schemaVersion": 1,
+  "listing_diagnostics": [
+    [
+      1,
+      200,
+      20,
+      88431
+    ],
+    [
+      2,
+      200,
+      20,
+      88721
+    ],
+    [
+      3,
+      200,
+      20,
+      88968
+    ],
+    [
+      4,
+      200,
+      20,
+      88978
+    ],
+    [
+      5,
+      200,
+      20,
+      88938
+    ],
+    [
+      6,
+      200,
+      20,
+      89495
+    ],
+    [
+      7,
+      200,
+      20,
+      89110
+    ],
+    [
+      8,
+      200,
+      20,
+      89051
+    ],
+    [
+      9,
+      200,
+      20,
+      89235
+    ],
+    [
+      10,
+      200,
+      20,
+      89359
+    ],
+    [
+      11,
+      200,
+      20,
+      89562
+    ],
+    [
+      12,
+      200,
+      20,
+      89413
+    ],
+    [
+      13,
+      200,
+      20,
+      89351
+    ],
+    [
+      14,
+      200,
+      20,
+      89102
+    ],
+    [
+      15,
+      200,
+      20,
+      89467
+    ],
+    [
+      16,
+      200,
+      20,
+      89292
+    ],
+    [
+      17,
+      200,
+      20,
+      89144
+    ],
+    [
+      18,
+      200,
+      20,
+      89068
+    ],
+    [
+      19,
+      200,
+      20,
+      88617
+    ],
+    [
+      20,
+      200,
+      15,
+      84788
+    ]
+  ],
+  "registry_entries": 395,
+  "matches": {
+    "人民民主党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=258",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55436
+    },
+    "大爱宪改": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=193",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d40b2720035.jpg",
+          "alt": "134_大愛憲改聯盟(原制憲聯盟)biglove2",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 53344
+    },
+    "中华社会民主党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=117",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 52764
+    },
+    "中国青年党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=3",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55614
+    },
+    "公民党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=132",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d37fb51002a.JPG",
+          "alt": "73_公民黨",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55517
+    },
+    "台湾动物保护党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=365",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2022/8a428aff82345180018257fcd571004f.jpg",
+          "alt": "動保檔logo_1",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 56236
+    },
+    "台湾第一民族党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=293",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55047
+    },
+    "台湾农民党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=187",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d274d0e001d.jpg",
+          "alt": "128_台灣農民黨_96",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55254
+    },
+    "台湾独立党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=332",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d0a97db0011.jpg",
+          "alt": "273_台灣獨立黨_圖形100X120-2",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 52986
+    },
+    "正神名党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=434",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/8a428aff774c22100179ea47ee3e21b0.jpg",
+          "alt": "正神名黨",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55305
+    },
+    "合一行动联盟": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=401",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/ff808081682cc3ce016898fe5a7b0190.jpg",
+          "alt": "1080124合一行動聯盟標章",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55655
+    },
+    "安定力量": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=405",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2019/ff8080816e68e248016ea648b95c01af.png",
+          "alt": "未命名-1",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55522
+    },
+    "宗教联盟": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=378",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2019/ff808081682cc3ce016913c55baa029a.png",
+          "alt": "螢幕截圖 2018-12-18 15",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 53214
+    },
+    "金色力量党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=427",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2020/ff8080816f79b5020170eba98f060688.jpg",
+          "alt": "金力黨黨徵",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55582
+    },
+    "信心希望联盟": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=342",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d4dd6680048.jpg",
+          "alt": "283_信心希望聯盟_政黨標章",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 52952
+    },
+    "喜乐岛联盟": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=407",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/ff8080816b88b9f5016c6f5c0a71074b.jpg",
+          "alt": "20190704喜樂島聯盟定案之LOGO",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55656
+    },
+    "全国民主非政党联盟": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=125",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 53016
+    },
+    "民主联盟": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=144",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 54782
+    },
+    "台澎党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=414",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2022/ff8080816d570355016d86193d410141.jpg",
+          "alt": "logo circle 不透明 300dpi",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55855
+    },
+    "台湾吾党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=156",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 52802
+    },
+    "和平鸽联盟党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=325",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542cad2f89000b.jpg",
+          "alt": "266_和平鴿聯盟黨-黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 53240
+    },
+    "绿党社会民主党联盟": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=340",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/8a428aff7c83259a017ca5cc425400d8.jpg",
+          "alt": "281_綠黨社會民主黨聯盟_共同LOGO 0926FINAL-01",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 53082
+    },
+    "中国生产党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=310",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 52785
+    },
+    "新国家连线": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=145",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 54725
+    },
+    "台湾工党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=160",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55202
+    },
+    "大道慈悲济世党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=191",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 52845
+    },
+    "工教联盟": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=163",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55022
+    },
+    "台湾慧行志工党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=153",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542cb0b488000e.jpg",
+          "alt": "94_臺灣慧行志工黨_黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 52989
+    },
+    "民主自由党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=60",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d31dbe90022.JPG",
+          "alt": "30_民主自由黨_黨徽-白底",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 53025
+    },
+    "中华联合党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=250",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d44456c003b.jpg",
+          "alt": "191_中華聯合黨_黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55526
+    },
+    "复康联盟党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=528",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/444/relpic/13073/528/71d91498-79b6-4ab5-9c75-e653098f5ea1.jpg",
+          "alt": "復康聯盟標章",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55381
+    },
+    "大中华统一阵线": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=151",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 52788
+    },
+    "台湾前进党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=337",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d285891001e.jpg",
+          "alt": "278_泛盟黨_政黨標章圖樣-泛盟黨黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 53088
+    },
+    "真理党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=111",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 52804
+    },
+    "中华台商爱国党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=246",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 54836
+    },
+    "中国团结党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=46",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 52958
+    },
+    "劳工党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=314",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/444/relpic/13073/314/9694206b-99a0-4c31-83db-83e297236709.jpg",
+          "alt": "勞工黨標章",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 52912
+    },
+    "民生公益": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=371",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2018/ff80808164cb1fe40164e8cea9cb0071.png",
+          "alt": "民生黨-LOGO-透明背景_色碼B01F24",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55495
+    },
+    "台湾整复师联盟工党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=283",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542caf052b000c.jpg",
+          "alt": "224_台灣整復師聯盟工黨_120910_台整復師聯盟工黨政黨標章",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55593
+    },
+    "台湾民意党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=229",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/ff8080816ecfec30016ef960ea4b0122.jpg",
+          "alt": "台灣民意黨標章1081216",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 53200
+    },
+    "天一党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=402",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2019/ff808081682cc3ce01696b6de27d0368.jpg",
+          "alt": "天一黨標章",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55305
+    },
+    "司法正义党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=299",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/ff8080816ecfec30016f5a9ed2fc034e.jpg",
+          "alt": "司法正義黨標章",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55779
+    },
+    "正党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=247",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55990
+    },
+    "中华妇女党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=210",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2017/ff808081542c937601542d22ce12001c.jpg",
+          "alt": "中華婦女黨標章圖樣-1040824",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55984
+    },
+    "中华爱国同心党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=398",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/444/relpic/13073/398/309401e2-cb68-4f80-a808-c00eab464a02.jpg",
+          "alt": "1120214標章",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55446
+    },
+    "兴中同盟会": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=352",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55424
+    },
+    "家庭基本收入": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=139",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/ff8080816e3fa61e016e647fd15b00f1.jpeg",
+          "alt": "家庭基本收入標章",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55389
+    },
+    "中华文化共和党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=433",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55133
+    },
+    "台湾麻将最大党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=517",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55478
+    },
+    "金门高粱党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=361",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2018/ff8080815840f69b01584a061c480515.jpg",
+          "alt": "政黨標章",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 52916
+    },
+    "中华新住民党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=289",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2017/ff8080815a1bd8ab015a2618ba23002f.png",
+          "alt": "中華新住民黨政黨標章",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 53038
+    },
+    "中国人民行动党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=126",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d3767180029.jpg",
+          "alt": "67_中國人民行動黨-政黨標章",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 53001
+    },
+    "社会福利党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=336",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d4c271e0044.jpg",
+          "alt": "277_社會福利黨_社福黨黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 53090
+    },
+    "龙党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=379",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/444/relpic/13073/379/be715419-c41b-4e92-a5a9-09a488176373.jpg",
+          "alt": "龍黨標章",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55620
+    },
+    "台湾未来党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=338",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d4cb2060045.jpg",
+          "alt": "279_台灣未來黨_黨徽-01",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 53122
+    },
+    "中国和平统一党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=375",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/8a428aff7c83259a017cb56e4eab011f.jpg",
+          "alt": "1081204中國和平統一黨",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55860
+    },
+    "中华照生党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=238",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/ff8080816b88b9f5016ca7e6bb190809.jpg",
+          "alt": "中華照生黨",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 53182
+    },
+    "圆党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=235",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 53007
+    },
+    "台湾君民党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=349",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542cafbfc6000d.jpg",
+          "alt": "290_皇君人民政黨-黨徽標章LOGO",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 56227
+    },
+    "工党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=7",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 52921
+    },
+    "中国大同民主党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=66",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 52962
+    },
+    "中国忠义党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=28",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 54583
+    },
+    "中国全民福利党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=122",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 54328
+    },
+    "中兴党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=95",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d36413f0027.JPG",
+          "alt": "48_中興黨_黨旗(1)",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 54478
+    },
+    "中国中青党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=74",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 53022
+    },
+    "中华民国机车党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=315",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 54567
+    },
+    "言论自由联盟": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=265",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 53007
+    },
+    "聋国党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=351",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/444/relpic/13073/351/0c41c3c1-4ba1-4b48-9fc0-7da57c4edc21.jpg",
+          "alt": "1081118聾國黨標章",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 53158
+    },
+    "经济党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=323",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2019/ff808081682cc3ce0168a183e92001ba.jpg",
+          "alt": "經濟黨標章",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55415
+    },
+    "世界和平党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=162",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d3b6ac90030.JPG",
+          "alt": "103_世界和平黨政黨標章",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 54017
+    },
+    "天宙和平统一家庭党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=316",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55712
+    },
+    "中华文化复兴在理党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=366",
+      "image_candidates": [
+        {
+          "url": "https://party.moi.gov.tw/images/default.png",
+          "alt": "未上傳黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55220
+    },
+    "台湾国民党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=186",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d3d150c0032.jpg",
+          "alt": "127_台灣國民黨_黨徽3",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55785
+    },
+    "台湾人民共产党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=374",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/8a428aff7c83259a017ca5cfd72700da.jpg",
+          "alt": "臺灣人民共產黨標章",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55830
+    },
+    "中国国家社会主义劳工党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=309",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d471b06003e.jpg",
+          "alt": "250_中國國家社會主義勞工黨_國工黨黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55896
+    },
+    "左翼联盟": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=397",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2022/8a428aff7e6c3038017e7bd907420054.png",
+          "alt": "icon",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 55734
+    },
+    "台湾新住民党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=429",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/8a428aff7c2b75d0017c3450518e0184.png",
+          "alt": "標章",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 54899
+    },
+    "前进党": {
+      "detail_page": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=430",
+      "image_candidates": [
+        {
+          "url": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2020/ff8080817457c8f00174ae75cbf501cf.jpg",
+          "alt": "前進黨黨徽",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/egov.png",
+          "alt": "我的E政府 [另開新視窗]",
+          "width": null,
+          "height": null
+        },
+        {
+          "url": "https://party.moi.gov.tw/images/aplus.png",
+          "alt": "通過AA等級無障礙網頁檢測",
+          "width": null,
+          "height": null
+        }
+      ],
+      "page_title": "政黨資訊網-查政黨",
+      "page_bytes": 56333
+    }
+  },
+  "unmatched": [
+    "中华统一促进党",
+    "台澎国际法法理建国党",
+    "制度救世岛",
+    "中国台湾原住民党",
+    "台湾主义党",
+    "制宪联盟",
+    "中华民国台湾基本法连线",
+    "大爱宪改联盟",
+    "红党",
+    "台湾双语无法党",
+    "台湾国民会议",
+    "人民民主阵线",
+    "泛盟党",
+    "台湾革命党",
+    "共和党",
+    "国家民主党",
+    "绿色本土清新党",
+    "洪运忠义党"
+  ]
+}
