@@ -63,7 +63,7 @@ test('2022 mayor and township offices cover all/county/town scopes without inven
   }
  }
 });
-test('presidential overview shows real county turnout and town candidate votes without fabricated turnout',()=>{
+test('presidential overview shows verified CEC county and town turnout, never fabricated counts',()=>{
  const full=W.overviewRegionData(president,{year:2024,office:'president',scope:'all'});
  assert.equal(full.result.contests.length,22);
  assert.equal(full.overview.registeredVoters,19548531);
@@ -74,10 +74,13 @@ test('presidential overview shows real county turnout and town candidate votes w
  const town=W.overviewRegionData(president,{year:2024,office:'president',scope:'town',county:'台北市',area:choices.areas[0].value});
  assert.equal(town.townVotesVerified,true);
  assert.ok(town.overview.validVotes>0);
- assert.equal(town.overview.registeredVoters,null);
- assert.equal(town.overview.ballotsCast,null);
- assert.equal(town.overview.invalidVotes,null);
- assert.equal(town.overview.turnout,null);
+ assert.ok(Number.isSafeInteger(town.overview.registeredVoters)&&town.overview.registeredVoters>0);
+ assert.ok(Number.isSafeInteger(town.overview.ballotsCast)&&town.overview.ballotsCast>0);
+ assert.ok(Number.isSafeInteger(town.overview.invalidVotes)&&town.overview.invalidVotes>=0);
+ assert.equal(town.overview.ballotsCast,town.overview.validVotes+town.overview.invalidVotes);
+ assert.ok(town.overview.ballotsCast<=town.overview.registeredVoters);
+ assert.equal(town.overview.turnout,
+  town.overview.ballotsCast/town.overview.registeredVoters*100);
 });
 
 test('counties without township-head elections do not inherit statewide figures',()=>{
