@@ -25,7 +25,9 @@
  async function loadKaohsiungVillages(year,fetcher=root.fetch){
   if(!HISTORICAL_KAOHSIUNG_YEARS.has(Number(year)))return[];
   if(!kaohsiungVillagesLoad){
-   kaohsiungVillagesLoad=Promise.all([1,2,3,4,5].map(async i=>{
+   // The validated shard inventory contains Qianzhen in #3 and Sanmin in #5.
+   // Loading only these two avoids ~3 MB of unrelated village geometry.
+   kaohsiungVillagesLoad=Promise.all([3,5].map(async i=>{
     const response=await fetcher('assets/map-villages-'+i+'.json?v=20261031-split-v25',{cache:'default'});
     if(!response.ok)throw Error('历史高雄市里界资料缺失：地图第'+i+'部分');
     const rows=await response.json();if(!Array.isArray(rows))throw Error('历史里界格式错误：第'+i+'部分');
