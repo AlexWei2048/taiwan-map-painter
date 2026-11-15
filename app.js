@@ -1668,7 +1668,7 @@ function requestResetConfirmation(scope){
  const all=scope==='all';
  $('confirmResetTitle').textContent=all?'恢复地图初始状态？':'清空当前界面地图数据？';
  $('confirmResetMessage').textContent=all
-  ?'将清除本机保存的全部预测、乡镇预测、手动填色、投票记录、自定义政党与党徽、图例调整及地图显示设置，并恢复默认视图。此操作不可撤销。网站内置候选人名单、2022历史选举结果和地图底图不会被删除。'
+  ?'将清除本机保存的全部预测、乡镇预测、手动填色、投票记录、自定义政党与党徽、图例调整及地图显示设置，并恢复默认视图。此操作不可撤销。网站内置候选人名单、历史选举结果和地图底图不会被删除。'
   :'将清除「'+currentResetScopeLabel()+'」当前可见范围内的预测记录，或当前图层的填色与投票数据。其他县市、选举类别、选区类型及未显示图层的数据会保留；此操作可通过撤销恢复。';
  $('confirmReset').textContent=all?'确认恢复初始状态':'确认清空当前范围';
  $('resetChoiceDialog').close();
