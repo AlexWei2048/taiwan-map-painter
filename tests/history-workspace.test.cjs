@@ -187,8 +187,8 @@ test('CSV historical export orders districts numerically and candidates by votes
 
 test('historical legislative election ids are not shown to visitors',()=>{
  assert.equal(Workspace.readableElectionName('legislative:2004:regional'),'2004年立法机构民代选举 · 区域民代');
- assert.equal(Workspace.readableElectionName('legislative:2004:party'),'2004年立法机构民代选举 · 不分区席次计算票');
- assert.equal(Workspace.readableElectionName('legislative:2024:party'),'2024年立法机构民代选举 · 不分区政党票');
+ assert.equal(Workspace.readableElectionName('legislative:2004:party'),'2004年立法机构民代选举 · 不分区民代');
+ assert.equal(Workspace.readableElectionName('legislative:2024:party'),'2024年立法机构民代选举 · 不分区民代');
  const card=Workspace.turnoutCards({turnoutGroups:[{electorate:'plains',registeredVoters:10}]},{office:'legislative',year:2004});
  assert.equal(card[0].title,'平地少数民族民代');
 });
