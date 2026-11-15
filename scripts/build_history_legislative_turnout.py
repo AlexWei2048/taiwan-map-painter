@@ -110,34 +110,34 @@ def extract_profile(source, totals):
         if poll_no or electors < cast or cast < 0 or accepted < 0 or rejected < 0 or cast != accepted + rejected:
             continue
         district = simplify(raw.get("DistrictName"))
-        if county in ("全国", "台闽地区", "全区"):
-            key = ("national", "", "")
-        elif town:
-            key = ("town", county, town)
-        elif district and district not in ("0", "00", "-"):
-            number = district_number(district)
-            if not number:
-                continue
-            key = ("district", county, number)
-        else:
-            key = ("county", county, "")
         row = [electors, cast, accepted, rejected]
-        valid[key].append(row)
+        if county in ("全国", "台闽地区", "全区"):
+            candidates = [("national", "", "")]
+        elif town:
+            candidates = [("town", county, town)]
+        else:
+            # CEC archive uses DistrictName for several different county and
+            # constituency codes. Do NOT assume that a numeric code is the
+            # elected constituency number: match to the independently compiled
+            # candidate valid-vote total to distinguish both geographic grains.
+            candidates = [("county", county, "")]
+            number = district_number(district)
+            if number:
+                candidates.append(("district", county, number))
+        for key in candidates:
+            if totals.get(key) == accepted:
+                valid[key].append(row)
+                counts["reconciled"] += 1
         if len(sample) < 7:
-            sample.append((key, row))
+            sample.append((candidates, row))
     result = {"national": {}, "county": {}, "town": {}, "district": {}}
     for key, values in valid.items():
         scope, county, area = key
-        if len(values) != 1:
+        unique = {tuple(value) for value in values}
+        if len(unique) != 1:
             counts["ambiguous"] += 1
             continue
-        v = values[0]
-        if key not in totals:
-            counts["no_candidate_scope"] += 1
-            continue
-        if totals[key] != v[2]:
-            counts["valid_votes_mismatch"] += 1
-            continue
+        v = list(next(iter(unique)))
         if scope == "national":
             result["national"] = v
         elif scope == "county":
