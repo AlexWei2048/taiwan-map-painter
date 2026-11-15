@@ -55,8 +55,8 @@ test('enriched 2022 history has verified complete candidate and turnout fields',
 });
 
 
-test('2022 mayoral wards have 366 independently verified turnout profiles with no shifted county sums',()=>{
- assert.equal(snapshot.townProfiles.length,366);
+test('2022 mayoral wards have 368 independently verified turnout profiles with no shifted county sums',()=>{
+ assert.equal(snapshot.townProfiles.length,368);
  assert.equal(snapshot.provenance.cecTownProfiles.statistics.coveredMayoralCounties,21);
  const towns=new Map(),sites=new Map(),countyProfiles=new Map();
  assert.equal(snapshot.mayorTownNames.length,368);
@@ -84,7 +84,7 @@ test('2022 mayoral wards have 366 independently verified turnout profiles with n
   for(const field of Object.keys(stats))assert.equal(stats[field],contest[field],county+' '+field);
  }
  assert.equal(sites.size,368);
- assert.deepEqual([...sites.keys()].filter(key=>!towns.has(key)).sort(),['嘉义市|东区','嘉义市|西区']);
+ assert.deepEqual([...sites.keys()].filter(key=>!towns.has(key)).sort(),[],'both 2022 Chiayi mayoral rerun wards have official CEC ballot profiles');
 });
 
 test('official result semantics and source labels survive normalization',()=>{

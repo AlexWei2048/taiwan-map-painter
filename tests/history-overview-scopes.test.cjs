@@ -96,18 +96,18 @@ test('counties without township-head elections do not inherit statewide figures'
  assert.equal(scoped.overview.validVotes,null);
 });
 
-test('2022 Chiayi City rerun keeps ward turnout missing but exact local vote sums',()=>{
- for(const [ward,total] of [['东区',42637],['西区',51176]]){
+test('2022 Chiayi City rerun keeps verified local vote and turnout totals',()=>{
+ for(const [ward,total,registered,cast,invalid] of [['东区',42637,96706,42798,161],['西区',51176,117424,51390,214]]){
   const result=W.overviewRegionData(local,{year:2022,office:'mayor',scope:'town',county:'嘉义市',area:ward});
   assert.ok(result);
   assert.equal(result.townVotesVerified,true);
   assert.equal(result.overview.validVotes,total);
-  assert.equal(result.overview.registeredVoters,null);
-  assert.equal(result.overview.ballotsCast,null);
-  assert.equal(result.overview.invalidVotes,null);
-  assert.equal(result.overview.turnout,null);
+  assert.equal(result.overview.registeredVoters,registered);
+  assert.equal(result.overview.ballotsCast,cast);
+  assert.equal(result.overview.invalidVotes,invalid);
+  assert.equal(result.overview.turnout,cast/registered*100);
  }
- assert.equal(local.snapshot.townProfiles.some(profile=>profile.county==='嘉义市'),false);
+ assert.equal(local.snapshot.townProfiles.filter(profile=>profile.office==='mayor'&&profile.county==='嘉义市').length,2);
 });
 
 test('2022 delayed Chiayi mayoral rerun has official and candidate-verified Eastern/Western turnout',()=>{
