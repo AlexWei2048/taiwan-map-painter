@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "office": "mayor",
+  "scope": "six_municipalities",
+  "year": 2026,
+  "decisionDate": "2026-10-16",
+  "sourceTitle": "中選會審定115年直轄市長、直轄市議員、縣（市）長及縣（市）議員選舉候選人資格",
+  "sourceUrl": "https://web.cec.gov.tw/central/article/65213",
+  "status": "qualified_on_2026_10_16",
+  "caveat": "中央選舉委員會2026-10-16資格審定新聞稿，並非2026-11-12地方選委會號次公告逐項替代文件",
+  "counties": [
+    {
+      "county": "台北市",
+      "officialCounty": "臺北市",
+      "names": [
+        "郭璽",
+        "沈伯洋",
+        "蕭文乾",
+        "唐新民",
+        "蔣萬安",
+        "林志成"
+      ]
+    },
+    {
+      "county": "新北市",
+      "officialCounty": "新北市",
+      "names": [
+        "蘇巧慧",
+        "李四川",
+        "蘇輝湟"
+      ]
+    },
+    {
+      "county": "桃园市",
+      "officialCounty": "桃園市",
+      "names": [
+        "張善政",
+        "黃世杰"
+      ]
+    },
+    {
+      "county": "台中市",
+      "officialCounty": "臺中市",
+      "names": [
+        "何欣純",
+        "江啟臣",
+        "洪麗華"
+      ]
+    },
+    {
+      "county": "台南市",
+      "officialCounty": "臺南市",
+      "names": [
+        "謝龍介",
+        "蕭燐洪",
+        "葉人文",
+        "陳亭妃"
+      ]
+    },
+    {
+      "county": "高雄市",
+      "officialCounty": "高雄市",
+      "names": [
+        "張靜",
+        "賴瑞隆",
+        "王肇民",
+        "柯志恩",
+        "洪方隆"
+      ]
+    }
+  ],
+  "officialCount": 23,
+  "officialNationwideMayorTotal": 81,
+  "auditedFields": [
+    "office",
+    "county",
+    "candidate_name",
+    "eligibility_oct16"
+  ]
+}
