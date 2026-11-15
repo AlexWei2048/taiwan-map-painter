@@ -1381,11 +1381,52 @@ function drawIdentityPanelLabels(group,interactive=false,exportAll=false){
 function drawFreeNationwideDistrictLabels(group){
  drawLabels(group,data.counties,geometryLayout(currentItems(),true),19,false,true,true);
 }
+function historicalLegislativeNationalRegional(){
+ return typeof History2022View!=='undefined'&&History2022View.active()&&History2022View.office()==='legislative'
+  &&History2022View.legislativeScale()==='national'&&History2022View.legislativeBallot()==='regional';
+}
+function historicalLegislativeMultiBadges(){
+ return typeof History2022View!=='undefined'&&History2022View.legislativeBadgesMode?.()===true;
+}
+function appendHistoricalLegislativeBadges(layer,transform,nationwide){
+ if(!historicalLegislativeMultiBadges())return;
+ const group=svgEl('g',{'data-history-legislative-seat-layer':'true','pointer-events':'none'}),size=nationwide?11:17;
+ for(const feature of currentItems()){
+  if(!feature.center)continue;
+  const winners=History2022View.legislativeSeatRows(feature);
+  if(!winners.length)continue;
+  const parties=HistoryLegislative.seatBadgeComposition(winners);
+  const items=nationwide?parties:parties.flatMap(item=>item.winners.map(()=>({party:item.party,seats:1})));
+  const shown=items.slice(0,nationwide?5:15),step=size*1.22,cx=feature.center[0]*transform.scale+transform.tx,cy=feature.center[1]*transform.scale+transform.ty;
+  const g=svgEl('g',{'data-history-seat-district':feature.id,'aria-label':feature.name+'：'+parties.map(p=>p.party+p.seats+'席').join('，')});
+  for(let i=0;i<shown.length;i++){
+   const item=shown[i],x=cx+(i-(shown.length-1)/2)*step,y=cy+(nationwide?14:12);
+   g.append(svgEl('circle',{cx:x,cy:y,r:size*.59,fill:partyColor(item.party),stroke:'#fff','stroke-width':1.25}));
+   const logo=logoFor(predictionParty(item.party));
+   if(logo)g.append(svgEl('image',{href:logo,x:x-size*.54,y:y-size*.54,width:size*1.08,height:size*1.08,'preserveAspectRatio':'xMidYMid meet'}));
+   if(nationwide&&item.seats>1){const count=svgEl('text',{x:x+size*.45,y:y+size*.78,'font-size':size*.78,'font-weight':700,fill:'#244533',stroke:'#fff','stroke-width':2,'paint-order':'stroke'});count.textContent=String(item.seats);g.append(count)}
+  }
+  if(items.length>shown.length){const extra=svgEl('text',{x:cx+(shown.length+1)*step/2,y:cy+size,'font-size':size*.85,'font-weight':700,fill:'#244533'});extra.textContent='+'+(items.length-shown.length);g.append(extra)}
+  group.append(g);
+ }
+ layer.insertBefore(group,layer.firstChild);
+}
+function drawHistoricalLegislativeRegionalLabels(group,interactive=false){
+ const items=currentItems(),transform=geometryLayout(items,true),nationwide=historicalLegislativeNationalRegional();
+ if(state.labels){
+  if(nationwide){
+   const counties=History2022View.legislativeCountyFeatures?.()||[];
+   drawLabels(group,counties.length?counties:data.counties,transform,19,interactive,true,true);
+  }else drawLabels(group,items,transform,sceneSpec().font,interactive);
+ }else group.replaceChildren();
+ appendHistoricalLegislativeBadges(group,transform,nationwide);
+}
 function renderLabels(){
  clearTimeout(navigationLabelTimer);navigationLabelTimer=0;
  const group=$('labels');group.replaceChildren();mapNumberRows=[];
- if(state.labels&&view){
-  if(identityPanelsActive())drawIdentityPanelLabels(group,true,false);
+ if((state.labels||historicalLegislativeMultiBadges())&&view){
+  if(historicalLegislativeNationalRegional()||historicalLegislativeMultiBadges())drawHistoricalLegislativeRegionalLabels(group,true);
+  else if(identityPanelsActive())drawIdentityPanelLabels(group,true,false);
   else if(freeNationwideDistrictMap())drawFreeNationwideDistrictLabels(group);
   else if(state.level==='villages')drawVillageLabels(group,currentItems(),geometryLayout(currentItems(),true),view,true);
   else drawLabels(group,currentItems(),geometryLayout(currentItems(),true),sceneSpec().font,true);
@@ -2099,10 +2140,11 @@ function exportSvg(){
  exportNumberRows=[];
  try{
   for(const id of ['predictionPatterns','insetFrames','regions','townBorders','districtBorders','borders','labels','mapFurniture','legend']){
-   if(id==='labels'&&!state.labels)continue;if(!$(id))continue;
+   if(id==='labels'&&!state.labels&&!historicalLegislativeMultiBadges())continue;if(!$(id))continue;
    const g=$(id).cloneNode(true);g.removeAttribute('id');if(id==='legend')g.setAttribute('data-export-map-legend','true');
    if(id==='labels'&&identityPanelsActive())drawIdentityPanelLabels(g,false,true);
    else if(id==='labels'&&freeNationwideDistrictMap())drawFreeNationwideDistrictLabels(g);
+    else if(id==='labels'&&(historicalLegislativeNationalRegional()||historicalLegislativeMultiBadges()))drawHistoricalLegislativeRegionalLabels(g,false);
    else if(id==='labels'&&state.level!=='villages')drawLabels(g,currentItems(),geometryLayout(currentItems(),true),sceneSpec().font,false);
    else if(id==='labels'&&state.level==='villages')drawVillageLabels(g,currentItems(),geometryLayout(currentItems(),true),fittedView(),false);
    map.append(g);
