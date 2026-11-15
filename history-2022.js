@@ -774,6 +774,10 @@
   }
   if(kind==='council'&&metric==='party')return featurePresentation(feature).fill;
   if(legislativeMultiView())return featurePresentation(feature).fill;
+  if(legislativeMode&&metric==='party'){
+   const local=currentResult?.regions.get(featureKey(feature));
+   return local?.party?partyColor(local.party):'#edf1e9';
+  }
   if(noElection(feature))return '#ffffff';
   const region=currentResult?.regions.get(featureKey(feature));
   return !region?'#edf1e9':!voteMetric()&&region.tie?'#aebdb4':region.party?tone(partyColor(region.party),metric==='votes'?region.top?.votes||0:region.share,currentResult.range):'#edf1e9';
