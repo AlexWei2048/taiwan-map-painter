@@ -1,0 +1,50 @@
+name: Reconcile historic presidential county/town turnout from CEC
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/enrich_presidential_cec_profiles.py
+      - .github/workflows/presidential-legacy-profiles.yml
+  workflow_dispatch:
+permissions: {contents: write}
+concurrency:
+  group: presidential-local-turnout-enrich
+  cancel-in-progress: false
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: true}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m pip install opencc-python-reimplemented
+      - run: python scripts/enrich_presidential_cec_profiles.py
+      - name: Verify turnout matches, profile arithmetic and legal range
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report=json.loads(Path("reports/presidential-official-local-turnout.json").read_text())
+          assert sum(x["county_matches"] for x in report["years"])>=110,report["years"]
+          assert sum(x["town_matches"] for x in report["years"])>=1800,report["years"]
+          for y in report["years"]:
+            snapshot=json.loads(Path(f"assets/history-president-{y['year']}.json").read_text())
+            assert len(snapshot["contests"])==y["original_counties"]
+            for c in snapshot["contests"]:
+              if c["registered_voters"] is not None:
+                assert c["valid_votes"]+c["invalid_votes"]==c["ballots_cast"]<=c["registered_voters"]
+            for t in snapshot["townProfiles"]:
+              assert t["valid_votes"]+t["invalid_votes"]==t["ballots_cast"]<=t["registered_voters"]
+            print(y["year"],y["county_matches"],y["town_matches"])
+          PY
+      - name: Publish verified local-only presidential ballots without altering candidate votes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/history-president-*.json reports/presidential-official-local-turnout.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Complete CEC-verified historic presidential county and township turnout"
+            git push origin HEAD:main
+          fi

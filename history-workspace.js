@@ -147,11 +147,12 @@
     present.size===expected.size&&[...expected].every(key=>present.has(key))&&
     rows.every(row=>Number.isSafeInteger(row.votes)&&row.votes>=0);
    const validVotes=townVotesVerified?rows.reduce((sum,row)=>sum+row.votes,0):null;
-   // Only the 2022 mayoral race has official CEC township-level ballot profiles.
+   // Township ballot profiles are used ONLY when the office/year has official
+   // CEC records cross-checked against the independent candidate-vote sum.
    // Never substitute county-wide figures or 2022-11-26 data for Chiayi's
    // separately held 2022-12-18 mayoral rerun.
-   const profile=office==='mayor'&&townVotesVerified?
-    (indexed.snapshot.townProfiles||[]).find(p=>p.office==='mayor'&&p.county===county&&p.town===area):null;
+   const profile=['mayor','president'].includes(office)&&townVotesVerified?
+    (indexed.snapshot.townProfiles||[]).find(p=>p.office===office&&p.county===county&&p.town===area):null;
    const verifiedProfile=profile&&Number.isSafeInteger(profile.registered_voters)&&
     Number.isSafeInteger(profile.ballots_cast)&&Number.isSafeInteger(profile.invalid_votes)&&
     Number.isSafeInteger(profile.valid_votes)&&profile.valid_votes===validVotes&&
