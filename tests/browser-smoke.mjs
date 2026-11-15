@@ -2577,3 +2577,43 @@ test('Historic legislative national maps render complete administrative boundari
   assert.match(await exportSvg(page),/data-shared-boundary=/,year+' SVG export retains boundaries');
  }
 });
+
+test('Election-period legislative maps have no missing winners, all county names and Wuqiu town geometry',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('legislative');
+ await page.waitForFunction(()=>History2022View.office()==='legislative'&&History2022View.year()===2024);
+ for(const year of ['2008','2012','2016','2020','2024']){
+  await page.locator('#historyYear').selectOption(year);
+  await page.waitForFunction(y=>History2022View.year()===Number(y)&&History2022View.snapshot()?.year===Number(y),year);
+  const r=await page.evaluate(()=>{
+   const features=History2022View.items(),county=History2022View.legislativeCountyFeatures(),regions=[...document.querySelectorAll('#regions path[data-region]')],
+    labels=[...document.querySelectorAll('#labels text[data-label]')],layer=document.querySelector('#labels');
+   const neutral=regions.filter(x=>['','#edf1e9','none','#ffffff','#fff'].includes((x.getAttribute('fill')||'').toLowerCase())).map(x=>x.getAttribute('aria-label')?.slice(0,60));
+   const missing=county.filter(x=>!labels.some(y=>y.dataset.label===x.id)).map(x=>x.name);
+   const outside=labels.filter(x=>x.dataset.placement==='outside');
+   const withoutLead=outside.filter(x=>!layer.querySelector('path[data-label-leader="'+x.dataset.label+'"]')).map(x=>x.textContent);
+   return{n:features.length,regions:regions.length,labels:labels.length,missing,neutral,withoutLead,sourceCountyCount:county.length};
+  });
+  assert.equal(r.n,73,year+' full constituency count');
+  assert.equal(r.regions,73,year+' all constituency polygons');
+  assert.deepEqual(r.neutral,[],year+' should never leave a valid constituency blank');
+  assert.deepEqual(r.missing,[],year+' all historical counties labelled');
+  assert.deepEqual(r.withoutLead,[],year+' all outside names connected with visible leader lines');
+ }
+ await page.locator('#historyYear').selectOption('2012');
+ await page.waitForFunction(()=>History2022View.year()===2012);
+ await page.locator('#historyElectorate').selectOption('party');
+ await page.locator('#historyCounty').selectOption('金门县');
+ await page.locator('#historyScale').selectOption('town');
+ const wu=await page.evaluate(()=>{
+  const item=History2022View.items().find(f=>f.name==='乌坵乡');
+  const path=item&&document.querySelector('#regions path[data-region="'+item.id+'"]');
+  const label=item&&document.querySelector('#labels text[data-label="'+item.id+'"]');
+  return{hasTown:!!item,region:!!path,visibleLabel:!!label,hasGeometry:!!item?.d};
+ });
+ assert.equal(wu.hasTown,true,'historic Kinmen has Wuqiu township');
+ assert.equal(wu.region,true,'Wuqiu appears as a map polygon');
+ assert.equal(wu.hasGeometry,true,'Wuqiu has nonempty geometry');
+ assert.equal(wu.visibleLabel,true,'Wuqiu township receives a visible label');
+});
