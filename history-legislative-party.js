@@ -68,6 +68,12 @@
  const SLATE_SOURCE_2024='https://zh.wikipedia.org/wiki/2024%E5%B9%B4%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E7%AB%8B%E6%B3%95%E5%A7%94%E5%93%A1%E9%81%B8%E8%88%89#全國不分區及僑居國外國民選舉';
 
  const OVERSEAS_WINNERS={
+  2004:{
+   '中国国民党':'吴英毅 谢文政 吴松柏',
+   '民主进步党':'陈明真 庄和子 陈重信',
+   '亲民党':'梅长锜',
+   '台湾团结联盟':'刘宽平'
+  },
   2001:{
    '中国国民党':'关沃暖 孙国华',
    '民主进步党':'萧美琴 张秀珍 张旭成',
@@ -75,7 +81,7 @@
    '台湾团结联盟':'王政中'
   }
  };
- const OVERSEAS_SOURCES={2001:'https://web.cec.gov.tw/api/file/80c0e18d-31cd-4104-a6c5-2b0a3dc2fc21.pdf'};
+ const OVERSEAS_SOURCES={2004:'https://web.cec.gov.tw/api/file/66199533-8d61-4512-adf9-05f3f1bf022b.pdf',2001:'https://web.cec.gov.tw/api/file/80c0e18d-31cd-4104-a6c5-2b0a3dc2fc21.pdf'};
 
  const EXTRA={
   2016:{'民主进步党':[{rank:18,name:'施义芳',elected:false},{rank:19,name:'周春米',elected:true}],
@@ -97,7 +103,7 @@
  const SOURCES={
   1992:'https://www.president.gov.tw/Page/294/36980',
   1995:'https://www.npf.org.tw/2/648',1998:'https://www.npf.org.tw/2/648',2001:'https://web.cec.gov.tw/api/file/80c0e18d-31cd-4104-a6c5-2b0a3dc2fc21.pdf',
-  2004:'https://news.cts.com.tw/cts/general/200412/200412110163494.html',
+  2004:'https://web.cec.gov.tw/api/file/66199533-8d61-4512-adf9-05f3f1bf022b.pdf',
   2008:'https://web.cec.gov.tw/api/file/f596f3d8-74bc-45b8-82fc-42ebce92c681.pdf',
   2012:'https://web.cec.gov.tw/api/file/ffb8f1b6-709e-40eb-aff7-ae98eb3d5da8.pdf',
   2016:'https://election.ltn.com.tw/2016/news/breakingnews/1575386',
@@ -261,7 +267,7 @@
      body.append(overseasGrid);
     }
     body.append(element('p','history-list-caveat',model.old?
-     model.year===2001?'本届已核对当选的不分区41人及侨选8人；尚未收录全部未当选提名人。':'此处仅收录已核实的不分区当选人，尚未录入本届侨选名单及全部未当选提名人。':
+     [2001,2004].includes(model.year)?'本届已核对当选的不分区41人及侨选8人；尚未收录全部未当选提名人。':'此处仅收录已核实的不分区当选人，尚未录入本届侨选名单及全部未当选提名人。':
      model.year===2024&&SLATES_2024[p.party]?'2024年原始提名顺序与选举当晚当选名单；任期内递补不改变此处的原始当选标记。':'这里只展示已核实的原始当选名单及部分特殊提名顺序，不代表完整政党提名名单；任期内辞职、递补不计入本表。'));
    }else{
     body.append(element('p','history-list-caveat',p.seats?
