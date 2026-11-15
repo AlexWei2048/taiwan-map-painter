@@ -2372,3 +2372,56 @@ test('2020/2024 legislative overviews show CEC-verified constituency and townshi
   await page.locator('#historyElectorate').selectOption('regional');
  }
 });
+
+
+test('History sidebar office, year, electorate, county and selected focus update the overview without undoing reverse map sync',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('council');
+ await page.locator('#historyViewOverview').click();
+ const scope=page.locator('#historyOverviewScope'),county=page.locator('#historyOverviewCounty');
+ assert.equal(await scope.inputValue(),'all');
+ await page.locator('#historyCounty').selectOption('台北市');
+ assert.equal(await scope.inputValue(),'county');
+ assert.equal(await county.inputValue(),'台北市');
+ assert.match(await page.locator('#historyOverviewTitle').textContent(),/台北市/);
+ await page.locator('#historyElectorate').selectOption('regional');
+ assert.equal(await scope.inputValue(),'county');
+ assert.equal(await county.inputValue(),'台北市');
+ assert.match(await page.locator('#historyOverviewTitle').textContent(),/台北市/);
+ await page.locator('#historyCounty').selectOption('');
+ assert.equal(await scope.inputValue(),'all');
+
+ await page.locator('#historyOffice').selectOption('legislative');
+ await page.locator('#historyYear').selectOption('2004');
+ await page.waitForFunction(()=>History2022View.year()===2004&&HistoryWorkspace.result()?.contests?.length>0);
+ assert.equal(await scope.inputValue(),'all');
+ await page.locator('#historyCounty').selectOption('高雄市');
+ assert.equal(await scope.inputValue(),'county');
+ assert.equal(await county.inputValue(),'高雄市');
+ const focus=page.locator('#historyFocus');
+ await page.locator('#historyScale').selectOption('district');
+ const options=await focus.locator('option').evaluateAll(items=>items.filter(x=>x.value).map(x=>({value:x.value,label:x.textContent})));
+ assert.ok(options.length>=2,'historical city has two constituency focus choices');
+ await focus.selectOption(options[1].value);
+ await page.waitForFunction(()=>HistoryWorkspace.selectedOverviewScope().scope==='district');
+ const selected=await page.evaluate(()=>({
+  overview:HistoryWorkspace.selectedOverviewScope(),result:HistoryWorkspace.result(),
+  title:document.querySelector('#historyOverviewTitle').textContent,
+  mapFocus:document.querySelector('#historyFocus').value
+ }));
+ assert.equal(selected.overview.county,'高雄市');
+ assert.equal(selected.result.contests.length,1);
+ assert.equal(selected.mapFocus,options[1].value);
+ assert.match(selected.title,/选区/);
+
+ await scope.selectOption('all');
+ assert.equal(await scope.inputValue(),'all');
+ assert.equal(await page.locator('#historyCounty').inputValue(),'');
+ assert.equal(await page.locator('#historyScale').inputValue(),'national');
+ await scope.selectOption('county');
+ await county.selectOption('台北市');
+ assert.equal(await scope.inputValue(),'county');
+ assert.equal(await page.locator('#historyCounty').inputValue(),'台北市');
+ assert.equal(await county.inputValue(),'台北市');
+});

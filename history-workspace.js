@@ -304,15 +304,56 @@
  let active=false;
  let indexed=null,currentResult=null,currentOverview=null,overviewContestId='';
  let overviewScope='all',overviewCounty='',overviewArea='',overviewInitialized=false,overviewContext='',overviewMapCounty='';
+ let overviewSidebarKey='',overviewSyncingFromStatistics=false;
 
- function overviewContextKey(){return state.office+'|'+state.year+(state.office==='legislative'?'|'+state.electorate:'')}
- function chooseOverviewOnMapChange(){
-  const key=overviewContextKey();
-  if(!overviewInitialized||overviewContext!==key){
-   overviewInitialized=true;overviewContext=key;overviewMapCounty=state.county;
-   overviewCounty=state.county||'';overviewScope=state.county?'county':'all';
-   overviewArea='';overviewContestId='';
+ function overviewContextKey(){
+  return state.office+'|'+state.year+
+   (['legislative','council'].includes(state.office)?'|'+state.electorate:'');
+ }
+ // The left-hand controls are the primary selection. The overview may also
+ // drive the map; guard that reverse flow so its own district/town choice is
+ // not wiped by the ensuing sidebar/map render.
+ function sidebarScopeKey(){
+  return[overviewContextKey(),state.county||'',
+   el('historyScale')?.value||'',el('historyFocus')?.value||''].join('|');
+ }
+ function sidebarOverviewTarget(){
+  const county=state.county||'',scale=el('historyScale')?.value||'',
+   focus=el('historyFocus')?.value||'';
+  if(!county||scale==='national')return{scope:'all',county:'',area:''};
+  const level=state.office==='legislative'&&state.electorate==='regional'||state.office==='council'?
+   'district':'town';
+  // A map showing all wards/districts of one county represents the county
+  // aggregate. Choose an individual constituency only when the sidebar
+  // explicitly selected its focus; never silently pick the first one.
+  if(state.office==='legislative'&&focus&&
+     (scale==='district'&&level==='district'||scale==='town'&&level==='town')){
+   const choices=overviewRegionChoices(indexed,{
+    year:state.year,office:state.office,electorate:state.electorate,county}).areas;
+   let chosen=null;
+   if(level==='district'){
+    const number=Core.districtNumber(focus);
+    chosen=choices.find(item=>Core.districtNumber(item.label)===number);
+   }else chosen=choices.find(item=>item.value===focus||item.label===focus);
+   if(chosen)return{scope:level,county,area:chosen.value};
   }
+  return{scope:'county',county,area:''};
+ }
+ function chooseOverviewOnMapChange(){
+  const key=overviewContextKey(),sidebarKey=sidebarScopeKey();
+  if(overviewSyncingFromStatistics){
+   overviewSidebarKey=sidebarKey;
+   return;
+  }
+  if(overviewInitialized&&overviewContext===key&&overviewSidebarKey===sidebarKey)return;
+  // During an asynchronous year/office change, avoid setting the default
+  // selection from the previous election's candidate and county index.
+  if(indexed&&Number(indexed.snapshot?.year)!==state.year)return;
+  const target=sidebarOverviewTarget();
+  overviewInitialized=true;overviewContext=key;overviewSidebarKey=sidebarKey;
+  overviewMapCounty=state.county;
+  overviewCounty=target.county;overviewScope=target.scope;
+  overviewArea=target.area;overviewContestId='';
  }
  function syncOverviewControls(){
   const legislative=state.office==='legislative',level=legislative&&state.electorate==='regional'||state.office==='council'?'district':'town';
@@ -362,8 +403,14 @@
    (overviewScope==='district'&&state.office==='legislative'?
     overviewRegionChoices(indexed,{year:state.year,office:state.office,electorate:state.electorate,
      county:overviewCounty}).areas.find(item=>item.value===overviewArea)?.label:'')||'';
-  return root.History2022View?.syncOverviewMap?.({
-   scope:overviewScope,county:overviewCounty,area:overviewArea,districtName})===true;
+  overviewSyncingFromStatistics=true;
+  try{
+   return root.History2022View?.syncOverviewMap?.({
+    scope:overviewScope,county:overviewCounty,area:overviewArea,districtName})===true;
+  }finally{
+   overviewSyncingFromStatistics=false;
+   overviewSidebarKey=sidebarScopeKey();
+  }
  }
  function changeOverviewMap(){
   if(!syncOverviewMap())render();
@@ -604,8 +651,7 @@
   for(const view of VIEWS){const button=el('historyView'+view[0].toUpperCase()+view.slice(1));if(button){const selected=state.view===view;button.classList.toggle('active',selected);button.setAttribute('aria-pressed',String(selected))}}
   renderTurnoutCards();if(el('historyCoverage')&&currentResult)el('historyCoverage').textContent=state.office==='legislative'?'当前票种：'+(root.HistoryLegislative?.ballots(state.year).find(x=>x.value===state.electorate)?.label||'立法机构民代')+' · '+currentResult.contests.length+'个统计区域 · '+currentResult.candidacies.length+'条结果。':'当前范围：'+currentResult.contests.length+'个选举区 · '+currentResult.candidacies.length+'条候选人记录。';emit();return{...state};
  }
- function setView(view){const before=state.view;state=normalizeSelection({...readSelection(),view});
-  if(view==='overview'&&before!=='overview'&&overviewMapCounty!==state.county)overviewInitialized=false;
+ function setView(view){state=normalizeSelection({...readSelection(),view});
   render()}
  function activate(initialSelection={}){
   const target=normalizeSelection({...state,...initialSelection});state=target;active=true;
@@ -627,7 +673,7 @@
   const blob=new Blob([content],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),link=doc.createElement('a');link.href=url;link.download=exportStem(state)+'.csv';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
  }
  for(const id of ['historyYear','historyOffice','historyElectorate','historyScale','historyMetric'])el(id)?.addEventListener('change',render);
- el('historyCounty')?.addEventListener('change',()=>{overviewInitialized=false;render()});
+ el('historyCounty')?.addEventListener('change',render);
  el('historyOverviewScope')?.addEventListener('change',event=>{overviewScope=event.target.value;overviewArea='';changeOverviewMap()});
  el('historyOverviewCounty')?.addEventListener('change',event=>{overviewCounty=event.target.value||'';overviewArea='';changeOverviewMap()});
  el('historyOverviewContest')?.addEventListener('change',event=>{overviewArea=event.target.value||'';changeOverviewMap()});
