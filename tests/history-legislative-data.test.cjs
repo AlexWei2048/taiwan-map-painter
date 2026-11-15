@@ -92,3 +92,53 @@ test('geographic legislative profiles enforce exact accepted-vote reconciliation
  assert.equal(unmatched.historicalOverall,null);
  assert.equal(turnout.national(2024,'regional').validVotes,13363780);
 });
+
+
+test('all five separate party-ballot elections have 368 individually audited township maps',()=>{
+ const Historical=require('../history-presidential.js');
+ const base=JSON.parse(fs.readFileSync(path.join(__dirname,'../assets/map-base.json'),'utf8'));
+ const norm=x=>String(x||'').trim().replaceAll('臺','台').replaceAll('縣','县')
+  .replaceAll('鄉','乡').replaceAll('鎮','镇').replaceAll('區','区');
+ const baseTown=x=>norm(x).replace(/[乡镇市区]$/u,'');
+ const expected={2008:[25,12,9780573],2012:[22,11,13162072],2016:[22,18,12190139],
+  2020:[22,19,14160138],2024:[22,16,13776736]};
+ for(const [year,expectedValues] of Object.entries(expected)){
+  const s=shard(Number(year));
+  const geometry=Legislative.scopeGeometry(s,base,norm,Core.mergePaths,Historical.modernCounty,baseTown);
+  const audit=Legislative.auditPartyTownVotes(s,geometry);
+  assert.equal(audit.valid,true,year+' '+audit.errors.join('；'));
+  assert.equal(audit.areas,368,year+' real townships');
+  assert.deepEqual([audit.counties,audit.politicalParties,audit.votes],expectedValues);
+  assert.equal(geometry.towns.length,368,year+' polygon coverage');
+  const found=new Set(geometry.towns.map(t=>t.county+'|'+t.name));
+  assert.ok(found.has('台北市|北投区'));
+  assert.ok(found.has('金门县|金城镇'));
+  assert.ok(found.has('连江县|南竿乡'));
+  const district=s.rows.filter(r=>r.electorate==='party'&&r.level==='town'&&
+    r.county==='台北市'&&r.town==='北投区');
+  assert.equal(district.length,expectedValues[1],year+' North Taipei party count');
+  const all=district.reduce((n,r)=>n+r.votes,0);
+  const indexed=Core.index(s);
+  const detail=Data.localResult(indexed,{year:Number(year),electorate:'party',
+   scope:'town',county:'台北市',area:'北投区'});
+  assert.equal(detail.overview.validVotes,all,year+' authentic local votes');
+  assert.equal(detail.result.candidacies.reduce((n,r)=>n+r.votes,0),all);
+ }
+});
+
+test('party township audit rejects fabricated totals or a dropped historic polygon',()=>{
+ const s=shard(2024),Historical=require('../history-presidential.js');
+ const norm=x=>String(x||'').trim().replaceAll('臺','台').replaceAll('縣','县')
+  .replaceAll('鄉','乡').replaceAll('鎮','镇').replaceAll('區','区');
+ const base=JSON.parse(fs.readFileSync(path.join(__dirname,'../assets/map-base.json'),'utf8'));
+ const geometry=Legislative.scopeGeometry(s,base,norm,Core.mergePaths,Historical.modernCounty,
+  x=>norm(x).replace(/[乡镇市区]$/u,''));
+ const corrupt={...s,rows:s.rows.map(r=>r.electorate==='party'&&r.level==='town'&&
+  r.county==='台北市'&&r.town==='北投区'&&r.party==='民主进步党'?{...r,votes:r.votes+1}:r)};
+ const invalid=Legislative.auditPartyTownVotes(corrupt,geometry);
+ assert.equal(invalid.valid,false);
+ assert.ok(invalid.errors.some(e=>e.includes('县市与乡镇市区政党票不一致')));
+ const missing=Legislative.auditPartyTownVotes(s,{...geometry,towns:geometry.towns.slice(1)});
+ assert.equal(missing.valid,false);
+ assert.ok(missing.errors.some(e=>e.includes('缺少乡镇图形')));
+});
