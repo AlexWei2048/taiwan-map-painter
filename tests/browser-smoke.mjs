@@ -2723,3 +2723,35 @@ test('Official Kaohsiung 2008–2016 village splits fill exactly one historic co
   assert.equal(result.restored,true,year+' township overlay restores without reloading');
  }
 });
+
+
+test('Candidate directory pending ballot-number filters and counts agree',async t=>{
+ const page=await pageFor(t);
+ const result=await page.evaluate(()=>{
+  const district=candidateDatabase.districts.find(d=>d.type==='mayor'&&d.candidateIds.length>=3);
+  if(!district)throw Error('Missing multi-candidate mayor district fixture');
+  district.candidateIds.forEach((id,i)=>{const candidate=candidateById.get(id);candidate.number=i===0?'':i===1?'待补':String(i+1)});
+  document.getElementById('directoryOffice').value='mayor';
+  document.getElementById('directoryCounty').value=district.county;
+  populateDirectoryDistricts();
+  document.getElementById('directoryDistrict').value=district.id;
+  document.getElementById('onlyPendingNumbers').checked=true;
+  renderCandidateDirectory();
+  const card=document.querySelector('#directoryResults .district-card');
+  const filtered={stat:card?.querySelector('.district-stats')?.textContent,
+   count:card?.querySelectorAll('.candidate-table tbody tr').length,
+   pending:card?.querySelectorAll('.candidate-table .pending-number').length,
+   total:document.getElementById('directoryCount').textContent};
+  document.getElementById('onlyPendingNumbers').checked=false;
+  renderCandidateDirectory();
+  return{filtered,all:document.querySelector('#directoryResults .district-card .district-stats')?.textContent,
+   fullCount:document.querySelectorAll('#directoryResults .district-card .candidate-table tbody tr').length,
+   expected:district.candidateIds.length};
+ });
+ assert.match(result.filtered.stat,/待核号次人数2/);
+ assert.equal(result.filtered.count,2);
+ assert.equal(result.filtered.pending,2);
+ assert.match(result.filtered.total,/2 名候选人/);
+ assert.match(result.all,/候选人数/);
+ assert.equal(result.fullCount,result.expected);
+});
