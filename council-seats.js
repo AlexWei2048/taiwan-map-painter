@@ -277,5 +277,5 @@ predictionPartyCounts=function(){return councilSeatMode()?councilCountySeatCount
 const baseCouncilCaption=predictionLegendCaption;
 predictionLegendCaption=function(){return councilSeatMode()?'每圆一席；空心圆尚未预测，党徽表示预测当选，灰圆表示无可用党徽':baseCouncilCaption()};
 const baseCouncilRender=render;
-render=function(){document.getElementById('canvas').classList.toggle('council-seats-mode',councilCountyPresentation());baseCouncilRender()};
+render=function(){document.getElementById('canvas').classList.toggle('council-seats-mode',councilCountyPresentation()||historicalLegislativeSeatMode());baseCouncilRender()};
 if(data)render();
