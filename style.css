@@ -811,3 +811,6 @@ body.history-mode #districtReferenceNote,body.history-mode #districtReferenceSou
 .history-overview-scope-controls select{width:100%;min-width:0;max-width:100%;padding:10px 9px;
  border:1px solid #cadbd0;border-radius:8px;background:#fff;color:#244b38;font-size:13px}
 @media(max-width:750px){.history-overview-scope-controls{grid-template-columns:minmax(0,1fr)}}
+
+/* Overview geographic drilldown remains visible in the map above the cards. */
+#regions path.history-overview-focused-region{stroke:#d49b32!important;stroke-width:3!important;stroke-dasharray:7 3;vector-effect:non-scaling-stroke;paint-order:stroke}

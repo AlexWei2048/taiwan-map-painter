@@ -352,6 +352,22 @@
    areaSelect.value=overviewArea;
   }
  }
+ function syncOverviewMap(){
+  if(state.view!=='overview')return false;
+  syncOverviewControls();
+  overviewInitialized=true;overviewContext=overviewContextKey();
+  overviewMapCounty=overviewScope==='all'?'':overviewCounty;
+  const contest=indexed?.contestsById?.get(overviewArea);
+  const districtName=contest?.district_name||
+   (overviewScope==='district'&&state.office==='legislative'?
+    overviewRegionChoices(indexed,{year:state.year,office:state.office,electorate:state.electorate,
+     county:overviewCounty}).areas.find(item=>item.value===overviewArea)?.label:'')||'';
+  return root.History2022View?.syncOverviewMap?.({
+   scope:overviewScope,county:overviewCounty,area:overviewArea,districtName})===true;
+ }
+ function changeOverviewMap(){
+  if(!syncOverviewMap())render();
+ }
  function renderOverviewScope(scoped){
   const title=el('historyOverviewTitle'),description=el('historyOverviewDescription');
   if(!title)return;
@@ -392,7 +408,7 @@
   overviewArea=overviewScope==='county'?'':contestId;
   overviewContestId=overviewScope==='county'?'':contestId;
   state=normalizeSelection({...readSelection(),view:'overview'});
-  render();return true;
+  changeOverviewMap();return true;
  }
  function openFeatureOverview(feature){
   if(!feature||!indexed)return false;
@@ -416,7 +432,7 @@
    if(wanted){overviewScope='district';overviewArea=wanted.value}
   }
   state=normalizeSelection({...readSelection(),view:'overview'});
-  render();return true;
+  changeOverviewMap();return true;
  }
  function contestForFeature(feature){
   if(!feature)return null;
@@ -612,9 +628,9 @@
  }
  for(const id of ['historyYear','historyOffice','historyElectorate','historyScale','historyMetric'])el(id)?.addEventListener('change',render);
  el('historyCounty')?.addEventListener('change',()=>{overviewInitialized=false;render()});
- el('historyOverviewScope')?.addEventListener('change',event=>{overviewScope=event.target.value;overviewArea='';render()});
- el('historyOverviewCounty')?.addEventListener('change',event=>{overviewCounty=event.target.value||'';overviewArea='';render()});
- el('historyOverviewContest')?.addEventListener('change',event=>{overviewArea=event.target.value||'';render()});
+ el('historyOverviewScope')?.addEventListener('change',event=>{overviewScope=event.target.value;overviewArea='';changeOverviewMap()});
+ el('historyOverviewCounty')?.addEventListener('change',event=>{overviewCounty=event.target.value||'';overviewArea='';changeOverviewMap()});
+ el('historyOverviewContest')?.addEventListener('change',event=>{overviewArea=event.target.value||'';changeOverviewMap()});
  for(const [view,id] of [['candidates','historyViewCandidates'],['overview','historyViewOverview']])el(id)?.addEventListener('click',()=>setView(state.view===view?'map':view));
  for(const id of ['workspacePrediction','workspaceFree'])el(id)?.addEventListener('click',()=>{active=false});
  function setSnapshot(snapshot){try{indexed=root.HistoryCore.index(snapshot);render();return true}catch(error){if(el('historyLoadStatus')){el('historyLoadStatus').hidden=false;el('historyLoadStatus').textContent='历史数据版本不兼容，请重新载入。'};if(el('historyRetry'))el('historyRetry').hidden=false;return false}}

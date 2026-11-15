@@ -2275,3 +2275,65 @@ test('Historic legislative nationwide maps label counties instead of constituenc
  await page.locator('#historyElectorate').selectOption('mountain');
  assert.deepEqual(await page.locator('#historyScale option').allTextContents(),['全部地区（含金门、马祖）','县市','乡镇市区']);
 });
+
+test('Overview statistical region controls change the corresponding historical map geography',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('council');
+ await page.locator('#historyViewOverview').click();
+ const scope=page.locator('#historyOverviewScope'),county=page.locator('#historyOverviewCounty'),area=page.locator('#historyOverviewContest');
+ assert.equal(await page.locator('#historyCounty').inputValue(),'');
+ assert.equal(await page.locator('#regions path[data-region]').count(),22,'national council overview uses 22 county polygons');
+ await scope.selectOption('county');
+ await county.selectOption('高雄市');
+ assert.equal(await page.locator('#historyCounty').inputValue(),'高雄市');
+ assert.ok(await page.locator('#regions path[data-region]').count()>2,'county seat view displays district polygons');
+ await scope.selectOption('district');
+ await area.selectOption({index:0});
+ assert.equal(await page.locator('#regions .history-overview-focused-region').count(),1,
+  'selected council district is highlighted on the geographic map');
+ await scope.selectOption('all');
+ assert.equal(await page.locator('#historyCounty').inputValue(),'');
+ assert.equal(await page.locator('#regions path[data-region]').count(),22);
+ await page.locator('#historyOffice').selectOption('legislative');
+ await page.locator('#historyYear').selectOption('2004');
+ await page.waitForFunction(()=>History2022View.snapshot()?.year===2004);
+ await page.locator('#historyViewOverview').click();
+ await page.locator('#historyOverviewScope').selectOption('county');
+ await page.locator('#historyOverviewCounty').selectOption('高雄市');
+ assert.equal(await page.locator('#historyScale').inputValue(),'county');
+ assert.equal(await page.locator('#regions path[data-region]').count(),2);
+ await page.locator('#historyOverviewScope').selectOption('district');
+ assert.equal(await page.locator('#historyScale').inputValue(),'district');
+ assert.equal(await page.locator('#regions path[data-region]').count(),1);
+ await page.locator('#historyOverviewScope').selectOption('all');
+ assert.equal(await page.locator('#historyScale').inputValue(),'national');
+ assert.ok(await page.locator('#regions path[data-region]').count()>=22);
+});
+test('Council and historic multi-member legislative nationwide maps use plurality of actual county seats',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('council');
+ const check=await page.evaluate(()=>{
+  const f=currentItems().find(f=>f.name==='台北市'),counts=History2022View.countySeatLeader('台北市'),
+  el=document.querySelector('#regions path[data-region="'+f.id+'"]');
+  return{leader:counts,fill:el.getAttribute('fill'),districts:currentItems().length};
+ });
+ assert.equal(check.districts,22);
+ assert.ok(check.leader.party&&check.leader.seats>0);
+ assert.equal(check.fill,await page.evaluate(party=>predictionParty(party).color,check.leader.party));
+ await page.locator('#historyOffice').selectOption('legislative');
+ await page.locator('#historyYear').selectOption('2004');
+ await page.waitForFunction(()=>History2022View.snapshot()?.year===2004);
+ const historical=await page.evaluate(()=>{
+  const counties=currentItems(),f=counties.find(f=>f.county==='高雄市'),dominant=History2022View.countySeatLeader('高雄市'),
+  el=[...document.querySelectorAll('#regions path[data-region]')].find(p=>p.dataset.region===f?.id);
+  return{count:counties.length,isCounty:counties.every(f=>f.name===f.county),seat:dominant,
+   fill:el?.getAttribute('fill'),expected:dominant.party?predictionParty(dominant.party).color:dominant.tied?'#aebdb4':'#edf1e9',
+   logos:document.querySelectorAll('#labels [data-history-seat-card]').length};
+ });
+ assert.ok(historical.count>=22);
+ assert.equal(historical.isCounty,true);
+ assert.equal(historical.fill,historical.expected);
+ assert.equal(historical.logos,0);
+});
