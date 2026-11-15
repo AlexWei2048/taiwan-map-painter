@@ -1,0 +1,28 @@
+name: Reconcile CEC 2026 city and county council qualifications
+on:
+  push:
+    paths:
+      - scripts/audit_2026_cec_council_qualifications.py
+      - tests/test_2026_cec_council_qualifications.py
+      - assets/election-2026.js
+      - .github/workflows/cec-2026-council-qualifications.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit-council:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: |
+          python -m unittest discover -s tests -p test_2026_cec_council_qualifications.py
+          python scripts/audit_2026_cec_council_qualifications.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cec-2026-council-qualification-audit
+          path: reports/2026-cec-council-qualification-audit.json
+          if-no-files-found: warn
