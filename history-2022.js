@@ -433,7 +433,8 @@
    .sort((a,b)=>HistoryCore.compareResultRows(a,b,legislativeBallot==='regional'?'council':'mayor')||
     legislativeRowArea(a).localeCompare(legislativeRowArea(b),'zh',{numeric:true})||b.votes-a.votes);
   const national=scale==='national'&&legislativeBallot!=='regional';
-  el('historySummary').textContent=(county||'全部地区（含金门、马祖）')+' · '+HistoryLegislative.ballots(legislativeYear).find(x=>x.value===legislativeBallot)?.label+' · '+rows.length+'条结果'+(national?' · 全区总票':'');
+  const actualTowns=legislativePartyTownView()?new Set(all.map(r=>r.county+'|'+r.town)).size:0;
+  el('historySummary').textContent=(county||'全部地区（含金门、马祖）')+' · '+HistoryLegislative.ballots(legislativeYear).find(x=>x.value===legislativeBallot)?.label+(legislativePartyTownView()?' · '+actualTowns+'个乡镇市区':'')+' · '+rows.length+'条结果'+(national?' · 全区总票':'');
   if(!rows.length){
    root.append(createHistoryElement('p','history-legislative-empty','该范围没有可核实的选举结果。'));el('historyPage').textContent='';el('historyPrev').disabled=true;el('historyNext').disabled=true;return
   }
@@ -853,7 +854,7 @@
   if(el('historyOffice').value==='legislative')activateLegislative(Number(el('historyYear').value));
  };
  if(el('historyElectorate'))el('historyElectorate').onchange=()=>{electorate=el('historyElectorate').value;if(legislativeMode){legislativeBallot=electorate;scale='national';county='';legislativeFocus='';el('historyCounty').value=''}resultPage=0;switchMode();render()};
- el('historyCounty').onchange=()=>{county=el('historyCounty').value;legislativeFocus='';if(legislativeMode)scale=county?'county':'national';resultPage=0;switchMode();render()};
+ el('historyCounty').onchange=()=>{county=el('historyCounty').value;legislativeFocus='';if(legislativeMode&&!legislativePartyTownView())scale=county?'county':'national';resultPage=0;switchMode();render()};
  el('historyMetric').onchange=()=>{metric=el('historyMetric').value;render()};
  el('historyParty').onchange=()=>{selectedParty=el('historyParty').value;render()};
  el('historySearch').oninput=()=>{resultPage=0;if(currentResult)showRows(currentResult)};
@@ -868,7 +869,7 @@
   metric='party';candidateScope='top';selectedCandidate='';resultPage=0;el('historyOffice').value=kind;
   el('categoryHistory').click();
  };
- el('historyScale').onchange=()=>{scale=el('historyScale').value;if(legislativeMode){legislativeFocus='';if(scale==='national')county='';else if(['district','town'].includes(scale)&&!county)county=el('historyCounty').options[1]?.value||'';el('historyCounty').value=county}switchMode();render()};
+ el('historyScale').onchange=()=>{scale=el('historyScale').value;if(legislativeMode){legislativeFocus='';if(scale==='national')county='';else if(['district','town'].includes(scale)&&!county&&!legislativePartyTownView())county=el('historyCounty').options[1]?.value||'';el('historyCounty').value=county}switchMode();render()};
  if(el('historyFocus'))el('historyFocus').onchange=()=>{legislativeFocus=el('historyFocus').value;resultPage=0;switchMode();render()};
  el('historyCandidateScope').onchange=()=>{candidateScope=el('historyCandidateScope').value;render()};
  el('historyCandidate').onchange=()=>{selectedCandidate=el('historyCandidate').value;render()};
@@ -883,7 +884,7 @@
   document.getElementById('showTownBoundaries').checked=state.showTownBoundaries;
   renderTownBorders();applyBorders();persist();
  };
- const formerReturn=el('returnTaiwanMap').onclick;el('returnTaiwanMap').onclick=()=>{if(!active)return formerReturn();county='';legislativeFocus='';if(legislativeMode)scale='national';el('historyCounty').value='';switchMode();render()};
+ const formerReturn=el('returnTaiwanMap').onclick;el('returnTaiwanMap').onclick=()=>{if(!active)return formerReturn();const keepPartyTowns=legislativePartyTownView();county='';legislativeFocus='';if(legislativeMode)scale=keepPartyTowns?'town':'national';el('historyCounty').value='';switchMode();render()};
  const defaultColor=fillColor;fillColor=function(feature){
   if(!active)return defaultColor(feature);
   // Qianzhen was divided at village level in 2008–2016. Never attribute
@@ -921,6 +922,7 @@
  const defaultPushHistory=pushHistory;pushHistory=function(){if(!active)return defaultPushHistory()};
  const defaultPaint=paint;paint=function(feature){if(!active)return defaultPaint(feature);if(legislativeMode){
    if(legislativeYear===1992&&['plains','mountain'].includes(legislativeBallot))return toast('1992年没有县市得票分布，仅可查阅全区选举结果');
+   if(legislativePartyTownView()&&!county){county=feature.county;legislativeFocus='';el('historyCounty').value=county;switchMode();render();openHistoryRegion(feature);return}
    if(!county||scale==='national'){county=feature.county;scale='county';legislativeFocus='';el('historyCounty').value=county;switchMode();render();return}
    if(legislativeBallot==='regional'&&scale==='county'){scale='district';legislativeFocus=feature.name;switchMode();render();openHistoryRegion(feature);return}
    if(legislativeBallot!=='regional'&&scale==='county'){scale='town';legislativeFocus='';switchMode();render();return}
