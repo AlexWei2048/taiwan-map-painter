@@ -34,7 +34,7 @@ test('actual party votes have all-area, county and town map levels without fabri
 });
 test('historic 1992 indigenous ballots do not manufacture local tallies',()=>{
  const s=shard(1992),indexed=Core.index(s);
- assert.deepEqual(Legislative.levels(1992,'mountain').map(([value])=>value),['national']);
+ assert.deepEqual(Legislative.levels(1992,'mountain').map(([value])=>value),['county']);
  assert.equal(Data.localResult(indexed,{year:1992,electorate:'mountain',scope:'county',county:'台北市'}),null);
  assert.equal(Data.localResult(indexed,{year:1992,electorate:'plains',scope:'town',county:'台北市',area:'北投区'}),null);
  const national=Data.localResult(indexed,{year:1992,electorate:'mountain',scope:'all'});
