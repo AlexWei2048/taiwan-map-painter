@@ -60,3 +60,13 @@ test('2004 old two-category allocation and 2008 two-party allocation reconcile',
  assert.equal(recent.matchesOfficial,true);
  assert.deepEqual(recent.parties.map(p=>[p.party,p.seats]),[['中国国民党',20],['民主进步党',14]]);
 });
+
+test('2001/2004 minor parties without an overseas slate never crash nomination rendering',()=>{
+ for(const year of [2001,2004]){
+  const m=Party.build(year,{rows:[{electorate:'party',level:'national',party:'新党',votes:900000},
+   {electorate:'party',level:'national',party:'中国国民党',votes:8000000}]});
+  assert.equal(m.parties.length,2);
+  const small=m.parties.find(x=>x.party==='新党');
+  assert.deepEqual(small.overseasNominees,[]);
+ }
+});
