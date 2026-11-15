@@ -104,8 +104,53 @@ for name,item in candidates.items():
   skips.append({"name":name,"reason":str(err),"source":src})
   print("SKIP",name,str(err),flush=True)
  time.sleep(.12)
-# Only add images with a party match backed by the registrar; no speculative
-# reuse of current logos for historically distinct parties or for independents.
+# Two directly documented party-specific emblems were missed by the
+# registrar importer: an official party website and a Wikimedia Commons
+# attribution page identifying the exact archived party.
+supplemental=[
+ {"name":"台澎国际法法理建国党",
+  "also":["台澎党"],
+  "urls":[
+   # Wikimedia Commons: File:SSFPP logo 2019.png (author JusticeForce)
+   "https://upload.wikimedia.org/wikipedia/commons/1/1b/SSFPP_logo_2019.png",
+   "https://www.ssfpp.tw/img2/logo-pyramid.png"],
+  "source_page":"https://commons.wikimedia.org/wiki/File:SSFPP_logo_2019.png",
+  "license":"Wikimedia Commons; attribution and license on source file page"},
+ {"name":"台湾动物保护党",
+  "also":[],
+  "urls":["https://static.wixstatic.com/media/f4b9b6_1d0a1482ceb24a8f85c64410c119f092~mv2.jpg/v1/fit/w_2500%2Ch_1330%2Cal_c/f4b9b6_1d0a1482ceb24a8f85c64410c119f092~mv2.jpg"],
+  "source_page":"https://www.tapp.org.tw/",
+  "license":"Official party image; rights retained by party; identification only"}
+]
+for item in supplemental:
+ name=norm(item["name"]);pid=lookup.get(name)
+ if pid in existing or pid in byid:continue
+ raw=None;last_error=None;chosen=None
+ for url in item["urls"]:
+  try:
+   response=session.get(url,timeout=35);response.raise_for_status()
+   if "image" not in response.headers.get("Content-Type",""):
+    raise ValueError("non-image response")
+   binary,size=decode_image(response.content)
+   raw=response.content;chosen=url;break
+  except Exception as err:
+   last_error=str(err)
+ if raw is None:
+  skips.append({"name":name,"reason":"official/commons source unavailable: "+str(last_error)})
+  continue
+ uri="data:image/png;base64,"+base64.b64encode(binary).decode("ascii")
+ if pid:byid[pid]=uri
+ else:byname[name]=uri
+ for alias in item["also"]:byname[norm(alias)]=uri
+ documentation.append({"name":name,"party_id":pid,
+  "official_registry":item["source_page"],"official_image":chosen,
+  "source_sha256":hashlib.sha256(raw).hexdigest(),
+  "rendered_sha256":hashlib.sha256(binary).hexdigest(),
+  "image_bytes":len(binary),"size_after_fit":size,"license":item["license"],
+  "source_alternative":item["urls"]})
+ print("IMPORTED_SUPPLEMENT",name,pid or "historical",len(binary),chosen,flush=True)
+# Only add images with a party match backed by the registrar or a party-owned
+# source / precisely identified Commons file; no speculative reuse.
 render="/* Official party-logo images, with sources in reports/official-party-logos-import.json.\n"
 render+=" * Rights remain with the image owners. No placeholders, no hotlinks. */\n"
 render+="const SOURCED_PARTY_LOGOS_BY_ID="+json.dumps(byid,ensure_ascii=False,separators=(",",":"))+";\n"
