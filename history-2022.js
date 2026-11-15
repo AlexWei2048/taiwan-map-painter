@@ -656,7 +656,7 @@
   el('historyCounty').value=county;el('historyScaleBox').hidden=kind!=='mayor'&&!legislativeMode;
   if(legislativeMode){
    const ballot=el('historyElectorate');ballot.replaceChildren(...HistoryLegislative.ballots(legislativeYear).map(item=>new Option(item.label,item.value)));ballot.value=legislativeBallot;
-   const levels=HistoryLegislative.levels(legislativeYear,legislativeBallot),scaleSelect=el('historyScale');scaleSelect.replaceChildren(...levels.map(([value,label])=>new Option(label,value)));if(!levels.some(([value])=>value===scale))scale=levels[0][0];scaleSelect.value=scale;
+   const levels=HistoryLegislative.levels(legislativeYear,legislativeBallot),scaleSelect=el('historyScale');scaleSelect.replaceChildren(...levels.map(([value,label])=>new Option(legislativeYear>=2008&&legislativeBallot==='party'&&value==='town'&&!county?'乡镇市区（全台368个）':label,value)));if(!levels.some(([value])=>value===scale))scale=levels[0][0];scaleSelect.value=scale;
    const focusBox=el('historyFocusBox'),focusSelect=el('historyFocus'),focusLabel=el('historyFocusLabel');
    if(focusBox&&focusSelect){
     const eligible=!!county&&['district','town'].includes(scale)&&!(legislativeYear===1992&&legislativeBallot!=='party');
