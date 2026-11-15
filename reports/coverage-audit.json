@@ -5,7 +5,7 @@
   "original_logo_ids": 30,
   "sourced_preset_logo_ids": 13,
   "sourced_historical_logo_names": 36,
-  "total_party_names_in_archives": 125,
+  "total_party_names_in_archives": 124,
   "top_archive_parties": [
     {
       "name": "中国国民党",
@@ -15,7 +15,7 @@
     },
     {
       "name": "无党籍",
-      "rows": 26320,
+      "rows": 31328,
       "id": "gray",
       "has_logo": true
     },
@@ -42,12 +42,6 @@
       "rows": 5559,
       "id": "tsu",
       "has_logo": true
-    },
-    {
-      "name": "无党籍及未经政党推荐",
-      "rows": 5008,
-      "id": null,
-      "has_logo": false
     },
     {
       "name": "无党团结联盟",
@@ -184,8 +178,8 @@
     {
       "name": "制宪联盟",
       "rows": 864,
-      "id": null,
-      "has_logo": false
+      "id": "twca",
+      "has_logo": true
     },
     {
       "name": "中华民国台湾基本法连线",
@@ -268,8 +262,8 @@
     {
       "name": "大爱宪改联盟",
       "rows": 469,
-      "id": null,
-      "has_logo": false
+      "id": "twca",
+      "has_logo": true
     },
     {
       "name": "红党",
@@ -797,21 +791,6 @@
   ],
   "missing_archive_logos": [
     {
-      "name": "无党籍及未经政党推荐",
-      "rows": 5008,
-      "total_votes_across_grains": 12051215,
-      "known_preset": null,
-      "sources": [
-        "history-2022-candidacies",
-        "history-2022.json",
-        "history-president-2012.json"
-      ],
-      "spellings": [
-        "无党籍及未经政党推荐",
-        "無黨籍及未經政黨推薦"
-      ]
-    },
-    {
       "name": "中国台湾原住民党",
       "rows": 2373,
       "total_votes_across_grains": 53676,
@@ -823,19 +802,6 @@
       ],
       "spellings": [
         "中国台湾原住民党"
-      ]
-    },
-    {
-      "name": "连署",
-      "rows": 1576,
-      "total_votes_across_grains": 14844470,
-      "known_preset": null,
-      "sources": [
-        "history-president-1996.json",
-        "history-president-2000.json"
-      ],
-      "spellings": [
-        "连署"
       ]
     },
     {
@@ -877,18 +843,6 @@
       ]
     },
     {
-      "name": "制宪联盟",
-      "rows": 864,
-      "total_votes_across_grains": 106649,
-      "known_preset": null,
-      "sources": [
-        "history-legislative-2008.json"
-      ],
-      "spellings": [
-        "制宪联盟"
-      ]
-    },
-    {
       "name": "中华民国台湾基本法连线",
       "rows": 848,
       "total_votes_across_grains": 96486,
@@ -922,18 +876,6 @@
       ],
       "spellings": [
         "制度救世岛"
-      ]
-    },
-    {
-      "name": "大爱宪改联盟",
-      "rows": 469,
-      "total_votes_across_grains": 100398,
-      "known_preset": null,
-      "sources": [
-        "history-legislative-2016.json"
-      ],
-      "spellings": [
-        "大爱宪改联盟"
       ]
     },
     {

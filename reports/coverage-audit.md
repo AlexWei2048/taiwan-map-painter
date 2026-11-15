@@ -6,9 +6,9 @@
 - 有党徽图档的标识（含无党籍标记）：43
 - 新增官方预设党徽：13
 - 新增官方历史名称图档：36
-- 已归一化的历史党名种类：125
+- 已归一化的历史党名种类：124
 - 没有内置党徽的预设政党：5
-- 没有匹配到已收录党徽的历史党名：49
+- 没有匹配到已收录党徽的历史党名：45
 
 ## 缺党徽的预设政党
 
@@ -24,17 +24,13 @@
 
 | 名称 | 数据行数 | 首个来源 |
 |---|---:|---|
-| 无党籍及未经政党推荐 | 5008 | history-2022-candidacies |
 | 中国台湾原住民党 | 2373 | history-legislative-1995.json |
-| 连署 | 1576 | history-president-1996.json |
 | 全国民主非政党联盟 | 1261 | history-legislative-1995.json |
 | 民主联盟 | 1175 | history-legislative-1998.json |
 | 台湾主义党 | 872 | history-legislative-2012.json |
-| 制宪联盟 | 864 | history-legislative-2008.json |
 | 中华民国台湾基本法连线 | 848 | history-legislative-2012.json |
 | 台湾吾党 | 812 | history-legislative-2001.json |
 | 制度救世岛 | 485 | history-legislative-2024.json |
-| 大爱宪改联盟 | 469 | history-legislative-2016.json |
 | 红党 | 467 | history-legislative-2008.json |
 | 台湾双语无法党 | 452 | history-legislative-2024.json |
 | 台湾国民会议 | 439 | history-legislative-2012.json |
