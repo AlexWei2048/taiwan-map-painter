@@ -2089,9 +2089,13 @@ test('Presidential, mayor and township overviews expose all/county/town levels w
   assert.match(local.title,office==='township'?/金门(?:县)?/:/台北市/);
   assert.ok(local.contests>=1);
   if(office==='president'){
-   assert.equal(local.data.registeredVoters,null,'presidential local voter roll is not inferred');
-   assert.equal(local.data.ballotsCast,null,'presidential local turnout is not inferred');
-   assert.ok(local.data.validVotes>0,'verified presidential town votes remain available');
+   // Newly sourced, CEC-reconciled presidential township figures are now
+   // available instead of the previous deliberately unfilled placeholders.
+   assert.ok(Number.isInteger(local.data.registeredVoters)&&local.data.registeredVoters>0,
+    'presidential local registered voters come from validated CEC profiles');
+   assert.ok(Number.isInteger(local.data.ballotsCast)&&local.data.ballotsCast>0);
+   assert.ok(Number.isInteger(local.data.invalidVotes)&&local.data.invalidVotes>=0);
+   assert.equal(local.data.validVotes+local.data.invalidVotes,local.data.ballotsCast);
   }else if(office==='mayor'){
    // All 366 regular 2022 mayoral wards now have official CEC elprof
    // voter/ballot totals; only the separate Chiayi rerun retains nulls.
