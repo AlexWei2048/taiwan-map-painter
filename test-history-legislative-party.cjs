@@ -88,10 +88,13 @@ test('2001/2004 minor parties without an overseas slate never crash nomination r
  }
 });
 
-test('2004 and 2024 nominee identities do not contain silent duplicates',()=>{
+test('1995, 2004 and 2024 nominee identities and at-large winners match the source',()=>{
+ const expected={1995:{'中国国民党':15,'民主进步党':11,'新党':4},
+ 2004:{'中国国民党':15,'民主进步党':16,'亲民党':6,'台湾团结联盟':4},
+ 2024:{'中国国民党':13,'民主进步党':13,'台湾民众党':8}};
  for(const year of [1995,2004,2024])for(const party of Object.keys(Party.VERIFIED[year])){
   const names=Party.nominees(year,party).map(n=>n.name);
   assert.equal(new Set(names).size,names.length,year+' '+party);
-  assert.equal(Party.nominees(year,party).filter(n=>n.elected).length,Party.VERIFIED[year][party],year+' '+party+' winners');
+  assert.equal(Party.nominees(year,party).filter(n=>n.elected).length,expected[year][party]||0,year+' '+party+' at-large winners');
  }
 });
