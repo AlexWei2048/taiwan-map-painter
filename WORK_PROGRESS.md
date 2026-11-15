@@ -321,3 +321,8 @@ Latest source revision: 20261030-no-offline-v11.
 - 候选人表支持搜索与政党筛选，当选仅使用官方标记图片；县市长可下钻查看乡镇市区得票领先分布，避免把地区领先写成当选。
 - 历史SVG/PNG文件名包含年份、类别、范围和指标；CSV同时输出规范名称与官方原始名称，并防止表格公式注入。进入、退出历史模式不改动预测与自由填色方案。
 - 数据快照、几何拓扑和108项Node回归检查全部通过。当前执行环境缺少Playwright且限制Chromium进程套接字，新增浏览器断言已提交，待CI或具备浏览器权限的环境执行。
+
+## 2026-11-16 质量审计与自动化更新
+- 官方2026候选人公告监测/只读比对：scripts/audit_2026_official.py、tests/test_official_2026_audit.py、official-2026-candidates.yml，来源白名单与跨轮监测状态缓存，官方证据确认前不更改候选人与预测。
+- 1992—2004边界审计：history-legislative.js记录精度及来源，scripts/audit_legacy_legislative_boundaries.cjs验证所有142个选区，1992参考年份为1995；缺少当年地籍图不假定轮廓精确。
+- 视觉回归：tests/visual-regression.mjs及visual-regression.yml，比对上一版与新版的桌面、移动端与SVG导出像素，并生成Artif​​act差异截图。详细流程见docs/audits/2026-candidates-boundaries-visual-qa.md。
