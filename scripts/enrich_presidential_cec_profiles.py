@@ -52,8 +52,10 @@ def stats(row):
 def run(year):
  archive=ROOT/f"assets/history-president-{year}.json"
  snap=json.loads(archive.read_text(encoding="utf-8"))
- base_url,raw_base=fetch(year,"elbase.csv")
- prof_url,raw_prof=fetch(year,"elprof.csv")
+ base_file="elbase_P1.csv" if year==2016 else "elbase.csv"
+ prof_file="elprof_P1.csv" if year==2016 else "elprof.csv"
+ base_url,raw_base=fetch(year,base_file)
+ prof_url,raw_prof=fetch(year,prof_file)
  counties={};towns={}
  for r in parse(raw_base):
   if len(r)<6:continue
@@ -76,15 +78,22 @@ def run(year):
   if row.get("level")=="town" and row.get("type")=="president":
    town_votes[(norm(row["county"]),norm(row["town"]))]+=int(row.get("votes") or 0)
  accepted_county={};accepted_towns={};audit=Counter()
+ # CEC 2012+ sometimes omits explicit township totals. Build independent
+ # candidate-verified township sums from polling-station lines when available.
+ polling_rows=defaultdict(list)
  for r in parse(raw_prof):
   if len(r)<10:continue
   p,c,d,t,v,station=map(field,r[:6])
-  if station not in ("","0000","0") or v not in ("","0000"):
-   continue
   group=stats(r)
-  if group is None:audit["bad_arithmetic"]+=1;continue
+  if group is None:
+   audit["bad_arithmetic"]+=1;continue
   county=counties.get((p,c))
   if not county:continue
+  if t not in ("000","") and station not in ("","0000","0"):
+   town=towns.get((p,c,d,t))
+   if town:polling_rows[(county,town)].append(group)
+  if station not in ("","0000","0") or v not in ("","0000"):
+   continue
   if t in ("000","") and d in ("00",""):
    contest=bycounty.get(county)
    if contest and int(contest["valid_votes"])==group["valid_votes"]:
@@ -98,6 +107,15 @@ def run(year):
    if town_votes.get(pair)==group["valid_votes"] and pair not in accepted_towns:
     accepted_towns[pair]=group;audit["town"]+=1
    else:audit["town_mismatch"]+=1
+ for pair,station_rows in polling_rows.items():
+  if pair in accepted_towns or pair not in town_votes:continue
+  combined={field:sum(r[field] for r in station_rows)
+   for field in ("registered_voters","ballots_cast","valid_votes","invalid_votes")}
+  if combined["valid_votes"]==town_votes[pair] and
+    combined["registered_voters"]>=combined["ballots_cast"] and
+    combined["ballots_cast"]==combined["valid_votes"]+combined["invalid_votes"]:
+   accepted_towns[pair]=combined;audit["town_from_stations"]+=1
+  else:audit["town_stations_mismatch"]+=1
  for name,group in accepted_county.items():
   contest=bycounty[name]
   for col in ("registered_voters","ballots_cast","invalid_votes"):
