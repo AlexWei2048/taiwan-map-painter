@@ -2139,6 +2139,8 @@ test('Ten legislative history years expose data and real historical electoral ma
  assert.ok(await page.evaluate(()=>History2022View.items().length>=22));
  await page.locator('#historyOffice').selectOption('mayor');
  await page.waitForFunction(()=>History2022View.office()==='mayor'&&History2022View.year()===2022);
+ const officialOrder=['台北市','新北市','桃园市','台中市','台南市','高雄市','新竹县','苗栗县','彰化县','南投县','云林县','嘉义县','屏东县','宜兰县','花莲县','台东县','澎湖县','基隆市','新竹市','嘉义市','金门县','连江县'];
+ assert.deepEqual(await page.locator('#historyCounty option').evaluateAll(options=>options.slice(1).map(option=>option.value)),officialOrder);
 });
 
 
