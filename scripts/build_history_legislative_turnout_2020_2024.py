@@ -89,7 +89,7 @@ def read_names(base_rows):
         if len(row) < 6:
             continue
         p, c, district, town, village, label = [str(x).strip() for x in row[:6]]
-        if not p or c == "000":
+        if not p or p == "00" and c == "000":
             continue
         if town == "000" and village == "0000" and district == "00":
             counties[(p, c)] = norm(label).split(" ")[0]
@@ -102,7 +102,7 @@ def read_names(base_rows):
 
 def verified_profiles(year, ballot):
     # 2024 CEC source spells the source of administrative codes elbese.csv.
-    base_file = "elbese.csv" if year == 2024 else "elbase.csv"
+    base_file = "elbese.csv" if year == 2024 and ballot == "regional" else "elbase.csv"
     urls = {name: source(year, ballot, filename)
             for name, filename in (("elbase", base_file), ("elprof", "elprof.csv"))}
     raw = {name: download(url) for name, url in urls.items()}
