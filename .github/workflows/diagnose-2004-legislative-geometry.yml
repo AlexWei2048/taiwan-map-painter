@@ -1,0 +1,19 @@
+name: Diagnose historical Kaohsiung legislative geography
+on:
+  push:
+    paths:
+      - scripts/inspect_2004_kaohsiung.cjs
+      - .github/workflows/diagnose-2004-legislative-geometry.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node scripts/inspect_2004_kaohsiung.cjs
