@@ -2595,9 +2595,10 @@ test('Election-period legislative maps have no missing winners, all county names
    const missing=county.filter(x=>!labels.some(y=>y.dataset.label===x.id)).map(x=>x.name);
    const outside=labels.filter(x=>x.dataset.placement==='outside');
    const withoutLead=outside.filter(x=>!layer.querySelector('path[data-label-leader="'+x.dataset.label+'"]')).map(x=>x.textContent);
-   return{n:features.length,regions:regions.length,labels:labels.length,missing,neutral,withoutLead,sourceCountyCount:county.length};
+   return{n:features.length,regions:regions.length,labels:labels.length,missing,neutral,withoutLead,sourceCountyCount:county.length,periods:features.filter(f=>f.geometryPeriod==='2008–2016').length};
   });
   assert.equal(r.n,73,year+' full constituency count');
+  if(Number(year)<2020)assert.equal(r.periods,73,year+' must draw 2008–2016-period districts, not 2024 geometry');
   assert.equal(r.regions,73,year+' all constituency polygons');
   assert.deepEqual(r.neutral,[],year+' should never leave a valid constituency blank');
   assert.deepEqual(r.missing,[],year+' all historical counties labelled');
