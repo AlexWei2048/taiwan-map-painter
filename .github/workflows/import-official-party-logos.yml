@@ -31,7 +31,11 @@ jobs:
           assert r["count_by_historical_name"]>=18,r["count_by_historical_name"]
           s=Path("assets/party-logos-sourced.js").read_text()
           assert re.search(r"const SOURCED_PARTY_LOGOS_BY_ID=\{",s)
-          assert all(x["official_image"].startswith("https://ws.moi.gov.tw/001/Upload/") for x in r["official_sources"])
+          from urllib.parse import urlparse
+          approved={"ws.moi.gov.tw","upload.wikimedia.org","www.ssfpp.tw","static.wixstatic.com"}
+          assert all(urlparse(x["official_image"]).hostname in approved
+                     and x.get("source_sha256") and x.get("official_registry")
+                     for x in r["official_sources"])
           print("Imported",r["count_by_id"],"preset logos and",r["count_by_historical_name"],"historical logos")
           PY
       - name: Publish only verified, source-attributed party emblems
