@@ -1,0 +1,42 @@
+name: Audit missing 2001 regional legislative national turnout
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/verify_2001_regional_national_turnout.py
+      - .github/workflows/verify-2001-regional-national.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: true}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Check original CEC 2001 nationwide regional ballot profile
+        run: python scripts/verify_2001_regional_national_turnout.py
+      - name: Validate only verified historical turnout
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('assets/history-legislative-turnout-2001.json'))
+          record=p['ballots']['regional'].get('national')
+          if record:
+            assert len(record)==4 and record[1]==record[2]+record[3] and record[0]>=record[1]
+            assert 'national_source' in p['audit']['regional']
+            print('VERIFIED',record)
+          else:print('NO NEW RECONCILABLE 2001 NATIONAL PROFILE; retain missing')
+          PY
+      - name: Publish only source-backed national profile if established
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/history-legislative-turnout-2001.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Fill 2001 regional nationwide turnout with matched original CEC profile"
+            git push origin HEAD:main
+          fi
