@@ -250,6 +250,22 @@
  const LAW_NEW='https://law.cec.gov.tw/LawContent.aspx?id=GL000292';
  const LAW_OLD='https://www.president.gov.tw/Page/294/36980';
  const openParties=new Set();
+ const NOMINATION_STATS={
+  2001:{type:'不分区提名',source:'CEC',complete:true},
+  2004:{type:'不分区及侨选提名',source:'CEC',complete:true},
+  2008:{type:'政党提名',source:'CEC',complete:true},
+  2012:{type:'政党提名',source:'行政院公报',complete:true},
+  2016:{type:'政党提名',source:'CEC',complete:true},
+  2020:{type:'政党提名',source:'CEC',complete:true},
+  2024:{type:'政党提名',source:'CEC',complete:true}
+ };
+ function nominationCount(year){
+  const slates=SLATES_BY_YEAR[year];
+  if(slates)return Object.values(slates).reduce((n,value)=>n+value.split(/\s+/).filter(Boolean).length,0);
+  if(Number(year)===2004)return Object.values(UNORDERED_SLATES_2004).reduce((n,value)=>n+value.split(/\s+/).filter(Boolean).length,0)+
+   Object.values(OVERSEAS_SLATES_2004).reduce((n,value)=>n+value.split(/\s+/).filter(Boolean).length,0);
+  return null;
+ }
  const key=s=>String(s||'').replace(/[臺台]/g,'台').replace(/[·．‧]/g,'·').trim();
  const isIndependent=s=>['无党籍','無黨籍','无','無','无党籍及未经政党推荐','無黨籍及未經政黨推薦'].includes(key(s));
  const format=n=>Number(n||0).toLocaleString('zh-CN');
@@ -338,7 +354,7 @@
   for(const [label,value] of [['比例代表席次',model.parts[0]+model.parts[1]+' 席'],
    ['取得席次政党',model.parties.filter(p=>p.seats).length+' 个'],
    [model.old?'有推荐候选人政党':'参选政党',model.parties.length+' 个'],
-   [model.year===2024?'名单人数':'5% 门槛',model.year===2024?'177 人':'得票满 5%']]){
+   [nominationCount(model.year)!==null?'登记提名人数':'5% 门槛',nominationCount(model.year)!==null?nominationCount(model.year)+' 人':'得票满 5%']]){
     const tile=element('div','history-list-stat');tile.append(element('span','',label),element('strong','',value));stats.append(tile);
   }
   box.append(stats);
@@ -362,6 +378,7 @@
    '旧制的票数为政党推荐候选人的票数汇总；无党籍与未经政党推荐的候选人票不纳入政党分配。席次分配按不分区、侨选分别计算。':
    '仅得票率达到5%的政党参与第二阶段席次分配，按合格政党的票数重新归一化，再以最大余额法分配34席。');
   box.append(caption);
+  if(model.year<2001){box.append(element('p','history-list-caveat','档案范围：本届原始不分区与侨选当选名单已补齐；部分政党的落选提名名册未能从可检索资料中逐名确认。'))}
   if(!model.matchesOfficial){
    box.append(element('p','history-list-alert','注意：当前资料按法定规则计算的席次与已核对历史结果存在差异，本页保留计算值供核查，不将其标为官方当选名单。'));
   }
@@ -396,7 +413,7 @@
    }
    if(p.winners.length){
     body.append(element('h5','',SLATES_BY_YEAR[model.year]?.[p.party]?'提名名单 · '+p.winners.length+'人 · 原始当选 '+p.winners.filter(c=>c.elected).length+'人':
-      model.year===2004&&UNORDERED_SLATES_2004[p.party]?'登记提名名单 · '+p.winners.length+'人（原始顺序未核实）':'原始当选名单 · 已核实 '+p.winners.filter(c=>c.elected).length+' 人'));
+      model.year===2004&&UNORDERED_SLATES_2004[p.party]?'登记提名名单 · '+p.winners.length+'人（原始排序未核实）':'原始当选名单 · 已核实 '+p.winners.filter(c=>c.elected).length+' 人'));
     const grid=element('div','history-list-nominees');
     for(const n of p.winners){
      const row=element('div','history-list-nominee');
@@ -424,12 +441,14 @@
      body.append(overseasGrid);
     }
     body.append(element('p','history-list-caveat',model.old?
-     [2001,2004].includes(model.year)?'本届已核对当选的不分区41人及侨选8人；尚未收录全部未当选提名人。':'此处仅收录已核实的不分区当选人，尚未录入本届侨选名单及全部未当选提名人。':
-     SLATES_BY_YEAR[model.year]?.[p.party]?'本届已收录该党原始提名顺序及投票当时的当选名单；任期内递补不计入原始当选。':'这里只展示已核实的原始当选名单及部分特殊提名顺序，不代表完整政党提名名单；任期内辞职、递补不计入本表。'));
+     model.year===2001?'已核对本届不分区完整提名顺序及原始当选人，侨选仅收录原始当选人；未录入侨选全部提名名单。':
+     model.year===2004?'已对照中选会不分区及侨选全部登记候选人，名单原始排序尚未全部核实；当选标记为首次选举结果。':
+     '已收录不分区和侨选原始当选人；1992—1998年落选提名人与正式名单顺序尚待旧公报数字化核实。':
+     SLATES_BY_YEAR[model.year]?.[p.party]?'本届已收录该党原始提名顺序及选举当时的当选名单；任期内递补不计入原始当选。':'仅收录已核实的原始当选名单；未取得完整提名顺序时不推断名次。'));
    }else{
     body.append(element('p','history-list-caveat',p.seats?
      '本届该党获得席次，但原始当选人及完整提名名册尚未逐项核实，因此暂不展示姓名。':
-     '此党未分配到席次；其完整提名名册尚未逐项核实，暂不展示未经确认的姓名。'));
+     '本届未取得席次；当前史料尚未确认该党是否提交不分区提名名单，因此不展示未经核实的姓名。'));
    }
    const ref=element('a','history-list-detail-link','核对本届原始选举资料');
    ref.href=SLATE_SOURCES[model.year]||SOURCES[model.year]||LAW_NEW;ref.target='_blank';ref.rel='noopener noreferrer';body.append(ref);
