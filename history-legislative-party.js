@@ -6,6 +6,20 @@
  'use strict';
  const ERA_SEATS={1992:[30,6],1995:[30,6],1998:[41,8],2001:[41,8],2004:[41,8]};
  const WINNERS={
+  1992:{
+   '中国国民党':'程建人 蔡友土 李鸣皋 周书府 严启昌 陈健民 黄正一 李友吉 罗传进 洪冬桂 陈锡章 刘瑞生 陈玺安 刘国昭 葛雨琴 李源泉 杨吉雄 刘光华 李宗正',
+   '民主进步党':'叶菊兰 张俊雄 戴振耀 余玲雅 林瑞卿 谢聪敏 黄尔璇 赵绣娃 侯海熊 方来进 叶耀鹏'
+  },
+  1995:{
+   '中国国民党':'刘松藩 李鸣皋 洪冬桂 陈健民 李友吉 葛雨琴 刘国昭 罗传进 刘光华 杨吉雄 靳曾珍丽 王令麟 张光锦 陈琼赞 蔡璧煌',
+   '民主进步党':'谢长廷 黄尔璇 巴燕·达鲁 张俊宏 王拓 简锡堦 洪奇昌 刘进兴 林瑞卿 林文郎 范巽绿',
+   '新党':'陈癸淼 林郁方 郑龙水 陈一新'
+  },
+  1998:{
+   '中国国民党':'饶颖奇 陈健治 高育仁 洪昭男 李鸣皋 陈琼赞 郑逢时 洪秀柱 翁重钧 林国龙 王令麟 曾振农 陈杰儒 杨吉雄 靳曾珍丽 周正之 游淮银 许素叶 刘光华 李正宗 蔡铃兰 廖风德 李全教',
+   '民主进步党':'张俊宏 陈昭南 巴燕·达鲁 周清玉 颜锦福 林忠正 陈胜宏 许荣淑 黄尔璇 刘俊雄 戴振耀 范巽绿 陈忠信 简锡堦 林文郎',
+   '新党':'李炷烽 张世良 郑龙水'
+  },
   2001:{
    '中国国民党':'饶颖奇 江丙坤 陈健治 黄昭顺 高育仁 王钟渝 黄德福 蔡铃兰 陈健民 郑逢时 侯彩凤 李和顺 陈建年',
    '民主进步党':'洪奇昌 尤清 陈道明 刘世芳 张俊宏 林浊水 高志鹏 许荣淑 邱永仁 颜锦福 邱彰 郑贵莲 陈胜宏 陈忠信 刘俊雄',
@@ -68,6 +82,20 @@
  const SLATE_SOURCE_2024='https://zh.wikipedia.org/wiki/2024%E5%B9%B4%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E7%AB%8B%E6%B3%95%E5%A7%94%E5%93%A1%E9%81%B8%E8%88%89#全國不分區及僑居國外國民選舉';
 
  const OVERSEAS_WINNERS={
+  1992:{
+   '中国国民党':'江伟平 郭石城 张建国 廖光生',
+   '民主进步党':'张旭成 陈唐山'
+  },
+  1995:{
+   '中国国民党':'李文郎 黄清林 吴惠祖',
+   '民主进步党':'张旭成 林哲夫',
+   '新党':'钱达'
+  },
+  1998:{
+   '中国国民党':'洪读 范扬盛 杨作洲 关沃暖',
+   '民主进步党':'张旭成 钟金江 张秀珍',
+   '新党':'营志宏'
+  },
   2004:{
    '中国国民党':'吴英毅 谢文政 吴松柏',
    '民主进步党':'陈明真 庄和子 陈重信',
@@ -102,14 +130,15 @@
   2024:{'民主进步党':13,'中国国民党':13,'台湾民众党':8}
  };
  const SOURCES={
-  1992:'https://www.president.gov.tw/Page/294/36980',
-  1995:'https://www.npf.org.tw/2/648',1998:'https://www.npf.org.tw/2/648',2001:'https://web.cec.gov.tw/api/file/80c0e18d-31cd-4104-a6c5-2b0a3dc2fc21.pdf',
+  1992:'https://zh.wikipedia.org/wiki/1992%E5%B9%B4%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E7%AB%8B%E6%B3%95%E5%A7%94%E5%93%A1%E9%81%B8%E8%88%89',
+  1995:'https://zh.wikipedia.org/wiki/1995%E5%B9%B4%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E7%AB%8B%E6%B3%95%E5%A7%94%E5%93%A1%E9%81%B8%E8%88%89',
+  1998:'https://zh.wikipedia.org/wiki/1998%E5%B9%B4%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E7%AB%8B%E6%B3%95%E5%A7%94%E5%93%A1%E9%81%B8%E8%88%89',2001:'https://web.cec.gov.tw/api/file/80c0e18d-31cd-4104-a6c5-2b0a3dc2fc21.pdf',
   2004:'https://web.cec.gov.tw/api/file/66199533-8d61-4512-adf9-05f3f1bf022b.pdf',
-  2008:'https://web.cec.gov.tw/api/file/f596f3d8-74bc-45b8-82fc-42ebce92c681.pdf',
-  2012:'https://web.cec.gov.tw/api/file/ffb8f1b6-709e-40eb-aff7-ae98eb3d5da8.pdf',
-  2016:'https://election.ltn.com.tw/2016/news/breakingnews/1575386',
-  2020:'https://www.cna.com.tw/news/firstnews/202001115030.aspx',
-  2024:'https://2024.cec.gov.tw/article/content/?id=NEWS&target=%2Farticle%2FA0217'
+  2008:'https://web.cec.gov.tw/api/file/9b6521a5-f3ef-4754-bd3e-cd0a3292c282.pdf',
+  2012:'https://web.cec.gov.tw/api/file/94c76578-5aa9-4248-9f81-8e625f92d326.pdf',
+  2016:'https://web.cec.gov.tw/api/file/26f914ad-93b3-4c8e-9844-546ea286c970.pdf',
+  2020:'https://web.cec.gov.tw/api/file/480f911a-7a9f-46d1-b87f-a7b47a1ce1f4.pdf',
+  2024:'https://web.cec.gov.tw/api/file/776fd1c9-dec7-4ec9-add0-c491f946f9e6.pdf'
  };
  const LAW_NEW='https://law.cec.gov.tw/LawContent.aspx?id=GL000292';
  const LAW_OLD='https://www.president.gov.tw/Page/294/36980';
