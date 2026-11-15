@@ -2208,3 +2208,26 @@ test('Legislative indigenous and party ballots have geography-appropriate levels
  assert.deepEqual(await page.locator('#historyScale option').evaluateAll(a=>a.map(o=>o.value)),['national']);
  assert.match(await page.locator('#historyLegislativeMapHint').innerText(),/不推算地方票数/);
 });
+
+
+test('Historic legislative nationwide maps label counties instead of constituency numbers',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('legislative');
+ await page.waitForFunction(()=>History2022View.office()==='legislative'&&History2022View.year()===2024&&History2022View.snapshot()?.rows?.length>0);
+ assert.deepEqual(await page.locator('#historyScale option').allTextContents(),['全国总览','县市','选举区']);
+ const labels=await page.locator('#labels [data-label]').allTextContents();
+ assert.ok(labels.some(name=>name.includes('台北')),'nationwide regional map has county labels');
+ assert.equal(await page.locator('#labels [data-placement="district-number"]').count(),0,'no constituency numbers in nationwide view');
+ await page.locator('#historyYear').selectOption('2004');
+ await page.waitForFunction(()=>History2022View.year()===2004&&History2022View.snapshot()?.year===2004);
+ assert.equal(await page.locator('#labels [data-placement="district-number"]').count(),0);
+ assert.ok(await page.locator('#labels [data-history-seat-district]').count()>10,'old multi-seat constituencies draw winning party logos');
+ await page.locator('#historyCounty').selectOption('台北市');
+ assert.equal(await page.locator('#historyScale').inputValue(),'county');
+ assert.ok(await page.locator('#labels [data-label]').count()>0);
+ await page.locator('#historyElectorate').selectOption('party');
+ assert.deepEqual(await page.locator('#historyScale option').allTextContents(),['全部地区（含金门、马祖）','县市','乡镇市区']);
+ await page.locator('#historyElectorate').selectOption('mountain');
+ assert.deepEqual(await page.locator('#historyScale option').allTextContents(),['全部地区（含金门、马祖）','县市','乡镇市区']);
+});
