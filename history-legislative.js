@@ -8,12 +8,12 @@
   items.push({value:'party',label:'不分区民代'});
   return items;
  }
+ // "全部地区" is a map-range choice, not an administrative hierarchy.
+ // 1992 indigenous returns have only nationwide tallies; never infer county votes.
  function levels(year,electorate){
-  const national=['national','全部地区（含金门、马祖）'];
-  if(electorate==='regional')return [['national','全台总览'],['county','县市'],['district','选举区']];
-  if(Number(year)===1992&&['plains','mountain'].includes(electorate))return [national];
-  if(Number(year)===1992)return [national,['county','县市']];
-  return [national,['county','县市'],['town','乡镇市区']];
+  if(electorate==='regional')return [['county','县市'],['district','选举区']];
+  if(Number(year)===1992)return [['county','县市']];
+  return [['county','县市'],['town','乡镇市区']];
  }
  // Source: CEC 2008 (7th) district announcement and 2012 (8th) election record.
  // Existing map village polygons are used to reconstruct split district boundaries.
