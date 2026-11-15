@@ -203,6 +203,61 @@
   }
   return{towns,counties,missing};
  }
+
+ // Validate exact 2008+ party-ballot geography against CEC-derived totals.
+ // A township polygon is only usable if its historic town identity maps
+ // uniquely to one modern base polygon; no county average is ever applied.
+ function auditPartyTownVotes(snapshot,geometry){
+  const year=Number(snapshot?.year),errors=[];
+  if(!Number.isFinite(year)||year<2008)return{valid:false,errors:['仅支持2008年及以后独立政党票']};
+  const source=(snapshot?.rows||[]).filter(r=>r.electorate==='party'),parties=new Set();
+  const national=new Map(),county=new Map(),town=new Map(),townKeys=new Set(),countyKeys=new Set();
+  const add=(map,key,v)=>map.set(key,(map.get(key)||0)+v);
+  for(const row of source){
+   const n=Number(row.votes),p=String(row.party||row.name||'');
+   if(!p||!Number.isSafeInteger(n)||n<0){errors.push('非法政党得票记录');continue}
+   parties.add(p);
+   if(row.level==='national')add(national,p,n);
+   if(row.level==='county'){
+    countyKeys.add(row.county);add(county,row.county+'|'+p,n);
+   }
+   if(row.level==='town'){
+    townKeys.add(row.county+'|'+row.town);add(town,row.county+'|'+row.town+'|'+p,n);
+   }
+  }
+  if(townKeys.size!==368)errors.push('乡镇市区记录数应为368，实际 '+townKeys.size);
+  if(countyKeys.size!==(year===2008?25:22))errors.push('历史县市记录数不正确：'+countyKeys.size);
+  const townshipToCounty=new Map();
+  for(const [key,v] of town){
+   const sep=key.lastIndexOf('|'),party=key.slice(sep+1),townKey=key.slice(0,sep);
+   const countyName=townKey.slice(0,townKey.indexOf('|'));
+   add(townshipToCounty,countyName+'|'+party,v);
+  }
+  for(const [key,v] of county)if((townshipToCounty.get(key)||0)!==v)
+   errors.push(key+' 县市与乡镇市区政党票不一致');
+  const countiesToNational=new Map();
+  for(const [key,v] of county)add(countiesToNational,key.slice(key.indexOf('|')+1),v);
+  for(const [p,v] of national)if((countiesToNational.get(p)||0)!==v)
+   errors.push(p+' 全区与县市政党票不一致');
+  if(national.size!==parties.size)errors.push('全区政党数与乡镇政党数不符');
+  const features=geometry?.towns||[],covered=new Set(),polygonIds=new Set();
+  for(const feature of features){
+   const key=feature.county+'|'+feature.name;
+   if(covered.has(key))errors.push('乡镇图形重复 '+key);
+   covered.add(key);
+   if(!townKeys.has(key))errors.push('乡镇图形没有真实得票 '+key);
+   const polygon=String(feature.sourceId||feature.id||'');
+   if(polygonIds.has(polygon))errors.push('同一现行乡镇图形错误地用于多个历史行政区 '+polygon);
+   polygonIds.add(polygon);
+  }
+  for(const key of townKeys)if(!covered.has(key))errors.push('缺少乡镇图形 '+key);
+  if(geometry?.missing?.length)errors.push('未匹配历史乡镇图形 '+geometry.missing.length);
+  if(features.length!==368||polygonIds.size!==368)
+   errors.push('乡镇地图图形必须一一对应368个历史乡镇市区');
+  return{valid:errors.length===0,year,areas:townKeys.size,politicalParties:parties.size,
+   counties:countyKeys.size,votes:[...national.values()].reduce((a,b)=>a+b,0),errors};
+ }
+
  function singleMemberGeometry(snapshot,map,normalize=s=>s,modernCounty=s=>s){
   const norm=value=>normalize(String(value||'')),seen=new Set(),features=[];
   for(const row of snapshot?.rows||[]){
@@ -259,7 +314,7 @@
   if(!mapLoad)mapLoad=(async()=>{const response=await fetcher('assets/map-legislative.json?v=20261031-split-v25',{cache:'default'});if(!response.ok)throw Error('立法机构民代选区地图 HTTP '+response.status);const map=await response.json();if(!Array.isArray(map.legislative)||map.legislative.length!==73)throw Error('立法机构民代选区地图校验未通过');return map})().catch(error=>{mapLoad=null;throw error});
   return mapLoad;
  }
- const api={YEARS,ballots,levels,multiMember,countyLabelsOnly,seatBadgeComposition,districtKey,winners,composition,renderMode,rows,note,districtNumber,districtGeometry,scopeGeometry,singleMemberGeometry,periodSingleMemberGeometry,load,loadMap,loadKaohsiungVillages,kaohsiungSplitFragment};
+ const api={YEARS,ballots,levels,multiMember,countyLabelsOnly,seatBadgeComposition,districtKey,winners,composition,renderMode,rows,note,districtNumber,districtGeometry,scopeGeometry,auditPartyTownVotes,singleMemberGeometry,periodSingleMemberGeometry,load,loadMap,loadKaohsiungVillages,kaohsiungSplitFragment};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;
  else root.HistoryLegislative=api;
 })(typeof window==='undefined'?{}:window);
