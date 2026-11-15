@@ -105,6 +105,7 @@
     legislativeMode=true;presidentialMode=false;legislativeYear=year;kind='legislative';snapshotData=shard;
     if(!wasLegislative||!['national','county','district','town'].includes(scale))scale='national';legislativeFocus='';
     legislativeAreaGeometry=HistoryLegislative.scopeGeometry(geometryReference||shard,data,norm,HistoryCore.mergePaths,HistoryPresidential.modernCounty,HistoryPresidential.baseTown);
+    if(year>=2008){const audit=HistoryLegislative.auditPartyTownVotes(shard,legislativeAreaGeometry);if(!audit.valid)throw Error('不分区政党票乡镇数据与底图未能逐项核对：'+audit.errors.slice(0,4).join('；'))}
     const legacyMap={...data,towns:legislativeAreaGeometry.towns,counties:legislativeAreaGeometry.counties,villages:kaohsiungVillages};
    if(year<2008)legislativeGeometry=HistoryLegislative.districtGeometry(shard,geometryReference||shard,legacyMap,norm,HistoryCore.mergePaths,HistoryPresidential.modernCounty,HistoryPresidential.baseTown);
    else{
@@ -178,6 +179,7 @@
   }
   return recordsInView();
  }
+ const legislativePartyTownView=()=>legislativeMode&&legislativeYear>=2008&&legislativeBallot==='party'&&scale==='town';
  function legislativeCurrentLevel(){
   if(legislativeBallot==='regional')return 'district';
   if(legislativeYear===1992&&['plains','mountain'].includes(legislativeBallot))return 'district';
@@ -600,7 +602,7 @@
 
  function incumbentLabel(r){return r.incumbent===true?'现任':r.incumbent===false?'非现任':'—'}
  let resultPage=0;
- function candidateKey(r){return presidentialMode?['president',presidentialYear,r.number,r.name].join('|'):legislativeMode?['legislative',legislativeYear,r.electorate,r.county,r.district,r.number,r.name].join('|'):[r.county,r.electorate,r.district,kind==='township'?r.town:'',r.number,r.name].join('|')}
+ function candidateKey(r){return presidentialMode?['president',presidentialYear,r.number,r.name].join('|'):legislativeMode?(r.electorate==='party'?['legislative',legislativeYear,'party',r.party].join('|'):['legislative',legislativeYear,r.electorate,r.county,r.district,r.number,r.name].join('|')):[r.county,r.electorate,r.district,kind==='township'?r.town:'',r.number,r.name].join('|')}
  function ensureHistoryGeometry(){
   if(historicalFeatures.length||!data?.towns?.length||!districtMetadata.length||!hsinchuGeometry)return;
   historicalFeatures=districtMetadata.map(h=>{
