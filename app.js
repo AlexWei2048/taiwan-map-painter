@@ -140,6 +140,38 @@ function appendCircularPartyLogo(group,href,x,y,size,attributes={}){
  group.append(defs,logo);
  return logo;
 }
+
+const seatTiePatternIds=new Map();
+let seatTieSequence=0;
+function resetSeatTiePatterns(){
+ seatTiePatternIds.clear();
+ const defs=document.getElementById('seatTiePatterns');
+ if(defs)defs.replaceChildren();
+}
+// All co-leaders receive equal-width alternating 45-degree stripes.
+// The map and the exported SVG share these inline definitions.
+function seatTiePatternFill(parties){
+ const sorted=[...new Map((parties||[]).filter(p=>p&&p.color).map(p=>[String(p.id||p.name||p.color),{id:String(p.id||p.name||p.color),color:p.color}])).values()]
+  .sort((a,b)=>a.id.localeCompare(b.id,'zh'));
+ if(!sorted.length)return '#edf1e9';
+ if(sorted.length===1)return sorted[0].color;
+ const map=$('map');
+ if(!map)return sorted[0].color;
+ let defs=document.getElementById('seatTiePatterns');
+ if(!defs){defs=svgEl('defs',{id:'seatTiePatterns'});map.prepend(defs)}
+ const key=sorted.map(p=>p.id+'='+p.color).join('|');
+ if(seatTiePatternIds.has(key))return 'url(#'+seatTiePatternIds.get(key)+')';
+ const id='seat-tie-'+(++seatTieSequence),band=8,period=band*sorted.length;
+ const pattern=svgEl('pattern',{id,patternUnits:'userSpaceOnUse',width:period,height:period,patternTransform:'rotate(45)','data-seat-tie-count':sorted.length});
+ sorted.forEach((p,i)=>pattern.append(svgEl('rect',{x:i*band,y:0,width:band+.08,height:period,fill:p.color,'data-seat-tie-party':p.id})));
+ defs.append(pattern);seatTiePatternIds.set(key,id);
+ return 'url(#'+id+')';
+}
+function seatTieLeaderColors(counts,colorOf){
+ const entries=counts instanceof Map?[...counts]:Object.entries(counts||{});
+ const max=Math.max(0,...entries.map(([,seats])=>Number(seats)||0));
+ return max?entries.filter(([,seats])=>seats===max).map(([id])=>({id,color:colorOf(id)})):[];
+}
 function bounds(items){return [Math.min(...items.map(x=>x.box[0])),Math.min(...items.map(x=>x.box[1])),Math.max(...items.map(x=>x.box[2])),Math.max(...items.map(x=>x.box[3]))]}
 const isNationwide=()=>!state.county&&!mayorTownBoundaryOverlay()&&['towns','council','legislative'].includes(state.level)&&state.labels;
 function councilVisibleIdentity(){return exportPanelFilter||(state.level==='council'&&state.workspaceMode==='prediction'&&state.fillMode==='prediction'?state.councilViewScope:'all')}
@@ -1572,7 +1604,7 @@ function appendSharedBorders(group,level,identity='regional',filterTown=false){
 
 function render(){
  syncCouncilExportScopeVisibility();
- if(!data)return;ensureMapDetails();syncMapLayerStatus();$('canvas').classList.toggle('nationwide-mode',isNationwide());$('canvas').classList.toggle('county-mode',state.level==='counties'||mayorTownBoundaryOverlay());
+ if(!data)return;resetSeatTiePatterns();ensureMapDetails();syncMapLayerStatus();$('canvas').classList.toggle('nationwide-mode',isNationwide());$('canvas').classList.toggle('county-mode',state.level==='counties'||mayorTownBoundaryOverlay());
  const regionGroup=$('regions'),borderGroup=$('borders'),districtGroup=$('districtBorders'),townGroup=$('townBorders');
  for(const group of [regionGroup,borderGroup,districtGroup,townGroup]){group.replaceChildren();group.removeAttribute('transform')}
  if(identityPanelsActive()){
@@ -2160,7 +2192,7 @@ function exportSvg(){
  const map=svgEl('svg',{x:40,y:mapY,width:contentWidth,height:contentHeight,viewBox:'0 0 '+spec.width+' '+spec.height,preserveAspectRatio:'xMidYMid meet'});
  exportNumberRows=[];
  try{
-  for(const id of ['predictionPatterns','insetFrames','regions','townBorders','districtBorders','borders','labels','mapFurniture','legend']){
+  for(const id of ['seatTiePatterns','predictionPatterns','insetFrames','regions','townBorders','districtBorders','borders','labels','mapFurniture','legend']){
    if(id==='labels'&&!state.labels&&!historicalLegislativeMultiBadges())continue;if(!$(id))continue;
    const g=$(id).cloneNode(true);g.removeAttribute('id');if(id==='legend')g.setAttribute('data-export-map-legend','true');
    if(id==='labels'&&identityPanelsActive())drawIdentityPanelLabels(g,false,true);
@@ -2652,4 +2684,4 @@ function freeOverviewFeatures(county){
  return features.filter(f=>!county||f.county===county);
 }
 function freeOverviewCounts(county){const counts={};for(const f of freeOverviewFeatures(county)){const id=featureFillId(f);if(id)counts[id]=(counts[id]||0)+1}return counts}
-function freeCountyColor(county){const counts=freeOverviewCounts(county),max=Math.max(0,...Object.values(counts));if(!max)return '#edf1e9';const leaders=Object.keys(counts).filter(id=>counts[id]===max);return leaders.length===1?paletteById(leaders[0])?.color||'#edf1e9':'#aebdb4'}
+function freeCountyColor(county){const counts=freeOverviewCounts(county),max=Math.max(0,...Object.values(counts));if(!max)return '#edf1e9';const leaders=Object.keys(counts).filter(id=>counts[id]===max);return seatTiePatternFill(leaders.map(id=>({id,color:paletteById(id)?.color||'#738772'})))}

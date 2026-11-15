@@ -222,7 +222,7 @@ function councilCountyFill(county){
  const counts=councilCountySeatCounts(county),max=Math.max(0,...Object.values(counts));
  if(!max)return '#edf1e9';
  const leaders=Object.keys(counts).filter(id=>counts[id]===max);
- return leaders.length===1?paletteById(leaders[0])?.color||'#738772':'#aebdb4';
+ return seatTiePatternFill(leaders.map(id=>({id,color:paletteById(id)?.color||'#738772'})));
 }
 function councilCountyDetail(county){
  const counts=councilCountySeatCounts(county),entries=Object.entries(counts).sort((a,b)=>b[1]-a[1]);

@@ -555,7 +555,7 @@
  }
  function countySeatFill(countyName){
   const leader=countySeatLeader(countyName);
-  return leader.tied?'#aebdb4':leader.party?partyColor(leader.party):'#edf1e9';
+  return leader.tied?seatTiePatternFill(seatTieLeaderColors(leader.counts,partyColor)):leader.party?partyColor(leader.party):'#edf1e9';
  }
  function legislativeMultiView(){return active&&legislativeMode&&legislativeBallot==='regional'&&legislativeYear<2008&&metric==='party'}
  function historyCouncilSeats(){return active&&kind==='council'&&!!county&&metric==='party'}
@@ -638,7 +638,7 @@
     focusSelect.value=legislativeFocus;
    }
    if(el('historyLegislativeMapHint')){el('historyLegislativeMapHint').hidden=false;el('historyLegislativeMapHint').textContent=
-    legislativeBallot==='regional'?(scale==='national'?(legislativeYear<2008?'全台按各县市区域民代当选席次最多的政党填色；并列最多使用灰色。点击县市进入后，各多席选区逐席显示党徽。':'全台单席选区按当选政党填色，点击选区进入县市查看完整结果。'):scale==='county'?(legislativeYear<2008?'县市图在各多席选区显示当选党徽，点击选区可查看候选人、得票率与当选结果。':'县市图显示当届选区和选区号；点击选区查看完整候选人、得票率与当选结果。'):'选举区图聚焦本区候选人及法定当选席次。'):
+    legislativeBallot==='regional'?(scale==='national'?(legislativeYear<2008?'全台按各县市区域民代当选席次最多的政党填色；并列最多使用多党斜纹。点击县市进入后，各多席选区逐席显示党徽。':'全台单席选区按当选政党填色，点击选区进入县市查看完整结果。'):scale==='county'?(legislativeYear<2008?'县市图在各多席选区显示当选党徽，点击选区可查看候选人、得票率与当选结果。':'县市图显示当届选区和选区号；点击选区查看完整候选人、得票率与当选结果。'):'选举区图聚焦本区候选人及法定当选席次。'):
     legislativeYear===1992&&['plains','mountain'].includes(legislativeBallot)?'1992年没有县市及乡镇得票记录，全区地图仅显示行政区轮廓，不推算地方票数。':
     scale==='national'?'按县市着色，点击县市可查看县市及乡镇市区结果。':scale==='county'?'县市得票分布；选择乡镇市区层级可继续下钻。':'点击乡镇市区查看得票分布。';}
 
@@ -856,7 +856,7 @@
   }
   if(noElection(feature))return '#ffffff';
   const region=currentResult?.regions.get(featureKey(feature));
-  return !region?'#edf1e9':!voteMetric()&&region.tie?'#aebdb4':region.party?tone(partyColor(region.party),metric==='votes'?region.top?.votes||0:region.share,currentResult.range):'#edf1e9';
+  return !region?'#edf1e9':!voteMetric()&&region.tie?seatTiePatternFill(seatTieLeaderColors(region.partyCounts,partyColor)):region.party?tone(partyColor(region.party),metric==='votes'?region.top?.votes||0:region.share,currentResult.range):'#edf1e9';
  };
  const defaultDetail=regionDetail;regionDetail=function(feature){if(!active)return defaultDetail(feature);if(metric==='seats'){const counts=county?currentResult?.regions.get(featureKey(feature))?.partyCounts:currentResult?.countySeats.get(feature.county);return counts?selectedParty+' · '+(counts.get(selectedParty)||0)+'席':'暂无该层级数据'}if(nationwideHistoricalSeatColors()){
    const leader=countySeatLeader(feature.county||feature.name);
