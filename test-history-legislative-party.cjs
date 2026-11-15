@@ -98,3 +98,15 @@ test('1995, 2004 and 2024 nominee identities and at-large winners match the sour
   assert.equal(Party.nominees(year,party).filter(n=>n.elected).length,expected[year][party]||0,year+' '+party+' at-large winners');
  }
 });
+
+test('Legislative party district dialogue keeps full party names and resets shared columns',()=>{
+ const fs=require('node:fs');
+ const ui=fs.readFileSync('history-2022.js','utf8');
+ const css=fs.readFileSync('history-legislative.css','utf8');
+ assert.match(ui,/history-party-vote-dialog',partyBallotDialog/);
+ assert.match(ui,/partyBallotDialog\?r\.party:displayedCandidateName\(r\)/);
+ assert.match(ui,/headers\]\.forEach\(cell=>\{cell\.hidden=false\}\)/);
+ assert.match(ui,/popupWrap\.hidden=false/);
+ assert.match(css,/history-party-vote-dialog.*history-candidate-table/s);
+ assert.match(css,/min-width:175px;text-align:left;white-space:normal/);
+});
