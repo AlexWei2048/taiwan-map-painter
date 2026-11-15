@@ -1,0 +1,650 @@
+{
+  "schemaVersion": 1,
+  "count_by_id": 11,
+  "count_by_historical_name": 35,
+  "official_sources": [
+    {
+      "name": "大爱宪改",
+      "party_id": "twca",
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=193",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d40b2720035.jpg",
+      "source_sha256": "c43def055b16bf485e400cd40d06df5ac4d7a00c1eaa5480c8f91190352bb749",
+      "rendered_sha256": "eba307a67d9b086efa89ed43a4411220cf2c5a7ddd86f6a27c3911a36e6aaba6",
+      "image_bytes": 15888,
+      "size_after_fit": "116x116",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "公民党",
+      "party_id": "ttcp",
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=132",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d37fb51002a.JPG",
+      "source_sha256": "cec416ec50900287c9b23ecfa9dd96ca083fdf88663e9936130b10b4844e38fd",
+      "rendered_sha256": "f6e6ad5bbc3625f0f28825f8207ce1673fcc5372b3ebb23437a71483c308a15e",
+      "image_bytes": 17662,
+      "size_after_fit": "116x116",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "台湾农民党",
+      "party_id": "tfp",
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=187",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d274d0e001d.jpg",
+      "source_sha256": "962a484cd2d8cf453cc96457f53ef06d9df72232f71714b2bed2100bc28b7477",
+      "rendered_sha256": "b171ec0e6df85e5a9037bfef09cb55994e1fdd00b625159c19d55ec6cdcc13d1",
+      "image_bytes": 13304,
+      "size_after_fit": "92x116",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "台湾独立党",
+      "party_id": "tip",
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=332",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d0a97db0011.jpg",
+      "source_sha256": "3b2d4c4cc3e5c3ee2ea0fcee463d67da626157eaab5326bb2b22e0934352b23e",
+      "rendered_sha256": "1894b9c7bc09fc1c6adf70ff392b57f3d51472aae47da3e26206be5cfeade7b6",
+      "image_bytes": 15232,
+      "size_after_fit": "95x116",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "正神名党",
+      "party_id": "zsmp",
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=434",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/8a428aff774c22100179ea47ee3e21b0.jpg",
+      "source_sha256": "42278def3eed4a0c9fe4cb63066d45523ba4e85e2a210f90f76d5a7c3cb3acf4",
+      "rendered_sha256": "1909f24cd92c25832361bf996e375e05545274d268cc33f70c6f2fcc7da0ff13",
+      "image_bytes": 16674,
+      "size_after_fit": "116x115",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "合一行动联盟",
+      "party_id": "tuaa",
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=401",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/ff808081682cc3ce016898fe5a7b0190.jpg",
+      "source_sha256": "7a4ce0ff51b0706b60e16cc74560c28262dad256f251625a633fb3f1d3f2de20",
+      "rendered_sha256": "1c44f6bd0aa47426ad8020a94714a8dc4e1d6ff13d9257b218384a014fa2dbd3",
+      "image_bytes": 8567,
+      "size_after_fit": "116x116",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "安定力量",
+      "party_id": "sfp",
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=405",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2019/ff8080816e68e248016ea648b95c01af.png",
+      "source_sha256": "3b35edcb9333eeb9883add02d3b46d81fe2e151341a76a9263a8344447a57eef",
+      "rendered_sha256": "e43f22eab39ae7677dcfc4f272645ffb99d184ecfeabd133752c3041dacf65c2",
+      "image_bytes": 11855,
+      "size_after_fit": "116x116",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "宗教联盟",
+      "party_id": "ifu",
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=378",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2019/ff808081682cc3ce016913c55baa029a.png",
+      "source_sha256": "508f4afdd8a8eddc6f34de9174d6fd3a46bb86353cd63a9d6af8659cbd9b66bc",
+      "rendered_sha256": "34cc285d106dd238d9232973ab1787e99d6713b14a4efe76686fe5a7b9fce6a8",
+      "image_bytes": 16530,
+      "size_after_fit": "113x116",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "金色力量党",
+      "party_id": "gpp",
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=427",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2020/ff8080816f79b5020170eba98f060688.jpg",
+      "source_sha256": "cd6514227fc1360e8df0b5e4f529935e953abfbe13f5403c47b7a4b0aaf63fe7",
+      "rendered_sha256": "1208d53b08175887c5e539d3086c8361a2e954cc6f50165b116e4c642cedb0b0",
+      "image_bytes": 7641,
+      "size_after_fit": "116x116",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "信心希望联盟",
+      "party_id": "fhl",
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=342",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d4dd6680048.jpg",
+      "source_sha256": "9ffb03c3c6d8937d9672b5c94b4bb7c907639fcfda6bb7a770b6944ce0d0f730",
+      "rendered_sha256": "56bd1619dda7d2a99f8012ec56728527d6be855a042c97598d2afc938baf25fb",
+      "image_bytes": 7822,
+      "size_after_fit": "82x116",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "喜乐岛联盟",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=407",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/ff8080816b88b9f5016c6f5c0a71074b.jpg",
+      "source_sha256": "6fc15b138e95dc585b2d9471ebc0c6c269a915fb163edcbd800758a5048458f6",
+      "rendered_sha256": "63c3ce77c3ef7c64cfb8ae89cb817c0a053108b506abdd724d76ea22dda90fb1",
+      "image_bytes": 14083,
+      "size_after_fit": "106x116",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "和平鸽联盟党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=325",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542cad2f89000b.jpg",
+      "source_sha256": "0f615d9629004fe5fae202a2c2886d6e5f448dad5b96a37d0d6f720d279efd96",
+      "rendered_sha256": "9f6e19569f9580ba5847c8a1539a299477d0f1b81e94a1b99b80406b3e696df4",
+      "image_bytes": 11520,
+      "size_after_fit": "116x106",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "绿党社会民主党联盟",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=340",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/8a428aff7c83259a017ca5cc425400d8.jpg",
+      "source_sha256": "d0c5a7afb432da00baeba4bcc69d43654238daef5f8d0e56d8cabda279f0dafa",
+      "rendered_sha256": "4c868c5dc5a83b4189677c3b6d23ce8f071f79b98cfbf36503f47e96dd997c02",
+      "image_bytes": 11919,
+      "size_after_fit": "116x116",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "台湾慧行志工党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=153",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542cb0b488000e.jpg",
+      "source_sha256": "91d9d352c23b536dca302f499bce1ef0ed15105abd2ffde7e918003306fcb5a3",
+      "rendered_sha256": "a5f911e78e950e70b6d1dc0ecbfb77868e3b9436b86807be98cf3bc1180c001b",
+      "image_bytes": 10197,
+      "size_after_fit": "87x116",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "民主自由党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=60",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d31dbe90022.JPG",
+      "source_sha256": "cde68e67dd3457a0b2696de6c5e55507111a8a75d640383260956a404958a533",
+      "rendered_sha256": "9d737225afd38acebb6665d9e3d3afb80ee871c733c706913d68083f6b89218e",
+      "image_bytes": 12867,
+      "size_after_fit": "116x104",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "中华联合党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=250",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d44456c003b.jpg",
+      "source_sha256": "1b23af8abe691281d10ebf812ed9e4667863e340a4ada0933177cacfebd75832",
+      "rendered_sha256": "42c05d4e098ed74ecef4e5a74c2961db37891d5ebf3ed78eed0be073fc665e29",
+      "image_bytes": 5897,
+      "size_after_fit": "116x79",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "复康联盟党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=528",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/444/relpic/13073/528/71d91498-79b6-4ab5-9c75-e653098f5ea1.jpg",
+      "source_sha256": "f90c79e353db48bf18a4cf997c9c10d53168c4b2b745016b3fc1d39df3c4d838",
+      "rendered_sha256": "5fd6475c1400958211516d59405f37f9e8560b29c6d0f7f3d14cfe23be12b60c",
+      "image_bytes": 15309,
+      "size_after_fit": "116x77",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "台湾前进党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=337",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d285891001e.jpg",
+      "source_sha256": "1886c243677db8148d86230a4b1e11bd19154866930efc60b9f8dcdd25b7aeaa",
+      "rendered_sha256": "e3f88ba0f9900e5f3742808ac3aa5e07ff42d8bf12620829e699462d36f14a73",
+      "image_bytes": 28513,
+      "size_after_fit": "116x116",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "劳工党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=314",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/444/relpic/13073/314/9694206b-99a0-4c31-83db-83e297236709.jpg",
+      "source_sha256": "f66bb4d30f6dc21711acf9d445d4a1be99e497c822a62b6bb20b8a5fe1787ee0",
+      "rendered_sha256": "c1fe500ada5712c3b61d4be7b81f4e71be16d43af89e44d0059cf12bc4ce08cb",
+      "image_bytes": 11948,
+      "size_after_fit": "106x116",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "民生公益",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=371",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2018/ff80808164cb1fe40164e8cea9cb0071.png",
+      "source_sha256": "b7a041d1a71f7ad4e3f553adede9420f4af21026f78083b26f4cd1d2869e6e41",
+      "rendered_sha256": "885fd5e724f6cbd65a0ddbfb26e8b36ed6846beb72bc504a1d848c9145d81430",
+      "image_bytes": 13982,
+      "size_after_fit": "116x116",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "台湾整复师联盟工党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=283",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542caf052b000c.jpg",
+      "source_sha256": "bf5aad84beec640c38d0c553fcc64b57302709f1a31817f74f338793656416ee",
+      "rendered_sha256": "7c1b5bcba289eb183fd6403b3f9e82c286956139645a32e7e1e6f3b708a0f67b",
+      "image_bytes": 8967,
+      "size_after_fit": "116x89",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "台湾民意党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=229",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/ff8080816ecfec30016ef960ea4b0122.jpg",
+      "source_sha256": "983874cc41ad83af4c2f3a4a348b705057c0ebb23f92b92c8a999cf360f99060",
+      "rendered_sha256": "f261b1d9bbc34dc89cda33b890b53b995d536cd27203a0ee7768dcec739486f0",
+      "image_bytes": 24544,
+      "size_after_fit": "116x115",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "天一党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=402",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2019/ff808081682cc3ce01696b6de27d0368.jpg",
+      "source_sha256": "6c0fba61ab7273ac8f0423db30eb5f91031de10ea59ef3140c9791f09aacba29",
+      "rendered_sha256": "589b6d7de1d972d744cf54cdc3d103f35d2af06b4bd92fd40e478451f6d7efc7",
+      "image_bytes": 4488,
+      "size_after_fit": "89x116",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "中华妇女党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=210",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2017/ff808081542c937601542d22ce12001c.jpg",
+      "source_sha256": "5f9b6aaff5479818941b7205e4b85c9d27157456c9b98bf0b86003615dc7b702",
+      "rendered_sha256": "ab313f296a2c8418e99478aa9dce7bb67d0235901e94421f234d05de3a62d996",
+      "image_bytes": 18041,
+      "size_after_fit": "116x116",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "中华爱国同心党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=398",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/444/relpic/13073/398/309401e2-cb68-4f80-a808-c00eab464a02.jpg",
+      "source_sha256": "1467220925a1c971ea6ffcb30592f72a656319a167d7e5dd6d566def919e0969",
+      "rendered_sha256": "d900d19a0d07dbc22389e5b2081f1f77ff1ed5dafa2a944d0d37088722433c67",
+      "image_bytes": 11725,
+      "size_after_fit": "116x110",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "家庭基本收入",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=139",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/ff8080816e3fa61e016e647fd15b00f1.jpeg",
+      "source_sha256": "1d120924bda2f5de80997e8a678062667d5e975afd07cc6a33117373a904a31d",
+      "rendered_sha256": "e5e8b981c254e6ca7c7ba891eba4e6975043251dbb4945595cb92004b39d80c2",
+      "image_bytes": 15339,
+      "size_after_fit": "116x116",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "金门高粱党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=361",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2018/ff8080815840f69b01584a061c480515.jpg",
+      "source_sha256": "52f20eec290d2b3579384aaa0645206999c7fe83dc0ff4f1c5bf2867a7fdc750",
+      "rendered_sha256": "41b89acf9e50517325a982af61cf47b26c9203c262dd819c8a87e22acf9e1c62",
+      "image_bytes": 1184,
+      "size_after_fit": "116x71",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "中华新住民党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=289",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2017/ff8080815a1bd8ab015a2618ba23002f.png",
+      "source_sha256": "6e2d2f3b49f7260f365595a3bc1617b5ea69e2e996c3bad68644d3e893753ba8",
+      "rendered_sha256": "f384fd4f8ede8bce7fd595a5300b83dd4577cb441209c6122074812ae0c42ce8",
+      "image_bytes": 11351,
+      "size_after_fit": "116x103",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "中国人民行动党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=126",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d3767180029.jpg",
+      "source_sha256": "9074121c6e445d1a17e74ff01e245ba2fa1b44f870a270fc8828aae32f16afba",
+      "rendered_sha256": "0cd58287fae1a8dbb420bca0e46b9552583df70f4c26d4a35fe31d1d9180f95d",
+      "image_bytes": 6948,
+      "size_after_fit": "116x99",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "社会福利党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=336",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d4c271e0044.jpg",
+      "source_sha256": "67467780bf1e5f277ca02fa39a1371eba76b001e8fa153054aca53f85376d434",
+      "rendered_sha256": "c516f598ba0d1a5347b5ac2d1e6ffd7d8287e4a3e95a7aa5259c3bbe6bd3c1d9",
+      "image_bytes": 17771,
+      "size_after_fit": "100x116",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "龙党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=379",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/444/relpic/13073/379/be715419-c41b-4e92-a5a9-09a488176373.jpg",
+      "source_sha256": "61c8b1a024d7fa7d3c2784d8b2320bca4cc6643e18efb13ce5fc1fd8e6f2dda2",
+      "rendered_sha256": "f0eb306915899d6669dee346bf9c5de631c2d5e82695e2022bfdb5b3b02e2b3e",
+      "image_bytes": 10985,
+      "size_after_fit": "116x78",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "台湾未来党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=338",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d4cb2060045.jpg",
+      "source_sha256": "061e8288973ba80426b792281817353211e2a72a4c7bf718853c743f40e5ff38",
+      "rendered_sha256": "5f612a7985cf3c03ec70201e7593acf0d9aab85d5720adc056a7f575a054c71f",
+      "image_bytes": 15030,
+      "size_after_fit": "116x112",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "中国和平统一党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=375",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/8a428aff7c83259a017cb56e4eab011f.jpg",
+      "source_sha256": "b9a5a1925564abeca1bd27b5bd5984f879e5d4f6eb1a16499096126812bf7ccd",
+      "rendered_sha256": "c0e30b92d4f2392b32d3ed9ebe270cd89a5cfdc1c08a5794b86db9a3c646f07c",
+      "image_bytes": 12703,
+      "size_after_fit": "116x91",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "中华照生党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=238",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/ff8080816b88b9f5016ca7e6bb190809.jpg",
+      "source_sha256": "89c24b218fa5888e1e124eb7e8d1b783e64dc2b4591064def102f357177c1436",
+      "rendered_sha256": "62f8fa8843723c8a2e77311ea7660c5b962b9e15ad84c7432a212ba7f4de852e",
+      "image_bytes": 8638,
+      "size_after_fit": "116x88",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "台湾君民党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=349",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542cafbfc6000d.jpg",
+      "source_sha256": "61b30280b00c06d1bd838952506e1364cb8291ffdae9ab86037c72619ce9406d",
+      "rendered_sha256": "3168421db9968164fd18168846361dffade92a1ef6a7a1b939f8fa78ea725e9b",
+      "image_bytes": 25765,
+      "size_after_fit": "116x116",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "中兴党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=95",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d36413f0027.JPG",
+      "source_sha256": "98ea8e7f4be3c44a4f2fb2e3bf87cf78160c1b9726eb48f8449b3572c8609443",
+      "rendered_sha256": "5b32858f43b878ccff0eff48f045f22e835d462e76fa5022f7ecbc8fc2617bc5",
+      "image_bytes": 3097,
+      "size_after_fit": "116x69",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "聋国党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=351",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/444/relpic/13073/351/0c41c3c1-4ba1-4b48-9fc0-7da57c4edc21.jpg",
+      "source_sha256": "ccec38473d8fee3314b5fbd8ef2d9387be0316959931981fa0381fe2c41011cf",
+      "rendered_sha256": "1ce0b128d1a1291da1c93607c0ce4b4889a644b70087ce8eebdd0ff28fb3e2a6",
+      "image_bytes": 19156,
+      "size_after_fit": "115x116",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "经济党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=323",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2019/ff808081682cc3ce0168a183e92001ba.jpg",
+      "source_sha256": "b2add7045be326de9022fd869590fd06b46495579973942b17928dca817280e3",
+      "rendered_sha256": "18d6acc1edb7e6d6fae7e62452d144656761a442f55d07f3689061282ccd3e75",
+      "image_bytes": 8865,
+      "size_after_fit": "116x116",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "世界和平党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=162",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d3b6ac90030.JPG",
+      "source_sha256": "c8cbcb291c1142f274e4a233b81facacec6e4ccc083f153397173e21b0e5c198",
+      "rendered_sha256": "ae95153b07556df9a755467ad2b79a32354941eb4cea1c1804793c41ed390a6e",
+      "image_bytes": 13241,
+      "size_after_fit": "116x106",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "台湾国民党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=186",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d3d150c0032.jpg",
+      "source_sha256": "192ad173b4ea761717965f7eb80fd56e1cb5d8ba1ed690b7e6bae2b68c61d978",
+      "rendered_sha256": "b233c7a02f7023a858deac55e1a034ea3934af62ed61fc1b40f90ae3f540ad67",
+      "image_bytes": 12720,
+      "size_after_fit": "116x116",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "台湾人民共产党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=374",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/8a428aff7c83259a017ca5cfd72700da.jpg",
+      "source_sha256": "aab4e484df4565546a32945a9cda7f1f7583d91efe0a1a28dfcdc8fcfa466532",
+      "rendered_sha256": "1dfbacbbe2c25a0f7447f7e80f1318bdba2ec8d40fa62ade549c1198eefb8c3a",
+      "image_bytes": 4360,
+      "size_after_fit": "116x116",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "中国国家社会主义劳工党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=309",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d471b06003e.jpg",
+      "source_sha256": "34c0dcba96192fb61cf58d627b7efdd9b5787b519d1208724bb0160d150490d4",
+      "rendered_sha256": "e2de3017d5f8774487f81c7a8650db35820b0ae6db058872bcceea1721e0e9af",
+      "image_bytes": 28224,
+      "size_after_fit": "116x116",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "左翼联盟",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=397",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2022/8a428aff7e6c3038017e7bd907420054.png",
+      "source_sha256": "0c4dc3522b4bacd2500b78c6b13778a81681c799cc61e42228545188d89ffef3",
+      "rendered_sha256": "c3ba3d96d9f48ce9b18e5cf5dd757fcd4586b59f084c665cf98d60dc14aba982",
+      "image_bytes": 7911,
+      "size_after_fit": "116x116",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "台湾新住民党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=429",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/8a428aff7c2b75d0017c3450518e0184.png",
+      "source_sha256": "37a0db74da488eefd8da6973ee88a3bf288bedcf01678ca2651708a643d1c0ba",
+      "rendered_sha256": "e7d20180232b6106c79111d57d8748a8b57acb998bce8b7ce037434ce2f71dad",
+      "image_bytes": 6948,
+      "size_after_fit": "116x98",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "前进党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=430",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2020/ff8080817457c8f00174ae75cbf501cf.jpg",
+      "source_sha256": "8fbe2948cd78afeb8a991070f3898202c52bcd42ac4d645ea9777e6354fa5893",
+      "rendered_sha256": "e7e2c6b10fdb1996fd50a9a50d44d756b5123de88d51da1a23c581b0275aa440",
+      "image_bytes": 26336,
+      "size_after_fit": "116x115",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "中华统一促进党",
+      "party_id": "up",
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&s=172&sms=13073",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d0bc0f20012.jpg",
+      "source_sha256": "985a484d255d4b3af56eff7fc624f4b1f68f58a200d5edb29689ebf6d96bfb4e",
+      "rendered_sha256": "dc7e2bfed255d9dbfdefafdfb3d77c26c43236a3491fb14800f94c5a7715e560",
+      "image_bytes": 9484,
+      "size_after_fit": "116x74",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    }
+  ],
+  "unverified_or_unavailable": [
+    {
+      "name": "人民民主党",
+      "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "中华社会民主党",
+      "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "中国青年党",
+      "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "台湾动物保护党",
+      "reason": "unexpected image dimensions",
+      "source": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2022/8a428aff82345180018257fcd571004f.jpg"
+    },
+    {
+      "name": "台湾第一民族党",
+      "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "全国民主非政党联盟",
+      "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "民主联盟",
+      "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "台澎党",
+      "reason": "Image size (64000000 pixels) exceeds limit of 40000000 pixels, could be decompression bomb DOS attack.",
+      "source": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2022/ff8080816d570355016d86193d410141.jpg"
+    },
+    {
+      "name": "台湾吾党",
+      "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "中国生产党",
+      "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "新国家连线",
+      "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "台湾工党",
+      "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "大道慈悲济世党",
+      "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "工教联盟",
+      "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "大中华统一阵线",
+      "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "真理党",
+      "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "中华台商爱国党",
+      "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "中国团结党",
+      "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "司法正义党",
+      "reason": "unusually large official image",
+      "source": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/ff8080816ecfec30016f5a9ed2fc034e.jpg"
+    },
+    {
+      "name": "正党",
+      "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "兴中同盟会",
+      "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "中华文化共和党",
+      "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "台湾麻将最大党",
+      "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "圆党",
+      "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "工党",
+      "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "中国大同民主党",
+      "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "中国忠义党",
+      "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "中国全民福利党",
+      "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "中国中青党",
+      "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "中华民国机车党",
+      "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "言论自由联盟",
+      "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "天宙和平统一家庭党",
+      "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "中华文化复兴在理党",
+      "reason": "ministry has no uploaded emblem image"
+    }
+  ]
+}

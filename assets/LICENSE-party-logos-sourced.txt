@@ -1,0 +1,233 @@
+官方登记党徽的来源与授权说明
+
+党徽仅用于对应政党身份识别，权利归原党或权利人所有，并不受网站 MIT 授权涵盖。原图均来自政党资讯网登记页面及所属公开原始档案。
+
+大爱宪改 [twca]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=193
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d40b2720035.jpg
+来源SHA256：c43def055b16bf485e400cd40d06df5ac4d7a00c1eaa5480c8f91190352bb749
+
+公民党 [ttcp]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=132
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d37fb51002a.JPG
+来源SHA256：cec416ec50900287c9b23ecfa9dd96ca083fdf88663e9936130b10b4844e38fd
+
+台湾农民党 [tfp]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=187
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d274d0e001d.jpg
+来源SHA256：962a484cd2d8cf453cc96457f53ef06d9df72232f71714b2bed2100bc28b7477
+
+台湾独立党 [tip]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=332
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d0a97db0011.jpg
+来源SHA256：3b2d4c4cc3e5c3ee2ea0fcee463d67da626157eaab5326bb2b22e0934352b23e
+
+正神名党 [zsmp]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=434
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/8a428aff774c22100179ea47ee3e21b0.jpg
+来源SHA256：42278def3eed4a0c9fe4cb63066d45523ba4e85e2a210f90f76d5a7c3cb3acf4
+
+合一行动联盟 [tuaa]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=401
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/ff808081682cc3ce016898fe5a7b0190.jpg
+来源SHA256：7a4ce0ff51b0706b60e16cc74560c28262dad256f251625a633fb3f1d3f2de20
+
+安定力量 [sfp]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=405
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2019/ff8080816e68e248016ea648b95c01af.png
+来源SHA256：3b35edcb9333eeb9883add02d3b46d81fe2e151341a76a9263a8344447a57eef
+
+宗教联盟 [ifu]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=378
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2019/ff808081682cc3ce016913c55baa029a.png
+来源SHA256：508f4afdd8a8eddc6f34de9174d6fd3a46bb86353cd63a9d6af8659cbd9b66bc
+
+金色力量党 [gpp]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=427
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2020/ff8080816f79b5020170eba98f060688.jpg
+来源SHA256：cd6514227fc1360e8df0b5e4f529935e953abfbe13f5403c47b7a4b0aaf63fe7
+
+信心希望联盟 [fhl]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=342
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d4dd6680048.jpg
+来源SHA256：9ffb03c3c6d8937d9672b5c94b4bb7c907639fcfda6bb7a770b6944ce0d0f730
+
+喜乐岛联盟 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=407
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/ff8080816b88b9f5016c6f5c0a71074b.jpg
+来源SHA256：6fc15b138e95dc585b2d9471ebc0c6c269a915fb163edcbd800758a5048458f6
+
+和平鸽联盟党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=325
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542cad2f89000b.jpg
+来源SHA256：0f615d9629004fe5fae202a2c2886d6e5f448dad5b96a37d0d6f720d279efd96
+
+绿党社会民主党联盟 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=340
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/8a428aff7c83259a017ca5cc425400d8.jpg
+来源SHA256：d0c5a7afb432da00baeba4bcc69d43654238daef5f8d0e56d8cabda279f0dafa
+
+台湾慧行志工党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=153
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542cb0b488000e.jpg
+来源SHA256：91d9d352c23b536dca302f499bce1ef0ed15105abd2ffde7e918003306fcb5a3
+
+民主自由党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=60
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d31dbe90022.JPG
+来源SHA256：cde68e67dd3457a0b2696de6c5e55507111a8a75d640383260956a404958a533
+
+中华联合党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=250
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d44456c003b.jpg
+来源SHA256：1b23af8abe691281d10ebf812ed9e4667863e340a4ada0933177cacfebd75832
+
+复康联盟党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=528
+原图：https://ws.moi.gov.tw/001/Upload/444/relpic/13073/528/71d91498-79b6-4ab5-9c75-e653098f5ea1.jpg
+来源SHA256：f90c79e353db48bf18a4cf997c9c10d53168c4b2b745016b3fc1d39df3c4d838
+
+台湾前进党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=337
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d285891001e.jpg
+来源SHA256：1886c243677db8148d86230a4b1e11bd19154866930efc60b9f8dcdd25b7aeaa
+
+劳工党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=314
+原图：https://ws.moi.gov.tw/001/Upload/444/relpic/13073/314/9694206b-99a0-4c31-83db-83e297236709.jpg
+来源SHA256：f66bb4d30f6dc21711acf9d445d4a1be99e497c822a62b6bb20b8a5fe1787ee0
+
+民生公益 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=371
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2018/ff80808164cb1fe40164e8cea9cb0071.png
+来源SHA256：b7a041d1a71f7ad4e3f553adede9420f4af21026f78083b26f4cd1d2869e6e41
+
+台湾整复师联盟工党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=283
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542caf052b000c.jpg
+来源SHA256：bf5aad84beec640c38d0c553fcc64b57302709f1a31817f74f338793656416ee
+
+台湾民意党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=229
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/ff8080816ecfec30016ef960ea4b0122.jpg
+来源SHA256：983874cc41ad83af4c2f3a4a348b705057c0ebb23f92b92c8a999cf360f99060
+
+天一党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=402
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2019/ff808081682cc3ce01696b6de27d0368.jpg
+来源SHA256：6c0fba61ab7273ac8f0423db30eb5f91031de10ea59ef3140c9791f09aacba29
+
+中华妇女党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=210
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2017/ff808081542c937601542d22ce12001c.jpg
+来源SHA256：5f9b6aaff5479818941b7205e4b85c9d27157456c9b98bf0b86003615dc7b702
+
+中华爱国同心党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=398
+原图：https://ws.moi.gov.tw/001/Upload/444/relpic/13073/398/309401e2-cb68-4f80-a808-c00eab464a02.jpg
+来源SHA256：1467220925a1c971ea6ffcb30592f72a656319a167d7e5dd6d566def919e0969
+
+家庭基本收入 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=139
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/ff8080816e3fa61e016e647fd15b00f1.jpeg
+来源SHA256：1d120924bda2f5de80997e8a678062667d5e975afd07cc6a33117373a904a31d
+
+金门高粱党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=361
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2018/ff8080815840f69b01584a061c480515.jpg
+来源SHA256：52f20eec290d2b3579384aaa0645206999c7fe83dc0ff4f1c5bf2867a7fdc750
+
+中华新住民党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=289
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2017/ff8080815a1bd8ab015a2618ba23002f.png
+来源SHA256：6e2d2f3b49f7260f365595a3bc1617b5ea69e2e996c3bad68644d3e893753ba8
+
+中国人民行动党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=126
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d3767180029.jpg
+来源SHA256：9074121c6e445d1a17e74ff01e245ba2fa1b44f870a270fc8828aae32f16afba
+
+社会福利党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=336
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d4c271e0044.jpg
+来源SHA256：67467780bf1e5f277ca02fa39a1371eba76b001e8fa153054aca53f85376d434
+
+龙党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=379
+原图：https://ws.moi.gov.tw/001/Upload/444/relpic/13073/379/be715419-c41b-4e92-a5a9-09a488176373.jpg
+来源SHA256：61c8b1a024d7fa7d3c2784d8b2320bca4cc6643e18efb13ce5fc1fd8e6f2dda2
+
+台湾未来党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=338
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d4cb2060045.jpg
+来源SHA256：061e8288973ba80426b792281817353211e2a72a4c7bf718853c743f40e5ff38
+
+中国和平统一党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=375
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/8a428aff7c83259a017cb56e4eab011f.jpg
+来源SHA256：b9a5a1925564abeca1bd27b5bd5984f879e5d4f6eb1a16499096126812bf7ccd
+
+中华照生党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=238
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/ff8080816b88b9f5016ca7e6bb190809.jpg
+来源SHA256：89c24b218fa5888e1e124eb7e8d1b783e64dc2b4591064def102f357177c1436
+
+台湾君民党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=349
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542cafbfc6000d.jpg
+来源SHA256：61b30280b00c06d1bd838952506e1364cb8291ffdae9ab86037c72619ce9406d
+
+中兴党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=95
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d36413f0027.JPG
+来源SHA256：98ea8e7f4be3c44a4f2fb2e3bf87cf78160c1b9726eb48f8449b3572c8609443
+
+聋国党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=351
+原图：https://ws.moi.gov.tw/001/Upload/444/relpic/13073/351/0c41c3c1-4ba1-4b48-9fc0-7da57c4edc21.jpg
+来源SHA256：ccec38473d8fee3314b5fbd8ef2d9387be0316959931981fa0381fe2c41011cf
+
+经济党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=323
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2019/ff808081682cc3ce0168a183e92001ba.jpg
+来源SHA256：b2add7045be326de9022fd869590fd06b46495579973942b17928dca817280e3
+
+世界和平党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=162
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d3b6ac90030.JPG
+来源SHA256：c8cbcb291c1142f274e4a233b81facacec6e4ccc083f153397173e21b0e5c198
+
+台湾国民党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=186
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d3d150c0032.jpg
+来源SHA256：192ad173b4ea761717965f7eb80fd56e1cb5d8ba1ed690b7e6bae2b68c61d978
+
+台湾人民共产党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=374
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/8a428aff7c83259a017ca5cfd72700da.jpg
+来源SHA256：aab4e484df4565546a32945a9cda7f1f7583d91efe0a1a28dfcdc8fcfa466532
+
+中国国家社会主义劳工党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=309
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d471b06003e.jpg
+来源SHA256：34c0dcba96192fb61cf58d627b7efdd9b5787b519d1208724bb0160d150490d4
+
+左翼联盟 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=397
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2022/8a428aff7e6c3038017e7bd907420054.png
+来源SHA256：0c4dc3522b4bacd2500b78c6b13778a81681c799cc61e42228545188d89ffef3
+
+台湾新住民党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=429
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/8a428aff7c2b75d0017c3450518e0184.png
+来源SHA256：37a0db74da488eefd8da6973ee88a3bf288bedcf01678ca2651708a643d1c0ba
+
+前进党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=430
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2020/ff8080817457c8f00174ae75cbf501cf.jpg
+来源SHA256：8fbe2948cd78afeb8a991070f3898202c52bcd42ac4d645ea9777e6354fa5893
+
+中华统一促进党 [up]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&s=172&sms=13073
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d0bc0f20012.jpg
+来源SHA256：985a484d255d4b3af56eff7fc624f4b1f68f58a200d5edb29689ebf6d96bfb4e
