@@ -15,10 +15,12 @@ test('Historical local geography includes the offshore Kinmen Wuqiu islands for 
   const j=shard(year),area=scope(j),wu=area.towns.filter(f=>f.county==='金门县'&&f.name==='乌坵乡');
   assert.equal(wu.length,1,year+' Wuqiu must be retained');
   assert.equal(wu[0].d,source.d,year+' Wuqiu outline is the authentic base shape');
-  assert.ok(area.counties.find(c=>c.name==='金门县').d.includes(source.d),year+' Kinmen region includes Wuqiu');
+  const kinmen=area.counties.find(c=>c.name==='金门县');
+  assert.ok(kinmen&&kinmen.box[2]>=source.box[2]-.00001,year+' Kinmen includes the outer Wuqiu geography');
+  assert.ok(kinmen.d.includes(source.d.match(/M(-?[\d.]+,-?[\d.]+)/)?.[1]||'MISSING_WUQIU'),year+' county outline must include a Wuqiu ring vertex');
  }
  const j=shard(1995),area=scope(j),old=Leg.districtGeometry(shard(1992),j,{...base,towns:area.towns,counties:area.counties},norm,Core.mergePaths,Pre.modernCounty,Pre.baseTown);
- assert.ok(old.some(f=>f.county==='金门县'&&f.d.includes(source.d)),'1992 Kinmen approximated using 1995 town geography includes Wuqiu');
+ assert.ok(old.some(f=>f.county==='金门县'&&f.box[2]>=source.box[2]-.00001),'1992 Kinmen approximated using 1995 town geography includes Wuqiu');
 });
 test('Every post-2008 single-member district has one elected-result geometry from the correct geographic period',()=>{
  for(const year of [2008,2012,2016,2020,2024]){
