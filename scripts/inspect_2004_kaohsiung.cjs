@@ -25,3 +25,24 @@ for(const g of geo){
  const b=g.box,other=geo.find(x=>x!==g);
  if(other)console.log('GAP',g.number,other.number,'normalized-width',Math.max(0,other.box[0]-b[2],b[0]-other.box[2]),'normalized-height',Math.max(0,other.box[1]-b[3],b[1]-other.box[3]));
 }
+
+function rings(d){return d.split(/M/i).filter(Boolean).map(part=>{const nums=part.match(/-?(?:\\d*\\.)?\\d+(?:e[+-]?\\d+)?/gi)||[];return Array.from({length:Math.floor(nums.length/2)},(_,i)=>[+nums[2*i],+nums[2*i+1]])}).filter(v=>v.length>=3)}
+function contains(rs,x,y){let inside=false;for(const poly of rs){for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[i],b=poly[j];if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])inside=!inside}}return inside}
+for(const g of geo){
+ const names=[...(refTownNames.get(g.number)||[])];
+ const original=area.towns.filter(t=>names.includes(t.name));
+ console.log('GEOMETRY_AUDIT',g.number,
+  'sources',original.map(t=>({name:t.name,length:t.d.length,rings:rings(t.d).length})),
+  'mergedRings',rings(g.d).length,'mergedLength',g.d.length);
+ const raw=original.map(t=>rings(t.d)),merged=rings(g.d);
+ let sourceCount=0,mergedCount=0,missing=0;
+ for(let i=0;i<65;i++)for(let j=0;j<65;j++){
+  const x=g.box[0]+(j+.5)*(g.box[2]-g.box[0])/65;
+  const y=g.box[1]+(i+.5)*(g.box[3]-g.box[1])/65;
+  const originalInside=raw.some(rs=>contains(rs,x,y));
+  const mergedInside=contains(merged,x,y);
+  if(originalInside){sourceCount++;if(!mergedInside)missing++}
+  if(mergedInside)mergedCount++;
+ }
+ console.log('COVERAGE_AUDIT',g.number,{sourceCount,mergedCount,missing,percentMissing:Math.round(100*missing/Math.max(1,sourceCount))});
+}
