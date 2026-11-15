@@ -31,20 +31,37 @@ test("Women\u0027s guarantee modifies original winners rather than replacing nom
   assert.equal(names.find(c=>c.rank===lost)?.elected,false,year+' '+party+' rank '+lost);
  }
 });
-test('Historical sources without official slate order never manufacture a rank',()=>{
- for(const year of [1992,1995,1998,2004]){
-  for(const party of Object.keys(Party.VERIFIED[year])){
-   for(const item of Party.nominees(year,party)){
-    assert.equal(item.rank,null,year+' '+party+' unverified order');
-   }
-  }
+test('1992 and 1998 never invent an unverified rank or an unsuccessful nominee',()=>{
+ for(const year of [1992,1998])for(const party of Object.keys(Party.VERIFIED[year])){
+  for(const item of Party.nominees(year,party))assert.equal(item.rank,null,year+' '+party);
  }
 });
+test('1995 CEC published full candidate lists and official order are restored',()=>{
+ assert.equal(Party.nominationCount(1995),55);
+ assert.deepEqual(['中国国民党','民主进步党','新党'].map(p=>Party.nominees(1995,p).length),[28,19,8]);
+ assert.equal(Party.nominees(1995,'中国国民党')[14].name,'陈琼赞');
+ assert.equal(Party.nominees(1995,'民主进步党')[11].name,'范巽绿');
+ assert.equal(Party.nominees(1995,'新党')[7].name,'袁琼琼');
+});
+test('2004 CEC published full ranked major-party rosters, and annulment is explicit',()=>{
+ assert.equal(Party.nominees(2004,'中国国民党')[0].name,'王金平');
+ assert.equal(Party.nominees(2004,'中国国民党').length,24);
+ assert.equal(Party.nominees(2004,'民主进步党')[0].name,'蔡煌瑯');
+ assert.equal(Party.nominees(2004,'民主进步党').length,31);
+ assert.equal(Party.nominees(2004,'亲民党')[0].name,'刘忆如');
+ assert.equal(Party.nominees(2004,'亲民党').length,19);
+ const tsu=Party.nominees(2004,'台湾团结联盟');
+ assert.equal(tsu.length,10);
+ assert.deepEqual(tsu.slice(0,4).map(n=>[n.rank,n.name,n.elected]),[[1,'赖幸媛',true],[2,'黄政哲',true],[3,'郭林勇',true],[4,'陈银河',true]]);
+ assert.equal(tsu.at(-1).disqualified,true);
+ assert.equal(tsu.at(-1).elected,false);
+ assert.equal(Party.nominees(2004,'无党团结联盟').every(n=>n.rank===null),true);
+});
 test('2024 approved CEC full slate names and 34 original winners remain intact',()=>{
- assert.equal(Party.nominees(2024,'台湾绿党')[4]?.name,'希婕·玛飞洑');
- assert.equal(Party.nominees(2024,'台湾绿党')[5]?.name,'林莉蔡');
- assert.equal(Party.nominees(2024,'小民参政欧巴桑联盟')[2]?.name,'阎柏陵');
- assert.equal(Party.nominees(2024,'中国国民党')[28]?.name,'李继显');
+ assert.equal(Party.nominees(2024,'台湾绿党')[4]?.name,'希婻·玛飞洑');
+ assert.equal(Party.nominees(2024,'台湾绿党')[5]?.name,'林莉棻');
+ assert.equal(Party.nominees(2024,'小民参政欧巴桑联盟')[2]?.name,'闵柏陵');
+ assert.equal(Party.nominees(2024,'中国国民党')[28]?.name,'李缙颖');
  assert.equal(Party.nominees(2024,'台湾民众党').filter(c=>c.elected).length,8);
  assert.equal(Party.nominees(2024,'民主进步党').filter(c=>c.elected).length,13);
 });
@@ -68,5 +85,13 @@ test('2001/2004 minor parties without an overseas slate never crash nomination r
   assert.equal(m.parties.length,2);
   const small=m.parties.find(x=>x.party==='劳动党');
   assert.deepEqual(small.overseasNominees,[]);
+ }
+});
+
+test('2004 and 2024 nominee identities do not contain silent duplicates',()=>{
+ for(const year of [1995,2004,2024])for(const party of Object.keys(Party.VERIFIED[year])){
+  const names=Party.nominees(year,party).map(n=>n.name);
+  assert.equal(new Set(names).size,names.length,year+' '+party);
+  assert.equal(Party.nominees(year,party).filter(n=>n.elected).length,Party.VERIFIED[year][party],year+' '+party+' winners');
  }
 });
