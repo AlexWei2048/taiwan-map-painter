@@ -1431,7 +1431,7 @@ function drawHistoricalLegislativeRegionalLabels(group,interactive=false){
      'data-label':countyFeature.id,'data-history-county-name':labelName,fill:'#294c39',stroke:'#fff','stroke-width':3,'paint-order':'stroke'});
     label.textContent=labelName;
     if(interactive){label.style.cursor='pointer';label.style.pointerEvents='auto';label.setAttribute('tabindex','0');
-     label.onclick=()=>History2022View.enterLegislativeCounty(countyFeature.county||labelName);
+     label.onclick=()=>{const select=document.getElementById('historyCounty');select.value=countyFeature.county||labelName;select.dispatchEvent(new Event('change',{bubbles:true}))};
      label.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();label.onclick()}};
     }
     group.append(label);
