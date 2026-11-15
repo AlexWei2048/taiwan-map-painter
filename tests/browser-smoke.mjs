@@ -2425,3 +2425,42 @@ test('History sidebar office, year, electorate, county and selected focus update
  assert.equal(await page.locator('#historyCounty').inputValue(),'台北市');
  assert.equal(await county.inputValue(),'台北市');
 });
+
+
+test('Historic candidate results use exactly one vertical scrollbar and quote Taiwan Statebuilding Party only in visible/export text',async t=>{
+ const page=await pageFor(t,{width:1290,height:880});
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('legislative');
+ await page.waitForFunction(()=>History2022View.office()==='legislative'&&History2022View.year()===2024);
+ await page.locator('#historyElectorate').selectOption('party');
+ await page.locator('#historyCounty').selectOption('台北市');
+ await page.locator('#historyViewCandidates').click();
+ await page.waitForFunction(()=>document.querySelector('#historyResults .history-table-wrap')&&
+  document.querySelector('#historyResults')?.textContent.includes('“台湾基进”'));
+ const result=await page.evaluate(()=>{
+  const outer=document.querySelector('#historyResults'),inner=outer.querySelector('.history-table-wrap');
+  const outerStyle=getComputedStyle(outer),innerStyle=getComputedStyle(inner);
+  return{
+   outerOverflow:outerStyle.overflowY,innerOverflow:innerStyle.overflowY,
+   outerHeight:outer.clientHeight,innerHeight:inner.clientHeight,innerScrollHeight:inner.scrollHeight,
+   partyText:outer.textContent,partyMatch:partyMatch('“台湾基进”')?.id,
+   rawParty:PARTY_PRESETS.find(p=>p.id==='tsp')?.name,
+   frozenHeader:getComputedStyle(inner.querySelector('thead th')).position
+  }
+ });
+ assert.equal(result.outerOverflow,'visible','remove the redundant outer result-list scrollbar');
+ assert.equal(result.innerOverflow,'auto','retain the sole table scrollbar');
+ assert.ok(result.innerScrollHeight>result.innerHeight,'table remains vertically scrollable');
+ assert.equal(result.frozenHeader,'sticky','table header remains sticky');
+ assert.match(result.partyText,/“台湾基进”/);
+ assert.equal(result.partyMatch,'tsp');
+ assert.equal(result.rawParty,'台湾基进','display changes do not modify the party data');
+ const csv=await download(page,'#historyExportCsv');
+ assert.match(csv,/“台湾基进”/,'CSV has consistent presentation quoting');
+ assert.doesNotMatch(csv,/““台湾基进””/,'no duplicate quotation marks');
+ await page.locator('#historyOffice').selectOption('council');
+ await page.locator('#historyViewCandidates').click();
+ if(await page.locator('#historyCandidatesPanel').isHidden())await page.locator('#historyViewCandidates').click();
+ assert.equal(await page.locator('#historyResults').evaluate(el=>getComputedStyle(el).overflowY),'visible',
+  'council result lists also have only one scroll viewport');
+});

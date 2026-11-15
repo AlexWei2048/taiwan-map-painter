@@ -477,6 +477,18 @@ dialog.floating-prediction-dialog > .floating-dialog-scroll{
 .history-dialog-navigation{display:flex;justify-content:flex-end;gap:9px;margin-top:18px;flex-wrap:wrap}
 .history-result-section #historySummary{margin-bottom:14px;color:#567365;font-size:13px}
 .history-result-section .history-table-wrap{max-height:460px;overflow:auto}
+/* Historical candidate tables used to show two vertical scrollbars: the
+ * .history-results container (380px) and its .history-table-wrap child
+ * (460px) both scrolled. Keep the table as the ONLY scroll viewport so
+ * sticky column headers and horizontal table navigation still work. */
+#historyResultSection #historyResults{
+ max-height:none;overflow:visible;border:0;border-radius:0;background:transparent;
+}
+#historyResultSection #historyResults>.history-table-wrap{
+ box-sizing:border-box;width:100%;max-height:460px;overflow:auto;
+ overscroll-behavior:contain;scrollbar-gutter:stable;
+}
+
 .history-result-dialog{width:min(960px,94vw);max-height:88dvh;overflow:auto;border:1px solid var(--line);border-radius:16px;padding:26px;color:var(--ink)}
 .history-result-dialog::backdrop{background:#193b3166}
 .history-result-dialog .history-table-wrap{max-height:65dvh;overflow:auto}

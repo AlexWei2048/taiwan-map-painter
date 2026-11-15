@@ -24,6 +24,14 @@ test('2502 clauses 49–86 normalize Taiwan-related public wording without disto
   ['全国选举区','全部地区选举区'],
   ['全台选区','全部地区选区'],
   ['时代力量','“时代力量”'],
+  ['台湾基进','“台湾基进”'],
+  ['台灣基進','“台湾基进”'],
+  ['臺灣基進','“台湾基进”'],
+  ['“台湾基进”','“台湾基进”'],
+  ['台湾基进与时代力量','“台湾基进”与“时代力量”'],
+  ['台湾民众党','台湾民众党'],
+  ['台湾团结联盟','台湾团结联盟'],
+  ['一边一国行动党','一边一国行动党'],
   ['台联','台联党'],
   ['台联党','台联党'],
   ['台湾独立党','“台湾独立党”'],
@@ -55,9 +63,11 @@ test('2502 clauses 49–86 normalize Taiwan-related public wording without disto
 });
 
 test('CSV serializers apply public spelling and quotation marks while leaving the original values unchanged',()=>{
- const original=[['政党','地区'],['时代力量','全国平地原住民']];
+ const original=[['政党','地区'],['时代力量','全国平地原住民'],['台湾基进','台北市']];
  const csv=HistoryCore.csv(original);
  assert.match(csv,/“时代力量”/);
+ assert.match(csv,/“台湾基进”/);
+ assert.equal(original[2][0],'台湾基进','source party name remains unmodified');
  assert.match(csv,/全部地区平地少数民族/);
  assert.doesNotMatch(csv,/原住民|全国/);
  assert.equal(original[1][0],'时代力量');
