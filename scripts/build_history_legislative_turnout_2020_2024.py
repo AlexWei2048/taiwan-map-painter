@@ -55,7 +55,7 @@ def parse_csv(raw):
 
 def district_num(value):
     import re
-    match = re.search(r"(?:第)?0*(\\d+)\\s*(?:選(?:舉)?區|选(?:举)?区)?$", str(value or ""))
+    match = re.search(r"(?:第)?0*(\d+)\s*(?:選(?:舉)?區|选(?:举)?区)?$", str(value or ""))
     return str(int(match.group(1))) if match else ""
 
 
