@@ -2181,7 +2181,7 @@ test('Legislative redraw: pre-2008 winners use emblems instead of colored party 
  await page.waitForFunction(()=>History2022View.snapshot()?.year===2004);
  assert.equal(await page.locator('#historyScale').inputValue(),'national');
  assert.equal(await page.locator('#labels [data-placement="district-number"]').count(),0);
- assert.ok(await page.locator('#labels [data-history-seat-district]').count()>=15,'national map should show party composition within historical constituencies');
+ assert.equal(await page.locator('#labels [data-history-seat-district]').count(),0,'2004 nationwide map must show county names only, without party emblems');
  await page.locator('#historyCounty').selectOption('台北市');
  assert.ok(await page.locator('#labels [data-history-seat-district]').count()>=2,'county detail should display each actual winning party emblem');
  await page.locator('#historyViewCandidates').click();
@@ -2223,10 +2223,11 @@ test('Historic legislative nationwide maps label counties instead of constituenc
  await page.locator('#historyYear').selectOption('2004');
  await page.waitForFunction(()=>History2022View.year()===2004&&History2022View.snapshot()?.year===2004);
  assert.equal(await page.locator('#labels [data-placement="district-number"]').count(),0);
- assert.ok(await page.locator('#labels [data-history-seat-district]').count()>10,'old multi-seat constituencies draw winning party logos');
+ assert.equal(await page.locator('#labels [data-history-seat-district]').count(),0,'old multi-seat nationwide map never draws emblems');
  await page.locator('#historyCounty').selectOption('台北市');
  assert.equal(await page.locator('#historyScale').inputValue(),'county');
  assert.ok(await page.locator('#labels [data-label]').count()>0);
+ assert.ok(await page.locator('#labels [data-history-seat-district]').count()>0,'old multi-seat county map draws party emblems');
  await page.locator('#historyElectorate').selectOption('party');
  assert.deepEqual(await page.locator('#historyScale option').allTextContents(),['全部地区（含金门、马祖）','县市','乡镇市区']);
  await page.locator('#historyElectorate').selectOption('mountain');
