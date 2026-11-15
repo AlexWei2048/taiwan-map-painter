@@ -314,7 +314,7 @@
     checked:Object.prototype.hasOwnProperty.call(expected,item.party)?seats===expected[item.party]:!seats,
     quota:primary.detail?.get(item.party)||null,overseasQuota:overseas?.detail?.get(item.party)||null,
     winners:nominees(year,item.party),overseasWinners:(OVERSEAS_WINNERS[year]?.[item.party]||'').split(/\s+/).filter(Boolean),
-    overseasNominees:(year===2001?OVERSEAS_SLATES_2001[item.party]:year===2004?OVERSEAS_SLATES_2004[item.party]:'').split(/\s+/).filter(Boolean)};
+    overseasNominees:(year===2001?OVERSEAS_SLATES_2001[item.party]||'':year===2004?OVERSEAS_SLATES_2004[item.party]||'':'').split(/\s+/).filter(Boolean)};
   }).sort((a,b)=>b.seats-a.seats||b.votes-a.votes||a.party.localeCompare(b.party,'zh'));
   return {year,old,parts,total,eligibleTotal:primary.base,parties:result,
    totalAssigned:result.reduce((n,p)=>n+p.seats,0),
