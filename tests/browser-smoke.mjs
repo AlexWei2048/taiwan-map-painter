@@ -2228,6 +2228,57 @@ test('Legislative redraw: pre-2008 winners use emblems instead of colored party 
  assert.equal(await page.locator('#historyResults table[data-ballot="regional"]').count(),1);
  assert.ok(await page.locator('#historyResults tr.history-elected-row').count()>0);
 });
+
+test('2008–2024 party votes map all 368 actual townships, support party-specific shares and town drilldown',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('legislative');
+ await page.locator('#historyElectorate').selectOption('party');
+ for(const year of [2008,2012,2016,2020,2024]){
+  await page.locator('#historyYear').selectOption(String(year));
+  await page.waitForFunction(y=>History2022View.snapshot()?.year===y&&History2022View.year()===y,year);
+  await page.locator('#historyScale').selectOption('town');
+  assert.equal(await page.locator('#historyCounty').inputValue(),'',year+' nationwide town layer must not force a county');
+  assert.equal(await page.locator('#historyScale').inputValue(),'town');
+  const map=await page.evaluate(()=>{
+   const items=History2022View.items(),rows=History2022View.snapshot().rows.filter(r=>r.electorate==='party');
+   return{features:items.length,counties:new Set(items.map(x=>x.county)).size,
+    votes:rows.filter(x=>x.level==='town').reduce((a,b)=>a+b.votes,0),
+    national:rows.filter(x=>x.level==='national').reduce((a,b)=>a+b.votes,0),
+    townNames:items.filter(x=>x.county==='台北市').map(x=>x.name)};
+  });
+  assert.equal(map.features,368,year+' displays all real town polygons');
+  assert.equal(map.votes,map.national,year+' reconciles real town vote records with national total');
+  assert.ok(map.townNames.includes('北投区'));
+  assert.equal(await page.locator('#regions path[data-region]').count(),368,'one county polygon must not replace town map');
+ }
+ await page.locator('#historyMetric').selectOption('share');
+ await page.locator('#historyCandidateScope').selectOption('candidate');
+ assert.equal(await page.locator('label[for="historyCandidate"]').innerText(),'政党');
+ assert.equal(await page.locator('#historyCandidate option').count(),16,'party selector contains each party exactly once');
+ await page.locator('#historyCandidate').selectOption({label:'民主进步党'});
+ const crossTown=await page.evaluate(()=>{
+  const rows=History2022View.snapshot().rows.filter(r=>r.electorate==='party'&&r.level==='town'&&r.party==='民主进步党');
+  return{townCount:new Set(rows.map(r=>r.county+'|'+r.town)).size,
+   mapCount:History2022View.items().length,
+   chosen:document.querySelector('#historyCandidate').selectedOptions[0]?.textContent};
+ });
+ assert.deepEqual(crossTown,{townCount:368,mapCount:368,chosen:'民主进步党'});
+ await page.locator('#historyCounty').selectOption('台北市');
+ assert.equal(await page.locator('#historyScale').inputValue(),'town','choosing a county keeps the fine geographic level');
+ assert.equal(await page.evaluate(()=>History2022View.items().length),12);
+ await page.locator('#returnTaiwanMap').click();
+ assert.equal(await page.locator('#historyScale').inputValue(),'town','return restores nationwide township granularity');
+ assert.equal(await page.evaluate(()=>History2022View.items().length),368);
+ await page.locator('#regions path[data-region="legislative-area:2024:台北市|北投区"]').click({force:true});
+ assert.equal(await page.locator('#historyCounty').inputValue(),'台北市');
+ assert.equal(await page.locator('#historyScale').inputValue(),'town');
+ assert.ok(await page.locator('#historyResultDialog').isVisible(),'clicking a township opens its own party tally');
+ const expected=await page.evaluate(()=>History2022View.snapshot().rows.find(r=>
+  r.electorate==='party'&&r.level==='town'&&r.county==='台北市'&&r.town==='北投区'&&r.party==='民主进步党')?.votes);
+ assert.ok(await page.locator('#historyDialogRows').innerText().then(t=>t.includes(expected.toLocaleString('zh-CN'))));
+});
+
 test('Legislative indigenous and party ballots have geography-appropriate levels and non-candidate result tables',async t=>{
  const page=await pageFor(t);
  await page.locator('#categoryHistory').click();
