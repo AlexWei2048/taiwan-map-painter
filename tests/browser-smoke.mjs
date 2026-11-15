@@ -2127,7 +2127,7 @@ test('Ten legislative history years expose data and real historical electoral ma
  assert.ok(await page.evaluate(()=>History2022View.items().some(f=>f.county==='金门县')&&History2022View.items().some(f=>f.county==='连江县')),'outer islands are available');
  await page.locator('#historyYear').selectOption('2004');
  await page.waitForFunction(()=>History2022View.year()===2004&&History2022View.snapshot()?.year===2004,{timeout:20000});
- assert.ok((await page.locator('#historyElectorate option').allTextContents()).includes('不分区席次计算票'));
+ assert.ok((await page.locator('#historyElectorate option').allTextContents()).includes('不分区民代'));
  await page.locator('#historyElectorate').selectOption('regional');
  await page.waitForFunction(()=>History2022View.items().length>20);
  await page.locator('#historyMetric').selectOption('seats');
