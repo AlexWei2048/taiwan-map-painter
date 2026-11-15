@@ -151,3 +151,14 @@ test('Multi-member history composes party seats from actual winners, not top-vot
   [{party:'民主进步党',seats:2},{party:'中国国民党',seats:1}]);
  assert.equal(Legislative.winners(snap,{county:'台北市',district:'台北市第一选区'}).length,2);
 });
+
+
+test('regional legislative maps expose three navigation levels and historical party badge counts',()=>{
+ assert.deepEqual(Legislative.levels(2024,'regional'),[['national','全国总览'],['county','县市'],['district','选举区']]);
+ assert.deepEqual(Legislative.levels(2024,'party').map(([id])=>id),['national','county','town']);
+ assert.equal(Legislative.countyLabelsOnly('national','regional'),true);
+ assert.equal(Legislative.countyLabelsOnly('county','regional'),false);
+ assert.equal(Legislative.countyLabelsOnly('national','plains'),false);
+ const records=[{party:'中国国民党',name:'甲'},{party:'民主进步党',name:'乙'},{party:'中国国民党',name:'丙'}];
+ assert.deepEqual(Legislative.seatBadgeComposition(records).map(r=>[r.party,r.seats,r.winners.length]),[['中国国民党',2,2],['民主进步党',1,1]]);
+});
