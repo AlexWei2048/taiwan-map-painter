@@ -2184,6 +2184,13 @@ test('Legislative redraw: pre-2008 winners use emblems instead of colored party 
  assert.equal(await page.locator('#labels [data-history-seat-district]').count(),0,'2004 nationwide map must show county names only, without party emblems');
  await page.locator('#historyCounty').selectOption('台北市');
  assert.ok(await page.locator('#labels [data-history-seat-district]').count()>=2,'county detail should display each actual winning party emblem');
+ assert.ok(await page.locator('#labels [data-history-seat-card] [data-historical-seat-frame]').count()>=2,
+  'multi-member constituency emblems are grouped in translucent frames');
+ assert.equal(await page.locator('#labels [data-history-seat-number]').first().getAttribute('font-size'),'23',
+  'constituency numbers are enlarged for county-level maps');
+ assert.ok(await page.locator('#labels [data-seat-grid-rows]').evaluateAll(cards=>
+  cards.some(card=>Number(card.getAttribute('data-seat-grid-rows'))>1)),
+  'winning party logos wrap into several rows');
  await page.locator('#historyViewCandidates').click();
  assert.ok(await page.locator('#historyLegislativeSummary').innerText().then(t=>t.includes('当选党派席次')));
  assert.equal(await page.locator('#historyResults table[data-ballot="regional"]').count(),1);
