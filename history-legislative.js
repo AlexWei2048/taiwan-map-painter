@@ -144,10 +144,13 @@
    const townNames=membership.get(key)||new Set();
    const splits=kaohsiungSplitFragment(target.year,norm(row.county),districtNumber(row.district),map?.towns||[],map?.villages||[])||[];
    const splitNames=new Set(splits.map(s=>s.town));
-   const sources=[...townNames].map(t=>findTown(row.county,t)).filter(Boolean).filter(t=>!splitNames.has(t.name));
+   const resolved=[...townNames].map(name=>({name,feature:findTown(row.county,name)}));
+   const missingTowns=resolved.filter(item=>!item.feature).map(item=>item.name);
+   const sources=resolved.map(item=>item.feature).filter(Boolean).filter(t=>!splitNames.has(t.name));
+   let usedCountyFallback=false;
    if(!sources.length&&!splits.length){
     const countyFeature=(map?.counties||[]).find(f=>(norm(f.name||f.county)===norm(row.county)||norm(f.name||f.county)===norm(modernCounty(row.county))));
-    if(countyFeature)sources.push(countyFeature);
+    if(countyFeature){sources.push(countyFeature);usedCountyFallback=true}
    }
    if(!sources.length&&!splits.length)continue;
    // Village-split constituencies can share a township in historical returns.
@@ -161,9 +164,19 @@
    // All other areas are kept as separate non-overlapping polygon rings.
    const fillRule=splits.some(s=>s.fillRule==='evenodd')?'evenodd':'nonzero';
    const sourceTownIds=[...sources,...splits.map(s=>s.source)].map(f=>f.sourceId||f.id).filter(Boolean);
+   const referenceYear=Number(reference?.year)||Number(target.year);
+   const notes=['选区归属依据'+referenceYear+'年统计资料，轮廓使用现行行政区图形近似展示，并非当届原始测绘界线'];
+   if(referenceYear!==Number(target.year))notes.push('当届缺少乡镇归属明细，借用'+referenceYear+'年选区归属，可能与'+target.year+'年实际划分不同');
+   if(approximate)notes.push('同一乡镇市区跨越多个选区，缺少当年村里界线，存在边界重叠风险');
+   if(missingTowns.length)notes.push('缺少可匹配地理图形：'+missingTowns.join('、'));
+   if(usedCountyFallback)notes.push('无法还原选区局部范围，整县轮廓仅作位置示意，不代表选区边界');
+   if(splits.length)notes.push(...splits.map(s=>s.note));
+   const boundaryQuality=usedCountyFallback?'county-fallback':missingTowns.length?'incomplete':referenceYear!==Number(target.year)?'cross-year':approximate?'town-split':'modern-outline';
    features.push({id:'legislative-'+target.year+'-'+key,county:norm(row.county),name:norm(row.district),number:districtNumber(row.district),electorate:'regional',
     sourceTownIds,d:mergePaths(parts.map(f=>f.d)),box,center:[(box[0]+box[2])/2,(box[1]+box[3])/2],fillRule,
-    ...(splits.length?{historicalBoundaryNote:splits.map(s=>s.note).join('；'),historicalVillageSplit:true}:approximate?{historicalBoundaryNote:'本届选区涉及乡镇市区内部村里分割；现有底图按乡镇市区近似，不代表精确村里界线',boundaryApproximate:true}:{})});
+    historicalBoundarySourceYear:referenceYear,historicalBoundaryQuality:boundaryQuality,historicalBoundaryMissingTowns:missingTowns,
+    historicalBoundarySourceTowns:[...townNames],historicalBoundaryNote:notes.join('；'),boundaryApproximate:true,
+    ...(splits.length?{historicalVillageSplit:true}:{})});
   }
   return features;
  }
