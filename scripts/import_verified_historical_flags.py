@@ -35,7 +35,15 @@ def main():
     if not m or not n:raise RuntimeError('Verified logo manifest missing')
     by_id=json.loads(m.group(1));by_name=json.loads(n.group(1))
     if PARTY_ID in by_id:
-        print('ALREADY_INCLUDED',NAME)
+        # The official-source contract also requires normalized original
+        # registry/image URLs for all source records, even Commons flags.
+        doc=json.loads(REPORT.read_text(encoding='utf-8'))
+        for item in doc.get('official_sources',[]):
+            if item.get('party_id')==PARTY_ID:
+                item['official_registry']=REGISTRY
+                item['official_image']=SOURCE_FILE
+        REPORT.write_text(json.dumps(doc,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+        print('AUDITED_EXISTING_FLAG_SOURCE',NAME)
         return
     resp=requests.get(SOURCE_FILE,timeout=50,headers={'User-Agent':'IslandPalette-verified-historical-party-flag/1.0'})
     resp.raise_for_status()
