@@ -19,7 +19,7 @@ test('Complete modern nomination records cover every party and preserve audited 
   assert.equal(Party.nominationCount(+year),total,year+' nominations');
  }
 });
-test('Women's guarantee modifies original winners rather than replacing nomination ranks',()=>{
+test("Women\u0027s guarantee modifies original winners rather than replacing nomination ranks",()=>{
  for(const [year,party,won,lost] of [
   [2012,'台湾团结联盟',4,3],
   [2016,'民主进步党',19,18],
