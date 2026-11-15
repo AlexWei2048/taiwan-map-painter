@@ -6,9 +6,9 @@ test('offers all ten regular legislative election years',()=>{
  assert.deepEqual(Legislative.YEARS,[1992,1995,1998,2001,2004,2008,2012,2016,2020,2024]);
 });
 
-test('uses era-correct ballot labels',()=>{
- assert.equal(Legislative.ballots(2004).find(x=>x.value==='party').label,'不分区席次计算票');
- assert.equal(Legislative.ballots(2008).find(x=>x.value==='party').label,'不分区政党票');
+test('uses the renamed party-list mode while preserving era-correct explanatory notes',()=>{
+ assert.equal(Legislative.ballots(2004).find(x=>x.value==='party').label,'不分区民代');
+ assert.equal(Legislative.ballots(2008).find(x=>x.value==='party').label,'不分区民代');
 });
 
 test('legislative map levels follow ballot geography, with no invented 1992 local votes',()=>{
