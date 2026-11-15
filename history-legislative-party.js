@@ -81,7 +81,7 @@
  };
  const SLATE_SOURCE_2024='https://2024.cec.gov.tw/data/file/2fb887c81a7a4b3a888e4d3befe9259d.pdf';
  const SLATE_SOURCES={
-  2001:'https://web.cec.gov.tw/api/file/9255d5fb-ee03-4533-88b2-9dcce3cbef04.pdf',
+  2001:'https://web.cec.gov.tw/api/file/516cdc62-a08b-4612-a818-7c3ad96511ce.pdf',
   2004:'https://web.cec.gov.tw/api/file/9ecb9f91-beff-44ad-9e72-e7d56be79b2a.pdf',
   2008:'https://web.cec.gov.tw/api/file/9b6521a5-f3ef-4754-bd3e-cd0a3292c282.pdf',
   2012:'https://gazette.nat.gov.tw/EG_FileManager/eguploadpub/eg018004/ch02/type3/gov15/num2/OEg.pdf',
@@ -124,11 +124,11 @@
  // Complete sets below have independent per-party totals to support integrity checks.
  const SLATES_BY_YEAR={
   2001:{
-   '中国国民党':'饶颖奇 江丙坤 陈健治 黄昭顺 高育仁 王钟渝 黄德福 蔡铃兰 陈健民 郑逢时 侯彩凤 李和顺 陈建年 高仲源 黄逢时 许素叶 王事展 黄正义 陈钊云 李仁人 尹梓芊 李正宗 陈杰儒 魏镛 吴绮美 吕丽莉 刘宗明 简明哲 石元娜 许俊达 廖万隆 唐霈惠 韩国瑜 格桑德钦巴顿 陈美子 纪荣伟 张昱祥 李旭辉 曹一之',
-   '民主进步党':'洪奇昌 尤清 陈道明 刘世芳 张俊宏 林浊水 高志鹏 许荣淑 邱永仁 颜锦福 邱彰 郑贵莲 陈胜宏 陈忠信 刘俊雄 林文郎 林忠正 张兆路 戴振耀 苏嘉富 黄国照 朱铜树 廖茂勋',
-   '新党':'许历农 石齐平 李炳南 郑纪恩 延惠君 施颜 邓家基 谢园',
-   '亲民党':'刘忆如 殷乃平 李桐豪 刘松藩 林惠官 顾崇廉 钟荣吉 蔡中涵 高明见 陈飞龙 宋楚瑜 李复甸 简金卿 郑桂蓉 郭晏生 郑阿月 吴雪山 林腾鹰 林忠信 孙荣吉 杨荣明 张万同 李允杰',
-   '台湾团结联盟':'黄宗源 吴东昇 程振隆 黄政哲 苏进强 陈敏英 许松根 黄昭展 潘至诚 蔡吉源 黄金郎 张祯祥 洪进益 邱垂亮 黄正文'
+   '中国国民党':'饶颖奇 江丙坤 陈健治 黄昭顺 高育仁 王钟渝 黄德福 蔡铃兰 陈健民 郑逢时 侯彩凤 李和顺 陈建年 高仲源 黄逢时 许素叶 王事展 黄正义 陈钉云 李仁人 尹祈羊 李正宗 陈杰儒 魏镛 吴绮美 吕丽莉 刘宗明 简明哲 石元娜 许俊达 廖万隆 唐玺惠 韩国瑜 格桑德钦巴顿 陈美子 纪荣祥 张昆祥 李旭辉 曹一之',
+   '民主进步党':'洪奇昌 尤清 陈道明 刘世芳 张俊宏 林浊水 高志鹏 许荣淑 邱永仁 颜锦福 邱彰 郑贵莲 陈胜宏 陈忠信 刘俊雄 林文郎 林忠正 张兆路 戴振耀 苏嘉富 黄国照 朱铭树 廖茂勋',
+   '新党':'许历农 石齐平 李炳南 郑纪恩 延惠君 施诚 邓家基 谢图',
+   '亲民党':'刘忆如 殷乃平 李桐豪 刘松藩 林惠官 顾崇廉 钟荣吉 蔡中涵 高明见 陈飞龙 宋楚瑜 李复甸 简金卿 邹桂蓉 郭晟生 郑阿月 吴雪山 林鹤锡 林忠信 孙荣吉 杨荣明 张万同 李允杰',
+   '台湾团结联盟':'黄宗源 吴东昇 程振隆 黄政哲 苏进强 陈敏敦 许松根 黄昭展 潘至诚 蔡吉源 黄金郎 张祯祥 洪进益 邱垂亮 黄主文'
   },
   2008:{
    '公民党':'雷侨云 钱汉清 陈华足 孔仁奕',
@@ -210,6 +210,14 @@
   '台湾团结联盟':'陈鸿基 黄金郎 李旭辉 李研慧 赖幸媛 陈永兴 林志嘉 陈银河 黄政哲 郭林勇',
   '无党团结联盟':'张博雅 宋丽华 陈杰儒 萧苑瑜 吴庆堂'
  };
+ const OVERSEAS_SLATES_2001={
+  '中国国民党':'关沃暖 孙国华 吴松柏 林雪美 薛盛华 吴英毅 申章昌 黄林芝',
+  '民主进步党':'萧美琴 张秀珍 张旭成 钟金江 康泰山',
+  '新党':'营志宏 李竞芬',
+  '亲民党':'林政义 杨富美 李廷亚 宋枕文 王绍文',
+  '台湾团结联盟':'王政中'
+ };
+
  const OVERSEAS_SLATES_2004={
   '中国国民党':'谢文政 吴英毅 吴松柏 薛盛华 王晓蓉',
   '台湾团结联盟':'吕宪治 刘宽平 陈炎生',
@@ -261,7 +269,8 @@
  };
  function nominationCount(year){
   const slates=SLATES_BY_YEAR[year];
-  if(slates)return Object.values(slates).reduce((n,value)=>n+value.split(/\s+/).filter(Boolean).length,0);
+  if(slates)return Object.values(slates).reduce((n,value)=>n+value.split(/\s+/).filter(Boolean).length,0)+
+   (Number(year)===2001?Object.values(OVERSEAS_SLATES_2001).reduce((n,value)=>n+value.split(/\s+/).filter(Boolean).length,0):0);
   if(Number(year)===2004)return Object.values(UNORDERED_SLATES_2004).reduce((n,value)=>n+value.split(/\s+/).filter(Boolean).length,0)+
    Object.values(OVERSEAS_SLATES_2004).reduce((n,value)=>n+value.split(/\s+/).filter(Boolean).length,0);
   return null;
@@ -305,7 +314,7 @@
     checked:Object.prototype.hasOwnProperty.call(expected,item.party)?seats===expected[item.party]:!seats,
     quota:primary.detail?.get(item.party)||null,overseasQuota:overseas?.detail?.get(item.party)||null,
     winners:nominees(year,item.party),overseasWinners:(OVERSEAS_WINNERS[year]?.[item.party]||'').split(/\s+/).filter(Boolean),
-    overseasNominees:year===2004?(OVERSEAS_SLATES_2004[item.party]||'').split(/\s+/).filter(Boolean):[]};
+    overseasNominees:(year===2001?OVERSEAS_SLATES_2001[item.party]:year===2004?OVERSEAS_SLATES_2004[item.party]:'').split(/\s+/).filter(Boolean)};
   }).sort((a,b)=>b.seats-a.seats||b.votes-a.votes||a.party.localeCompare(b.party,'zh'));
   return {year,old,parts,total,eligibleTotal:primary.base,parties:result,
    totalAssigned:result.reduce((n,p)=>n+p.seats,0),
@@ -427,22 +436,22 @@
     }
     body.append(grid);
     if(model.old&&(p.overseasNominees.length||p.overseasWinners.length)){
-     const hasAll=p.overseasNominees.length>0,overseasDisplay=hasAll?p.overseasNominees:p.overseasWinners,
-      overseasWinnerSet=new Set(p.overseasWinners);
-     body.append(element('h5','',hasAll?'侨选登记提名名单 · '+overseasDisplay.length+'人（原始顺序未核实）':'侨选原始当选名单 · '+p.overseasWinners.length+'人'));
+     const hasAll=p.overseasNominees.length>0,ordered=hasAll&&model.year===2001,
+      overseasDisplay=hasAll?p.overseasNominees:p.overseasWinners,overseasWinnerSet=new Set(p.overseasWinners);
+     body.append(element('h5','',hasAll?'侨选登记提名名单 · '+overseasDisplay.length+'人（'+(ordered?'按当届原始登记顺序':'原始排序未核实')+'）':'侨选原始当选名单 · '+p.overseasWinners.length+'人'));
      const overseasGrid=element('div','history-list-nominees');
      for(const [i,name] of overseasDisplay.entries()){
       const elected=overseasWinnerSet.has(name);
       const row=element('div','history-list-nominee'+(elected?' elected':''));
       const mark=element('span','history-list-result');
       if(elected){const img=element('img','history-list-winner-mark');img.src='assets/elected-mark.png';img.alt='当选';img.loading='lazy';mark.append(img)}
-      row.append(element('span','history-list-rank',hasAll?'·':String(i+1)+'.'),element('span','history-list-person',name),mark);
+      row.append(element('span','history-list-rank',ordered||!hasAll?String(i+1)+'.':'·'),element('span','history-list-person',name),mark);
       overseasGrid.append(row);
      }
      body.append(overseasGrid);
     }
     body.append(element('p','history-list-caveat',model.old?
-     model.year===2001?'已核对本届不分区完整提名顺序及原始当选人，侨选仅收录原始当选人；未录入侨选全部提名名单。':
+     model.year===2001?'已核对本届全部108名不分区与21名侨选的提名顺序，以及41名不分区、8名侨选的原始当选人。':
      model.year===2004?'已对照中选会不分区及侨选全部登记候选人，名单原始排序尚未全部核实；当选标记为首次选举结果。':
      '已收录不分区和侨选原始当选人；1992—1998年落选提名人与正式名单顺序尚待旧公报数字化核实。':
      SLATES_BY_YEAR[model.year]?.[p.party]?'本届已收录该党原始提名顺序及选举当时的当选名单；任期内递补不计入原始当选。':'仅收录已核实的原始当选名单；未取得完整提名顺序时不推断名次。'));
