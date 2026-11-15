@@ -69,7 +69,10 @@
    else modernTownIndex.set(modernKey,town);
   }
   const findTown=(county,name)=>{
-   const key=norm(county)+'|'+norm(baseTown(name)),exact=townIndex.get(key);
+   // Membership names were already reduced by baseTown(). Never strip a
+   // second suffix: 新市 becomes 新, 左镇 becomes 左, 平镇 becomes 平.
+   const key=norm(county)+'|'+norm(name);
+   const exact=townIndex.get(key)||townIndex.get(norm(county)+'|'+norm(baseTown(name)));
    if(exact)return exact;
    // Only compatibility mode for maps WITHOUT historic-county labels.
    if(historicCounties.has(norm(county)))return null;
@@ -80,23 +83,6 @@
    if(row.electorate!=='regional'||row.level!=='town')continue;
    const key=norm(row.county)+'|'+districtNumber(row.district),town=norm(baseTown(row.town));
    if(!membership.has(key))membership.set(key,new Set());membership.get(key).add(town);
-  }
-  // Official 2008–2016 whole-town constituencies omitted by some township
-  // vote rows. Restore *only* membership verified against period boundaries.
-  const verifiedMissing={
-   '桃园县|平镇':5,'桃园市|平镇':5,
-   '台南县|新市':2,'台南县|左镇':2,
-   '台南市|新市':2,'台南市|左镇':2
-  };
-  if(Number(target?.year)>=2008&&Number(target?.year)<=2016){
-   for(const town of map?.towns||[]){
-    const county=norm(town.county),base=norm(baseTown(town.name));
-    const district=verifiedMissing[county+'|'+base];
-    if(!district)continue;
-    const key=county+'|'+district;
-    if(!membership.has(key))membership.set(key,new Set());
-    membership.get(key).add(base);
-   }
   }
   const seen=new Set(),features=[];
   for(const row of target?.rows||[]){
@@ -122,7 +108,8 @@
   if(Number(target?.year)>=2008&&Number(target?.year)<=2016){
    for(const town of map?.towns||[]){
     if(norm(town.county)!=='高雄市'||norm(baseTown(town.name))!=='前镇')continue;
-    features.push({id:'legislative-unresolved-'+target.year+'-qianzhen',
+    if(!features.unresolved)features.unresolved=[];
+    features.unresolved.push({id:'legislative-unresolved-'+target.year+'-qianzhen',
      county:'高雄市',name:'前镇区（历史选区分割待核对）',
      number:0,electorate:'regional',d:town.d,box:town.box,
      center:town.center||[(town.box[0]+town.box[2])/2,(town.box[1]+town.box[3])/2],
@@ -208,7 +195,7 @@
   }
   if(missing.length)throw Error(snapshot.year+'年区域选区地图缺少：'+missing.join('、'));
   // Carry the village-split city fallback into 2008–2016 national maps.
-  selected.push(...historical.filter(f=>f.unresolvedHistorical));
+  selected.unresolved=historical.unresolved||[];
   return selected;
  }
  async function load(year,fetcher=root.fetch){
