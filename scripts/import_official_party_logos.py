@@ -72,11 +72,26 @@ def decode_image(raw):
  out=io.BytesIO();canvas.save(out,format="PNG",optimize=True)
  return out.getvalue(),f"{im.width}x{im.height}"
 
+# Preserve independently verified images from the last successful run. Official
+# servers can time out, which must NEVER cause a downgrade to fewer logos.
 byid={};byname={};documentation=[];skips=[]
+prior_js=ASSETS/"party-logos-sourced.js"
+prior_json=REPORT/"official-party-logos-import.json"
+if prior_js.exists() and prior_json.exists():
+ old=prior_js.read_text(encoding="utf-8")
+ prior=json.loads(prior_json.read_text(encoding="utf-8"))
+ for variable,target in (
+   ("SOURCED_PARTY_LOGOS_BY_ID",byid),
+   ("SOURCED_PARTY_LOGOS_BY_NAME",byname)):
+  match=re.search(r"const "+variable+r"=(\\{.*?\\});",old,re.S)
+  if match:target.update(json.loads(match.group(1)))
+ documentation.extend(prior.get("official_sources",[]))
+ skips.extend(prior.get("unverified_or_unavailable",[]))
+ print("REUSED_VERIFIED",len(byid),len(byname),len(documentation),flush=True)
 for name,item in candidates.items():
  name=norm(name)
  party_id=lookup.get(name)
- if party_id in existing:
+ if party_id in existing or party_id in byid or name in byname:
   continue
  imgs=[img for img in item.get("image_candidates",[])
        if img["url"].startswith("https://ws.moi.gov.tw/001/Upload/")
@@ -124,7 +139,7 @@ supplemental=[
 ]
 for item in supplemental:
  name=norm(item["name"]);pid=lookup.get(name)
- if pid in existing or pid in byid:continue
+ if pid in existing or pid in byid or name in byname:continue
  raw=None;last_error=None;chosen=None
  for url in item["urls"]:
   try:
@@ -156,6 +171,11 @@ render+=" * Rights remain with the image owners. No placeholders, no hotlinks. *
 render+="const SOURCED_PARTY_LOGOS_BY_ID="+json.dumps(byid,ensure_ascii=False,separators=(",",":"))+";\n"
 render+="const SOURCED_PARTY_LOGOS_BY_NAME="+json.dumps(byname,ensure_ascii=False,separators=(",",":"))+";\n"
 (ASSETS/"party-logos-sourced.js").write_text(render)
+# No duplicate documentation or stale missing-status for now-imported parties.
+documentation=list({(x["name"],x.get("party_id")):x for x in documentation}.values())
+available_names={norm(x["name"]) for x in documentation}
+skips=list({norm(x["name"]):x for x in skips
+ if norm(x["name"]) not in available_names}.values())
 output={"schemaVersion":1,"count_by_id":len(byid),"count_by_historical_name":len(byname),
  "official_sources":documentation,"unverified_or_unavailable":skips}
 (REPORT/"official-party-logos-import.json").write_text(json.dumps(output,ensure_ascii=False,indent=2)+"\n")
