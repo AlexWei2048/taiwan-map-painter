@@ -39,7 +39,11 @@
     query.contestId=contest.contest_id;
    }
    const result=Core.filter(indexed,query);
-   return{result,overview:Turnout.enrich(Core.overview(result),{year,electorate,scope,county,contests:result.contests.length}),scope,county,area};
+   const districtNumber=scope==='district'&&result.contests.length===1?
+    String(root.HistoryLegislative?.districtNumber(result.contests[0].district_name)||
+      Core.districtNumber(result.contests[0].district_name)||''):'';
+   return{result,overview:Turnout.enrich(Core.overview(result),{
+    year,electorate,scope,county,area,districtNumber,contests:result.contests.length}),scope,county,area};
   }
   const level=scope==='town'?'town':'county';
   const rows=s.rows.filter(r=>r.electorate===electorate&&r.level===level&&r.county===county&&
@@ -69,7 +73,7 @@
   }
   const result={index:indexed,selection:{year,office:'legislative',electorate,countyId:county},
    contests,candidacies,summaries};
-  return{result,overview:{...Turnout.enrich(Core.overview(result),{year,electorate,scope,county}),electedCount:null,incumbentCount:null},
+  return{result,overview:{...Turnout.enrich(Core.overview(result),{year,electorate,scope,county,area}),electedCount:null,incumbentCount:null},
    scope,county,area,geographicVoteOnly:true};
  }
  function exportCsv(snapshot,selection={}){

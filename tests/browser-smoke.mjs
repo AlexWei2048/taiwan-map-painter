@@ -1232,7 +1232,12 @@ test('2022 council uses all historical district geometries and actual elected se
  assert.equal(await page.locator('#districtReferenceSource').isVisible(),false);
  assert.doesNotMatch(await page.locator('#historyCoverage').textContent(),/资料来源：/);
  assert.equal(await page.locator('#regions path[data-region]').count(),22);
- assert.equal(await page.locator('#regions path[data-region]').evaluateAll(nodes=>nodes.every(node=>node.getAttribute('fill')==='#f0f3ed')),true);
+ assert.equal(await page.locator('#regions path[data-region]').evaluateAll(nodes=>nodes.every(node=>{
+  const county=node.getAttribute('aria-label')?.split('，')[0]||'';
+  const leader=History2022View.countySeatLeader(county);
+  const expected=leader.tied?'#aebdb4':leader.party?predictionParty(leader.party).color:'#edf1e9';
+  return node.getAttribute('fill')===expected;
+ })),true,'nationwide council county colors reflect the most elected seats');
  const geometry=await page.evaluate(()=>({count:History2022View.features().length,seats:History2022View.features().reduce((n,f)=>n+f.seats,0),missing:History2022View.features().filter(f=>!f.d).length}));
  assert.deepEqual(geometry,{count:215,seats:910,missing:0});
  let total=0;
@@ -2298,7 +2303,7 @@ test('Overview statistical region controls change the corresponding historical m
  await page.locator('#historyOffice').selectOption('legislative');
  await page.locator('#historyYear').selectOption('2004');
  await page.waitForFunction(()=>History2022View.snapshot()?.year===2004);
- await page.locator('#historyViewOverview').click();
+ if(await page.locator('#historyOverviewPanel').isHidden())await page.locator('#historyViewOverview').click();
  await page.locator('#historyOverviewScope').selectOption('county');
  await page.locator('#historyOverviewCounty').selectOption('高雄市');
  assert.equal(await page.locator('#historyScale').inputValue(),'county');

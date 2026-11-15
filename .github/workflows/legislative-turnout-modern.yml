@@ -38,7 +38,10 @@ jobs:
               counts={scope:len(rows) for scope,rows in profiles.items()}
               print(year, ballot, counts, flush=True)
               assert len(profiles["county"])>=10,(year,ballot,counts)
-              assert sum(len(x) for x in profiles["town"].values())>=100,(year,ballot,counts)
+              if ballot=="regional":
+                assert sum(len(x) for x in profiles["district"].values())>=60,(year,ballot,counts)
+              else:
+                assert sum(len(x) for x in profiles["town"].values())>=100,(year,ballot,counts)
           PY
       - name: Publish only reconciled source profiles
         run: |
