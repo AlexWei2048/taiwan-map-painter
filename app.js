@@ -1793,7 +1793,7 @@ function polishedPredictionTableLayout(rows,targetWidth=null){
  // is known. Otherwise names remain split even when expanded columns fit.
  const numeric=rows.some(row=>row.estimated),specified=rows.every(row=>row.specified),showAll=rows.some(row=>row.allCandidates);
  const historical=rows[0]?.historical;
- const metricFields=historical?['votes','share',...(showAll?['status']:[])]:numeric?(specified&&!showAll?['votes','share'].filter(k=>rows.some(r=>k==='votes'?r.hasVotes:r.hasShare)):['votes','share','status']):showAll?['status']:[];
+ const metricFields=historical?['votes','share','status']:numeric?(specified&&!showAll?['votes','share'].filter(k=>rows.some(r=>k==='votes'?r.hasVotes:r.hasShare)):['votes','share','status']):showAll?['status']:[];
  const metricHeaders={votes:historical?'得票数':'预测得票数',share:historical?'得票率':'预测得票率',status:'当选'};
  const extraWidths=metricFields.map(k=>k==='status'?96:99),extraWidth=extraWidths.reduce((n,w)=>n+w,0);
  const columns=rows.length<=90?2:rows.length<=260?4:6,gap=5;
