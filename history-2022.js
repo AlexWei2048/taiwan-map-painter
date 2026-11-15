@@ -64,8 +64,10 @@
  }
  function updateHistoricCounties(counties){
   const list=el('historyCounty'),previous=county;
-  list.replaceChildren(new Option('全部地区（含金门、马祖）',''),...counties.map(c=>new Option(c,c)));
-  county=counties.includes(previous)?previous:'';
+  const ordered=[...new Set(counties)].sort((a,b)=>
+   HistoryCore.compareResultRows({county_name:a},{county_name:b},'mayor'));
+  list.replaceChildren(new Option('全部地区（含金门、马祖）',''),...ordered.map(c=>new Option(c,c)));
+  county=ordered.includes(previous)?previous:'';
   list.value=county;
  }
  function restoreStandardElection(office){
@@ -103,7 +105,7 @@
    db.legislative.length=0;dbIds.clear();addRows(shard.rows);
    const wasLegislative=legislativeMode;
     legislativeMode=true;presidentialMode=false;legislativeYear=year;kind='legislative';snapshotData=shard;
-    if(!wasLegislative||!['national','county','district','town'].includes(scale))scale='national';legislativeFocus='';
+    if(!wasLegislative||!['county','district','town'].includes(scale))scale='county';legislativeFocus='';
     legislativeAreaGeometry=HistoryLegislative.scopeGeometry(geometryReference||shard,data,norm,HistoryCore.mergePaths,HistoryPresidential.modernCounty,HistoryPresidential.baseTown);
     if(year>=2008){const audit=HistoryLegislative.auditPartyTownVotes(shard,legislativeAreaGeometry);if(!audit.valid)throw Error('不分区政党票乡镇数据与底图未能逐项核对：'+audit.errors.slice(0,4).join('；'))}
     const legacyMap={...data,towns:legislativeAreaGeometry.towns,counties:legislativeAreaGeometry.counties,villages:kaohsiungVillages};
@@ -114,8 +116,8 @@
    legislativeBallot=['regional','plains','mountain','party'].includes(electorate)?electorate:'regional';electorate=legislativeBallot;
    const available=HistoryLegislative.levels(year,legislativeBallot).map(item=>item[0]);
    scale=available.includes(scale)?scale:available[0];
-    if(scale==='national')county='';
-   updateHistoricCounties([...new Set(shard.rows.filter(row=>row.level==='county'&&row.electorate==='regional').map(row=>row.county).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'zh-CN')));
+    // No nationwide map tier: all-area geography is controlled by map range.
+   updateHistoricCounties([...new Set(shard.rows.filter(row=>row.level==='county'&&row.electorate==='regional').map(row=>row.county).filter(Boolean))]);
    el('historyYear').value=String(year);candidateScope='top';selectedCandidate='';resultPage=0;
    indicator.hidden=true;indicator.textContent='';window.dispatchEvent(new CustomEvent('historysnapshotready',{detail:{snapshot:shard}}));
    switchMode();render();
@@ -174,7 +176,9 @@
   }));
  }
  function legislativeDisplayRows(){
-  if(legislativeMode&&scale==='national'&&legislativeBallot!=='regional'){
+  if(legislativeMode&&legislativeYear===1992&&!county&&
+   ['plains','mountain'].includes(legislativeBallot)){
+   // Preserve verified nationwide totals without inventing county data.
    const national=legislativeNationalRows();if(national.length)return national;
   }
   return recordsInView();
@@ -384,7 +388,7 @@
   const overallSeats=wins.length;
   const head=createHistoryElement('div','history-legislative-head');
   head.append(createHistoryElement('strong','',yearLabel()+' · '+ballotName),
-   createHistoryElement('span','',scale==='national'?'全部地区（含金门、马祖）':(county||'县市')+(legislativeFocus?' · '+legislativeFocus:'')));
+   createHistoryElement('span','',!county?'全部地区（含金门、马祖）':county+(legislativeFocus?' · '+legislativeFocus:'')));
   root.append(head);
   const tiles=createHistoryElement('div','history-legislative-stats');
   const ranked=[...records].sort((a,b)=>b.votes-a.votes),first=ranked[0];
@@ -436,7 +440,7 @@
   const rows=all.filter(r=>(!partyFilter||r.party===partyFilter)&&(!search||[r.county,r.town,r.district,r.name,r.party].some(v=>String(v||'').includes(search))))
    .sort((a,b)=>HistoryCore.compareResultRows(a,b,legislativeBallot==='regional'?'council':'mayor')||
     legislativeRowArea(a).localeCompare(legislativeRowArea(b),'zh',{numeric:true})||b.votes-a.votes);
-  const national=scale==='national'&&legislativeBallot!=='regional';
+  const national=legislativeYear===1992&&!county&&['plains','mountain'].includes(legislativeBallot);
   const actualTowns=legislativePartyTownView()?new Set(all.map(r=>r.county+'|'+r.town)).size:0;
   el('historySummary').textContent=(county||'全部地区（含金门、马祖）')+' · '+HistoryLegislative.ballots(legislativeYear).find(x=>x.value===legislativeBallot)?.label+(legislativePartyTownView()?' · '+actualTowns+'个乡镇市区':'')+' · '+rows.length+'条结果'+(national?' · 全区总票':'');
   if(!rows.length){
@@ -574,7 +578,7 @@
  function historyOverview(){return active&&!county&&kind!=='mayor'&&!legislativeMode}
  function legislativeNationalView(){return active&&legislativeMode&&!county}
  function nationwideHistoricalSeatColors(){return active&&metric==='party'&&
-  (kind==='council'&&!county||legislativeMode&&legislativeBallot==='regional'&&legislativeYear<2008&&!county)}
+  (kind==='council'&&!county||legislativeMode&&legislativeBallot==='regional'&&!county&&scale==='county')}
  function countySeatLeader(countyName){
   const counts=currentResult?.countySeats?.get(countyName);
   if(!counts?.size)return{party:null,seats:0,tied:false,counts:null};
@@ -627,7 +631,7 @@
     // 1992–2004 nationwide is a county seat-plurality map, not a pile of
     // constituency fills/badges. The county geometry also allows true county
     // interaction and matches the labels shown on the map.
-    if(legislativeYear<2008&&!county&&scale==='national')
+    if(!county&&scale==='county')
      return legislativeAreaGeometry?.counties||data.counties;
     return legislativeGeometry.filter(f=>(!county||f.county===county)&&!(scale==='district'&&legislativeFocus&&HistoryLegislative.districtNumber(f.number||f.name)!==HistoryLegislative.districtNumber(legislativeFocus)));
    }
@@ -678,9 +682,9 @@
    }
    if(el('historyLegislativeMapHint')){el('historyLegislativeMapHint').hidden=false;el('historyLegislativeMapHint').textContent=
     legislativePartyTownView()?(county?'各乡镇市区以当届实际政党票分别上色；可切换领先政党或指定政党的得票数、得票率，点击乡镇查看各党完整结果。':'全台368个乡镇市区直接按各地真实政党票上色，点击任一乡镇即可查看当地各党得票。2008年按当年行政区统计，不按现行县市比例推算。'):
-    legislativeBallot==='regional'?(scale==='national'?(legislativeYear<2008?'全台按各县市区域民代当选席次最多的政党填色；并列最多使用多党斜纹。点击县市进入后，各多席选区逐席显示党徽。':'全台单席选区按当选政党填色，点击选区进入县市查看完整结果。'):scale==='county'?(legislativeYear<2008?'县市图在各多席选区显示当选党徽，点击选区可查看候选人、得票率与当选结果。':'县市图显示当届选区和选区号；点击选区查看完整候选人、得票率与当选结果。'):'选举区图聚焦本区候选人及法定当选席次。'):
+    legislativeBallot==='regional'?(!county?(legislativeYear<2008?'全台按各县市区域民代当选席次最多的政党填色；并列最多使用多党斜纹。点击县市进入后，各多席选区逐席显示党徽。':'全台单席选区按当选政党填色，点击选区进入县市查看完整结果。'):scale==='county'?(legislativeYear<2008?'县市图在各多席选区显示当选党徽，点击选区可查看候选人、得票率与当选结果。':'县市图显示当届选区和选区号；点击选区查看完整候选人、得票率与当选结果。'):'选举区图聚焦本区候选人及法定当选席次。'):
     legislativeYear===1992&&['plains','mountain'].includes(legislativeBallot)?'1992年没有县市及乡镇得票记录，全区地图仅显示行政区轮廓，不推算地方票数。':
-    scale==='national'?'按县市着色，点击县市可查看县市及乡镇市区结果。':scale==='county'?'县市得票分布；选择乡镇市区层级可继续下钻。':'点击乡镇市区查看得票分布。';}
+    !county?'按县市着色，点击县市可查看县市及乡镇市区结果。':scale==='county'?'县市得票分布；选择乡镇市区层级可继续下钻。':'点击乡镇市区查看得票分布。';}
 
   }else{if(el('historyFocusBox'))el('historyFocusBox').hidden=true;if(el('historyLegislativeMapHint'))el('historyLegislativeMapHint').hidden=true;el('historyScale').replaceChildren(new Option('县市','district'),new Option('乡镇市区','town'));el('historyScale').value=scale;if(kind==='council')el('historyElectorate').replaceChildren(new Option('全部类型（分别统计）','all'),new Option('区域议员','regional'),new Option('平地少数民族议员','plains'),new Option('山地少数民族议员','mountain'))}
   if(el('historyElectorateBox'))el('historyElectorateBox').hidden=kind!=='council'&&!legislativeMode;if(el('historyElectorate'))el('historyElectorate').value=electorate;
@@ -869,8 +873,8 @@
   if(el('historyOffice').value==='president')activatePresidential(Number(el('historyYear').value));
   if(el('historyOffice').value==='legislative')activateLegislative(Number(el('historyYear').value));
  };
- if(el('historyElectorate'))el('historyElectorate').onchange=()=>{electorate=el('historyElectorate').value;if(legislativeMode){legislativeBallot=electorate;scale='national';county='';legislativeFocus='';el('historyCounty').value=''}resultPage=0;switchMode();render()};
- el('historyCounty').onchange=()=>{county=el('historyCounty').value;legislativeFocus='';if(legislativeMode&&!legislativePartyTownView())scale=county?'county':'national';resultPage=0;switchMode();render()};
+ if(el('historyElectorate'))el('historyElectorate').onchange=()=>{electorate=el('historyElectorate').value;if(legislativeMode){legislativeBallot=electorate;scale='county';county='';legislativeFocus='';el('historyCounty').value=''}resultPage=0;switchMode();render()};
+ el('historyCounty').onchange=()=>{county=el('historyCounty').value;legislativeFocus='';if(legislativeMode&&!legislativePartyTownView())scale='county';resultPage=0;switchMode();render()};
  el('historyMetric').onchange=()=>{metric=el('historyMetric').value;render()};
  el('historyParty').onchange=()=>{selectedParty=el('historyParty').value;render()};
  el('historySearch').oninput=()=>{resultPage=0;if(currentResult)showRows(currentResult)};
@@ -885,7 +889,7 @@
   metric='party';candidateScope='top';selectedCandidate='';resultPage=0;el('historyOffice').value=kind;
   el('categoryHistory').click();
  };
- el('historyScale').onchange=()=>{scale=el('historyScale').value;if(legislativeMode){legislativeFocus='';if(scale==='national')county='';else if(['district','town'].includes(scale)&&!county&&!legislativePartyTownView())county=el('historyCounty').options[1]?.value||'';el('historyCounty').value=county}switchMode();render()};
+ el('historyScale').onchange=()=>{scale=el('historyScale').value;if(legislativeMode){legislativeFocus='';if(['district','town'].includes(scale)&&!county&&!legislativePartyTownView())county=el('historyCounty').options[1]?.value||'';el('historyCounty').value=county}switchMode();render()};
  if(el('historyFocus'))el('historyFocus').onchange=()=>{legislativeFocus=el('historyFocus').value;resultPage=0;switchMode();render()};
  el('historyCandidateScope').onchange=()=>{candidateScope=el('historyCandidateScope').value;render()};
  el('historyCandidate').onchange=()=>{selectedCandidate=el('historyCandidate').value;render()};
@@ -900,7 +904,7 @@
   document.getElementById('showTownBoundaries').checked=state.showTownBoundaries;
   renderTownBorders();applyBorders();persist();
  };
- const formerReturn=el('returnTaiwanMap').onclick;el('returnTaiwanMap').onclick=()=>{if(!active)return formerReturn();const keepPartyTowns=legislativePartyTownView();county='';legislativeFocus='';if(legislativeMode)scale=keepPartyTowns?'town':'national';el('historyCounty').value='';switchMode();render()};
+ const formerReturn=el('returnTaiwanMap').onclick;el('returnTaiwanMap').onclick=()=>{if(!active)return formerReturn();const keepPartyTowns=legislativePartyTownView();county='';legislativeFocus='';if(legislativeMode)scale=keepPartyTowns?'town':'county';el('historyCounty').value='';switchMode();render()};
  const defaultColor=fillColor;fillColor=function(feature){
   if(!active)return defaultColor(feature);
   // Qianzhen was divided at village level in 2008–2016. Never attribute
@@ -939,7 +943,7 @@
  const defaultPaint=paint;paint=function(feature){if(!active)return defaultPaint(feature);if(legislativeMode){
    if(legislativeYear===1992&&['plains','mountain'].includes(legislativeBallot))return toast('1992年没有县市得票分布，仅可查阅全区选举结果');
    if(legislativePartyTownView()&&!county){county=feature.county;legislativeFocus='';el('historyCounty').value=county;switchMode();render();openHistoryRegion(feature);return}
-   if(!county||scale==='national'){county=feature.county;scale='county';legislativeFocus='';el('historyCounty').value=county;switchMode();render();return}
+   if(!county){county=feature.county;scale='county';legislativeFocus='';el('historyCounty').value=county;switchMode();render();return}
    if(legislativeBallot==='regional'&&scale==='county'){scale='district';legislativeFocus=feature.name;switchMode();render();openHistoryRegion(feature);return}
    if(legislativeBallot!=='regional'&&scale==='county'){scale='town';legislativeFocus='';switchMode();render();return}
    openHistoryRegion(feature);return
