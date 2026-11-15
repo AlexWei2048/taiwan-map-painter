@@ -1,0 +1,39 @@
+{
+  "source": "https://raw.githubusercontent.com/kiang/db.cec.gov.tw/master/voteData/2022%E5%B9%B4_%E5%98%89%E7%BE%A9%E5%B8%82%E9%95%B7%E9%87%8D%E8%A1%8C%E9%81%B8%E8%88%89/prof.csv",
+  "release": "https://web.cec.gov.tw/cyec/article/37711",
+  "sha256": "10c212aea9e8f1b99f3d805f045f0e8cbcf9d3c9246ad915b2578ab3963e3539",
+  "whole_city": {
+    "registered_voters": 214130,
+    "ballots_cast": 94188,
+    "valid_votes": 93813,
+    "invalid_votes": 375
+  },
+  "wards": {
+    "东区": {
+      "registered_voters": 96706,
+      "ballots_cast": 42798,
+      "valid_votes": 42637,
+      "invalid_votes": 161,
+      "candidates": [
+        27978,
+        14174,
+        83,
+        233,
+        169
+      ]
+    },
+    "西区": {
+      "registered_voters": 117424,
+      "ballots_cast": 51390,
+      "valid_votes": 51176,
+      "invalid_votes": 214,
+      "candidates": [
+        31896,
+        18616,
+        163,
+        302,
+        199
+      ]
+    }
+  }
+}
