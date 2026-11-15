@@ -2512,3 +2512,62 @@ test('2024 presidential township overview shows CEC-verified electors, ballots a
  assert.equal(overview.cast,overview.valid+overview.invalid);
  assert.ok(overview.cast<=overview.registered);
 });
+
+
+test('Historical presidential maps show county-local winning tickets and keep their actual year boundaries',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('legislative');
+ await page.waitForFunction(()=>History2022View.office()==='legislative'&&History2022View.snapshot()?.year===2024);
+ await page.locator('#historyOffice').selectOption('president');
+ await page.waitForFunction(()=>History2022View.office()==='president'&&History2022View.snapshot()?.year===2024);
+ assert.equal(await page.locator('#historyScale').inputValue(),'district');
+ for(const year of ['1996','2000','2004','2008','2012','2016','2020','2024']){
+  await page.locator('#historyYear').selectOption(year);
+  await page.waitForFunction(y=>History2022View.year()===Number(y)&&History2022View.snapshot()?.year===Number(y),year);
+  const result=await page.evaluate(()=>{
+   const f=History2022View.items(),paths=[...document.querySelectorAll('#regions path[data-region]')],records=History2022View.snapshot().rows;
+   const colors={1996:{林洋港:'#815F9D',陈履安:'#577B91'},2000:{宋楚瑜:'#815F9D',许信良:'#B46A52'}};
+   const expected=(name,party)=>party==='连署'?colors[History2022View.year()]?.[name]||predictionParty(party).color:predictionParty(party).color;
+   const wrong=f.filter(feature=>{
+    const best=records.filter(r=>r.level==='county'&&r.county===feature.county).sort((a,b)=>b.votes-a.votes)[0];
+    const p=paths.find(node=>node.dataset.region===feature.id);
+    return !best||!p||p.getAttribute('fill')!==expected(best.name,best.party);
+   }).map(x=>x.name);
+   const border=document.querySelector('#districtBorders path[data-shared-boundary="counties"]');
+   return{count:f.length,paths:paths.length,wrong,outline:border?.getAttribute('d')?.length||0,
+    stroke:border?.getAttribute('stroke'),level:document.querySelector('#historyScale').value};
+  });
+  assert.equal(result.count,Number(year)<=2008?25:22,year+' historical counties');
+  assert.equal(result.paths,result.count,year+' regions');
+  assert.deepEqual(result.wrong,[],year+' local winner color');
+  assert.ok(result.outline>100&&result.stroke!=='none',year+' full historical county border');
+  assert.equal(result.level,'district',year+' county scale');
+ }
+ await page.locator('#historyYear').selectOption('2000');
+ await page.waitForFunction(()=>History2022View.year()===2000);
+ assert.match(await exportSvg(page),/data-shared-boundary="counties"/);
+});
+test('Historic legislative national maps render complete administrative boundaries and include them in exports',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('legislative');
+ await page.waitForFunction(()=>History2022View.office()==='legislative');
+ for(const year of ['1992','2004','2008','2012','2024']){
+  await page.locator('#historyYear').selectOption(year);
+  await page.waitForFunction(y=>History2022View.year()===Number(y)&&History2022View.snapshot()?.year===Number(y),year);
+  const result=await page.evaluate(()=>{
+   const shapes=History2022View.items(),paths=[...document.querySelectorAll('#regions path[data-region]')];
+   const border=document.querySelector('#districtBorders path[data-shared-boundary]');
+   const older=History2022View.year()<2008;
+   const complete=older?border?.hasAttribute('data-historical-plurality-outline'):
+    border?.getAttribute('d')===sharedBoundaryGeometry(History2022View.legislativeFeatures(),true).all;
+   return{count:shapes.length,paths:paths.length,outline:border?.getAttribute('d')?.length||0,
+    stroke:border?.getAttribute('stroke'),complete:!!complete};
+  });
+  assert.equal(result.count,result.paths,year+' constituency coverage');
+  assert.ok(result.outline>100&&result.stroke!=='none',year+' visible administrative outlines');
+  assert.equal(result.complete,true,year+' complete outer perimeters including coasts');
+  assert.match(await exportSvg(page),/data-shared-boundary=/,year+' SVG export retains boundaries');
+ }
+});
