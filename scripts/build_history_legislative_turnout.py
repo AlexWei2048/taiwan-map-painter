@@ -41,10 +41,10 @@ def simplify(value):
 
 def district_number(value):
     text = simplify(value)
-    m = re.search(r"第\\s*0*(\\d+)\\s*選?舉?區?", text)
+    m = re.search(r"第\s*0*(\d+)\s*選?舉?區?", text)
     if m:
         return str(int(m.group(1)))
-    m = re.search(r"\\d+", text)
+    m = re.search(r"\d+", text)
     return str(int(m.group())) if m else ""
 
 
