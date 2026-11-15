@@ -111,3 +111,27 @@
 .history-list-quota{color:#64776b;font-size:.77rem;margin:-5px 0 13px;line-height:1.55}
 .history-list-result{display:inline-flex;justify-content:center;align-items:center;min-width:20px}
 .history-list-winner-mark{display:block;width:24px;height:24px;object-fit:contain}
+
+/* Party ballot district popup: three visible columns, never reuse the
+   narrow fixed number column reserved for candidate ballots. */
+.history-result-dialog.history-party-vote-dialog .history-candidate-table{
+ width:100%;min-width:370px;table-layout:auto
+}
+.history-result-dialog.history-party-vote-dialog .history-candidate-table :is(th,td):nth-child(-n+2){
+ position:static;left:auto;width:auto;min-width:0;max-width:none;box-shadow:none
+}
+.history-result-dialog.history-party-vote-dialog .history-candidate-table thead th:nth-child(2),
+.history-result-dialog.history-party-vote-dialog .history-candidate-table tbody td:first-child{
+ min-width:175px;text-align:left;white-space:normal;overflow:visible;overflow-wrap:break-word
+}
+.history-result-dialog.history-party-vote-dialog .history-candidate-table .history-party-cell{
+ display:inline-flex;min-width:0;justify-content:flex-start;align-items:center;
+ gap:7px;white-space:normal;text-align:left
+}
+.history-legislative-table .history-party-cell{
+ display:inline-flex;gap:6px;align-items:center;justify-content:flex-start;
+ white-space:normal;overflow-wrap:anywhere
+}
+.history-list-nominee.withdrawn{opacity:.8;background:#f8f5f3;border-style:dashed}
+.history-list-nominee.withdrawn .history-list-person{text-decoration:line-through;text-decoration-color:#b5a49a}
+.history-list-nominee.withdrawn .history-list-result{color:#936d50;white-space:normal}
