@@ -396,7 +396,7 @@
   for(const [label,value] of [['比例代表席次',model.parts[0]+model.parts[1]+' 席'],
    ['取得席次政党',model.parties.filter(p=>p.seats).length+' 个'],
    [model.old?'有推荐候选人政党':'参选政党',model.parties.length+' 个'],
-   [nominationCount(model.year)!==null?'登记提名人数':'5% 门槛',nominationCount(model.year)!==null?nominationCount(model.year)+' 人':'得票满 5%']]){
+   [nominationCount(model.year)!==null?(model.year===1995?'已核实不分区提名':'登记提名人数'):'5% 门槛',nominationCount(model.year)!==null?nominationCount(model.year)+' 人':'得票满 5%']]){
     const tile=element('div','history-list-stat');tile.append(element('span','',label),element('strong','',value));stats.append(tile);
   }
   box.append(stats);
