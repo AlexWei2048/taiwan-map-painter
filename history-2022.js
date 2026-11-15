@@ -90,10 +90,11 @@
   const requestId=++loadingPresidentialId,indicator=el('historyLoadStatus');
   indicator.hidden=false;indicator.textContent='正在载入 '+year+' 年立法机构民代选举结果…';el('historyRetry').hidden=true;
   try{
-   const [shard,ready,geometryReference,regionalMap]=await Promise.all([
+   const [shard,ready,geometryReference,regionalMap,kaohsiungVillages]=await Promise.all([
     HistoryLegislative.load(year),snapshot(),
     year===1992?HistoryLegislative.load(1995):Promise.resolve(null),
     year>=2008?HistoryLegislative.loadMap():Promise.resolve(null),
+    HistoryLegislative.loadKaohsiungVillages(year),
     // Profile failures must not prevent browsing valid election results.
     HistoryLegislativeTurnout.load(year).catch(error=>{console.warn('历史投票统计暂未载入',error.message);return null})
    ]);
@@ -104,7 +105,7 @@
     legislativeMode=true;presidentialMode=false;legislativeYear=year;kind='legislative';snapshotData=shard;
     if(!wasLegislative||!['national','county','district','town'].includes(scale))scale='national';legislativeFocus='';
     legislativeAreaGeometry=HistoryLegislative.scopeGeometry(geometryReference||shard,data,norm,HistoryCore.mergePaths,HistoryPresidential.modernCounty,HistoryPresidential.baseTown);
-    const legacyMap={...data,towns:legislativeAreaGeometry.towns,counties:legislativeAreaGeometry.counties};
+    const legacyMap={...data,towns:legislativeAreaGeometry.towns,counties:legislativeAreaGeometry.counties,villages:kaohsiungVillages};
    if(year<2008)legislativeGeometry=HistoryLegislative.districtGeometry(shard,geometryReference||shard,legacyMap,norm,HistoryCore.mergePaths,HistoryPresidential.modernCounty,HistoryPresidential.baseTown);
    else{
     legislativeGeometry=HistoryLegislative.periodSingleMemberGeometry(shard,regionalMap,legacyMap,norm,HistoryCore.mergePaths,HistoryPresidential.modernCounty,HistoryPresidential.baseTown);
@@ -612,7 +613,7 @@
     // interaction and matches the labels shown on the map.
     if(legislativeYear<2008&&!county&&scale==='national')
      return legislativeAreaGeometry?.counties||data.counties;
-    return [...legislativeGeometry,...(legislativeGeometry.unresolved||[])].filter(f=>(!county||f.county===county)&&!(scale==='district'&&legislativeFocus&&HistoryLegislative.districtNumber(f.number||f.name)!==HistoryLegislative.districtNumber(legislativeFocus)));
+    return legislativeGeometry.filter(f=>(!county||f.county===county)&&!(scale==='district'&&legislativeFocus&&HistoryLegislative.districtNumber(f.number||f.name)!==HistoryLegislative.districtNumber(legislativeFocus)));
    }
    if(legislativeYear===1992&&['plains','mountain'].includes(legislativeBallot))return legislativeAreaGeometry?.counties||[]; // No county-level figures: neutral national geography.
    return(scale==='town'?(legislativeAreaGeometry?.towns||data.towns):(legislativeAreaGeometry?.counties||data.counties)).filter(f=>(!county||f.county===county)&&!(scale==='town'&&legislativeFocus&&f.name!==legislativeFocus));
