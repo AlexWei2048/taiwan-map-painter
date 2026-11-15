@@ -805,7 +805,8 @@ test('Administrative lookup is outside canvas and exports every entry',()=>{
  assert.match(app,/data-export-legend-below-key/);
  assert.match(app,/actualWidth=coreWidth/);
  assert.match(app,/appendExportPredictionTable\(root,winnerRows,tableY,winnerLayout\)/);
- assert.match(app,/if\(state\.labels&&view\)/);
+ assert.match(app,/if\(\(state\.labels\|\|historicalLegislativeMultiBadges\(\)\)\&\&view\)/);
+ assert.match(app,/\/\/ Match council maps: hiding number labels does not hide elected-seat logos\./);
  assert.match(read('workspace-ui.js'),/The main renderer now synchronizes region numbers and their adjacent table/);
 });
 
