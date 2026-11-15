@@ -358,7 +358,8 @@
  }
  function syncOverviewControls(){
   const legislative=state.office==='legislative',level=legislative&&state.electorate==='regional'||state.office==='council'?'district':'town';
-  const available=legislative?(root.HistoryLegislative?.levels(state.year,state.electorate)||[]).map(([id])=>id==='national'?'all':id):['all','county',level];
+  const available=legislative?(Number(state.year)===1992&&['plains','mountain'].includes(state.electorate)?
+    ['all']:['all',...(root.HistoryLegislative?.levels(state.year,state.electorate)||[]).map(([id])=>id)]):['all','county',level];
   if(!['all','county',level].includes(overviewScope)||!available.includes(overviewScope))overviewScope='all';
   const {counties}=overviewRegionChoices(indexed,{year:state.year,office:state.office,electorate:state.electorate});
   if(overviewScope!=='all'&&!counties.includes(overviewCounty))
@@ -511,7 +512,7 @@
   return normalizeSelection({
    ...state,year:el('historyYear')?.value,office,
    electorate:el('historyElectorate')?.value,county:el('historyCounty')?.value,
-   level:office==='legislative'?(scale||'national'):office==='mayor'||office==='president'?(scale==='town'?'town':'county'):office==='council'?'district':'town',
+   level:office==='legislative'?(scale||'county'):office==='mayor'||office==='president'?(scale==='town'?'town':'county'):office==='council'?'district':'town',
    metric:el('historyMetric')?.value
   });
  }
