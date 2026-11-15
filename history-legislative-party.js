@@ -84,6 +84,7 @@
  const OVERSEAS_SOURCES={2004:'https://web.cec.gov.tw/api/file/66199533-8d61-4512-adf9-05f3f1bf022b.pdf',2001:'https://web.cec.gov.tw/api/file/80c0e18d-31cd-4104-a6c5-2b0a3dc2fc21.pdf'};
 
  const EXTRA={
+  2012:{'台湾团结联盟':[{rank:3,name:'黄昆辉',elected:false},{rank:4,name:'林世嘉',elected:true}]},
   2016:{'民主进步党':[{rank:18,name:'施义芳',elected:false},{rank:19,name:'周春米',elected:true}],
         '中国国民党':[{rank:11,name:'曾永权',elected:false},{rank:12,name:'王育敏',elected:true}]},
   2024:{'民主进步党':[{rank:13,name:'王正旭',elected:false},{rank:14,name:'王义川',elected:false},{rank:15,name:'陈培瑜',elected:true}]}
