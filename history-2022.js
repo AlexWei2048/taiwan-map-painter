@@ -137,7 +137,15 @@
    if(!presidentialMode||!['district','town'].includes(scale))scale='district';
     db.mayor.length=0;dbIds.clear();
    addRows(shard.rows.map(row=>({...row,type:'mayor'})));
-   presidentialMode=true;presidentialYear=year;presidentialGeometry=geometry;
+   // Fully exit the previously selected legislative office. Without this,
+    // historical map items are presidential counties but record keys and
+    // state.level still resolve through legislative regions, leaving the
+    // whole presidential map uncolored after an office switch.
+    legislativeMode=false;
+    legislativeGeometry=[];
+    legislativeAreaGeometry=null;
+    legislativeFocus='';
+    presidentialMode=true;presidentialYear=year;presidentialGeometry=geometry;
    kind='mayor';snapshotData=shard;
    updateHistoricCounties(geometry.countyNames);
    el('historyYear').value=String(year);
