@@ -2647,18 +2647,20 @@ test('Official Kaohsiung 2008–2016 village splits fill exactly one historic co
    }
    const town=document.querySelector('#townBorders path[data-shared-boundary="towns"]');
    const start={exists:!!town,length:town?.getAttribute('d')?.length||0,visible:document.querySelector('#townBorders').style.display!=='none',stroke:town?.getAttribute('stroke')};
-   const check=document.getElementById('showTownBoundaries');
-   const before=check.checked;
+   const check=document.getElementById('historyTownBoundaries');
+   const available=!!check&&document.getElementById('historyTownBoundaryBox')?.hidden===false;
+   const before=check?.checked;
    if(!before){check.checked=true;check.dispatchEvent(new Event('change',{bubbles:true}));}
    const shown=document.querySelector('#townBorders').style.display!=='none';
    check.checked=false;check.dispatchEvent(new Event('change',{bubbles:true}));
    const hidden=document.querySelector('#townBorders').style.display==='none';
    check.checked=true;check.dispatchEvent(new Event('change',{bubbles:true}));
-   return{year:y,misses,scanned:villages.length,town:start,shown,hidden,restored:document.querySelector('#townBorders').style.display!=='none'};
+   return{year:y,misses,scanned:villages.length,town:start,toggleVisible:available,shown,hidden,restored:document.querySelector('#townBorders').style.display!=='none'};
   },year);
   assert.deepEqual(result.misses,[],year+' official Kaohsiung village-split fills must be disjoint and exhaustive');
   assert.ok(result.scanned>120,year+' village polygons are loaded');
   assert.ok(result.town.exists&&result.town.length>1000,year+' historical township boundary paths exist');
+  assert.equal(result.toggleVisible,true,year+' historical township overlay toggle is visible in sidebar');
   assert.equal(result.shown,true,year+' township overlay visible when enabled');
   assert.equal(result.hidden,true,year+' township overlay hides when disabled');
   assert.equal(result.restored,true,year+' township overlay restores without reloading');
