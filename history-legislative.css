@@ -28,3 +28,82 @@
 .history-legislative-table[data-ballot="party"] tbody tr:not(.history-district-divider):first-child td{font-weight:600}
 @media(max-width:760px){.history-legislative-summary{padding:13px 12px}.history-legislative-stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.history-legislative-stat{padding:10px}.history-legislative-stat strong{font-size:1.02rem}.history-legislative-seat-chips{gap:6px}}
 @media(max-width:440px){.history-legislative-stats{grid-template-columns:1fr 1fr}.history-legislative-head{align-items:flex-start;flex-direction:column}}
+
+
+/* Party-list electoral history: national allocations + expandable party slates */
+.history-legislative-summary:has(.history-list-explorer){background:#fff;border:1px solid #dce7e1;padding:18px 20px}
+.history-list-explorer{color:#24453b;font-size:.91rem}
+.history-list-head{display:flex;gap:12px;justify-content:space-between;align-items:start;margin-bottom:16px}
+.history-list-eyebrow{font-size:.74rem;color:#618175;letter-spacing:.06em}
+.history-list-head h3{margin:4px 0 6px;font-size:1.13rem;color:#213f36;line-height:1.35}
+.history-list-head p{margin:0;font-size:.84rem;color:#607a70;line-height:1.65}
+.history-list-source{flex-shrink:0;color:#246b56;font-size:.78rem;border-bottom:1px dotted #91b3a4;text-decoration:none;margin-top:2px}
+.history-list-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:12px 0 15px}
+.history-list-stat{min-width:0;border:1px solid #e4ece7;border-radius:10px;padding:12px;background:#fbfdfb}
+.history-list-stat span{display:block;font-size:.74rem;color:#668174;line-height:1.45}
+.history-list-stat strong{display:block;font-size:1.13rem;margin-top:7px;line-height:1.3;color:#294a3d;overflow-wrap:anywhere}
+.history-list-oldsplit{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:9px 0;padding:8px 0}
+.history-list-oldsplit span{background:#edf3ef;color:#3b6853;padding:6px 9px;border-radius:7px;font-size:.8rem}
+.history-list-oldsplit span:last-child{background:none;color:#61796d}
+.history-list-seatbar{display:flex;min-height:34px;overflow:hidden;border-radius:8px;background:#ecf0ed;border:1px solid #dde6df;margin-top:12px}
+.history-list-seat-segment{display:flex;align-items:center;justify-content:center;min-width:0;color:#fff;font-weight:700;text-shadow:0 1px 2px #0008;font-size:.81rem}
+.history-list-seat-segment+.history-list-seat-segment{border-left:2px solid #fff}
+.history-list-context{margin:10px 0 18px;color:#617a6e;font-size:.81rem;line-height:1.55}
+.history-list-alert{padding:10px 12px;margin:8px 0 16px;color:#855327;background:#fff9ef;border-left:3px solid #c08b46;font-size:.82rem;line-height:1.55}
+.history-list-section-title{display:flex;justify-content:space-between;align-items:baseline;gap:14px;margin:17px 0 10px}
+.history-list-section-title h4{margin:0;font-size:.97rem;color:#244d3e}
+.history-list-section-title>span{font-size:.77rem;color:#7b8c82}
+.history-list-party-list{display:grid;gap:7px}
+.history-list-party{border:1px solid #dfe9e2;border-radius:9px;background:#fff;overflow:hidden}
+.history-list-party[open]{border-color:#aecfbb;box-shadow:0 2px 8px #1c5b3210}
+.history-list-party summary{cursor:pointer;list-style:none}
+.history-list-party summary::-webkit-details-marker{display:none}
+.history-list-party-row{display:grid;grid-template-columns:minmax(120px,2fr) minmax(83px,1fr) minmax(65px,.7fr) minmax(72px,.9fr) minmax(45px,.6fr) 13px;align-items:center;column-gap:9px;padding:12px;line-height:1.4}
+.history-list-party-row:hover{background:#f5faf6}
+.history-list-party[open]>.history-list-party-row{background:#eff7f1}
+.history-list-party-name{min-width:0;font-weight:600;color:#294b3b;overflow-wrap:anywhere}
+.history-list-party-name .history-party-cell{display:flex;align-items:center;gap:7px;min-width:0}
+.history-list-party-name .history-party-cell img{width:24px;height:24px;object-fit:contain;flex:none}
+.history-list-party-name .history-party-cell span{overflow-wrap:anywhere}
+.history-list-count,.history-list-rate{font-size:.81rem;color:#596f66;font-variant-numeric:tabular-nums}
+.history-list-seat{font-size:.95rem;color:#23593f;text-align:center;white-space:nowrap}
+.history-list-qualifier{font-size:.75rem;color:#8c746c;white-space:nowrap}
+.history-list-qualifier.qualified{color:#3c8666}
+.history-list-chevron{color:#5c8270;transition:transform .2s ease;text-align:right}
+.history-list-party[open] .history-list-chevron{transform:rotate(180deg)}
+.history-list-party-details{padding:14px 16px 16px;border-top:1px solid #e4eee7}
+.history-list-party-breakdown{font-size:.83rem;color:#436957;margin:0 0 12px}
+.history-list-party-details h5{font-size:.89rem;margin:8px 0 12px;color:#294c3a}
+.history-list-nominees{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.history-list-nominee{display:flex;gap:7px;align-items:center;padding:8px;border-radius:7px;background:#f8faf8;border:1px solid #e8eeea;font-size:.82rem;min-width:0}
+.history-list-rank{font-variant-numeric:tabular-nums;color:#73897b;flex:none;min-width:20px}
+.history-list-person{flex:1;overflow-wrap:anywhere}
+.history-list-result{color:#8c8f8c;font-size:.72rem;white-space:nowrap}
+.history-list-nominee.elected .history-list-result{color:#267c52}
+.history-list-caveat{font-size:.78rem;color:#74867b;line-height:1.6;margin:12px 0}
+.history-list-detail-link{display:inline-block;margin:5px 10px 5px 0;color:#297059;font-size:.79rem;text-decoration:underline;text-underline-offset:3px}
+.history-list-method{margin-top:20px;border-top:1px solid #e0e8e1;padding-top:12px}
+.history-list-method summary{cursor:pointer;color:#2b644d;font-weight:600;font-size:.85rem}
+.history-list-method-body{margin-top:10px;background:#f8fbf9;padding:12px 14px;border-radius:8px;font-size:.81rem;line-height:1.7;color:#516e5c}
+.history-list-method-body p{margin:0 0 10px}
+@media(max-width:860px){
+ .history-list-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .history-list-nominees{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .history-list-party-row{grid-template-columns:minmax(90px,2fr) minmax(68px,1fr) minmax(52px,.9fr) 16px;gap:7px}
+ .history-list-count{display:none}
+ .history-list-qualifier{display:none}
+}
+@media(max-width:540px){
+ .history-legislative-summary:has(.history-list-explorer){padding:13px}
+ .history-list-head{flex-direction:column;gap:8px}
+ .history-list-section-title{flex-direction:column;gap:4px}
+ .history-list-party-row{grid-template-columns:minmax(100px,2fr) 65px 36px 13px;padding:11px 8px;gap:5px}
+ .history-list-party-name{font-size:.81rem}
+ .history-list-party-name .history-party-cell img{width:19px;height:19px}
+ .history-list-rate{font-size:.73rem}
+ .history-list-seat{font-size:.82rem}
+ .history-list-nominees{grid-template-columns:1fr 1fr}
+ .history-list-nominee{padding:6px;gap:4px}
+ .history-list-result{font-size:.7rem}
+}
+@media(max-width:390px){.history-list-nominees{grid-template-columns:1fr}.history-list-stats{gap:6px}.history-list-stat{padding:9px}.history-list-stats strong{font-size:1rem}}
