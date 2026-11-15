@@ -1,0 +1,28 @@
+name: Research official registered Taiwan party emblems
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - scripts/research_official_party_logos.py
+      - .github/workflows/official-party-logo-research.yml
+permissions: {contents: write}
+jobs:
+  research:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m pip install requests beautifulsoup4 opencc-python-reimplemented
+      - run: python scripts/research_official_party_logos.py
+      - name: Commit candidate-source audit without importing images
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reports/official-party-logo-candidates.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Audit official ministry party emblems against archived party names"
+            git push origin HEAD:main
+          fi
