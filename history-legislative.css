@@ -107,3 +107,7 @@
  .history-list-result{font-size:.7rem}
 }
 @media(max-width:390px){.history-list-nominees{grid-template-columns:1fr}.history-list-stats{gap:6px}.history-list-stat{padding:9px}.history-list-stats strong{font-size:1rem}}
+
+.history-list-quota{color:#64776b;font-size:.77rem;margin:-5px 0 13px;line-height:1.55}
+.history-list-result{display:inline-flex;justify-content:center;align-items:center;min-width:20px}
+.history-list-winner-mark{display:block;width:24px;height:24px;object-fit:contain}
