@@ -12,9 +12,9 @@ test('uses era-correct ballot labels',()=>{
 });
 
 test('legislative map levels follow ballot geography, with no invented 1992 local votes',()=>{
- const national=['national','全部地区（含金门、马祖）'];
- assert.deepEqual(Legislative.levels(1992,'regional'),[national,['county','县市'],['district','选举区']]);
- assert.deepEqual(Legislative.levels(2024,'regional'),[national,['county','县市'],['district','选举区']]);
+ const national=['national','全部地区（含金门、马祖）'],regionalNational=['national','全台总览'];
+ assert.deepEqual(Legislative.levels(1992,'regional'),[regionalNational,['county','县市'],['district','选举区']]);
+ assert.deepEqual(Legislative.levels(2024,'regional'),[regionalNational,['county','县市'],['district','选举区']]);
  assert.deepEqual(Legislative.levels(2024,'party'),[national,['county','县市'],['town','乡镇市区']]);
  assert.deepEqual(Legislative.levels(2024,'mountain'),[national,['county','县市'],['town','乡镇市区']]);
  assert.deepEqual(Legislative.levels(1992,'party'),[national,['county','县市']]);
@@ -154,7 +154,7 @@ test('Multi-member history composes party seats from actual winners, not top-vot
 
 
 test('regional legislative maps expose three navigation levels and historical party badge counts',()=>{
- assert.deepEqual(Legislative.levels(2024,'regional'),[['national','全国总览'],['county','县市'],['district','选举区']]);
+ assert.deepEqual(Legislative.levels(2024,'regional'),[['national','全台总览'],['county','县市'],['district','选举区']]);
  assert.deepEqual(Legislative.levels(2024,'party').map(([id])=>id),['national','county','town']);
  assert.equal(Legislative.countyLabelsOnly('national','regional'),true);
  assert.equal(Legislative.countyLabelsOnly('county','regional'),false);
