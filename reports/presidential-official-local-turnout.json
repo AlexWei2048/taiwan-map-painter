@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "years": [
+    {
+      "year": 1996,
+      "county_matches": 25,
+      "town_matches": 369,
+      "original_counties": 25,
+      "original_town_units": 369,
+      "audit": {
+        "county": 25,
+        "town": 369,
+        "bad_arithmetic": 2
+      },
+      "sources": [
+        "https://raw.githubusercontent.com/kiang/db.cec.gov.tw/master/voteData/9%E4%BB%BB%E7%B8%BD%E7%B5%B1/elbase.csv",
+        "https://raw.githubusercontent.com/kiang/db.cec.gov.tw/master/voteData/9%E4%BB%BB%E7%B8%BD%E7%B5%B1/elprof.csv"
+      ]
+    },
+    {
+      "year": 2000,
+      "county_matches": 25,
+      "town_matches": 369,
+      "original_counties": 25,
+      "original_town_units": 369,
+      "audit": {
+        "county": 25,
+        "town": 369
+      },
+      "sources": [
+        "https://raw.githubusercontent.com/kiang/db.cec.gov.tw/master/voteData/2000%E5%B9%B410%E4%BB%BB%E7%B8%BD%E7%B5%B1/elbase.csv",
+        "https://raw.githubusercontent.com/kiang/db.cec.gov.tw/master/voteData/2000%E5%B9%B410%E4%BB%BB%E7%B8%BD%E7%B5%B1/elprof.csv"
+      ]
+    },
+    {
+      "year": 2004,
+      "county_matches": 25,
+      "town_matches": 368,
+      "original_counties": 25,
+      "original_town_units": 368,
+      "audit": {
+        "county": 25,
+        "town": 358,
+        "town_mismatch": 10,
+        "bad_arithmetic": 1,
+        "town_from_stations": 10
+      },
+      "sources": [
+        "https://raw.githubusercontent.com/kiang/db.cec.gov.tw/master/voteData/2004%20%20%2011%E4%BB%BB%E7%B8%BD%E7%B5%B1/elbase.csv",
+        "https://raw.githubusercontent.com/kiang/db.cec.gov.tw/master/voteData/2004%20%20%2011%E4%BB%BB%E7%B8%BD%E7%B5%B1/elprof.csv"
+      ]
+    },
+    {
+      "year": 2008,
+      "county_matches": 25,
+      "town_matches": 368,
+      "original_counties": 25,
+      "original_town_units": 368,
+      "audit": {
+        "town": 368,
+        "county": 25
+      },
+      "sources": [
+        "https://raw.githubusercontent.com/kiang/db.cec.gov.tw/master/voteData/2008%2012%E4%BB%BB%E7%B8%BD%E7%B5%B1/elbase.csv",
+        "https://raw.githubusercontent.com/kiang/db.cec.gov.tw/master/voteData/2008%2012%E4%BB%BB%E7%B8%BD%E7%B5%B1/elprof.csv"
+      ]
+    },
+    {
+      "year": 2012,
+      "county_matches": 22,
+      "town_matches": 0,
+      "original_counties": 22,
+      "original_town_units": 368,
+      "audit": {
+        "county": 22
+      },
+      "sources": [
+        "https://raw.githubusercontent.com/kiang/db.cec.gov.tw/master/voteData/20120114-%E7%B8%BD%E7%B5%B1%E5%8F%8A%E7%AB%8B%E5%A7%94/%E7%B8%BD%E7%B5%B1/elbase.csv",
+        "https://raw.githubusercontent.com/kiang/db.cec.gov.tw/master/voteData/20120114-%E7%B8%BD%E7%B5%B1%E5%8F%8A%E7%AB%8B%E5%A7%94/%E7%B8%BD%E7%B5%B1/elprof.csv"
+      ]
+    },
+    {
+      "year": 2016,
+      "county_matches": 22,
+      "town_matches": 0,
+      "original_counties": 22,
+      "original_town_units": 368,
+      "audit": {
+        "county": 22
+      },
+      "sources": [
+        "https://raw.githubusercontent.com/kiang/db.cec.gov.tw/master/voteData/2016%E7%B8%BD%E7%B5%B1%E7%AB%8B%E5%A7%94/%E7%B8%BD%E7%B5%B1/elbase_P1.csv",
+        "https://raw.githubusercontent.com/kiang/db.cec.gov.tw/master/voteData/2016%E7%B8%BD%E7%B5%B1%E7%AB%8B%E5%A7%94/%E7%B8%BD%E7%B5%B1/elprof_P1.csv"
+      ]
+    },
+    {
+      "year": 2020,
+      "county_matches": 22,
+      "town_matches": 0,
+      "original_counties": 22,
+      "original_town_units": 368,
+      "audit": {
+        "county": 22
+      },
+      "sources": [
+        "https://raw.githubusercontent.com/kiang/db.cec.gov.tw/master/voteData/2020%E7%B8%BD%E7%B5%B1%E7%AB%8B%E5%A7%94/%E7%B8%BD%E7%B5%B1/elbase.csv",
+        "https://raw.githubusercontent.com/kiang/db.cec.gov.tw/master/voteData/2020%E7%B8%BD%E7%B5%B1%E7%AB%8B%E5%A7%94/%E7%B8%BD%E7%B5%B1/elprof.csv"
+      ]
+    },
+    {
+      "year": 2024,
+      "county_matches": 22,
+      "town_matches": 0,
+      "original_counties": 22,
+      "original_town_units": 368,
+      "audit": {
+        "county": 22
+      },
+      "sources": [
+        "https://raw.githubusercontent.com/kiang/db.cec.gov.tw/master/voteData/2024%E7%B8%BD%E7%B5%B1%E7%AB%8B%E5%A7%94/%E7%B8%BD%E7%B5%B1/elbase.csv",
+        "https://raw.githubusercontent.com/kiang/db.cec.gov.tw/master/voteData/2024%E7%B8%BD%E7%B5%B1%E7%AB%8B%E5%A7%94/%E7%B8%BD%E7%B5%B1/elprof.csv"
+      ]
+    }
+  ]
+}
