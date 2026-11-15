@@ -368,6 +368,10 @@
  function renderLegislativeSummary(){
   const root=el('historyLegislativeSummary');if(!root)return;
   root.hidden=!legislativeMode;root.replaceChildren();if(!legislativeMode)return;
+  if(legislativeBallot==='party'&&window.HistoryLegislativeParty){
+   window.HistoryLegislativeParty.render(root,{year:legislativeYear,snapshot:snapshotData,makeParty:appendHistoryParty});
+   return;
+  }
   const records=legislativeResultRows(),votes=records.reduce((sum,r)=>sum+r.votes,0),ballotName=HistoryLegislative.ballots(legislativeYear).find(x=>x.value===legislativeBallot)?.label||'选举';
   const districtRecords=db.legislative.filter(r=>r.electorate===legislativeBallot&&r.level==='district'&&r.elected&&(!county||r.county===county));
   const wins=legislativeBallot==='party'?[]:legislativeBallot==='regional'?records.filter(r=>r.elected):districtRecords;
