@@ -38,6 +38,29 @@
    '台湾民众党':'黄珊珊 黄国昌 陈昭姿 吴春城 麦玉珍 林国成 林忆君 张启楷'
   }
  };
+
+ // Published party rosters are recorded in original ballot order. 2024 contains
+ // all 177 approved nominees across 16 lists, including parties with zero seats.
+ const SLATES_2024={
+  '小民参政欧巴桑联盟':'高芸婷 林诗涵 闵柏陵',
+  '台湾绿党':'钟宝珠 李菁琪 黄柔嘉 吴伊婷 希婻·玛飞洑 林莉棻 黄慧芬 张竹芩',
+  '台湾双语无法党':'陈亭谕 萧文乾',
+  '台湾基进':'史惟筑 陈奕齐 黄枫茹 陈君恺 杨佩桦 黄馨莹 徐煊博',
+  '中华统一促进党':'丁炳仁 黄妙如 肖云霞 张安乐',
+  '民主进步党':'林月琴 沈伯洋 张雅琳 洪申翰 罗美玲 游锡堃 范云 柯建铭 沈发惠 庄瑞雄 林楚茵 郭昱晴 王正旭 王义川 陈培瑜 陈俊翰 张秀君 黄奕睿 孙一信 吴祥荣 陈慧君 柯富扬 刘柏君 石明谨 曾美玲 黄真玮 曾湘桦 郑力嘉 陈右欣 余宛如 许菡芸 周威佑 廖韶吟 蔡宜文',
+  '制度救世岛':'林丽容 石人仁 张怡菁 古文发 黄千明',
+  '时代力量':'林依莹 王宝萱 宋国鼎 江盛 陈泰源 陈昱安 余佳蒨 郑侑青',
+  '中国国民党':'韩国瑜 柯志恩 葛如钧 翁晓玲 陈菁徽 吴宗宪 林倩绮 陈永康 许宇甄 谢龙介 苏清泉 张嘉郡 王育敏 蔡明忠 吴亮仪 李玉婵 李霞 杨应超 徐弘庭 钟沛君 江怡臻 简荣宗 田长沛 沈采颖 林琼嘉 陈克威 邱一峰 廖怡琇 李缙颖 李茂芊 丁瑀 杨智伃 何嘉霖 康晋瑜',
+  '司法改革党':'戴翊如 张静 李柏融 尤瑞敏 赖伯琦 吴振橐 晏扬清 许韶珍 杨启珊',
+  '新党':'王建煊 仉桂美 吴成典 贺桦 林易升 陈丽玲 戴德满 王子芩',
+  '台湾民众党':'黄珊珊 黄国昌 陈昭姿 吴春城 麦玉珍 林国成 林忆君 张启楷 刘书彬 洪毓祥 蔡春绸 王安祥 邱慧洳 陈清龙 李贞秀 许忠信 徐瑞希 杨弘意 陈智菡 庄贻量 林筱淇 蔡丰州 张雪如 汤宏正 林淑芬 梁明辉 廖维欣 冯启彦 林子宇 张清俊 林治华 李家豪 邱于珊 周榆修',
+  '台湾维新':'苏焕智 刘亦恩 江映瑶',
+  '亲民党':'李桐豪 陈怡洁 曲兆祥 何伟真 简泰河 蓝志玟 吴建德 黎淑慧 孙信君 黎建南',
+  '人民最大党':'林东雄 赖方静静',
+  '台湾团结联盟':'周倪安 刘一德 欧阳瑞莲 王思棠 张登凯 吴家庆'
+ };
+ const SLATE_SOURCE_2024='https://zh.wikipedia.org/wiki/2024%E5%B9%B4%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E7%AB%8B%E6%B3%95%E5%A7%94%E5%93%A1%E9%81%B8%E8%88%89#全國不分區及僑居國外國民選舉';
+
  const EXTRA={
   2016:{'民主进步党':[{rank:18,name:'施义芳',elected:false},{rank:19,name:'周春米',elected:true}],
         '中国国民党':[{rank:11,name:'曾永权',elected:false},{rank:12,name:'王育敏',elected:true}]},
@@ -111,6 +134,10 @@
    matchesOfficial:result.every(p=>p.checked)&&result.reduce((n,p)=>n+p.seats,0)===parts[0]+parts[1]};
  }
  function nominees(year,party){
+  if(Number(year)===2024&&SLATES_2024[party]){
+   const winners=new Set((WINNERS[2024]?.[party]||'').split(/\s+/));
+   return SLATES_2024[party].split(/\s+/).map((name,i)=>({rank:i+1,name,elected:winners.has(name)}));
+  }
   const names=WINNERS[year]?.[party]?.split(/\s+/).filter(Boolean)||[];
   if(!names.length)return [];
   let candidates=names.map((name,i)=>({rank:i+1,name,elected:true}));
@@ -195,7 +222,7 @@
      ' · '+(p.seats?'获配席次':'未取得席次'));
    body.append(line);
    if(p.winners.length){
-    body.append(element('h5','','原始当选名单 · 已核实 '+p.winners.filter(c=>c.elected).length+' 人'));
+    body.append(element('h5','',model.year===2024&&SLATES_2024[p.party]?'完整提名名单 · '+p.winners.length+'人 · 原始当选 '+p.winners.filter(c=>c.elected).length+'人':'原始当选名单 · 已核实 '+p.winners.filter(c=>c.elected).length+' 人'));
     const grid=element('div','history-list-nominees');
     for(const n of p.winners){
      const row=element('div','history-list-nominee');
@@ -209,14 +236,14 @@
     body.append(grid);
     body.append(element('p','history-list-caveat',model.old?
      '此处仅收录已核实的不分区当选人，尚未录入本届侨选名单及全部未当选提名人。':
-     '这里只展示已核实的原始当选名单及部分特殊提名顺序，不代表完整政党提名名单；任期内辞职、递补不计入本表。'));
+     model.year===2024&&SLATES_2024[p.party]?'2024年原始提名顺序与选举当晚当选名单；任期内递补不改变此处的原始当选标记。':'这里只展示已核实的原始当选名单及部分特殊提名顺序，不代表完整政党提名名单；任期内辞职、递补不计入本表。'));
    }else{
     body.append(element('p','history-list-caveat',p.seats?
      '本届该党获得席次，但原始当选人及完整提名名册尚未逐项核实，因此暂不展示姓名。':
      '此党未分配到席次；其完整提名名册尚未逐项核实，暂不展示未经确认的姓名。'));
    }
    const ref=element('a','history-list-detail-link','核对本届原始选举资料');
-   ref.href=SOURCES[model.year]||LAW_NEW;ref.target='_blank';ref.rel='noopener noreferrer';body.append(ref);
+   ref.href=model.year===2024?SLATE_SOURCE_2024:SOURCES[model.year]||LAW_NEW;ref.target='_blank';ref.rel='noopener noreferrer';body.append(ref);
    details.append(body);table.append(details);
   }
   if(!model.parties.length)table.append(element('p','history-list-caveat','本届的政党得票数据尚未加载。'));
