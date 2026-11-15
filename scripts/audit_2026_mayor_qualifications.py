@@ -17,7 +17,7 @@ OUTPUT=ROOT/"reports/2026-municipal-mayor-qualification-audit.json"
 
 def canon(v):
     s=unicodedata.normalize("NFKC",str(v or ""))
-    return re.sub(r"[\s·‧．.]+","",s).replace("臺","台").replace("台","台")
+    return re.sub(r"[\s·‧．.]+","",s).replace("臺","台").replace("溫","温").replace("啟","啓")
 
 def check(data,reference):
     candidates=data.get("candidates",[])
@@ -55,7 +55,12 @@ def main():
     p=argparse.ArgumentParser()
     p.add_argument("--output",type=Path,default=OUTPUT)
     args=p.parse_args()
-    report=check(load_directory(),json.loads(SOURCE.read_text(encoding="utf-8")))
+    base=json.loads(SOURCE.read_text(encoding="utf-8"))
+    counties=json.loads((ROOT/"sources/election-2026/official-county-mayors-20261016.json").read_text(encoding="utf-8"))
+    assert base["officialCount"]==23 and counties["officialCount"]==58
+    assert len(base["counties"])+len(counties["counties"])==22
+    reference={**base,"counties":base["counties"]+counties["counties"],"officialCount":81}
+    report=check(load_directory(),reference)
     args.output.parent.mkdir(parents=True,exist_ok=True)
     args.output.write_text(json.dumps(report,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
     print(json.dumps({"passed":report["passed"],"matched":report["matched"],

@@ -21,4 +21,8 @@ class TestMayorNames(unittest.TestCase):
   source=json.loads((ROOT/"sources/election-2026/official-mayors-20261016.json").read_text())
   self.assertEqual([len(c["names"]) for c in source["counties"]],[6,3,2,3,4,5])
   self.assertEqual(len({n for c in source["counties"] for n in c["names"]}),23)
+  counties=json.loads((ROOT/"sources/election-2026/official-county-mayors-20261016.json").read_text())
+  self.assertEqual(len(counties["counties"]),16)
+  self.assertEqual(sum(len(c["names"]) for c in counties["counties"]),58)
+  self.assertEqual(source["officialCount"]+counties["officialCount"],81)
 if __name__=="__main__":unittest.main()

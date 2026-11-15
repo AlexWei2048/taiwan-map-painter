@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 1,
+  "year": 2026,
+  "office": "mayor",
+  "scope": "sixteen_counties_and_cities",
+  "decisionDate": "2026-10-16",
+  "sourceTitle": "中選會審定115年直轄市長、直轄市議員、縣（市）長及縣（市）議員選舉候選人資格",
+  "sourceUrl": "https://web.cec.gov.tw/central/article/65213",
+  "status": "qualified_on_2026_10_16",
+  "caveat": "十六縣市長2026-10-16資格審定姓名核對資料；不代替2026-11-17候選人公告或各縣市號次冊",
+  "counties": [
+    {
+      "county": "新竹县",
+      "officialCounty": "新竹縣",
+      "names": [
+        "鄭朝方",
+        "朱定瑀",
+        "徐欣瑩"
+      ]
+    },
+    {
+      "county": "苗栗县",
+      "officialCounty": "苗栗縣",
+      "names": [
+        "陳品安",
+        "鍾東錦"
+      ]
+    },
+    {
+      "county": "彰化县",
+      "officialCounty": "彰化縣",
+      "names": [
+        "陳重嘉",
+        "陳素月",
+        "邱建富",
+        "魏平政"
+      ]
+    },
+    {
+      "county": "南投县",
+      "officialCounty": "南投縣",
+      "names": [
+        "温世政",
+        "許淑華"
+      ]
+    },
+    {
+      "county": "云林县",
+      "officialCounty": "雲林縣",
+      "names": [
+        "吳炳輝",
+        "張嘉郡",
+        "劉建國",
+        "林佳瑜"
+      ]
+    },
+    {
+      "county": "嘉义县",
+      "officialCounty": "嘉義縣",
+      "names": [
+        "吳品叡",
+        "蔡易餘"
+      ]
+    },
+    {
+      "county": "屏东县",
+      "officialCounty": "屏東縣",
+      "names": [
+        "蘇清泉",
+        "周春米"
+      ]
+    },
+    {
+      "county": "宜兰县",
+      "officialCounty": "宜蘭縣",
+      "names": [
+        "陳宏毅",
+        "吳宗憲",
+        "劉燦輝",
+        "林國漳",
+        "楊鉯婷"
+      ]
+    },
+    {
+      "county": "花莲县",
+      "officialCounty": "花蓮縣",
+      "names": [
+        "游淑貞",
+        "張峻",
+        "魏嘉賢",
+        "羅佩秦"
+      ]
+    },
+    {
+      "county": "台东县",
+      "officialCounty": "臺東縣",
+      "names": [
+        "陳瑩",
+        "吳秀華",
+        "李吳穎智",
+        "王志偉"
+      ]
+    },
+    {
+      "county": "澎湖县",
+      "officialCounty": "澎湖縣",
+      "names": [
+        "吳淑瑾",
+        "陳振中",
+        "周倪安",
+        "許智富",
+        "陳盡川",
+        "葉竹林"
+      ]
+    },
+    {
+      "county": "金门县",
+      "officialCounty": "金門縣",
+      "names": [
+        "洪和成",
+        "李文良",
+        "黃世團",
+        "陳玉珍",
+        "張國威",
+        "梁文韜",
+        "張火木"
+      ]
+    },
+    {
+      "county": "连江县",
+      "officialCounty": "連江縣",
+      "names": [
+        "王忠銘",
+        "曹爾元"
+      ]
+    },
+    {
+      "county": "基隆市",
+      "officialCounty": "基隆市",
+      "names": [
+        "謝國樑",
+        "魏造文",
+        "童子瑋"
+      ]
+    },
+    {
+      "county": "新竹市",
+      "officialCounty": "新竹市",
+      "names": [
+        "高虹安",
+        "莊競程",
+        "何志勇"
+      ]
+    },
+    {
+      "county": "嘉义市",
+      "officialCounty": "嘉義市",
+      "names": [
+        "黃宏成台灣阿成世界偉人財神總統",
+        "陳愷璜",
+        "張啓楷",
+        "王美惠",
+        "王義成"
+      ]
+    }
+  ],
+  "officialCount": 58,
+  "officialNationwideMayorTotal": 81
+}

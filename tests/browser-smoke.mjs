@@ -2388,6 +2388,7 @@ test('Council and historic multi-member legislative nationwide maps use pluralit
  const page=await pageFor(t);
  await page.locator('#categoryHistory').click();
  await page.locator('#historyOffice').selectOption('council');
+ await page.waitForFunction(()=>History2022View.snapshot()?.year===2022&&History2022View.countySeatLeader('台北市').seats>0);
  const check=await page.evaluate(()=>{
   const f=currentItems().find(f=>f.name==='台北市'),counts=History2022View.countySeatLeader('台北市'),
   el=document.querySelector('#regions path[data-region="'+f.id+'"]');
@@ -2754,4 +2755,15 @@ test('Candidate directory pending ballot-number filters and counts agree',async 
  assert.match(result.filtered.total,/2 名候选人/);
  assert.match(result.all,/候选人数/);
  assert.equal(result.fullCount,result.expected);
+});
+
+test('Local 2026 results remain hidden until an official fully reconciled data release is published',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('mayor');
+ await page.waitForResponse(response=>response.url().includes('history-2026-availability.json'));
+ assert.deepEqual(await page.locator('#historyYear option').allTextContents(),['2022']);
+ assert.equal(await page.evaluate(()=>window.HISTORY_2026_RESULTS_AVAILABLE===true),false);
+ const manifest=await page.evaluate(async()=>await (await fetch('assets/history-2026-availability.json')).json());
+ assert.equal(manifest.status,'awaiting_results');
 });
