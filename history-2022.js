@@ -107,9 +107,7 @@
     const legacyMap={...data,towns:legislativeAreaGeometry.towns,counties:legislativeAreaGeometry.counties};
    if(year<=2008)legislativeGeometry=HistoryLegislative.districtGeometry(shard,geometryReference||shard,legacyMap,norm,HistoryCore.mergePaths,HistoryPresidential.modernCounty,HistoryPresidential.baseTown);
    else{
-    legislativeGeometry=HistoryLegislative.singleMemberGeometry(shard,regionalMap,norm,HistoryPresidential.modernCounty);
-    const fallback=HistoryLegislative.districtGeometry(shard,shard,legacyMap,norm,HistoryCore.mergePaths,HistoryPresidential.modernCounty,HistoryPresidential.baseTown),keys=new Set(legislativeGeometry.map(f=>f.county+'|'+f.number));
-    legislativeGeometry.push(...fallback.filter(f=>!keys.has(f.county+'|'+f.number)));
+    legislativeGeometry=HistoryLegislative.periodSingleMemberGeometry(shard,regionalMap,legacyMap,norm,HistoryCore.mergePaths,HistoryPresidential.modernCounty,HistoryPresidential.baseTown);
    }
    legislativeBallot=['regional','plains','mountain','party'].includes(electorate)?electorate:'regional';electorate=legislativeBallot;
    const available=HistoryLegislative.levels(year,legislativeBallot).map(item=>item[0]);
@@ -637,7 +635,9 @@
   if(el('historyWorkspaceTitle'))el('historyWorkspaceTitle').textContent=yearLabel()+' '+officeTitle()+'选举结果';
   if(el('historyBoundaryNote')){
   el('historyBoundaryNote').hidden=!presidentialMode&&!legislativeMode;
-  if(legislativeMode)el('historyBoundaryNote').textContent='历史选区按当届县市、乡镇市区归属重建；底图几何使用现行行政区近似，无法精确还原的旧里界不作推算。';
+  if(legislativeMode)el('historyBoundaryNote').textContent=legislativeYear>=2008&&legislativeYear<2020?
+   '2008—2016年立法机构区域选区依当届归属显示；2020年调整的台中、台南、高雄、新竹县、屏东按当届乡镇市区选区资料重建。村里内部划分缺少可核历史界线时仅近似展示。':
+   '历史选区按当届县市、乡镇市区归属重建；底图几何使用现行行政区近似，无法精确还原的旧里界不作推算。';
   else if(presidentialMode)el('historyBoundaryNote').textContent='县市和乡镇市区按当届归属显示，边界采用现行底图近似；'+
    (presidentialYear<=2000?'不同“连署”候选人使用不同图示色，不代表政党。':'颜色表示各地区最高票候选人所属政党。');
  }
