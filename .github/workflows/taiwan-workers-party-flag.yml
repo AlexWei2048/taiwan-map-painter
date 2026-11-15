@@ -1,0 +1,48 @@
+name: Verify historically documented Taiwan Workers Party flag
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/import_verified_taiwan_workers_flag.py
+      - .github/workflows/taiwan-workers-party-flag.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: true}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m pip install requests cairosvg pillow opencc-python-reimplemented
+      - name: Download and embed exact historical-party logo source
+        run: python scripts/import_verified_taiwan_workers_flag.py
+      - name: Refresh source coverage report
+        run: python scripts/audit_site_coverage.py
+      - name: Assert title, source and party separation
+        run: |
+          python - <<'PY'
+          import json,re
+          from pathlib import Path
+          text=Path('assets/party-logos-sourced.js').read_text()
+          data=json.loads(re.search(r'const SOURCED_PARTY_LOGOS_BY_NAME=(\{.*?\});',text,re.S).group(1))
+          assert data['台湾工党'].startswith('data:image/png;base64,')
+          assert '劳动党' not in data
+          records=json.loads(Path('reports/official-party-logos-import.json').read_text())
+          assert any(x.get('name')=='台湾工党' and x.get('author')=='AAAAA143222' for x in records['official_sources'])
+          report=json.loads(Path('reports/coverage-audit.json').read_text())
+          assert not any(x['name']=='台湾工党' for x in report['missing_archive_logos'])
+          print('Taiwan Workers Party historical flag verified and attributed')
+          PY
+      - name: Commit source-proven historic logo and audit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/party-logos-sourced.js assets/LICENSE-party-logos-sourced.txt reports/official-party-logos-import.json reports/coverage-audit.json reports/coverage-audit.md index.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Embed CC BY-SA Taiwan Workers Party historical flag and coverage proof"
+            git push origin HEAD:main
+          fi
