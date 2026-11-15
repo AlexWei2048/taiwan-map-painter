@@ -1596,7 +1596,9 @@ function sharedMapBorders(level,identity='regional',includeCoast=false){
  return mesh;
 }
 function appendSharedBorders(group,level,identity='regional',filterTown=false){
- const mesh=sharedMapBorders(level,identity,!!state.county);
+ const historicalRegional=level==='legislative'&&typeof History2022View!=='undefined'&&History2022View.active()&&History2022View.office?.()==='legislative';
+ // National historic legislative regions need complete perimeters, including coasts and islands.
+ const mesh=sharedMapBorders(level,identity,!!state.county||historicalRegional);
  const d=filterTown&&state.villageTown?mesh.byTown[state.villageTown]||'':state.county?mesh.byCounty[state.county]||'':mesh.all;
  if(d){const historicCounty=level==='counties'&&typeof History2022View!=='undefined'&&History2022View.active()&&['president','legislative'].includes(History2022View.office?.());group.append(svgEl('path',{d,fill:'none','vector-effect':'non-scaling-stroke','data-shared-boundary':level,...(historicCounty?{'data-historical-county-outline':'true'}:{})}));}
 }
@@ -1630,8 +1632,15 @@ function render(){
     appendSharedBorders(districtGroup,mayorTownBoundaryOverlay()||councilCountyOverview()?'counties':state.level,'regional',state.level==='villages');
   for(const f of currentItems()){
    const path=regionPath(f);
-   if(historicalCountySeats){path.setAttribute('stroke',BOUNDARY_PRESET.countyBorderColor);path.setAttribute('stroke-width',BOUNDARY_PRESET.countyBorderWidth)}
    regionGroup.append(path);
+  }
+  if(historicalCountySeats){
+   // applyBorders removes region strokes: place the true historical outlines
+   // above the fills instead of relying on per-feature strokes.
+   const d=currentItems().map(f=>f.d).filter(Boolean).join(' ');
+   if(d)districtGroup.append(svgEl('path',{d,fill:'none','vector-effect':'non-scaling-stroke',
+    'data-shared-boundary':'counties','data-historical-county-outline':'true',
+    'data-historical-plurality-outline':'true'}));
   }
   if(!historicalCountySeats&&state.level!=='counties'&&!mayorTownBoundaryOverlay()&&!(state.level==='villages'&&state.villageTown))appendSharedBorders(borderGroup,'counties');
  }
