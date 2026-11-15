@@ -109,3 +109,18 @@ test('2022 Chiayi City rerun keeps ward turnout missing but exact local vote sum
  }
  assert.equal(local.snapshot.townProfiles.some(profile=>profile.county==='嘉义市'),false);
 });
+
+test('2022 delayed Chiayi mayoral rerun has official and candidate-verified Eastern/Western turnout',()=>{
+ const snapshot=local.snapshot;
+ const city=local.contests.find(c=>c.election_id==='2022-mayor'&&c.county_name==='嘉义市');
+ assert.ok(city,'delayed December rerun city exists');
+ const wards=[['东区',96706,42798,42637,161],['西区',117424,51390,51176,214]];
+ for(const [town,registered,cast,valid,invalid] of wards){
+  const selected=W.overviewRegionData(local,{year:2022,office:'mayor',scope:'town',county:'嘉义市',area:town});
+  assert.ok(selected.townVotesVerified,'CEC local candidate votes verified '+town);
+  assert.equal(selected.overview.registeredVoters,registered);
+  assert.equal(selected.overview.ballotsCast,cast);
+  assert.equal(selected.overview.validVotes,valid);
+  assert.equal(selected.overview.invalidVotes,invalid);
+ }
+});
