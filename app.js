@@ -1416,7 +1416,26 @@ function drawHistoricalLegislativeRegionalLabels(group,interactive=false){
  if(state.labels){
   if(nationwide){
    const counties=History2022View.legislativeCountyFeatures?.()||[];
-   drawLabels(group,counties.length?counties:data.counties,transform,19,interactive,true,true);
+   const names=counties.length?counties:data.counties;
+   drawLabels(group,names,transform,19,interactive,true,true);
+   // Historical county polygons sometimes lack sufficiently wide label anchors.
+   // Every county still receives its own visible *name*, never a district number.
+   const placed=new Set([...group.querySelectorAll('text[data-label]')].map(node=>node.textContent.replaceAll('臺','台')));
+   const offsets={'台北市':[-9,21],'基隆市':[17,-15],'新竹市':[11,15],'嘉义市':[11,18]};
+   for(const countyFeature of names){
+    const labelName=String(countyFeature.name||countyFeature.county||'').replaceAll('臺','台');
+    if(!labelName||placed.has(labelName))continue;
+    const center=countyFeature.center||[(countyFeature.box[0]+countyFeature.box[2])/2,(countyFeature.box[1]+countyFeature.box[3])/2];
+    const offset=offsets[labelName]||[0,0],x=center[0]*transform.scale+transform.tx+offset[0],y=center[1]*transform.scale+transform.ty+offset[1];
+    const label=svgEl('text',{x,y,'font-size':17,'font-weight':650,'text-anchor':'middle','dominant-baseline':'middle',
+     'data-label':countyFeature.id,'data-history-county-name':labelName,fill:'#294c39',stroke:'#fff','stroke-width':3,'paint-order':'stroke'});
+    label.textContent=labelName;
+    if(interactive){label.style.cursor='pointer';label.style.pointerEvents='auto';label.setAttribute('tabindex','0');
+     label.onclick=()=>History2022View.enterLegislativeCounty(countyFeature.county||labelName);
+     label.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();label.onclick()}};
+    }
+    group.append(label);
+   }
   }else drawLabels(group,items,transform,sceneSpec().font,interactive);
  }else group.replaceChildren();
  appendHistoricalLegislativeBadges(group,transform,nationwide);
