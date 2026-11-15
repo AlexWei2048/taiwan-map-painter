@@ -83,7 +83,7 @@ if prior_js.exists() and prior_json.exists():
  for variable,target in (
    ("SOURCED_PARTY_LOGOS_BY_ID",byid),
    ("SOURCED_PARTY_LOGOS_BY_NAME",byname)):
-  match=re.search(r"const "+variable+r"=(\\{.*?\\});",old,re.S)
+  match=re.search(r"const "+variable+r"=(\{.*?\});",old,re.S)
   if match:target.update(json.loads(match.group(1)))
  documentation.extend(prior.get("official_sources",[]))
  skips.extend(prior.get("unverified_or_unavailable",[]))
