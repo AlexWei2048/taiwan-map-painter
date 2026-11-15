@@ -95,6 +95,7 @@
  const SLATE_SOURCE_2024='https://web.cec.gov.tw/api/file/776fd1c9-dec7-4ec9-add0-c491f946f9e6.pdf';
  const SLATE_SOURCES={
   2001:'https://web.cec.gov.tw/api/file/9255d5fb-ee03-4533-88b2-9dcce3cbef04.pdf',
+  2004:'https://web.cec.gov.tw/api/file/9ecb9f91-beff-44ad-9e72-e7d56be79b2a.pdf',
   2008:'https://web.cec.gov.tw/api/file/9b6521a5-f3ef-4754-bd3e-cd0a3292c282.pdf',
   2012:'https://gazette.nat.gov.tw/EG_FileManager/eguploadpub/eg018004/ch02/type3/gov15/num2/OEg.pdf',
   2016:'https://web.cec.gov.tw/api/file/26f914ad-93b3-4c8e-9844-546ea286c970.pdf',
@@ -200,6 +201,23 @@
   2024:SLATES_2024
  };
 
+ // CEC sixth-legislature registration register lists people but not their formal order.
+ // Preserve a complete 2004 nomination inventory without inventing ranking.
+ const UNORDERED_SLATES_2004={
+  '中国国民党':'曹寿民 苏起 黄德福 帅化民 柴云清 王敏星 黄昭顺 张立宇 刘盛良 白添枝 黄志雄 郭素春 李纪珠 陈瑞昌 江丙坤 陈美子 侯彩凤 黄良华 王金平 曾永权 赵连出 华真 章仁香 董清池',
+  '民主进步党':'陈时中 洪奇昌 黄诚 许永面 陈宗仁 黄淑英 田秋堇 蔡英文 高志鹏 吴明敏 邱永仁 周平德 王荣璋 李若华 张庆惠 徐进荣 薛凌 林浊水 蔡煌瑯 杨芳婉 张俊雄 卢孳艳 尤清 王涂发 卢天麟 曾智勇 许德祥 许荣淑 夷将·拔路儿 陈秀惠 林文郎',
+  '亲民党':'李复甸 罗淑蕾 刘忆如 张志铭 董贞吟 刘文雄 李锦泉 林正国 顾崇廉 葛建埔 吴攀龙 陈进兴 兰梁筱娟 黄旐涛 王蔡幸 蔡胜佳 钟荣吉 李文来 林惠官',
+  '台湾团结联盟':'陈鸿基 黄金郎 李旭辉 李研慧 赖幸媛 陈永兴 林志嘉 陈银河 黄政哲 郭林勇',
+  '无党团结联盟':'张博雅 宋丽华 陈杰儒 萧苑瑜 吴庆堂'
+ };
+ const OVERSEAS_SLATES_2004={
+  '中国国民党':'谢文政 吴英毅 吴松柏 薛盛华 王晓蓉',
+  '台湾团结联盟':'吕宪治 刘宽平 陈炎生',
+  '亲民党':'李廷亚 林政义 陈庆仰 李维灏 梅长锜',
+  '民主进步党':'陈重信 庄和子 黄静枝 陈明真 陈东荣 李正三',
+  '无党团结联盟':'黄正义'
+ };
+
  const EXTRA={
   2012:{'台湾团结联盟':[{rank:3,name:'黄昆辉',elected:false},{rank:4,name:'林世嘉',elected:true}]},
   2016:{'民主进步党':[{rank:18,name:'施义芳',elected:false},{rank:19,name:'周春米',elected:true}],
@@ -270,13 +288,18 @@
    return {...item,seats,atLarge:first,overseas:second,expected:expected[item.party]??0,
     checked:Object.prototype.hasOwnProperty.call(expected,item.party)?seats===expected[item.party]:!seats,
     quota:primary.detail?.get(item.party)||null,overseasQuota:overseas?.detail?.get(item.party)||null,
-    winners:nominees(year,item.party),overseasWinners:(OVERSEAS_WINNERS[year]?.[item.party]||'').split(/\s+/).filter(Boolean)};
+    winners:nominees(year,item.party),overseasWinners:(OVERSEAS_WINNERS[year]?.[item.party]||'').split(/\s+/).filter(Boolean),
+    overseasNominees:year===2004?(OVERSEAS_SLATES_2004[item.party]||'').split(/\s+/).filter(Boolean):[]};
   }).sort((a,b)=>b.seats-a.seats||b.votes-a.votes||a.party.localeCompare(b.party,'zh'));
   return {year,old,parts,total,eligibleTotal:primary.base,parties:result,
    totalAssigned:result.reduce((n,p)=>n+p.seats,0),
    matchesOfficial:result.every(p=>p.checked)&&result.reduce((n,p)=>n+p.seats,0)===parts[0]+parts[1]};
  }
  function nominees(year,party){
+  if(Number(year)===2004&&UNORDERED_SLATES_2004[party]){
+   const winners=new Set((WINNERS[2004]?.[party]||'').split(/\s+/));
+   return UNORDERED_SLATES_2004[party].split(/\s+/).map(name=>({rank:null,name,elected:winners.has(name)}));
+  }
   const slate=SLATES_BY_YEAR[Number(year)]?.[party];
   if(slate){
    const winners=new Set((WINNERS[year]?.[party]||'').split(/\s+/));
@@ -284,14 +307,14 @@
   }
   const names=WINNERS[year]?.[party]?.split(/\s+/).filter(Boolean)||[];
   if(!names.length)return [];
-  let candidates=names.map((name,i)=>({rank:i+1,name,elected:true}));
+  let candidates=names.map((name)=>({rank:null,name,elected:true}));
   const special=EXTRA[year]?.[party];
   if(special?.length){
    const map=new Map(special.map(row=>[row.name,row]));
-   candidates=candidates.filter(row=>!map.has(row.name)).map((row,i)=>({...row,rank:i+1}));
+   candidates=candidates.filter(row=>!map.has(row.name));
    candidates.push(...special);
   }
-  return candidates.sort((a,b)=>a.rank-b.rank);
+  return candidates.sort((a,b)=>(a.rank??Infinity)-(b.rank??Infinity));
  }
  function element(tag,klass,text){
   const n=document.createElement(tag);if(klass)n.className=klass;if(text!==undefined)n.textContent=text;return n;
@@ -372,25 +395,30 @@
     body.append(element('p','history-list-quota',quotaText));
    }
    if(p.winners.length){
-    body.append(element('h5','',SLATES_BY_YEAR[model.year]?.[p.party]?'提名名单 · '+p.winners.length+'人 · 原始当选 '+p.winners.filter(c=>c.elected).length+'人':'原始当选名单 · 已核实 '+p.winners.filter(c=>c.elected).length+' 人'));
+    body.append(element('h5','',SLATES_BY_YEAR[model.year]?.[p.party]?'提名名单 · '+p.winners.length+'人 · 原始当选 '+p.winners.filter(c=>c.elected).length+'人':
+      model.year===2004&&UNORDERED_SLATES_2004[p.party]?'登记提名名单 · '+p.winners.length+'人（原始顺序未核实）':'原始当选名单 · 已核实 '+p.winners.filter(c=>c.elected).length+' 人'));
     const grid=element('div','history-list-nominees');
     for(const n of p.winners){
      const row=element('div','history-list-nominee');
      if(n.elected)row.classList.add('elected');
      const mark=element('span','history-list-result');
      if(n.elected){const img=element('img','history-list-winner-mark');img.src='assets/elected-mark.png';img.alt='当选';img.loading='lazy';mark.append(img)}
-     row.append(element('span','history-list-rank',n.rank+'.'),element('span','history-list-person',n.name),mark);
-     if(n.rank>p.seats&&n.elected)row.title='按妇女保障规则优先当选，并非单纯前N名';
+     row.append(element('span','history-list-rank',n.rank?String(n.rank)+'.':'·'),element('span','history-list-person',n.name),mark);
+     if(n.rank!==null&&n.rank>p.seats&&n.elected)row.title='按妇女保障规则优先当选，并非单纯前N名';
      grid.append(row);
     }
     body.append(grid);
-    if(model.old&&p.overseasWinners.length){
-     body.append(element('h5','','侨选原始当选名单 · '+p.overseasWinners.length+'人'));
+    if(model.old&&(p.overseasNominees.length||p.overseasWinners.length)){
+     const hasAll=p.overseasNominees.length>0,overseasDisplay=hasAll?p.overseasNominees:p.overseasWinners,
+      overseasWinnerSet=new Set(p.overseasWinners);
+     body.append(element('h5','',hasAll?'侨选登记提名名单 · '+overseasDisplay.length+'人（原始顺序未核实）':'侨选原始当选名单 · '+p.overseasWinners.length+'人'));
      const overseasGrid=element('div','history-list-nominees');
-     for(const [i,name] of p.overseasWinners.entries()){
-      const row=element('div','history-list-nominee elected');
-      const mark=element('span','history-list-result');const img=element('img','history-list-winner-mark');img.src='assets/elected-mark.png';img.alt='当选';img.loading='lazy';mark.append(img);
-      row.append(element('span','history-list-rank',String(i+1)+'.'),element('span','history-list-person',name),mark);
+     for(const [i,name] of overseasDisplay.entries()){
+      const elected=overseasWinnerSet.has(name);
+      const row=element('div','history-list-nominee'+(elected?' elected':''));
+      const mark=element('span','history-list-result');
+      if(elected){const img=element('img','history-list-winner-mark');img.src='assets/elected-mark.png';img.alt='当选';img.loading='lazy';mark.append(img)}
+      row.append(element('span','history-list-rank',hasAll?'·':String(i+1)+'.'),element('span','history-list-person',name),mark);
       overseasGrid.append(row);
      }
      body.append(overseasGrid);
