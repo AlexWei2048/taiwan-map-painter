@@ -72,6 +72,21 @@ def run(year):
   p,c,d,t,v=map(field,r[:5])
   if t not in ("000","") and v=="0000" and (p,c) in counties:
    towns[(p,c,d,t)]=norm(r[5])
+ # 2012+ CEC elbase uses district code 00 for town dictionary rows,
+ # while elprof polling records use non-zero polling district codes (e.g.
+ # 台北市北投区: base 00/001, polls 01/001). Match province+county+town
+ # ONLY when that code identifies a unique locality; cross-check against
+ # independently archived candidate vote totals before publishing it.
+ town_by_code={}
+ ambiguous_town_codes=set()
+ for (p,c,d,t),name in towns.items():
+  key=(p,c,t)
+  if key in town_by_code and town_by_code[key]!=name:
+   ambiguous_town_codes.add(key)
+  else:town_by_code[key]=name
+ for key in ambiguous_town_codes:town_by_code.pop(key,None)
+ def find_town(p,c,d,t):
+  return towns.get((p,c,d,t)) or town_by_code.get((p,c,t))
  bycounty={c["county_name"]:c for c in snap["contests"]}
  town_votes=defaultdict(int)
  for row in snap.get("rows",[]):
@@ -99,7 +114,7 @@ def run(year):
   county=counties.get((p,c))
   if not county:continue
   if t not in ("000","") and station not in ("","0000","0"):
-   town=towns.get((p,c,d,t))
+   town=find_town(p,c,d,t)
    if town:polling_rows[(county,town)].append(group)
   if station not in ("","0000","0") or v not in ("","0000"):
    continue
@@ -110,7 +125,7 @@ def run(year):
     elif accepted_county[county]!=group:audit["ambiguous_county"]+=1;accepted_county.pop(county,None)
    else:audit["county_mismatch"]+=1
   elif t not in ("000",""):
-   town=towns.get((p,c,d,t))
+   town=find_town(p,c,d,t)
    if not town:continue
    pair=(county,town)
    if town_votes.get(pair)==group["valid_votes"] and pair not in accepted_towns:
