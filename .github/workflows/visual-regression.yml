@@ -1,0 +1,67 @@
+name: Map visual regression (desktop, mobile and export)
+on:
+  push:
+    branches: [main]
+    paths:
+      - index.html
+      - app.js
+      - history-2022.js
+      - history-legislative.js
+      - history-workspace.js
+      - candidate-directory.js
+      - '*.css'
+      - assets/history-legislative-*.json
+      - assets/map-*.json
+      - tests/visual-regression.mjs
+      - .github/workflows/visual-regression.yml
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  compare-visuals:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser and image comparison libraries
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.1 pngjs@7.0.0 pixelmatch@7.1.0
+          npx playwright install chromium
+      - name: Compare against previous git revision
+        run: |
+          BASE_DIR="$(mktemp -d /tmp/island-palette-baseline-XXXXXX)"
+          git worktree add --detach "$BASE_DIR" HEAD^
+          python3 -m http.server 8765 --bind 127.0.0.1 --directory "$GITHUB_WORKSPACE" >/tmp/visual-current.log 2>&1 &
+          CURRENT_PID=$!
+          python3 -m http.server 8766 --bind 127.0.0.1 --directory "$BASE_DIR" >/tmp/visual-baseline.log 2>&1 &
+          BASE_PID=$!
+          trap 'kill "$CURRENT_PID" "$BASE_PID" 2>/dev/null || true; git worktree remove --force "$BASE_DIR" || true' EXIT
+          node tests/visual-regression.mjs
+      - name: Explain visual changes
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path('reports/visual-regression/summary.json')
+          if not p.exists():raise SystemExit(0)
+          data=json.loads(p.read_text())
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('## Map visual regression: previous revision vs current\n\n')
+              f.write('| Scenario | Pixel change | Status |\n|---|---:|---|\n')
+              for row in data['scenes']:
+                  f.write(f"| {row['id']} | {row.get('changedFraction',0)*100:.2f}% | {row['status']} |\n")
+              f.write('\nScreenshots from both versions and difference images are available in the artifact. Significant intentional changes require review; broken map geometry or capture errors fail.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: map-visual-comparison
+          path: reports/visual-regression/
+          retention-days: 30
+          if-no-files-found: warn
