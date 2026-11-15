@@ -106,7 +106,7 @@
 
 这些文字包含诚实显示不可取得数据的情况，不能单凭关键字批量替换。
 
-- `site-updated.js`：不可用 ×1
 - `history-2022.js`：暂无资料 ×1, 暂无该 ×5, 未收录 ×1, 不可用 ×2, 无可核实 ×1
+- `site-updated.js`：不可用 ×1
 - `history-workspace.js`：暂无资料 ×4, 暂无该 ×2
 - `tests/history-workspace.test.cjs`：暂无资料 ×5

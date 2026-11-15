@@ -1331,12 +1331,6 @@
     }
   ],
   "placeholder_code_locations": {
-    "site-updated.js": [
-      {
-        "phrase": "不可用",
-        "count": 1
-      }
-    ],
     "history-2022.js": [
       {
         "phrase": "暂无资料",
@@ -1356,6 +1350,12 @@
       },
       {
         "phrase": "无可核实",
+        "count": 1
+      }
+    ],
+    "site-updated.js": [
+      {
+        "phrase": "不可用",
         "count": 1
       }
     ],
