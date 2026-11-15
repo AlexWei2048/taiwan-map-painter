@@ -1410,36 +1410,7 @@ function drawIdentityPanelLabels(group,interactive=false,exportAll=false){
  }
 }
 // County-name-only labels without electoral numbers or leader lines, shared by screen and export.
-function drawFreeNationwideDistrictLabels(group){
- drawLabels(group,data.counties,geometryLayout(currentItems(),true),19,false,true,true);
-}
-function historicalLegislativeNationalRegional(){
- return typeof History2022View!=='undefined'&&History2022View.active()&&History2022View.office()==='legislative'
-  &&History2022View.legislativeScale()==='national'&&History2022View.legislativeBallot()==='regional';
-}
-function historicalLegislativeMultiBadges(){
- return typeof History2022View!=='undefined'&&History2022View.legislativeBadgesMode?.()===true;
-}
-// Historical pre-2008 constituency seat cards share the council map's
-// visual vocabulary: large constituency number, translucent grouped emblems,
-// several rows and no party-color fill of the constituency itself.
-// Historical multi-member district seat markers use precisely the same
-// geometry-aware, per-seat drawing engine as county council seat maps.
-function appendHistoricalLegislativeBadges(layer,transform,nationwide,interactive=false){
- if(!historicalLegislativeMultiBadges()||nationwide)return;
- if(typeof drawHistoricalLegislativeSeats==='function')
-  drawHistoricalLegislativeSeats(layer,transform,interactive);
-}
-function drawHistoricalLegislativeRegionalLabels(group,interactive=false){
- const items=currentItems(),transform=geometryLayout(items,true),nationwide=historicalLegislativeNationalRegional();
- if(state.labels){
-  if(nationwide){
-   const counties=History2022View.legislativeCountyFeatures?.()||[];
-   const names=counties.length?counties:data.counties;
-   drawLabels(group,names,transform,19,interactive,true,false);
-   // Historical county polygons sometimes lack sufficiently wide label anchors.
-   // Every county still receives its own visible *name*, never a district number.
-
+function completeCountyLabelsWithLeaders(group,names,transform,interactive){
    // A missing county name must be connected to its polygon. Reuse the
    // existing collision-aware orthogonal callout routing, including the
    // inset exclusion boxes and legend space.
@@ -1519,6 +1490,40 @@ function drawHistoricalLegislativeRegionalLabels(group,interactive=false){
     group.append(label);placed.add(labelName);used.push(pos.rect);
     if(pos.leaderPoints)routes.push(pos.leaderPoints);
    }
+}
+function drawFreeNationwideDistrictLabels(group){
+ const names=data.counties,transform=geometryLayout(currentItems(),true);
+ drawLabels(group,names,transform,19,false,true,false);
+ completeCountyLabelsWithLeaders(group,names,transform,false);
+}
+function historicalLegislativeNationalRegional(){
+ return typeof History2022View!=='undefined'&&History2022View.active()&&History2022View.office()==='legislative'
+  &&History2022View.legislativeScale()==='national'&&History2022View.legislativeBallot()==='regional';
+}
+function historicalLegislativeMultiBadges(){
+ return typeof History2022View!=='undefined'&&History2022View.legislativeBadgesMode?.()===true;
+}
+// Historical pre-2008 constituency seat cards share the council map's
+// visual vocabulary: large constituency number, translucent grouped emblems,
+// several rows and no party-color fill of the constituency itself.
+// Historical multi-member district seat markers use precisely the same
+// geometry-aware, per-seat drawing engine as county council seat maps.
+function appendHistoricalLegislativeBadges(layer,transform,nationwide,interactive=false){
+ if(!historicalLegislativeMultiBadges()||nationwide)return;
+ if(typeof drawHistoricalLegislativeSeats==='function')
+  drawHistoricalLegislativeSeats(layer,transform,interactive);
+}
+function drawHistoricalLegislativeRegionalLabels(group,interactive=false){
+ const items=currentItems(),transform=geometryLayout(items,true),nationwide=historicalLegislativeNationalRegional();
+ if(state.labels){
+  if(nationwide){
+   const counties=History2022View.legislativeCountyFeatures?.()||[];
+   const names=counties.length?counties:data.counties;
+   drawLabels(group,names,transform,19,interactive,true,false);
+   // Historical county polygons sometimes lack sufficiently wide label anchors.
+   // Every county still receives its own visible *name*, never a district number.
+
+   completeCountyLabelsWithLeaders(group,names,transform,interactive);
   }else{
    // The prominent number in each seat card is the constituency label.
    // Avoid duplicating the number behind and in front of a multirow frame.
