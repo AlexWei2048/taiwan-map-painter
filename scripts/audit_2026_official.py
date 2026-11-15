@@ -153,14 +153,21 @@ class OfficialLinks(HTMLParser):
         self.url=""
         self.parts=[]
         self.links=[]
+        self.all_text=[]
+        self.ignore=0
     def handle_starttag(self,tag,attrs):
+        if tag in ("script","style"):
+            self.ignore+=1
         if tag=="a":
             self.in_anchor=True
             self.url=dict(attrs).get("href","")
             self.parts=[]
     def handle_data(self,data):
-        if self.in_anchor: self.parts.append(data)
+        if not self.ignore and data.strip():self.all_text.append(" ".join(data.split()))
+        if self.in_anchor and not self.ignore:self.parts.append(data)
     def handle_endtag(self,tag):
+        if tag in ("script","style"):
+            self.ignore=max(0,self.ignore-1)
         if tag=="a" and self.in_anchor:
             name=" ".join(" ".join(self.parts).split())
             if re.search("候選人|候选人|抽籤|抽签|選舉公報|选举公报|資格審定|资格审定",name):
@@ -179,10 +186,12 @@ def monitor(registry, previous=None, fetcher=None):
             html=fetcher(url)
             parser=OfficialLinks();parser.feed(html)
             links=sorted(parser.links,key=lambda x:(x["title"],x["url"]))
-            digest=hashlib.sha256(json.dumps(links,ensure_ascii=False,sort_keys=True).encode()).hexdigest()
+            keywords=("候選人","候选人","抽籤","抽签","選舉公報","选举公报","資格","资格","115年","115 年")
+            candidate_text=[line for line in parser.all_text if any(word in line for word in keywords)]
+            digest=hashlib.sha256(json.dumps({"links":links,"candidateText":candidate_text},ensure_ascii=False,sort_keys=True).encode()).hexdigest()
             before=old.get(key,{}).get("digest")
             sources[key]={"status":"changed" if before and before!=digest else "unchanged" if before else "first_observation",
-                "checkedAt":datetime.now(timezone.utc).isoformat(),"url":url,"digest":digest,"links":links}
+                "checkedAt":datetime.now(timezone.utc).isoformat(),"url":url,"digest":digest,"links":links,"candidateText":candidate_text[:120]}
         except Exception as error:
             sources[key]={"status":"fetch_failed","url":url,"error":str(error)[:240],
                 "previousDigest":old.get(key,{}).get("digest")}
