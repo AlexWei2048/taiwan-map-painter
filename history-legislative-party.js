@@ -375,9 +375,10 @@
   }
   box.append(chart);
   const caption=element('p','history-list-context',model.old?
-   '旧制的票数为政党推荐候选人的票数汇总；无党籍与未经政党推荐的候选人票不纳入政党分配。席次分配按不分区、侨选分别计算。':
+   '旧制为政党推荐的区域及少数民族候选人票汇总；无党籍与未经推荐者的候选人票不纳入比例分配。席次按不分区、侨选分别计算。部分小党虽有地区候选人得票，未必另行提出不分区提名名单。':
    '仅得票率达到5%的政党参与第二阶段席次分配，按合格政党的票数重新归一化，再以最大余额法分配34席。');
   box.append(caption);
+  box.append(element('p','history-list-context','席次以当届全区结果分配，切换县市或乡镇市区地图只影响地方票数展示，不改变各党实际获配的全区席次。'));
   if(model.year<2001){box.append(element('p','history-list-caveat','档案范围：本届原始不分区与侨选当选名单已补齐；部分政党的落选提名名册未能从可检索资料中逐名确认。'))}
   if(!model.matchesOfficial){
    box.append(element('p','history-list-alert','注意：当前资料按法定规则计算的席次与已核对历史结果存在差异，本页保留计算值供核查，不将其标为官方当选名单。'));
@@ -475,7 +476,7 @@
   container.append(box);
   return model;
  }
- const api={build,allocate,nominees,render,ERA_SEATS,VERIFIED};
+ const api={build,allocate,nominees,nominationCount,render,ERA_SEATS,VERIFIED};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;
  else root.HistoryLegislativeParty=api;
 })(typeof window==='undefined'?{}:window);
