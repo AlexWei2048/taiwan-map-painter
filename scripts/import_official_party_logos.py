@@ -112,7 +112,7 @@ supplemental=[
   "also":["台澎党"],
   "urls":[
    # Wikimedia Commons: File:SSFPP logo 2019.png (author JusticeForce)
-   "https://upload.wikimedia.org/wikipedia/commons/1/1b/SSFPP_logo_2019.png",
+   "https://upload.wikimedia.org/wikipedia/commons/a/a5/SSFPP_logo_2019.png",
    "https://www.ssfpp.tw/img2/logo-pyramid.png"],
   "source_page":"https://commons.wikimedia.org/wiki/File:SSFPP_logo_2019.png",
   "license":"Wikimedia Commons; attribution and license on source file page"},
