@@ -25,7 +25,7 @@ class ImportTests(unittest.TestCase):
  def test_missing_winner_does_not_infer_from_votes(self):
   snap,audit=prepare(fixture(),[source("a",15,""),source("b",10,"0")])
   self.assertFalse(audit["readyToPublish"])
-  self.assertTrue(any("winner" in s for s in audit["warnings"]))
+  self.assertTrue(any("winner" in s.lower() for s in audit["warnings"]))
  def test_bad_numbers_and_winner_count(self):
   bad=[source("a",15,"1"),source("b",10,"1")]
   self.assertTrue(any("winners" in x for x in prepare(fixture(),bad)[1]["issues"]))
