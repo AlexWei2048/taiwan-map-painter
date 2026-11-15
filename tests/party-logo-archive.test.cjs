@@ -13,3 +13,5 @@ test('The historic Chinese Social Democratic Party flag is embedded, usable and 
  assert.ok(html.indexOf('party-logos-sourced.js')<html.indexOf('party-logos-archive.js'));
  assert.ok(html.indexOf('party-logos-archive.js')<html.indexOf('app.js'));
 });
+
+test('Existing verified historical flags are cropped from the center without stretching',()=>{ const js=fs.readFileSync('assets/party-logos-archive.js','utf8'); assert.match(js,/Math\.min\(right-left\+1,bottom-top\+1\)/); assert.match(js,/brush\.arc\(64,64,64,0,2\*Math\.PI\)/); assert.ok(js.includes("'ycp'")); assert.ok(js.includes("'台湾工党'")); });
