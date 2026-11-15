@@ -121,14 +121,15 @@
  function allocate(votes,seats){
   const eligible=votes.filter(r=>r.eligible),base=eligible.reduce((s,r)=>s+r.votes,0);
   if(!base)return {assigned:new Map(),base:0,unallocated:seats};
+  const round4=n=>Math.round((n+Number.EPSILON)*10000)/10000;
   const shares=eligible.map(r=>{
-   const raw=r.votes*seats/base,floor=Math.floor(raw);
-   return {...r,raw,floor,remainder:raw-floor,assigned:floor};
+   const rate=round4(r.votes/base*100),raw=round4(rate/100*seats),floor=Math.floor(raw);
+   return {...r,rate,raw,floor,remainder:round4(raw-floor),assigned:floor};
   });
   let remaining=seats-shares.reduce((n,r)=>n+r.floor,0);
   shares.sort((a,b)=>b.remainder-a.remainder||b.votes-a.votes||a.party.localeCompare(b.party,'zh'));
   for(let i=0;i<shares.length&&i<remaining;i++)shares[i].assigned++;
-  return {assigned:new Map(shares.map(r=>[r.party,r.assigned])),base,unallocated:Math.max(0,remaining-shares.length)};
+  return {assigned:new Map(shares.map(r=>[r.party,r.assigned])),detail:new Map(shares.map(r=>[r.party,{quota:r.raw,whole:r.floor,bonus:r.assigned-r.floor,rate:r.rate}])),base,unallocated:Math.max(0,remaining-shares.length)};
  }
  function build(year,snapshot){
   year=Number(year);
@@ -150,6 +151,7 @@
    const first=primary.assigned.get(item.party)||0,second=overseas?.assigned.get(item.party)||0,seats=first+second;
    return {...item,seats,atLarge:first,overseas:second,expected:expected[item.party]??0,
     checked:Object.prototype.hasOwnProperty.call(expected,item.party)?seats===expected[item.party]:!seats,
+    quota:primary.detail?.get(item.party)||null,overseasQuota:overseas?.detail?.get(item.party)||null,
     winners:nominees(year,item.party),overseasWinners:(OVERSEAS_WINNERS[year]?.[item.party]||'').split(/\s+/).filter(Boolean)};
   }).sort((a,b)=>b.seats-a.seats||b.votes-a.votes||a.party.localeCompare(b.party,'zh'));
   return {year,old,parts,total,eligibleTotal:primary.base,parties:result,
@@ -194,7 +196,7 @@
   for(const [label,value] of [['比例代表席次',model.parts[0]+model.parts[1]+' 席'],
    ['取得席次政党',model.parties.filter(p=>p.seats).length+' 个'],
    [model.old?'有推荐候选人政党':'参选政党',model.parties.length+' 个'],
-   ['5% 门槛','得票满 5%']]){
+   [model.year===2024?'名单人数':'5% 门槛',model.year===2024?'177 人':'得票满 5%']]){
     const tile=element('div','history-list-stat');tile.append(element('span','',label),element('strong','',value));stats.append(tile);
   }
   box.append(stats);
@@ -244,6 +246,12 @@
     (model.old?'不分区 '+p.atLarge+'席 · 侨选 '+p.overseas+'席':'得票 '+format(p.votes)+' 票 · '+percent(p.share)+'（原始得票率）')+
      ' · '+(p.seats?'获配席次':'未取得席次'));
    body.append(line);
+   if(p.quota){
+    const quotaText=model.old?'不分区分配配额 '+p.quota.quota.toFixed(4)+'席（整数'+p.quota.whole+'＋余数分配'+p.quota.bonus+'）'+
+     (p.overseasQuota?'；侨选分配配额 '+p.overseasQuota.quota.toFixed(4)+'席（整数'+p.overseasQuota.whole+'＋余数分配'+p.overseasQuota.bonus+'）':''):
+     '34席分配配额 '+p.quota.quota.toFixed(4)+'席（整数'+p.quota.whole+'＋余数分配'+p.quota.bonus+'）';
+    body.append(element('p','history-list-quota',quotaText));
+   }
    if(p.winners.length){
     body.append(element('h5','',model.year===2024&&SLATES_2024[p.party]?'完整提名名单 · '+p.winners.length+'人 · 原始当选 '+p.winners.filter(c=>c.elected).length+'人':'原始当选名单 · 已核实 '+p.winners.filter(c=>c.elected).length+' 人'));
     const grid=element('div','history-list-nominees');
@@ -287,8 +295,8 @@
   const steps=[
    '① 票源：1992—2004年将各政党推荐的区域与少数民族候选人得票汇总，排除无党籍及未经推荐者；2008年起直接使用独立政党票。',
    '② 资格：政党原始得票率达到5%方可分配席次。未过门槛者的票数，不参与下一阶段的分母。',
-   '③ 分配：合格政党票数 ÷ 合格政党总票数 × 当届应选席次。先取整数席，余席按小数余额从大到小分配（最大余额法）。',
-   model.old?'④ 旧制：不分区与侨选分别核算，不能将旧制'+(model.parts[0]+model.parts[1])+'席合并后计算；依旧制提名名单、当届妇女保障规定决定实际人选。':
+   '③ 分配：合格政党票数 ÷ 合格政党总票数 × 当届应选席次。得票率百分数与席次配额按法规计算至小数点后四位，再取整数席，余席按余额从大到小分配（最大余额法）。',
+   model.old?'④ 旧制：不分区与侨选分别核算，不能将'+(model.parts[0]+model.parts[1])+'席合并后计算。妇女保障规则与新制不同：每党各类别获配5至10席应有至少1名女性，超过10席后每满10席增设1名女性名额。':
      '④ 新制：每党获配席次依候选人名单顺序确定；当选名单中的女性必须至少占一半，不足时由后续女性优先补足。',
    '⑤ 本页显示投票时的原始当选结果，而非任期中递补后的在任名单；旧制来源汇总不等于独立投出的政党票。'
   ];
