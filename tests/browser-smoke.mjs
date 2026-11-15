@@ -2186,11 +2186,26 @@ test('Legislative redraw: pre-2008 winners use emblems instead of colored party 
  assert.ok(await page.locator('#labels [data-history-seat-district]').count()>=2,'county detail should display each actual winning party emblem');
  assert.ok(await page.locator('#labels [data-history-seat-card] [data-historical-seat-frame]').count()>=2,
   'multi-member constituency emblems are grouped in translucent frames');
- assert.equal(await page.locator('#labels [data-history-seat-number]').first().getAttribute('font-size'),'23',
-  'constituency numbers are enlarged for county-level maps');
+ assert.equal(await page.locator('#labels [data-history-seat-number]').first().getAttribute('font-size'),'24',
+  'historical constituency numbers match council seat cards');
  assert.ok(await page.locator('#labels [data-seat-grid-rows]').evaluateAll(cards=>
   cards.some(card=>Number(card.getAttribute('data-seat-grid-rows'))>1)),
   'winning party logos wrap into several rows');
+ assert.equal(await page.locator('#labels [data-history-legislative-seat-layer]').getAttribute('data-seat-style'),'council',
+  'regional legislative seats reuse council visual language');
+ assert.ok(await page.locator('#labels [data-history-seat-card] [data-seat-slot][data-seat-status="elected"]').count()>5,
+  'one council-style circular badge is drawn for each elected person');
+ assert.ok(await page.locator('#labels [data-historical-seat-frame]').evaluateAll(frames=>
+  frames.every(frame=>frame.getAttribute('rx')==='9')),
+  'historical frames have the same corner radius as council frames');
+ assert.ok(await page.locator('#labels [data-history-seat-card] [data-seat-slot] circle').evaluateAll(circles=>
+  circles.every(circle=>Number(circle.getAttribute('r'))===16)),
+  'legislative emblems share the council 32px circular seat size');
+ assert.equal(await page.locator('#labels [data-history-seat-card] rect[fill="#ffffff55"]').count()+
+                    await page.locator('#labels [data-history-seat-card] rect[fill="#ffffffed"]').count(),
+              await page.locator('#labels [data-history-seat-card]').count(),
+              'each seat frame uses exactly the council inside/outside translucency');
+
  await page.locator('#historyViewCandidates').click();
  assert.ok(await page.locator('#historyLegislativeSummary').innerText().then(t=>t.includes('当选党派席次')));
  assert.equal(await page.locator('#historyResults table[data-ballot="regional"]').count(),1);

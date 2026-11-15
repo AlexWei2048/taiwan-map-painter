@@ -1391,87 +1391,12 @@ function historicalLegislativeMultiBadges(){
 // Historical pre-2008 constituency seat cards share the council map's
 // visual vocabulary: large constituency number, translucent grouped emblems,
 // several rows and no party-color fill of the constituency itself.
-function appendHistoricalLegislativeBadges(layer,transform,nationwide){
+// Historical multi-member district seat markers use precisely the same
+// geometry-aware, per-seat drawing engine as county council seat maps.
+function appendHistoricalLegislativeBadges(layer,transform,nationwide,interactive=false){
  if(!historicalLegislativeMultiBadges()||nationwide)return;
- const features=currentItems().filter(f=>f.center);
- const area=transform.area||contentArea(sceneSpec());
- const group=svgEl('g',{'data-history-legislative-seat-layer':'true'});
- // Draw all cards inside the map's safe region, moving smaller overlapping
- // constituencies to a nearby open position rather than stacking emblems.
- const occupied=[],minGap=8,iconSize=25,step=32,rowStep=32;
- const sorted=features.map(feature=>({
-  feature,winners:History2022View.legislativeSeatRows(feature)
- })).filter(entry=>entry.winners.length).sort((a,b)=>
-  a.feature.center[1]-b.feature.center[1]||a.feature.center[0]-b.feature.center[0]);
- const clamp=(value,min,max)=>Math.min(Math.max(value,min),max);
- for(const {feature,winners} of sorted){
-  const parties=HistoryLegislative.seatBadgeComposition(winners);
-  const items=parties.flatMap(item=>item.winners.map(()=>item.party));
-  const cols=Math.min(4,Math.max(1,Math.ceil(Math.sqrt(items.length*1.4))));
-  const rows=Math.ceil(items.length/cols),width=Math.max(116,cols*step+20),height=43+rows*rowStep+10;
-  const anchorX=feature.center[0]*transform.scale+transform.tx;
-  const anchorY=feature.center[1]*transform.scale+transform.ty;
-  const offsets=[[0,0],[0,-55],[0,55],[-85,0],[85,0],[-85,-55],[85,-55],
-   [-85,55],[85,55],[0,-110],[0,110],[-170,0],[170,0]];
-  let best=null;
-  for(const [dx,dy] of offsets){
-   const left=clamp(anchorX+dx-width/2,area.left+10,Math.max(area.left+10,area.right-width-10));
-   const top=clamp(anchorY+dy-height/2,area.top+12,Math.max(area.top+12,area.bottom-height-12));
-   const overlaps=occupied.reduce((n,r)=>
-    n+Math.max(0,Math.min(left+width+minGap,r.x+r.w)-Math.max(left-minGap,r.x))*
-      Math.max(0,Math.min(top+height+minGap,r.y+r.h)-Math.max(top-minGap,r.y)),0);
-   const distance=Math.hypot(left+width/2-anchorX,top+height/2-anchorY);
-   const score=overlaps*12+distance;
-   if(!best||score<best.score)best={left,top,score,distance};
-  }
-  const {left,top,distance}=best;occupied.push({x:left,y:top,w:width,h:height});
-  const cx=left+width/2,number=HistoryLegislative.districtNumber(feature.number||feature.name);
-  const card=svgEl('g',{'data-history-seat-district':feature.id,
-   'data-history-seat-card':'true','data-seat-grid-columns':cols,'data-seat-grid-rows':rows,
-   'data-seat-count':items.length,'aria-label':feature.name+'：'+parties.map(p=>p.party+p.seats+'席').join('，')});
-  if(distance>36){
-   group.append(svgEl('path',{d:'M'+anchorX+','+anchorY+' L'+cx+','+(top+height/2),
-    stroke:'#789d89','stroke-width':1.6,'stroke-dasharray':'4 3',
-    fill:'none','pointer-events':'none','data-history-seat-leader':feature.id}));
-   group.append(svgEl('circle',{cx:anchorX,cy:anchorY,r:3.5,fill:'#507861',
-    stroke:'#fff','stroke-width':1.5,'pointer-events':'none'}));
-  }
-  card.append(svgEl('rect',{x:left+1,y:top+3,width,height,rx:13,
-   fill:'#5c7660','fill-opacity':.08,'pointer-events':'none'}));
-  card.append(svgEl('rect',{x:left,y:top,width,height,rx:13,
-   fill:'#ffffff','fill-opacity':.86,stroke:'#a7c1af','stroke-width':1.25,
-   'data-historical-seat-frame':feature.id}));
-  card.append(svgEl('path',{d:'M'+(left+12)+','+(top+37)+' H'+(left+width-12),
-   stroke:'#cdded2','stroke-width':1,'pointer-events':'none'}));
-  const title=svgEl('text',{x:cx,y:top+26,'text-anchor':'middle',
-   'font-size':23,'font-weight':800,fill:'#284f39',stroke:'#fff','stroke-width':.5,
-   'paint-order':'stroke','data-history-seat-number':String(number||feature.name),'data-label':feature.id});
-  title.textContent=number?'第'+number+'选区':feature.name;card.append(title);
-  items.forEach((party,i)=>{
-   const col=i%cols,row=Math.floor(i/cols);
-   const gx=left+(width-(cols-1)*step-iconSize)/2+col*step;
-   const gy=top+43+row*rowStep;
-   const mark=svgEl('g',{'data-historical-seat-party':party});
-   mark.append(svgEl('circle',{cx:gx+iconSize/2,cy:gy+iconSize/2,r:iconSize/2,
-    fill:'#ffffff',stroke:'#c3d5c8','stroke-width':1.3}));
-   const p=predictionParty(party),logo=logoFor(p);
-   if(logo)appendCircularPartyLogo(mark,logo,gx+1,gy+1,iconSize-2,{'data-historical-party-logo':party});
-   else{
-    mark.append(svgEl('circle',{cx:gx+iconSize/2,cy:gy+iconSize/2,r:iconSize/2-2,
-     fill:p.color||'#87948d'}));
-    const initial=svgEl('text',{x:gx+iconSize/2,y:gy+iconSize*.7,
-     'text-anchor':'middle','font-size':14,'font-weight':700,fill:'#fff'});
-    initial.textContent=party==='无党籍'?'无':party.slice(0,1);mark.append(initial);
-   }
-   const tip=svgEl('title');tip.textContent=party+' · 当选1席';mark.append(tip);
-   card.append(mark);
-  });
-  // The same polygon click/keyboard handler remains responsible for navigation;
-  // the card itself must not steal pointers from the underlying election map.
-  card.setAttribute('pointer-events','none');
-  group.append(card);
- }
- layer.append(group);
+ if(typeof drawHistoricalLegislativeSeats==='function')
+  drawHistoricalLegislativeSeats(layer,transform,interactive);
 }
 function drawHistoricalLegislativeRegionalLabels(group,interactive=false){
  const items=currentItems(),transform=geometryLayout(items,true),nationwide=historicalLegislativeNationalRegional();
@@ -1506,7 +1431,7 @@ function drawHistoricalLegislativeRegionalLabels(group,interactive=false){
  }else group.replaceChildren();
  // On the all-area map show county names only. Multi-member seat emblems
  // belong to the district map after the user opens a specific county.
- if(!nationwide)appendHistoricalLegislativeBadges(group,transform,false);
+ if(!nationwide)appendHistoricalLegislativeBadges(group,transform,false,interactive);
 }
 function renderLabels(){
  clearTimeout(navigationLabelTimer);navigationLabelTimer=0;

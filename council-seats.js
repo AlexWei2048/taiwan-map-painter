@@ -13,8 +13,16 @@ function councilSeatRows(d){
  return Array.from({length:Number(d.seats)||0},(_,i)=>winners[i]||null);
 }
 function councilCountyPresentation(){return councilSeatMode()||state.workspaceMode==='free'&&state.level==='council'&&!!state.county}
+function historicalLegislativeSeatMode(){
+ return typeof History2022View!=='undefined'&&History2022View.active()&&
+  History2022View.legislativeBadgesMode?.()===true&&
+  History2022View.legislativeScale?.()!=='national'&&!!state.county;
+}
 const baseCouncilScene=sceneSpec;
-sceneSpec=function(){return councilCountyPresentation()?{width:1600,height:1450+furnitureFooterHeight(),pad:80,font:26}:baseCouncilScene()};
+// Matching council and historical multi-member constituencies share one
+// fixed-size canvas so their logos, callouts, and font sizes have the same scale.
+sceneSpec=function(){return councilCountyPresentation()||historicalLegislativeSeatMode()?
+ {width:1600,height:1450+furnitureFooterHeight(),pad:80,font:26}:baseCouncilScene()};
 const baseCouncilPanels=identityPanelLayouts;
 identityPanelLayouts=function(){
  if(!councilCountyPresentation())return baseCouncilPanels();
@@ -137,6 +145,120 @@ function drawCouncilSeats(group,interactive){
    if(interactive){g.setAttribute('role','button');g.setAttribute('tabindex','0');const composition=badgeRows.map(item=>item.party+' '+item.count+'席').join('、');g.setAttribute('aria-label',historical?shortDirectoryName(d)+'，'+(composition||'暂无当选席次资料'):shortDirectoryName(d)+'，应选'+seats.length+'席，已预测'+seats.filter(Boolean).length+'席');g.style.cursor='pointer';g.setAttribute('pointer-events','all');g.onpointerenter=()=>toggleLabelRegionHighlight(f,true);g.onpointerleave=()=>toggleLabelRegionHighlight(f,false);g.onfocus=()=>toggleLabelRegionHighlight(f,true);g.onblur=()=>toggleLabelRegionHighlight(f,false);g.onclick=()=>{if(typeof History2022View!=='undefined'&&History2022View.seatMode())History2022View.openRegion(f);else openPredictionDistrict(d)};g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();g.onclick()}}}
   }
  }
+}
+
+/* Historical 1992–2004 regional legislative constituencies render with the
+ * SAME seat placement algorithm and exact visual primitives as council maps.
+ * Never replace elected-person seats with one aggregate party dot.
+ * Nationwide historical maps remain county-name only.
+ */
+function legislativeSeatPlacementFallback(f,n,t,used,items){
+ const a=t.area,anchor=mapLabelAnchor(f,t)||{x:f.center[0]*t.scale+t.tx,y:f.center[1]*t.scale+t.ty};
+ const size=32,pitch=39,pad=8,cols=Math.min(8,Math.max(1,Math.ceil(Math.sqrt(n*1.3)))),
+  rows=Math.ceil(n/cols),w=(cols-1)*pitch+size+pad*2,h=(rows-1)*pitch+size+40;
+ const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
+ let best=null,bestCost=Infinity;
+ // Council's strict geometric placement should ordinarily succeed. This
+ // fallback only keeps every historic seat visible in rare crowded views.
+ for(let y=a.top+20+h/2;y<=a.bottom-8-h/2;y+=29)
+  for(let x=a.left+8+w/2;x<=a.right-8-w/2;x+=29){
+   const rect=[x-w/2,y-h/2,x+w/2,y+h/2],
+    overlapping=used.reduce((sum,r)=>sum+
+     Math.max(0,Math.min(rect[2],r[2])-Math.max(rect[0],r[0]))*
+     Math.max(0,Math.min(rect[3],r[3])-Math.max(rect[1],r[1])),0);
+   if(overlapping)continue;
+   const land=councilSeatRectTouchesLand(rect,items,t)?9000:0,
+    cost=land+Math.hypot(x-anchor.x,y-anchor.y)+Math.max(w/h,h/w)*25;
+   if(cost<bestCost){best={x,y,w,h,cols,rows,rect,anchor,size,pitch,outside:true};bestCost=cost}
+  }
+ if(best){used.push(best.rect);return best}
+ const x=clamp(anchor.x,a.left+w/2+8,a.right-w/2-8),y=clamp(anchor.y,a.top+h/2+20,a.bottom-h/2-8);
+ const rect=[x-w/2,y-h/2,x+w/2,y+h/2];used.push(rect);
+ return{x,y,w,h,cols,rows,rect,anchor,size,pitch,outside:true};
+}
+function drawHistoricalLegislativeSeats(group,t,interactive=false){
+ const all=currentItems().filter(f=>f.center&&f.d);
+ const sorted=all.map(f=>({f,seats:History2022View.legislativeSeatRows(f)}))
+  .filter(item=>item.seats.length)
+  .sort((a,b)=>(a.f.box[2]-a.f.box[0])*(a.f.box[3]-a.f.box[1])-
+    (b.f.box[2]-b.f.box[0])*(b.f.box[3]-b.f.box[1]));
+ const placements=new Map(),used=[];
+ for(const {f,seats} of sorted){
+  const q=councilSeatPlacement(f,seats.length,t,used,all)||
+   legislativeSeatPlacementFallback(f,seats.length,t,used,all);
+  placements.set(f.id,q);
+ }
+ const root=svgEl('g',{'data-history-legislative-seat-layer':'true',
+  'data-seat-style':'council','data-seat-layout':'inside-first'}),
+  leaders=svgEl('g',{'data-history-legislative-seat-leaders':'true','pointer-events':'none'}),
+  badges=svgEl('g',{'data-history-legislative-seat-badges':'true'});
+ root.append(leaders,badges);
+ const routed=[],allRects=[...placements.values()].map(q=>q.rect);
+ for(const {f,seats} of sorted){
+  const q=placements.get(f.id),composition=HistoryLegislative.seatBadgeComposition(seats);
+  const g=svgEl('g',{'data-seat-district':f.id,'data-history-seat-district':f.id,
+   'data-seat-region':f.id,'data-history-seat-card':'true','data-seat-count':seats.length,
+   'data-seat-grid-columns':q.cols,'data-seat-grid-rows':q.rows,
+   'data-seat-placement':q.outside?'outside':'inside','data-history-badge-mode':'seats',
+   'data-seat-style':'council','aria-label':f.name+'：'+composition.map(p=>p.party+p.seats+'席').join('，')});
+  if(q.outside){
+   const route=councilSeatLeaderPoints(q,allRects.filter(r=>r!==q.rect),routed);
+   if(route){
+    const d=route.map((p,i)=>(i?'L':'M')+p[0]+','+p[1]).join('');
+    routed.push(...mapLeaderSegments(route));
+    leaders.append(svgEl('path',{d,fill:'none',
+     style:'fill:none;stroke:#fff;stroke-width:2.1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.94',
+     'vector-effect':'non-scaling-stroke','data-seat-leader-halo':f.id}));
+    leaders.append(svgEl('path',{d,fill:'none',
+     style:'fill:none;stroke:#537d6b;stroke-width:0.9px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.78',
+     'vector-effect':'non-scaling-stroke','data-seat-leader':f.id}));
+    leaders.append(svgEl('circle',{cx:q.anchor.x,cy:q.anchor.y,r:4,fill:'#537d6b',
+     style:'stroke:#fff;stroke-width:1.4px','data-seat-anchor':f.id}));
+   }
+  }
+  // Shared council styling: no shadow, frosted frame inside districts, solid
+  // white in callout space, 24px district number, 32px circular seat logos.
+  g.append(svgEl('rect',{x:q.rect[0],y:q.rect[1],width:q.w,height:q.h,rx:9,
+   fill:q.outside?'#ffffffed':'#ffffff55',stroke:q.outside?'#dce5df':'none',
+   'data-seat-frame':f.id,'data-historical-seat-frame':f.id}));
+  const number=districtMapNumber(f)||HistoryLegislative.districtNumber(f.number||f.name);
+  const title=svgEl('text',{x:q.x,y:q.rect[1]+22,'text-anchor':'middle',
+   'font-size':24,fill:'#294a3a','paint-order':'stroke',stroke:'#fff',
+   'stroke-width':4,'data-history-seat-number':number||f.name,
+   'data-label':f.id,'data-placement':'district-number'});
+  title.textContent=number||f.name;
+  if(state.labels)g.append(title);
+  seats.forEach((seat,i)=>{
+   const row=Math.floor(i/q.cols),col=i%q.cols,
+    rowCount=Math.min(q.cols,seats.length-row*q.cols),
+    x=q.x+(col-(rowCount-1)/2)*q.pitch-q.size/2,
+    y=q.rect[1]+33+row*q.pitch;
+   const p=predictionParty(seat.party),
+    emblem=!['其他','其他政党'].includes(seat.party)?logoFor(p):'',
+    slot=svgEl('g',{'data-seat-slot':i,'data-seat-status':'elected',
+     'data-seat-party':p?.id||'','data-history-seat-badge':seat.party,
+     'data-history-seat-count':1,role:'img','aria-label':seat.party+'当选1席'});
+   const tip=svgEl('title');tip.textContent=seat.name+' · '+seat.party;slot.append(tip);
+   slot.append(svgEl('circle',{cx:x+q.size/2,cy:y+q.size/2,r:q.size/2,
+    fill:emblem?'#fff':'#91999f',stroke:emblem?'#8b9c92':'#91999f',
+    'stroke-width':1.8}));
+   if(emblem)appendCircularPartyLogo(slot,emblem,x,y,q.size,
+    {'data-seat-logo':p.id,'data-historical-party-logo':seat.party});
+   g.append(slot);
+  });
+  if(interactive){
+   g.setAttribute('role','button');g.setAttribute('tabindex','0');
+   g.style.cursor='pointer';g.setAttribute('pointer-events','all');
+   g.onpointerenter=()=>toggleLabelRegionHighlight(f,true);
+   g.onpointerleave=()=>toggleLabelRegionHighlight(f,false);
+   g.onfocus=()=>toggleLabelRegionHighlight(f,true);
+   g.onblur=()=>toggleLabelRegionHighlight(f,false);
+   g.onclick=()=>paint(f);
+   g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();g.onclick()}};
+  }else g.setAttribute('pointer-events','none');
+  badges.append(g);
+ }
+ group.append(root);
 }
 const baseCouncilSeatHighlight=toggleLabelRegionHighlight;
 toggleLabelRegionHighlight=function(f,active){baseCouncilSeatHighlight(f,active);for(const group of $('labels').querySelectorAll('[data-seat-region]'))if(group.dataset.seatRegion===String(f.id))group.classList.toggle('seat-region-highlighted',active)};
