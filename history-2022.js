@@ -6,7 +6,8 @@
  let presidentialMode=false,presidentialYear=2024,presidentialGeometry=null;
  let legislativeMode=false,legislativeYear=2024,legislativeBallot='regional',legislativeGeometry=[],legislativeAreaGeometry=null,legislativeFocus='';
  let history2022Snapshot=null,originalMayorRows=null,loadingPresidentialId=0;
- const yearLabel=()=>String(presidentialMode?presidentialYear:legislativeMode?legislativeYear:2022);
+ let localYear=2022,history2026Manifest=null,history2026Snapshot=null,original2022DistrictMetadata=[];
+ const yearLabel=()=>String(presidentialMode?presidentialYear:legislativeMode?legislativeYear:localYear);
  const officeTitle=()=>presidentialMode?'台湾地区领导人':titles[kind];
  const areaLeading=()=>presidentialMode||legislativeMode&&legislativeBallot!=='regional'||mayorTownView();
  const norm=x=>simplify(String(x||'')).trim();
@@ -42,9 +43,9 @@
     if(!resp.ok)throw Error('历史投票数据 HTTP '+resp.status);if(!metaResp.ok)throw Error('2022议员选区资料 HTTP '+metaResp.status);
     const obj=await resp.json(),meta=await metaResp.json();
     if(meta.year!==2022||meta.districtCount!==215||!Array.isArray(meta.rows)||meta.rows.reduce((n,x)=>n+x.seats,0)!==910)throw Error('2022议员选区资料未通过完整性核验');
-    districtMetadata=meta.rows.map(d=>({...d,county:norm(d.county),name:norm(d.name),scope:norm(d.scope),scopeTowns:d.scopeTowns.map(norm),electorate:HistoryCore.identity(d.electorate)}));if(!geoResp.ok)throw Error('2022新竹市地图载入失败');hsinchuGeometry=await geoResp.json();if(hsinchuGeometry.year!==2022||hsinchuGeometry.features?.length!==5)throw Error('2022新竹市选区范围不完整');
+    districtMetadata=meta.rows.map(d=>({...d,county:norm(d.county),name:norm(d.name),scope:norm(d.scope),scopeTowns:d.scopeTowns.map(norm),electorate:HistoryCore.identity(d.electorate)}));original2022DistrictMetadata=districtMetadata.slice();if(!geoResp.ok)throw Error('2022新竹市地图载入失败');hsinchuGeometry=await geoResp.json();if(hsinchuGeometry.year!==2022||hsinchuGeometry.features?.length!==5)throw Error('2022新竹市选区范围不完整');
     if(obj.schemaVersion!==2||obj.year!==2022||!Array.isArray(obj.rows)||obj.rows.length<8000)throw Error('历史快照内容不完整或版本不兼容');
-    history2022Snapshot=obj;addRows(obj.rows);originalMayorRows=db.mayor.slice();if(!presidentialMode)snapshotData=obj;ensureHistoryGeometry();loaded=true;window.dispatchEvent(new CustomEvent('historysnapshotready',{detail:{snapshot:obj}}));
+    history2022Snapshot=obj;addRows(obj.rows);originalMayorRows=db.mayor.slice();if(!presidentialMode&&!legislativeMode&&localYear===2022)snapshotData=obj;ensureHistoryGeometry();loaded=true;window.dispatchEvent(new CustomEvent('historysnapshotready',{detail:{snapshot:obj}}));
     if(el('historyLoadStatus')){el('historyLoadStatus').textContent='';el('historyLoadStatus').hidden=true}return true
    }catch(error){
     if(el('historyLoadStatus')){el('historyLoadStatus').hidden=false;el('historyLoadStatus').textContent='历史数据暂时未能载入：'+error.message};if(el('historyRetry'))el('historyRetry').hidden=false;toast('2022 历史数据载入失败：'+error.message);return false
@@ -54,14 +55,85 @@
  }
 
  function updateYearOptions(office=el('historyOffice').value){
-  const years=office==='president'?HistoryPresidential.YEARS:office==='legislative'?HistoryLegislative.YEARS:[2022],select=el('historyYear');
-  const requested=Number(select.value),chosen=years.includes(requested)?requested:(office==='president'||office==='legislative'?2024:2022);
+  const years=office==='president'?HistoryPresidential.YEARS:office==='legislative'?HistoryLegislative.YEARS:(history2026Manifest?.status==='published'?[2022,2026]:[2022]),select=el('historyYear');
+  const requested=Number(select.value),chosen=years.includes(requested)?requested:(office==='president'||office==='legislative'?2024:years.includes(localYear)?localYear:2022);
   if(select.options.length!==years.length||years.some((year,i)=>Number(select.options[i]?.value)!==year)){
    select.replaceChildren(...years.map(year=>new Option(String(year),String(year))));
   }
   select.value=String(chosen);
   return chosen;
  }
+
+ function year2026DistrictMetadata(){
+  return (candidateDatabase?.districts||[]).filter(d=>d.type==='council').map(d=>({
+   ...d,county:norm(d.county),name:norm(d.name),scope:norm(d.scope),
+   scopeTowns:[],number:Number(d.number||HistoryCore.districtNumber(d.name)||d.id.split(':').at(-1)),
+   electorate:HistoryCore.identity(d.electorate)
+  }));
+ }
+ async function check2026Availability(){
+  try{
+   const response=await fetch('assets/history-2026-availability.json?v=20261116-polling-gate',{cache:'no-store'});
+   if(!response.ok)return;
+   const manifest=await response.json();
+   if(manifest.schemaVersion!==1||manifest.year!==2026||manifest.status!=='published')return;
+   if(!/^[0-9a-f]{64}$/i.test(manifest.sha256||'')||manifest.candidateCount!==2051||manifest.districtCount!==447)return;
+   history2026Manifest=manifest;
+   window.HISTORY_2026_RESULTS_AVAILABLE=true;
+   if(!['president','legislative'].includes(el('historyOffice').value))updateYearOptions();
+   window.HistoryWorkspace?.render?.();
+  }catch(error){console.warn('2026结果发布状态暂不可用',error.message)}
+ }
+ async function activateLocalYear(year){
+  if(!active)return;
+  if(year!==2026){
+   if(year!==2022)return;
+   const ready=await snapshot();if(!ready||!active)return;
+   localYear=2022;
+   for(const type of ['mayor','council','township'])db[type].length=0;
+   dbIds.clear();addRows(history2022Snapshot.rows);
+   snapshotData=history2022Snapshot;districtMetadata=original2022DistrictMetadata.slice();
+   historicalFeatures=[];
+   el('historyYear').value='2022';candidateScope='top';selectedCandidate='';resultPage=0;
+   window.dispatchEvent(new CustomEvent('historysnapshotready',{detail:{snapshot:snapshotData}}));
+   switchMode();render();return;
+  }
+  if(history2026Manifest?.status!=='published'){
+   el('historyYear').value=String(localYear);
+   toast('2026正式得票尚未公告，历史数据暂只提供2022年结果');return;
+  }
+  const token=++loadingPresidentialId,indicator=el('historyLoadStatus');
+  indicator.hidden=false;indicator.textContent='正在核对2026年正式结果数据…';
+  try{
+   await snapshot();
+   if(!history2026Snapshot){
+    const response=await fetch('assets/history-2026.json?v='+history2026Manifest.sha256.slice(0,14));
+    if(!response.ok)throw Error('2026官方结果 HTTP '+response.status);
+    const shard=await response.json();
+    if(shard.schemaVersion!==2||shard.year!==2026||shard.completeness!=='full'||
+       shard.contests?.length!==447||shard.candidacies?.length!==2051||
+       !Array.isArray(shard.rows)||shard.rows.length<2051||
+       !['provisional','certified'].includes(shard.publicationStatus))
+       throw Error('2026选举结果缺少完整的官方选区、候选人或得票明细');
+    history2026Snapshot=shard;
+   }
+   if(token!==loadingPresidentialId||!active||['president','legislative'].includes(el('historyOffice').value))return;
+   presidentialMode=false;legislativeMode=false;localYear=2026;
+   for(const type of ['mayor','council','township'])db[type].length=0;
+   dbIds.clear();addRows(history2026Snapshot.rows);
+   snapshotData=history2026Snapshot;districtMetadata=year2026DistrictMetadata();historicalFeatures=[];
+   candidateScope='top';selectedCandidate='';resultPage=0;
+   el('historyYear').value='2026';indicator.hidden=true;indicator.textContent='';
+   window.dispatchEvent(new CustomEvent('historysnapshotready',{detail:{snapshot:snapshotData}}));
+   switchMode();render();
+  }catch(error){
+   if(token!==loadingPresidentialId)return;
+   indicator.hidden=false;indicator.textContent='2026年官方结果载入失败：'+error.message;
+   el('historyRetry').hidden=false;el('historyYear').value=String(localYear);
+  }
+ }
+ check2026Availability();
+
  function updateHistoricCounties(counties){
   const list=el('historyCounty'),previous=county;
   const ordered=[...new Set(counties)].sort((a,b)=>
@@ -74,15 +146,20 @@
   loadingPresidentialId+=1;
   const wasPresidential=presidentialMode,wasLegislative=legislativeMode;
   presidentialMode=false;presidentialGeometry=null;legislativeMode=false;legislativeAreaGeometry=null;legislativeFocus='';
-  if(wasPresidential&&originalMayorRows){
-   db.mayor.length=0;db.mayor.push(...originalMayorRows);
+  if(localYear===2026&&history2026Snapshot){
+   for(const officeName of ['mayor','council','township'])db[officeName].length=0;
+   dbIds.clear();addRows(history2026Snapshot.rows);snapshotData=history2026Snapshot;
+   districtMetadata=year2026DistrictMetadata();historicalFeatures=[];
+  }else{
+   if(wasPresidential&&originalMayorRows){db.mayor.length=0;db.mayor.push(...originalMayorRows)}
+   snapshotData=history2022Snapshot||snapshotData;
+   districtMetadata=original2022DistrictMetadata.slice();historicalFeatures=[];
   }
-  snapshotData=history2022Snapshot||snapshotData;
   kind=office;updateHistoricCounties(COUNTY_ORDER);updateYearOptions(office);
   candidateScope='top';selectedCandidate='';resultPage=0;
   el('historyOffice').value=office;
-  if((wasPresidential||wasLegislative)&&history2022Snapshot){
-   window.dispatchEvent(new CustomEvent('historysnapshotready',{detail:{snapshot:history2022Snapshot}}));
+  if((wasPresidential||wasLegislative)&&snapshotData){
+   window.dispatchEvent(new CustomEvent('historysnapshotready',{detail:{snapshot:snapshotData}}));
   }
   switchMode();render();
  }
@@ -522,7 +599,7 @@
   const search=norm(el('districtTableSearch')?.value||'');
   const rows=districtMetadata.filter(d=>(!county||norm(d.county)===county)&&(!search||norm(d.name+d.scope+DistrictCore.identityName(d)).includes(search)));
   const seats=rows.reduce((n,d)=>n+d.seats,0);
-  el('districtReferenceTitle').textContent=(county||'全台')+'2022议员选区范围与名额';
+  el('districtReferenceTitle').textContent=(county||'全台')+yearLabel()+'议员选区范围与名额';
   el('districtReferenceSummary').textContent=rows.length+'个历史选区 · '+seats+'个应选席次'+(county?'':' · 全台215个选区、910席');
   const root=el('districtTableGroups');root.replaceChildren();
   const groups=new Map();for(const d of rows){if(!groups.has(d.county))groups.set(d.county,[]);groups.get(d.county).push(d)}
@@ -530,7 +607,7 @@
    const details=document.createElement('details');details.className='county-district-group';details.open=!!county||name===rows[0]?.county;
    const summary=document.createElement('summary');summary.textContent=norm(name)+' · '+list.length+'个选区 · '+list.reduce((n,d)=>n+d.seats,0)+'席';details.append(summary);
    const wrap=document.createElement('div');wrap.className='reference-table-wrap';const table=document.createElement('table');table.className='reference-table';
-   const caption=document.createElement('caption');caption.textContent=norm(name)+'（2022年）议员选区范围与名额';table.append(caption);
+   const caption=document.createElement('caption');caption.textContent=norm(name)+'（'+yearLabel()+'年）议员选区范围与名额';table.append(caption);
    const thead=document.createElement('thead'),trh=document.createElement('tr');
    for(const label of ['选区','类别','选区范围','应选名额','妇保名额','地图边界']){const th=document.createElement('th');th.scope='col';th.textContent=label;trh.append(th)}
    thead.append(trh);table.append(thead);const tbody=document.createElement('tbody');
@@ -540,7 +617,7 @@
     const scope=document.createElement('td');scope.className='reference-scope';scope.textContent=mainlandTerms(norm(d.scope))||'无乡镇市区得票记录';tr.append(scope);
     const seat=document.createElement('td');seat.className='reference-number';seat.textContent=d.seats+'席';tr.append(seat);
     const women=document.createElement('td');women.className='reference-number';women.textContent=d.womenReserved+'席';tr.append(women);
-    const map=document.createElement('td');const matchKey=HistoryCore.key(d.county,d.electorate,d.number,norm);map.textContent='2022年选区范围';map.className=unmatchedDistricts.has(matchKey)?'history-map-mismatch':'history-map-match';tr.append(map);
+    const map=document.createElement('td');const matchKey=HistoryCore.key(d.county,d.electorate,d.number,norm);map.textContent=yearLabel()+'年选区范围';map.className=unmatchedDistricts.has(matchKey)?'history-map-mismatch':'history-map-match';tr.append(map);
     tbody.append(tr)
    }
    table.append(tbody);wrap.append(table);details.append(wrap);root.append(details)
@@ -614,6 +691,15 @@
  let resultPage=0;
  function candidateKey(r){return presidentialMode?['president',presidentialYear,r.number,r.name].join('|'):legislativeMode?(r.electorate==='party'?['legislative',legislativeYear,'party',r.party].join('|'):['legislative',legislativeYear,r.electorate,r.county,r.district,r.number,r.name].join('|')):[r.county,r.electorate,r.district,kind==='township'?r.town:'',r.number,r.name].join('|')}
  function ensureHistoryGeometry(){
+  if(localYear===2026&&!presidentialMode&&!legislativeMode){
+   if(historicalFeatures.length||!data?.council?.length||!data?.councilIndigenous?.length)return;
+   const meta=new Map(districtMetadata.map(d=>[[norm(d.county),d.electorate,String(d.number)].join('|'),d]));
+   historicalFeatures=[...data.council,...data.councilIndigenous].map(f=>{
+    const id=[norm(f.county),HistoryCore.identity(f.electorate),districtNumber(f.number||f.name)].join('|');
+    const district=meta.get(id);
+    return {...f,historyId:district?.id||'',seats:district?.seats||f.seats||0};
+   });return;
+  }
   if(historicalFeatures.length||!data?.towns?.length||!districtMetadata.length||!hsinchuGeometry)return;
   historicalFeatures=districtMetadata.map(h=>{
    const split=h.county==='新竹市'&&h.electorate==='regional'?hsinchuGeometry.features.find(f=>f.number===h.number):null;
@@ -644,9 +730,10 @@
   return items.filter(f=>!county||f.county===county);
  }
  function noElection(f){return f.name!==f.county&&active&&kind==='township'&&loaded&&!db.township.some(r=>r.county===f.county&&r.town===f.name)}
- function historicalDistrictFor(f){return districtMetadata.find(d=>d.id===f.historyId)}
+ function historicalDistrictFor(f){return districtMetadata.find(d=>d.id===f.historyId)||
+  (localYear===2026?districtMetadata.find(d=>d.county===norm(f.county)&&d.electorate===HistoryCore.identity(f.electorate)&&String(d.number)===districtNumber(f.number||f.name)):null)}
  function historicalSeatRows(d){
-  const cs=db.council.filter(r=>r.level==='district'&&HistoryCore.key(r.county,r.electorate,r.district,norm)===HistoryCore.key(d.county,d.electorate,d.number,norm)&&r.elected).map(r=>({...r,id:'2022|'+candidateKey(r),history:true}));
+  const cs=db.council.filter(r=>r.level==='district'&&HistoryCore.key(r.county,r.electorate,r.district,norm)===HistoryCore.key(d.county,d.electorate,d.number,norm)&&r.elected).map(r=>({...r,id:yearLabel()+'|'+candidateKey(r),history:true}));
   cs.sort((a,b)=>state.palette.findIndex(p=>p.id===predictionParty(a.party).id)-state.palette.findIndex(p=>p.id===predictionParty(b.party).id)||a.party.localeCompare(b.party)||b.votes-a.votes);
   return Array.from({length:d.seats},(_,i)=>cs[i]||null);
  }
@@ -655,10 +742,11 @@
   if(titleEyebrow)titleEyebrow.textContent=yearLabel()+' 历史数据';
   if(el('historyWorkspaceTitle'))el('historyWorkspaceTitle').textContent=yearLabel()+' '+officeTitle()+'选举结果';
   if(el('historyBoundaryNote')){
-  el('historyBoundaryNote').hidden=!presidentialMode&&!legislativeMode;
+  el('historyBoundaryNote').hidden=!presidentialMode&&!legislativeMode&&localYear!==2026;
   if(legislativeMode)el('historyBoundaryNote').textContent=legislativePartyTownView()?'政党票票数均为当届乡镇市区的实际统计值，完整对账至县市与全区；2008及2012年的行政区名称遵循当届，轮廓采用对应现行乡镇市区图形，并不保证还原每一处历史边界。':legislativeYear===1992?'1992年区域选区缺少当届乡镇级归属资料；本图借用1995年乡镇归属和现行地理轮廓定位，不能据此推断1992年精确历史边界。':legislativeYear<2008?'1995—2004年区域选区按当届选区归属重建，使用现行乡镇市区轮廓近似绘制；县市内部分界或旧村里界线可能不精确，点选选区可查看具体说明。':legislativeYear>=2008&&legislativeYear<2020?
    '2008—2016年立法机构区域选区依当届归属显示；2020年调整的台中、台南、高雄、新竹县、屏东按当届乡镇市区选区资料重建。村里内部划分缺少可核历史界线时仅近似展示。':
    '历史选区按当届县市、乡镇市区归属重建；底图几何使用现行行政区近似，无法精确还原的旧里界不作推算。';
+  else if(localYear===2026)el('historyBoundaryNote').textContent='2026年正式结果仅在中选会或地方选委会资料逐项核对、选区得票与席次校验通过后发布；预测与官方结果分开保存。未核实的乡镇得票不推算。';
   else if(presidentialMode)el('historyBoundaryNote').textContent='县市和乡镇市区按当届归属显示，边界采用现行底图近似；'+
    (presidentialYear<=2000?'不同“连署”候选人使用不同图示色，不代表政党。':'颜色表示各地区最高票候选人所属政党。');
  }
@@ -741,7 +829,7 @@
    body.append(tr);
   }
   const district=historicalDistrictFor(f);
-  el('historyDialogMessage').textContent=!rows.length?(noElection(f)?'2022年本区域不举行乡镇市区长选举。':'暂无该层级的历史数据。'):district?
+  el('historyDialogMessage').textContent=!rows.length?(noElection(f)?yearLabel()+'年本区域不举行乡镇市区长选举。':'暂无该层级的历史数据。'):district?
    '应选 '+district.seats+' 席 · 妇保 '+district.womenReserved+' 席 · 有效票 '+rows.reduce((n,r)=>n+r.votes,0).toLocaleString('zh-CN'):
    (legislativeMode?(partyBallotDialog?'本地区政党得票与得票率':legislativeBallot==='regional'&&legislativeYear<2008?'本届多席选区的当选者与得票':'本地区候选人得票及选举结果'):mayorTownView()?'本地区得票':presidentialMode?'当地候选人得票与全台当选标记':'2022年得票与当选结果');
   if(rows.length)el('historyDialogMessage').append(' · '+rows.length+(partyBallotDialog?' 个政党':' 位候选人')+' · 按得票数排序');
@@ -850,7 +938,7 @@
    card.classList.toggle('seat-region-highlighted',!!targetId&&card.dataset.seatRegion===targetId);
  }
  window.History2022View={metricLabel,exportRows,exportMetadata,featurePresentation,active:()=>active,activate,deactivate,syncOverviewMap,
-  countySeatLeader,kind:()=>kind,office:()=>presidentialMode?'president':legislativeMode?'legislative':kind,year:()=>presidentialMode?presidentialYear:legislativeMode?legislativeYear:2022,overview:historyOverview,seatMode:historyCouncilSeats,items:historyItems,noElection,districtFor:historicalDistrictFor,seatRows:historicalSeatRows,historicTownFeatures:()=>presidentialMode?presidentialGeometry?.towns||[]:legislativeMode?legislativeAreaGeometry?.towns||[]:null,allTowns:()=>presidentialMode?presidentialGeometry?.towns||[]:legislativeMode?legislativeAreaGeometry?.towns||[]:data?.towns||[],openRegion:openHistoryRegion,openContest:openContestById,features:()=>historicalFeatures,legislativeFeatures:()=>legislativeMode?legislativeGeometry:[],legislativeNationwide:legislativeNationalView,legislativeBadgesMode:legislativeMultiView,legislativeCountyFeatures:()=>legislativeMode?legislativeAreaGeometry?.counties||[]:[],legislativeSeatRows:f=>legislativeMode?HistoryLegislative.winners(snapshotData,{county:f.county,district:f.electorate==='regional'?f.name:''}):[],legislativeBallot:()=>legislativeBallot,legislativeScale:()=>scale,snapshot:()=>snapshotData};
+  countySeatLeader,kind:()=>kind,office:()=>presidentialMode?'president':legislativeMode?'legislative':kind,year:()=>presidentialMode?presidentialYear:legislativeMode?legislativeYear:localYear,overview:historyOverview,seatMode:historyCouncilSeats,items:historyItems,noElection,districtFor:historicalDistrictFor,seatRows:historicalSeatRows,historicTownFeatures:()=>presidentialMode?presidentialGeometry?.towns||[]:legislativeMode?legislativeAreaGeometry?.towns||[]:null,allTowns:()=>presidentialMode?presidentialGeometry?.towns||[]:legislativeMode?legislativeAreaGeometry?.towns||[]:data?.towns||[],openRegion:openHistoryRegion,openContest:openContestById,features:()=>historicalFeatures,legislativeFeatures:()=>legislativeMode?legislativeGeometry:[],legislativeNationwide:legislativeNationalView,legislativeBadgesMode:legislativeMultiView,legislativeCountyFeatures:()=>legislativeMode?legislativeAreaGeometry?.counties||[]:[],legislativeSeatRows:f=>legislativeMode?HistoryLegislative.winners(snapshotData,{county:f.county,district:f.electorate==='regional'?f.name:''}):[],legislativeBallot:()=>legislativeBallot,legislativeScale:()=>scale,snapshot:()=>snapshotData};
  const resultSection=el('historyResultSection')||(()=>{const section=document.createElement('section');section.id='historyResultSection';section.hidden=true;section.className='history-result-section';const heading=document.createElement('h3');heading.textContent='2022 选举结果';section.append(heading,el('historySummary'),el('historySearchTools'),el('historyResults'),el('historyPager'),el('historyCompare'));el('districtReference').before(section);return section})();
  if(!el('historyResultParty')){const partyLabel=document.createElement('label');partyLabel.className='label';partyLabel.htmlFor='historyResultParty';partyLabel.textContent='筛选政党';const partySelect=document.createElement('select');partySelect.id='historyResultParty';partySelect.append(new Option('全部政党',''));el('historySearchTools').append(partyLabel,partySelect)}
  const dialogNav=document.createElement('div');dialogNav.className='history-dialog-navigation';const dialogBack=document.createElement('button');dialogBack.type='button';dialogBack.id='historyDialogBack';dialogBack.className='button quiet';dialogBack.textContent='返回上一级';const dialogDrilldown=document.createElement('button');dialogDrilldown.type='button';dialogDrilldown.id='historyDialogDrilldown';dialogDrilldown.className='button primary';dialogDrilldown.textContent='查看乡镇市区得票分布';dialogNav.append(dialogBack,dialogDrilldown);el('historyResultDialog').append(dialogNav);
@@ -872,6 +960,7 @@
  el('historyYear').onchange=()=>{
   if(el('historyOffice').value==='president')activatePresidential(Number(el('historyYear').value));
   if(el('historyOffice').value==='legislative')activateLegislative(Number(el('historyYear').value));
+  if(!['president','legislative'].includes(el('historyOffice').value))activateLocalYear(Number(el('historyYear').value));
  };
  if(el('historyElectorate'))el('historyElectorate').onchange=()=>{electorate=el('historyElectorate').value;if(legislativeMode){legislativeBallot=electorate;scale='county';county='';legislativeFocus='';el('historyCounty').value=''}resultPage=0;switchMode();render()};
  el('historyCounty').onchange=()=>{county=el('historyCounty').value;legislativeFocus='';if(legislativeMode&&!legislativePartyTownView())scale='county';resultPage=0;switchMode();render()};
@@ -881,7 +970,7 @@
  if(el('historyResultParty'))el('historyResultParty').onchange=()=>{resultPage=0;if(currentResult)showRows(currentResult)};
  el('historyPrev').onclick=()=>{resultPage--;showRows(currentResult)};
  el('historyNext').onclick=()=>{resultPage++;showRows(currentResult)};
- if(el('historyRetry'))el('historyRetry').onclick=()=>{if(el('historyOffice').value==='president'){activatePresidential(Number(el('historyYear').value));return}if(el('historyOffice').value==='legislative'){activateLegislative(Number(el('historyYear').value));return}loaded=false;snapshot().then(success=>{if(active&&success)render()})};
+ if(el('historyRetry'))el('historyRetry').onclick=()=>{if(el('historyOffice').value==='president'){activatePresidential(Number(el('historyYear').value));return}if(el('historyOffice').value==='legislative'){activateLegislative(Number(el('historyYear').value));return}localYear===2026?activateLocalYear(2026):(loaded=false,snapshot().then(success=>{if(active&&success)render()}))};
  el('historyFromPrediction').onclick=()=>{
   if(!window.HistoryAccess?.canAccess()){window.HistoryAccess?.notice();return}
   if(presidentialMode||legislativeMode)restoreStandardElection(state.predictionOffice);
@@ -897,7 +986,7 @@
  const defaultDistrictSearch=el('districtTableSearch').oninput;
  el('districtTableSearch').oninput=event=>{if(active&&kind==='council')renderHistoryDistrictReference();else defaultDistrictSearch?.(event)};
  const defaultDistrictDownload=el('downloadDistrictTable').onclick;
- el('downloadDistrictTable').onclick=event=>{if(!active||kind!=='council')return defaultDistrictDownload?.(event);const lines=[['县市','选区','类别','选区范围','应选名额','妇保名额','地图匹配'],...districtMetadata.filter(d=>(!county||norm(d.county)===county)).map(d=>[norm(d.county),d.name,DistrictCore.identityName(d),mainlandTerms(norm(d.scope)),d.seats,d.womenReserved,unmatchedDistricts.has(norm(d.county)+'|'+d.electorate+'|'+d.number)?'未匹配':'已匹配'])];const blob=new Blob(['\uFEFF'+lines.map(row=>row.map(csvCell).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='2022议员选区范围与名额.csv';a.click();URL.revokeObjectURL(url)};
+ el('downloadDistrictTable').onclick=event=>{if(!active||kind!=='council')return defaultDistrictDownload?.(event);const lines=[['县市','选区','类别','选区范围','应选名额','妇保名额','地图匹配'],...districtMetadata.filter(d=>(!county||norm(d.county)===county)).map(d=>[norm(d.county),d.name,DistrictCore.identityName(d),mainlandTerms(norm(d.scope)),d.seats,d.womenReserved,unmatchedDistricts.has(norm(d.county)+'|'+d.electorate+'|'+d.number)?'未匹配':'已匹配'])];const blob=new Blob(['\uFEFF'+lines.map(row=>row.map(csvCell).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=yearLabel()+'议员选区范围与名额.csv';a.click();URL.revokeObjectURL(url)};
  const historicTownToggle=el('historyTownBoundaries');
  if(historicTownToggle)historicTownToggle.onchange=()=>{
   pushHistory();state.showTownBoundaries=historicTownToggle.checked;
@@ -938,7 +1027,7 @@
    const detail=[...leader.counts].sort((a,b)=>b[1]-a[1]).map(([party,seats])=>party+' '+seats+'席').join('、');
    return(leader.tied?'当选席次并列最多':leader.party+'当选席次最多')+' · '+detail;
   }
-  if(kind==='council'&&metric==='party')return featurePresentation(feature).tooltip;if(legislativeMultiView())return featurePresentation(feature).tooltip;if(historyOverview()){return '点击查看'+feature.county+'2022年结果'}if(noElection(feature))return '2022年本区域不举行乡镇市区长选举';const region=currentResult?.regions.get(featureKey(feature));if(voteMetric())return region?.top?region.top.name+' · '+(metric==='votes'?region.top.votes.toLocaleString('zh-CN')+'票 · '+region.share.toFixed(2)+'%':region.share.toFixed(2)+'% · '+region.top.votes.toLocaleString('zh-CN')+'票'):'暂无该候选人得票数据';if(areaLeading())return region?.top?region.top.name+' · 得票领先 · '+region.top.votes.toLocaleString('zh-CN')+'票 · '+region.share.toFixed(2)+'%'+(feature.historicalBoundaryNote?' · '+feature.historicalBoundaryNote:''):'暂无本地区得票资料';return !region?'历史数据未匹配':region.tie?'各党当选席次并列':region.party+' · '+region.seatCount+'席'};
+  if(kind==='council'&&metric==='party')return featurePresentation(feature).tooltip;if(legislativeMultiView())return featurePresentation(feature).tooltip;if(historyOverview()){return '点击查看'+feature.county+yearLabel()+'年结果'}if(noElection(feature))return yearLabel()+'年本区域不举行乡镇市区长选举';const region=currentResult?.regions.get(featureKey(feature));if(voteMetric())return region?.top?region.top.name+' · '+(metric==='votes'?region.top.votes.toLocaleString('zh-CN')+'票 · '+region.share.toFixed(2)+'%':region.share.toFixed(2)+'% · '+region.top.votes.toLocaleString('zh-CN')+'票'):'暂无该候选人得票数据';if(areaLeading())return region?.top?region.top.name+' · 得票领先 · '+region.top.votes.toLocaleString('zh-CN')+'票 · '+region.share.toFixed(2)+'%'+(feature.historicalBoundaryNote?' · '+feature.historicalBoundaryNote:''):'暂无本地区得票资料';return !region?'历史数据未匹配':region.tie?'各党当选席次并列':region.party+' · '+region.seatCount+'席'};
  const defaultPushHistory=pushHistory;pushHistory=function(){if(!active)return defaultPushHistory()};
  const defaultPaint=paint;paint=function(feature){if(!active)return defaultPaint(feature);if(legislativeMode){
    if(legislativeYear===1992&&['plains','mountain'].includes(legislativeBallot))return toast('1992年没有县市得票分布，仅可查阅全区选举结果');
@@ -952,7 +1041,7 @@
  const defaultRender=render;render=function(){if(active&&data){delete el('legend').dataset.historyBox;syncHistoryControls();currentResult=analyze()}defaultRender();if(active){update();for(const id of ['workspacePrediction','workspaceFree']){el(id).classList.remove('active');el(id).setAttribute('aria-pressed','false')}}};
  function showComparison(result){
   const root=el('historyCompare');
-  root.hidden=presidentialMode||legislativeMode||mayorTownView()||historyOverview()&&kind==='mayor';
+  root.hidden=localYear===2026||presidentialMode||legislativeMode||mayorTownView()||historyOverview()&&kind==='mayor';
   if(root.hidden)return;
   const parties=new Map(),districts=[...directoryDistrictById.values()].filter(d=>d.type===kind&&(!county||d.county===county));
   let completed=0;

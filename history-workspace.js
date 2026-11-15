@@ -8,7 +8,7 @@
   const csvCell=value=>{let text=exportedWording(value);if(/^[=+@\t\r-]/.test(text))text="'"+text;return '"'+text.replace(/"/g,'""')+'"'};
  const OFFICES=new Set(['mayor','council','township','president','legislative']);
  const PRESIDENT_YEARS=[1996,2000,2004,2008,2012,2016,2020,2024];
- const yearsForOffice=office=>office==='president'?PRESIDENT_YEARS:office==='legislative'?(root.HistoryLegislative?.YEARS||[1992,1995,1998,2001,2004,2008,2012,2016,2020,2024]):[2022];
+ const yearsForOffice=office=>office==='president'?PRESIDENT_YEARS:office==='legislative'?(root.HistoryLegislative?.YEARS||[1992,1995,1998,2001,2004,2008,2012,2016,2020,2024]):root.HISTORY_2026_RESULTS_AVAILABLE===true?[2022,2026]:[2022];
  const Core=typeof module!=='undefined'&&module.exports?require('./history-core.js'):root.HistoryCore;
  const VIEWS=new Set(['map','candidates','overview']);
  const ELECTORATES=new Set(['all','regional','plains','mountain']);
