@@ -2215,7 +2215,7 @@ test('Historic legislative nationwide maps label counties instead of constituenc
  await page.locator('#categoryHistory').click();
  await page.locator('#historyOffice').selectOption('legislative');
  await page.waitForFunction(()=>History2022View.office()==='legislative'&&History2022View.year()===2024&&History2022View.snapshot()?.rows?.length>0);
- assert.deepEqual(await page.locator('#historyScale option').allTextContents(),['全台总览','县市','选举区']);
+ assert.deepEqual(await page.locator('#historyScale option').allTextContents(),['全部地区总览','县市','选举区']);
  const labels=await page.locator('#labels [data-label]').allTextContents();
  assert.ok(labels.some(name=>name.includes('台北')),'nationwide regional map has county labels');
  assert.equal(await page.locator('#labels [data-placement="district-number"]').count(),0,'no constituency numbers in nationwide view');
