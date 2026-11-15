@@ -53,7 +53,28 @@
  }
  function districtGeometry(target,reference,map,normalize=s=>s,mergePaths=paths=>paths.join(' '),modernCounty=s=>s,baseTown=s=>s){
   const norm=value=>normalize(String(value||''));
-  const townIndex=new Map((map?.towns||[]).map(t=>[norm(modernCounty(t.county))+'|'+norm(baseTown(t.name)),t]));
+  // Map features already carry the county that existed in the election year.
+  // Preserve that county identity: the old 高雄市三民区 and 高雄县三民乡
+  // both normalize to today's 高雄市 + 三民, but were very far apart.
+  // Normalizing the county BEFORE matching silently sends urban 三民区 to
+  // today's 那玛夏区 (formerly 高雄县三民乡).
+  const townIndex=new Map(),modernTownIndex=new Map(),historicCounties=new Set();
+  for(const town of map?.towns||[]){
+   const county=norm(town.county),name=norm(baseTown(town.name)),
+    historicKey=county+'|'+name,modernKey=norm(modernCounty(county))+'|'+name;
+   historicCounties.add(county);
+   if(!townIndex.has(historicKey))townIndex.set(historicKey,town);
+   // A normalized key is usable only when uniquely assigned.
+   if(modernTownIndex.has(modernKey))modernTownIndex.set(modernKey,null);
+   else modernTownIndex.set(modernKey,town);
+  }
+  const findTown=(county,name)=>{
+   const key=norm(county)+'|'+norm(baseTown(name)),exact=townIndex.get(key);
+   if(exact)return exact;
+   // Only compatibility mode for maps WITHOUT historic-county labels.
+   if(historicCounties.has(norm(county)))return null;
+   return modernTownIndex.get(norm(modernCounty(county))+'|'+norm(baseTown(name)))||null;
+  };
   const membership=new Map();
   for(const row of reference?.rows||[]){
    if(row.electorate!=='regional'||row.level!=='town')continue;
@@ -64,7 +85,7 @@
   for(const row of target?.rows||[]){
    if(row.electorate!=='regional'||row.level!=='district')continue;
    const key=norm(row.county)+'|'+districtNumber(row.district);if(seen.has(key))continue;seen.add(key);
-   const townNames=membership.get(key)||new Set(),sources=[...townNames].map(t=>townIndex.get(norm(modernCounty(row.county))+'|'+t)).filter(Boolean);
+   const townNames=membership.get(key)||new Set(),sources=[...townNames].map(t=>findTown(row.county,t)).filter(Boolean);
    if(!sources.length){
     const countyFeature=(map?.counties||[]).find(f=>(norm(f.name||f.county)===norm(row.county)||norm(f.name||f.county)===norm(modernCounty(row.county))));
     if(countyFeature)sources.push(countyFeature);

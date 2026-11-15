@@ -90,6 +90,32 @@ test('recognizes official long and Chinese-numeral constituency names without co
  assert.deepEqual(features.map(x=>x.d),['M1','M2']);
 });
 
+test('2004 Kaohsiung city constituency does not include former Kaohsiung county Sanmin township',()=>{
+ const fs=require('node:fs'),path=require('node:path');
+ const Presidential=require('../history-presidential.js'),Core=require('../history-core.js');
+ const map=JSON.parse(fs.readFileSync(path.join(__dirname,'../assets/map-base.json'),'utf8'));
+ const snap=JSON.parse(fs.readFileSync(path.join(__dirname,'../assets/history-legislative-2004.json'),'utf8'));
+ const focus={...snap,rows:snap.rows.filter(r=>['高雄市','高雄县'].includes(r.county))};
+ const area=Legislative.scopeGeometry(focus,map,s=>s,Core.mergePaths,Presidential.modernCounty,Presidential.baseTown);
+ const urban=area.towns.find(t=>t.county==='高雄市'&&t.name==='三民区');
+ const mountain=area.towns.find(t=>t.county==='高雄县'&&t.name==='三民乡');
+ assert.ok(urban,'historical city Sanmin district exists');
+ assert.ok(mountain,'historical county Sanmin township exists separately');
+ assert.ok(urban.box[1]>440,'urban Sanmin must be close to Kaohsiung port');
+ assert.ok(mountain.box[1]<400,'former county Sanmin is in northern mountains');
+ const districts=Legislative.districtGeometry(focus,focus,{...map,towns:area.towns,counties:area.counties},
+  s=>s,Core.mergePaths,Presidential.modernCounty,Presidential.baseTown);
+ const first=districts.find(d=>d.county==='高雄市'&&d.number===1);
+ const second=districts.find(d=>d.county==='高雄市'&&d.number===2);
+ assert.ok(first&&second,'both 2004 city districts must exist');
+ assert.ok(first.box[1]>440,'city first district must not stretch north to the old county mountains');
+ assert.ok(first.box[2]<190,'city first district must not stretch east to the old county mountains');
+ assert.ok(first.box[3]>=second.box[1]&&second.box[3]>=first.box[1],
+  'both urban constituencies occupy overlapping north-south ranges');
+ assert.equal(Legislative.winners(snap,{county:'高雄市',district:first.name}).length,6);
+ assert.equal(Legislative.winners(snap,{county:'高雄市',district:second.name}).length,5);
+});
+
 test('separates former county and city into distinct historical geometry',()=>{
  const snapshot={year:2004,rows:[
   {electorate:'regional',level:'county',county:'台中县'},

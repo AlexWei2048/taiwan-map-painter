@@ -2232,6 +2232,26 @@ test('Legislative indigenous and party ballots have geography-appropriate levels
 });
 
 
+test('2004 Kaohsiung districts preserve their former city boundaries',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('legislative');
+ await page.locator('#historyYear').selectOption('2004');
+ await page.waitForFunction(()=>History2022View.snapshot()?.year===2004);
+ await page.locator('#historyCounty').selectOption('高雄市');
+ const result=await page.evaluate(()=>{
+  const districts=currentItems().filter(f=>f.county==='高雄市');
+  return districts.map(f=>({number:f.number,box:f.box,partySeats:History2022View.legislativeSeatRows(f).length,
+   frame:!!document.querySelector('#labels [data-history-seat-district="'+CSS.escape(f.id)+'"]')}));
+ });
+ assert.equal(result.length,2);
+ const first=result.find(x=>x.number===1),second=result.find(x=>x.number===2);
+ assert.ok(first&&second);
+ assert.ok(first.box[1]>440,'former Kaohsiung County Sanmin township must never enter urban constituency 1');
+ assert.ok(first.box[2]<190);
+ assert.deepEqual([first.partySeats,second.partySeats],[6,5]);
+ assert.equal(first.frame,true);assert.equal(second.frame,true);
+});
 test('Historic legislative nationwide maps label counties instead of constituency numbers',async t=>{
  const page=await pageFor(t);
  await page.locator('#categoryHistory').click();
