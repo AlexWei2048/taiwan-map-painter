@@ -1,0 +1,79 @@
+name: Monitor official 2026 candidate announcements
+on:
+  schedule:
+    - cron: '20 4 * * *' # 12:20 Taiwan time
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/audit_2026_official.py
+      - sources/election-2026/official-source-registry.json
+      - tests/test_official_2026_audit.py
+      - .github/workflows/official-2026-candidates.yml
+permissions:
+  contents: read
+jobs:
+  official-monitor:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify read-only candidate audit
+        run: |
+          python -m unittest discover -s tests -p test_official_2026_audit.py
+          python scripts/audit_2026_official.py --output reports/official-2026-candidate-local.json
+      - uses: actions/cache/restore@v4
+        with:
+          path: .cache/cec-official-monitor.json
+          key: official-cec-${{ github.run_id }}
+          restore-keys: official-cec-
+      - name: Check current official notices
+        id: monitor
+        continue-on-error: true
+        run: |
+          python scripts/audit_2026_official.py --monitor --previous .cache/cec-official-monitor.json \
+            --output reports/official-2026-candidate-monitor.json
+      - name: Summarize changes and keep last good observation
+        if: always()
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path('reports/official-2026-candidate-monitor.json')
+          if not p.exists():
+              print('::warning::No official source monitoring report; data freshness unknown')
+              raise SystemExit(0)
+          mon=json.loads(p.read_text()).get('monitor',{})
+          state=Path('.cache/cec-official-monitor.json')
+          old={}
+          if state.exists():
+              try:old=json.loads(state.read_text()).get('sources',{})
+              except Exception: pass
+          for key,row in mon.get('sources',{}).items():
+              if row.get('status')=='fetch_failed' and key in old:
+                  mon['sources'][key]=old[key] | {'lastCheckStatus':'fetch_failed'}
+          state.parent.mkdir(parents=True,exist_ok=True)
+          state.write_text(json.dumps(mon,ensure_ascii=False,indent=2))
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('## 2026 official candidate watch\n\n')
+              f.write('**New/changed official pages:** '+(', '.join(mon.get('changed',[])) or 'none observed')+'\n\n')
+              f.write('**Fetch errors:** '+(', '.join(mon.get('errors',[])) or 'none')+'\n\n')
+              f.write('No candidate, ballot or saved prediction has been auto-modified. Review original official notices before adopting changes.\n')
+          if mon.get('changed'):print('::warning::CEC official source changed: '+', '.join(mon['changed']))
+          if mon.get('errors'):print('::warning::CEC source could not be checked: '+', '.join(mon['errors']))
+          PY
+      - uses: actions/cache/save@v4
+        if: steps.monitor.outcome == 'success'
+        with:
+          path: .cache/cec-official-monitor.json
+          key: official-cec-${{ github.run_id }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: official-candidate-audit-${{ github.run_id }}
+          path: |
+            reports/official-2026-candidate-local.json
+            reports/official-2026-candidate-monitor.json
+          if-no-files-found: ignore
