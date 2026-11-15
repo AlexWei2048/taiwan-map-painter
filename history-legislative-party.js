@@ -258,9 +258,9 @@
     for(const n of p.winners){
      const row=element('div','history-list-nominee');
      if(n.elected)row.classList.add('elected');
-     row.append(element('span','history-list-rank',n.rank+'.'),
-      element('span','history-list-person',n.name),
-      element('span','history-list-result',n.elected?'★ 当选':'未当选'));
+     const mark=element('span','history-list-result');
+     if(n.elected){const img=element('img','history-list-winner-mark');img.src='assets/elected-mark.png';img.alt='当选';img.loading='lazy';mark.append(img)}
+     row.append(element('span','history-list-rank',n.rank+'.'),element('span','history-list-person',n.name),mark);
      if(n.rank>p.seats&&n.elected)row.title='按妇女保障规则优先当选，并非单纯前N名';
      grid.append(row);
     }
@@ -270,7 +270,8 @@
      const overseasGrid=element('div','history-list-nominees');
      for(const [i,name] of p.overseasWinners.entries()){
       const row=element('div','history-list-nominee elected');
-      row.append(element('span','history-list-rank',String(i+1)+'.'),element('span','history-list-person',name),element('span','history-list-result','★ 当选'));
+      const mark=element('span','history-list-result');const img=element('img','history-list-winner-mark');img.src='assets/elected-mark.png';img.alt='当选';img.loading='lazy';mark.append(img);
+      row.append(element('span','history-list-rank',String(i+1)+'.'),element('span','history-list-person',name),mark);
       overseasGrid.append(row);
      }
      body.append(overseasGrid);
