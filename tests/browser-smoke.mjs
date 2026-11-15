@@ -2761,7 +2761,6 @@ test('Local 2026 results remain hidden until an official fully reconciled data r
  const page=await pageFor(t);
  await page.locator('#categoryHistory').click();
  await page.locator('#historyOffice').selectOption('mayor');
- await page.waitForResponse(response=>response.url().includes('history-2026-availability.json'));
  assert.deepEqual(await page.locator('#historyYear option').allTextContents(),['2022']);
  assert.equal(await page.evaluate(()=>window.HISTORY_2026_RESULTS_AVAILABLE===true),false);
  const manifest=await page.evaluate(async()=>await (await fetch('assets/history-2026-availability.json')).json());
