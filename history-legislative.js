@@ -5,7 +5,7 @@
  const LABELS={regional:'区域民代',plains:'平地少数民族民代',mountain:'山地少数民族民代'};
  function ballots(year){
   const items=Object.entries(LABELS).map(([value,label])=>({value,label}));
-  items.push({value:'party',label:Number(year)>=2008?'不分区政党票':'不分区席次计算票'});
+  items.push({value:'party',label:'不分区民代'});
   return items;
  }
  function levels(year,electorate){
@@ -92,7 +92,7 @@
    (!selection.county||row.county===selection.county));
  }
  function note(year,electorate){
-  if(electorate==='party'&&Number(year)<2008)return '本项并非独立政党票，而是依各党区域及原住民候选人票汇总的席次计算票。';
+  if(electorate==='party'&&Number(year)<2008)return '2008年前无独立不分区政党票；政党席次以政党推荐的区域及少数民族候选人得票按旧制计算，详见下方席次与名单。';
   if(Number(year)===1992)return '1992年公开机器资料只到选区层，本页不推算乡镇市区票数。';
   return '';
  }
