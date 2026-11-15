@@ -41,7 +41,7 @@ def sourced_logos():
     content=src.read_text(encoding="utf-8")
     values=[]
     for label in ("SOURCED_PARTY_LOGOS_BY_ID","SOURCED_PARTY_LOGOS_BY_NAME"):
-        match=re.search(r"const "+label+r"=(\\{.*?\\});",content,re.S)
+        match=re.search(r"const "+label+r"=(\{.*?\});",content,re.S)
         values.append(set(json.loads(match.group(1))) if match else set())
     return tuple(values)
 
