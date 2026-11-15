@@ -1,0 +1,55 @@
+name: Supplement only documented historic party emblems
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/import_verified_historical_flags.py
+      - .github/workflows/historical-party-emblems.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: verified-party-flag-import
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install constrained image readers
+        run: python -m pip install requests pillow cairosvg opencc-python-reimplemented
+      - name: Verify and import documented historical party flag
+        run: python scripts/import_verified_historical_flags.py
+      - name: Refresh source-backed coverage inventory
+        run: python scripts/audit_site_coverage.py
+      - name: Verify party logo manifest and aliases
+        run: |
+          python - <<'PY'
+          import json,re
+          from pathlib import Path
+          text=Path('assets/party-logos-sourced.js').read_text()
+          a=json.loads(re.search(r'const SOURCED_PARTY_LOGOS_BY_ID=(\{.*?\});',text,re.S).group(1))
+          assert a['ycp'].startswith('data:image/png;base64,')
+          manifest=json.loads(Path('reports/official-party-logos-import.json').read_text())
+          assert any(v.get('party_id')=='ycp' for v in manifest['official_sources'])
+          assert len(a)==manifest['count_by_id']
+          audit=json.loads(Path('reports/coverage-audit.json').read_text())
+          assert all(v['id']!='ycp' for v in audit['missing_preset_logos'])
+          assert all(v['name']!='无党籍及未经政党推荐' for v in audit['missing_archive_logos'])
+          print('Verified',len(a),'sourced preset emblems, all with provenance')
+          PY
+      - name: Commit audited logos and coverage report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/party-logos-sourced.js assets/LICENSE-party-logos-sourced.txt reports/official-party-logos-import.json reports/coverage-audit.json reports/coverage-audit.md index.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Embed documented Chinese Youth Party flag and refresh election archive emblem audit"
+            git push origin HEAD:main
+          fi
