@@ -326,3 +326,10 @@ Latest source revision: 20261030-no-offline-v11.
 - 官方2026候选人公告监测/只读比对：scripts/audit_2026_official.py、tests/test_official_2026_audit.py、official-2026-candidates.yml，来源白名单与跨轮监测状态缓存，官方证据确认前不更改候选人与预测。
 - 1992—2004边界审计：history-legislative.js记录精度及来源，scripts/audit_legacy_legislative_boundaries.cjs验证所有142个选区，1992参考年份为1995；缺少当年地籍图不假定轮廓精确。
 - 视觉回归：tests/visual-regression.mjs及visual-regression.yml，比对上一版与新版的桌面、移动端与SVG导出像素，并生成Artif​​act差异截图。详细流程见docs/audits/2026-candidates-boundaries-visual-qa.md。
+
+## 2026-11-16 资格审定与正式结果接入
+
+- 中选会10月16日资格审定复核：县市长81/81逐人匹配，直辖市议员605、县市议员887人与中选会合格人数对账，10名审定资格不符的议员ID均排除，独立CI通过。
+- 2026开票结果导入器已就绪：2051名候选人空白号次与票数模板、447个选区的席次/候选人对账、乡镇得票与总票对账、正式来源/日期校验、妇保异常警告、投票日前禁止发布、正式认证状态保护；生成的数据仅在--publish时写入历史数据文件。
+- 历史数据在manifest标注published且载入的2026数据结构完全有效时才会显示2026，当前仍为awaiting_results；2022与用户保存的预测不受影响。
+- 2026年11月17日议员、县市长正式名单公告之前，不能将10月16日资格审定和第三方号次视为已逐人核实。

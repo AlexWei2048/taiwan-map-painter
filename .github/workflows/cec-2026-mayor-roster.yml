@@ -1,4 +1,4 @@
-name: Check 2026 municipal mayor roster against CEC qualification
+name: Verify all 81 CEC-qualified 2026 mayors across 22 counties
 on:
   push:
     paths:
@@ -26,5 +26,5 @@ jobs:
         if: always()
         with:
           name: cec-qualified-mayor-2026-audit
-          path: reports/2026-municipal-mayor-qualification-audit.json
+          path: reports/2026-all-mayor-qualification-audit.json
           if-no-files-found: warn

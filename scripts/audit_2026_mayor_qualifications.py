@@ -13,7 +13,7 @@ sys.path.insert(0,str(ROOT/"scripts"))
 from audit_2026_official import load_directory, analyze_directory
 
 SOURCE=ROOT/"sources/election-2026/official-mayors-20261016.json"
-OUTPUT=ROOT/"reports/2026-municipal-mayor-qualification-audit.json"
+OUTPUT=ROOT/"reports/2026-all-mayor-qualification-audit.json"
 
 def canon(v):
     s=unicodedata.normalize("NFKC",str(v or ""))
@@ -45,9 +45,9 @@ def check(data,reference):
     assert expected_total==reference["officialCount"]
     all_ok=not issues and all_mayor==reference["officialNationwideMayorTotal"]
     return {"referenceDate":reference["decisionDate"],"source":reference["sourceUrl"],
-            "coverage":"仅六个直辖市市长的2026-10-16资格审定姓名、县市和数量；不代表号次或11-12公告全文已逐项核实",
-            "municipalities":groups,"matched":sum(g["matched"] for g in groups),
-            "totalMunicipal":expected_total,"nationwideMayor":all_mayor,
+            "coverage":"已按中选会2026-10-16资格审定资料匹配全部22县市的81名县市长候选人；不代表11-12或11-17正式公告的逐人号次已全部复核",
+            "areas":groups,"matched":sum(g["matched"] for g in groups),
+            "totalMayors":expected_total,"nationwideMayor":all_mayor,
             "nationwideReferenceCount":reference["officialNationwideMayorTotal"],
             "passed":all_ok,"issues":issues}
 
@@ -64,7 +64,7 @@ def main():
     args.output.parent.mkdir(parents=True,exist_ok=True)
     args.output.write_text(json.dumps(report,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
     print(json.dumps({"passed":report["passed"],"matched":report["matched"],
-          "totalMunicipal":report["totalMunicipal"],"nationwideMayor":report["nationwideMayor"],
+          "totalMayors":report["totalMayors"],"nationwideMayor":report["nationwideMayor"],
           "issues":report["issues"]},ensure_ascii=False))
     return 0 if report["passed"] else 2
 if __name__=="__main__":raise SystemExit(main())
