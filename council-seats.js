@@ -178,8 +178,12 @@ function legislativeSeatPlacementFallback(f,n,t,used,items){
 }
 function drawHistoricalLegislativeSeats(group,t,interactive=false){
  const all=currentItems().filter(f=>f.center&&f.d);
- const sorted=all.map(f=>({f,seats:History2022View.legislativeSeatRows(f)}))
-  .filter(item=>item.seats.length)
+ const sorted=all.map(f=>({f,
+   seats:[...History2022View.legislativeSeatRows(f)].sort((a,b)=>
+    state.palette.findIndex(p=>p.id===predictionParty(a.party).id)-
+    state.palette.findIndex(p=>p.id===predictionParty(b.party).id)||
+    a.party.localeCompare(b.party,'zh')||b.votes-a.votes)
+  })).filter(item=>item.seats.length)
   .sort((a,b)=>(a.f.box[2]-a.f.box[0])*(a.f.box[3]-a.f.box[1])-
     (b.f.box[2]-b.f.box[0])*(b.f.box[3]-b.f.box[1]));
  const placements=new Map(),used=[];
