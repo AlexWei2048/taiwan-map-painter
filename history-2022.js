@@ -259,7 +259,7 @@
    const locals=[...result.regions.values()].filter(r=>r.top?.party),party=locals[0]?.top.party;
    return party?[{party,name:'',count:locals.length}]:[];
   }
-  if(!detailedLegend()return [...result.partySeats].map(([party,count])=>({party,name:'',count}));
+  if(!detailedLegend())return [...result.partySeats].map(([party,count])=>({party,name:'',count}));
   const entries=new Map();
   for(const region of result.regions.values()){
    if(!region.party)continue;
