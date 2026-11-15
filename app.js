@@ -2514,7 +2514,15 @@ function syncBorderControls(){
 function applyBorders(){
  const primary=primaryBoundaryKeys();
  for(const [selector,color,width]of [['#regions path','none',0],['#districtBorders path',state[primary.color],state[primary.width]],['#borders path',state.countyBorderColor,state.countyBorderWidth],['#townBorders path',state.townBorderColor,state.townBorderWidth]])
- for(const p of document.querySelectorAll(selector)){const historicCounty=p.hasAttribute('data-historical-county-outline');const lineColor=historicCounty?state.countyBorderColor:color,lineWidth=historicCounty?state.countyBorderWidth:width;p.setAttribute('stroke',lineColor);p.setAttribute('stroke-width',lineWidth);p.style.stroke=lineColor;p.style.strokeWidth=lineWidth;}
+ for(const p of document.querySelectorAll(selector)){const historicCounty=p.hasAttribute('data-historical-county-outline');
+  const historicTown=selector==='#townBorders path'&&typeof History2022View!=='undefined'&&History2022View.active()&&History2022View.office()==='legislative';
+  // The ordinary township preset is only 0.5px and nearly invisible in
+  // full-Taiwan historical maps. Give history a visible neutral baseline;
+  // honor explicitly customized colors and widths without overriding them.
+  const lightDefault=historicTown&&String(state.townBorderColor).toUpperCase()==='#B1C3B9'&&Number(state.townBorderWidth)===0.5;
+  const lineColor=historicCounty?state.countyBorderColor:lightDefault?'#627F71':color,
+   lineWidth=historicCounty?state.countyBorderWidth:lightDefault?1.0:width;
+  p.setAttribute('stroke',lineColor);p.setAttribute('stroke-width',lineWidth);p.style.stroke=lineColor;p.style.strokeWidth=lineWidth;}
  $('townBorders').style.display=state.showTownBoundaries?'':'none';syncBorderControls();
 }
 for(const [id,key]of borderControls){let edited=false;$(id).addEventListener('focus',()=>edited=false);$(id).addEventListener('pointerdown',()=>edited=false);$(id).addEventListener('input',()=>{const value=$(id).value;if(id.endsWith('Hex')&&!/^#[\da-f]{6}$/i.test(value))return;if(!edited){pushHistory();edited=true}state[borderControlKey(id,key)]=id.endsWith('Width')?Number(value):value;applyBorders();persist()});$(id).addEventListener('change',()=>syncBorderControls())}
