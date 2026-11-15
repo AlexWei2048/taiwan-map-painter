@@ -515,7 +515,10 @@
    table.append(tbody);wrap.append(table);details.append(wrap);root.append(details)
   }
  }
- function update(){if(!active||!data)return;const result=currentResult;showRows(result);showComparison(result);paintHistory(result);renderHistoryDistrictReference();el('predictionScopeLabel').textContent=yearLabel()+' 历史选举结果';el('brushName').textContent=historyOverview()?'点击县市查看'+yearLabel()+'年结果':yearLabel()+'选举结果 · 点击区域查看候选人与得票';el('returnTaiwanMap').hidden=!county;el('historyResultSection').hidden=false;el('headerExportPredictions').hidden=true;el('undo').disabled=true;el('redo').disabled=true;window.HistoryWorkspace?.render()}
+ function update(){if(!active||!data)return;const result=currentResult;showRows(result);showComparison(result);paintHistory(result);renderHistoryDistrictReference();el('predictionScopeLabel').textContent=yearLabel()+' 历史选举结果';el('brushName').textContent=historyOverview()&&kind==='council'&&metric==='party'?
+  '各县市按最多当选席次政党填色 · 点击县市查看议员选区':
+  historyOverview()?'点击县市查看'+yearLabel()+'年结果':
+  yearLabel()+'选举结果 · 点击区域查看候选人与得票';el('returnTaiwanMap').hidden=!county;el('historyResultSection').hidden=false;el('headerExportPredictions').hidden=true;el('undo').disabled=true;el('redo').disabled=true;window.HistoryWorkspace?.render()}
  function switchMode(){
   state.workspaceMode='history';state.fillMode='solid';state.level=legislativeMode?(legislativeBallot==='regional'?'legislative':scale==='town'?'towns':'counties'):kind==='mayor'?(scale==='town'?'towns':'counties'):kind==='council'?'council':'towns';state.county=county;state.villageTown='';
   if(kind==='council')state.councilViewScope='all';
@@ -635,7 +638,7 @@
     focusSelect.value=legislativeFocus;
    }
    if(el('historyLegislativeMapHint')){el('historyLegislativeMapHint').hidden=false;el('historyLegislativeMapHint').textContent=
-    legislativeBallot==='regional'?(scale==='national'?'全台总览仅标县市名称，点击选区进入县市。'+(legislativeYear<2008?'进入县市后才以党徽显示各多席选区当选结果。':'单席选区以当选政党直接填色。'):scale==='county'?(legislativeYear<2008?'县市图在各多席选区显示当选党徽，点击选区可查看候选人、得票率与当选结果。':'县市图显示当届选区和选区号；点击选区查看完整候选人、得票率与当选结果。'):'选举区图聚焦本区候选人及法定当选席次。'):
+    legislativeBallot==='regional'?(scale==='national'?(legislativeYear<2008?'全台按各县市区域民代当选席次最多的政党填色；并列最多使用灰色。点击县市进入后，各多席选区逐席显示党徽。':'全台单席选区按当选政党填色，点击选区进入县市查看完整结果。'):scale==='county'?(legislativeYear<2008?'县市图在各多席选区显示当选党徽，点击选区可查看候选人、得票率与当选结果。':'县市图显示当届选区和选区号；点击选区查看完整候选人、得票率与当选结果。'):'选举区图聚焦本区候选人及法定当选席次。'):
     legislativeYear===1992&&['plains','mountain'].includes(legislativeBallot)?'1992年没有县市及乡镇得票记录，全区地图仅显示行政区轮廓，不推算地方票数。':
     scale==='national'?'按县市着色，点击县市可查看县市及乡镇市区结果。':scale==='county'?'县市得票分布；选择乡镇市区层级可继续下钻。':'点击乡镇市区查看得票分布。';}
 
