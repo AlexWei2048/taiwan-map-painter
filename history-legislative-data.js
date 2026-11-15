@@ -3,6 +3,7 @@
 (function(root){
  'use strict';
  const Core=typeof module!=='undefined'&&module.exports?require('./history-core.js'):root.HistoryCore;
+ const Turnout=typeof module!=='undefined'&&module.exports?require('./history-legislative-turnout.js'):root.HistoryLegislativeTurnout;
  const BALLOT_LABELS={regional:'区域民代',plains:'平地少数民族民代',mountain:'山地少数民族民代',party:'不分区政党票'};
  const compare=(a,b)=>Core.compareResultRows(a,b,'council');
  function regionChoices(indexed,selection={}){
@@ -25,7 +26,7 @@
    scope=selection.scope||'all',county=String(selection.county||''),area=String(selection.area||'');
   if(scope==='all'||scope==='national'){
    const result=Core.filter(indexed,{year,office:'legislative',electorate});
-   const overview=Core.overview(result);if(electorate==='party')overview.electedCount=null;
+   const overview=Turnout.enrich(Core.overview(result),{year,electorate,scope:'all'});if(electorate==='party')overview.electedCount=null;
    return{result,overview,scope:'all',county:'',area:''};
   }
   if(!county)return null;
@@ -38,7 +39,7 @@
     query.contestId=contest.contest_id;
    }
    const result=Core.filter(indexed,query);
-   return{result,overview:Core.overview(result),scope,county,area};
+   return{result,overview:Turnout.enrich(Core.overview(result),{year,electorate,scope,county,contests:result.contests.length}),scope,county,area};
   }
   const level=scope==='town'?'town':'county';
   const rows=s.rows.filter(r=>r.electorate===electorate&&r.level===level&&r.county===county&&
@@ -68,7 +69,7 @@
   }
   const result={index:indexed,selection:{year,office:'legislative',electorate,countyId:county},
    contests,candidacies,summaries};
-  return{result,overview:{...Core.overview(result),electedCount:null,incumbentCount:null},
+  return{result,overview:{...Turnout.enrich(Core.overview(result),{year,electorate,scope,county}),electedCount:null,incumbentCount:null},
    scope,county,area,geographicVoteOnly:true};
  }
  function exportCsv(snapshot,selection={}){

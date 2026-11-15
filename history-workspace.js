@@ -373,6 +373,7 @@
    description.textContent='当前统计范围：'+fullArea+
     (scoped?.noElection?' · 该县市没有举行此类乡镇市区长选举':'')+
     (groups.length>1?' · 关键指标为各选举类别合计，图表保留分类统计':'')+
+    (scoped?.overview?.turnoutSource?' · 投票统计来自已核验的选举概况':'')+
     (overviewScope==='town'&&['president','mayor'].includes(state.office)?
      (Number.isInteger(scoped?.overview?.registeredVoters)?
       ' · 本区投票人数与选举人数来自中选会原始选举统计':
@@ -541,6 +542,24 @@
    const label=doc.createElement('span'),strong=doc.createElement('strong'),detail=doc.createElement('small');
    label.textContent=card.label;strong.textContent=card.value;detail.textContent=card.detail;
    article.append(label,strong,detail);rootNode.append(article);
+  }
+  if(currentOverview.historicalOverall){
+   const total=currentOverview.historicalOverall,fmt=n=>n.toLocaleString('zh-CN');
+   for(const entry of [
+    ['整届合计 · 选举人数',fmt(total.registeredVoters),'投票人数 '+fmt(total.ballotsCast)],
+    ['整届合计 · 投票率',total.turnout.toFixed(2)+'%',
+     '有效票 '+fmt(total.validVotes)+' · 无效票 '+fmt(total.invalidVotes)]
+   ]){
+    const article=doc.createElement('article');article.className='history-overview-card';
+    article.dataset.group='whole-election';
+    for(const [tag,text] of [['span',entry[0]],['strong',entry[1]],['small',entry[2]]]){
+     const node=doc.createElement(tag);node.textContent=text;article.append(node);
+    }
+    rootNode.append(article);
+   }
+   const note=doc.createElement('p');note.className='history-overview-placeholder';
+   note.textContent='整届合计含区域与少数民族选举，不代表当前票种的投票数据。';
+   rootNode.append(note);
   }
   renderOverviewCharts();
   const note=el('historyOverviewNote');

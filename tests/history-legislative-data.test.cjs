@@ -56,3 +56,26 @@ test('historic national maps suppress multi-member logos but county maps retain 
  assert.match(method,/if\(!nationwide\)appendHistoricalLegislativeBadges\(group,transform,false\)/);
  assert.match(app,/data-history-legislative-seat-layer/);
 });
+
+test('national legislative turnout is ballot-specific and all available figures reconcile',()=>{
+ const T=require('../history-legislative-turnout.js');
+ for(const [year,ballots] of Object.entries(T.NATIONAL))for(const ballot of Object.keys(ballots)){
+  const stat=T.national(+year,ballot);
+  assert.ok(stat,'Unverified count '+year+' '+ballot);
+  assert.equal(stat.ballotsCast,stat.validVotes+stat.invalidVotes);
+  assert.ok(stat.turnout>0&&stat.turnout<=100);
+ }
+ assert.equal(T.national(2004,'party'),null);
+ assert.equal(T.overall(1992).ballotsCast,9666020);
+ const regional=Data.localResult(Core.index(shard(2004)),{year:2004,electorate:'regional',scope:'all'});
+ assert.equal(regional.overview.registeredVoters,16258979);
+ assert.equal(regional.overview.invalidVotes,77336);
+ const party=Data.localResult(Core.index(shard(2004)),{year:2004,electorate:'party',scope:'all'});
+ assert.equal(party.overview.registeredVoters,null);
+ assert.equal(party.overview.historicalOverall.registeredVoters,16559254);
+ const early=Data.localResult(Core.index(shard(1998)),{year:1998,electorate:'regional',scope:'all'});
+ assert.equal(early.overview.registeredVoters,null);
+ assert.equal(early.overview.historicalOverall.ballotsCast,10188302);
+ const local=Data.localResult(Core.index(shard(2004)),{year:2004,electorate:'regional',scope:'county',county:'台北市'});
+ assert.equal(local.overview.registeredVoters,null);
+});
