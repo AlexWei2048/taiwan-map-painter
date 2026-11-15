@@ -49,3 +49,10 @@ test('old multi-seat district reports actual elected counts and unique candidate
  assert.equal(local.overview.electedCount,local.result.candidacies.filter(c=>c.elected_official).length);
  assert.ok(local.overview.electedCount>1);
 });
+
+test('historic national maps suppress multi-member logos but county maps retain them',()=>{
+ const app=fs.readFileSync(path.join(__dirname,'../app.js'),'utf8');
+ const method=app.match(/function drawHistoricalLegislativeRegionalLabels\([\s\S]*?\n}\nfunction renderLabels\(/)?.[0]||'';
+ assert.match(method,/if\(!nationwide\)appendHistoricalLegislativeBadges\(group,transform,false\)/);
+ assert.match(app,/data-history-legislative-seat-layer/);
+});

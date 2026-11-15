@@ -14,6 +14,15 @@
  const ELECTORATES=new Set(['all','regional','plains','mountain']);
  const METRICS={mayor:new Set(['party','share','votes']),president:new Set(['party','share','votes']),legislative:new Set(['party','seats','share','votes']),council:new Set(['party','seats','share','votes']),township:new Set(['party','share','votes'])};
  const labels={regional:'区域议员',plains:'平地少数民族议员',mountain:'山地少数民族议员'};
+ const legislativeBallotLabel=(year,electorate)=>{
+  const key=String(electorate||'').replace(/^legislative:\d{4}:/,'');
+  return root.HistoryLegislative?.ballots(Number(year)).find(item=>item.value===key)?.label||
+   ({regional:'区域民代',plains:'平地少数民族民代',mountain:'山地少数民族民代',party:Number(year)<2008?'不分区席次计算票':'不分区政党票'}[key]||'立法机构民代');
+ };
+ const readableElectionName=(value,year=2024)=>{
+  const raw=String(value||''),match=/^legislative:(\d{4}):(regional|plains|mountain|party)$/.exec(raw);
+  return match?match[1]+'年立法机构民代选举 · '+legislativeBallotLabel(Number(match[1]),match[2]):raw;
+ };
  const rate=(valid,cast,invalid)=>Number.isFinite(valid)&&Number.isFinite(cast)&&cast>0?valid/cast*100:Number.isFinite(valid)&&Number.isFinite(invalid)&&valid+invalid>0?valid/(valid+invalid)*100:null;
  const levelOptions=(office,year=2024,electorate='regional')=>office==='legislative'?(root.HistoryLegislative?.levels(year,electorate)||[['district','选举区']]):office==='mayor'||office==='president'?[['county','县市'],['town','乡镇市区']]:office==='council'?[['district','选举区']]:[['town','乡镇市区']];
  const electorateOptions=(office,year=2024)=>office==='legislative'?(root.HistoryLegislative?.ballots(year)||[]).map(item=>[item.value,item.label]):office==='council'?[['all','全部类型（分别统计）'],['regional','区域议员'],['plains','平地少数民族议员'],['mountain','山地少数民族议员']]:[['regional','区域选举']];
@@ -36,7 +45,8 @@
   const visible=groups;
   return visible.map(group=>({
    electorate:group.electorate,
-   title:selection.office==='council'?(labels[group.electorate]||'其他议员'):
+   title:selection.office==='legislative'?legislativeBallotLabel(selection.year,group.electorate):
+    selection.office==='council'?(labels[group.electorate]||'其他议员'):
     selection.office==='township'?(group.electorate==='mountain'?'山地少数民族区长':group.electorate==='plains'?'平地少数民族乡镇市长':'区域乡镇市长'):'区域选举',
    registeredVoters:group.registeredVoters??null,
    ballotsCast:group.ballotsCast??null,
@@ -284,7 +294,7 @@
   }
   return '\uFEFF'+output.map(row=>row.map(csvCell).join(',')).join('\r\n');
  }
- const api={normalizeSelection,yearsForOffice,levelOptions,electorateOptions,turnoutCards,overviewRegionChoices,overviewRegionData,featurePresentation,badgeFallback,candidateRows,overviewCards,overviewCharts,drilldownSelection,exportStem,historyCsv,presidentialTownCsv};
+ const api={normalizeSelection,yearsForOffice,levelOptions,electorateOptions,legislativeBallotLabel,readableElectionName,turnoutCards,overviewRegionChoices,overviewRegionData,featurePresentation,badgeFallback,candidateRows,overviewCards,overviewCharts,drilldownSelection,exportStem,historyCsv,presidentialTownCsv};
  if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
 
  const doc=root.document;
@@ -347,10 +357,11 @@
   if(!title)return;
   const name=state.office==='legislative'?(root.HistoryLegislative?.ballots(state.year).find(x=>x.value===state.electorate)?.label||'立法机构民代'):{mayor:'县市长',council:'议员',township:'乡镇市区长',president:'台湾地区领导人'}[state.office]||'选举';
   const all=overviewScope==='all',county=overviewCounty;
-  const district=overviewScope==='district'||overviewScope==='town'?
-   state.office==='council'||state.office==='township'?
-    scoped?.result?.contests?.[0]?.district_name||overviewArea:
-    overviewArea:'';
+  // overviewArea is often a stable contest id, never human-facing text.
+  const geographicArea=overviewArea&&indexed?.contestsById?.get(overviewArea)?.district_name||
+   (overviewScope==='town'?overviewArea:'');
+  const district=['district','town'].includes(overviewScope)?
+   scoped?.result?.contests?.[0]?.district_name||geographicArea||'':'';
   const identity=scoped?.result?.contests?.length===1&&state.office==='council'?
    labels[scoped.result.contests[0].electorate]||'议员':name;
   title.textContent=[state.year+'年',all?'全部地区（含金门、马祖）':county,district,
@@ -375,7 +386,7 @@
   if(!contest)return false;
   overviewInitialized=true;overviewContext=overviewContextKey();
   overviewCounty=contest.county_name;overviewMapCounty=state.county;
-  overviewScope=state.office==='council'?'district':
+  overviewScope=state.office==='council'||state.office==='legislative'&&state.electorate==='regional'?'district':
    state.office==='township'?'town':'county';
   overviewArea=overviewScope==='county'?'':contestId;
   overviewContestId=overviewScope==='county'?'':contestId;

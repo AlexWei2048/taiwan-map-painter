@@ -606,7 +606,7 @@
     focusSelect.value=legislativeFocus;
    }
    if(el('historyLegislativeMapHint')){el('historyLegislativeMapHint').hidden=false;el('historyLegislativeMapHint').textContent=
-    legislativeBallot==='regional'?(scale==='national'?'全台总览仅标县市名称，点击任意选区进入县市。'+(legislativeYear<2008?'多席选区以党徽及席次数标示各党当选结果。':'单席选区以当选政党直接填色。'):scale==='county'?'县市图显示当届选区和选区号；点击选区查看完整候选人、得票率与当选结果。':'选举区图聚焦本区候选人及法定当选席次。'):
+    legislativeBallot==='regional'?(scale==='national'?'全台总览仅标县市名称，点击选区进入县市。'+(legislativeYear<2008?'进入县市后才以党徽显示各多席选区当选结果。':'单席选区以当选政党直接填色。'):scale==='county'?(legislativeYear<2008?'县市图在各多席选区显示当选党徽，点击选区可查看候选人、得票率与当选结果。':'县市图显示当届选区和选区号；点击选区查看完整候选人、得票率与当选结果。'):'选举区图聚焦本区候选人及法定当选席次。'):
     legislativeYear===1992&&['plains','mountain'].includes(legislativeBallot)?'1992年没有县市及乡镇得票记录，全区地图仅显示行政区轮廓，不推算地方票数。':
     scale==='national'?'按县市着色，点击县市可查看县市及乡镇市区结果。':scale==='county'?'县市得票分布；选择乡镇市区层级可继续下钻。':'点击乡镇市区查看得票分布。';}
 

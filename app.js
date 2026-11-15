@@ -1438,7 +1438,9 @@ function drawHistoricalLegislativeRegionalLabels(group,interactive=false){
    }
   }else drawLabels(group,items,transform,sceneSpec().font,interactive);
  }else group.replaceChildren();
- appendHistoricalLegislativeBadges(group,transform,nationwide);
+ // On the all-area map show county names only. Multi-member seat emblems
+ // belong to the district map after the user opens a specific county.
+ if(!nationwide)appendHistoricalLegislativeBadges(group,transform,false);
 }
 function renderLabels(){
  clearTimeout(navigationLabelTimer);navigationLabelTimer=0;

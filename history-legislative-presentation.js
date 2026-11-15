@@ -64,11 +64,7 @@
   if(national){
    const counties=History2022View.legislativeCountyFeatures();
    drawLabels(layer,counties,layout,19,true,true,true);
-   if(badgeMode){
-    const root=svgEl('g',{'data-national-legislative-seats':'true'});
-    for(const county of counties)seatGroup(root,county,layout,true);
-    layer.append(root);
-   }
+   // Nationwide is a county locator: never overlay old multi-seat party badges.
   }else if(badgeMode){
    const root=svgEl('g',{'data-district-legislative-seats':'true'});
    for(const feature of features)seatGroup(root,feature,layout,false);
