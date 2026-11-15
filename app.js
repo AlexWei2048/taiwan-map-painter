@@ -828,6 +828,8 @@ function countyCityCallout(f,t,name,font,used,area,reserve,items,leaders=[]){
  const mainland=items.filter(item=>!isInsetIslandFeature(item));
  const width=Array.from(name).length*font*1.04+8,height=font*1.5+5;
  const preferred=['台北市','基隆市'].includes(name)?'right':'left';
+  // Reserve visibly separate callout lanes for the two adjacent northern cities.
+  const northPair=name==='台北市'||name==='基隆市';
  const frames=leaderFrames(t,6);
  const blocked=rect=>rect[0]<area.left||rect[2]>area.right||rect[1]<area.top||rect[3]>area.bottom||
   used.some(other=>leaderOverlap(rect,other))||
@@ -839,10 +841,13 @@ function countyCityCallout(f,t,name,font,used,area,reserve,items,leaders=[]){
   const sign=side==='left'?-1:1;
   const coast=mapLabelColumnEdge(mainland,t,side,[anchor.y-height,anchor.y+height],font,anchor.x);
   for(const shift of [0,-1,1,-2,2,-3,3,-4,4,-5,5,-6,6,-7,7,-8,8,-9,9,-10,10,-11,11,-12,12]){
-   const y=anchor.y+shift*(height+5);
+   const pairOffset=name==='台北市'?height*1.65:name==='基隆市'?-height*1.65:0;
+    const y=anchor.y+pairOffset+shift*(height+(northPair?13:5));
    const x=coast+sign*(width/2+Math.max(37,font*2.5));
    const rect=[x-width/2,y-height/2,x+width/2,y+height/2];
    if(blocked(rect))continue;
+   // Extra line-to-label clearance prevents Taipei and Keelung ambiguity.
+   if(northPair&&leaders.some(points=>points.some(point=>Math.abs(point[1]-y)<height+14)))continue;
    if([-.42,0,.42].some(dx=>[-.42,0,.42].some(dy=>mainland.some(item=>regionContains(item,x+dx*width,y+dy*height,t)))))continue;
    const route=mapOrthogonalLeader(anchor,side,x,y,width,coast,leaders,used,area,frames);
    if(!route)continue;
@@ -1563,7 +1568,7 @@ function drawMapFurniture(group,t,spec){group.replaceChildren();const wide=isNat
 }
 function renderMapFurniture(){const spec=sceneSpec(),t=identityPanelsActive()?identityPanelLayouts()[0]?.t:geometryLayout(currentItems(),state.labels);if(!t)return;drawInsetFrames($('insetFrames'),t,spec);drawMapFurniture($('mapFurniture'),t,spec)}
 
-function regionPath(f){const identity=identityPanelsActive()?' · '+electorateName(featureElectorate(f)):'';const p=svgEl('path',{d:f.d,fill:fillColor(f),stroke:'none','stroke-width':0,'vector-effect':'non-scaling-stroke','fill-rule':'evenodd','data-region':f.id,'data-electorate':featureElectorate(f),tabindex:0,role:'button','aria-label':`${f.county}${f.name===f.county?'':f.name}${identity}，${regionDetail(f)}`});const title=svgEl('title');title.textContent=f.county+(f.name===f.county?'':f.name)+identity;p.append(title);p.addEventListener('click',()=>{if(!moved)paint(f)});p.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();paint(f)}};p.onpointermove=e=>{if(drag)return;const tip=$('tooltip'),r=$('canvas').getBoundingClientRect();tip.replaceChildren();const label=document.createElement('span');label.textContent=f.name;const sub=document.createElement('small');sub.textContent=f.county+(f.town?' · '+f.town:'')+identity+' · '+regionDetail(f);tip.append(label,sub);tip.hidden=false;tip.style.left=Math.min(e.clientX-r.left+15,r.width-165)+'px';tip.style.top=Math.max(45,e.clientY-r.top-48)+'px'};p.addEventListener('pointerenter',()=>toggleLabelRegionHighlight(f,true));p.onpointerleave=()=>{$('tooltip').hidden=true;toggleLabelRegionHighlight(f,false)};p.addEventListener('focus',()=>toggleLabelRegionHighlight(f,true));p.addEventListener('blur',()=>toggleLabelRegionHighlight(f,false));return p}
+function regionPath(f){const identity=identityPanelsActive()?' · '+electorateName(featureElectorate(f)):'';const p=svgEl('path',{d:f.d,fill:fillColor(f),stroke:'none','stroke-width':0,'vector-effect':'non-scaling-stroke','fill-rule':(typeof History2022View!=='undefined'&&History2022View.active()&&History2022View.office?.()==='legislative'&&History2022View.legislativeBallot?.()==='regional'?'nonzero':'evenodd'),'data-region':f.id,'data-electorate':featureElectorate(f),tabindex:0,role:'button','aria-label':`${f.county}${f.name===f.county?'':f.name}${identity}，${regionDetail(f)}`});const title=svgEl('title');title.textContent=f.county+(f.name===f.county?'':f.name)+identity;p.append(title);p.addEventListener('click',()=>{if(!moved)paint(f)});p.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();paint(f)}};p.onpointermove=e=>{if(drag)return;const tip=$('tooltip'),r=$('canvas').getBoundingClientRect();tip.replaceChildren();const label=document.createElement('span');label.textContent=f.name;const sub=document.createElement('small');sub.textContent=f.county+(f.town?' · '+f.town:'')+identity+' · '+regionDetail(f);tip.append(label,sub);tip.hidden=false;tip.style.left=Math.min(e.clientX-r.left+15,r.width-165)+'px';tip.style.top=Math.max(45,e.clientY-r.top-48)+'px'};p.addEventListener('pointerenter',()=>toggleLabelRegionHighlight(f,true));p.onpointerleave=()=>{$('tooltip').hidden=true;toggleLabelRegionHighlight(f,false)};p.addEventListener('focus',()=>toggleLabelRegionHighlight(f,true));p.addEventListener('blur',()=>toggleLabelRegionHighlight(f,false));return p}
 
 // Nationwide views show shared internal borders only; county views restore
 // complete polygon outlines, including coastal and isolated-island edges.
