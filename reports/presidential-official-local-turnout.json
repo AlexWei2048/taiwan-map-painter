@@ -68,10 +68,11 @@
     {
       "year": 2012,
       "county_matches": 22,
-      "town_matches": 0,
+      "town_matches": 368,
       "original_counties": 22,
       "original_town_units": 368,
       "audit": {
+        "town": 368,
         "county": 22
       },
       "sources": [
@@ -82,10 +83,11 @@
     {
       "year": 2016,
       "county_matches": 22,
-      "town_matches": 0,
+      "town_matches": 368,
       "original_counties": 22,
       "original_town_units": 368,
       "audit": {
+        "town": 368,
         "county": 22
       },
       "sources": [
@@ -96,10 +98,11 @@
     {
       "year": 2020,
       "county_matches": 22,
-      "town_matches": 0,
+      "town_matches": 368,
       "original_counties": 22,
       "original_town_units": 368,
       "audit": {
+        "town": 368,
         "county": 22
       },
       "sources": [
@@ -110,10 +113,11 @@
     {
       "year": 2024,
       "county_matches": 22,
-      "town_matches": 0,
+      "town_matches": 368,
       "original_counties": 22,
       "original_town_units": 368,
       "audit": {
+        "town": 368,
         "county": 22
       },
       "sources": [
