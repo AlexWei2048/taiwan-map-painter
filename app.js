@@ -1503,7 +1503,7 @@ function drawFreeNationwideDistrictLabels(group){
 }
 function historicalLegislativeNationalRegional(){
  return typeof History2022View!=='undefined'&&History2022View.active()&&History2022View.office()==='legislative'
-  &&History2022View.legislativeScale()==='national'&&History2022View.legislativeBallot()==='regional';
+  &&History2022View.legislativeNationwide()&&History2022View.legislativeBallot()==='regional';
 }
 function historicalLegislativeMultiBadges(){
  return typeof History2022View!=='undefined'&&History2022View.legislativeBadgesMode?.()===true;
