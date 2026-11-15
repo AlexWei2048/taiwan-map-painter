@@ -18,7 +18,8 @@ const scenarios=[
  {id:'mayor-all-mobile',viewport:mobile,kind:'mayor'},
  {id:'council-taipei-desktop',viewport:desktop,kind:'council',county:'台北市'},
  {id:'town-kaohsiung-mobile',viewport:mobile,kind:'township',county:'高雄市'},
- {id:'free-town-mobile',viewport:mobile,kind:'free'},
+ {id:'free-overview-mobile',viewport:mobile,kind:'free'},
+ {id:'free-taitung-mobile',viewport:mobile,kind:'free',county:'台东县'},
  {id:'history-2004-taipei-desktop',viewport:desktop,kind:'history',year:2004,county:'台北市'},
  {id:'history-2024-national-mobile',viewport:mobile,kind:'history',year:2024},
  {id:'mayor-export-svg-desktop',viewport:desktop,kind:'mayor',export:true},
@@ -45,6 +46,7 @@ async function capture(base,scenario,suffix){
   }else if(scenario.kind==='free'){
    await page.locator('#workspaceFree').click();
    await page.locator('#townLevel').click();
+   if(scenario.county)await page.locator('#county').selectOption(scenario.county);
   }else if(scenario.kind==='history'){
    await page.locator('#categoryHistory').click();
    await page.locator('#historyOffice').selectOption('legislative');
