@@ -1403,7 +1403,7 @@ function appendHistoricalLegislativeBadges(layer,transform,nationwide){
    const item=shown[i],x=cx+(i-(shown.length-1)/2)*step,y=cy+(nationwide?14:12);
    g.append(svgEl('circle',{cx:x,cy:y,r:size*.59,fill:partyColor(item.party),stroke:'#fff','stroke-width':1.25}));
    const logo=logoFor(predictionParty(item.party));
-   if(logo)g.append(svgEl('image',{href:logo,x:x-size*.54,y:y-size*.54,width:size*1.08,height:size*1.08,'preserveAspectRatio':'xMidYMid meet'}));
+   if(logo)appendCircularPartyLogo(g,logo,x-size*.54,y-size*.54,size*1.08,{'data-historical-party-logo':item.party});
    if(nationwide&&item.seats>1){const count=svgEl('text',{x:x+size*.45,y:y+size*.78,'font-size':size*.78,'font-weight':700,fill:'#244533',stroke:'#fff','stroke-width':2,'paint-order':'stroke'});count.textContent=String(item.seats);g.append(count)}
   }
   if(items.length>shown.length){const extra=svgEl('text',{x:cx+(shown.length+1)*step/2,y:cy+size,'font-size':size*.85,'font-weight':700,fill:'#244533'});extra.textContent='+'+(items.length-shown.length);g.append(extra)}
