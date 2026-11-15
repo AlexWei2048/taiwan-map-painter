@@ -2181,9 +2181,9 @@ test('Legislative redraw: pre-2008 winners use emblems instead of colored party 
  await page.waitForFunction(()=>History2022View.snapshot()?.year===2004);
  assert.equal(await page.locator('#historyScale').inputValue(),'national');
  assert.equal(await page.locator('#labels [data-placement="district-number"]').count(),0);
- assert.ok(await page.locator('[data-national-legislative-seats="true"] [data-history-legislative-seats="county"]').count()>=15);
+ assert.ok(await page.locator('#labels [data-history-seat-district]').count()>=15,'national map should show party composition within historical constituencies');
  await page.locator('#historyCounty').selectOption('台北市');
- assert.ok(await page.locator('[data-district-legislative-seats="true"] [data-history-legislative-seats="district"]').count()>=2);
+ assert.ok(await page.locator('#labels [data-history-seat-district]').count()>=2,'county detail should display each actual winning party emblem');
  await page.locator('#historyViewCandidates').click();
  assert.ok(await page.locator('#historyLegislativeSummary').innerText().then(t=>t.includes('当选党派席次')));
  assert.equal(await page.locator('#historyResults table[data-ballot="regional"]').count(),1);
