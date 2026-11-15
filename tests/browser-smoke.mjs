@@ -2766,3 +2766,62 @@ test('Local 2026 results remain hidden until an official fully reconciled data r
  const manifest=await page.evaluate(async()=>await (await fetch('assets/history-2026-availability.json')).json());
  assert.equal(manifest.status,'awaiting_results');
 });
+
+
+test('Published-only 2026 results can load in history, switch offices and return to 2022 without entering predictions',async t=>{
+ const context=await browser.newContext({viewport:{width:1200,height:850}});
+ t.after(()=>context.close());
+ const page=await context.newPage(),errors=[];
+ page.on('pageerror',err=>errors.push(err.message));
+ await page.route('**/history-access.js*',route=>route.fulfill({contentType:'application/javascript',
+  body:'window.HistoryAccess={ready:Promise.resolve(true),canAccess:()=>true,notice:()=>{}};'}));
+ await page.route('**/assets/history-2026-availability.json*',route=>route.fulfill({contentType:'application/json',body:JSON.stringify({
+  schemaVersion:1,year:2026,status:'published',candidateCount:2051,districtCount:447,sha256:'a'.repeat(64)
+ })}));
+ await page.goto(base);
+ await page.locator('#regions path[data-region]').first().waitFor();
+ await page.waitForFunction(()=>window.HISTORY_2026_RESULTS_AVAILABLE===true);
+ const fake=await page.evaluate(()=>{
+  const ds=candidateDatabase.districts,cs=candidateDatabase.candidates,byDistrict=new Map(ds.map(d=>[d.id,d]));
+  const elections=['mayor','council','township'].map(office=>({
+   election_id:'2026-'+office,year:2026,office,source_url:'https://web.cec.gov.tw/central',
+   source_name:'TEST FIXTURE ONLY',boundary_version:'2026'
+  }));
+  const contests=ds.map(d=>({
+   contest_id:d.id,election_id:'2026-'+d.type,county_name:d.county,district_name:d.name,
+   electorate:HistoryCore.identity(d.electorate),seats:d.seats||1,reserved_seats:d.womenReserved||0,
+   registered_voters:null,ballots_cast:null,valid_votes:250000,invalid_votes:null
+  }));
+  const candidacies=cs.map(c=>{
+   const d=byDistrict.get(c.districtId);return{
+    candidacy_id:c.id,candidate_id:c.id,contest_id:d.id,ballot_number:String(c.number),
+    candidate_name:c.nameSimplified||c.name,party_name:c.party||'无党籍',
+    votes:1000+Number(c.number||0),elected_official:d.candidateIds.slice(0,d.seats||1).includes(c.id)
+   }
+  });
+  const rows=cs.map(c=>{
+   const d=byDistrict.get(c.districtId);
+   return{type:c.type,level:c.type==='mayor'?'county':c.type==='council'?'district':'town',
+    electorate:HistoryCore.identity(d.electorate),county:c.county,
+    district:c.type==='council'?d.name:'',town:c.type==='township'?d.name.replace(c.county,''):'',
+    name:c.nameSimplified||c.name,party:c.party,number:String(c.number),gender:c.gender,
+    votes:1000+Number(c.number||0),elected:d.candidateIds.slice(0,d.seats||1).includes(c.id)}
+  });
+  return{schemaVersion:2,year:2026,completeness:'full',publicationStatus:'provisional',
+   elections,contests,candidacies,rows};
+ });
+ assert.equal(fake.contests.length,447);
+ assert.equal(fake.candidacies.length,2051);
+ await page.route('**/assets/history-2026.json*',route=>route.fulfill({contentType:'application/json',body:JSON.stringify(fake)}));
+ await page.locator('#categoryHistory').click();
+ await page.waitForFunction(()=>document.querySelector('#historyYear option[value="2026"]'));
+ await page.locator('#historyYear').selectOption('2026');
+ await page.waitForFunction(()=>History2022View.year()===2026&&History2022View.snapshot()?.year===2026);
+ assert.ok(await page.locator('#regions path[data-region]').count()>0);
+ assert.equal(await page.locator('#historyYear').inputValue(),'2026');
+ await page.locator('#historyOffice').selectOption('council');
+ assert.equal(await page.locator('#historyYear').inputValue(),'2026');
+ await page.locator('#historyYear').selectOption('2022');
+ await page.waitForFunction(()=>History2022View.year()===2022&&History2022View.snapshot()?.year===2022);
+ assert.deepEqual(errors,[],'Switching historic snapshots raises no JS exceptions');
+});
