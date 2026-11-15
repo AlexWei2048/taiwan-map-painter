@@ -35,6 +35,16 @@ def logo_keys():
     content=(ASSETS/"party-logos.js").read_text(encoding="utf-8")
     return sorted(set(re.findall(r'["\x27]([\w-]+)["\x27]\s*:\s*["\x27]data:image/',content)))
 
+def sourced_logos():
+    src=ASSETS/"party-logos-sourced.js"
+    if not src.exists():return set(),set()
+    content=src.read_text(encoding="utf-8")
+    values=[]
+    for label in ("SOURCED_PARTY_LOGOS_BY_ID","SOURCED_PARTY_LOGOS_BY_NAME"):
+        match=re.search(r"const "+label+r"=(\\{.*?\\});",content,re.S)
+        values.append(set(json.loads(match.group(1))) if match else set())
+    return tuple(values)
+
 def elections():
     samples={}
     for p in sorted(ASSETS.glob("history-legislative-????.json")):
@@ -49,7 +59,9 @@ def elections():
     return samples
 
 def inventory():
-    presets=parties();keys=set(logo_keys())
+    presets=parties();baseline=set(logo_keys())
+    official_ids,official_names=sourced_logos()
+    keys=baseline|official_ids
     indexed={}
     for p in presets:
         for key in [p["name"]]+p.get("aliases",[]):
@@ -69,7 +81,7 @@ def inventory():
     missing=[]
     for name,count in counter.most_common():
         pid=indexed.get(name)
-        if pid and pid in keys:continue
+        if pid and pid in keys or name in official_names:continue
         missing.append({"name":name,"rows":count,"total_votes_across_grains":votes[name],
             "known_preset":pid or None,"sources":sorted(years[name]),"spellings":sorted(raw[name])})
     unused=[{"id":p["id"],"name":p["name"],"aliases":p.get("aliases",[])}
@@ -95,9 +107,12 @@ def inventory():
     return {"schemaVersion":1,
         "total_preset_parties":len(presets),
         "total_current_logo_ids":len(keys),
+        "original_logo_ids":len(baseline),
+        "sourced_preset_logo_ids":len(official_ids),
+        "sourced_historical_logo_names":len(official_names),
         "total_party_names_in_archives":len(counter),
         "top_archive_parties":[{"name":name,"rows":count,"id":indexed.get(name),
-           "has_logo":bool(indexed.get(name) in keys)} for name,count in counter.most_common(180)],
+           "has_logo":bool(indexed.get(name) in keys or name in official_names)} for name,count in counter.most_common(180)],
         "missing_preset_logos":unused,
         "missing_archive_logos":missing,
         "placeholder_code_locations":text_sources,
@@ -111,7 +126,9 @@ def markdown(result):
       "本报告是来源数据自动盘点，**不把暂时没找到的图片误认成官方党徽**。得票记录含不同层级重复汇总，因此仅以记录出现次数作为优先级，绝不能把 total_votes_across_grains 视为实际选举总票数。",
       "",
       f"- 已收录预设政党：{result['total_preset_parties']}",
-      f"- 有党徽图档的标识：{result['total_current_logo_ids']}",
+      f"- 有党徽图档的标识（含无党籍标记）：{result['total_current_logo_ids']}",
+      f"- 新增官方预设党徽：{result['sourced_preset_logo_ids']}",
+      f"- 新增官方历史名称图档：{result['sourced_historical_logo_names']}",
       f"- 已归一化的历史党名种类：{result['total_party_names_in_archives']}",
       f"- 没有内置党徽的预设政党：{len(result['missing_preset_logos'])}",
       f"- 没有匹配到已收录党徽的历史党名：{len(result['missing_archive_logos'])}",
