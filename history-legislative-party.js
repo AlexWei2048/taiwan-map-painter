@@ -62,17 +62,17 @@
  // Published party rosters are recorded in original ballot order. 2024 contains
  // all 177 approved nominees across 16 lists, including parties with zero seats.
  const SLATES_2024={
-  '小民参政欧巴桑联盟':'高芸婷 林诗涵 阎柏陵',
-  '台湾绿党':'钟宝珠 李菁琪 黄柔嘉 吴伊婷 希婕·玛飞洑 林莉蔡 黄慧芬 张竹岑',
+  '小民参政欧巴桑联盟':'高芸婷 林诗涵 闵柏陵',
+  '台湾绿党':'钟宝珠 李菁琪 黄柔嘉 吴伊婷 希婻·玛飞洑 林莉棻 黄慧芬 张竹芩',
   '台湾双语无法党':'陈亭谕 萧文乾',
-  '台湾基进':'史惟筑 陈奕齐 黄枫茹 陈君恺 杨佩桦 黄馨莹 徐焕博',
+  '台湾基进':'史惟筑 陈奕齐 黄枫茹 陈君恺 杨佩桦 黄馨莹 徐煊博',
   '中华统一促进党':'丁炳仁 黄妙如 肖云霞 张安乐',
   '民主进步党':'林月琴 沈伯洋 张雅琳 洪申翰 罗美玲 游锡堃 范云 柯建铭 沈发惠 庄瑞雄 林楚茵 郭昱晴 王正旭 王义川 陈培瑜 陈俊翰 张秀君 黄奕睿 孙一信 吴祥荣 陈慧君 柯富扬 刘柏君 石明谨 曾美玲 黄真玮 曾湘桦 郑力嘉 陈右欣 余宛如 许菡芸 周威佑 廖韶吟 蔡宜文',
   '制度救世岛':'林丽容 石人仁 张怡菁 古文发 黄千明',
-  '时代力量':'林依莹 王宝萱 宋国鼎 江盛 陈泰源 陈昱安 余佳倩 郑俏青',
-  '中国国民党':'韩国瑜 柯志恩 葛如钧 翁晓玲 陈菁徽 吴宗宪 林倩绮 陈永康 许宇甄 谢龙介 苏清泉 张嘉郡 王育敏 蔡明忠 吴亮仪 李玉婵 李霞 杨应超 徐弘庭 钟沛君 江怡臻 简荣宗 田长沛 沈采颖 林环嘉 陈克威 邱一峰 廖怡琇 李继显 李茂芊 丁瑀 杨智伃 何嘉霖 康晋瑜',
-  '司法改革党':'戴翊如 张静 李柏融 尤瑞敏 赖伯琦 吴振豪 晏扬清 许韶珍 杨启珊',
-  '新党':'王建煊 仇桂美 吴成典 贺桦 林易升 陈丽玲 戴德满 王子苓',
+  '时代力量':'林依莹 王宝萱 宋国鼎 江盛 陈泰源 陈昱安 余佳蒨 郑侑青',
+  '中国国民党':'韩国瑜 柯志恩 葛如钧 翁晓玲 陈菁徽 吴宗宪 林倩绮 陈永康 许宇甄 谢龙介 苏清泉 张嘉郡 王育敏 蔡明忠 吴亮仪 李玉婵 李霞 杨应超 徐弘庭 钟沛君 江怡臻 简荣宗 田长沛 沈采颖 林琼嘉 陈克威 邱一峰 廖怡琇 李缙颖 李茂芊 丁瑀 杨智伃 何嘉霖 康晋瑜',
+  '司法改革党':'戴翊如 张静 李柏融 尤瑞敏 赖伯琦 吴振橐 晏扬清 许韶珍 杨启珊',
+  '新党':'王建煊 仉桂美 吴成典 贺桦 林易陞 陈丽玲 戴德满 王子芩',
   '台湾民众党':'黄珊珊 黄国昌 陈昭姿 吴春城 麦玉珍 林国成 林忆君 张启楷 刘书彬 洪毓祥 蔡春绸 王安祥 邱慧洳 陈清龙 李贞秀 许忠信 徐瑞希 杨弘意 陈智菡 庄贻量 林筱淇 蔡丰州 张雪如 汤宏正 林淑芬 梁明辉 廖维欣 冯启彦 林子宇 张清俊 林治华 李家豪 邱于珊 周榆修',
   '台湾维新':'苏焕智 刘亦恩 江映瑶',
   '亲民党':'李桐豪 陈怡洁 曲兆祥 何伟真 简泰河 蓝志玟 吴建德 黎淑慧 孙信君 黎建南',
@@ -81,8 +81,9 @@
  };
  const SLATE_SOURCE_2024='https://2024.cec.gov.tw/data/file/2fb887c81a7a4b3a888e4d3befe9259d.pdf';
  const SLATE_SOURCES={
+  1995:'https://web.cec.gov.tw/api/file/1e2b67f6-1a6c-4d9e-8a1e-778c1fe1b88c.pdf',
   2001:'https://web.cec.gov.tw/api/file/516cdc62-a08b-4612-a818-7c3ad96511ce.pdf',
-  2004:'https://web.cec.gov.tw/api/file/9ecb9f91-beff-44ad-9e72-e7d56be79b2a.pdf',
+  2004:'https://web.cec.gov.tw/api/file/7948d4c0-bd7a-4159-b4c9-5a3014c5d1e1.pdf',
   2008:'https://web.cec.gov.tw/api/file/9b6521a5-f3ef-4754-bd3e-cd0a3292c282.pdf',
   2012:'https://gazette.nat.gov.tw/EG_FileManager/eguploadpub/eg018004/ch02/type3/gov15/num2/OEg.pdf',
   2016:'https://web.cec.gov.tw/api/file/26f914ad-93b3-4c8e-9844-546ea286c970.pdf',
@@ -207,9 +208,35 @@
   '中国国民党':'曹寿民 苏起 黄德福 帅化民 柴云清 王敏星 黄昭顺 张立宇 刘盛良 白添枝 黄志雄 郭素春 李纪珠 陈瑞昌 江丙坤 陈美子 侯彩凤 黄良华 王金平 曾永权 赵连出 华真 章仁香 董清池',
   '民主进步党':'陈时中 洪奇昌 黄诚 许永面 陈宗仁 黄淑英 田秋堇 蔡英文 高志鹏 吴明敏 邱永仁 周平德 王荣璋 李若华 张庆惠 徐进荣 薛凌 林浊水 蔡煌瑯 杨芳婉 张俊雄 卢孳艳 尤清 王涂发 卢天麟 曾智勇 许德祥 许荣淑 夷将·拔路儿 陈秀惠 林文郎',
   '亲民党':'李复甸 罗淑蕾 刘忆如 张志铭 董贞吟 刘文雄 李锦泉 林正国 顾崇廉 葛建埔 吴攀龙 陈进兴 兰梁筱娟 黄旐涛 王蔡幸 蔡胜佳 钟荣吉 李文来 林惠官',
-  '台湾团结联盟':'陈鸿基 黄金郎 李旭辉 李研慧 赖幸媛 陈永兴 林志嘉 陈银河 黄政哲 郭林勇',
+  '台湾团结联盟':'陈鸿基 黄金郎 李旭煌 李妍慧 赖幸媛 陈永兴 林志嘉 陈银河 黄政哲 郭林勇',
   '无党团结联盟':'张博雅 宋丽华 陈杰儒 萧苑瑜 吴庆堂'
  };
+ // CEC official 2004 election brochure and post-cancellation ranked slate.
+ // The Taiwan Solidarity Union originally nominated Chen Yongxing at rank 1;
+ // the CEC cancelled his registration on 2004-12-08 and renumbered nine valid names.
+ const ORDERED_SLATES_2004={
+  '中国国民党':'王金平 江丙坤 黄志雄 李纪珠 曾永权 白添枝 黄昭顺 黄德福 郭素春 刘盛良 章仁香 曹寿民 苏起 侯彩凤 帅化民 黄良华 柴云清 张立宇 陈美子 赵连出 华真 王敏星 董清池 陈瑞昌',
+  '民主进步党':'蔡煌瑯 陈秀惠 洪奇昌 张俊雄 高志鹏 蔡英文 薛凌 王荣璋 尤清 张庆惠 林浊水 卢天麟 田秋堇 黄淑英 邱永仁 王涂发 许荣淑 吴明敏 林文郎 许德祥 黄诚 杨芳婉 陈宗仁 周平德 李若华 陈时中 夷将·拔路儿 曾智勇 卢孳艳 许永面 徐进荣',
+  '亲民党':'刘忆如 刘文雄 蔡胜佳 顾崇廉 钟荣吉 林惠官 李复甸 李文来 陈进兴 罗淑蕾 董贞吟 张志铭 林正国 李锦泉 黄旐涛 葛建埔 兰梁筱娟 吴攀龙 王蔡幸',
+  '台湾团结联盟':'赖幸媛 黄政哲 郭林勇 陈银河 林志嘉 陈鸿基 黄金郎 李妍慧 李旭煌'
+ };
+ // The 1995 CEC election bulletin lists all 28/19/8 at-large nominees,
+ // including those who were not elected. Do not infer slates for 1992 or 1998.
+ const EARLY_ORDERED_SLATES={
+  1995:{
+   '中国国民党':'刘松藩 李鸣皋 洪冬桂 陈健民 李友吉 葛雨琴 刘国昭 罗传进 刘光华 杨吉雄 靳曾珍丽 张光锦 王令麟 蔡璧煌 陈琼赞 简金卿 蔡胜邦 洪濬哲 华加志 陈重安 张坚华 杭达琳 施琇龙 黄贵美 李复旬 徐维中 赵丽云 郑美华',
+   '民主进步党':'谢长廷 黄尔璇 巴燕·达鲁 张俊宏 王拓 简锡堦 洪奇昌 刘进兴 林瑞卿 林文郎 林忠正 范巽绿 许阳明 李瑞木 方来进 王隆基 陈欣华 郑余镇 林圣崇',
+   '新党':'陈癸淼 林郁方 郑龙水 陈一新 张丰吉 师蔚霞 李义三 袁琼琼'
+  }
+ };
+ const ORDERED_OVERSEAS_2004={
+  '中国国民党':'吴英毅 谢文政 吴松柏 王晓蓉 薛盛华',
+  '民主进步党':'陈明真 庄和子 陈重信 陈东荣 黄静枝 李正三',
+  '亲民党':'梅长锜 李廷亚 林政义 陈庆仰 李维灏'
+ };
+ const hasOfficialSlate=(year,party)=>Boolean(ORDERED_SLATES_2004[party]&&Number(year)===2004||
+  EARLY_ORDERED_SLATES[Number(year)]?.[party]||SLATES_BY_YEAR[Number(year)]?.[party]);
+
  const OVERSEAS_SLATES_2001={
   '中国国民党':'关沃暖 孙国华 吴松柏 林雪美 薛盛华 吴英毅 申章昌 黄林芝',
   '民主进步党':'萧美琴 张秀珍 张旭成 钟金江 康泰山',
@@ -268,7 +295,7 @@
   2024:{type:'政党提名',source:'CEC',complete:true}
  };
  function nominationCount(year){
-  const slates=SLATES_BY_YEAR[year];
+  const slates=SLATES_BY_YEAR[year]||EARLY_ORDERED_SLATES[year];
   if(slates)return Object.values(slates).reduce((n,value)=>n+value.split(/\s+/).filter(Boolean).length,0)+
    (Number(year)===2001?Object.values(OVERSEAS_SLATES_2001).reduce((n,value)=>n+value.split(/\s+/).filter(Boolean).length,0):0);
   if(Number(year)===2004)return Object.values(UNORDERED_SLATES_2004).reduce((n,value)=>n+value.split(/\s+/).filter(Boolean).length,0)+
@@ -321,11 +348,17 @@
    matchesOfficial:result.every(p=>p.checked)&&result.reduce((n,p)=>n+p.seats,0)===parts[0]+parts[1]};
  }
  function nominees(year,party){
+  if(Number(year)===2004&&ORDERED_SLATES_2004[party]){
+   const elected=new Set((WINNERS[2004]?.[party]||'').split(/\s+/));
+   const slate=ORDERED_SLATES_2004[party].split(/\s+/).filter(Boolean).map((name,i)=>({rank:i+1,name,elected:elected.has(name)}));
+   if(party==='台湾团结联盟')slate.push({rank:null,name:'陈永兴',elected:false,disqualified:true,originalRank:1});
+   return slate;
+  }
   if(Number(year)===2004&&UNORDERED_SLATES_2004[party]){
    const winners=new Set((WINNERS[2004]?.[party]||'').split(/\s+/));
    return UNORDERED_SLATES_2004[party].split(/\s+/).map(name=>({rank:null,name,elected:winners.has(name)}));
   }
-  const slate=SLATES_BY_YEAR[Number(year)]?.[party];
+  const slate=SLATES_BY_YEAR[Number(year)]?.[party]||EARLY_ORDERED_SLATES[Number(year)]?.[party];
   if(slate){
    const winners=new Set((WINNERS[year]?.[party]||'').split(/\s+/));
    return slate.split(/\s+/).map((name,i)=>({rank:i+1,name,elected:winners.has(name)}));
@@ -388,7 +421,7 @@
    '仅得票率达到5%的政党参与第二阶段席次分配，按合格政党的票数重新归一化，再以最大余额法分配34席。');
   box.append(caption);
   box.append(element('p','history-list-context','席次以当届全区结果分配，切换县市或乡镇市区地图只影响地方票数展示，不改变各党实际获配的全区席次。'));
-  if(model.year<2001){box.append(element('p','history-list-caveat','档案范围：本届原始不分区与侨选当选名单已补齐；部分政党的落选提名名册未能从可检索资料中逐名确认。'))}
+  if(model.year<2001){box.append(element('p','history-list-caveat',model.year===1995?'档案范围：1995年三党共55名不分区正式提名名单已按选举公报补齐；侨选部分仍以可核实的原始当选人资料为准。':'档案范围：本届原始不分区与侨选当选名单已补齐；1992年或1998年的完整落选提名名册尚未逐项核实，不将当选名单冒充完整提名名单。'))}
   if(!model.matchesOfficial){
    box.append(element('p','history-list-alert','注意：当前资料按法定规则计算的席次与已核对历史结果存在差异，本页保留计算值供核查，不将其标为官方当选名单。'));
   }
@@ -422,22 +455,25 @@
     body.append(element('p','history-list-quota',quotaText));
    }
    if(p.winners.length){
-    body.append(element('h5','',SLATES_BY_YEAR[model.year]?.[p.party]?'提名名单 · '+p.winners.length+'人 · 原始当选 '+p.winners.filter(c=>c.elected).length+'人':
+    body.append(element('h5','',hasOfficialSlate(model.year,p.party)?'提名名单 · '+p.winners.length+'人 · 原始当选 '+p.winners.filter(c=>c.elected).length+'人':
       model.year===2004&&UNORDERED_SLATES_2004[p.party]?'登记提名名单 · '+p.winners.length+'人（原始排序未核实）':'原始当选名单 · 已核实 '+p.winners.filter(c=>c.elected).length+' 人'));
     const grid=element('div','history-list-nominees');
     for(const n of p.winners){
      const row=element('div','history-list-nominee');
      if(n.elected)row.classList.add('elected');
+     if(n.disqualified)row.classList.add('withdrawn');
      const mark=element('span','history-list-result');
      if(n.elected){const img=element('img','history-list-winner-mark');img.src='assets/elected-mark.png';img.alt='当选';img.loading='lazy';mark.append(img)}
-     row.append(element('span','history-list-rank',n.rank?String(n.rank)+'.':'·'),element('span','history-list-person',n.name),mark);
+     if(n.disqualified)mark.textContent='登记撤销';
+     row.append(element('span','history-list-rank',n.rank?String(n.rank)+'.':n.originalRank?'原'+n.originalRank+'.':'·'),element('span','history-list-person',n.name),mark);
      if(n.rank!==null&&n.rank>p.seats&&n.elected)row.title='按妇女保障规则优先当选，并非单纯前N名';
      grid.append(row);
     }
     body.append(grid);
     if(model.old&&(p.overseasNominees.length||p.overseasWinners.length)){
-     const hasAll=p.overseasNominees.length>0,ordered=hasAll&&model.year===2001,
-      overseasDisplay=hasAll?p.overseasNominees:p.overseasWinners,overseasWinnerSet=new Set(p.overseasWinners);
+     const fixed=ORDERED_OVERSEAS_2004[model.year===2004?p.party:''];
+     const hasAll=p.overseasNominees.length>0,ordered=hasAll&&(model.year===2001||Boolean(fixed)),
+      overseasDisplay=fixed?fixed.split(/\s+/):hasAll?p.overseasNominees:p.overseasWinners,overseasWinnerSet=new Set(p.overseasWinners);
      body.append(element('h5','',hasAll?'侨选登记提名名单 · '+overseasDisplay.length+'人（'+(ordered?'按当届原始登记顺序':'原始排序未核实')+'）':'侨选原始当选名单 · '+p.overseasWinners.length+'人'));
      const overseasGrid=element('div','history-list-nominees');
      for(const [i,name] of overseasDisplay.entries()){
@@ -445,16 +481,17 @@
       const row=element('div','history-list-nominee'+(elected?' elected':''));
       const mark=element('span','history-list-result');
       if(elected){const img=element('img','history-list-winner-mark');img.src='assets/elected-mark.png';img.alt='当选';img.loading='lazy';mark.append(img)}
-      row.append(element('span','history-list-rank',ordered||!hasAll?String(i+1)+'.':'·'),element('span','history-list-person',name),mark);
+      row.append(element('span','history-list-rank',ordered?String(i+1)+'.':'·'),element('span','history-list-person',name),mark);
       overseasGrid.append(row);
      }
      body.append(overseasGrid);
     }
     body.append(element('p','history-list-caveat',model.old?
-     model.year===2001?'已核对本届全部108名不分区与21名侨选的提名顺序，以及41名不分区、8名侨选的原始当选人。':
-     model.year===2004?'已对照中选会不分区及侨选全部登记候选人，名单原始排序尚未全部核实；当选标记为首次选举结果。':
-     '已收录不分区和侨选原始当选人；1992—1998年落选提名人与正式名单顺序尚待旧公报数字化核实。':
-     SLATES_BY_YEAR[model.year]?.[p.party]?'本届已收录该党原始提名顺序及选举当时的当选名单；任期内递补不计入原始当选。':'仅收录已核实的原始当选名单；未取得完整提名顺序时不推断名次。'));
+     model.year===2001?'已核对本届不分区及侨选的提名顺序与原始当选人。':
+     model.year===2004?'中选会公报已核对主要政党正式提名次序；个别小党及侨选名单如未核实顺序则不显示名次。台联原第1名陈永兴于投票前被撤销登记，保留原提名记录但不计入有效当选。':
+     model.year===1995?'已根据1995年中选会公报补齐并按正式提名顺序排列不分区名单；侨选仅呈现已核实的当选人，不推断其他人的顺序。':
+     '仅已核实原始当选人；未取得完整提名名册时不推断落选名单或其排序。':
+     hasOfficialSlate(model.year,p.party)?'本届已收录该党原始提名顺序及选举当时的当选名单；任期内递补不计入原始当选。':'仅收录已核实的原始当选名单；未取得完整提名顺序时不推断名次。'));
    }else{
     body.append(element('p','history-list-caveat',p.seats?
      '本届该党获得席次，但原始当选人及完整提名名册尚未逐项核实，因此暂不展示姓名。':
