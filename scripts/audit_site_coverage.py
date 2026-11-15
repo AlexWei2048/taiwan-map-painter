@@ -19,7 +19,9 @@ REPORT.mkdir(exist_ok=True)
 cc = OpenCC("t2s")
 
 def normalized(value):
-    return cc.convert(str(value or "")).replace("臺", "台").strip().replace("無黨籍", "无党籍")
+    name=cc.convert(str(value or "")).replace("臺", "台").strip().replace("無黨籍", "无党籍")
+    if name in ("无党籍及未经政党推荐", "无党籍及未經政黨推薦"):return "无党籍"
+    return name
 
 def load_json(path):
     try: return json.loads(path.read_text(encoding="utf-8-sig"))
@@ -84,6 +86,9 @@ def inventory():
     missing=[]
     for name,count in counter.most_common():
         pid=indexed.get(name)
+        # 连署/连署参选 is an independent nomination mechanism, NOT a
+        # legally registered party that could possess an official party logo.
+        if name in ("连署", "連署"):continue
         if pid and pid in keys or name in official_names:continue
         missing.append({"name":name,"rows":count,"total_votes_across_grains":votes[name],
             "known_preset":pid or None,"sources":sorted(years[name]),"spellings":sorted(raw[name])})
