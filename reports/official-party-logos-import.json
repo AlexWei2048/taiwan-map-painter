@@ -549,7 +549,9 @@
       "rendered_sha256": "2a366b48451b7260a2644f33d3d5d7ff195059160f8587301e2d716331a2cf3d",
       "image_bytes": 489,
       "license": "Public domain; basic geometric flag, documentation on Commons file page",
-      "author": "Ericmetro; Wikimedia Commons"
+      "author": "Ericmetro; Wikimedia Commons",
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=3",
+      "official_image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Flag_of_Chinese_Youth_Party.svg"
     }
   ],
   "unverified_or_unavailable": [
