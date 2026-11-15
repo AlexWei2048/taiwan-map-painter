@@ -1100,12 +1100,14 @@ test('Free nationwide council is regional-only with county labels and drills int
    names:[...document.querySelectorAll('#labels text[data-label]')].map(el=>el.textContent.trim()),
    numbers:document.querySelectorAll('#labels [data-number-key],#labels [data-placement="district-number"]').length,
    leaders:document.querySelectorAll('#labels path[data-label-leader],#labels path[data-prominent-leader]').length,
+    missingLeaders:[...document.querySelectorAll('#labels text[data-placement="outside"]')].filter(el=>
+     !document.querySelector('#labels path[data-label-leader="'+el.dataset.label+'"]')).map(el=>el.textContent),
    numberedKey:!document.querySelector('#mapNumberKey').hidden
   }));
-  assert.ok(facts.names.length>=18,'National map must label the counties');
+  assert.equal(facts.names.length,22,'National map must identify all 22 counties');
   assert.ok(facts.names.every(name=>/(?:[县市]|金门|马祖)$/.test(name)),JSON.stringify(facts.names));
   assert.equal(facts.numbers,0,'No district numbers on national map');
-  assert.equal(facts.leaders,0,'No national label leader lines');
+  assert.deepEqual(facts.missingLeaders,[],'Every external county name has its own connected leader');
   assert.equal(facts.numberedKey,false,'No numeric district key on national map');
  };
  await page.locator('#councilLevel').click();
@@ -1123,7 +1125,7 @@ test('Free nationwide council is regional-only with county labels and drills int
  assert.match(await page.locator('#tooltip').textContent(),/第1选区/);
  const nationalCouncilSvg=await exportSvg(page);
  assert.match(nationalCouncilSvg,/data-region="63000-01"/);
- assert.doesNotMatch(nationalCouncilSvg,/data-placement="district-number"|data-label-leader=|data-number-key=/);
+ assert.doesNotMatch(nationalCouncilSvg,/data-placement="district-number"|data-number-key=/);
  await page.locator('#regions path[data-region="'+council[0]+'"]').dispatchEvent('click');
  assert.equal(await page.locator('#county').inputValue(),'台北市','National council click opens the county, not a paint action');
  assert.equal(await page.evaluate(id=>state.fills.council[id],council[0]),councilBefore);
@@ -1186,7 +1188,7 @@ test('Free nationwide council is regional-only with county labels and drills int
  assert.equal(await page.locator('#regions path[data-region="'+legislative[1]+'"]').getAttribute('fill'),legislativeFills[1].color);
  const nationalLegislativeSvg=await exportSvg(page);
  assert.match(nationalLegislativeSvg,/data-region="63000-01"/);
- assert.doesNotMatch(nationalLegislativeSvg,/data-placement="district-number"|data-label-leader=|data-number-key=/);
+ assert.doesNotMatch(nationalLegislativeSvg,/data-placement="district-number"|data-number-key=/);
  await page.locator('#regions path[data-region="'+legislative[1]+'"]').dispatchEvent('click');
  assert.equal(await page.locator('#county').inputValue(),'台北市','Clicking a second national district opens the county again');
  assert.equal(await page.locator('#regions path[data-region="'+legislative[1]+'"]').getAttribute('fill'),legislativeFills[1].color,
