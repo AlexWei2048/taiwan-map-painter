@@ -713,6 +713,7 @@
   const body=el('historyDialogRows'),table=body.closest('table'),wrap=table.parentElement;
   const partyBallotDialog=legislativeMode&&legislativeBallot==='party';
   const hiddenColumns=new Set(partyBallotDialog?[0,2,3,4,7]:[]);
+  el('historyResultDialog').classList.toggle('history-party-vote-dialog',partyBallotDialog);
   if(table.tHead.rows[0]?.cells[1])table.tHead.rows[0].cells[1].textContent=partyBallotDialog?'政党':'候选人';
   // Display both offices' verified genders for presidential tickets.
   if(table.tHead.rows[0]?.cells[2])table.tHead.rows[0].cells[2].textContent=presidentialMode?'性别（正/副）':'性别';
@@ -726,7 +727,7 @@
   for(const r of [...rows].sort((a,b)=>b.votes-a.votes)){
    const tr=document.createElement('tr');
    if(isOfficialWinner(r))tr.className='history-elected-row';
-   for(const [i,value] of [r.number||'—',displayedCandidateName(r),displayedGender(r),incumbentLabel(r),r.party,r.votes.toLocaleString('zh-CN'),(r._share||0).toFixed(2)+'%',''].entries()){
+   for(const [i,value] of [r.number||'—',partyBallotDialog?r.party:displayedCandidateName(r),displayedGender(r),incumbentLabel(r),r.party,r.votes.toLocaleString('zh-CN'),(r._share||0).toFixed(2)+'%',''].entries()){
     if(hiddenColumns.has(i))continue;
     const td=document.createElement('td');
     const logo=i===4||partyBallotDialog&&i===1?logoFor(predictionParty(r.party)):'';
@@ -756,7 +757,12 @@
   el('historyDialogDrilldown').hidden=!(kind==='mayor'&&scale==='district');el('historyDialogBack').hidden=!county;
  }
  function openContestById(contestId,summary){
-  if(!summary)return;lastOpenedFeature=null;const contest=summary.contest,rows=summary.candidacies,body=el('historyDialogRows');el('historyDialogTitle').textContent=contest.county_name+' · '+contest.district_name+' · '+yearLabel()+' '+officeTitle()+'选举结果';el('historyDialogMessage').textContent='有效票 '+summary.validVotes.toLocaleString('zh-CN')+' · '+rows.length+' 位候选人 · 按得票数排序';body.replaceChildren();
+  if(!summary)return;
+  el('historyResultDialog').classList.remove('history-party-vote-dialog');
+  const headers=el('historyDialogRows').closest('table').tHead.rows[0].cells;
+  [...headers].forEach(cell=>{cell.hidden=false});
+  if(headers[1])headers[1].textContent='候选人';
+  lastOpenedFeature=null;const contest=summary.contest,rows=summary.candidacies,body=el('historyDialogRows');el('historyDialogTitle').textContent=contest.county_name+' · '+contest.district_name+' · '+yearLabel()+' '+officeTitle()+'选举结果';el('historyDialogMessage').textContent='有效票 '+summary.validVotes.toLocaleString('zh-CN')+' · '+rows.length+' 位候选人 · 按得票数排序';body.replaceChildren();
   for(const r of rows){const tr=document.createElement('tr');if(r.elected_official)tr.className='history-elected-row';for(const [i,value] of [r.ballot_number||'—',r.candidate_name,r.gender||'—',r.incumbent_at_election===true?'现任':r.incumbent_at_election===false?'非现任':'—',r.party_name,r.votes.toLocaleString('zh-CN'),Number(r.vote_share||0).toFixed(2)+'%',''].entries()){const td=document.createElement('td');if(i===7&&r.elected_official){const mark=document.createElement('img');mark.src='assets/elected-mark.png';mark.alt='当选';mark.width=18;mark.height=18;td.append(mark)}else td.textContent=value;tr.append(td)}body.append(tr)}
   const overviewButton=el('historyDialogOverview');
   if(overviewButton){overviewButton.hidden=false;overviewButton.textContent='查看本选区概况';
