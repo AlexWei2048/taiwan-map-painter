@@ -41,7 +41,9 @@ test('Coastlines are excluded while all actual shared administrative borders rem
  assert.ok(complete.all.length>result.all.length);
  assert.ok(complete.byCounty['县甲'].includes('M0,0L1,0'),'selected county restores shoreline');
  assert.ok(complete.byCounty['离岛'].includes('M4,4L5,4'),'island coastline must be present when selected');
- assert.match(app,/sharedMapBorders\(level,identity,!!state\.county\)/);
+ // Historic legislative regions retain their complete coastline at national scope; regular maps still omit it.
+ assert.match(app,/sharedMapBorders\(level,identity,!!state\.county\|\|historicalRegional\)/);
+ assert.match(app,/const historicalRegional=level==='legislative'/);
  assert.match(app,/includeCoast\?'complete':'internal'/);
  assert.equal(calculate([{...polygons[0]}, {...polygons[1],id:'a'}]).all,'');
  assert.match(app,/appendSharedBorders\(districtGroup,mayorTownBoundaryOverlay\(\)\|\|councilCountyOverview\(\)\?'counties':state.level/);
