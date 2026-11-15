@@ -1439,21 +1439,85 @@ function drawHistoricalLegislativeRegionalLabels(group,interactive=false){
    drawLabels(group,names,transform,19,interactive,true,false);
    // Historical county polygons sometimes lack sufficiently wide label anchors.
    // Every county still receives its own visible *name*, never a district number.
-   const placed=new Set([...group.querySelectorAll('text[data-label]')].map(node=>node.textContent.replaceAll('臺','台')));
-   const offsets={'台北市':[-9,21],'基隆市':[17,-15],'新竹市':[11,15],'嘉义市':[11,18]};
+
+   // A missing county name must be connected to its polygon. Reuse the
+   // existing collision-aware orthogonal callout routing, including the
+   // inset exclusion boxes and legend space.
+   const placed=new Set([...group.querySelectorAll('text[data-label]')]
+    .map(node=>node.textContent.replaceAll('臺','台')));
+   const textNodes=[...group.querySelectorAll('text[data-label]')];
+   const used=textNodes.map(el=>{
+    const x=Number(el.getAttribute('x')),y=Number(el.getAttribute('y')),
+     font=Number(el.getAttribute('font-size'))||19,
+     w=Array.from(el.textContent||'').length*font*1.04+12,h=font*1.7+8;
+    return[x-w/2,y-h/2,x+w/2,y+h/2];
+   });
+   const routes=[],area=transform.area||contentArea(sceneSpec()),
+    reserve=state.legend.show?legendBox(sceneSpec()):null,
+    layer=group.querySelector('[data-map-leader-layer]')||group;
    for(const countyFeature of names){
     const labelName=String(countyFeature.name||countyFeature.county||'').replaceAll('臺','台');
     if(!labelName||placed.has(labelName))continue;
-    const center=countyFeature.center||[(countyFeature.box[0]+countyFeature.box[2])/2,(countyFeature.box[1]+countyFeature.box[3])/2];
-    const offset=offsets[labelName]||[0,0],x=center[0]*transform.scale+transform.tx+offset[0],y=center[1]*transform.scale+transform.ty+offset[1];
-    const label=svgEl('text',{x,y,'font-size':17,'font-weight':650,'text-anchor':'middle','dominant-baseline':'middle',
-     'data-label':countyFeature.id,'data-history-county-name':labelName,fill:'#294c39',stroke:'#fff','stroke-width':3,'paint-order':'stroke'});
+    let pos=null;
+    if(isInsetIslandFeature(countyFeature)){
+     pos=countyIslandName(countyFeature,transform,labelName,17);
+    }
+    if(!pos)for(const font of [17,15,13]){
+     pos=countyCityCallout(countyFeature,transform,labelName,font,used,area,reserve,names,routes);
+     if(pos)break;
+    }
+    if(!pos){
+     // Last resort: a short unobstructed label lane outside the coast,
+     // not a floating text item without any connection to the polygon.
+     const anchor=townVisualCenter(countyFeature,transform);
+     const side=['台北市','基隆市'].includes(labelName)?'right':'left';
+     const font=15,w=Array.from(labelName).length*font*1.05+12,h=font*1.7+7;
+     const coast=mapLabelColumnEdge(names.filter(f=>!isInsetIslandFeature(f)),transform,side,[anchor.y-h,anchor.y+h],font,anchor.x);
+     const x=coast+(side==='left'?-1:1)*(w/2+30);
+     for(const offset of [0,-1,1,-2,2,-3,3,-4,4,-5,5,-6,6,-7,7,-8,8]){
+      const y=anchor.y+offset*(h+6),rect=[x-w/2,y-h/2,x+w/2,y+h/2];
+      if(rect[0]<area.left||rect[2]>area.right||rect[1]<area.top||rect[3]>area.bottom||
+       used.some(other=>leaderOverlap(other,rect))||
+       reserve&&leaderOverlap(rect,[reserve.x,reserve.y,reserve.x+reserve.width,reserve.y+reserve.height]))continue;
+      const direction=side==='left'?-1:1,end=x-direction*(w/2+3),elbow=anchor.x+direction*13;
+      pos={x,y,font,rect,leaderAnchor:anchor,column:side,
+       leaderPath:'M'+anchor.x+','+anchor.y+'H'+elbow+'V'+y+'H'+end};
+      break;
+     }
+    }
+    if(!pos){
+     // Do not drop a county identity merely because its preferred lane is
+     // crowded: place it close to the feature with an explicit leader.
+     const anchor=townVisualCenter(countyFeature,transform),font=14,
+      x=anchor.x+50,y=anchor.y-31,w=Array.from(labelName).length*font+8;
+     pos={x,y,font,rect:[x-w/2,y-font,x+w/2,y+font],leaderAnchor:anchor,
+      leaderPath:'M'+anchor.x+','+anchor.y+'H'+(anchor.x+12)+'V'+y+'H'+(x-w/2)};
+    }
+    if(pos.leaderAnchor){
+     const d=pos.leaderPath;
+     layer.append(svgEl('path',{d,fill:'none',
+      style:'fill:none;stroke:#fff;stroke-width:2.1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.94',
+      'vector-effect':'non-scaling-stroke','pointer-events':'none','data-label-leader-halo':countyFeature.id}));
+     layer.append(svgEl('path',{d,fill:'none',
+      style:'fill:none;stroke:#537d6b;stroke-width:0.9px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.78',
+      'vector-effect':'non-scaling-stroke','pointer-events':'none',
+      'data-label-leader':countyFeature.id,'data-prominent-leader':'true'}));
+     layer.append(svgEl('circle',{cx:pos.leaderAnchor.x,cy:pos.leaderAnchor.y,
+      r:1.9,fill:'#537d6b',style:'stroke:#fff;stroke-width:1.1px',
+      'pointer-events':'none','data-label-anchor':countyFeature.id}));
+    }
+    const label=svgEl('text',{x:pos.x,y:pos.y,'font-size':pos.font,'font-weight':600,
+     'text-anchor':'middle','dominant-baseline':'middle','data-label':countyFeature.id,
+     'data-history-county-name':labelName,'data-placement':pos.leaderAnchor?'outside':'inset-bottom',
+     fill:'#294c39',stroke:'#fff','stroke-width':2.6,'paint-order':'stroke'});
     label.textContent=labelName;
     if(interactive){label.style.cursor='pointer';label.style.pointerEvents='auto';label.setAttribute('tabindex','0');
-     label.onclick=()=>{const select=document.getElementById('historyCounty');select.value=countyFeature.county||labelName;select.dispatchEvent(new Event('change',{bubbles:true}))};
+     label.onclick=()=>{const select=document.getElementById('historyCounty');
+      select.value=countyFeature.county||labelName;select.dispatchEvent(new Event('change',{bubbles:true}))};
      label.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();label.onclick()}};
     }
-    group.append(label);
+    group.append(label);placed.add(labelName);used.push(pos.rect);
+    if(pos.leaderPoints)routes.push(pos.leaderPoints);
    }
   }else{
    // The prominent number in each seat card is the constituency label.
