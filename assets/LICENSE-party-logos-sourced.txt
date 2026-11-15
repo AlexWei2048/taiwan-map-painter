@@ -247,3 +247,9 @@
 党旗：https://commons.wikimedia.org/wiki/File:Flag_of_Chinese_Youth_Party.svg
 授权：公共领域（几何图案）；作者 Ericmetro；来源 Commons
 原图SHA256：67fd51cf3bd393eeb9ba96e6fb3d795da878f6a525f937e6e4c39b12ef5e2a82
+
+台湾工党 [历史名称，党旗替代标识]（切勿混为劳动党）
+来源：https://commons.wikimedia.org/wiki/File:台灣工黨黨旗.svg
+作者：AAAAA143222
+授权：CC BY-SA 4.0 https://creativecommons.org/licenses/by-sa/4.0/
+来源 SHA256：2723ce4fa7bce57fdaa5aa672e55dd6f36d700fef67e497478b66b82eed22ebd

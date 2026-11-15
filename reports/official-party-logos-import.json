@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "count_by_id": 14,
-  "count_by_historical_name": 36,
+  "count_by_historical_name": 37,
   "official_sources": [
     {
       "name": "大爱宪改",
@@ -552,6 +552,21 @@
       "author": "Ericmetro; Wikimedia Commons",
       "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=3",
       "official_image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Flag_of_Chinese_Youth_Party.svg"
+    },
+    {
+      "name": "台湾工党",
+      "party_id": null,
+      "official_registry": "https://commons.wikimedia.org/wiki/File:台灣工黨黨旗.svg",
+      "official_image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/台灣工黨黨旗.svg",
+      "source_page": "https://commons.wikimedia.org/wiki/File:台灣工黨黨旗.svg",
+      "source_file": "https://commons.wikimedia.org/wiki/Special:Redirect/file/台灣工黨黨旗.svg",
+      "asset_type": "historic party flag, NOT a separately registered party emblem",
+      "source_sha256": "2723ce4fa7bce57fdaa5aa672e55dd6f36d700fef67e497478b66b82eed22ebd",
+      "rendered_sha256": "991855addb4e8c4347fe8b4fe9986b2295f03b16f239bfaeb670960f70e7f264",
+      "image_bytes": 1363,
+      "license": "Wikimedia Commons CC BY-SA 4.0; attribution and share-alike requirements apply",
+      "author": "AAAAA143222",
+      "source_note": "Specific historical Taiwan Workers Party; not Labour Party"
     }
   ],
   "unverified_or_unavailable": [

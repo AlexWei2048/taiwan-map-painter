@@ -5,10 +5,10 @@
 - 已收录预设政党：49
 - 有党徽图档的标识（含无党籍标记）：44
 - 新增官方预设党徽：14
-- 新增官方历史名称图档：36
+- 新增官方历史名称图档：37
 - 已归一化的历史党名种类：124
 - 没有内置党徽的预设政党：4
-- 没有匹配到已收录党徽的历史党名：44
+- 没有匹配到已收录党徽的历史党名：43
 
 ## 缺党徽的预设政党
 
@@ -37,7 +37,6 @@
 | 台湾第一民族党 | 392 | history-legislative-2016.json |
 | 新国家连线 | 366 | history-legislative-1998.json |
 | 中华社会民主党 | 85 | history-legislative-1992.json |
-| 台湾工党 | 83 | history-2022-candidacies |
 | 大道慈悲济世党 | 77 | history-legislative-2008.json |
 | 工教联盟 | 47 | history-legislative-2004.json |
 | 人民民主阵线 | 34 | history-legislative-2012.json |

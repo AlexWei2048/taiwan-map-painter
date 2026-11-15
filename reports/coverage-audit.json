@@ -4,7 +4,7 @@
   "total_current_logo_ids": 44,
   "original_logo_ids": 30,
   "sourced_preset_logo_ids": 14,
-  "sourced_historical_logo_names": 36,
+  "sourced_historical_logo_names": 37,
   "total_party_names_in_archives": 124,
   "top_archive_parties": [
     {
@@ -347,7 +347,7 @@
       "name": "台湾工党",
       "rows": 83,
       "id": null,
-      "has_logo": false
+      "has_logo": true
     },
     {
       "name": "大道慈悲济世党",
@@ -954,22 +954,6 @@
       ],
       "spellings": [
         "中华社会民主党"
-      ]
-    },
-    {
-      "name": "台湾工党",
-      "rows": 83,
-      "total_votes_across_grains": 33560,
-      "known_preset": null,
-      "sources": [
-        "history-2022-candidacies",
-        "history-2022.json",
-        "history-legislative-2016.json",
-        "history-legislative-2020.json"
-      ],
-      "spellings": [
-        "台湾工党",
-        "台灣工黨"
       ]
     },
     {
