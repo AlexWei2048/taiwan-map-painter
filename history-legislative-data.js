@@ -79,7 +79,7 @@
  function exportCsv(snapshot,selection={}){
   if(snapshot?.office!=='legislative')return Core.csv([['无立法机构民代资料']]);
   const year=Number(selection.year||snapshot.year),electorate=selection.electorate||'regional',
-   level=electorate==='regional'?'district':selection.level==='national'?'national':
+   level=electorate==='regional'?'district':year===1992&&!county&&['plains','mountain'].includes(electorate)?'national':selection.level==='national'?'national':
     selection.level==='town'?'town':'county',county=selection.county||'';
   const focus=String(selection.focus||'');
   const records=snapshot.rows.filter(r=>r.electorate===electorate&&r.level===level&&(!county||r.county===county)&&
