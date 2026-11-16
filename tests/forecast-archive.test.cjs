@@ -103,3 +103,16 @@ test('Town-level accuracy only uses full official town results, not county total
  assert.equal(missing.local.evaluated,0);
  assert.equal(missing.local.skipped,1);
 });
+
+
+test('Archived party identity is frozen even when the live candidate roster changes later',()=>{
+ const archive=A.capture(current(),db,meta);
+ const changed=JSON.parse(JSON.stringify(db));
+ changed.candidates.find(c=>c.id==='a').party='新政党';
+ const reopened=A.validate(archive,changed);
+ assert.equal(reopened.candidateParties.a,'甲');
+ const record=official();
+ record.candidacies.forEach(c=>{c.party_name=db.candidates.find(x=>x.id===c.candidate_id).party});
+ const result=A.compare(reopened,record,changed);
+ assert.equal(result.partySeatError,2,'forecast party seats use archived names while actual uses official party');
+});
