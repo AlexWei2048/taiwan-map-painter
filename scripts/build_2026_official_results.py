@@ -18,6 +18,7 @@ from audit_2026_official import load_directory,trusted_source
 COLUMNS=["candidate_id","number","votes","elected","source_url","source_date"]
 TOWN_COLS=["candidate_id","county","town","votes","source_url","source_date"]
 TURNOUT_COLS=["district_id","registered_voters","ballots_cast","valid_votes","invalid_votes","source_url","source_date"]
+TOWN_TURNOUT_COLS=["county","town","registered_voters","ballots_cast","valid_votes","invalid_votes","source_url","source_date"]
 EXPECTED={"mayor":(22,81),"council":(221,1492),"township":(204,478)}
 ELECTION_DAY=date(2026,11,28)
 CERTIFICATION_DAY=date(2026,12,4)
@@ -68,7 +69,7 @@ def make_template(directory,path):
                 "district":d.get("name") or "","candidate_name":c.get("nameOriginal") or c.get("name")})
     return path
 
-def prepare(directory,raw,town_raw=(),turnout_raw=(),status="provisional"):
+def prepare(directory,raw,town_raw=(),turnout_raw=(),status="provisional",town_turnout_raw=()):
     if status not in ("provisional","certified"):raise ValueError("Unsupported result status")
     cs={c["id"]:c for c in directory["candidates"]}
     ds={d["id"]:d for d in directory["districts"]}
@@ -144,6 +145,36 @@ def prepare(directory,raw,town_raw=(),turnout_raw=(),status="provisional"):
             if valid!=sum(r["votes"] for _,r in by_d[did]):
                 issues.append(did+": candidate vote total != official valid_votes")
         turnout[did]=values;source_set.add(src)
+    town_profiles=[];town_profile_keys=set()
+    mayors={d["county"].replace("臺","台"):d for d in ds.values() if d["type"]=="mayor"}
+    for line,row in enumerate(town_turnout_raw,2):
+        county=str(row.get("county") or "").strip()
+        town=str(row.get("town") or "").strip()
+        canonical=county.replace("臺","台")
+        d=mayors.get(canonical)
+        if not d or not town:
+            issues.append(f"town turnout row {line}: unknown mayor county/town");continue
+        key=(canonical,town)
+        if key in town_profile_keys:
+            issues.append(f"town turnout row {line}: repeated mayor town profile {key}");continue
+        town_profile_keys.add(key)
+        try:
+            values={field:number(row.get(field),field+" in "+town) for field in
+                    ("registered_voters","ballots_cast","valid_votes","invalid_votes")}
+            src=official(row)
+        except ValueError as error:
+            issues.append(f"town turnout row {line}: {error}");continue
+        if values["ballots_cast"]>values["registered_voters"] or values["valid_votes"]+values["invalid_votes"]!=values["ballots_cast"]:
+            issues.append(f"town turnout row {line}: invalid turnout reconciliation");continue
+        candidate_ids=d["candidateIds"]
+        records=[next((item for item in towns.get(cid,[]) if item["town"]==town),None) for cid in candidate_ids]
+        if any(item is None for item in records):
+            issues.append(f"town turnout row {line}: candidate town votes not fully sourced");continue
+        if values["valid_votes"]!=sum(item["votes"] for item in records):
+            issues.append(f"town turnout row {line}: valid votes differ from candidate town totals");continue
+        town_profiles.append({"office":"mayor","county":canonical,"town":town,**values,
+                              "source_url":src[0],"source_date":src[1]})
+        source_set.add(src)
     counts={t:(sum(d["type"]==t for d in ds.values()),sum(c["type"]==t for c in cs.values())) for t in EXPECTED}
     baseline=all(counts[t]==EXPECTED[t] for t in EXPECTED)
     if not baseline:warnings.append("Candidate or district counts do not match audited 2026 baseline")
@@ -193,14 +224,14 @@ def prepare(directory,raw,town_raw=(),turnout_raw=(),status="provisional"):
                 rows.append({**base,"level":"town","town":item["town"],"votes":item["votes"],"candidateId":cid})
     digest=hashlib.sha256(json.dumps([(x,observed[x]["number"],observed[x]["votes"],observed[x]["elected"]) for x in sorted(observed)],ensure_ascii=False).encode()).hexdigest()
     snapshot={"schemaVersion":2,"year":2026,"office":"local","publicationStatus":status,"completeness":"full" if complete else "partial",
-      "elections":elections,"contests":contests,"candidacies":candidacies,"rows":rows,
+      "elections":elections,"contests":contests,"candidacies":candidacies,"rows":rows,"townProfiles":town_profiles,
       "provenance":{"sourceLinks":[{"url":u,"sourceDate":day} for u,day in sorted(source_set)],
         "recordDigest":digest,"builtAt":datetime.now(timezone.utc).isoformat(),
         "officialWinnerMarksOnly":True,"forecastsUnaffected":True}}
     report={"year":2026,"status":status,"readyToPublish":complete and baseline,"baselineMatches":baseline,
        "coveredCandidates":len(observed),"expectedCandidates":len(cs),"coveredDistricts":len(by_d),"expectedDistricts":len(ds),
        "missingCandidateIds":sorted(missing)[:100],"issues":issues,"warnings":warnings,"byOffice":counts,
-       "sourceCount":len(source_set),"recordDigest":digest,"published":False}
+       "sourceCount":len(source_set),"verifiedMayorTownProfiles":len(town_profiles),"recordDigest":digest,"published":False}
     return snapshot,report
 
 def save(data,file):
@@ -213,6 +244,7 @@ def main(argv=None):
     p.add_argument("--results",type=Path)
     p.add_argument("--town-votes",type=Path)
     p.add_argument("--turnout",type=Path)
+    p.add_argument("--town-turnout",type=Path,help="Optional CEC verified mayor turnout at town level")
     p.add_argument("--status",choices=("provisional","certified"),default="provisional")
     p.add_argument("--report",type=Path,default=ROOT/"reports/2026-results-intake-audit.json")
     p.add_argument("--staged-output",type=Path,default=ROOT/"reports/2026-results-staged.json")
@@ -226,7 +258,8 @@ def main(argv=None):
     raw=read_csv(args.results,COLUMNS)
     town=read_csv(args.town_votes,TOWN_COLS) if args.town_votes else []
     turnout=read_csv(args.turnout,TURNOUT_COLS) if args.turnout else []
-    snapshot,report=prepare(directory,raw,town,turnout,args.status)
+    town_turnout=read_csv(args.town_turnout,TOWN_TURNOUT_COLS) if args.town_turnout else []
+    snapshot,report=prepare(directory,raw,town,turnout,args.status,town_turnout)
     save(report,args.report)
     if args.publish:
         if date.today()<ELECTION_DAY:raise ValueError("Result publication is forbidden before polling day")
