@@ -2825,3 +2825,49 @@ test('Published-only 2026 results can load in history, switch offices and return
  await page.waitForFunction(()=>History2022View.year()===2022&&History2022View.snapshot()?.year===2022);
  assert.deepEqual(errors,[],'Switching historic snapshots raises no JS exceptions');
 });
+
+
+test('2026 user prediction snapshots are separate from the editable project and survive editing',async t=>{
+ const page=await pageFor(t,{width:1200,height:900});
+ await page.locator('#county').selectOption('台北市');
+ await selectMayor(page);
+ const district=await page.evaluate(()=>candidateDatabase.districts.find(d=>d.type==='mayor'&&d.county==='台北市').id);
+ const before=await page.evaluate(id=>JSON.stringify(state.predictions[id]),district);
+ await page.locator('#forecastArchiveLabel').fill('11月27日模拟选前版本');
+ await page.locator('#forecastArchiveNote').fill('浏览器测试快照');
+ await page.locator('#forecastArchiveCreate').click();
+ await page.waitForFunction(()=>document.getElementById('forecastArchiveList').querySelectorAll('.forecast-archive-card').length===1);
+ const archive=await page.evaluate(()=>{
+  const all=JSON.parse(localStorage.getItem('island-palette-forecast-archives-v1'));
+  return {count:all.length,saved:all[0],project:JSON.parse(localStorage.getItem(KEY))};
+ });
+ assert.equal(archive.count,1);
+ assert.equal(archive.saved.label,'11月27日模拟选前版本');
+ assert.equal(archive.saved.note,'浏览器测试快照');
+ assert.ok(JSON.stringify(archive.saved.predictions[district]).includes('winners'));
+ assert.ok(archive.saved.predictions[district].winners.length===1);
+ assert.equal(archive.saved.predictions[district].winners[0],JSON.parse(before).winners[0]);
+ await page.locator('#editPrediction').click();
+ await page.getByRole('radio',{name:'预测沈伯洋当选',exact:true}).check();
+ await page.locator('#savePrediction').click();
+ assert.notEqual(await page.evaluate(id=>JSON.stringify(state.predictions[id]),district),before);
+ const after=await page.evaluate(id=>JSON.stringify(JSON.parse(localStorage.getItem('island-palette-forecast-archives-v1'))[0].predictions[id]),district);
+ assert.equal(after,before);
+ page.once('dialog',dialog=>dialog.accept());
+ await page.locator('.forecast-archive-card').getByRole('button',{name:'恢复编辑'}).click();
+ assert.equal(await page.evaluate(id=>JSON.stringify(state.predictions[id]),district),before);
+ const dl=page.waitForEvent('download');
+ await page.locator('.forecast-archive-card').getByRole('button',{name:'下载JSON'}).click();
+ const file=await dl,body=JSON.parse(await readFile(await file.path(),'utf8'));
+ assert.equal(body.kind,'island-palette-2026-forecast-archive');
+ assert.equal(body.id,archive.saved.id);
+ assert.equal(body.predictions[district].winners[0],JSON.parse(before).winners[0]);
+});
+test('2026 snapshot review is blocked before official results are published',async t=>{
+ const page=await pageFor(t);
+ await selectMayor(page);
+ await page.locator('#forecastArchiveCreate').click();
+ await page.locator('.forecast-archive-card').getByRole('button',{name:'与正式结果比较'}).click();
+ await page.waitForFunction(()=>document.getElementById('forecastArchiveStatus').textContent.includes('正式得票结果尚未发布'));
+ assert.equal(await page.locator('.forecast-review').count(),0);
+});
