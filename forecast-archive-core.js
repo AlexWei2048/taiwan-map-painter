@@ -62,17 +62,28 @@ function validate(input,directory){
     note:String(record.note||'').slice(0,300),updatedAt:safeDate(record.updatedAt)?record.updatedAt:''};
   }
  }
+ const chosen=new Set(Object.values(predictions).flatMap(r=>r.winners));
+ const candidateParties={};
+ for(const [cid,party]of Object.entries(input.candidateParties||{})){
+  if(!chosen.has(cid)||!candidates.has(cid)||typeof party!=='string'||party.length>80)
+   throw Error('封存所用的政党资料与预测候选人不匹配');
+  candidateParties[cid]=party;
+ }
  return{kind:KIND,version:VERSION,id:input.id,electionYear:2026,createdAt:input.createdAt,
   label:String(input.label||'选前预测').trim().slice(0,80)||'选前预测',
   note:String(input.note||'').slice(0,500),rosterAsOf:String(input.rosterAsOf||'').slice(0,40),
-  predictions,localPredictions};
+  predictions,localPredictions,candidateParties};
 }
 function capture(state,directory,meta={}){
  const id=String(meta.id||('snapshot-'+Date.now()+'-'+Math.random().toString(36).slice(2,10)));
  return validate({kind:KIND,version:VERSION,id,electionYear:2026,
   createdAt:String(meta.createdAt||new Date().toISOString()),label:meta.label||'选前预测',
   note:meta.note||'',rosterAsOf:directory?.asOf,
-  predictions:clone(state.predictions||{}),localPredictions:clone(state.localPredictions||{})},directory);
+  predictions:clone(state.predictions||{}),localPredictions:clone(state.localPredictions||{}),
+  candidateParties:Object.fromEntries(
+   [...new Set(Object.values(state.predictions||{}).flatMap(r=>r.winners||[]))]
+    .map(id=>[id,directory.candidates.find(c=>c.id===id)?.party||'无党籍']))
+ },directory);
 }
 function coverage(archive,directory){
  const byId=new Map((directory?.districts||[]).map(d=>[d.id,d]));
@@ -117,8 +128,8 @@ function compare(archive,official,directory){
   const a=new Set(winners),p=new Set(prediction.winners);
   const exact=a.size===p.size&&[...a].every(id=>p.has(id)),hits=[...p].filter(id=>a.has(id)).length;
   const electedParty=new Map(),predParty=new Map();
-  for(const cid of winners){const party=String(directory.candidates.find(c=>c.id===cid)?.party||'无党籍');electedParty.set(party,(electedParty.get(party)||0)+1)}
-  for(const cid of p){const party=String(directory.candidates.find(c=>c.id===cid)?.party||'无党籍');predParty.set(party,(predParty.get(party)||0)+1)}
+  for(const cid of winners){const party=String(byId.get(cid)?.party_name||directory.candidates.find(c=>c.id===cid)?.party||'无党籍');electedParty.set(party,(electedParty.get(party)||0)+1)}
+  for(const cid of p){const party=String(archive.candidateParties?.[cid]||directory.candidates.find(c=>c.id===cid)?.party||'无党籍');predParty.set(party,(predParty.get(party)||0)+1)}
   const allParties=new Set([...electedParty.keys(),...predParty.keys()]);
   const partyError=[...allParties].reduce((sum,party)=>sum+Math.abs((predParty.get(party)||0)-(electedParty.get(party)||0)),0)/2;
   const detail={districtId:d.id,county:d.county,office:d.type,seats:d.seats,exact,
