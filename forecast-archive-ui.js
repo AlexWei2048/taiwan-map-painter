@@ -102,6 +102,44 @@ async function compare(id){
   render();setStatus('复盘完成：仅对填写完整、且官方结果能精确匹配候选人ID的选区计分。');
  }catch(error){activeComparison=null;render();setStatus('暂不能复盘：'+error.message)}
 }
+function downloadReviewPng(result,label='我的2026预测'){
+ if(!result||result.electionYear!==2026)throw Error('尚无可导出的官方结果复盘');
+ const canvas=document.createElement('canvas');canvas.width=1180;canvas.height=900;
+ const ctx=canvas.getContext('2d');if(!ctx)throw Error('浏览器不支持图片导出');
+ ctx.fillStyle='#f5f8f4';ctx.fillRect(0,0,1180,900);
+ ctx.fillStyle='#295d4a';ctx.fillRect(0,0,1180,13);
+ ctx.fillStyle='#244938';ctx.font='bold 55px system-ui,sans-serif';ctx.fillText('2026 选举预测复盘',60,113);
+ ctx.fillStyle='#537261';ctx.font='27px system-ui,sans-serif';
+ ctx.fillText(String(label).slice(0,29),60,158);
+ ctx.fillText(result.sourceStatus==='certified'?'对比：正式公告结果':'对比：开票暂定结果',60,198);
+ const p=n=>n===null?'暂无可比数据':n.toFixed(2)+'%';
+ const pairs=[
+  ['已评估完整选区',result.districtsEvaluated+'个'],['名单全部预测正确',result.districtsExact+'个'],
+  ['选区预测准确率',p(result.districtAccuracy)],['当选席次命中率',p(result.winnerSeatAccuracy)],
+  ['正确预测的当选席次',result.seatHits+' / '+result.seatsEvaluated+'席'],
+  ['政党席次绝对误差',result.partySeatError+'席'],
+  ['得票数平均绝对误差',result.voteMAE===null?'暂无可比数据':Math.round(result.voteMAE).toLocaleString('zh-CN')+'票'],
+  ['得票率平均绝对误差',result.shareMAE===null?'暂无可比数据':result.shareMAE.toFixed(2)+'个百分点']
+ ];
+ for(let i=0;i<pairs.length;i++){
+  const x=60+(i%2)*550,y=234+Math.floor(i/2)*129;
+  ctx.fillStyle='#fff';ctx.fillRect(x,y,518,109);
+  ctx.strokeStyle='#d9e5da';ctx.strokeRect(x,y,518,109);
+  ctx.fillStyle='#587361';ctx.font='23px system-ui,sans-serif';ctx.fillText(pairs[i][0],x+17,y+37);
+  ctx.fillStyle='#28533e';ctx.font='bold 34px system-ui,sans-serif';ctx.fillText(pairs[i][1],x+17,y+84);
+ }
+ ctx.fillStyle='#567062';ctx.font='22px system-ui,sans-serif';
+ ctx.fillText('未填写完整的预测不计分，缺失官方资料不推算。',60,790);
+ ctx.fillText('有效对比的得票预测：票数'+result.voteEstimatesCompared+'项；得票率'+result.shareEstimatesCompared+'项。',60,825);
+ ctx.font='20px system-ui,sans-serif';ctx.fillStyle='#779080';
+ ctx.fillText('岛屿调色盘 · 本机封存时间并非经第三方认证',60,864);
+ canvas.toBlob(blob=>{
+  if(!blob)return setStatus('图片生成失败，请下载JSON复盘报告');
+  const url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='2026选举预测复盘-'+result.archiveId+'.png';a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+ },'image/png');
+}
 function comparisonPanel(result){
  const node=document.createElement('section');node.className='forecast-review';
  node.append(text('h4','选后复盘 · '+(result.sourceStatus==='certified'?'已公告结果':'开票暂定结果')));
@@ -133,6 +171,8 @@ function comparisonPanel(result){
   ' 条乡镇预测缺少可核官方乡镇票数或区名匹配，未作推算。','data-help'));
  const button=document.createElement('button');button.type='button';button.textContent='下载复盘报告 JSON';
  button.onclick=()=>triggerDownload(result,'2026预测复盘-'+result.archiveId+'.json');node.append(button);
+ const pngButton=document.createElement('button');pngButton.type='button';pngButton.textContent='下载复盘图片 PNG';
+ pngButton.onclick=()=>downloadReviewPng(result,getArchive(result.archiveId)?.label||'我的预测');node.append(pngButton);
  return node;
 }
 function render(){
@@ -195,5 +235,5 @@ function init(){
  render();
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
-root.ForecastArchiveUI={render,create,read,compare};
+root.ForecastArchiveUI={render,create,read,compare,downloadReviewPng};
 })(window);
