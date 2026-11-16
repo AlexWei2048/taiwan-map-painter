@@ -2871,3 +2871,17 @@ test('2026 snapshot review is blocked before official results are published',asy
  await page.waitForFunction(()=>document.getElementById('forecastArchiveStatus').textContent.includes('正式得票结果尚未发布'));
  assert.equal(await page.locator('.forecast-review').count(),0);
 });
+
+
+test('Officially released prediction review exports a readable PNG summary (synthetic test-only data)',async t=>{
+ const page=await pageFor(t);
+ const result={archiveId:'snapshot-2026-visual-test',electionYear:2026,sourceStatus:'certified',
+  districtsEvaluated:10,districtsExact:6,districtAccuracy:60,winnerSeatAccuracy:80,
+  seatHits:12,seatsEvaluated:15,partySeatError:2,shareMAE:4.25,voteMAE:1250,
+  voteEstimatesCompared:18,shareEstimatesCompared:21};
+ const dl=page.waitForEvent('download',{timeout:10000});
+ await page.evaluate(report=>window.ForecastArchiveUI.downloadReviewPng(report,'模拟复盘展示'),result);
+ const path=await (await dl).path(),bytes=await readFile(path);
+ assert.ok(bytes.length>20000,'exported PNG contains nonempty chart raster');
+ assert.deepEqual([...bytes.subarray(0,8)],[137,80,78,71,13,10,26,10],'PNG magic');
+});
