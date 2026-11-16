@@ -62,6 +62,32 @@ class OfficialAuditTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,"official source"):
                 audit.parse_official_csv(p,fixture())
 
+    def test_review_template_keeps_ids_and_never_pretends_values_are_official(self):
+        data=fixture()
+        with tempfile.TemporaryDirectory() as tmp:
+            path=Path(tmp)/"review.csv"
+            audit.write_official_template(data,path)
+            with path.open(encoding="utf-8-sig",newline="") as handle:
+                rows=list(csv.DictReader(handle))
+            self.assertEqual(len(rows),2)
+            self.assertEqual({r["candidate_id"] for r in rows},{c["id"] for c in data["candidates"]})
+            self.assertTrue(all(not r["number"] and not r["source_url"] and not r["party"] for r in rows))
+            self.assertEqual(rows[0]["local_ballot_reference"],"1")
+            rows[0].update(number="3",party="中国国民党",gender="男",eligible="yes",
+                source_url="https://web.cec.gov.tw/central/article/65212",source_date="2026-10-16")
+            for row in rows[1:]:
+                row.update(number="2",source_url="https://web.cec.gov.tw/central/article/65212",
+                    source_date="2026-10-16")
+            with path.open("w",encoding="utf-8",newline="") as handle:
+                w=csv.DictWriter(handle,fieldnames=rows[0].keys());w.writeheader();w.writerows(rows)
+            result=audit.parse_official_csv(path,data)
+            self.assertEqual(result["totals"]["difference"],1)
+            rows[0]["candidate_id"]="incorrect-id"
+            with path.open("w",encoding="utf-8",newline="") as handle:
+                w=csv.DictWriter(handle,fieldnames=rows[0].keys());w.writeheader();w.writerows(rows)
+            with self.assertRaisesRegex(ValueError,"candidate_id"):
+                audit.parse_official_csv(path,data)
+
     def test_publication_change_and_fetch_failure(self):
         registry={"sources":[{"id":"official","url":"https://web.cec.gov.tw/central"}]}
         old=audit.monitor(registry,fetcher=lambda _: '<a href="/foo">候選人公告甲</a><p>115年資格完成</p>')
