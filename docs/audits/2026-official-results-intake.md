@@ -28,3 +28,15 @@ python scripts/build_2026_official_results.py --results reviewed-cec-results-202
 --publish 会创建 assets/history-2026.json 和更新 assets/history-2026-availability.json，不修改 assets/election-2026.js 与任何用户本地预测。只有明确有正式数据后，历史结果页面才可启用2026年份。发布前状态清单始终为 awaiting_results。source status 由 --status provisional|certified 区分；正式认证须在中选会排定的12月4日以后。
 
 备注：这是针对中选会官方资料的**标准化导入器**，不是自动抓取未经核实的开票直播数据；原始PDF/Excel需要核对后转录为CSV，避免把不同层级或不同选区的票数混到一起。
+
+
+## Verified township turnout and pre-election forecast snapshots
+
+To include township/ward-level turnout for the 2026 county-mayor election, provide a source-backed CSV to the optional --town-turnout parameter. Fields: county,town,registered_voters,ballots_cast,valid_votes,invalid_votes,source_url,source_date. This is accepted only when each mayoral candidate's official town-level vote is also present via --town-votes and all numeric totals reconcile. Unavailable turnout data remains blank, never estimated from county totals.
+
+To prepare line-by-line candidate verification for the November 17 publication, run:
+python scripts/audit_2026_official.py --template 2026-official-review.csv
+
+The 2051-row template retains stable candidate IDs and local reference values. Official number, eligibility, party, gender, source URL and publication date are deliberately blank. The official audit is non-mutating.
+
+In the 2026 prediction workspace, users can manually archive their current forecast, export/import single or multiple JSON snapshots, and restore a snapshot to the editable forecast only after confirmation. Archived records are stored separately from editable map state. After actual 2026 results are officially released and pass source checksum/completeness checks, users can compare exact district winner sets, seat hit rate, party seat errors and vote-share/vote-count error, then export a JSON or PNG review. Missing districts are excluded from denominators. The archive timestamp comes from the user's device, not an independently trusted time authority.

@@ -285,3 +285,14 @@ SVG/PNG 导出图中的行政区索引与图例另置于地图右侧独立栏中
 - **正式结果导入器**：`scripts/build_2026_official_results.py`，可导出包含2051名候选人稳定ID的空白得票CSV；支持完整选区得票、乡镇市区得票细项、选区投票统计校验。先写入`reports/`暂存，只有全部447个选区、2051名候选人的官方资料齐全且投票日到来后，人工使用 `--publish` 才会生成 `assets/history-2026.json`；不修改网站已有的2026用户预测。
 - **历史数据的2026年份**：页面读取 `assets/history-2026-availability.json`，目前状态为`awaiting_results`，不显示虚构的2026官方得票。选后正式结果通过发布校验才显示2026选项；保留2022和立法机构历年数据。历史数据访问权限沿用现状。
 - 导入字段与操作：[2026正式结果导入说明](docs/audits/2026-official-results-intake.md)。
+
+
+### 2026 official candidate audit and forecast archive (November 16)
+
+The 2026 election workspace now provides independent forecast snapshots: optional labels and notes, local browser archiving, single/bundle JSON exports, importing without overwriting other archives, and confirmation before restoring an old forecast into the editable map. A saved snapshot is unaffected by subsequent map edits. Snapshot times use the device clock and are not third-party certified.
+
+After officially published and reconciled 2026 result files become available, the review calculates exact winning-list accuracy, correctly predicted seats, party-seat error, and mean absolute errors for reported vote counts and shares. It provides JSON/PNG reports; incomplete predictions and missing official town data are not extrapolated.
+
+The official CEC review workflow now generates a blank 2051-candidate CSV retaining candidate IDs for the November 17 official notices. Mayors' 81 names and the 1492 approved council candidate counts/10 exclusions reconcile to the October 16 CEC qualifications; full candidate number verification and township-head roster checks remain pending their respective official releases.
+
+The official result importer supports an optional --town-turnout CSV for county-mayor township/ward turnout, but requires complete source-backed candidate town votes and matching valid/invalid ballot totals before publishing those figures. See docs/audits/2026-official-results-intake.md.

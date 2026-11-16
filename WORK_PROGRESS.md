@@ -333,3 +333,11 @@ Latest source revision: 20261030-no-offline-v11.
 - 2026开票结果导入器已就绪：2051名候选人空白号次与票数模板、447个选区的席次/候选人对账、乡镇得票与总票对账、正式来源/日期校验、妇保异常警告、投票日前禁止发布、正式认证状态保护；生成的数据仅在--publish时写入历史数据文件。
 - 历史数据在manifest标注published且载入的2026数据结构完全有效时才会显示2026，当前仍为awaiting_results；2022与用户保存的预测不受影响。
 - 2026年11月17日议员、县市长正式名单公告之前，不能将10月16日资格审定和第三方号次视为已逐人核实。
+
+
+## 2026-11-16 forecast archiving and final election preparation
+
+- Created separate archive model/UI, local snapshot storage and JSON import/export; editable forecasts are preserved unless a user confirms restoring a snapshot. Source-gated official outcome comparisons will export JSON and PNG reports when results exist.
+- Added source-backed 2051-candidate blank official review CSV to CEC monitoring workflow. Qualification review remains distinct from November 17 candidate and ballot-number announcements.
+- Added verified mayoral ward/town turnout CSV ingestion with candidate-vote and ballot reconciliations. Unavailable local turnout is not inferred.
+- The 2026 historical result publication manifest remains awaiting_results; existing owner-only history permission and user predictions remain unchanged.
