@@ -24,6 +24,7 @@ jobs:
         run: |
           python -m unittest discover -s tests -p test_official_2026_audit.py
           python scripts/audit_2026_official.py --output reports/official-2026-candidate-local.json
+          python scripts/audit_2026_official.py --template reports/official-2026-review-template.csv
       - uses: actions/cache/restore@v4
         with:
           path: .cache/cec-official-monitor.json
@@ -76,4 +77,5 @@ jobs:
           path: |
             reports/official-2026-candidate-local.json
             reports/official-2026-candidate-monitor.json
+            reports/official-2026-review-template.csv
           if-no-files-found: ignore
