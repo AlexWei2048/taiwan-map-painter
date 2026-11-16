@@ -91,6 +91,25 @@ def candidate_index(data):
             by_name.setdefault(key, set()).add(c["id"])
     return by_id, by_name
 
+def write_official_template(data,path):
+    """All 2051 roster IDs retained; no claim of official verification in blank fields."""
+    districts={d["id"]:d for d in data["districts"]}
+    fieldnames=["candidate_id","type","county","districtId","name","number","party","gender","eligible","source_url","source_date",
+                "local_ballot_reference","local_party_reference","local_gender_reference","roster_as_of"]
+    output=Path(path);output.parent.mkdir(parents=True,exist_ok=True)
+    with output.open("w",encoding="utf-8-sig",newline="") as handle:
+        writer=csv.DictWriter(handle,fieldnames=fieldnames)
+        writer.writeheader()
+        for c in sorted(data["candidates"],key=lambda item:(item["type"],item["county"],item["districtId"],item["id"])):
+            writer.writerow({"candidate_id":c["id"],"type":c["type"],"county":c["county"],
+                "districtId":c["districtId"],"name":c.get("nameOriginal") or c.get("name") or "",
+                "number":"","party":"","gender":"","eligible":"","source_url":"","source_date":"",
+                "local_ballot_reference":c.get("number") or "",
+                "local_party_reference":c.get("party") or "",
+                "local_gender_reference":c.get("gender") or "",
+                "roster_as_of":data.get("asOf") or ""})
+    return output
+
 def parse_official_csv(path, data):
     """Expected fields: type,county,districtId,name,number,party,gender,eligible,source_url,source_date.
     Empty comparison fields mean not verified, never mean 0 or 'unknown'.
@@ -121,6 +140,11 @@ def parse_official_csv(path, data):
             raise ValueError("Repeated official candidate: "+repr(key))
         seen.add(key)
         matches = sorted(by_name.get(key, []))
+        # Candidate ID is an additional guard when a sheet was generated from our template.
+        # Never remap a user forecast merely because the official name was changed.
+        reference_id=(row.get("candidate_id") or "").strip()
+        if reference_id and (reference_id not in by_id or (matches and reference_id not in matches)):
+            raise ValueError("Line %d: candidate_id does not match official district/name; review manually" % lineno)
         record = {"official": {k:row.get(k,"").strip() for k in ("type","county","districtId","name","number","party","gender","eligible","source_url","source_date")}, "candidateId": matches[0] if len(matches)==1 else None}
         if len(matches)>1:
             record["status"]="ambiguous";record["differences"]=["Multiple local candidates have the same official identity"]
@@ -210,11 +234,15 @@ def fetch_html(url):
 def main(argv=None):
     p=argparse.ArgumentParser()
     p.add_argument("--roster",help="Reviewed official CSV path (never auto-applied)")
+    p.add_argument("--template",help="Export blank official-review CSV with candidate IDs")
     p.add_argument("--monitor",action="store_true")
     p.add_argument("--previous",help="Previous monitor JSON state; immutable baseline is not required")
     p.add_argument("--output",default="reports/official-2026-candidate-audit.json")
     args=p.parse_args(argv)
     data=load_directory()
+    if args.template:
+        print("Wrote blank official verification template:",write_official_template(data,args.template))
+        if not args.roster and not args.monitor:return 0
     report={"local":analyze_directory(data),"generatedAt":datetime.now(timezone.utc).isoformat()}
     if args.roster:
         report["rosterAudit"]=parse_official_csv(args.roster,data)
