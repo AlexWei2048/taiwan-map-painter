@@ -48,6 +48,21 @@ class ImportTests(unittest.TestCase):
   self.assertEqual(snap["contests"][0]["invalid_votes"],1)
   t[0]["valid_votes"]="24"
   self.assertTrue(any("candidate vote" in x for x in prepare(fixture(),raw,turnout_raw=t)[1]["issues"]))
+ def test_mayor_town_turnout_uses_only_full_official_town_votes(self):
+  raw=[source("a",15,"1"),source("b",10,"0")]
+  town=[dict(candidate_id=cid,county="台北市",town="中正区",votes=str(v),source_url=URL,source_date=DAY)
+      for cid,v in (("a",15),("b",10))]
+  profile=[dict(county="台北市",town="中正区",registered_voters="30",
+      ballots_cast="26",valid_votes="25",invalid_votes="1",source_url=URL,source_date=DAY)]
+  snap,audit=prepare(fixture(),raw,town_raw=town,town_turnout_raw=profile)
+  self.assertFalse(audit["issues"])
+  self.assertEqual(audit["verifiedMayorTownProfiles"],1)
+  self.assertEqual(snap["townProfiles"][0]["registered_voters"],30)
+  profile[0]["valid_votes"]="24"
+  self.assertTrue(any("valid votes" in x for x in prepare(fixture(),raw,town_raw=town,town_turnout_raw=profile)[1]["issues"]))
+  snap,audit=prepare(fixture(),raw,town_turnout_raw=profile)
+  self.assertTrue(any("not fully sourced" in x for x in audit["issues"]))
+
  def test_no_pre_election_or_non_official_sources(self):
   with self.assertRaisesRegex(ValueError,"predates"):official(dict(source_url=URL,source_date="2026-11-17"))
   with self.assertRaisesRegex(ValueError,"official"):official(dict(source_url="https://example.org",source_date=DAY))
