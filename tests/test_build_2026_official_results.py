@@ -59,6 +59,7 @@ class ImportTests(unittest.TestCase):
   self.assertEqual(audit["verifiedMayorTownProfiles"],1)
   self.assertEqual(snap["townProfiles"][0]["registered_voters"],30)
   profile[0]["valid_votes"]="24"
+  profile[0]["invalid_votes"]="2"  # turnout adds up, but differs from the 25 sourced candidate votes
   self.assertTrue(any("valid votes" in x for x in prepare(fixture(),raw,town_raw=town,town_turnout_raw=profile)[1]["issues"]))
   snap,audit=prepare(fixture(),raw,town_turnout_raw=profile)
   self.assertTrue(any("not fully sourced" in x for x in audit["issues"]))
