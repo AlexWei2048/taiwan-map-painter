@@ -1,0 +1,22 @@
+/* Separate 2026 prediction snapshots; do not affect SVG export or map canvas. */
+.forecast-archive{margin:16px 0;padding:16px;border:1px solid #d2dfd5;border-radius:14px;background:#f9fbf8;color:#244139}
+.forecast-archive h3{font-size:1.04rem;margin:0 0 5px;color:#244139}
+.forecast-archive p{margin:6px 0 12px;line-height:1.55}
+.forecast-archive label{display:block;font-size:.88rem;font-weight:600;margin:9px 0}
+.forecast-archive input,.forecast-archive textarea{width:100%;max-width:100%;box-sizing:border-box;margin-top:5px;font:inherit;color:#243d36;border:1px solid #9db1a3;border-radius:8px;padding:9px;background:#fff}
+.forecast-archive textarea{resize:vertical;min-height:58px}
+.forecast-archive-actions,.forecast-archive-main-actions{display:flex;flex-wrap:wrap;gap:7px}
+.forecast-archive-actions button,.forecast-archive-main-actions button,.forecast-review button{border:1px solid #b2c8b8;border-radius:8px;background:#fff;padding:8px 10px;color:#294a3a;cursor:pointer;line-height:1.25}
+.forecast-archive-main-actions .primary{background:#285e4d;color:white;border-color:#285e4d}
+.forecast-archive-actions button:disabled{opacity:.55;cursor:not-allowed}
+.forecast-archive-card{border-top:1px solid #dce7df;padding:12px 0}
+.forecast-archive-card strong,.forecast-archive-card small{display:block;overflow-wrap:anywhere}
+.forecast-archive-meta{color:#607a69;font-size:.77rem;margin:5px 0 10px}
+.forecast-archive-note{font-size:.83rem;white-space:pre-wrap;overflow-wrap:anywhere}
+#forecastArchiveTotal{display:block;margin:12px 0 3px;color:#526d5c;font-size:.85rem}
+#forecastArchiveStatus{margin:8px 0 12px;white-space:pre-wrap}
+.forecast-review{padding:12px;background:#eff6ef;margin-top:12px;border-radius:10px}
+.forecast-review h4{margin:0 0 9px}
+.forecast-review-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:6px}
+.forecast-review-stat{padding:6px 8px;border:1px solid #d1dfd2;border-radius:7px;background:#fff;font-size:.81rem}
+@media (max-width:620px){.forecast-archive{padding:12px}.forecast-archive-actions button{flex:1 1 42%}.forecast-review-grid{grid-template-columns:1fr}}
