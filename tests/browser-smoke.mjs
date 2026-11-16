@@ -2196,6 +2196,49 @@ test('Legislative redesign: one national map with county names, county drilldown
  await page.locator('#historyFocus').selectOption({index:1});
  assert.equal(await page.locator('#regions path[data-region]').count(),1,'focus a single district');
 });
+
+test('Historical regional districts at all-area scope stay nationwide and respect single/multiple seats',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('legislative');
+ await page.waitForFunction(()=>History2022View.office()==='legislative'&&History2022View.year()===2024&&History2022View.snapshot()?.year===2024);
+ await page.locator('#historyScale').selectOption('district');
+ const nationwide=await page.evaluate(()=>{
+  const features=History2022View.legislativeFeatures(),paths=new Map([...document.querySelectorAll('#regions path[data-region]')].map(p=>[p.dataset.region,p]));
+  const colored=features.filter(f=>{
+   const winner=History2022View.legislativeSeatRows(f)[0];
+   return winner&&paths.get(f.id)?.getAttribute('fill')===predictionParty(winner.party).color;
+  }).length;
+  return {county:document.querySelector('#historyCounty').value,scale:History2022View.legislativeScale(),
+   mapCount:currentItems().length,total:features.length,colored};
+ });
+ assert.equal(nationwide.county,'','selecting district level must not jump to Taipei');
+ assert.equal(nationwide.scale,'district');
+ assert.equal(nationwide.mapCount,nationwide.total,'map shows every regional constituency');
+ assert.equal(nationwide.total,73,'2024 has 73 regional districts');
+ assert.equal(nationwide.colored,73,'every district uses its own winner party color');
+ await page.locator('#historyCounty').selectOption('台北市');
+ await page.locator('#historyScale').selectOption('district');
+ await page.locator('#historyCounty').selectOption('');
+ assert.equal(await page.locator('#historyScale').inputValue(),'district','clearing county keeps district layer');
+ assert.equal(await page.locator('#regions path[data-region]').count(),73);
+ await page.locator('#historyYear').selectOption('2004');
+ await page.waitForFunction(()=>History2022View.year()===2004&&History2022View.snapshot()?.year===2004);
+ assert.equal(await page.locator('#historyCounty').inputValue(),'');
+ assert.equal(await page.locator('#historyScale').inputValue(),'district');
+ const old=await page.evaluate(()=>({districts:currentItems().length,expected:History2022View.legislativeFeatures().length,
+  badged:document.querySelectorAll('#labels [data-history-seat-district]').length,
+  partyLogos:document.querySelectorAll('#labels [data-historical-party-logo]').length}));
+ assert.equal(old.districts,old.expected,'old regional districts are all present on all-area map');
+ assert.ok(old.badged>0&&old.partyLogos>0,'old multi-member all-area district map shows elected emblems');
+});
+test('Removed forecast archive/review no longer loads UI or scripts',async t=>{
+ const page=await pageFor(t);
+ assert.equal(await page.locator('#forecastArchive').count(),0);
+ assert.equal(await page.evaluate(()=>typeof window.ForecastArchiveUI),'undefined');
+ assert.equal(await page.evaluate(()=>typeof window.ForecastArchiveCore),'undefined');
+});
+
 test('Legislative redraw: pre-2008 winners use emblems instead of colored party regions',async t=>{
  const page=await pageFor(t);
  await page.locator('#categoryHistory').click();
@@ -2839,82 +2882,3 @@ test('Published-only 2026 results can load in history, switch offices and return
 });
 
 
-test('2026 user prediction snapshots are separate from the editable project and survive editing',async t=>{
- const page=await pageFor(t,{width:1200,height:900});
- await page.locator('#county').selectOption('台北市');
- await selectMayor(page);
- const district=await page.evaluate(()=>candidateDatabase.districts.find(d=>d.type==='mayor'&&d.county==='台北市').id);
- const before=await page.evaluate(id=>JSON.stringify(state.predictions[id]),district);
- await page.locator('#forecastArchiveLabel').fill('11月27日模拟选前版本');
- await page.locator('#forecastArchiveNote').fill('浏览器测试快照');
- await page.locator('#forecastArchiveCreate').click();
- await page.waitForFunction(()=>document.getElementById('forecastArchiveList').querySelectorAll('.forecast-archive-card').length===1);
- const archive=await page.evaluate(()=>{
-  const all=JSON.parse(localStorage.getItem('island-palette-forecast-archives-v1'));
-  return {count:all.length,saved:all[0],project:JSON.parse(localStorage.getItem(KEY))};
- });
- assert.equal(archive.count,1);
- assert.equal(archive.saved.label,'11月27日模拟选前版本');
- assert.equal(archive.saved.note,'浏览器测试快照');
- assert.ok(JSON.stringify(archive.saved.predictions[district]).includes('winners'));
- assert.ok(archive.saved.predictions[district].winners.length===1);
- assert.equal(archive.saved.predictions[district].winners[0],JSON.parse(before).winners[0]);
- await page.locator('#editPrediction').click();
- await page.getByRole('radio',{name:'预测沈伯洋当选',exact:true}).check();
- await page.locator('#savePrediction').click();
- assert.notEqual(await page.evaluate(id=>JSON.stringify(state.predictions[id]),district),before);
- const after=await page.evaluate(id=>JSON.stringify(JSON.parse(localStorage.getItem('island-palette-forecast-archives-v1'))[0].predictions[id]),district);
- assert.equal(after,before);
- page.once('dialog',dialog=>dialog.accept());
- await page.locator('.forecast-archive-card').getByRole('button',{name:'恢复编辑'}).click();
- assert.equal(await page.evaluate(id=>JSON.stringify(state.predictions[id]),district),before);
- const dl=page.waitForEvent('download');
- await page.locator('.forecast-archive-card').getByRole('button',{name:'下载JSON'}).click();
- const file=await dl,body=JSON.parse(await readFile(await file.path(),'utf8'));
- assert.equal(body.kind,'island-palette-2026-forecast-archive');
- assert.equal(body.id,archive.saved.id);
- assert.equal(body.predictions[district].winners[0],JSON.parse(before).winners[0]);
-});
-test('2026 snapshot review is blocked before official results are published',async t=>{
- const page=await pageFor(t);
- await selectMayor(page);
- await page.locator('#forecastArchiveCreate').click();
- await page.locator('.forecast-archive-card').getByRole('button',{name:'与正式结果比较'}).click();
- await page.waitForFunction(()=>document.getElementById('forecastArchiveStatus').textContent.includes('正式得票结果尚未发布'));
- assert.equal(await page.locator('.forecast-review').count(),0);
-});
-
-
-test('Officially released prediction review exports a readable PNG summary (synthetic test-only data)',async t=>{
- const page=await pageFor(t);
- const result={archiveId:'snapshot-2026-visual-test',electionYear:2026,sourceStatus:'certified',
-  districtsEvaluated:10,districtsExact:6,districtAccuracy:60,winnerSeatAccuracy:80,
-  seatHits:12,seatsEvaluated:15,partySeatError:2,shareMAE:4.25,voteMAE:1250,
-  voteEstimatesCompared:18,shareEstimatesCompared:21};
- const dl=page.waitForEvent('download',{timeout:10000});
- await page.evaluate(report=>window.ForecastArchiveUI.downloadReviewPng(report,'模拟复盘展示'),result);
- const path=await (await dl).path(),bytes=await readFile(path);
- assert.ok(bytes.length>20000,'exported PNG contains nonempty chart raster');
- assert.deepEqual([...bytes.subarray(0,8)],[137,80,78,71,13,10,26,10],'PNG magic');
-});
-
-
-test('2026 forecast archive JSON import is explicit, preserves editable forecasts, and rejects duplicates',async t=>{
- const page=await pageFor(t);
- await selectMayor(page);
- await page.locator('#forecastArchiveCreate').click();
- const previous=await page.evaluate(()=>({
-  archive:JSON.parse(localStorage.getItem('island-palette-forecast-archives-v1'))[0],
-  state:JSON.stringify(state.predictions)
- }));
- page.once('dialog',d=>d.accept());
- await page.locator('.forecast-archive-card').getByRole('button',{name:'删除'}).click();
- assert.equal(await page.locator('.forecast-archive-card').count(),0);
- const contents=Buffer.from(JSON.stringify(previous.archive),'utf8');
- await page.locator('#forecastArchiveFile').setInputFiles({name:'2026forecast.json',mimeType:'application/json',buffer:contents});
- await page.waitForFunction(()=>document.querySelectorAll('.forecast-archive-card').length===1);
- assert.equal(await page.evaluate(()=>JSON.stringify(state.predictions)),previous.state);
- await page.locator('#forecastArchiveFile').setInputFiles({name:'2026forecast.json',mimeType:'application/json',buffer:contents});
- await page.waitForFunction(()=>document.getElementById('forecastArchiveStatus').textContent.includes('重复封存ID'));
- assert.equal(await page.locator('.forecast-archive-card').count(),1);
-});

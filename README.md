@@ -24,7 +24,7 @@
 * **数据核对与来源**：独立政党票与席次分配核对中选会历届选举数据；原始名单优先参照中选会历届登记公告及当选公告，2012年参照当届政府公报，1992—1998年当选名单交叉核实历史选举资料。可追查[2024年中选会完整提名公告](https://2024.cec.gov.tw/data/file/2fb887c81a7a4b3a888e4d3befe9259d.pdf)、[2016年中选会提名公告](https://web.cec.gov.tw/api/file/26f914ad-93b3-4c8e-9844-546ea286c970.pdf)、[历届选举资料库](https://db.cec.gov.tw/ElecTable)。早期资料缺失会在页面标示，不依计算配额虚构人名或当选顺序。
 
 
-历史工作台收录1992、1995、1998、2001、2004、2008、2012、2016、2020及2024十届定期选举。区域民代的“地图层级”只保留**县市／选举区**；“全部地区（含金门、马祖）”属于“地图范围”首项，可以显示全台县市地图：全部地区图只标县市名称，不堆叠选区编号；**2004年及以前的多席选区在全部地区地图上不绘制党徽**，仅在点入具体县市后，按议员地图的做法在各选区上逐席显示当选党徽，再可聚焦单一选区查看候选人、当选人和党派席次。2008年起的单席选区按官方当选政党填色。**平地少数民族、山地少数民族和不分区政党票**在有地域数据的年份按全部地区／县市／乡镇市区展示，地图与表格分别呈现当地领先候选人、政党票数、得票率及原选举法定当选标记。该选项已统一改名为“**不分区民代**”：1992—2004年按各党推荐区域及少数民族候选人得票汇总计算，不存在单独的政党票；2008年起使用独立政党票。页面按年份自动切换制度，显示参选政党、5%门槛、得票数与得票率、法定席次分配、席次比例图和各党展开式原始当选名单，并提供详细计算规则。
+历史工作台收录1992、1995、1998、2001、2004、2008、2012、2016、2020及2024十届定期选举。区域民代的“地图层级”只保留**县市／选举区**；“全部地区（含金门、马祖）”属于“地图范围”首项，可以显示全台县市地图：全部地区的县市总览仅标县市名称；切换到选举区层级时仍显示全部地区的各个区域选区；**2004年及以前的多席选区在“县市”层级显示各县市的席次领先政党；切换为“选举区”层级时（包括全部地区），在每个区域选区上逐席显示当选党徽**。点入县市后可放大查看选区党徽，亦可聚焦单一选区查看候选人、当选人和党派席次。2008年起的单席选区按官方当选政党填色。**平地少数民族、山地少数民族和不分区政党票**在有地域数据的年份按全部地区／县市／乡镇市区展示，地图与表格分别呈现当地领先候选人、政党票数、得票率及原选举法定当选标记。该选项已统一改名为“**不分区民代**”：1992—2004年按各党推荐区域及少数民族候选人得票汇总计算，不存在单独的政党票；2008年起使用独立政党票。页面按年份自动切换制度，显示参选政党、5%门槛、得票数与得票率、法定席次分配、席次比例图和各党展开式原始当选名单，并提供详细计算规则。
 
 不分区政党票、平地少数民族及山地少数民族候选人票在来源具备明细时可按全部地区（含金门、马祖）、县市及乡镇市区查看。1992年政治大学选举研究数据库仅提供选区层候选人结果，因此该届区域民代的席次与候选人票按真实选区展示，平地及山地少数民族仅可显示全区结果，**县市地图仅保留中性行政区背景，不推算地方得票**；不分区民代的旧制计算票可由现有候选人票汇总至县市，但不推算乡镇市区票数。1995年以后数据由中选会开放资料的Taiwan Votes核对CSV构建；每个年度单独生成快照，来源文件、行数和SHA-256记录在 `sources/history-legislative-manifest.json`。
 
@@ -296,3 +296,5 @@ After officially published and reconciled 2026 result files become available, th
 The official CEC review workflow now generates a blank 2051-candidate CSV retaining candidate IDs for the November 17 official notices. Mayors' 81 names and the 1492 approved council candidate counts/10 exclusions reconcile to the October 16 CEC qualifications; full candidate number verification and township-head roster checks remain pending their respective official releases.
 
 The official result importer supports an optional --town-turnout CSV for county-mayor township/ward turnout, but requires complete source-backed candidate town votes and matching valid/invalid ballot totals before publishing those figures. See docs/audits/2026-official-results-intake.md.
+
+2026-11-16：移除“预测封存与选后复盘”入口及对应实现与测试，不影响现有2026预测保存、导入、导出流程。修复立法机构民代历史地图在“选举区＋全部地区”时自动跳至台北市的问题；2008—2024年全部地区逐单席选区填色，1992—2004年全部地区逐多席选区展示当选党徽，保留原县市总览样式。

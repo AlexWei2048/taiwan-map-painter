@@ -1514,7 +1514,7 @@ function historicalLegislativeMultiBadges(){
 // Historical multi-member district seat markers use precisely the same
 // geometry-aware, per-seat drawing engine as county council seat maps.
 function appendHistoricalLegislativeBadges(layer,transform,nationwide,interactive=false){
- if(!historicalLegislativeMultiBadges()||nationwide)return;
+ if(!historicalLegislativeMultiBadges()||(nationwide&&History2022View.legislativeScale?.()!=='district'))return;
  if(typeof drawHistoricalLegislativeSeats==='function')
   drawHistoricalLegislativeSeats(layer,transform,interactive);
 }
@@ -1535,9 +1535,9 @@ function drawHistoricalLegislativeRegionalLabels(group,interactive=false){
    group.replaceChildren();
   }
  }else group.replaceChildren();
- // On the all-area map show county names only. Multi-member seat emblems
- // belong to the district map after the user opens a specific county.
- if(!nationwide)appendHistoricalLegislativeBadges(group,transform,false,interactive);
+ // In all-area county view, county labels suffice. In all-area district view,
+  // render each old multi-member constituency with its elected-seat emblems.
+ appendHistoricalLegislativeBadges(group,transform,nationwide,interactive);
 }
 function renderLabels(){
  clearTimeout(navigationLabelTimer);navigationLabelTimer=0;
