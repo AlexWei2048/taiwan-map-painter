@@ -81,7 +81,7 @@ class OfficialAuditTests(unittest.TestCase):
             with path.open("w",encoding="utf-8",newline="") as handle:
                 w=csv.DictWriter(handle,fieldnames=rows[0].keys());w.writeheader();w.writerows(rows)
             result=audit.parse_official_csv(path,data)
-            self.assertEqual(result["totals"]["difference"],1)
+            self.assertEqual(result["totals"]["difference"],2)  # official 2 vs local 待补 also differs
             rows[0]["candidate_id"]="incorrect-id"
             with path.open("w",encoding="utf-8",newline="") as handle:
                 w=csv.DictWriter(handle,fieldnames=rows[0].keys());w.writeheader();w.writerows(rows)
