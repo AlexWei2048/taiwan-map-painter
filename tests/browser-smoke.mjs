@@ -2788,7 +2788,8 @@ test('Published-only 2026 results can load in history, switch offices and return
    source_name:'TEST FIXTURE ONLY',boundary_version:'2026'
   }));
   const contests=ds.map(d=>({
-   contest_id:d.id,election_id:'2026-'+d.type,county_name:d.county,district_name:d.name,
+   contest_id:d.id,election_id:'2026-'+d.type,county_id:d.county,county_name:d.county,
+   district_name:d.type==='township'?d.name.replace(d.county,''):d.name,
    electorate:HistoryCore.identity(d.electorate),seats:d.seats||1,reserved_seats:d.womenReserved||0,
    registered_voters:null,ballots_cast:null,valid_votes:250000,invalid_votes:null
   }));
@@ -2821,6 +2822,17 @@ test('Published-only 2026 results can load in history, switch offices and return
  assert.equal(await page.locator('#historyYear').inputValue(),'2026');
  await page.locator('#historyOffice').selectOption('council');
  assert.equal(await page.locator('#historyYear').inputValue(),'2026');
+ await page.locator('#historyCounty').selectOption('台北市');
+ await page.waitForFunction(()=>HistoryWorkspace?.result()?.contests?.length>0);
+ const filtered=await page.evaluate(()=>({
+  year:HistoryWorkspace.result().index.snapshot.year,
+  counties:[...new Set(HistoryWorkspace.result().contests.map(x=>x.county_name))],
+  rows:HistoryWorkspace.result().candidacies.length,
+  mapRegions:document.querySelectorAll('#regions path[data-region]').length
+ }));
+ assert.equal(filtered.year,2026);
+ assert.deepEqual(filtered.counties,['台北市']);
+ assert.ok(filtered.rows>0&&filtered.mapRegions>0,'Published 2026 council results display on scoped map');
  await page.locator('#historyYear').selectOption('2022');
  await page.waitForFunction(()=>History2022View.year()===2022&&History2022View.snapshot()?.year===2022);
  assert.deepEqual(errors,[],'Switching historic snapshots raises no JS exceptions');
