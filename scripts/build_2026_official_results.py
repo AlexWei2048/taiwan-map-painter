@@ -166,9 +166,9 @@ def prepare(directory,raw,town_raw=(),turnout_raw=(),status="provisional"):
         votes=sum(r["votes"] for _,r in members)
         info=turnout.get(did,{})
         contests.append({
-            "contest_id":did,"election_id":"2026-"+kind,"county_id":str(d.get("countyId") or ""),
+            "contest_id":did,"election_id":"2026-"+kind,"county_id":str(d.get("countyId") or ("2026-county-"+hashlib.sha256(county.encode("utf-8")).hexdigest()[:12])),
             "county_name":county,"county_name_official":county,"district_id":did,
-            "district_name":name,"district_name_official":name,
+            "district_name":shorttown if kind=="township" else name,"district_name_official":name,
             "scope_names":[d["scope"]] if d.get("scope") else [],
             "seats":int(d.get("seats") or 1),"reserved_seats":int(d.get("womenReserved") or 0),
             "electorate":{"plainsIndigenous":"plains","mountainIndigenous":"mountain"}.get(d.get("electorate"),d.get("electorate") or "regional"),
@@ -188,9 +188,9 @@ def prepare(directory,raw,town_raw=(),turnout_raw=(),status="provisional"):
             base={"type":kind,"electorate":contests[-1]["electorate"],"county":county,"district":name if kind=="council" else "",
                 "number":str(r["number"]),"name":nameCandidate,"party":party,"gender":c.get("gender") or "",
                 "votes":r["votes"],"elected":r["elected"] is True,"incumbent":c.get("incumbent")}
-            rows.append({**base,"level":level,"town":shorttown if kind=="township" else ""})
+            rows.append({**base,"level":level,"town":shorttown if kind=="township" else "","candidateId":cid})
             for item in towns.get(cid,[]):
-                rows.append({**base,"level":"town","town":item["town"],"votes":item["votes"]})
+                rows.append({**base,"level":"town","town":item["town"],"votes":item["votes"],"candidateId":cid})
     digest=hashlib.sha256(json.dumps([(x,observed[x]["number"],observed[x]["votes"],observed[x]["elected"]) for x in sorted(observed)],ensure_ascii=False).encode()).hexdigest()
     snapshot={"schemaVersion":2,"year":2026,"office":"local","publicationStatus":status,"completeness":"full" if complete else "partial",
       "elections":elections,"contests":contests,"candidacies":candidacies,"rows":rows,
