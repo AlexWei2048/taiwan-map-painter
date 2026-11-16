@@ -2897,3 +2897,24 @@ test('Officially released prediction review exports a readable PNG summary (synt
  assert.ok(bytes.length>20000,'exported PNG contains nonempty chart raster');
  assert.deepEqual([...bytes.subarray(0,8)],[137,80,78,71,13,10,26,10],'PNG magic');
 });
+
+
+test('2026 forecast archive JSON import is explicit, preserves editable forecasts, and rejects duplicates',async t=>{
+ const page=await pageFor(t);
+ await selectMayor(page);
+ await page.locator('#forecastArchiveCreate').click();
+ const previous=await page.evaluate(()=>({
+  archive:JSON.parse(localStorage.getItem('island-palette-forecast-archives-v1'))[0],
+  state:JSON.stringify(state.predictions)
+ }));
+ page.once('dialog',d=>d.accept());
+ await page.locator('.forecast-archive-card').getByRole('button',{name:'删除'}).click();
+ assert.equal(await page.locator('.forecast-archive-card').count(),0);
+ const contents=Buffer.from(JSON.stringify(previous.archive),'utf8');
+ await page.locator('#forecastArchiveFile').setInputFiles({name:'2026forecast.json',mimeType:'application/json',buffer:contents});
+ await page.waitForFunction(()=>document.querySelectorAll('.forecast-archive-card').length===1);
+ assert.equal(await page.evaluate(()=>JSON.stringify(state.predictions)),previous.state);
+ await page.locator('#forecastArchiveFile').setInputFiles({name:'2026forecast.json',mimeType:'application/json',buffer:contents});
+ await page.waitForFunction(()=>document.getElementById('forecastArchiveStatus').textContent.includes('重复封存ID'));
+ assert.equal(await page.locator('.forecast-archive-card').count(),1);
+});
