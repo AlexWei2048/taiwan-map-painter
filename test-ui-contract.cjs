@@ -1203,7 +1203,7 @@ test('Council map export scope appears only for council election category',()=>{
 
 test('historical legislative export titles never show an undefined office',()=>{assert.match(app,/president:'台湾地区领导人',legislative:'立法机构民代'/);});
 
-test('historical legislative overlays use period-specific district and county boundaries',()=>{assert.match(app,/historic-legislative:/);assert.match(app,/\['president','legislative'\]\.includes\(historicOffice\)/);const history=fs.readFileSync('history-2022.js','utf8');assert.match(history,/legislativeFeatures:\(\)=>legislativeMode\?legislativeGeometry:\[\]/);});
+test('historical legislative overlays use period-specific district and county boundaries',()=>{assert.match(app,/historic-legislative:/);assert.match(app,/historicOffice\?History2022View\.historicTownFeatures\(\)/);const history=fs.readFileSync('history-2022.js','utf8');assert.match(history,/legislativeFeatures:\(\)=>legislativeMode\?legislativeGeometry:\[\]/);});
 
 
 test('Historical vote-map browser modules are syntactically valid before deployment',()=>{

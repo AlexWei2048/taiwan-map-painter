@@ -57,7 +57,7 @@ const paletteById=id=>state.palette.find(p=>p.id===id);
 function allLayerItems(level=state.level){return [...(data[level]||[]),...(['council','legislative'].includes(level)?data[level+'Indigenous']||[]:[])]}
 function activeElectorate(){if(regionalLegislativeOnly())return 'regional';return state.electorate?.[state.level]||'regional'}
 const ELECTORATE_ORDER=['regional','plains','mountain'],LEGISLATIVE_FREE_ORDER=['regional','party','plains','mountain'];
-const electorateName=id=>({regional:'区域',party:'不分区政党',plains:'平地少数民族',mountain:'山地少数民族'})[id]||id;
+const electorateName=id=>({regional:'区域',party:'不分区政党',plains:'平地少数民族',mountain:'山地少数民族',indigenous:'少数民族'})[id]||id;
 const featureElectorate=f=>f.electorate||'regional';
 let exportPanelFilter='';
 function regionalLegislativeOnly(){return state.workspaceMode==='free'&&state.level==='legislative'}
@@ -175,7 +175,7 @@ function seatTieLeaderColors(counts,colorOf){
 function bounds(items){return [Math.min(...items.map(x=>x.box[0])),Math.min(...items.map(x=>x.box[1])),Math.max(...items.map(x=>x.box[2])),Math.max(...items.map(x=>x.box[3]))]}
 const isNationwide=()=>!state.county&&!mayorTownBoundaryOverlay()&&['towns','council','legislative'].includes(state.level)&&state.labels;
 function councilVisibleIdentity(){return exportPanelFilter||(state.level==='council'&&state.workspaceMode==='prediction'&&state.fillMode==='prediction'?state.councilViewScope:'all')}
-function panelIdentities(){if(typeof History2022View!=='undefined'&&History2022View.active()&&History2022View.kind()==='council')return ELECTORATE_ORDER.filter(id=>(!exportPanelFilter||exportPanelFilter===id)&&currentItems().some(f=>featureElectorate(f)===id));const order=legislativeFourPanelsActive()?LEGISLATIVE_FREE_ORDER:ELECTORATE_ORDER,selected=state.level==='council'?councilVisibleIdentity():'all';return selected&&selected!=='all'?[selected]:order}
+function panelIdentities(){if(typeof History2022View!=='undefined'&&History2022View.active()&&History2022View.kind()==='council')return [...ELECTORATE_ORDER,'indigenous'].filter(id=>(!exportPanelFilter||exportPanelFilter===id)&&currentItems().some(f=>featureElectorate(f)===id));const order=legislativeFourPanelsActive()?LEGISLATIVE_FREE_ORDER:ELECTORATE_ORDER,selected=state.level==='council'?councilVisibleIdentity():'all';return selected&&selected!=='all'?[selected]:order}
 function furnitureFooterHeight(){return Math.max(126,state.legend.show?legendMetrics(legendReserveEntries()).height+48:0)}
 function sceneSpec(){const panels=identityPanelsActive()?panelIdentities().length:0,base=panels===1?(state.county?{width:1200,height:900,pad:140,font:15}:{width:1800,height:2400,pad:250,font:10}):panels===4?(state.county?{width:2800,height:1500,pad:130,font:26}:{width:3200,height:2300,pad:180,font:28}):identityPanelsActive()?(state.county?{width:2400,height:1050,pad:120,font:26}:{width:3000,height:2100,pad:180,font:28}):isNationwide()?{width:1800,height:2400,pad:250,font:10}:{width:1200,height:900,pad:140,font:15};const n=data&&state.level==='villages'?currentItems().length:0;const townCount=directTownNameLabels()&&data?.towns?data.towns.reduce((count,f)=>count+(f.county===state.county),0):0;const calloutRoom=townCount>=35?180:townCount>=27?125:directTownNameLabels()?60:0;const mapHeight=Math.max(base.height+calloutRoom,n&&n<=120?n*8+220:0);return{...base,height:mapHeight+furnitureFooterHeight()}}
 function mapKeyRailWidth(spec){
@@ -1650,7 +1650,7 @@ function sharedMapBorders(level,identity='regional',includeCoast=false){
   sharedBorderCache.set(key,{source:features,mesh});
   return mesh;
  }
- const historicTowns=['president','legislative'].includes(historicOffice)?History2022View.historicTownFeatures():null;
+ const historicTowns=historicOffice?History2022View.historicTownFeatures():null;
  if(historicTowns&&level==='towns'){
   // Historical township boundaries are drawn from complete township outlines.
   // Arc matching across independently serialized polygons can omit segments.
@@ -1671,7 +1671,7 @@ function sharedMapBorders(level,identity='regional',includeCoast=false){
   sharedBorderCache.set(key,{source:historicTowns,mesh});
   return mesh;
  }
- if(level==='council'&&typeof History2022View!=='undefined'&&History2022View.active()&&History2022View.kind()==='council'){const features=History2022View.features(),key='2022:'+identity+':'+includeCoast,prior=sharedBorderCache.get(key);if(prior?.source===features)return prior.mesh;const mesh=sharedBoundaryGeometry(features.filter(f=>featureElectorate(f)===identity),includeCoast);sharedBorderCache.set(key,{source:features,mesh});return mesh}
+ if(level==='council'&&typeof History2022View!=='undefined'&&History2022View.active()&&History2022View.kind()==='council'){const features=History2022View.features(),key=History2022View.year()+':'+identity+':'+includeCoast,prior=sharedBorderCache.get(key);if(prior?.source===features)return prior.mesh;const mesh=sharedBoundaryGeometry(features.filter(f=>featureElectorate(f)===identity),includeCoast);sharedBorderCache.set(key,{source:features,mesh});return mesh}
  const regional=data[level]||[],indigenous=['council','legislative'].includes(level)?data[level+'Indigenous']||EMPTY_SHARED_BORDER_FEATURES:null;
  const key=level+':'+identity+':'+(includeCoast?'complete':'internal'),prior=sharedBorderCache.get(key);
  if(prior&&prior.regional===regional&&prior.indigenous===indigenous)return prior.mesh;

@@ -18,7 +18,7 @@
   return String(digit[v]||'');
  }
  const COUNTY_ORDER=['台北市','新北市','台北县','桃园市','桃园县','台中市','台中县','台南市','台南县','高雄市','高雄县','新竹县','苗栗县','彰化县','南投县','云林县','嘉义县','屏东县','宜兰县','花莲县','台东县','澎湖县','基隆市','新竹市','嘉义市','金门县','连江县'];
- const ELECTORATE_ORDER=['regional','plains','mountain'];
+ const ELECTORATE_ORDER=['regional','plains','mountain','indigenous'];
  const naturalCompare=(a,b)=>String(a||'').localeCompare(String(b||''),'zh',{numeric:true});
  function compareResultRows(a,b,office='council'){
   const county=row=>String(row.county??row.county_name??'');

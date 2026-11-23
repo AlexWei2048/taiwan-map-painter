@@ -1,0 +1,4664 @@
+{
+  "cec": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+  "cecArchiveSha256": "84740535b1f4a9a8fec8ebfe8f7577889837b7639cd7f5e40ef8826c6ab2f69a",
+  "nccu": "https://vote.nccu.edu.tw/cec/cechead.asp",
+  "nccu1993Summary": "https://vote.nccu.edu.tw/cec/F1993005.PDF",
+  "taiwanVotes": "https://www.taiwanvotes.tw/download/",
+  "years": {
+    "1994": {
+      "counts": {
+        "tv_matched": 283,
+        "nccu_matched": 283,
+        "three_source_agreement": 273,
+        "candidates": 283
+      },
+      "differences": [
+        {
+          "contest": "1994-council:台北市:regional:第5选举区",
+          "number": "2",
+          "candidate": "劉美華",
+          "adopted": {
+            "votes": 172,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "1994-council:台北市:regional:第6选举区",
+          "number": "6",
+          "candidate": "林慶隆",
+          "adopted": {
+            "votes": 14523,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "1994-council:台北市:regional:第6选举区",
+          "number": "10",
+          "candidate": "楊祖哗",
+          "adopted": {
+            "votes": 7857,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "楊祖珺"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "1994-council:高雄市:regional:第2选举区",
+          "number": "24",
+          "candidate": "周鍾",
+          "adopted": {
+            "votes": 10266,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "tv": {
+              "name": "周鍾𦰡"
+            },
+            "nccu": {
+              "name": "周鍾㴴"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "1994-council:高雄市:indigenous:原住民选区",
+          "number": "1",
+          "candidate": "高玉生",
+          "adopted": {
+            "votes": 481,
+            "party": "無",
+            "mark": "*"
+          },
+          "sources": {
+            "tv": {
+              "elected": false
+            },
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "1994-council:高雄市:indigenous:原住民选区",
+          "number": "2",
+          "candidate": "吳明生",
+          "adopted": {
+            "votes": 286,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "party": "中國國民黨"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "1994-council:高雄市:indigenous:原住民选区",
+          "number": "3",
+          "candidate": "潘阿木",
+          "adopted": {
+            "votes": 304,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "party": "中國國民黨"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "1994-council:高雄市:indigenous:原住民选区",
+          "number": "4",
+          "candidate": "張金水",
+          "adopted": {
+            "votes": 262,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "party": "中國國民黨"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "1994-council:高雄市:indigenous:原住民选区",
+          "number": "5",
+          "candidate": "吳福祥",
+          "adopted": {
+            "votes": 252,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "tv": {
+              "elected": true
+            },
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "1994-council:高雄市:indigenous:原住民选区",
+          "number": "6",
+          "candidate": "張美惠",
+          "adopted": {
+            "votes": 120,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "party": "中國國民黨"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        }
+      ],
+      "sourceFolders": [
+        "1994直轄市議員/區域",
+        "1994直轄市議員/原住民",
+        "1994直轄市長"
+      ]
+    },
+    "1997": {
+      "counts": {
+        "tv_matched": 80,
+        "nccu_matched": 80,
+        "three_source_agreement": 80,
+        "candidates": 80
+      },
+      "differences": [],
+      "sourceFolders": [
+        "1997縣市長"
+      ]
+    },
+    "1998": {
+      "counts": {
+        "tv_matched": 2993,
+        "nccu_matched": 2995,
+        "three_source_agreement": 2946,
+        "candidates": 3001,
+        "tv_unmatched": 8,
+        "nccu_unmatched": 6
+      },
+      "differences": [
+        {
+          "contest": "1998-council:台北市:regional:第6选举区",
+          "number": "19",
+          "candidate": "李慶鋒",
+          "adopted": {
+            "votes": 10950,
+            "party": "民主進步黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "李慶峰"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "1998-council:高雄市:regional:第1选举区",
+          "number": "10",
+          "candidate": "陳建達",
+          "adopted": {
+            "votes": 1145,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "陳建違"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "1998-mayor:台北市:regional:台北市",
+          "number": "3",
+          "candidate": "王建煊",
+          "adopted": {
+            "votes": 44452,
+            "party": "新黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "王建火宣"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "1998-council:台北县:regional:第1选举区",
+          "number": "19",
+          "candidate": "王溪鬪",
+          "adopted": {
+            "votes": 5505,
+            "party": "民主進步黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "王溪鬥"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "1998-council:台北县:regional:第6选举区",
+          "number": "10",
+          "candidate": "徐陳麗華",
+          "adopted": {
+            "votes": 6052,
+            "party": "中國國民黨",
+            "mark": "!"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "1998-council:宜兰县:regional:第10选举区",
+          "number": "5",
+          "candidate": "林正標",
+          "adopted": {
+            "votes": 4269,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "elected": false
+            },
+            "cec_constituency_archive": {
+              "mark": "*"
+            },
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "https://web.cec.gov.tw/api/file/3917cc1e-42bc-46e3-aec6-2c9c20b9246d.pdf"
+        },
+        {
+          "contest": "1998-council:宜兰县:regional:第10选举区",
+          "number": "6",
+          "candidate": "陳正男",
+          "adopted": {
+            "votes": 4250,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "elected": true
+            },
+            "cec_constituency_archive": {
+              "mark": ""
+            },
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "https://web.cec.gov.tw/api/file/3917cc1e-42bc-46e3-aec6-2c9c20b9246d.pdf"
+        },
+        {
+          "contest": "1998-council:桃园县:regional:第1选举区",
+          "number": "19",
+          "candidate": "黃享欽",
+          "adopted": {
+            "votes": 3711,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "黃響欽"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "1998-council:桃园县:regional:第7选举区",
+          "number": "2",
+          "candidate": "呂明美",
+          "adopted": {
+            "votes": 3912,
+            "party": "中國國民黨",
+            "mark": "!"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "1998-council:桃园县:regional:第8选举区",
+          "number": "2",
+          "candidate": "舒翠玲",
+          "adopted": {
+            "votes": 3743,
+            "party": "新黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "party": "民主進步黨"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "1998-council:新竹县:regional:第1选举区",
+          "number": "3",
+          "candidate": "劉家照",
+          "adopted": {
+            "votes": 2789,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "elected": true
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "1998-council:新竹县:regional:第1选举区",
+          "number": "11",
+          "candidate": "黃永和",
+          "adopted": {
+            "votes": 2820,
+            "party": "無",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "elected": false
+            },
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "1998-council:苗栗县:regional:第3选举区",
+          "number": "4",
+          "candidate": "周玉滿",
+          "adopted": {
+            "votes": 3238,
+            "party": "民主進步黨",
+            "mark": "!"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "1998-council:彰化县:regional:第6选举区",
+          "number": "2",
+          "candidate": "游月娥",
+          "adopted": {
+            "votes": 3595,
+            "party": "中國國民黨",
+            "mark": "!"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "1998-council:彰化县:regional:第7选举区",
+          "number": "7",
+          "candidate": "林雪屏",
+          "adopted": {
+            "votes": 4861,
+            "party": "無",
+            "mark": "!"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "1998-council:南投县:regional:第1选举区",
+          "number": "14",
+          "candidate": "宋懷琳",
+          "adopted": {
+            "votes": 3587,
+            "party": "中國國民黨",
+            "mark": "!"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "1998-council:云林县:regional:第2选举区",
+          "number": "10",
+          "candidate": "林慧如",
+          "adopted": {
+            "votes": 5075,
+            "party": "無",
+            "mark": "!"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "1998-council:云林县:regional:第6选举区",
+          "number": "14",
+          "candidate": "王春環",
+          "adopted": {
+            "votes": 3426,
+            "party": "中國國民黨",
+            "mark": "!"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "1998-council:台南县:regional:第4选举区",
+          "number": "2",
+          "candidate": "蔡秋蘭",
+          "adopted": {
+            "votes": 4715,
+            "party": "無",
+            "mark": "!"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "1998-council:高雄县:regional:第2选举区",
+          "number": "1",
+          "candidate": "康裕成",
+          "adopted": {
+            "votes": 5126,
+            "party": "民主進步黨",
+            "mark": "!"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "1998-council:高雄县:regional:第3选举区",
+          "number": "16",
+          "candidate": "蔡簡美雪",
+          "adopted": {
+            "votes": 4483,
+            "party": "無",
+            "mark": "!"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "1998-council:高雄县:regional:第4选举区",
+          "number": "6",
+          "candidate": "陸淑美",
+          "adopted": {
+            "votes": 4831,
+            "party": "中國國民黨",
+            "mark": "!"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "1998-council:高雄县:regional:第6选举区",
+          "number": "2",
+          "candidate": "葉香",
+          "adopted": {
+            "votes": 7230,
+            "party": "民主進步黨",
+            "mark": "!"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "1998-council:台中市:regional:第4选举区",
+          "number": "1",
+          "candidate": "黃馨慧",
+          "adopted": {
+            "votes": 2786,
+            "party": "中國國民黨",
+            "mark": "!"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "1998-council:台中市:regional:第5选举区",
+          "number": "4",
+          "candidate": "黃淑芬",
+          "adopted": {
+            "votes": 3282,
+            "party": "中國國民黨",
+            "mark": "!"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "1998-council:嘉义市:regional:第2选举区",
+          "number": "8",
+          "candidate": "陳幸枝",
+          "adopted": {
+            "votes": 2478,
+            "party": "民主進步黨",
+            "mark": "!"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "1998-council:台南市:regional:第1选举区",
+          "number": "20",
+          "candidate": "王家貞",
+          "adopted": {
+            "votes": 2468,
+            "party": "無",
+            "mark": "!"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "1998-council:台南市:regional:第4选举区",
+          "number": "4",
+          "candidate": "陳亭妃",
+          "adopted": {
+            "votes": 2590,
+            "party": "無",
+            "mark": "!"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "1998-council:金门县:regional:第1选举区",
+          "number": "8",
+          "candidate": "許玉昭",
+          "adopted": {
+            "votes": 606,
+            "party": "中國國民黨",
+            "mark": "!"
+          },
+          "sources": {
+            "nccu": {
+              "elected": false
+            },
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "1998-council:金门县:regional:第1选举区",
+          "number": "11",
+          "candidate": "張光海",
+          "adopted": {
+            "votes": 1174,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "張兆海"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "1998-council:金门县:regional:第1选举区",
+          "number": "25",
+          "candidate": "賴育茜",
+          "adopted": {
+            "votes": 520,
+            "party": "中國國民黨",
+            "mark": "!"
+          },
+          "sources": {
+            "nccu": {
+              "elected": false
+            },
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "1998-council:金门县:regional:第1选举区",
+          "number": "26",
+          "candidate": "歐陽彥木",
+          "adopted": {
+            "votes": 861,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "elected": true
+            },
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "1998-council:金门县:regional:第1选举区",
+          "number": "38",
+          "candidate": "陳膺天",
+          "adopted": {
+            "votes": 125,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "elected": true
+            },
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "1998-council:连江县:regional:第1选举区",
+          "number": "2",
+          "candidate": "李金梅",
+          "adopted": {
+            "votes": 242,
+            "party": "中國國民黨",
+            "mark": "!"
+          },
+          "sources": {
+            "nccu": {
+              "elected": false
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "1998-council:连江县:regional:第1选举区",
+          "number": "5",
+          "candidate": "曹以標",
+          "adopted": {
+            "votes": 278,
+            "party": "新黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "elected": true
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "1998-council:高雄县:mountain:第11选举区",
+          "number": "1",
+          "candidate": "巴槳.樂莎.梅子",
+          "adopted": {
+            "votes": 637,
+            "party": "民主進步黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "巴樂莎梅子"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "1998-council:苗栗县:plains:第7选举区",
+          "number": "1",
+          "candidate": "打赫史.達印.改擺刨",
+          "adopted": {
+            "votes": 436,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "打赫史.達"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "1998-township:苗栗县:regional:苑里镇",
+          "number": "3",
+          "candidate": "張鉦雧",
+          "adopted": {
+            "votes": 8612,
+            "party": "無",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "張鉦集"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "1998-township:台中县:regional:大雅乡",
+          "number": "3",
+          "candidate": "張豐奇",
+          "adopted": {
+            "votes": 11542,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "張豊奇"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "1998-township:台中县:regional:雾峰乡",
+          "number": "1",
+          "candidate": "葉國焴",
+          "adopted": {
+            "votes": 16807,
+            "party": "無",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "葉國育"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "1998-township:台南县:regional:西港乡",
+          "number": "2",
+          "candidate": "黃嘉淦",
+          "adopted": {
+            "votes": 8095,
+            "party": "無",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "黃嘉凎"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "1998-township:台南县:regional:山上乡",
+          "number": "4",
+          "candidate": "戴振芎",
+          "adopted": {
+            "votes": 2144,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "戴振芳"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        }
+      ],
+      "sourceFolders": [
+        "1998直轄市議員/區域",
+        "1998直轄市議員/原住民",
+        "1998直轄市長",
+        "1998縣市議員/區域",
+        "1998縣市議員/山原",
+        "1998縣市議員/平原",
+        "1998鄉鎮市長"
+      ]
+    },
+    "2001": {
+      "counts": {
+        "tv_matched": 88,
+        "nccu_matched": 88,
+        "candidates": 88,
+        "three_source_agreement": 86
+      },
+      "differences": [
+        {
+          "contest": "2001-mayor:台北县:regional:台北县",
+          "number": "1",
+          "candidate": "王建煊",
+          "adopted": {
+            "votes": 820808,
+            "party": "新黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "王建火宣"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2001-mayor:彰化县:regional:彰化县",
+          "number": "5",
+          "candidate": "陳婉貞",
+          "adopted": {
+            "votes": 6934,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "tv": {
+              "name": "陳婉真"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        }
+      ],
+      "sourceFolders": [
+        "2001縣市長"
+      ]
+    },
+    "2002": {
+      "counts": {
+        "tv_matched": 3175,
+        "nccu_matched": 2982,
+        "three_source_agreement": 2942,
+        "candidates": 3175,
+        "nccu_unmatched": 193
+      },
+      "differences": [
+        {
+          "contest": "2002-council:台北市:regional:第3选举区",
+          "number": "16",
+          "candidate": "田欣",
+          "adopted": {
+            "votes": 13350,
+            "party": "民主進步黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "elected": false
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:高雄市:regional:第5选举区",
+          "number": "1",
+          "candidate": "李順進",
+          "adopted": {
+            "votes": 6167,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "tv": {
+              "votes": 6320
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:高雄市:regional:第5选举区",
+          "number": "2",
+          "candidate": "郭金生",
+          "adopted": {
+            "votes": 1352,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "tv": {
+              "votes": 1358
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:高雄市:regional:第5选举区",
+          "number": "3",
+          "candidate": "邱政勝",
+          "adopted": {
+            "votes": 1893,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "tv": {
+              "votes": 1943
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:高雄市:regional:第5选举区",
+          "number": "4",
+          "candidate": "張吉雄",
+          "adopted": {
+            "votes": 4307,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "tv": {
+              "votes": 5066
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:高雄市:regional:第5选举区",
+          "number": "5",
+          "candidate": "葉津鈴",
+          "adopted": {
+            "votes": 10120,
+            "party": "台灣團結聯盟",
+            "mark": "*"
+          },
+          "sources": {
+            "tv": {
+              "votes": 10152
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:高雄市:regional:第5选举区",
+          "number": "6",
+          "candidate": "王友蘭",
+          "adopted": {
+            "votes": 4753,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "tv": {
+              "votes": 4761
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:高雄市:regional:第5选举区",
+          "number": "7",
+          "candidate": "高宗英",
+          "adopted": {
+            "votes": 10191,
+            "party": "民主進步黨",
+            "mark": "*"
+          },
+          "sources": {
+            "tv": {
+              "votes": 10225
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:高雄市:regional:第5选举区",
+          "number": "8",
+          "candidate": "陳清崧",
+          "adopted": {
+            "votes": 3000,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "tv": {
+              "votes": 3047
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:高雄市:regional:第5选举区",
+          "number": "9",
+          "candidate": "吳宗憲",
+          "adopted": {
+            "votes": 1423,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "tv": {
+              "votes": 1432
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:高雄市:regional:第5选举区",
+          "number": "10",
+          "candidate": "林宛蓉",
+          "adopted": {
+            "votes": 11925,
+            "party": "民主進步黨",
+            "mark": "*"
+          },
+          "sources": {
+            "tv": {
+              "votes": 11963
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:高雄市:regional:第5选举区",
+          "number": "12",
+          "candidate": "林錦城",
+          "adopted": {
+            "votes": 708,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "tv": {
+              "votes": 711
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:高雄市:regional:第5选举区",
+          "number": "13",
+          "candidate": "李復興",
+          "adopted": {
+            "votes": 13649,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "tv": {
+              "votes": 13719
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:高雄市:regional:第5选举区",
+          "number": "14",
+          "candidate": "朱文慶",
+          "adopted": {
+            "votes": 11142,
+            "party": "無",
+            "mark": "*"
+          },
+          "sources": {
+            "tv": {
+              "votes": 11186
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:高雄市:regional:第5选举区",
+          "number": "15",
+          "candidate": "陳彥宏",
+          "adopted": {
+            "votes": 834,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "tv": {
+              "votes": 835
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:高雄市:regional:第5选举区",
+          "number": "16",
+          "candidate": "楊敏郎",
+          "adopted": {
+            "votes": 10356,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "tv": {
+              "votes": 10593
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:高雄市:regional:第5选举区",
+          "number": "17",
+          "candidate": "簡金城",
+          "adopted": {
+            "votes": 11917,
+            "party": "親民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "tv": {
+              "votes": 11962
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:高雄市:regional:第5选举区",
+          "number": "18",
+          "candidate": "江振陸",
+          "adopted": {
+            "votes": 11639,
+            "party": "民主進步黨",
+            "mark": "*"
+          },
+          "sources": {
+            "tv": {
+              "votes": 11664
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:高雄市:regional:第5选举区",
+          "number": "19",
+          "candidate": "朱安雄",
+          "adopted": {
+            "votes": 12163,
+            "party": "無",
+            "mark": "*"
+          },
+          "sources": {
+            "tv": {
+              "votes": 12258
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:高雄市:regional:第5选举区",
+          "number": "20",
+          "candidate": "卜明殿",
+          "adopted": {
+            "votes": 8056,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "tv": {
+              "votes": 8132
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:高雄市:regional:第5选举区",
+          "number": "21",
+          "candidate": "梁連瑛",
+          "adopted": {
+            "votes": 6208,
+            "party": "民主進步黨",
+            "mark": ""
+          },
+          "sources": {
+            "tv": {
+              "votes": 6264
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:高雄市:regional:第5选举区",
+          "number": "22",
+          "candidate": "王天競",
+          "adopted": {
+            "votes": 3763,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "tv": {
+              "votes": 3771
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:高雄市:regional:第5选举区",
+          "number": "23",
+          "candidate": "蔡媽福",
+          "adopted": {
+            "votes": 8605,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "tv": {
+              "votes": 8618
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:高雄市:regional:第5选举区",
+          "number": "24",
+          "candidate": "蘇玉柱",
+          "adopted": {
+            "votes": 6943,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "tv": {
+              "votes": 6962
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:高雄市:regional:第5选举区",
+          "number": "25",
+          "candidate": "謝進發",
+          "adopted": {
+            "votes": 4287,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "tv": {
+              "votes": 4298
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:高雄市:regional:第5选举区",
+          "number": "26",
+          "candidate": "蔡慶源",
+          "adopted": {
+            "votes": 13770,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "tv": {
+              "votes": 13819
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:高雄市:indigenous:原住民选区",
+          "number": "5",
+          "candidate": "洪林雨萍",
+          "adopted": {
+            "votes": 240,
+            "party": "無黨團結聯盟",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "party": "台灣團結聯盟"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:台北县:regional:第1选举区",
+          "number": "11",
+          "candidate": "王溪鬪",
+          "adopted": {
+            "votes": 5128,
+            "party": "民主進步黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "王溪鬥"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:台南县:regional:第6选举区",
+          "number": "1",
+          "candidate": "姚溪海",
+          "adopted": {
+            "votes": 7326,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "姚溪梅"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:屏东县:regional:第5选举区",
+          "number": "6",
+          "candidate": "葉素貞",
+          "adopted": {
+            "votes": 119,
+            "party": "臺灣慧行志工黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "葉素真"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:基隆市:regional:第5选举区",
+          "number": "8",
+          "candidate": "俞叁發",
+          "adopted": {
+            "votes": 1815,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "俞參發"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:新竹市:regional:第4选举区",
+          "number": "5",
+          "candidate": "孫鍚洲",
+          "adopted": {
+            "votes": 2725,
+            "party": "無",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "孫錫洲"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:嘉义市:regional:第1选举区",
+          "number": "29",
+          "candidate": "張文鐤",
+          "adopted": {
+            "votes": 577,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "張文鼎"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:嘉义市:regional:第2选举区",
+          "number": "3",
+          "candidate": "蕭文億",
+          "adopted": {
+            "votes": 123,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "蕭文德"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:嘉义市:regional:第2选举区",
+          "number": "4",
+          "candidate": "蔡貴絲",
+          "adopted": {
+            "votes": 3781,
+            "party": "無",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "蘇貴絲"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:嘉义市:regional:第2选举区",
+          "number": "27",
+          "candidate": "凃晁綜",
+          "adopted": {
+            "votes": 815,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "涂晁綜"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:台南市:regional:第3选举区",
+          "number": "7",
+          "candidate": "李天",
+          "adopted": {
+            "votes": 2807,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "李天佑"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:台南市:regional:第5选举区",
+          "number": "8",
+          "candidate": "凃韶芳",
+          "adopted": {
+            "votes": 3157,
+            "party": "民主進步黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "涂韶芳"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2002-council:金门县:regional:第1选举区",
+          "number": "7",
+          "candidate": "許華玉",
+          "adopted": {
+            "votes": 467,
+            "party": "中國國民黨",
+            "mark": "!"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2002-council:彰化县:plains:第9选举区",
+          "number": "3",
+          "candidate": "八亘．羅外",
+          "adopted": {
+            "votes": 11,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "八宣.羅外"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        }
+      ],
+      "sourceFolders": [
+        "2002直轄市議員(區域)",
+        "2002直轄市議員(原住民)",
+        "2002直轄市長",
+        "2002縣市議員/區域",
+        "2002縣市議員/山原",
+        "2002縣市議員/平原",
+        "2002鄉鎮市長選舉"
+      ],
+      "seatCorrections": [
+        {
+          "contest": "2002-council:台中市:regional:第6选举区",
+          "adoptedSeats": 10,
+          "reservedSeats": null,
+          "source": "https://cdn.www.taichung.gov.tw/913381/post",
+          "cecArchiveSeats": "11"
+        },
+        {
+          "contest": "2002-council:金门县:regional:第1选举区",
+          "adoptedSeats": 17,
+          "reservedSeats": 4,
+          "source": "https://www.kmdn.gov.tw/1117/1271/1272/107378/",
+          "cecArchiveSeats": "18"
+        }
+      ]
+    },
+    "2005": {
+      "counts": {
+        "tv_matched": 2553,
+        "nccu_matched": 2545,
+        "three_source_agreement": 2447,
+        "candidates": 2553,
+        "nccu_unmatched": 8
+      },
+      "differences": [
+        {
+          "contest": "2005-council:台北县:regional:第4选举区",
+          "number": "1",
+          "candidate": "鄭綉瑛",
+          "adopted": {
+            "votes": 16074,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "鄭琇瑛"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2005-council:台北县:regional:第6选举区",
+          "number": "23",
+          "candidate": "葉正森",
+          "adopted": {
+            "votes": 11525,
+            "party": "無",
+            "mark": "*"
+          },
+          "sources": {
+            "tv": {
+              "elected": false
+            },
+            "cec_constituency_archive": {
+              "mark": ""
+            },
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "https://web.cec.gov.tw/api/file/1309a9e5-afda-4ad0-a69f-495166c1d872.pdf"
+        },
+        {
+          "contest": "2005-council:台北县:regional:第6选举区",
+          "number": "28",
+          "candidate": "蕭國基",
+          "adopted": {
+            "votes": 8400,
+            "party": "台灣團結聯盟",
+            "mark": ""
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:桃园县:regional:第3选举区",
+          "number": "2",
+          "candidate": "王松樺",
+          "adopted": {
+            "votes": 5661,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "tv": {
+              "name": "王☐樺"
+            },
+            "nccu": {
+              "name": "王松樺"
+            }
+          },
+          "decision": "CEC returns, spelling restored from corroborating record"
+        },
+        {
+          "contest": "2005-council:桃园县:regional:第7选举区",
+          "number": "3",
+          "candidate": "林志珉",
+          "adopted": {
+            "votes": 6494,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "林志民"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2005-council:桃园县:regional:第7选举区",
+          "number": "17",
+          "candidate": "洪奕巓",
+          "adopted": {
+            "votes": 8024,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "洪奕巔"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2005-council:桃园县:regional:第10选举区",
+          "number": "5",
+          "candidate": "閻中傑",
+          "adopted": {
+            "votes": 15543,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "tv": {
+              "name": "☐中傑"
+            },
+            "nccu": {
+              "name": "閻中傑"
+            }
+          },
+          "decision": "CEC returns, spelling restored from corroborating record"
+        },
+        {
+          "contest": "2005-council:新竹县:regional:第2选举区",
+          "number": "7",
+          "candidate": "陳栢維",
+          "adopted": {
+            "votes": 5533,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "陳柏維"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2005-council:台中县:regional:第1选举区",
+          "number": "5",
+          "candidate": "張德勲",
+          "adopted": {
+            "votes": 2367,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "張德勳"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2005-council:台中县:regional:第2选举区",
+          "number": "5",
+          "candidate": "傅矞晧",
+          "adopted": {
+            "votes": 4329,
+            "party": "親民黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "傅矞皓"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2005-council:台中县:regional:第7选举区",
+          "number": "4",
+          "candidate": "林樵鋒",
+          "adopted": {
+            "votes": 630,
+            "party": "工教聯盟",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "party": "工教團結聯盟"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2005-council:台中县:regional:第7选举区",
+          "number": "8",
+          "candidate": "閻嘉明",
+          "adopted": {
+            "votes": 538,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "tv": {
+              "name": "☐嘉明"
+            },
+            "nccu": {
+              "name": "閻嘉明"
+            }
+          },
+          "decision": "CEC returns, spelling restored from corroborating record"
+        },
+        {
+          "contest": "2005-council:台中县:regional:第7选举区",
+          "number": "13",
+          "candidate": "林栢裕",
+          "adopted": {
+            "votes": 4088,
+            "party": "民主進步黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "林柏裕"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2005-council:台中县:regional:第8选举区",
+          "number": "3",
+          "candidate": "林慈憙",
+          "adopted": {
+            "votes": 374,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "林慈喜"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2005-council:彰化县:regional:第2选举区",
+          "number": "3",
+          "candidate": "凃淑媚",
+          "adopted": {
+            "votes": 6491,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "涂淑媚"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2005-council:彰化县:regional:第4选举区",
+          "number": "9",
+          "candidate": "凃銓勝",
+          "adopted": {
+            "votes": 5554,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "涂銓勝"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2005-council:云林县:regional:第2选举区",
+          "number": "3",
+          "candidate": "謝淑亜",
+          "adopted": {
+            "votes": 7966,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "謝淑亞"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2005-council:云林县:regional:第3选举区",
+          "number": "14",
+          "candidate": "謝宜津",
+          "adopted": {
+            "votes": 884,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "cec_district_summary": {
+              "votes": 232
+            }
+          },
+          "decision": "CEC township subtotals corroborated by NCCU and Taiwan Votes"
+        },
+        {
+          "contest": "2005-council:云林县:regional:第3选举区",
+          "number": "15",
+          "candidate": "黃進一",
+          "adopted": {
+            "votes": 8676,
+            "party": "無",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_district_summary": {
+              "votes": 9328
+            }
+          },
+          "decision": "CEC township subtotals corroborated by NCCU and Taiwan Votes"
+        },
+        {
+          "contest": "2005-council:云林县:regional:第4选举区",
+          "number": "12",
+          "candidate": "詹㨗凱",
+          "adopted": {
+            "votes": 5443,
+            "party": "無",
+            "mark": "*"
+          },
+          "sources": {
+            "tv": {
+              "name": "詹☐凱"
+            },
+            "nccu": {
+              "name": "詹㨗凱"
+            }
+          },
+          "decision": "CEC returns, spelling restored from corroborating record"
+        },
+        {
+          "contest": "2005-council:嘉义县:regional:第4选举区",
+          "number": "10",
+          "candidate": "廖正雄",
+          "adopted": {
+            "votes": 5139,
+            "party": "民主進步黨",
+            "mark": "*"
+          },
+          "sources": {
+            "tv": {
+              "elected": false
+            },
+            "cec_constituency_archive": {
+              "mark": ""
+            },
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "NCCU results and CEC certified seat total, corroborated by Jiayi council rosters"
+        },
+        {
+          "contest": "2005-council:嘉义县:regional:第4选举区",
+          "number": "11",
+          "candidate": "李陳秀琴",
+          "adopted": {
+            "votes": 5944,
+            "party": "無",
+            "mark": "*"
+          },
+          "sources": {
+            "tv": {
+              "elected": false
+            },
+            "cec_constituency_archive": {
+              "mark": ""
+            },
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "NCCU results and CEC certified seat total, corroborated by Jiayi council rosters"
+        },
+        {
+          "contest": "2005-council:高雄县:regional:第3选举区",
+          "number": "16",
+          "candidate": "黃炏鈿",
+          "adopted": {
+            "votes": 4264,
+            "party": "民主進步黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "黃烗鈿"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2005-council:屏东县:regional:第1选举区",
+          "number": "8",
+          "candidate": "林亞蒓",
+          "adopted": {
+            "votes": 9882,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "林亞純"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2005-council:屏东县:regional:第4选举区",
+          "number": "6",
+          "candidate": "盧同恊",
+          "adopted": {
+            "votes": 11600,
+            "party": "民主進步黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "盧同協"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2005-council:台南市:regional:第5选举区",
+          "number": "13",
+          "candidate": "凃韶芳",
+          "adopted": {
+            "votes": 6180,
+            "party": "民主進步黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "涂韶芳"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2005-council:宜兰县:mountain:第11选举区",
+          "number": "2",
+          "candidate": "簡海樹",
+          "adopted": {
+            "votes": 1486,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:宜兰县:mountain:第12选举区",
+          "number": "3",
+          "candidate": "陳銘福",
+          "adopted": {
+            "votes": 1031,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:桃园县:mountain:第14选举区",
+          "number": "1",
+          "candidate": "張廷晟",
+          "adopted": {
+            "votes": 3580,
+            "party": "無",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:桃园县:mountain:第14选举区",
+          "number": "2",
+          "candidate": "林誠榮",
+          "adopted": {
+            "votes": 3049,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:苗栗县:mountain:第8选举区",
+          "number": "2",
+          "candidate": "高榮盛",
+          "adopted": {
+            "votes": 1438,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:台中县:mountain:第10选举区",
+          "number": "1",
+          "candidate": "黃永光",
+          "adopted": {
+            "votes": 915,
+            "party": "工教聯盟",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "party": "工教團結聯盟"
+            },
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:台中县:mountain:第10选举区",
+          "number": "3",
+          "candidate": "林建堂",
+          "adopted": {
+            "votes": 1649,
+            "party": "無",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:南投县:mountain:第6选举区",
+          "number": "1",
+          "candidate": "松秋明",
+          "adopted": {
+            "votes": 2817,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:南投县:mountain:第7选举区",
+          "number": "1",
+          "candidate": "謝汪汕",
+          "adopted": {
+            "votes": 3535,
+            "party": "無",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:南投县:mountain:第7选举区",
+          "number": "2",
+          "candidate": "張國華",
+          "adopted": {
+            "votes": 2748,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:高雄县:mountain:第8选举区",
+          "number": "2",
+          "candidate": "孫慶龍",
+          "adopted": {
+            "votes": 1061,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:高雄县:mountain:第9选举区",
+          "number": "1",
+          "candidate": "宋玉清",
+          "adopted": {
+            "votes": 340,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:高雄县:mountain:第9选举区",
+          "number": "2",
+          "candidate": "謝貴來",
+          "adopted": {
+            "votes": 1445,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:屏东县:mountain:第10选举区",
+          "number": "1",
+          "candidate": "林玉如",
+          "adopted": {
+            "votes": 2784,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:屏东县:mountain:第11选举区",
+          "number": "1",
+          "candidate": "潘明利",
+          "adopted": {
+            "votes": 3041,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:屏东县:mountain:第14选举区",
+          "number": "1",
+          "candidate": "簡東明",
+          "adopted": {
+            "votes": 2428,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:屏东县:mountain:第15选举区",
+          "number": "1",
+          "candidate": "陳英銘",
+          "adopted": {
+            "votes": 856,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:屏东县:mountain:第15选举区",
+          "number": "3",
+          "candidate": "黃順發",
+          "adopted": {
+            "votes": 988,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:屏东县:mountain:第16选举区",
+          "number": "1",
+          "candidate": "杜春生",
+          "adopted": {
+            "votes": 1794,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "tv": {
+              "elected": false
+            },
+            "cec_constituency_archive": {
+              "mark": ""
+            },
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "NCCU results, CEC certified seat total and the next official election bulletin"
+        },
+        {
+          "contest": "2005-council:台东县:mountain:第10选举区",
+          "number": "1",
+          "candidate": "蔡清德",
+          "adopted": {
+            "votes": 786,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:台东县:mountain:第10选举区",
+          "number": "2",
+          "candidate": "胡秋金",
+          "adopted": {
+            "votes": 1060,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:台东县:mountain:第12选举区",
+          "number": "1",
+          "candidate": "宋賢一",
+          "adopted": {
+            "votes": 1652,
+            "party": "無",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:台东县:mountain:第13选举区",
+          "number": "1",
+          "candidate": "林文川",
+          "adopted": {
+            "votes": 763,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:台东县:mountain:第13选举区",
+          "number": "3",
+          "candidate": "朱連濟",
+          "adopted": {
+            "votes": 770,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:花莲县:mountain:第8选举区",
+          "number": "2",
+          "candidate": "李春風",
+          "adopted": {
+            "votes": 4172,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:花莲县:mountain:第9选举区",
+          "number": "1",
+          "candidate": "林振輝",
+          "adopted": {
+            "votes": 1361,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:花莲县:mountain:第9选举区",
+          "number": "2",
+          "candidate": "林榮輝",
+          "adopted": {
+            "votes": 1862,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:花莲县:mountain:第10选举区",
+          "number": "2",
+          "candidate": "呂必賢",
+          "adopted": {
+            "votes": 1872,
+            "party": "無",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:台北县:plains:第11选举区",
+          "number": "2",
+          "candidate": "田春枝",
+          "adopted": {
+            "votes": 1792,
+            "party": "民主進步黨",
+            "mark": ""
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:台北县:plains:第11选举区",
+          "number": "3",
+          "candidate": "林忠仁",
+          "adopted": {
+            "votes": 2424,
+            "party": "無",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:台北县:plains:第11选举区",
+          "number": "4",
+          "candidate": "宋進財",
+          "adopted": {
+            "votes": 3629,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:桃园县:plains:第13选举区",
+          "number": "1",
+          "candidate": "洪國治",
+          "adopted": {
+            "votes": 3502,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:桃园县:plains:第13选举区",
+          "number": "2",
+          "candidate": "吳春芳",
+          "adopted": {
+            "votes": 2819,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:苗栗县:plains:第7选举区",
+          "number": "1",
+          "candidate": "潘秋榮",
+          "adopted": {
+            "votes": 453,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:苗栗县:plains:第7选举区",
+          "number": "2",
+          "candidate": "楊文昌",
+          "adopted": {
+            "votes": 1054,
+            "party": "無",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:台中县:plains:第9选举区",
+          "number": "2",
+          "candidate": "洪金福",
+          "adopted": {
+            "votes": 1158,
+            "party": "親民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:彰化县:plains:第9选举区",
+          "number": "1",
+          "candidate": "李金水",
+          "adopted": {
+            "votes": 48,
+            "party": "親民黨",
+            "mark": ""
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:彰化县:plains:第9选举区",
+          "number": "2",
+          "candidate": "張新男",
+          "adopted": {
+            "votes": 416,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:彰化县:plains:第9选举区",
+          "number": "4",
+          "candidate": "高福炎",
+          "adopted": {
+            "votes": 27,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:屏东县:plains:第8选举区",
+          "number": "1",
+          "candidate": "潘裕隆",
+          "adopted": {
+            "votes": 1430,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:台东县:plains:第6选举区",
+          "number": "1",
+          "candidate": "陳‧藍姆洛",
+          "adopted": {
+            "votes": 1453,
+            "party": "台灣團結聯盟",
+            "mark": ""
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:台东县:plains:第6选举区",
+          "number": "2",
+          "candidate": "洪玫璉",
+          "adopted": {
+            "votes": 1473,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:台东县:plains:第6选举区",
+          "number": "3",
+          "candidate": "王清堅",
+          "adopted": {
+            "votes": 1473,
+            "party": "無",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:台东县:plains:第6选举区",
+          "number": "5",
+          "candidate": "田賢生",
+          "adopted": {
+            "votes": 931,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:台东县:plains:第7选举区",
+          "number": "3",
+          "candidate": "許秋清",
+          "adopted": {
+            "votes": 561,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:台东县:plains:第7选举区",
+          "number": "6",
+          "candidate": "江堅壽",
+          "adopted": {
+            "votes": 1522,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:台东县:plains:第8选举区",
+          "number": "1",
+          "candidate": "林錦章",
+          "adopted": {
+            "votes": 1650,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:台东县:plains:第9选举区",
+          "number": "3",
+          "candidate": "劉純歌",
+          "adopted": {
+            "votes": 1084,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:台东县:plains:第9选举区",
+          "number": "4",
+          "candidate": "嚴亞美",
+          "adopted": {
+            "votes": 1884,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:花莲县:plains:第5选举区",
+          "number": "1",
+          "candidate": "曾玉霞",
+          "adopted": {
+            "votes": 1530,
+            "party": "親民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:花莲县:plains:第5选举区",
+          "number": "3",
+          "candidate": "余夏夫",
+          "adopted": {
+            "votes": 1364,
+            "party": "無",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:花莲县:plains:第5选举区",
+          "number": "4",
+          "candidate": "田美華",
+          "adopted": {
+            "votes": 1145,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:花莲县:plains:第5选举区",
+          "number": "7",
+          "candidate": "周利根",
+          "adopted": {
+            "votes": 1493,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:花莲县:plains:第6选举区",
+          "number": "1",
+          "candidate": "馬其三",
+          "adopted": {
+            "votes": 1364,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:花莲县:plains:第6选举区",
+          "number": "6",
+          "candidate": "楊德金",
+          "adopted": {
+            "votes": 1490,
+            "party": "親民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:花莲县:plains:第6选举区",
+          "number": "7",
+          "candidate": "江強民",
+          "adopted": {
+            "votes": 1448,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:花莲县:plains:第7选举区",
+          "number": "2",
+          "candidate": "陳英妹",
+          "adopted": {
+            "votes": 1654,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:基隆市:plains:第8选举区",
+          "number": "1",
+          "candidate": "馬賢生",
+          "adopted": {
+            "votes": 1335,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:台中市:plains:第7选举区",
+          "number": "1",
+          "candidate": "黃仁",
+          "adopted": {
+            "votes": 304,
+            "party": "親民黨",
+            "mark": ""
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:台中市:plains:第7选举区",
+          "number": "2",
+          "candidate": "羅春蘭",
+          "adopted": {
+            "votes": 408,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": ""
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-council:台中市:plains:第7选举区",
+          "number": "3",
+          "candidate": "陳天斯",
+          "adopted": {
+            "votes": 139,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "cec_candidate_file": {
+              "mark": "*"
+            }
+          },
+          "decision": "CEC constituency result, rather than candidate file"
+        },
+        {
+          "contest": "2005-mayor:花莲县:regional:花莲县",
+          "number": "4",
+          "candidate": "傅崐萁",
+          "adopted": {
+            "votes": 38379,
+            "party": "親民黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "傅崑萁"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2005-mayor:金门县:regional:金门县",
+          "number": "1",
+          "candidate": "陳福海",
+          "adopted": {
+            "votes": 13941,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "votes": 13940
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2005-mayor:金门县:regional:金门县",
+          "number": "3",
+          "candidate": "李炷烽",
+          "adopted": {
+            "votes": 17358,
+            "party": "新黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "votes": 17359
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2005-township:宜兰县:regional:壮围乡",
+          "number": "1",
+          "candidate": "游濸木",
+          "adopted": {
+            "votes": 5529,
+            "party": "民主進步黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "游蒼木"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2005-township:桃园县:regional:大溪镇",
+          "number": "2",
+          "candidate": "林熺達",
+          "adopted": {
+            "votes": 6152,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "林熹達"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2005-township:新竹县:regional:尖石乡",
+          "number": "1",
+          "candidate": "曾効忠",
+          "adopted": {
+            "votes": 2348,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "曾效忠"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2005-township:台中县:regional:丰原市",
+          "number": "1",
+          "candidate": "張瀞分",
+          "adopted": {
+            "votes": 42680,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "張靜分"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2005-township:台中县:regional:沙鹿镇",
+          "number": "1",
+          "candidate": "何季杏",
+          "adopted": {
+            "votes": 11701,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "tv": {
+              "name": "何☐杏"
+            },
+            "nccu": {
+              "name": "何季杏"
+            }
+          },
+          "decision": "CEC returns, spelling restored from corroborating record"
+        },
+        {
+          "contest": "2005-township:台中县:regional:神冈乡",
+          "number": "3",
+          "candidate": "王堃棠",
+          "adopted": {
+            "votes": 11969,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "王昆棠"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2005-township:台南县:regional:安定乡",
+          "number": "2",
+          "candidate": "王寳民",
+          "adopted": {
+            "votes": 7848,
+            "party": "無",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "王寶民"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2005-township:台南县:regional:山上乡",
+          "number": "1",
+          "candidate": "凃明星",
+          "adopted": {
+            "votes": 2004,
+            "party": "無",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "涂明星"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        }
+      ],
+      "sourceFolders": [
+        "2005縣市議員/區域",
+        "2005縣市議員/山原",
+        "2005縣市議員/平原",
+        "2005縣市長",
+        "2005鄉鎮市長"
+      ]
+    },
+    "2006": {
+      "counts": {
+        "tv_matched": 191,
+        "nccu_matched": 191,
+        "three_source_agreement": 189,
+        "candidates": 191
+      },
+      "differences": [
+        {
+          "contest": "2006-council:高雄市:regional:第2选举区",
+          "number": "16",
+          "candidate": "周鍾",
+          "adopted": {
+            "votes": 14695,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "tv": {
+              "name": "周鍾☐"
+            },
+            "nccu": {
+              "name": "周鍾"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2006-council:高雄市:indigenous:原住民选区",
+          "number": "4",
+          "candidate": "俄鄧‧殷艾",
+          "adopted": {
+            "votes": 1336,
+            "party": "民主進步黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "俄鄧‧殷"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        }
+      ],
+      "sourceFolders": [
+        "2006直轄市議員(區域)",
+        "2006直轄市議員(原住民)",
+        "2006直轄市長"
+      ]
+    },
+    "2009": {
+      "counts": {
+        "tv_matched": 1459,
+        "nccu_matched": 1356,
+        "three_source_agreement": 1353,
+        "candidates": 1459,
+        "nccu_unmatched": 103
+      },
+      "differences": [
+        {
+          "contest": "2009-council:新竹县:regional:第2选举区",
+          "number": "6",
+          "candidate": "陳栢維",
+          "adopted": {
+            "votes": 5865,
+            "party": "無黨籍及未經政黨推薦",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "陳   維"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2009-council:彰化县:regional:第2选举区",
+          "number": "9",
+          "candidate": "陳秀寶",
+          "adopted": {
+            "votes": 9666,
+            "party": "無黨籍及未經政黨推薦",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "陳秀寳"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2009-council:屏东县:mountain:第9选举区",
+          "number": "2",
+          "candidate": "包水生Pacekelj Cigaw",
+          "adopted": {
+            "votes": 1616,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "包水生"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        }
+      ],
+      "sourceFolders": [
+        "20091205-縣市長縣市議員及鄉鎮長/區域議員",
+        "20091205-縣市長縣市議員及鄉鎮長/山地議員",
+        "20091205-縣市長縣市議員及鄉鎮長/平地議員",
+        "20091205-縣市長縣市議員及鄉鎮長/縣市長",
+        "20091205-縣市長縣市議員及鄉鎮長/鄉鎮市長"
+      ]
+    },
+    "2010": {
+      "counts": {
+        "tv_matched": 660,
+        "nccu_matched": 660,
+        "three_source_agreement": 650,
+        "candidates": 660
+      },
+      "differences": [
+        {
+          "contest": "2010-council:台南市:regional:第10选举区",
+          "number": "9",
+          "candidate": "凃韶芳",
+          "adopted": {
+            "votes": 7461,
+            "party": "民主進步黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "涂韶芳"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2010-council:高雄市:regional:第4选举区",
+          "number": "12",
+          "candidate": "周鍾㴴",
+          "adopted": {
+            "votes": 16245,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "周鍾 __"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2010-council:高雄市:mountain:第13选举区",
+          "number": "1",
+          "candidate": "柯路加Istanba Ciban",
+          "adopted": {
+            "votes": 1736,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "柯路加"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2010-council:高雄市:mountain:第14选举区",
+          "number": "2",
+          "candidate": "謝貴來Istanda．Salizan",
+          "adopted": {
+            "votes": 687,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "謝貴來"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2010-council:高雄市:mountain:第14选举区",
+          "number": "4",
+          "candidate": "伊斯坦大‧貝雅夫‧正福Istanda．Paingav",
+          "adopted": {
+            "votes": 1240,
+            "party": "無黨籍及未經政黨推薦",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "伊斯坦大.貝"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2010-council:高雄市:mountain:第15选举区",
+          "number": "3",
+          "candidate": "孫慶龍Tanobake．Apaolithi",
+          "adopted": {
+            "votes": 1509,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "孫慶龍"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2010-council:新北市:plains:第11选举区",
+          "number": "1",
+          "candidate": "夷將．拔路兒Icyang．Parod",
+          "adopted": {
+            "votes": 1995,
+            "party": "民主進步黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "夷將．拔路兒"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2010-council:新北市:plains:第11选举区",
+          "number": "8",
+          "candidate": "宋進財Falong．Opa",
+          "adopted": {
+            "votes": 2590,
+            "party": "無黨籍及未經政黨推薦",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "宋進財"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2010-council:新北市:plains:第11选举区",
+          "number": "10",
+          "candidate": "拔耐．茹妮老王",
+          "adopted": {
+            "votes": 177,
+            "party": "無黨籍及未經政黨推薦",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "拔耐．茹妮老"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2010-council:高雄市:plains:第12选举区",
+          "number": "3",
+          "candidate": "俄鄧‧殷艾Eteng．Ingay",
+          "adopted": {
+            "votes": 1876,
+            "party": "民主進步黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "俄鄧‧殷艾"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        }
+      ],
+      "sourceFolders": [
+        "20101127-五都市長議員及里長/區域議員",
+        "20101127-五都市長議員及里長/山地議員",
+        "20101127-五都市長議員及里長/市長",
+        "20101127-五都市長議員及里長/平地議員"
+      ]
+    },
+    "2014": {
+      "counts": {
+        "tv_matched": 2174,
+        "nccu_matched": 2150,
+        "three_source_agreement": 2104,
+        "candidates": 2174,
+        "nccu_unmatched": 24
+      },
+      "differences": [
+        {
+          "contest": "2014-council:台北市:regional:第1选举区",
+          "number": "6",
+          "candidate": "周佳君",
+          "adopted": {
+            "votes": 1685,
+            "party": "人民民主陣線",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "party": "人民最大黨"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-council:高雄市:regional:第4选举区",
+          "number": "3",
+          "candidate": "周鍾㴴",
+          "adopted": {
+            "votes": 13975,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "tv": {
+              "name": "周鍾㴴"
+            },
+            "nccu": {
+              "name": "周鍾㴴"
+            }
+          },
+          "decision": "CEC returns, spelling restored from corroborating record"
+        },
+        {
+          "contest": "2014-council:台北市:mountain:第8选举区",
+          "number": "1",
+          "candidate": "伊凡諾幹 Iban Nokan",
+          "adopted": {
+            "votes": 275,
+            "party": "民主進步黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "伊凡諾幹"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-council:新北市:mountain:第12选举区",
+          "number": "1",
+          "candidate": "寶杜巴燕Bawtu‧Payen",
+          "adopted": {
+            "votes": 1303,
+            "party": "民主進步黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "寶杜巴燕"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-council:台南市:mountain:第18选举区",
+          "number": "1",
+          "candidate": "谷暮‧哈就 Kumu Hacyo",
+          "adopted": {
+            "votes": 933,
+            "party": "無黨籍及未經政黨推薦",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "谷暮‧哈就"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-council:高雄市:mountain:第13选举区",
+          "number": "1",
+          "candidate": "柯路加 Istanda Ciban",
+          "adopted": {
+            "votes": 1424,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "柯路加"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-council:高雄市:mountain:第14选举区",
+          "number": "1",
+          "candidate": "理斷‧搭給嚕嘟嗯Islituan‧Takiludun",
+          "adopted": {
+            "votes": 1201,
+            "party": "無黨籍及未經政黨推薦",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "理斷‧搭給嚕嘟嗯"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-council:高雄市:mountain:第14选举区",
+          "number": "3",
+          "candidate": "伊斯坦大‧貝雅夫‧正福Istanda‧Paingav",
+          "adopted": {
+            "votes": 1267,
+            "party": "無黨籍及未經政黨推薦",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "伊斯坦大‧貝雅夫‧正福"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-council:高雄市:mountain:第15选举区",
+          "number": "1",
+          "candidate": "范織欽Pasulang‧Tomatalate",
+          "adopted": {
+            "votes": 1608,
+            "party": "無黨籍及未經政黨推薦",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "范織欽"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-council:新北市:plains:第11选举区",
+          "number": "1",
+          "candidate": "宋雨蓁Nikar‧Falong",
+          "adopted": {
+            "votes": 3065,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "宋雨蓁"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-council:新北市:plains:第11选举区",
+          "number": "2",
+          "candidate": "夷將‧拔路兒Icyang‧Parod",
+          "adopted": {
+            "votes": 2407,
+            "party": "民主進步黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "夷將‧拔路兒"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-council:新竹县:mountain:第12选举区",
+          "number": "2",
+          "candidate": "柔夏‧布待Rosya.Butay",
+          "adopted": {
+            "votes": 1444,
+            "party": "無黨籍及未經政黨推薦",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "柔夏‧布待"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-council:新竹县:mountain:第13选举区",
+          "number": "1",
+          "candidate": "趙一先Obay a Awi’",
+          "adopted": {
+            "votes": 1478,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "趙一先"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-council:屏东县:mountain:第12选举区",
+          "number": "2",
+          "candidate": "李宜潔 djupelang Qrudu",
+          "adopted": {
+            "votes": 936,
+            "party": "無黨籍及未經政黨推薦",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "李宜潔"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-council:花莲县:mountain:第8选举区",
+          "number": "1",
+          "candidate": "許淑銀Otiam  Cirig",
+          "adopted": {
+            "votes": 5340,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "許淑銀"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-council:花莲县:mountain:第9选举区",
+          "number": "1",
+          "candidate": "吳香蘭Hisa‧Sakay",
+          "adopted": {
+            "votes": 1856,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "吳香蘭"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-council:花莲县:mountain:第10选举区",
+          "number": "4",
+          "candidate": "陳鶴章Salizan  Binkinuan",
+          "adopted": {
+            "votes": 1027,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "陳鶴章"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-council:台东县:mountain:第12选举区",
+          "number": "1",
+          "candidate": "余明志 taium ispalidaz",
+          "adopted": {
+            "votes": 477,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "余明志"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-council:台东县:mountain:第13选举区",
+          "number": "1",
+          "candidate": "章正輝 Lemaljiz‧Kusaza",
+          "adopted": {
+            "votes": 2636,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "章正輝"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-mayor:花莲县:regional:花莲县",
+          "number": "1",
+          "candidate": "傅崐萁",
+          "adopted": {
+            "votes": 89048,
+            "party": "無黨籍及未經政黨推薦",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "傳崐萁"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-council:新竹县:plains:第11选举区",
+          "number": "2",
+          "candidate": "林光榮Kuying.Kalang",
+          "adopted": {
+            "votes": 710,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "林光榮"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-council:花莲县:plains:第5选举区",
+          "number": "1",
+          "candidate": "羅名材Halu‧Lihang",
+          "adopted": {
+            "votes": 1695,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "羅名材"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-council:花莲县:plains:第5选举区",
+          "number": "5",
+          "candidate": "林秋美Abi‧Mulu",
+          "adopted": {
+            "votes": 1946,
+            "party": "無黨籍及未經政黨推薦",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "林秋美"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-council:花莲县:plains:第6选举区",
+          "number": "2",
+          "candidate": "萬榮財Lafi‧Mayaw",
+          "adopted": {
+            "votes": 2453,
+            "party": "無黨籍及未經政黨推薦",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "萬榮財"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-council:花莲县:plains:第6选举区",
+          "number": "3",
+          "candidate": "楊德金Kati‧Payo",
+          "adopted": {
+            "votes": 2626,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "楊德金"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-council:花莲县:plains:第6选举区",
+          "number": "4",
+          "candidate": "高潞‧以用‧巴魕剌Kawlo‧Iyun‧Pacidal",
+          "adopted": {
+            "votes": 2230,
+            "party": "無黨籍及未經政黨推薦",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "高潞‧以用‧巴魕剌"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-council:花莲县:plains:第7选举区",
+          "number": "5",
+          "candidate": "徐成國Hane‧Gayaw",
+          "adopted": {
+            "votes": 916,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "徐成國"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-council:台东县:plains:第7选举区",
+          "number": "5",
+          "candidate": "嚴惠美 Simoy‧Sapod",
+          "adopted": {
+            "votes": 736,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "嚴惠美"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-council:台东县:plains:第7选举区",
+          "number": "6",
+          "candidate": "陳．藍姆洛 Lamlo Payrang",
+          "adopted": {
+            "votes": 832,
+            "party": "台灣團結聯盟",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "陳．藍姆洛"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-council:台东县:plains:第9选举区",
+          "number": "1",
+          "candidate": "張萬生 Tahuk Malulang",
+          "adopted": {
+            "votes": 2866,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "張萬生"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-township:屏东县:regional:三地门乡",
+          "number": "1",
+          "candidate": "車牧勒薩以‧拉勒格安 Cemelesai Ljaljegan",
+          "adopted": {
+            "votes": 1506,
+            "party": "無黨籍及未經政黨推薦",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "車牧勒薩以‧拉勒格安"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-township:屏东县:regional:泰武乡",
+          "number": "2",
+          "candidate": "邱登星 Adrucangalj.Drusaljiyan",
+          "adopted": {
+            "votes": 1238,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "邱登星"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-township:屏东县:regional:泰武乡",
+          "number": "3",
+          "candidate": "潘明福 Tivoran.Kazangilijan",
+          "adopted": {
+            "votes": 1158,
+            "party": "無黨籍及未經政黨推薦",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "潘明福"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-township:屏东县:regional:春日乡",
+          "number": "1",
+          "candidate": "柯自強 Langalang Palivulj",
+          "adopted": {
+            "votes": 1698,
+            "party": "無黨籍及未經政黨推薦",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "柯自強"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-township:屏东县:regional:狮子乡",
+          "number": "1",
+          "candidate": "孔朝 Qaljayub‧Palaeculju",
+          "adopted": {
+            "votes": 1833,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "孔朝"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-township:屏东县:regional:狮子乡",
+          "number": "2",
+          "candidate": "侯金助 Kuljelje‧gadugadu",
+          "adopted": {
+            "votes": 1418,
+            "party": "民主進步黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "侯金助"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-township:花莲县:regional:秀林乡",
+          "number": "1",
+          "candidate": "張文成 Bucyang Ubus",
+          "adopted": {
+            "votes": 1575,
+            "party": "無黨籍及未經政黨推薦",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "張文成"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-township:花莲县:regional:万荣乡",
+          "number": "1",
+          "candidate": "徐金生Kosang‧Ecin",
+          "adopted": {
+            "votes": 1996,
+            "party": "無黨籍及未經政黨推薦",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "徐金生"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-township:花莲县:regional:万荣乡",
+          "number": "2",
+          "candidate": "蘇連進Siqay‧Teymu",
+          "adopted": {
+            "votes": 1582,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "蘇連進"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-township:花莲县:regional:卓溪乡",
+          "number": "2",
+          "candidate": "呂必賢Biung．Istasipal",
+          "adopted": {
+            "votes": 1893,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "呂必賢"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-township:台东县:regional:长滨乡",
+          "number": "1",
+          "candidate": "章雅豐 Yosef‧Akiko‧Kacaw",
+          "adopted": {
+            "votes": 1302,
+            "party": "無黨籍及未經政黨推薦",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "章雅豐"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-township:台东县:regional:海端乡",
+          "number": "1",
+          "candidate": "余夢蝶 isbalidav Biun",
+          "adopted": {
+            "votes": 640,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "余夢蝶"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-township:台东县:regional:金峰乡",
+          "number": "2",
+          "candidate": "宋賢一 Paramram Djalavak",
+          "adopted": {
+            "votes": 1202,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "宋賢一"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-township:台东县:regional:达仁乡",
+          "number": "1",
+          "candidate": "王光清 Saliyan‧Kaluvung",
+          "adopted": {
+            "votes": 1428,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "name": "王光清"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-township:台东县:regional:兰屿乡",
+          "number": "1",
+          "candidate": "希婻‧瑪飛洑 Sinan‧Mavivo",
+          "adopted": {
+            "votes": 310,
+            "party": "無黨籍及未經政黨推薦",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "希婻‧瑪飛洑"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2014-township:台东县:regional:兰屿乡",
+          "number": "2",
+          "candidate": "郭健平 Shaman Fengayan",
+          "adopted": {
+            "votes": 384,
+            "party": "無黨籍及未經政黨推薦",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "name": "郭健平"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        }
+      ],
+      "sourceFolders": [
+        "2014-103年地方公職人員選舉/直轄市區域議員",
+        "2014-103年地方公職人員選舉/直轄市區長",
+        "2014-103年地方公職人員選舉/直轄市山原議員",
+        "2014-103年地方公職人員選舉/直轄市市長",
+        "2014-103年地方公職人員選舉/直轄市平原議員",
+        "2014-103年地方公職人員選舉/縣市區域議員",
+        "2014-103年地方公職人員選舉/縣市山原議員",
+        "2014-103年地方公職人員選舉/縣市市長",
+        "2014-103年地方公職人員選舉/縣市平原議員",
+        "2014-103年地方公職人員選舉/縣市鄉鎮市長"
+      ]
+    },
+    "2018": {
+      "counts": {
+        "tv_matched": 2386,
+        "nccu_matched": 2367,
+        "three_source_agreement": 2357,
+        "candidates": 2386,
+        "nccu_unmatched": 19,
+        "withheld_mayor_town_contests": 1
+      },
+      "differences": [
+        {
+          "contest": "2018-council:台北市:regional:第4选举区",
+          "number": "18",
+          "candidate": "陳炳甫",
+          "adopted": {
+            "votes": 22223,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "nccu": {
+              "votes": 22211
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2018-mayor:台北市:regional:台北市",
+          "number": "1",
+          "candidate": "吳蕚洋",
+          "adopted": {
+            "votes": 5611,
+            "party": "無黨籍及未經政黨推薦",
+            "mark": ""
+          },
+          "sources": {
+            "cec_initial": {
+              "votes": 5611
+            }
+          },
+          "decision": "https://jirs.judicial.gov.tw/GNNWS/NNWSS002.asp?id=456006"
+        },
+        {
+          "contest": "2018-mayor:台北市:regional:台北市",
+          "number": "2",
+          "candidate": "丁守中",
+          "adopted": {
+            "votes": 577096,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "cec_initial": {
+              "votes": 577096
+            }
+          },
+          "decision": "https://jirs.judicial.gov.tw/GNNWS/NNWSS002.asp?id=456006"
+        },
+        {
+          "contest": "2018-mayor:台北市:regional:台北市",
+          "number": "3",
+          "candidate": "姚文智",
+          "adopted": {
+            "votes": 244342,
+            "party": "民主進步黨",
+            "mark": ""
+          },
+          "sources": {
+            "cec_initial": {
+              "votes": 244342
+            }
+          },
+          "decision": "https://jirs.judicial.gov.tw/GNNWS/NNWSS002.asp?id=456006"
+        },
+        {
+          "contest": "2018-mayor:台北市:regional:台北市",
+          "number": "4",
+          "candidate": "柯文哲",
+          "adopted": {
+            "votes": 580663,
+            "party": "無黨籍及未經政黨推薦",
+            "mark": "*"
+          },
+          "sources": {
+            "cec_initial": {
+              "votes": 580663
+            }
+          },
+          "decision": "https://jirs.judicial.gov.tw/GNNWS/NNWSS002.asp?id=456006"
+        },
+        {
+          "contest": "2018-mayor:台北市:regional:台北市",
+          "number": "5",
+          "candidate": "李錫錕",
+          "adopted": {
+            "votes": 6158,
+            "party": "無黨籍及未經政黨推薦",
+            "mark": ""
+          },
+          "sources": {
+            "cec_initial": {
+              "votes": 6158
+            }
+          },
+          "decision": "https://jirs.judicial.gov.tw/GNNWS/NNWSS002.asp?id=456006"
+        },
+        {
+          "contest": "2018-council:苗栗县:regional:第5选举区",
+          "number": "11",
+          "candidate": "李貴富",
+          "adopted": {
+            "votes": 3432,
+            "party": "民主進步黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "elected": true
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2018-council:彰化县:regional:第6选举区",
+          "number": "7",
+          "candidate": "劉景滄",
+          "adopted": {
+            "votes": 7020,
+            "party": "無黨籍及未經政黨推薦",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "elected": true
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2018-council:屏东县:regional:第1选举区",
+          "number": "15",
+          "candidate": "張金文",
+          "adopted": {
+            "votes": 4684,
+            "party": "無黨籍及未經政黨推薦",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "elected": true
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2018-council:金门县:regional:第2选举区",
+          "number": "11",
+          "candidate": "謝東龍",
+          "adopted": {
+            "votes": 1767,
+            "party": "中國國民黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "elected": true
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        }
+      ],
+      "sourceFolders": [
+        "2018-107年地方公職人員選舉/直轄市區域議員",
+        "2018-107年地方公職人員選舉/直轄市區長",
+        "2018-107年地方公職人員選舉/直轄市山原議員",
+        "2018-107年地方公職人員選舉/直轄市市長",
+        "2018-107年地方公職人員選舉/直轄市平原議員",
+        "2018-107年地方公職人員選舉/縣市區域議員",
+        "2018-107年地方公職人員選舉/縣市山原議員",
+        "2018-107年地方公職人員選舉/縣市市長",
+        "2018-107年地方公職人員選舉/縣市平原議員",
+        "2018-107年地方公職人員選舉/縣市鄉鎮市長"
+      ]
+    },
+    "2022": {
+      "counts": {
+        "withheld_mayor_town_contests": 2,
+        "tv_matched": 2280,
+        "nccu_matched": 2253,
+        "three_source_agreement": 2247,
+        "candidates": 2280,
+        "nccu_unmatched": 27
+      },
+      "differences": [
+        {
+          "contest": "2022-mayor:宜兰县:regional:宜兰县",
+          "number": "5",
+          "candidate": "江聰淵",
+          "adopted": {
+            "votes": 96779,
+            "party": "民主進步黨",
+            "mark": ""
+          },
+          "sources": {
+            "tv": {
+              "name": "江聰淵"
+            },
+            "nccu": {
+              "name": "江聰淵"
+            }
+          },
+          "decision": "CEC returns, spelling restored from corroborating record"
+        },
+        {
+          "contest": "2022-township:嘉义县:regional:鹿草乡",
+          "number": "1",
+          "candidate": "嚴珮瑜",
+          "adopted": {
+            "votes": 4366,
+            "party": "民主進步黨",
+            "mark": "*"
+          },
+          "sources": {
+            "tv": {
+              "name": "嚴珮瑜"
+            },
+            "nccu": {
+              "name": "嚴珮瑜"
+            }
+          },
+          "decision": "CEC returns, spelling restored from corroborating record"
+        },
+        {
+          "contest": "2022-township:屏东县:regional:九如乡",
+          "number": "1",
+          "candidate": "藍聰信",
+          "adopted": {
+            "votes": 6238,
+            "party": "民主進步黨",
+            "mark": "*"
+          },
+          "sources": {
+            "tv": {
+              "name": "藍聰信"
+            },
+            "nccu": {
+              "name": "藍聰信"
+            }
+          },
+          "decision": "CEC returns, spelling restored from corroborating record"
+        },
+        {
+          "contest": "2022-council:云林县:regional:第5选举区",
+          "number": "6",
+          "candidate": "丁慶錡",
+          "adopted": {
+            "votes": 563,
+            "party": "台灣君民黨",
+            "mark": ""
+          },
+          "sources": {
+            "nccu": {
+              "party": "皇君人民政黨"
+            }
+          },
+          "decision": "CEC official constituency result and election profile"
+        },
+        {
+          "contest": "2022-council:澎湖县:regional:第1选举区",
+          "number": "10",
+          "candidate": "歐中慨",
+          "adopted": {
+            "votes": 2404,
+            "party": "中國國民黨",
+            "mark": "*"
+          },
+          "sources": {
+            "tv": {
+              "name": "歐中慨"
+            },
+            "nccu": {
+              "name": "歐中慨"
+            }
+          },
+          "decision": "CEC returns, spelling restored from corroborating record"
+        },
+        {
+          "contest": "2022-council:新北市:regional:第3选举区",
+          "number": "17",
+          "candidate": "陳聰吉",
+          "adopted": {
+            "votes": 781,
+            "party": "無黨籍及未經政黨推薦",
+            "mark": ""
+          },
+          "sources": {
+            "tv": {
+              "name": "陳聰吉"
+            },
+            "nccu": {
+              "name": "陳聰吉"
+            }
+          },
+          "decision": "CEC returns, spelling restored from corroborating record"
+        }
+      ],
+      "sourceFolders": [
+        "2022-111年地方公職人員選舉/C1/city",
+        "2022-111年地方公職人員選舉/C1/prv",
+        "2022-111年地方公職人員選舉/D1",
+        "2022-111年地方公職人員選舉/D2",
+        "2022-111年地方公職人員選舉/T1/city",
+        "2022-111年地方公職人員選舉/T1/prv",
+        "2022-111年地方公職人員選舉/T2/city",
+        "2022-111年地方公職人員選舉/T2/prv",
+        "2022-111年地方公職人員選舉/T3/city",
+        "2022-111年地方公職人員選舉/T3/prv",
+        "https://web.cec.gov.tw/cyec/article/37711"
+      ]
+    },
+    "1993": {
+      "counts": {
+        "tv_unmatched": 77,
+        "nccu_matched": 77,
+        "candidates": 77
+      },
+      "differences": [],
+      "sourceFolders": [
+        "NCCU candidate records and election overview (attributed to CEC)"
+      ],
+      "nccuTownProfiles": {
+        "verifiedTownVoteRows": 1252,
+        "verifiedTownsWithTurnout": 345
+      },
+      "countiesWithoutReconciledTownVotes": []
+    }
+  }
+}
