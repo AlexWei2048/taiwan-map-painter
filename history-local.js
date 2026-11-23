@@ -28,7 +28,8 @@
  function geometry(shard,map,reference,normalize,mergePaths,modernCounty,baseTown){
   const year=shard.year,modern=reference===null;
   const lookup=(county,town)=>{
-   const name=county==='高雄县'&&baseTown(town)==='三民'?'那玛夏':baseTown(town);
+   const base=baseTown(town);
+   const name=county==='金门县'&&base==='乌丘'?'乌坵':county==='高雄县'&&base==='三民'?'那玛夏':base;
    return modernCounty(county)+'|'+name;
   };
   const historicPair=(county,town)=>county+'|'+lookup(county,town);

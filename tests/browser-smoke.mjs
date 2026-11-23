@@ -1729,7 +1729,7 @@ test('Presidential history loads real 2024 and 1996 shards, navigates historical
  await page.locator('#historyOffice').selectOption('mayor');
  await page.waitForFunction(()=>History2022View.office()==='mayor'&&History2022View.year()===2022&&
   document.querySelector('#historySummary').textContent.includes('个地区'));
- assert.equal(await page.locator('#historyYear option').count(),1);
+ assert.deepEqual(await page.locator('#historyYear option').allTextContents(),['1993','1994','1997','1998','2001','2002','2005','2006','2009','2010','2014','2018','2022']);
  assert.equal(await page.locator('#historyYear').inputValue(),'2022');
 });
 
@@ -2804,7 +2804,8 @@ test('Local 2026 results remain hidden until an official fully reconciled data r
  const page=await pageFor(t);
  await page.locator('#categoryHistory').click();
  await page.locator('#historyOffice').selectOption('mayor');
- assert.deepEqual(await page.locator('#historyYear option').allTextContents(),['2022']);
+ assert.equal(await page.locator('#historyYear option[value="2026"]').count(),0);
+ assert.equal(await page.locator('#historyYear').inputValue(),'2022');
  assert.equal(await page.evaluate(()=>window.HISTORY_2026_RESULTS_AVAILABLE===true),false);
  const manifest=await page.evaluate(async()=>await (await fetch('assets/history-2026-availability.json')).json());
  assert.equal(manifest.status,'awaiting_results');
@@ -2882,3 +2883,37 @@ test('Published-only 2026 results can load in history, switch offices and return
 });
 
 
+
+test('Historical national township maps colour every elected township, including Wuqiu, and drill down by county',async t=>{
+ const page=await pageFor(t,{width:1440,height:960});
+ await page.locator('#categoryHistory').click();
+ await page.waitForFunction(()=>History2022View.snapshot()?.year===2022);
+ await page.locator('#historyOffice').selectOption('township');
+ for(const year of [1998,2002,2005,2009,2014,2018,2022]){
+  await page.locator('#historyYear').selectOption(String(year));
+  await page.waitForFunction(y=>History2022View.office()==='township'&&History2022View.year()===y,year);
+  const result=await page.evaluate(()=>{
+   const results=History2022View.snapshot().rows.filter(r=>r.type==='township'&&r.level==='town'&&r.elected);
+   const items=new Map(History2022View.items().map(f=>[f.county+'|'+f.name,f]));
+   const paths=new Map([...document.querySelectorAll('#regions path[data-region]')].map(p=>[p.dataset.region,p.getAttribute('fill')]));
+   return {
+    winners:results.length,
+    missing:results.filter(r=>{
+     const id=items.get(simplify(r.county)+'|'+simplify(r.town))?.id;
+     return !id||!paths.has(id)||['#edf1e9','#ffffff'].includes(paths.get(id));
+    }).map(r=>[r.county,r.town]),
+    taipei:paths.get([...items.values()].find(f=>f.county==='台北市'&&f.name==='松山区').id)
+   };
+  });
+  assert.ok(result.winners>=200);
+  assert.deepEqual(result.missing,[],String(year));
+  assert.equal(result.taipei,'#ffffff',String(year));
+ }
+ const kinmen=page.locator('#regions path[data-region="09020010"]');
+ await kinmen.focus();
+ await kinmen.press('Enter');
+ assert.equal(await page.locator('#historyCounty').inputValue(),'金门县');
+ await page.locator('#returnTaiwanMap').click();
+ assert.equal(await page.locator('#historyCounty').inputValue(),'');
+ assert.notEqual(await kinmen.getAttribute('fill'),'#edf1e9');
+});

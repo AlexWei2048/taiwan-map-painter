@@ -576,14 +576,15 @@ function mapLabelAnchor(f,t){
 }
 function insetDefinitionForFeature(f){
  const definitions=insetDefinitions();
- return definitions.find(q=>q.town&&(q.town===f.name||q.town===f.town))||
+ const town=f.town||f.name, insetTown=f.county==='金门县'&&town==='乌丘乡'?'乌坵乡':town;
+ return definitions.find(q=>q.town&&(q.town===f.name||q.town===insetTown))||
   definitions.find(q=>q.county===f.name)||
   definitions.find(q=>q.county===f.county)||null;
 }
 function isInsetIslandFeature(f){return !!insetDefinitionForFeature(f)}
 function mapInsetLabelFit(f,t,width,height,used,area,reserve){
  const definition=insetDefinitionForFeature(f);if(!definition)return null;
- const insetTitle=f.name===definition.county||f.name===definition.town;
+ const insetTitle=f.name===definition.county||f.name===definition.town||definition.town==='乌坵乡'&&f.name==='乌丘乡';
  const xMap=insetTitle?definition.label[0]:(f.box[0]+f.box[2])/2;
  const featureBottom=f.box[3]*t.scale+t.ty;
  const x0=xMap*t.scale+t.tx;
