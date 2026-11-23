@@ -302,3 +302,9 @@ The official CEC review workflow now generates a blank 2051-candidate CSV retain
 The official result importer supports an optional --town-turnout CSV for county-mayor township/ward turnout, but requires complete source-backed candidate town votes and matching valid/invalid ballot totals before publishing those figures. See docs/audits/2026-official-results-intake.md.
 
 2026-11-16：移除“预测封存与选后复盘”入口及对应实现与测试，不影响现有2026预测保存、导入、导出流程。修复立法机构民代历史地图在“选举区＋全部地区”时自动跳至台北市的问题；2008—2024年全部地区逐单席选区填色，1992—2004年全部地区逐多席选区展示当选党徽，保留原县市总览样式。
+
+### 历史地方选举地图与名额核对
+
+- 2002、2005、2009、2014、2018 年新竹市区域议员按当届里别重建，轮廓使用现行里界及可核实的分里、并里关系近似绘制。1998 年新竹市第 1–4 选区仍可查得票及当选结果，地图暂缺可核实的区界。1998、2002 年台南市第 3 选区使用中区、西区合并后的轮廓。
+- 2009、2010、2014、2018 年可核实到单一选区的 558 条妇女保障名额来自当届中选会公告。部分公告只给多个选区合计，单区名额保留空值。公告链接、里界来源及选区资料见 [地方议员补充资料](assets/history-local-council-supplement.json)。
+- 键盘可用方向键移动地图焦点，回车或空格选取行政区，也可从「跳过地图」直接进入后续内容。窄屏历史候选人表可展开查看号次、性别、选举时现任和得票率。

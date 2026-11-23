@@ -58,6 +58,9 @@ def elections():
     for p in sorted(ASSETS.glob("history-president-????.json")):
         o=load_json(p)
         if "rows" in o:samples[p.name]=o["rows"]
+    for p in sorted(ASSETS.glob("history-local-????.json")):
+        o=load_json(p)
+        if "rows" in o:samples[p.name]=o["rows"]
     o=load_json(ASSETS/"history-2022.json")
     if "rows" in o:samples["history-2022.json"]=o["rows"]
     if "candidacies" in o:samples["history-2022-candidacies"]=o["candidacies"]

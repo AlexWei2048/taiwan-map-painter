@@ -77,3 +77,53 @@ test('Historical geography keeps old municipalities distinct and leaves split-to
  assert.ok(countyCouncil.districts.some(d=>d.county==='新竹市'&&!d.mapAvailable));
  assert.ok(countyCouncil.features.every(d=>d.mapAvailable));
 });
+
+test('Every archived local winner matches the map candidate, ballot, votes and party',()=>{
+ const toSimplified=require('../assets/opencc.js').Converter({from:'t',to:'cn'});
+ const norm=value=>toSimplified(value).replaceAll('臺','台');
+ const number=value=>Number(value.match(/第\s*(\d+)/)?.[1]||0);
+ const level={mayor:'county',council:'district',township:'town'};
+ const key=(office,county,identity,area,ballot)=>[office,norm(county),identity,area,Number(ballot)].join('|');
+ for(const year of new Set(Object.values(Local.YEARS).flat())){
+  const snapshot=year===2022?require('../assets/history-2022.json'):data(year);
+  const contests=new Map(snapshot.contests.map(c=>[c.contest_id,c]));
+  const rows=snapshot.rows.filter(r=>r.elected&&r.level===level[r.type]);
+  const mapWinners=new Map(rows.map(r=>[key(r.type,r.county,r.electorate,
+   r.type==='council'?number(r.district):r.type==='township'?norm(r.town):'',r.number),r]));
+  const winners=snapshot.candidacies.filter(candidate=>candidate.elected_official);
+  assert.equal(mapWinners.size,winners.length,String(year));
+  assert.equal(mapWinners.size,rows.length,String(year));
+  for(const candidate of winners){
+   const contest=contests.get(candidate.contest_id),office=contest.election_id.split('-')[1];
+   const area=office==='council'?number(contest.district_name):office==='township'?norm(contest.district_name):'';
+   const row=mapWinners.get(key(office,contest.county_name,contest.electorate,area,candidate.ballot_number));
+   assert.ok(row,contest.contest_id);
+   assert.deepEqual([norm(row.name),row.votes,norm(row.party)],
+    [norm(candidate.candidate_name),candidate.votes,norm(candidate.party_name)],contest.contest_id);
+  }
+ }
+});
+
+test('All council maps include every verified district, with four unresolved 1998 Hsinchu districts',()=>{
+ const supplement=require('../assets/history-local-council-supplement.json');
+ for(const year of Local.YEARS.council.filter(year=>year!==2022)){
+  const snapshot=Local.applyCouncilSupplement(data(year),supplement);
+  const geometry=Local.geometry(snapshot,map,year<=2010?reference:null,String,Core.mergePaths,
+   Presidential.modernCounty,Presidential.baseTown);
+  const districts=Local.councilMap(snapshot,geometry,Core.mergePaths);
+  const unavailable=districts.districts.filter(row=>!row.mapAvailable);
+  assert.deepEqual(unavailable.map(row=>row.id),year===1998?[1,2,3,4].map(n=>'1998-council:新竹市:regional:第'+n+'选举区'):[]);
+  const hsinchu=districts.features.filter(d=>d.county==='新竹市'&&d.electorate==='regional');
+  if([2002,2005,2009,2014,2018].includes(year)){
+   assert.equal(hsinchu.length,5);
+   const villageIds=hsinchu.flatMap(d=>snapshot.councilDistrictGeometry[d.historyId].villageIds);
+   assert.equal(villageIds.length,122,String(year));
+   assert.equal(new Set(villageIds).size,122,String(year));
+  }
+  if([2009,2010,2014,2018].includes(year)){
+   const enriched=districts.districts.filter(row=>row.womenReserved!==null);
+   assert.equal(enriched.length,{2009:125,2010:69,2014:185,2018:179}[year]);
+   assert.ok(enriched.every(row=>row.womenReserved>=0&&row.womenReserved<=row.seats));
+  }
+ }
+});

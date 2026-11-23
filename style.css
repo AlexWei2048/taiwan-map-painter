@@ -826,3 +826,22 @@ body.history-mode #districtReferenceNote,body.history-mode #districtReferenceSou
 
 /* Overview geographic drilldown remains visible in the map above the cards. */
 #regions path.history-overview-focused-region{stroke:#d49b32!important;stroke-width:3!important;stroke-dasharray:7 3;vector-effect:non-scaling-stroke;paint-order:stroke}
+
+.map-skip-link,.map-accessible-target{position:absolute;width:1px;height:1px;clip-path:inset(50%);overflow:hidden;white-space:nowrap}
+.map-skip-link:focus,.map-accessible-target:focus{position:relative;display:inline-block;width:auto;height:auto;clip-path:none;overflow:visible;padding:6px 12px;color:var(--ink);background:#fff;outline:2px solid var(--green);z-index:5}
+#regions path:focus-visible{stroke:#182e2b!important;stroke-width:3px!important;paint-order:stroke;outline:none}
+.history-mobile-details{display:none}
+@media(max-width:600px){
+ .history-mobile-list,.history-result-dialog:not(.history-party-vote-dialog) .history-candidate-table{width:100%;min-width:0;table-layout:fixed;white-space:normal}
+ .history-mobile-list tr:not(.history-district-divider)>:is(:nth-child(-n+3),:nth-child(5),:nth-child(6),:nth-child(9)),
+ .history-result-dialog:not(.history-party-vote-dialog) .history-candidate-table tr>:is(:nth-child(1),:nth-child(3),:nth-child(4),:nth-child(7)){display:none}
+ .history-mobile-list .history-mobile-details,.history-result-dialog:not(.history-party-vote-dialog) .history-mobile-details:not([hidden]){display:table-cell;width:48px;position:static}
+ .history-mobile-list :is(th,td),.history-result-dialog:not(.history-party-vote-dialog) .history-candidate-table :is(th,td){padding:7px 3px;overflow-wrap:anywhere}
+ .history-result-dialog:not(.history-party-vote-dialog) .history-candidate-table :is(th,td):nth-child(2){left:auto;box-shadow:none}
+ .history-candidate-table .history-mobile-details summary{cursor:pointer;white-space:nowrap}
+ .history-mobile-details dl{margin:6px 0 0;text-align:left}
+ .history-mobile-details dt{color:#4c6963}
+ .history-mobile-details dd{margin:0 0 3px}
+ .history-mobile-list .history-party-cell,.history-result-dialog:not(.history-party-vote-dialog) .history-party-cell{white-space:normal}
+ .history-mobile-list tr:not(.history-district-divider)>:nth-child(10),.history-result-dialog:not(.history-party-vote-dialog) .history-candidate-table tr>:nth-child(8){width:30px}
+}

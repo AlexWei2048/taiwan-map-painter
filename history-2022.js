@@ -553,6 +553,18 @@
   el('historyPage').textContent=(resultPage+1)+' / '+Math.ceil(rows.length/100);
   el('historyPrev').disabled=resultPage===0;el('historyNext').disabled=(resultPage+1)*100>=rows.length;
  }
+ function appendMobileCandidateDetails(row,items){
+  const details=document.createElement('details'),summary=document.createElement('summary');
+  summary.textContent='详情';
+  details.append(summary);
+  const list=document.createElement('dl');
+  for(const [label,value] of items){
+   const key=document.createElement('dt'),text=document.createElement('dd');
+   key.textContent=label;text.textContent=value||'—';list.append(key,text);
+  }
+  details.append(list);
+  const cell=document.createElement('td');cell.className='history-mobile-details';cell.append(details);row.append(cell);
+ }
  function showRows(result){
   if(legislativeMode){showLegislativeRows();return}
   const search=normCandidate(el('historySearch').value);
@@ -566,15 +578,16 @@
   el('historySummary').textContent=result.areas+'个地区 / 选区 · '+rows.length+'条候选人记录 · '+seats+(areaLeading()?'个地区领先':'席当选')+' · '+(metric==='share'?'得票率渐变':metric==='votes'?'得票数渐变':'当选结果')+(unmatchedDistricts.size?' · '+unmatchedDistricts.size+'个历史选区范围与当前地图不一致，已暂不着色':'');
   if(!rows.length){root.textContent='此范围没有已载入的历史结果。';return}
   const wrap=document.createElement('div');wrap.className='history-table-wrap';
-  const table=document.createElement('table');table.className='history-candidate-table';
+  const table=document.createElement('table');table.className='history-candidate-table history-mobile-list';
   const head=document.createElement('thead'),hr=document.createElement('tr');
   for(const label of ['县市','选区／乡镇市区','号次','候选人',presidentialMode?'性别（正/副）':'性别','选举时现任','政党','得票数','得票率','当选']){const th=document.createElement('th');th.textContent=label;hr.append(th)}
+  const mobileHeading=document.createElement('th');mobileHeading.className='history-mobile-details';mobileHeading.textContent='详情';hr.append(mobileHeading);
   head.append(hr);table.append(head);const body=document.createElement('tbody');
   let previousArea='';
   for(const r of rows.slice(resultPage*100,(resultPage+1)*100)){
    const area=areaKey(r);
    if(area!==previousArea){
-    const divider=document.createElement('tr'),heading=document.createElement('th');divider.className='history-district-divider';heading.scope='rowgroup';heading.colSpan=10;
+    const divider=document.createElement('tr'),heading=document.createElement('th');divider.className='history-district-divider';heading.scope='rowgroup';heading.colSpan=11;
     heading.textContent=kind==='mayor'?(presidentialMode?(scale==='town'?r.county+' · '+r.town:r.county+' · '+yearLabel()+'年领导人选举'):(mayorTownView()?r.county+' · '+r.town:r.county+' · 县市长选举')):kind==='council'?r.county+' · '+r.district+' · '+(r.electorate==='plains'?'平地少数民族议员':r.electorate==='mountain'?'山地少数民族议员':'区域议员'):r.county+' · '+r.town;
     divider.append(heading);body.append(divider);previousArea=area;
    }
@@ -588,6 +601,7 @@
    const votes=document.createElement('td');votes.className='history-number';votes.textContent=r.votes.toLocaleString('zh-CN');tr.append(votes);
    const rate=document.createElement('td');rate.className='history-number';rate.textContent=(r._share||0).toFixed(2)+'%';tr.append(rate);
    const status=document.createElement('td');appendResultMark(status,r);tr.append(status);
+   appendMobileCandidateDetails(tr,[['号次',values[2]],['性别',values[4]],['选举时现任',values[5]],['得票率',rate.textContent]]);
    body.append(tr)
   }
   table.append(body);wrap.append(table);root.append(wrap);
@@ -820,7 +834,7 @@
   el('historyDialogTitle').textContent=(f.county===f.name?f.name:f.county+' · '+f.name)+' · '+yearLabel()+' '+(presidentialMode?'台湾地区领导人':legislativeMode?(HistoryLegislative.ballots(legislativeYear).find(item=>item.value===legislativeBallot)?.label||'立法机构民代'):kind==='mayor'&&f.county.endsWith('市')?'市长':titles[kind])+'选举结果';
   const body=el('historyDialogRows'),table=body.closest('table'),wrap=table.parentElement;
   const partyBallotDialog=legislativeMode&&legislativeBallot==='party';
-  const hiddenColumns=new Set(partyBallotDialog?[0,2,3,4,7]:[]);
+  const hiddenColumns=new Set(partyBallotDialog?[0,2,3,4,7,8]:[]);
   el('historyResultDialog').classList.toggle('history-party-vote-dialog',partyBallotDialog);
   if(table.tHead.rows[0]?.cells[1])table.tHead.rows[0].cells[1].textContent=partyBallotDialog?'政党':'候选人';
   // Display both offices' verified genders for presidential tickets.
@@ -842,11 +856,12 @@
     if(logo){const img=document.createElement('img');img.src=logo;img.alt='';const party=document.createElement('span');party.className='history-party-cell';party.append(img,value);td.append(party)}
     if(i===7)appendResultMark(td,r);else if(!logo)td.append(value);tr.append(td);
    }
+   if(!partyBallotDialog)appendMobileCandidateDetails(tr,[['号次',r.number],['性别',displayedGender(r)],['选举时现任',incumbentLabel(r)],['得票率',(r._share||0).toFixed(2)+'%']]);
    body.append(tr);
   }
   const district=historicalDistrictFor(f);
   el('historyDialogMessage').textContent=!rows.length?(noElection(f)?yearLabel()+'年本区域不举行乡镇市区长选举。':'暂无该层级的历史数据。'):district?
-   '应选 '+district.seats+' 席 · 妇保 '+district.womenReserved+' 席 · 有效票 '+rows.reduce((n,r)=>n+r.votes,0).toLocaleString('zh-CN'):
+   '应选 '+district.seats+' 席 · 妇保 '+(district.womenReserved==null?'暂无资料':district.womenReserved+' 席')+' · 有效票 '+rows.reduce((n,r)=>n+r.votes,0).toLocaleString('zh-CN'):
    (legislativeMode?(partyBallotDialog?'本地区政党得票与得票率':legislativeBallot==='regional'&&legislativeYear<2008?'本届多席选区的当选者与得票':'本地区候选人得票及选举结果'):mayorTownView()?'本地区得票':presidentialMode?'当地候选人得票与全台当选标记':yearLabel()+'年得票与当选结果');
   if(rows.length)el('historyDialogMessage').append(' · '+rows.length+(partyBallotDialog?' 个政党':' 位候选人')+' · 按得票数排序');
   if(f.historicalBoundaryNote)el('historyDialogMessage').append(' · '+f.historicalBoundaryNote);
@@ -876,7 +891,10 @@
   if(el('historyDialogMissing'))el('historyDialogMissing').hidden=true;
   if(el('historyDialogScroll'))el('historyDialogScroll').hidden=true;
   lastOpenedFeature=null;const contest=summary.contest,rows=summary.candidacies,body=el('historyDialogRows');el('historyDialogTitle').textContent=contest.county_name+' · '+contest.district_name+' · '+yearLabel()+' '+officeTitle()+'选举结果';el('historyDialogMessage').textContent=(contest.election_date?contest.election_date+' 投票 · ':'')+'有效票 '+summary.validVotes.toLocaleString('zh-CN')+' · '+rows.length+' 位候选人 · 按得票数排序';body.replaceChildren();
-  for(const r of rows){const tr=document.createElement('tr');if(r.elected_official)tr.className='history-elected-row';for(const [i,value] of [r.ballot_number||'—',r.candidate_name,r.gender||'—',r.incumbent_at_election===true?'现任':r.incumbent_at_election===false?'非现任':'—',r.party_name,r.votes.toLocaleString('zh-CN'),Number(r.vote_share||0).toFixed(2)+'%',''].entries()){const td=document.createElement('td');if(i===7&&r.elected_official){const mark=document.createElement('img');mark.src='assets/elected-mark.png';mark.alt='当选';mark.width=18;mark.height=18;td.append(mark)}else td.textContent=value;tr.append(td)}body.append(tr)}
+  for(const r of rows){const tr=document.createElement('tr');if(r.elected_official)tr.className='history-elected-row';for(const [i,value] of [r.ballot_number||'—',r.candidate_name,r.gender||'—',r.incumbent_at_election===true?'现任':r.incumbent_at_election===false?'非现任':'—',r.party_name,r.votes.toLocaleString('zh-CN'),Number(r.vote_share||0).toFixed(2)+'%',''].entries()){const td=document.createElement('td');if(i===7&&r.elected_official){const mark=document.createElement('img');mark.src='assets/elected-mark.png';mark.alt='当选';mark.width=18;mark.height=18;td.append(mark)}else td.textContent=value;tr.append(td)}
+   appendMobileCandidateDetails(tr,[['号次',r.ballot_number],['性别',r.gender],['选举时现任',tr.cells[3].textContent],['得票率',tr.cells[6].textContent]]);
+   body.append(tr)
+  }
   const overviewButton=el('historyDialogOverview');
   if(overviewButton){overviewButton.hidden=false;overviewButton.textContent='查看本选区概况';
    overviewButton.onclick=()=>{el('historyResultDialog').close();window.HistoryWorkspace?.openContestOverview?.(contestId)};}

@@ -1627,38 +1627,52 @@ test('2022 actual result overview has responsive metrics and turnout visualizati
  assert.ok(layout.overflow<=2,'chart grid should not overflow horizontally');
 });
 
-test('Mobile historical result keeps ballot numbers and candidate names visible',async t=>{
+test('Mobile historical results show candidate, party, votes and election mark before expanding details',async t=>{
  const page=await pageFor(t,{width:390,height:844});
  await page.locator('#categoryHistory').click();
  await page.waitForFunction(()=>document.querySelector('#historySummary').textContent.includes('22席'));
  await page.locator('#historyCounty').selectOption({label:'台北市'});
- await page.locator('#regions [data-region="63000"]').click();
+ await page.locator('#historyViewCandidates').click();
+ const list=page.locator('#historyResults table');
+ assert.deepEqual(await list.locator('thead th:visible').allTextContents(),['候选人','政党','得票数','当选','详情']);
+ await list.locator('tbody details summary').first().click();
+ assert.match(await list.locator('tbody details[open]').innerText(),/得票率/);
+
+ await page.locator('#regions [data-region="63000"]').press('Enter');
  const dialog=page.locator('#historyResultDialog');
  assert.match(await dialog.locator('h2').textContent(),/台北市 · 2022 市长选举结果/);
- const header=dialog.locator('.history-candidate-table thead th');
- assert.equal((await header.nth(2).textContent()).trim(),'性别');
- assert.equal((await header.nth(3).textContent()).trim(),'选举时现任');
- assert.equal(await header.nth(2).evaluate(node=>node.hidden),false);
- assert.equal(await header.nth(3).evaluate(node=>node.hidden),false);
- assert.equal(await dialog.locator('tbody tr').first().locator('td').nth(2).textContent(),'男');
- const name=dialog.locator('.history-elected-row td').nth(1);
- assert.equal(await name.textContent(),'蒋万安');
- const mark=dialog.getByRole('img',{name:'当选',exact:true});
- assert.equal(await mark.count(),1);
+ const headers=dialog.locator('thead th:visible');
+ assert.deepEqual(await headers.allTextContents(),['候选人','政党','得票数','当选','详情']);
+ const row=dialog.locator('.history-elected-row');
+ assert.equal(await row.locator('td:visible').first().textContent(),'蒋万安');
+ const mark=row.getByRole('img',{name:'当选',exact:true});
  await mark.evaluate(el=>el.decode());
- assert.equal(await dialog.locator('tbody tr').nth(1).locator('td').last().innerHTML(),'');
+ assert.equal(await mark.isVisible(),true);
  const wrap=dialog.locator('.history-table-wrap');
- assert.equal(await wrap.evaluate(el=>el.scrollLeft),0);
- const bounds=await wrap.boundingBox(),initial=await name.boundingBox();
- assert.ok(initial.x>=bounds.x&&initial.x+initial.width<=bounds.x+bounds.width);
- // Force overflow independently of the system's CJK font metrics.
- await wrap.evaluate(el=>{el.style.maxWidth='220px'});
- const before=await name.boundingBox();
- await wrap.evaluate(el=>{el.scrollLeft=el.scrollWidth});
- assert.ok(await wrap.evaluate(el=>el.scrollLeft)>0);
- assert.ok(Math.abs((await name.boundingBox()).x-before.x)<2);
+ assert.ok(await wrap.evaluate(el=>el.scrollWidth<=el.clientWidth+1));
+ await row.locator('details summary').click();
+ const details=row.locator('details[open]');
+ assert.equal(await details.isVisible(),true);
+ assert.deepEqual(await details.locator('dt').allTextContents(),['号次','性别','选举时现任','得票率']);
+ assert.equal(await details.locator('dd').nth(1).textContent(),'男');
 });
 
+test('Map supports skipping and has one tab stop with directional navigation',async t=>{
+ const page=await pageFor(t);
+ const entry=page.locator('#regions [tabindex="0"]');
+ assert.equal(await entry.count(),1);
+ await entry.focus();
+ const before=await entry.getAttribute('data-region');
+ await page.keyboard.press('ArrowDown');
+ assert.notEqual(await entry.getAttribute('data-region'),before);
+ assert.equal(await entry.count(),1);
+ assert.equal(await entry.evaluate(el=>el===document.activeElement),true);
+ await page.keyboard.press('Tab');
+ assert.equal(await page.locator('#regions :focus').count(),0);
+ await page.locator('#skipMap').focus();
+ await page.keyboard.press('Enter');
+ assert.equal(await page.locator('#afterMap').evaluate(el=>el===document.activeElement),true);
+});
 
 test('Historical result windows share prediction drag and resize controls',async t=>{
  const page=await pageFor(t,{width:1200,height:950});
@@ -2900,7 +2914,8 @@ test('Historical national township maps colour every elected township, including
     winners:results.length,
     missing:results.filter(r=>{
      const id=items.get(simplify(r.county)+'|'+simplify(r.town))?.id;
-     return !id||!paths.has(id)||['#edf1e9','#ffffff'].includes(paths.get(id));
+     const party=simplify(r.party);
+     return !id||paths.get(id)!==predictionParty(party.startsWith('无党籍')?'无党籍':party).color;
     }).map(r=>[r.county,r.town]),
     taipei:paths.get([...items.values()].find(f=>f.county==='台北市'&&f.name==='松山区').id)
    };
@@ -2916,4 +2931,62 @@ test('Historical national township maps colour every elected township, including
  await page.locator('#returnTaiwanMap').click();
  assert.equal(await page.locator('#historyCounty').inputValue(),'');
  assert.notEqual(await kinmen.getAttribute('fill'),'#edf1e9');
+});
+
+test('Recovered historical Hsinchu council districts show official results and seat quotas',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('council');
+ for(const year of [2002,2005,2009,2014,2018]){
+  await page.locator('#historyYear').selectOption(String(year));
+  await page.waitForFunction(y=>History2022View.office()==='council'&&History2022View.snapshot()?.year===y,year);
+  await page.locator('#historyCounty').selectOption('新竹市');
+  const recovered=await page.evaluate(()=>{
+   const paths=new Set([...document.querySelectorAll('#regions path[data-region]')].map(p=>p.dataset.region));
+   return currentItems().filter(f=>f.electorate==='regional').map(f=>({
+    number:f.number,map:paths.has(f.id),winners:History2022View.seatRows(f).filter(Boolean).length,seats:f.seats
+   }));
+  });
+  assert.deepEqual(recovered.map(r=>r.number).sort(),[1,2,3,4,5]);
+  assert.ok(recovered.every(r=>r.map&&r.winners===r.seats),String(year));
+ }
+ await page.locator('#regions [data-region="history-2018-council:新竹市:regional:第1选举区"]').press('Enter');
+ const message=await page.locator('#historyDialogMessage').textContent();
+ assert.match(message,/妇保 3 席/);
+ assert.match(message,/里界近似绘制/);
+});
+
+test('All archived mayor and council national maps use official winners and seat pluralities',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.waitForFunction(()=>History2022View.snapshot()?.year===2022);
+ for(const office of ['mayor','council']){
+  await page.locator('#historyOffice').selectOption(office);
+  for(const year of await page.locator('#historyYear option').evaluateAll(options=>options.map(option=>Number(option.value)))){
+   await page.locator('#historyYear').selectOption(String(year));
+   await page.waitForFunction(({office,year})=>History2022View.office()===office&&History2022View.snapshot()?.year===year,{office,year});
+   const failures=await page.evaluate(office=>{
+    const winners=new Map();
+    for(const row of History2022View.snapshot().rows){
+     if(row.type!==office||!row.elected||row.level!==(office==='mayor'?'county':'district'))continue;
+     const county=simplify(row.county),raw=simplify(row.party),party=raw.startsWith('无党籍')?'无党籍':raw;
+     if(!winners.has(county))winners.set(county,new Map());
+     const tally=winners.get(county);
+     tally.set(party,(tally.get(party)||0)+1);
+    }
+    const items=new Map(History2022View.items().map(f=>[f.county,f.id]));
+    const paths=new Map([...document.querySelectorAll('#regions path[data-region]')].map(p=>[p.dataset.region,p.getAttribute('fill')]));
+    return [...winners].flatMap(([county,tally])=>{
+     const leading=[...tally].sort((a,b)=>b[1]-a[1]);
+     const colors=[...new Set(leading.filter(([,seats])=>seats===leading[0][1]).map(([party])=>predictionParty(party).color))];
+     const fill=paths.get(items.get(county));
+     if(colors.length===1)return fill===colors[0]?[]:[{county,fill,expected:colors[0]}];
+     const id=fill?.match(/^url\(#(.+)\)$/)?.[1],pattern=id&&document.getElementById(id);
+     const shown=new Set([...pattern?.children||[]].map(child=>child.getAttribute('fill')));
+     return colors.every(color=>shown.has(color))?[]:[{county,fill,expected:colors}];
+    });
+   },office);
+   assert.deepEqual(failures,[],office+' '+year);
+  }
+ }
 });

@@ -1392,7 +1392,8 @@ function drawLabels(group,items,t,font=15,interactive=false,countyNamesOnly=fals
   if(q.numeric){label.setAttribute('data-number-key',q.number);mapNumberRecord(q.f,q.number)}
   if(interactive){
    label.style.pointerEvents='auto';label.style.cursor='pointer';
-   label.setAttribute('tabindex','0');
+   // The corresponding map path provides the keyboard entry for this label.
+   label.setAttribute('tabindex','-1');
    label.addEventListener('pointerenter',()=>toggleLabelRegionHighlight(q.f,true));
    label.addEventListener('pointerleave',()=>toggleLabelRegionHighlight(q.f,false));
    label.addEventListener('focus',()=>toggleLabelRegionHighlight(q.f,true));
@@ -1569,7 +1570,43 @@ function drawMapFurniture(group,t,spec){group.replaceChildren();const wide=isNat
 }
 function renderMapFurniture(){const spec=sceneSpec(),t=identityPanelsActive()?identityPanelLayouts()[0]?.t:geometryLayout(currentItems(),state.labels);if(!t)return;drawInsetFrames($('insetFrames'),t,spec);drawMapFurniture($('mapFurniture'),t,spec)}
 
-function regionPath(f){const identity=identityPanelsActive()?' · '+electorateName(featureElectorate(f)):'';const p=svgEl('path',{d:f.d,fill:fillColor(f),stroke:'none','stroke-width':0,'vector-effect':'non-scaling-stroke','fill-rule':f.fillRule||(typeof History2022View!=='undefined'&&History2022View.active()&&History2022View.office?.()==='legislative'&&History2022View.legislativeBallot?.()==='regional'?'nonzero':'evenodd'),'data-region':f.id,'data-electorate':featureElectorate(f),tabindex:0,role:'button','aria-label':`${f.county}${f.name===f.county?'':f.name}${identity}，${regionDetail(f)}`});const title=svgEl('title');title.textContent=f.county+(f.name===f.county?'':f.name)+identity;p.append(title);p.addEventListener('click',()=>{if(!moved)paint(f)});p.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();paint(f)}};p.onpointermove=e=>{if(drag)return;const tip=$('tooltip'),r=$('canvas').getBoundingClientRect();tip.replaceChildren();const label=document.createElement('span');label.textContent=f.name;const sub=document.createElement('small');sub.textContent=f.county+(f.town?' · '+f.town:'')+identity+' · '+regionDetail(f);tip.append(label,sub);tip.hidden=false;tip.style.left=Math.min(e.clientX-r.left+15,r.width-165)+'px';tip.style.top=Math.max(45,e.clientY-r.top-48)+'px'};p.addEventListener('pointerenter',()=>toggleLabelRegionHighlight(f,true));p.onpointerleave=()=>{$('tooltip').hidden=true;toggleLabelRegionHighlight(f,false)};p.addEventListener('focus',()=>toggleLabelRegionHighlight(f,true));p.addEventListener('blur',()=>toggleLabelRegionHighlight(f,false));return p}
+let mapKeyboardRegion=null;
+function setMapKeyboardRegion(path){
+ const previous=$('regions').querySelector('[tabindex="0"]');
+ if(previous&&previous!==path)previous.setAttribute('tabindex','-1');
+ if(!path)return;
+ path.setAttribute('tabindex','0');
+ mapKeyboardRegion=path.dataset.region;
+}
+function handleMapRegionKey(event,path,feature){
+ if(event.key==='Enter'||event.key===' '){
+  event.preventDefault();
+  paint(feature);
+  return;
+ }
+ const direction={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]}[event.key];
+ if(!direction||event.altKey||event.ctrlKey||event.metaKey||event.shiftKey)return;
+ event.preventDefault();
+ const rect=path.getBoundingClientRect();
+ const x=rect.left+rect.width/2,y=rect.top+rect.height/2;
+ let nearest=null,best=Infinity;
+ for(const candidate of $('regions').querySelectorAll('[data-region]')){
+  if(candidate===path)continue;
+  const box=candidate.getBoundingClientRect();
+  const dx=box.left+box.width/2-x,dy=box.top+box.height/2-y;
+  const forward=dx*direction[0]+dy*direction[1];
+  if(forward<=0)continue;
+  const across=dx*direction[1]-dy*direction[0];
+  const distance=forward+3*Math.abs(across)+across*across/forward;
+  if(distance<best){nearest=candidate;best=distance}
+ }
+ nearest?.focus({preventScroll:true});
+}
+$('skipMap').onclick=event=>{
+ event.preventDefault();
+ $('afterMap').focus();
+};
+function regionPath(f){const identity=identityPanelsActive()?' · '+electorateName(featureElectorate(f)):'';const p=svgEl('path',{d:f.d,fill:fillColor(f),stroke:'none','stroke-width':0,'vector-effect':'non-scaling-stroke','fill-rule':f.fillRule||(typeof History2022View!=='undefined'&&History2022View.active()&&History2022View.office?.()==='legislative'&&History2022View.legislativeBallot?.()==='regional'?'nonzero':'evenodd'),'data-region':f.id,'data-electorate':featureElectorate(f),tabindex:-1,role:'button','aria-label':`${f.county}${f.name===f.county?'':f.name}${identity}，${regionDetail(f)}`});const title=svgEl('title');title.textContent=f.county+(f.name===f.county?'':f.name)+identity;p.append(title);p.addEventListener('click',()=>{if(!moved)paint(f)});p.onkeydown=e=>handleMapRegionKey(e,p,f);p.onpointermove=e=>{if(drag)return;const tip=$('tooltip'),r=$('canvas').getBoundingClientRect();tip.replaceChildren();const label=document.createElement('span');label.textContent=f.name;const sub=document.createElement('small');sub.textContent=f.county+(f.town?' · '+f.town:'')+identity+' · '+regionDetail(f);tip.append(label,sub);tip.hidden=false;tip.style.left=Math.min(e.clientX-r.left+15,r.width-165)+'px';tip.style.top=Math.max(45,e.clientY-r.top-48)+'px'};p.addEventListener('pointerenter',()=>toggleLabelRegionHighlight(f,true));p.onpointerleave=()=>{$('tooltip').hidden=true;toggleLabelRegionHighlight(f,false)};p.addEventListener('focus',()=>{setMapKeyboardRegion(p);toggleLabelRegionHighlight(f,true)});p.addEventListener('blur',()=>toggleLabelRegionHighlight(f,false));return p}
 
 // Nationwide views show shared internal borders only; county views restore
 // complete polygon outlines, including coastal and isolated-island edges.
@@ -1694,6 +1731,7 @@ function render(){
  syncCouncilExportScopeVisibility();
  if(!data)return;resetSeatTiePatterns();ensureMapDetails();syncMapLayerStatus();$('canvas').classList.toggle('nationwide-mode',isNationwide());$('canvas').classList.toggle('county-mode',state.level==='counties'||mayorTownBoundaryOverlay());
  const regionGroup=$('regions'),borderGroup=$('borders'),districtGroup=$('districtBorders'),townGroup=$('townBorders');
+ const restoreMapFocus=regionGroup.contains(document.activeElement);
  for(const group of [regionGroup,borderGroup,districtGroup,townGroup]){group.replaceChildren();group.removeAttribute('transform')}
  if(identityPanelsActive()){
   renderTownBorders();
@@ -1731,7 +1769,11 @@ function render(){
   if(!historicalCountySeats&&state.level!=='counties'&&!mayorTownBoundaryOverlay()&&!(state.level==='villages'&&state.villageTown))appendSharedBorders(borderGroup,'counties');
  }
  fit();renderPalette();renderLegend();renderList();updateProgress();updateHistory();applyBorders();renderMapFurniture();
- if(typeof renderPredictionDecorations==='function')renderPredictionDecorations()
+ if(typeof renderPredictionDecorations==='function')renderPredictionDecorations();
+ const paths=[...regionGroup.querySelectorAll('[data-region]')];
+ const keyboardPath=paths.find(path=>path.dataset.region===mapKeyboardRegion)||paths[0];
+ setMapKeyboardRegion(keyboardPath);
+ if(restoreMapFocus&&!document.querySelector('dialog[open]'))keyboardPath?.focus({preventScroll:true});
 }
 function recolor(){if(state.fillMode==='prediction'){render();return}if(state.fillMode==='gradient'){for(const p of $('regions').querySelectorAll('path')){const f=currentItems().find(f=>f.id===p.dataset.region);if(!f)continue;p.setAttribute('fill',fillColor(f));p.setAttribute('aria-label',f.county+(f.name===f.county?'':f.name)+'，'+regionDetail(f));}return;}for(const p of $('regions').querySelectorAll('path')){const f=currentItems().find(x=>x.id===p.dataset.region);if(!f)continue;const pal=paletteById(featureFillId(f));p.setAttribute('fill',noTownshipElection(f)?NO_TOWNSHIP_ELECTION_COLOR:pal?.color||'#edf1e9');p.setAttribute('aria-label',f.county+(f.name===f.county?'':f.name)+'，'+(pal?.name||'未填色'))}}
 function paint(f){if(freeNationwideDistrictMap()){pushHistory();state.county=f.county;state.villageTown='';$('tooltip').hidden=true;syncInputs();render();persist();return}if(freeCountyOverview()){pushHistory();state.county=f.county||f.name;state.villageTown='';$('tooltip').hidden=true;syncInputs();render();persist();return}if((councilCountyOverview()||townshipCountyOverview())&&typeof openPredictionRegion==='function'){openPredictionRegion(f);return}if(noTownshipElection(f))return toast('本区域不举行乡镇市区长选举');if(state.fillMode==='prediction'&&typeof openPredictionRegion==='function'){openPredictionRegion(f);return}if(typeof inspectCandidateRegion==='function'&&inspectCandidateRegion(f))return;if(state.fillMode==='gradient'){if(erase){pushHistory();delete state.elections[state.level][f.id];afterElectionEdit();return;}openVoteEditor(f);return;}const id=erase?undefined:state.selected,store=f.legislativeTown?state.legislativeTownFills[featureElectorate(f)]:state.fills[state.level],key=f.legislativeTown?f.sourceId:f.id;if(store[key]===id)return;pushHistory();if(id)store[key]=id;else delete store[key];recolor();renderPalette();renderLegend();renderList();updateProgress();persist()}
