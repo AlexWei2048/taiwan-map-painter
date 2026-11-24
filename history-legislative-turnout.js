@@ -22,11 +22,19 @@
   if(regions.has(year))return regions.get(year);
   if(loading.has(year))return loading.get(year);
   const promise=(async()=>{
-   const response=await fetcher('assets/history-legislative-turnout-'+year+'.json?v=20261124-cec-reconciled-v4',{cache:'default'});
+   const response=await fetcher('assets/history-legislative-turnout-'+year+'.json?v=20261124-cec-reconciled-v5',{cache:'default'});
    if(!response.ok)throw Error('历史选举概况资料 HTTP '+response.status);
    const content=await response.json();
    if(content.schemaVersion!==1||content.year!==year||!content.ballots)
     throw Error('历史选举概况资料版本不正确');
+   if(year===2001){
+    // The enrich() path independently checks each profile against candidate votes.
+    for(const item of [{"scope":"town","county":"台北县","area":"三重市","raw_key":"03,001,02,006","profile":[270999,183560,180537,3023]},{"scope":"district","county":"台北县","area":"2","raw_key":"03,001,02,000","profile":[911610,610602,600959,9643]},{"scope":"town","county":"高雄市","area":"旗津区","raw_key":"02,000,01,006","profile":[22740,14466,14267,199]},{"scope":"district","county":"高雄市","area":"1","raw_key":"02,000,01,000","profile":[600021,394065,390190,3875]},{"scope":"county","county":"高雄市","area":"","raw_key":"02,000,00,000","profile":[1061516,701411,694094,7317]}]){
+     const regional=content.ballots.regional;
+     if(item.scope==='county')regional.county[item.county]=item.profile;
+     else (regional[item.scope][item.county]??={})[item.area]=item.profile;
+    }
+   }
    regions.set(year,content);return content;
   })();
   loading.set(year,promise);

@@ -1,0 +1,456 @@
+{
+  "year": 2001,
+  "electorate": "regional",
+  "checkedAt": "2026-11-24",
+  "status": "partial",
+  "sources": {
+    "repository": "https://github.com/MISNUK/CECDataSet",
+    "candidateBlob": "e28f110fbf3807db3ac8792adcd13a535e85430f",
+    "profilesBlob": "98648d4dc87d1d94abc3d50b3015ed0a32f62f8c",
+    "alternateRepository": "https://github.com/kiang/db.cec.gov.tw/tree/master/voteData/5%E5%B1%86%E7%AB%8B%E5%A7%94/%E5%8D%80%E5%9F%9F",
+    "alternateCandidateBlob": "365c0c56173c5de4fb705fd21958252dbddcc209",
+    "alternateProfileBlob": "e7024f81d34918b7c88e5ef6e08f1a680f21444b"
+  },
+  "official_valid": 10174005,
+  "base_valid": 10171900,
+  "corrected_valid": 10172558,
+  "recovered_votes": 658,
+  "remaining_difference": 1447,
+  "corrections": [
+    {
+      "county": "台北县",
+      "town": "三重市",
+      "district": "台北县第2选区",
+      "raw_key": "03,001,02,006",
+      "district_key": "03,001,02,000",
+      "missing_poll": 637,
+      "method": "official district candidate totals minus all other town totals",
+      "old_total": 179888,
+      "new_total": 180537,
+      "candidates": [
+        {
+          "number": "1",
+          "name": "罗恩敏",
+          "party": "无党籍",
+          "old_votes": 342,
+          "new_votes": 342,
+          "official_district_votes": 1238,
+          "other_town_votes": 896
+        },
+        {
+          "number": "2",
+          "name": "郑余镇",
+          "party": "民主进步党",
+          "old_votes": 10721,
+          "new_votes": 10775,
+          "official_district_votes": 67710,
+          "other_town_votes": 56935
+        },
+        {
+          "number": "3",
+          "name": "蔡家福",
+          "party": "中国国民党",
+          "old_votes": 3030,
+          "new_votes": 3040,
+          "official_district_votes": 37656,
+          "other_town_votes": 34616
+        },
+        {
+          "number": "4",
+          "name": "郭金龙",
+          "party": "无党籍",
+          "old_votes": 207,
+          "new_votes": 209,
+          "official_district_votes": 863,
+          "other_town_votes": 654
+        },
+        {
+          "number": "5",
+          "name": "郭素春",
+          "party": "中国国民党",
+          "old_votes": 5991,
+          "new_votes": 6008,
+          "official_district_votes": 32155,
+          "other_town_votes": 26147
+        },
+        {
+          "number": "6",
+          "name": "陈景峻",
+          "party": "民主进步党",
+          "old_votes": 28297,
+          "new_votes": 28405,
+          "official_district_votes": 41999,
+          "other_town_votes": 13594
+        },
+        {
+          "number": "7",
+          "name": "仉桂美",
+          "party": "新党",
+          "old_votes": 2087,
+          "new_votes": 2097,
+          "official_district_votes": 7584,
+          "other_town_votes": 5487
+        },
+        {
+          "number": "8",
+          "name": "王政雄",
+          "party": "无党籍",
+          "old_votes": 104,
+          "new_votes": 104,
+          "official_district_votes": 326,
+          "other_town_votes": 222
+        },
+        {
+          "number": "9",
+          "name": "李日煌",
+          "party": "台湾团结联盟",
+          "old_votes": 3450,
+          "new_votes": 3462,
+          "official_district_votes": 8107,
+          "other_town_votes": 4645
+        },
+        {
+          "number": "10",
+          "name": "李先仁",
+          "party": "中国国民党",
+          "old_votes": 8421,
+          "new_votes": 8445,
+          "official_district_votes": 22262,
+          "other_town_votes": 13817
+        },
+        {
+          "number": "11",
+          "name": "周慧瑛",
+          "party": "民主进步党",
+          "old_votes": 11793,
+          "new_votes": 11823,
+          "official_district_votes": 42754,
+          "other_town_votes": 30931
+        },
+        {
+          "number": "12",
+          "name": "李鸿钧",
+          "party": "亲民党",
+          "old_votes": 13492,
+          "new_votes": 13547,
+          "official_district_votes": 60624,
+          "other_town_votes": 47077
+        },
+        {
+          "number": "13",
+          "name": "柯淑敏",
+          "party": "亲民党",
+          "old_votes": 13166,
+          "new_votes": 13217,
+          "official_district_votes": 38799,
+          "other_town_votes": 25582
+        },
+        {
+          "number": "14",
+          "name": "李显荣",
+          "party": "中国国民党",
+          "old_votes": 5630,
+          "new_votes": 5659,
+          "official_district_votes": 36816,
+          "other_town_votes": 31157
+        },
+        {
+          "number": "15",
+          "name": "陈宏昌",
+          "party": "中国国民党",
+          "old_votes": 14292,
+          "new_votes": 14326,
+          "official_district_votes": 36611,
+          "other_town_votes": 22285
+        },
+        {
+          "number": "16",
+          "name": "林志嘉",
+          "party": "无党籍",
+          "old_votes": 11480,
+          "new_votes": 11521,
+          "official_district_votes": 31470,
+          "other_town_votes": 19949
+        },
+        {
+          "number": "17",
+          "name": "吕钧鸿",
+          "party": "亲民党",
+          "old_votes": 3555,
+          "new_votes": 3565,
+          "official_district_votes": 17363,
+          "other_town_votes": 13798
+        },
+        {
+          "number": "18",
+          "name": "陈茂男",
+          "party": "民主进步党",
+          "old_votes": 31827,
+          "new_votes": 31956,
+          "official_district_votes": 76101,
+          "other_town_votes": 44145
+        },
+        {
+          "number": "19",
+          "name": "许登宫",
+          "party": "台湾团结联盟",
+          "old_votes": 12003,
+          "new_votes": 12036,
+          "official_district_votes": 40521,
+          "other_town_votes": 28485
+        }
+      ]
+    },
+    {
+      "county": "高雄市",
+      "town": "旗津区",
+      "district": "高雄市第1选区",
+      "raw_key": "02,000,01,006",
+      "district_key": "02,000,01,000",
+      "missing_poll": null,
+      "method": "sum official polling-station candidate votes and verify each polling-station profile",
+      "old_total": 14258,
+      "new_total": 14267,
+      "candidates": [
+        {
+          "number": "1",
+          "name": "林进兴",
+          "party": "民主进步党",
+          "old_votes": 2525,
+          "new_votes": 2525,
+          "official_district_votes": 58019,
+          "other_town_votes": 55494
+        },
+        {
+          "number": "2",
+          "name": "苏盈贵",
+          "party": "台湾团结联盟",
+          "old_votes": 1252,
+          "new_votes": 1252,
+          "official_district_votes": 44415,
+          "other_town_votes": 43163
+        },
+        {
+          "number": "3",
+          "name": "谢启大",
+          "party": "新党",
+          "old_votes": 204,
+          "new_votes": 204,
+          "official_district_votes": 15172,
+          "other_town_votes": 14968
+        },
+        {
+          "number": "4",
+          "name": "林锦煌",
+          "party": "无党籍",
+          "old_votes": 175,
+          "new_votes": 184,
+          "official_district_votes": 4168,
+          "other_town_votes": 3984
+        },
+        {
+          "number": "5",
+          "name": "曾长发",
+          "party": "中国国民党",
+          "old_votes": 937,
+          "new_votes": 937,
+          "official_district_votes": 23507,
+          "other_town_votes": 22570
+        },
+        {
+          "number": "6",
+          "name": "赵念渭",
+          "party": "无党籍",
+          "old_votes": 37,
+          "new_votes": 37,
+          "official_district_votes": 971,
+          "other_town_votes": 934
+        },
+        {
+          "number": "7",
+          "name": "江绮雯",
+          "party": "中国国民党",
+          "old_votes": 714,
+          "new_votes": 714,
+          "official_district_votes": 31108,
+          "other_town_votes": 30394
+        },
+        {
+          "number": "8",
+          "name": "陈其迈",
+          "party": "民主进步党",
+          "old_votes": 2159,
+          "new_votes": 2159,
+          "official_district_votes": 56550,
+          "other_town_votes": 54391
+        },
+        {
+          "number": "9",
+          "name": "杨色玉",
+          "party": "亲民党",
+          "old_votes": 499,
+          "new_votes": 499,
+          "official_district_votes": 26887,
+          "other_town_votes": 26388
+        },
+        {
+          "number": "10",
+          "name": "罗世雄",
+          "party": "中国国民党",
+          "old_votes": 3192,
+          "new_votes": 3192,
+          "official_district_votes": 33517,
+          "other_town_votes": 30325
+        },
+        {
+          "number": "11",
+          "name": "林寿山",
+          "party": "亲民党",
+          "old_votes": 797,
+          "new_votes": 797,
+          "official_district_votes": 25906,
+          "other_town_votes": 25109
+        },
+        {
+          "number": "12",
+          "name": "刘明松",
+          "party": "建国党",
+          "old_votes": 16,
+          "new_votes": 16,
+          "official_district_votes": 398,
+          "other_town_votes": 382
+        },
+        {
+          "number": "13",
+          "name": "朱星羽",
+          "party": "民主进步党",
+          "old_votes": 830,
+          "new_votes": 830,
+          "official_district_votes": 29198,
+          "other_town_votes": 28368
+        },
+        {
+          "number": "14",
+          "name": "叶耀鹏",
+          "party": "无党籍",
+          "old_votes": 389,
+          "new_votes": 389,
+          "official_district_votes": 9569,
+          "other_town_votes": 9180
+        },
+        {
+          "number": "15",
+          "name": "王天竞",
+          "party": "无党籍",
+          "old_votes": 165,
+          "new_votes": 165,
+          "official_district_votes": 7827,
+          "other_town_votes": 7662
+        },
+        {
+          "number": "16",
+          "name": "黄万闳",
+          "party": "无党籍",
+          "old_votes": 180,
+          "new_votes": 180,
+          "official_district_votes": 5029,
+          "other_town_votes": 4849
+        },
+        {
+          "number": "17",
+          "name": "梅再兴",
+          "party": "亲民党",
+          "old_votes": 187,
+          "new_votes": 187,
+          "official_district_votes": 17949,
+          "other_town_votes": 17762
+        }
+      ]
+    }
+  ],
+  "profiles": [
+    {
+      "scope": "town",
+      "county": "台北县",
+      "area": "三重市",
+      "raw_key": "03,001,02,006",
+      "profile": [
+        270999,
+        183560,
+        180537,
+        3023
+      ]
+    },
+    {
+      "scope": "district",
+      "county": "台北县",
+      "area": "2",
+      "raw_key": "03,001,02,000",
+      "profile": [
+        911610,
+        610602,
+        600959,
+        9643
+      ]
+    },
+    {
+      "scope": "town",
+      "county": "高雄市",
+      "area": "旗津区",
+      "raw_key": "02,000,01,006",
+      "profile": [
+        22740,
+        14466,
+        14267,
+        199
+      ]
+    },
+    {
+      "scope": "district",
+      "county": "高雄市",
+      "area": "1",
+      "raw_key": "02,000,01,000",
+      "profile": [
+        600021,
+        394065,
+        390190,
+        3875
+      ]
+    },
+    {
+      "scope": "county",
+      "county": "高雄市",
+      "area": "",
+      "raw_key": "02,000,00,000",
+      "profile": [
+        1061516,
+        701411,
+        694094,
+        7317
+      ]
+    }
+  ],
+  "unresolved": [
+    {
+      "county": "台北县",
+      "town": "新店市",
+      "district": "台北县第3选区",
+      "raw_key": "03,001,03,020",
+      "missing_poll": 1783,
+      "old_valid": 135927,
+      "official_valid": 136770,
+      "delta": 843
+    },
+    {
+      "county": "台北县",
+      "town": "汐止镇",
+      "district": "台北县第3选区",
+      "raw_key": "03,001,03,025",
+      "missing_poll": 1931,
+      "old_valid": 75800,
+      "official_valid": 76404,
+      "delta": 604
+    }
+  ],
+  "note": "两个原档版本均缺这三所明细。三重市同选区仅此一处缺口，按逐候选人唯一差额恢复；旗津区逐所候选人票数与逐所有效票完全一致。新店和汐止同区，不能将候选人差额任意分配。"
+}
