@@ -217,7 +217,25 @@ function parliamentPoints(total){
  }
  return pts.sort((a,b)=>b.angle-a.angle||a.r-b.r);
 }
-const api={aggregate,value,difference,modern,percent,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,LEGISLATIVE_TOTALS};
+// Display order only: not a claim about legislative voting alliances.
+// Use conservative historical party-family grouping; ambiguous parties and
+// independents remain in the middle rather than assigning a current ideology.
+function parliamentOrder(parties){
+ const normalize=p=>String(p).replace(/[“”「」『』]/g,'').replaceAll('臺','台').replaceAll('灣','湾').replaceAll('國','国').replaceAll('黨','党').replaceAll('團','团').replaceAll('聯','联').replaceAll('親','亲').replaceAll('進','进').replaceAll('無','无').replaceAll('基進','基进');
+ const green=new Set(['台湾团结联盟','台湾基进','基进党']);
+ const blue=new Set(['亲民党','新党']);
+ const rank=p=>{const n=normalize(p);return n==='民主进步党'?0:green.has(n)?1:blue.has(n)?3:n==='中国国民党'?4:2};
+ return [...parties].sort((a,b)=>rank(a[0])-rank(b[0])||b[1]-a[1]||a[0].localeCompare(b[0],'zh'));
+}
+// Mark the boundary after the minimum majority of seats counted from left.
+// Equal angular positions can occur on different concentric rows.
+function majorityBoundary(points){
+ const total=points.length;if(!total)return null;
+ const seats=Math.floor(total/2)+1;
+ const angle=seats===total?0:(points[seats-1].angle+points[seats].angle)/2;
+ return {seats,angle};
+}
+const api={aggregate,value,difference,modern,percent,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,LEGISLATIVE_TOTALS};
 if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
 root.HistoryTrends=api;
 })(typeof window==='undefined'?{}:window);

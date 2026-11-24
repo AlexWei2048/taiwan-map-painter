@@ -150,3 +150,5 @@
 @media(max-width:650px){.trend-controls{grid-template-columns:repeat(2,minmax(0,1fr))}.trend-card{padding:8px}.trend-control select{font-size:16px}.trend-card svg{min-width:540px}}
 
 .trend-year-controls{margin:12px 0}.trend-year-title{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px}.trend-year-title .button{font-size:12px;padding:4px 10px;min-height:28px}.trend-year-picker{display:flex;flex-wrap:wrap;gap:6px 12px;margin:9px 0}.trend-year{display:inline-flex;align-items:center;gap:5px;font-size:13px}.trend-year input{width:16px;height:16px;margin:0}.trend-parliament-section h4{margin:0;color:#244c3d}.trend-parliament-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:10px}.trend-parliament-card svg{min-width:0;width:100%;height:auto}.trend-parliament-card .data-help:empty{display:none}
+
+.trend-parliament-card .trend-card-heading{justify-content:flex-end}.trend-parliament-card .trend-card-heading h4{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}.trend-parliament-card .trend-card-actions{gap:5px}

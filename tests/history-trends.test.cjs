@@ -72,3 +72,14 @@ test('Integer tick marks and parliament dot counts are exact for small and large
  for(const max of [0,1,2,3,22,113,161,164,225,910]){const ticks=T.integerTicks(max);assert.ok(ticks.every(Number.isInteger));assert.ok(ticks.at(-1)>=max)}
  for(const total of [1,2,3,6,22,113,161,164,225,910]){const pts=T.parliamentPoints(total);assert.equal(pts.length,total);assert.ok(pts.every(p=>Number.isFinite(p.x)&&Number.isFinite(p.y)&&p.y<=0));assert.equal(new Set(pts.map(p=>p.x+'|'+p.y)).size,total)}
 });
+test('Parliament layout groups major parties at opposite ends and preserves neutral parties in the middle',()=>{
+ const entries=[['中国国民党',52],['无党籍',2],['民主进步党',51],['亲民党',3],['新党',1],['“台湾团结联盟”',4],['台湾民众党',8]];
+ const names=T.parliamentOrder(entries).map(p=>p[0]);
+ assert.equal(names[0],'民主进步党');assert.equal(names.at(-1),'中国国民党');
+ assert.ok(names.indexOf('“台湾团结联盟”')<names.indexOf('台湾民众党'));
+ assert.ok(names.indexOf('无党籍')<names.indexOf('亲民党'));
+ assert.ok(names.indexOf('台湾民众党')<names.indexOf('新党'));
+ for(const [total,expected] of [[1,1],[2,2],[113,57],[161,81],[225,113],[910,456]]){
+  const m=T.majorityBoundary(T.parliamentPoints(total));assert.equal(m.seats,expected);assert.ok(m.angle>=0&&m.angle<=Math.PI)
+ }
+});

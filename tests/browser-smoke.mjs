@@ -3132,6 +3132,11 @@ test('Legislative seat trends default to all years and show complete integer par
  assert.deepEqual((await graph.locator('[data-trend-total]').allTextContents()).map(Number),[161,164,225,225,225,113,113,113,113,113]);
  const last=page.locator('.trend-parliament-card').last();
  assert.equal(await last.locator('[data-seat-dot]').count(),113);
+ assert.equal(await last.locator('[data-majority-seats]').getAttribute('data-majority-seats'),'57');
+ assert.equal(await last.locator('[data-seat-year]').count(),1);
+ assert.equal(await last.locator('[data-seat-total]').textContent(),'113席');
+ const groups=await last.locator('[data-seat-party]').evaluateAll(ns=>ns.map(n=>n.dataset.seatParty));assert.equal(groups[0],'民主进步党');assert.equal(groups.at(-1),'中国国民党');
+ assert.ok(await last.locator('image[data-seat-logo="中国国民党"]').count());assert.ok(await last.locator('image[data-seat-logo="民主进步党"]').count());
  await page.locator('#trendSelectNone').click();await page.locator('#trendYears input[value="2024"]').check();
  await page.waitForFunction(()=>document.querySelectorAll('.trend-parliament-card [data-seat-dot]').length===113);
  assert.equal(await page.locator('.trend-parliament-card').count(),1);
