@@ -136,7 +136,7 @@
       578,
       2,
       580,
-      721
+      823
     ],
     [
       311,
@@ -280,7 +280,8 @@
     16534,
     131,
     16665,
-    23103
+    23205
   ],
-  "method": "23 consecutive precincts; next precinct 24 belongs to 鼓山区; every candidate total and row arithmetic reconciled; PDF text, image endpoint unavailable"
+  "method": "23 consecutive precincts; next precinct 24 belongs to 鼓山区; every candidate total and row arithmetic reconciled; PDF text, image endpoint unavailable",
+  "correction": "2026-11-24 recheck official PDF p1 precinct 11: 823 registered, not 721; cast 580 plus 243 unused ballots = 823."
 }
