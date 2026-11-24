@@ -14,7 +14,7 @@
    String(snapshotData?.elections?.find(e=>e.election_id===contest?.election_id)?.year||'')||yearLabel();
  }
  function localContest(f,district){
-  if(!snapshotData?.cycleYears)return null;
+  if(!snapshotData?.cycleYears&&!partialTownship())return null;
   const contests=snapshotData.contests;
   if(district)return contests.find(c=>c.contest_id===district.id);
   const ids=new Set(snapshotData.elections.filter(e=>e.office===kind).map(e=>e.election_id));
@@ -25,12 +25,19 @@
  }
  function localResultYear(f,district){return contestYear(localContest(f,district))}
  const archivedCouncil=()=>!legislativeMode&&!presidentialMode&&kind==='council'&&localYear===1994;
+ const partialTownship=()=>!legislativeMode&&!presidentialMode&&kind==='township'&&
+  snapshotData?.elections?.some(e=>e.office==='township'&&e.coverage==='partial');
  const officeTitle=()=>presidentialMode?'台湾地区领导人':titles[kind];
  function appendContestSource(contest){
   if(!contest?.source_url)return;
   const source=document.createElement('a');
   source.href=contest.source_url;source.target='_blank';source.rel='noopener';
   source.textContent='资料来源 ↗';el('historyDialogMessage').append(' · ',source);
+  if(partialTownship()&&contest.profile_source){
+   const profile=source.cloneNode();
+   profile.href=contest.profile_source;profile.textContent='投开票统计 ↗';
+   el('historyDialogMessage').append(' · ',profile);
+  }
  }
  const areaLeading=()=>presidentialMode||legislativeMode&&legislativeBallot!=='regional'||mayorTownView();
  const norm=x=>simplify(String(x||'')).trim();
@@ -450,7 +457,7 @@
    if(logo)appendCircularPartyLogo(root,logo,x+38,rowY,font*1.55);
    const label=svg('text',{x:x+font+48,y:rowY+font+1,'font-size':font,fill:'#426052','data-history-legend-candidate':entry.name||''});label.textContent=legendLabel(entry)+'（'+count+(areaLeading()?'个地区':'席')+'）';root.append(label);rowY+=rowH;
   }
-  if(kind==='township'){root.append(svg('rect',{x:x+18,y:rowY+3,width:font,height:font,fill:'#fff',stroke:'#9eaaa2'}));const t=svg('text',{x:x+font+48,y:rowY+font+1,'font-size':font,fill:'#426052','data-no-township-election-legend':'true'});t.textContent='无乡镇市区长选举';root.append(t)}
+  if(kind==='township'){root.append(svg('rect',{x:x+18,y:rowY+3,width:font,height:font,fill:partialTownship()?'#edf1e9':'#fff',stroke:'#9eaaa2'}));const t=svg('text',{x:x+font+48,y:rowY+font+1,'font-size':font,fill:'#426052','data-no-township-election-legend':'true'});t.textContent=partialTownship()?'暂无已核实档案':'无乡镇市区长选举';root.append(t)}
  }
  function paintHistory(result){
   if(!active||!data)return;
@@ -784,7 +791,7 @@
   const items=kind==='mayor'&&!mayorTownView()?data.counties:data.towns;
   return items.filter(f=>!county||f.county===county);
  }
- function noElection(f){return f.name!==f.county&&active&&kind==='township'&&(loaded||localGeometry)&&!db.township.some(r=>r.county===f.county&&r.town===f.name)}
+ function noElection(f){return f.name!==f.county&&active&&kind==='township'&&!partialTownship()&&(loaded||localGeometry)&&!db.township.some(r=>r.county===f.county&&r.town===f.name)}
  function councilScopeText(d){
   if(!d)return '';
   const split=localYear===2022&&d.county==='新竹市'&&d.electorate==='regional'?
@@ -897,7 +904,8 @@
   else if(localYear===2026)el('historyBoundaryNote').textContent='2026年正式结果仅在中选会或地方选委会资料逐项核对、选区得票与席次校验通过后发布；预测与官方结果分开保存。未核实的乡镇得票不推算。';
   else if(!presidentialMode&&localGeometry){
    const cycle=snapshotData?.cycleYears?'按选举批次合并显示，各地实际投票日期见选区结果。':'按实际投票年显示。';
-   const coverage=archivedCouncil()?' 1994年1月的县市议员资料采用地方选务档案转录，经选区有效票和当选席次对账。金门县可查已核实的部分候选人资料，合计采用已收录的完整结果。':'';
+   const coverage=archivedCouncil()?' 1994年1月的县市议员资料采用地方选务档案转录，经选区有效票和当选席次对账。金门县可查已核实的部分候选人资料，合计采用已收录的完整结果。':
+    partialTownship()?' 目前收录原台北县和原高雄县的官方清册，合计采用已收录的56个选区。':'';
    el('historyBoundaryNote').textContent=cycle+coverage+' 历史边界采用可对应的现行轮廓，缺少可靠边界的选区仍可查看候选人结果。'+(localYear===2018&&kind==='mayor'?' 台北市采用法院重计结果，区级重计明细缺失。':'');
   }
   else if(presidentialMode)el('historyBoundaryNote').textContent='县市和乡镇市区按当届归属显示，边界采用现行底图近似；'+
@@ -994,9 +1002,9 @@
    '应选 '+district.seats+' 席 · 妇保 '+(district.womenReserved==null?'暂无资料':district.womenReserved+' 席')+' · 有效票 '+rows.reduce((n,r)=>n+r.votes,0).toLocaleString('zh-CN'):
    (legislativeMode?(partyBallotDialog?'本地区政党得票与得票率':legislativeBallot==='regional'&&legislativeYear<2008?'本届多席选区的当选者与得票':'本地区候选人得票及选举结果'):mayorTownView()?'本地区得票':presidentialMode?'当地候选人得票与全台当选标记':actualYear+'年得票与当选结果');
   if(rows.length)el('historyDialogMessage').append(' · '+rows.length+(partyBallotDialog?' 个政党':' 位候选人')+' · 按得票数排序');
-  if(snapshotData?.cycleYears){
+  if(snapshotData?.cycleYears||partialTownship()){
    if(contest?.election_date)el('historyDialogMessage').append(' · 投票日期 '+contest.election_date);
-   if(archivedCouncil())appendContestSource(contest);
+   if(archivedCouncil()||partialTownship())appendContestSource(contest);
   }
   renderDialogScope(f,district);
   if(district?.womenReservedMethod==='statutory')el('historyDialogMessage').append(' · 妇保按当届规定计算');
@@ -1032,7 +1040,7 @@
   const detailFeature=legislativeMode?legislativeGeometry.find(f=>f.county===norm(contest.county_name)&&String(f.number)===String(HistoryLegislative.districtNumber(contest.district_name)))||{county:norm(contest.county_name),name:norm(contest.district_name)}:null;
   renderDialogScope(detailFeature,detailDistrict);
   if(contest.reserved_seats_method==='statutory')el('historyDialogMessage').append(' · 妇保按当届规定计算');
-  if(archivedCouncil())appendContestSource(contest);
+  if(archivedCouncil()||partialTownship())appendContestSource(contest);
   for(const r of [...rows].sort((a,b)=>b.votes-a.votes)){const tr=document.createElement('tr');if(r.elected_official)tr.className='history-elected-row';for(const [i,value] of [r.ballot_number||'—',r.candidate_name,r.gender||'—',r.incumbent_at_election===true?'是':'',r.party_name,r.votes.toLocaleString('zh-CN'),Number(r.vote_share||0).toFixed(2)+'%',''].entries()){const td=document.createElement('td');if(i===7&&r.elected_official){const mark=document.createElement('img');mark.src='assets/elected-mark.png';mark.alt='当选';mark.width=18;mark.height=18;td.append(mark)}else if(i===4){const logo=logoFor(predictionParty(value));if(logo){const img=document.createElement('img');img.src=logo;img.alt='';const party=document.createElement('span');party.className='history-party-cell';party.append(img,value);td.append(party)}else td.textContent=value}else td.textContent=value;if(i===3&&r.incumbent_at_election==null)td.title='现任资料缺失';tr.append(td)}
    appendMobileCandidateDetails(tr,[['号次',r.ballot_number],['性别',r.gender],['选举时现任',tr.cells[3].textContent],['得票率',tr.cells[6].textContent]]);
    body.append(tr)

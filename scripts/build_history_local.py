@@ -614,6 +614,57 @@ def add_chiayi_rerun(contests):
     })
 
 
+def add_1994_township(snapshot, audit):
+    archive = json.loads((ROOT / 'sources/history-1994-township.json').read_text(encoding='utf-8'))
+    contests, evidence = [], {}
+    for county in archive['counties']:
+        districts = county['districts']
+        normalized_county = norm(county['county'])
+        if (len({item['town'] for item in districts}) != county['contest_count']
+                or len(districts) != county['contest_count']
+                or sum(len(item['candidates']) for item in districts) != county['candidate_count']
+                or [sum(item['profile'][i] for item in districts) for i in range(4)] != county['profile_totals']):
+            raise ValueError(f'1994 {normalized_county} archive coverage or county totals do not reconcile')
+        evidence[normalized_county] = county
+        for item in districts:
+            registered, cast, valid, invalid = item['profile']
+            candidates = item['candidates']
+            if (not registered >= cast == valid + invalid or sum(row[4] for row in candidates) != valid
+                    or [row[0] for row in candidates] != list(range(1, len(candidates) + 1))
+                    or sum(row[5] for row in candidates) != 1
+                    or next(row[4] for row in candidates if row[5]) != max(row[4] for row in candidates)):
+                raise ValueError(f'1994 {normalized_county} {item["town"]} original returns do not reconcile')
+            roster = [
+                {'number': str(number), 'name': name, 'party': party, 'gender': gender,
+                 'votes': votes, 'mark': '*' if elected else '', 'incumbent': None,
+                 'candidate_mark': '*' if elected else '', 'winner_source': county['results_url']}
+                for number, name, party, gender, votes, elected in candidates
+            ]
+            contests.append({
+                'year': 1994, 'office': 'township', 'electorate': 'regional',
+                'county': county['county'], 'district': item['town'], 'region': 0,
+                'date': archive['date'], 'local': county['results_url'], 'roster': roster,
+                'profile': [''] * 6 + list(map(str, [valid, invalid, cast, registered])),
+                'scope': [], 'detail': {}, 'town_labels': {}, 'town_profiles': {},
+            })
+    supplement = build(contests, {}, {})[0][1994]
+    supplement['elections'][0].update(
+        source_name='台北县及高雄县选举委员会原始清册',
+        source_url=evidence['台北县']['results_url'],
+        coverage='partial',
+        counties=list(evidence),
+    )
+    for contest in supplement['contests']:
+        source = evidence[contest['county_name']]
+        contest.update(source_url=source['results_url'], profile_source=source['profile_url'])
+    for key in ('elections', 'contests', 'candidacies', 'rows'):
+        snapshot[key].extend(supplement[key])
+    audit['townshipArchives'] = {
+        name: {key: source[key] for key in ('contest_count', 'candidate_count', 'profile_totals', 'results_url', 'profile_url')}
+        for name, source in evidence.items()
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('cec_zip', type=Path)
@@ -639,6 +690,8 @@ def main():
     nccu = nccu_index(args.nccu_pages)
     contests.extend(nccu_1993_contests(nccu, args.nccu_pages / 'island-nccu-1993-profile.html'))
     snapshots, audit = build(contests, tv_index(args.taiwan_votes_csv), nccu)
+    if 1994 in snapshots:
+        add_1994_township(snapshots[1994], audit[1994])
     if 2002 in snapshots:
         proof = json.loads((ROOT / 'sources/history-2002-taichung-council-profiles.json').read_text(encoding='utf-8'))
         snapshot = snapshots[2002]

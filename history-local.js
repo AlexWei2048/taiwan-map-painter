@@ -4,7 +4,7 @@
  const YEARS={
   mayor:[1993,1994,1997,1998,2001,2002,2005,2006,2009,2010,2014,2018,2022],
   council:[1994,1998,2002,2005,2006,2009,2010,2014,2018,2022],
-  township:[1998,2002,2005,2009,2014,2018,2022]
+  township:[1994,1998,2002,2005,2009,2014,2018,2022]
  };
  const CYCLES={1994:1993,1998:1997,2002:2001,2006:2005,2010:2009};
  const groupedOffice=office=>office==='mayor'||office==='council';
@@ -154,7 +154,7 @@
   if(pending.has(year))return pending.get(year);
   const request=(async()=>{
    const [response,supplement]=await Promise.all([
-    fetcher('assets/history-local-'+year+'.json?v=20261124-local-results-v2'),
+    fetcher('assets/history-local-'+year+'.json?v=20261125-local-results-v3'),
     supplementYears.has(year)?loadSupplement(fetcher):null
    ]);
    if(!response.ok)throw Error('历史数据 HTTP '+response.status);

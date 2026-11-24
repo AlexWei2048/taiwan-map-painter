@@ -39,7 +39,7 @@ test('Historical county mayors and councils use five shared election cycles with
  const batches=[[1993,1994,25],[1997,1998,25],[2001,2002,25],[2005,2006,25],[2009,2010,22]];
  assert.deepEqual(Local.years('mayor'),[1994,1998,2002,2006,2010,2014,2018,2022]);
  assert.deepEqual(Local.years('council'),Local.years('mayor'));
- assert.deepEqual(Local.years('township'),[1998,2002,2005,2009,2014,2018,2022]);
+ assert.deepEqual(Local.years('township'),[1994,1998,2002,2005,2009,2014,2018,2022]);
  const supplement=require('../assets/history-local-council-supplement.json');
  const fetcher=async url=>({ok:true,json:async()=>url.includes('supplement')?supplement:
   url.includes('1994-council')?require('../assets/history-local-1994-council.json'):data(Number(url.match(/local-(\d{4})/)[1]))});
@@ -91,6 +91,27 @@ test('Historical county mayors and councils use five shared election cycles with
   if(last===1994)assert.deepEqual(districts.filter(c=>!c.mapAvailable&&c.electorate==='regional').map(c=>c.county),
    ['新竹市','新竹市','新竹市','新竹市']);
   assert.equal(geography.counties.some(c=>c.name==='台中县'),last<2010);
+ }
+});
+
+test('The partial 1994 township archive reconciles both counties and maps all 56 contests',()=>{
+ const shard=data(1994);
+ const election=shard.elections.find(e=>e.office==='township');
+ assert.equal(election.coverage,'partial');
+ const geometry=Local.geometry(shard,map,reference,String,Core.mergePaths,Presidential.modernCounty,Presidential.baseTown);
+ for(const [county,count,candidates,totals] of [
+  ['台北县',29,81,[1989086,1239640,1200839,38801]],
+  ['高雄县',27,66,[753209,596289,582302,13987]]
+ ]){
+  const contests=shard.contests.filter(c=>c.election_id===election.election_id&&c.county_name===county);
+  assert.equal(contests.length,count);
+  assert.equal(contests.flatMap(c=>contestants(shard,c)).length,candidates);
+  assert.deepEqual(['registered_voters','ballots_cast','valid_votes','invalid_votes']
+   .map(key=>contests.reduce((total,c)=>total+c[key],0)),totals);
+  for(const contest of contests){
+   assert.ok(contest.source_url&&contest.profile_source);
+   assert.ok(geometry.towns.some(t=>t.county===county&&t.name===contest.district_name),contest.district_name);
+  }
  }
 });
 

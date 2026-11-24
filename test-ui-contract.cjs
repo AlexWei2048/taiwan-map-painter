@@ -119,8 +119,19 @@ test('Progress and nationwide party-only legends are retained',()=>{
  assert.match(workspace,/const used=counts\(\)/);
  assert.match(workspace,/legendVisiblePalette\(\)\.filter\(p=>used\[p\.id\]\)/);
 });
-test('Confirmed incumbents retain their visible label without marking others',()=>{
- assert.match(read('candidate-directory.js'),/incumbent===true\)inc\.append\(dirText\('span','现任'/);
+test('The candidate directory distinguishes incumbents, acting officeholders and other candidates',()=>{
+ const directory=read('candidate-directory.js');
+ const label=new Function(directory.match(/^function directoryIncumbencyLabel\(c\)[^\n]+/m)[0]+';return directoryIncumbencyLabel')();
+ assert.equal(label({incumbent:true}),'现任');
+ assert.equal(label({incumbent:false,incumbentStatus:'acting'}),'代理');
+ assert.equal(label({incumbent:false}),'');
+ assert.match(directory,/role=directoryIncumbencyLabel\(c\);if\(role\)inc\.append/);
+ const window={};
+ new Function('window',read('assets/election-2026.js'))(window);
+ const audit=require('./sources/election-2026/incumbency-audit-20261125.json');
+ const candidates=window.ELECTION_2026_DATA.candidates;
+ assert.deepEqual(candidates.filter(c=>c.incumbent).map(c=>c.id).sort(),Object.keys(audit.incumbents).sort());
+ assert.deepEqual(candidates.filter(c=>c.incumbentStatus==='acting').map(c=>c.id),Object.keys(audit.acting));
  assert.match(read('prediction-ui.js'),/incumbent===true\?'现任':'',r\?\.winners/);
 });
 
