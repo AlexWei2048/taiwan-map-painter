@@ -3407,6 +3407,16 @@
           "registered_voters": 148147,
           "ballots_cast": 100572,
           "invalid_votes": 866
+        },
+        {
+          "county": "高雄市",
+          "town": "前镇区",
+          "source": "https://web.cec.gov.tw/api/file/265720de-f897-4000-96e1-87ad5d7e8797.pdf",
+          "precincts": 113,
+          "valid_votes": 102642,
+          "registered_voters": 152464,
+          "ballots_cast": 103540,
+          "invalid_votes": 898
         }
       ]
     },
