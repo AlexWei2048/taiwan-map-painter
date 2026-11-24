@@ -14,6 +14,8 @@ CEC_EXCLUDED_IDS={
  "council:10009:04:003","council:10010:06:008","council:10015:05:004",
  "council:09020:01:011","council:10017:03:003"
 }
+REINSTATED_ID="council:10015:05:004"
+REINSTATED_SOURCE="https://web.cec.gov.tw/api/file/6bd6ef5c-b17d-464f-9bd9-a6c216f40dd2.pdf"
 SOURCE_URL="https://web.cec.gov.tw/central/article/65212"
 def inspect(directory):
     candidates=directory["candidates"]
@@ -24,17 +26,22 @@ def inspect(directory):
     }
     included_ids={c["id"] for c in candidates}
     exclusion={e["candidateId"]:e for e in directory.get("excluded",[]) if e.get("type")=="council"}
-    excluded_confirmed=CEC_EXCLUDED_IDS & set(exclusion)
-    missing=CEC_EXCLUDED_IDS-set(exclusion)
-    still_present=CEC_EXCLUDED_IDS & included_ids
-    other_exclusions=set(exclusion)-CEC_EXCLUDED_IDS
+    # Preserve the October cohort; separately reconcile the November court-ordered roster.
+    restored=[c for c in council if c["id"]==REINSTATED_ID and c.get("officialFinalRoster",{}).get("sourceUrl")==REINSTATED_SOURCE and c.get("number")==3]
+    effective_excluded=CEC_EXCLUDED_IDS-({REINSTATED_ID} if restored else set())
+    expected=dict(OFFICIAL_ACCEPTED)
+    expected["county"]+=len(restored)
+    excluded_confirmed=effective_excluded & set(exclusion)
+    missing=effective_excluded-set(exclusion)
+    still_present=effective_excluded & included_ids
+    other_exclusions=set(exclusion)-effective_excluded
     issues=[]
-    if actual!=OFFICIAL_ACCEPTED:issues.append("CEC council cohort counts differ")
+    if actual!=expected:issues.append("CEC council cohort counts differ")
     if missing:issues.append("CEC disqualified council IDs missing from excluded audit")
     if still_present:issues.append("CEC disqualified council IDs still shown as candidates")
     if other_exclusions:issues.append("Council exclusions not in CEC 2026-10-16 reference; review independently")
     return{"asOf":"2026-10-16","officialSource":SOURCE_URL,"scopes":actual,
-      "officialScopes":OFFICIAL_ACCEPTED,"included":len(council),
+      "officialScopes":expected,"octoberOfficialScopes":OFFICIAL_ACCEPTED,"reinstated":len(restored),"included":len(council),
       "CECdisqualifiedCandidates":len(excluded_confirmed),"totalCECdisqualified":10,
       "exclusionIdsMissing":sorted(missing),"disqualifiedStillListed":sorted(still_present),
       "additionalCouncilExclusions":sorted(other_exclusions),
