@@ -22,7 +22,7 @@
   if(regions.has(year))return regions.get(year);
   if(loading.has(year))return loading.get(year);
   const promise=(async()=>{
-   const response=await fetcher('assets/history-legislative-turnout-'+year+'.json?v=20261115-cec-modern-v3',{cache:'default'});
+   const response=await fetcher('assets/history-legislative-turnout-'+year+'.json?v=20261124-cec-reconciled-v4',{cache:'default'});
    if(!response.ok)throw Error('历史选举概况资料 HTTP '+response.status);
    const content=await response.json();
    if(content.schemaVersion!==1||content.year!==year||!content.ballots)
@@ -38,8 +38,8 @@
   if(!Array.isArray(row)||row.length!==4)return null;
   const [registeredVoters,ballotsCast,validVotes,invalidVotes]=row;
   if(!row.every(n=>Number.isSafeInteger(n)&&n>=0)||registeredVoters<ballotsCast||
-   ballotsCast===0||ballotsCast!==validVotes+invalidVotes)return null;
-  return{registeredVoters,ballotsCast,validVotes,invalidVotes,turnout:ballotsCast/registeredVoters*100};
+   ballotsCast!==validVotes+invalidVotes)return null;
+  return{registeredVoters,ballotsCast,validVotes,invalidVotes,turnout:registeredVoters===0?null:ballotsCast/registeredVoters*100};
  }
  function national(year,electorate){return unpack(NATIONAL[Number(year)]?.[String(electorate)])}
  function overall(year){return unpack(WHOLE_ELECTION[Number(year)])}
