@@ -1,0 +1,512 @@
+{
+  "checkedAt": "2026-11-24",
+  "source": "https://www.chcg.gov.tw/TSO/getFile.aspx?did=441720&dir=xizhou&file=2&file_id=588025&type=1",
+  "title": "彰選一字第1153150233號",
+  "scope": "官方正式公告文字提取，26个乡镇市；PDF原图接口未能取得；仅姓名和号次。未核对政党、性别或现任。未写入运行时核验状态，待与候选人完整快照原子合并。",
+  "rows": [
+    {
+      "candidateId": "township:10007:10007010:001",
+      "districtId": "township:10007:10007010",
+      "number": 1,
+      "existingName": "陳文賓",
+      "extractedName": "陳文賓",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007010:002",
+      "districtId": "township:10007:10007010",
+      "number": 2,
+      "existingName": "黃柏瑜",
+      "extractedName": "黃柏瑜",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007020:001",
+      "districtId": "township:10007:10007020",
+      "number": 1,
+      "existingName": "楊妙月",
+      "extractedName": "楊妙月",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007020:002",
+      "districtId": "township:10007:10007020",
+      "number": 2,
+      "existingName": "施佩妤",
+      "extractedName": "施佩好",
+      "exact": false,
+      "previousVerification": "referenceSite"
+    },
+    {
+      "candidateId": "township:10007:10007030:001",
+      "districtId": "township:10007:10007030",
+      "number": 2,
+      "existingName": "林庚壬",
+      "extractedName": "林庚王",
+      "exact": false,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007030:002",
+      "districtId": "township:10007:10007030",
+      "number": 1,
+      "existingName": "葉嘉旭",
+      "extractedName": "葉嘉旭",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007040:001",
+      "districtId": "township:10007:10007040",
+      "number": 4,
+      "existingName": "黃漢皇",
+      "extractedName": "黃漢皇",
+      "exact": true,
+      "previousVerification": "referenceSite"
+    },
+    {
+      "candidateId": "township:10007:10007040:002",
+      "districtId": "township:10007:10007040",
+      "number": 1,
+      "existingName": "林國華",
+      "extractedName": "林國華",
+      "exact": true,
+      "previousVerification": "referenceSite"
+    },
+    {
+      "candidateId": "township:10007:10007040:003",
+      "districtId": "township:10007:10007040",
+      "number": 3,
+      "existingName": "鐘帷茲",
+      "extractedName": "鐘惟茲",
+      "exact": false,
+      "previousVerification": "referenceSite"
+    },
+    {
+      "candidateId": "township:10007:10007040:004",
+      "districtId": "township:10007:10007040",
+      "number": 2,
+      "existingName": "黃玉郎",
+      "extractedName": "黃玉郎",
+      "exact": true,
+      "previousVerification": "referenceSite"
+    },
+    {
+      "candidateId": "township:10007:10007050:001",
+      "districtId": "township:10007:10007050",
+      "number": 1,
+      "existingName": "黄永欽",
+      "extractedName": "黃永欽",
+      "exact": false,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007050:002",
+      "districtId": "township:10007:10007050",
+      "number": 2,
+      "existingName": "柯智偉",
+      "extractedName": "柯智偉",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007060:001",
+      "districtId": "township:10007:10007060",
+      "number": 2,
+      "existingName": "黃俊源",
+      "extractedName": "黃俊源",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007060:002",
+      "districtId": "township:10007:10007060",
+      "number": 3,
+      "existingName": "黃椿𩃀",
+      "extractedName": "黃椿霆",
+      "exact": false,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007060:003",
+      "districtId": "township:10007:10007060",
+      "number": 1,
+      "existingName": "陳文福",
+      "extractedName": "陳文福",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007070:001",
+      "districtId": "township:10007:10007070",
+      "number": 2,
+      "existingName": "鄭倫杰",
+      "extractedName": "鄭倫杰",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007070:002",
+      "districtId": "township:10007:10007070",
+      "number": 1,
+      "existingName": "葉國雄",
+      "extractedName": "葉國雄",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007080:001",
+      "districtId": "township:10007:10007080",
+      "number": 2,
+      "existingName": "沈文盛",
+      "extractedName": "沈文盛",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007080:002",
+      "districtId": "township:10007:10007080",
+      "number": 1,
+      "existingName": "葉繼元",
+      "extractedName": "葉繼元",
+      "exact": true,
+      "previousVerification": "referenceSite"
+    },
+    {
+      "candidateId": "township:10007:10007090:001",
+      "districtId": "township:10007:10007090",
+      "number": 1,
+      "existingName": "洪千芸",
+      "extractedName": "洪千芸",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007090:002",
+      "districtId": "township:10007:10007090",
+      "number": 2,
+      "existingName": "郭哲榮",
+      "extractedName": "郭哲榮",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007100:001",
+      "districtId": "township:10007:10007100",
+      "number": 3,
+      "existingName": "凃俊任",
+      "extractedName": "涂俊任",
+      "exact": false,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007100:002",
+      "districtId": "township:10007:10007100",
+      "number": 1,
+      "existingName": "張政岳",
+      "extractedName": "張政岳",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007100:003",
+      "districtId": "township:10007:10007100",
+      "number": 2,
+      "existingName": "張裕國",
+      "extractedName": "張裕國",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007110:001",
+      "districtId": "township:10007:10007110",
+      "number": 1,
+      "existingName": "陳貞妃",
+      "extractedName": "陳貞妃",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007110:002",
+      "districtId": "township:10007:10007110",
+      "number": 2,
+      "existingName": "何炳樺",
+      "extractedName": "何炳樺",
+      "exact": true,
+      "previousVerification": "referenceSite"
+    },
+    {
+      "candidateId": "township:10007:10007120:001",
+      "districtId": "township:10007:10007120",
+      "number": 2,
+      "existingName": "蕭淑芬",
+      "extractedName": "蕭淑芬",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007120:002",
+      "districtId": "township:10007:10007120",
+      "number": 1,
+      "existingName": "江宥增",
+      "extractedName": "江宥增",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007130:001",
+      "districtId": "township:10007:10007130",
+      "number": 3,
+      "existingName": "賴志銘",
+      "extractedName": "賴志銘",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007130:002",
+      "districtId": "township:10007:10007130",
+      "number": 2,
+      "existingName": "賴茂勝",
+      "extractedName": "賴茂勝",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007130:003",
+      "districtId": "township:10007:10007130",
+      "number": 1,
+      "existingName": "游盛",
+      "extractedName": "游盛",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007140:001",
+      "districtId": "township:10007:10007140",
+      "number": 1,
+      "existingName": "施建樑",
+      "extractedName": "施建樑",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007150:001",
+      "districtId": "township:10007:10007150",
+      "number": 1,
+      "existingName": "張佩瑩",
+      "extractedName": "張佩瑩",
+      "exact": true,
+      "previousVerification": "referenceSite"
+    },
+    {
+      "candidateId": "township:10007:10007160:001",
+      "districtId": "township:10007:10007160",
+      "number": 2,
+      "existingName": "魏碩衛",
+      "extractedName": "魏碩衛",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007160:002",
+      "districtId": "township:10007:10007160",
+      "number": 1,
+      "existingName": "林致安",
+      "extractedName": "林致安",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007170:001",
+      "districtId": "township:10007:10007170",
+      "number": 1,
+      "existingName": "蕭浚二",
+      "extractedName": "蕭浚二",
+      "exact": true,
+      "previousVerification": "referenceSite"
+    },
+    {
+      "candidateId": "township:10007:10007180:001",
+      "districtId": "township:10007:10007180",
+      "number": 2,
+      "existingName": "許敏適",
+      "extractedName": "許敏適",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007180:002",
+      "districtId": "township:10007:10007180",
+      "number": 1,
+      "existingName": "羅森澤",
+      "extractedName": "羅森澤",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007190:001",
+      "districtId": "township:10007:10007190",
+      "number": 1,
+      "existingName": "顏宏霖",
+      "extractedName": "顏宏霖",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007190:002",
+      "districtId": "township:10007:10007190",
+      "number": 2,
+      "existingName": "楊麗香",
+      "extractedName": "楊麗香",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007200:001",
+      "districtId": "township:10007:10007200",
+      "number": 3,
+      "existingName": "陳一惇",
+      "extractedName": "陳一悰",
+      "exact": false,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007200:002",
+      "districtId": "township:10007:10007200",
+      "number": 2,
+      "existingName": "吳聰明",
+      "extractedName": "吳聰明",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007200:003",
+      "districtId": "township:10007:10007200",
+      "number": 1,
+      "existingName": "許杰霖",
+      "extractedName": "許杰霖",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007210:001",
+      "districtId": "township:10007:10007210",
+      "number": 2,
+      "existingName": "許淑美",
+      "extractedName": "許淑美",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007210:002",
+      "districtId": "township:10007:10007210",
+      "number": 1,
+      "existingName": "劉美蘭",
+      "extractedName": "劉美蘭",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007220:001",
+      "districtId": "township:10007:10007220",
+      "number": 2,
+      "existingName": "張景舜",
+      "extractedName": "張景舜",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007220:002",
+      "districtId": "township:10007:10007220",
+      "number": 3,
+      "existingName": "張文良",
+      "extractedName": "張文良",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007220:003",
+      "districtId": "township:10007:10007220",
+      "number": 1,
+      "existingName": "許豊麟",
+      "extractedName": "許豐麟",
+      "exact": false,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007230:001",
+      "districtId": "township:10007:10007230",
+      "number": 1,
+      "existingName": "林保玲",
+      "extractedName": "林保玲",
+      "exact": true,
+      "previousVerification": "referenceSite"
+    },
+    {
+      "candidateId": "township:10007:10007240:001",
+      "districtId": "township:10007:10007240",
+      "number": 1,
+      "existingName": "陳玉照",
+      "extractedName": "陳玉照",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007240:002",
+      "districtId": "township:10007:10007240",
+      "number": 2,
+      "existingName": "吳井萱",
+      "extractedName": "吳井萱",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007250:001",
+      "districtId": "township:10007:10007250",
+      "number": 2,
+      "existingName": "林淑女",
+      "extractedName": "林淑女",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007250:002",
+      "districtId": "township:10007:10007250",
+      "number": 3,
+      "existingName": "詹光信",
+      "extractedName": "詹光信",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007250:003",
+      "districtId": "township:10007:10007250",
+      "number": 1,
+      "existingName": "戴孟書",
+      "extractedName": "戴孟書",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007260:001",
+      "districtId": "township:10007:10007260",
+      "number": 2,
+      "existingName": "巫宛萍",
+      "extractedName": "巫宛萍",
+      "exact": true,
+      "previousVerification": "official"
+    },
+    {
+      "candidateId": "township:10007:10007260:002",
+      "districtId": "township:10007:10007260",
+      "number": 1,
+      "existingName": "劉侑信",
+      "extractedName": "劉侑信",
+      "exact": true,
+      "previousVerification": "official"
+    }
+  ]
+}
