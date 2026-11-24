@@ -28,11 +28,12 @@ identityPanelLayouts=function(){
  if(!councilCountyPresentation())return baseCouncilPanels();
  const ids=panelIdentities(),spec=sceneSpec(),a=contentArea(spec),gap=28;
  const split=ids.length===3&&ids[0]==='regional';
+ const b=identityPanelBounds();
  return ids.map((identity,i)=>{
   let area;
   if(split){const cut=a.left+(a.right-a.left)*.65;area=i===0?{left:a.left,right:cut-gap,top:a.top+52,bottom:a.bottom}:{left:cut,right:a.right,top:a.top+52+(i-1)*(a.bottom-a.top+gap)/2,bottom:a.top+(i)*(a.bottom-a.top+gap)/2-gap/2}}
   else{const w=(a.right-a.left-gap*(ids.length-1))/ids.length;area={left:a.left+i*(w+gap),right:a.left+i*(w+gap)+w,top:a.top+52,bottom:a.bottom}}
-  const items=currentItems().filter(f=>featureElectorate(f)===identity),geo=data.counties.filter(f=>f.name===state.county),b=bounds(geo),pad=35;
+  const items=currentItems().filter(f=>featureElectorate(f)===identity),pad=35;
   const scale=Math.min((area.right-area.left-pad*2)/(b[2]-b[0]),(area.bottom-area.top-pad*2)/(b[3]-b[1]));
   const panel={identity,label:electorateName(identity),items,area,t:{scale,tx:(area.left+area.right)/2-(b[0]+b[2])/2*scale,ty:(area.top+area.bottom)/2-(b[1]+b[3])/2*scale,labelLeft:area.left,labelRight:area.right,area}};
   return councilSeatMode()?prepareCouncilSeatPanel(panel):panel;

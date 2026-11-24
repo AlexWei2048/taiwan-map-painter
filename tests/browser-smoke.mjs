@@ -3017,10 +3017,20 @@ test('The earliest local cycle shows dated council returns and preserves actual 
  await page.waitForFunction(()=>History2022View.office()==='council'&&History2022View.snapshot()?.contests.some(c=>c.election_id==='1994-council-counties'));
  assert.match(await page.locator('#historyBoundaryNote').textContent(),/金门(?:县)?完整候选人得票明细待补/);
  await page.locator('#historyCounty').selectOption('台北县');
+ await page.locator('#returnTaiwanMap').waitFor({state:'visible'});
+ assert.match(await page.locator('#scopeTitle').textContent(),/^台北县 · 1993\/1994/);
+ assert.ok(await page.locator('#historySeatBadges [data-history-seat-badge]').count()>0);
  await page.locator('#regions [data-region="history-1994-council-counties:台北县:regional:第8选举区"]').press('Enter');
  assert.match(await page.locator('#historyDialogMessage').textContent(),/1994-01-29/);
  assert.equal(await page.locator('#historyDialogMessage a').getAttribute('href'),'https://web.cec.gov.tw/tpcec/article/list/1271');
  assert.match(await page.locator('#historyDialogRows').textContent(),/周雅淑/);
+ await page.locator('#closeHistoryResult').click();
+ await page.locator('#historyMetric').selectOption('votes');
+ const projections=await page.locator('#regions > g[transform]').evaluateAll(groups=>groups.map(g=>g.getAttribute('transform')));
+ assert.ok(projections.length>0);
+ assert.ok(projections.every(transform=>!/(?:NaN|Infinity)/.test(transform)));
+ await page.locator('#returnTaiwanMap').click();
+ assert.equal(await page.locator('#historyCounty').inputValue(),'');
 });
 
 test('All archived mayor and council national maps use official winners and seat pluralities',async t=>{
