@@ -100,7 +100,10 @@ test('Historic county trends retain actual county names and separate pre-merger 
    for(const r of rows){
     assert.equal(r.complete,true,city+' '+year+' '+r.reason);
     const ids=new Set(s.elections.filter(e=>e.office==='council').map(e=>e.election_id));
-    const expected=s.contests.filter(c=>ids.has(c.election_id)&&norm(c.county_name)===r.county).reduce((n,c)=>n+c.seats,0);
+    const contests=s.contests.filter(c=>ids.has(c.election_id)&&norm(c.county_name)===r.county),contestIds=new Set(contests.map(c=>c.contest_id));
+    // 2022 raw contest seat metadata omits some indigenous allocations; the
+    // separately verified 2022 district metadata and official winner flags agree.
+    const expected=year===2022?require('../assets/history-council-districts-2022.json').rows.filter(d=>norm(d.county)===r.county).reduce((n,d)=>n+d.seats,0):s.candidacies.filter(c=>contestIds.has(c.contest_id)&&c.elected_official===true).length;
     assert.equal(Object.values(r.parties).reduce((n,v)=>n+v,0),expected,city+' '+year+' '+r.county);
    }
   }
