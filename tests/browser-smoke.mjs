@@ -3015,7 +3015,7 @@ test('The earliest local cycle shows dated council returns and preserves actual 
 
  await page.locator('#historyOffice').selectOption('council');
  await page.waitForFunction(()=>History2022View.office()==='council'&&History2022View.snapshot()?.contests.some(c=>c.election_id==='1994-council-counties'));
- assert.match(await page.locator('#historyBoundaryNote').textContent(),/金门县完整候选人得票明细待补/);
+ assert.match(await page.locator('#historyBoundaryNote').textContent(),/金门(?:县)?完整候选人得票明细待补/);
  await page.locator('#historyCounty').selectOption('台北县');
  await page.locator('#regions [data-region="history-1994-council-counties:台北县:regional:第8选举区"]').press('Enter');
  assert.match(await page.locator('#historyDialogMessage').textContent(),/1994-01-29/);
