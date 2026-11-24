@@ -6,9 +6,11 @@
   "method": "按县市、类别、选区及号次一对一匹配；来源为第三方索引，不表示全部原始公报已逐人核实；referenceIncumbent不可直接用于现任认定。",
   "stats": {
     "total": 2051,
-    "exactNormalizedNames": 2047,
-    "nameVariants": 4,
-    "officialFinalRoster": 778
+    "exactNormalizedNames": 2048,
+    "nameVariants": 3,
+    "resolvedAliases": 3,
+    "unresolvedNameVariants": 0,
+    "officialFinalRoster": 782
   },
   "rows": [
     {
@@ -12004,11 +12006,12 @@
       "localName": "朱仲一 Kalih．Tahes．Didiyun",
       "referenceName": "朱仲一",
       "nameMatch": false,
-      "officialFinalRoster": false,
+      "officialFinalRoster": true,
       "referenceOfficialSource": "https://web.cec.gov.tw/mlec/article/65362",
       "referenceParty": "無",
       "referenceGender": "",
-      "referenceIncumbent": ""
+      "referenceIncumbent": "",
+      "resolution": "正式公报含双语姓名；第三方索引省略族名；中文及号次匹配"
     },
     {
       "candidateId": "council:10005:08:001",
@@ -12017,11 +12020,12 @@
       "localName": "劉美蘭 Iwan．Sigiy",
       "referenceName": "劉美蘭",
       "nameMatch": false,
-      "officialFinalRoster": false,
+      "officialFinalRoster": true,
       "referenceOfficialSource": "https://web.cec.gov.tw/mlec/article/65362",
       "referenceParty": "中國國民黨",
       "referenceGender": "",
-      "referenceIncumbent": "Y"
+      "referenceIncumbent": "Y",
+      "resolution": "正式公报含双语姓名；第三方索引省略族名；中文及号次匹配"
     },
     {
       "candidateId": "council:10005:08:002",
@@ -12030,11 +12034,12 @@
       "localName": "黃茹君 Haking Yumaʼ",
       "referenceName": "黃茹君",
       "nameMatch": false,
-      "officialFinalRoster": false,
+      "officialFinalRoster": true,
       "referenceOfficialSource": "https://web.cec.gov.tw/mlec/article/65362",
       "referenceParty": "無",
       "referenceGender": "",
-      "referenceIncumbent": ""
+      "referenceIncumbent": "",
+      "resolution": "正式公报含双语姓名；第三方索引省略族名；中文及号次匹配"
     },
     {
       "candidateId": "council:10007:01:001",
@@ -14796,14 +14801,15 @@
       "candidateId": "council:10009:07:001",
       "districtId": "council:10009:07",
       "number": 2,
-      "localName": "呂佶娜",
+      "localName": "呂佶娜 Aniu‧Wuhsin",
       "referenceName": "呂佶娜Aniu‧Wuhsin",
-      "nameMatch": false,
-      "officialFinalRoster": false,
+      "nameMatch": true,
+      "officialFinalRoster": true,
       "referenceOfficialSource": "https://web.cec.gov.tw/api/file/af4001de-cfa1-4b10-948e-4f6addd8e5fa.pdf",
       "referenceParty": "中國國民黨",
       "referenceGender": "",
-      "referenceIncumbent": ""
+      "referenceIncumbent": "",
+      "resolution": "正式公报中文姓名，族名来自10月27日官方抽签原图"
     },
     {
       "candidateId": "council:10009:07:002",

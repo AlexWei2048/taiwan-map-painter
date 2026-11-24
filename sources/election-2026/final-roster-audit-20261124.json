@@ -3,7 +3,7 @@
   "checkedAt": "2026-11-24",
   "baseCandidateBlob": "cde314259e932bc4a9a45e319fcdc3336d051a87",
   "status": "partial",
-  "scope": "正式名单及号次；台北、新北、台南、高雄、基隆、新竹市市长公报及新竹市第6、7议员选区公报同时核对性别及推荐政党；其他公告仅姓名及号次。未核验现任状态。；本次电子公报补核县市长28人（其中嘉义县2人使用正式名单公告）及金门、马祖部分议员8人，公报可见的性别和推荐政党亦对照，未更改现任字段。；澎湖县正式公告整县对照，存在2处文字抽取字形差异待复核。；新增旧版公报及选委会公报文字核对14名县市长，另1人仅核对官方抽签结果，未升级为最终名单。；追加澎湖第2、5选区存疑姓名原图复核及马祖第4议员选区、东引乡长正式公报文字核对。；宜兰县、台东县11月17日正式名单公告原图复核。；花莲县11月17日正式名单原图对账，恢复周骏宥；宜兰胡文聪正式双语名补录。；三湾乡公报剔除未列名登记者，彰化县议员公告及花莲第6选区公报复核，宜兰头城镇蔡文益推荐政党修正。",
+  "scope": "正式名单及号次；台北、新北、台南、高雄、基隆、新竹市市长公报及新竹市第6、7议员选区公报同时核对性别及推荐政党；其他公告仅姓名及号次。未核验现任状态。；本次电子公报补核县市长28人（其中嘉义县2人使用正式名单公告）及金门、马祖部分议员8人，公报可见的性别和推荐政党亦对照，未更改现任字段。；澎湖县正式公告整县对照，存在2处文字抽取字形差异待复核。；新增旧版公报及选委会公报文字核对14名县市长，另1人仅核对官方抽签结果，未升级为最终名单。；追加澎湖第2、5选区存疑姓名原图复核及马祖第4议员选区、东引乡长正式公报文字核对。；宜兰县、台东县11月17日正式名单公告原图复核。；花莲县11月17日正式名单原图对账，恢复周骏宥；宜兰胡文聪正式双语名补录。；三湾乡公报剔除未列名登记者，彰化县议员公告及花莲第6选区公报复核，宜兰头城镇蔡文益推荐政党修正。；苗栗县第7、8选区及云林第7选区双语姓名差异已通过公报、抽签记录解决。",
   "sources": {
     "P": {
       "url": "https://web.cec.gov.tw/api/file/0a48ccd3-268d-4cb9-924c-dc777af8705a.pdf",
@@ -199,14 +199,26 @@
       "date": null,
       "title": "宜兰县乡镇市长候选人资料",
       "method": "official candidate list text"
+    },
+    "MLC78": {
+      "url": "https://eebulletin.cec.gov.tw/115/08%E8%8B%97%E6%A0%97%E7%B8%A3/02%E7%B8%A3%E8%AD%B0%E5%93%A1/%E8%8B%97%E6%A0%97%E7%B8%A3%E8%AD%B0%E5%93%A1%E7%AC%AC1%E9%81%B8%E5%8D%80.pdf",
+      "date": null,
+      "title": "苗栗县议员公报，第6页第7、8选区",
+      "method": "official bulletin text; screenshot unavailable; Chinese names corroborated by county draw announcement"
+    },
+    "YLC78": {
+      "url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/115%E5%B9%B4/11%E9%9B%B2%E6%9E%97%E7%B8%A3/%E9%9B%B2%E6%9E%97%E7%B8%A3%E7%AC%AC07%E3%80%8108%E9%81%B8%E8%88%89%E5%8D%80.pdf",
+      "date": null,
+      "title": "云林县第7、8选区议员公报",
+      "method": "official bulletin page image"
     }
   },
   "counts": {
     "mayor": 81,
-    "council": 464,
+    "council": 468,
     "township": 233
   },
-  "newOfficial": 947,
+  "newOfficial": 948,
   "rows": [
     {
       "candidateId": "council:10013:01:009",
@@ -11895,23 +11907,88 @@
         "name",
         "number"
       ]
-    }
-  ],
-  "unresolved": [
+    },
     {
-      "districtId": "council:10015:06",
-      "officialNameText": "蔡依靜 Lamen．Panay",
-      "officialNumber": 2,
-      "localName": "蔡依靜\nLamenǸPanay",
-      "source": "HL",
-      "note": "姓名拼写或字形差异，保留原记录待核"
+      "candidateId": "council:10005:07:002",
+      "districtId": "council:10005:07",
+      "type": "council",
+      "nameOriginal": "朱仲一\nKalih．Tahes．Didiyun",
+      "officialName": "朱仲一 Kalih．Tahes．Didiyun",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "official",
+      "source": "MLC78",
+      "page": 6,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number",
+        "gender",
+        "party"
+      ]
+    },
+    {
+      "candidateId": "council:10005:08:001",
+      "districtId": "council:10005:08",
+      "type": "council",
+      "nameOriginal": "劉美蘭\nIwan．Sigiy",
+      "officialName": "劉美蘭 Iwan．Sigiy",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "official",
+      "source": "MLC78",
+      "page": 6,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number",
+        "gender",
+        "party"
+      ]
+    },
+    {
+      "candidateId": "council:10005:08:002",
+      "districtId": "council:10005:08",
+      "type": "council",
+      "nameOriginal": "黃茹君\nHaking Yumaʼ",
+      "officialName": "黃茹君 Haking Yumaʼ",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "official",
+      "source": "MLC78",
+      "page": 6,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number",
+        "gender",
+        "party"
+      ]
+    },
+    {
+      "candidateId": "council:10009:07:001",
+      "districtId": "council:10009:07",
+      "type": "council",
+      "nameOriginal": "呂佶娜",
+      "officialName": "呂佶娜",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "referenceSite",
+      "source": "YLC78",
+      "page": 1,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number",
+        "gender",
+        "party"
+      ]
     }
   ],
+  "unresolved": [],
   "externalCountDiscrepancy": {
-    "siteCouncil": 1492,
-    "mediaCouncil": 1493,
-    "source": "https://udn.com/vote2026/story/124652/9887492",
-    "status": "待正式逐人核实，不自动增加候选人"
+    "resolved": true,
+    "note": "恢复花莲周骏宥、排除苗栗三湾乡未列公报登记者；与第三方源链接名册2051名一对一对应。"
   },
   "additionalDrawChecks": [
     {
@@ -11962,5 +12039,27 @@
     }
   ],
   "secondaryCrosscheck": "sources/election-2026/secondary-roster-crosscheck-20261124.json",
-  "changhuaUnresolved": []
+  "changhuaUnresolved": [],
+  "aliasReconciliation": [
+    {
+      "candidateId": "council:10005:07:002",
+      "source": "MLC78",
+      "resolution": "正式公报含双语姓名；第三方索引省略族名；中文及号次匹配"
+    },
+    {
+      "candidateId": "council:10005:08:001",
+      "source": "MLC78",
+      "resolution": "正式公报含双语姓名；第三方索引省略族名；中文及号次匹配"
+    },
+    {
+      "candidateId": "council:10005:08:002",
+      "source": "MLC78",
+      "resolution": "正式公报含双语姓名；第三方索引省略族名；中文及号次匹配"
+    },
+    {
+      "candidateId": "council:10009:07:001",
+      "source": "YLC78",
+      "resolution": "正式公报中文姓名，族名来自10月27日官方抽签原图"
+    }
+  ]
 }
