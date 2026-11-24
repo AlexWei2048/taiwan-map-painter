@@ -3157,4 +3157,8 @@ test('Historical council trends resolve former names and show pre-merger county 
  const labels=await page.locator('.trend-parliament-card [data-seat-year]').allTextContents();
  assert.ok(labels.includes('1994 · 高雄县'));assert.ok(labels.includes('1994 · 高雄市'));assert.ok(labels.includes('2010 · 高雄市'));
  assert.equal(labels.filter(x=>x.startsWith('2010')).length,1);
+ const pair=page.locator('[data-seat-pair="1994"]');assert.equal(await pair.count(),1);
+ assert.deepEqual(await pair.locator('[data-seat-date]').allTextContents(),['1994-01-29','1994-12-03']);
+ assert.equal(await pair.locator('[data-majority-seats]').count(),2);
+ assert.equal(await page.locator('.trend-parliament-card svg').count(),8);
 });

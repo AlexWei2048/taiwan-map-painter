@@ -109,3 +109,20 @@ test('Historic county trends retain actual county names and separate pre-merger 
  const kaohsiung=T.historicalScopeRows(s,{...conf,county:'高雄市'});
  assert.ok(kaohsiung.every(r=>/^2002$/.test(r.label)));
 });
+
+test('Council and mayor dates use their own original contests in every old election cycle',async()=>{
+ const L=require('../history-local.js'),norm=require('../assets/opencc.js').Converter({from:'t',to:'cn'});
+ const fetcher=async url=>({ok:true,json:async()=>url.includes('supplement')?require('../assets/history-local-council-supplement.json'):url.includes('1994-council')?require('../assets/history-local-1994-council.json'):require('../assets/history-local-'+url.match(/local-(\d{4})/)[1]+'.json')});
+ const checks={1994:['1994-01-29','1994-12-03'],1998:['1998-01-24','1998-12-05'],2002:['2002-01-26','2002-12-07'],2006:['2005-12-03','2006-12-09']};
+ for(const [year,dates] of Object.entries(checks)){
+  const s=await L.loadCycle(Number(year),'council',fetcher);
+  assert.deepEqual(T.electionDates(s,'council','高雄县',norm),[dates[0]]);
+  assert.deepEqual(T.electionDates(s,'council','高雄市',norm),[dates[1]]);
+  const all=T.historicalScopeRows(s,{office:'council',electorate:'all',metric:'party',normalize:norm})[0];
+  assert.deepEqual(all.label,[...new Set(dates.map(d=>d.slice(0,4)))].join('/'));
+  for(const county of ['台北县','桃园县','台中县','台中市','台南县','台南市','高雄县'])assert.deepEqual(T.electionDates(s,'council',county,norm),[dates[0]],county+' '+year);
+  for(const county of ['台北市','高雄市'])assert.deepEqual(T.electionDates(s,'council',county,norm),[dates[1]],county+' '+year);
+  const mayor=T.electionDates(s,'mayor','高雄县',norm);
+  assert.ok(mayor.every(d=>d.startsWith(String(Number(year)-1))),year+' '+mayor);
+ }
+});

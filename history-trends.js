@@ -133,15 +133,21 @@ function historicalCountyScopes(snapshot,selection){
  const available=family.filter(n=>present.has(n));
  return available.length?available:[county];
 }
+// Dates must be derived from this office's original contests, not the
+// shared local-election cycle (which also contains a different office).
+function electionDates(snapshot,office,county='',normalize=String){
+ const ids=electionIds(snapshot,office);
+ return [...new Set((snapshot.contests||[]).filter(c=>ids.has(c.election_id)&&(!county||normalize(String(c.county_name||''))===county)).map(c=>c.election_date).filter(d=>/^\d{4}-\d{2}-\d{2}$/.test(d||'')))].sort();
+}
 function historicalScopeRows(snapshot,selection,anchor){
  const {county='',office,normalize=String}=selection;
  const family=historicalCountyFamily(county),merged=MERGE_FAMILIES.some(g=>g.includes(county));
  const scopes=historicalCountyScopes(snapshot,selection);
  return scopes.map(actualCounty=>{
   const result=mapTrend(snapshot,{...selection,county:actualCounty,anchorCounty:county},anchor);
-  const ids=electionIds(snapshot,office);
-  const dates=[...new Set((snapshot.contests||[]).filter(c=>ids.has(c.election_id)&&normalize(String(c.county_name||''))===actualCounty).map(c=>c.election_date?.slice(0,4)).filter(Boolean))].sort();
-  if(actualCounty&&dates.length)result.label=dates.join('/');
+  const actualDates=electionDates(snapshot,office,actualCounty,normalize),dates=[...new Set(actualDates.map(d=>d.slice(0,4)))];
+  if(dates.length)result.label=dates.join('/');
+  result.dates=actualDates;result.cycle=snapshot.year;
   result.county=actualCounty;
   // Different pre-merger county and city are separate comparison units.
   // Do not join vote trends across their merger as if the boundaries stayed fixed.
@@ -278,7 +284,7 @@ function majorityBoundary(points){
  const angle=seats===total?0:(points[seats-1].angle+points[seats].angle)/2;
  return {seats,angle};
 }
-const api={aggregate,value,difference,modern,percent,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,historicalScopeRows,LEGISLATIVE_TOTALS};
+const api={aggregate,value,difference,modern,percent,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,historicalScopeRows,electionDates,LEGISLATIVE_TOTALS};
 if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
 root.HistoryTrends=api;
 })(typeof window==='undefined'?{}:window);
