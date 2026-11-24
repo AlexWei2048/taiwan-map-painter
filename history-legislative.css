@@ -135,3 +135,16 @@
 .history-list-nominee.withdrawn{opacity:.8;background:#f8f5f3;border-style:dashed}
 .history-list-nominee.withdrawn .history-list-person{text-decoration:line-through;text-decoration-color:#b5a49a}
 .history-list-nominee.withdrawn .history-list-result{color:#936d50;white-space:normal}
+
+/* Cross-election trends: consistent with the historical workbench. */
+.trend-heading h3{margin:0 0 5px;color:#214b3b}.trend-heading p{margin:0 0 14px;font-size:13px;color:#566c60}
+.trend-controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:10px 0}
+.trend-control{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:600;color:#405b4c;min-width:0}.trend-control select{width:100%;min-width:0}
+.trend-actions,.trend-card-actions{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.trend-actions .button,.trend-card-actions .button{font-size:12px;padding:6px 10px;min-height:30px}
+.trend-party-picker{display:flex;flex-wrap:wrap;gap:5px 13px;max-height:155px;overflow:auto;padding:8px 0;margin:8px 0}
+.trend-party{display:inline-flex;gap:5px;align-items:center;font-size:12px;color:#365246}.trend-party input{width:15px;height:15px;margin:0}.trend-party i{display:inline-block;width:11px;height:11px;border-radius:2px;flex:none}
+.trend-charts{display:grid;gap:12px}.trend-card{min-width:0;overflow:auto;border:1px solid #dce8e0;border-radius:10px;background:#fff;padding:12px}
+.trend-card-heading{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}.trend-card-heading h4{margin:0;color:#244c3d;font-size:15px}
+.trend-card svg{display:block;width:100%;min-width:560px;height:auto}.trend-card svg [role=button]{cursor:pointer}.trend-card svg [role=button]:focus{outline:none;stroke:#d38b25;stroke-width:3px}
+.trend-point-readout{font-size:13px;color:#315948;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+@media(max-width:650px){.trend-controls{grid-template-columns:repeat(2,minmax(0,1fr))}.trend-card{padding:8px}.trend-control select{font-size:16px}.trend-card svg{min-width:540px}}
