@@ -379,6 +379,21 @@ def nccu_1993_contests(nccu, profiles_file):
                 town = norm(r[0]).removeprefix(county)
                 if town in detail:
                     town_profiles[town] = [''] * 6 + [r[3], r[4], r[2], r[1]]
+        # Wuqiu is the only missing Kinmen township profile in this archive.
+        # Derive exact residual counts only from a complete six-town return,
+        # with independently reconciled candidate totals and five valid profiles.
+        kinmen_towns = {'金城镇', '金沙镇', '金湖镇', '金宁乡', '烈屿乡', '乌丘乡'}
+        if county == '金门县' and set(detail) == kinmen_towns and set(town_profiles) == kinmen_towns - {'乌丘乡'}:
+            official = list(map(int, (row[10], row[11], row[9], row[2])))
+            other = [list(map(int, p[6:10])) for p in town_profiles.values()]
+            if (sum(sum(v.values()) for v in detail.values()) == official[0]
+                    and all(sum(v[n] for v in detail.values()) == next(p['votes'] for p in roster if p['number'] == n) for n in names)
+                    and all(int(town_profiles[t][6]) == sum(detail[t].values()) for t in town_profiles)
+                    and all(a >= 0 and b >= 0 and a+b == c and d >= c for a,b,c,d in other)):
+                residual = [v - sum(p[i] for p in other) for i,v in enumerate(official)]
+                a,b,c,d = residual
+                if a == sum(detail['乌丘乡'].values()) and a >= 0 and b >= 0 and a+b == c and d >= c:
+                    town_profiles['乌丘乡'] = [''] * 6 + list(map(str, residual))
         yield {'year': 1993, 'office': 'mayor', 'electorate': 'regional', 'county': row[0],
                'district': row[0], 'region': 0, 'date': '1993-11-27', 'roster': roster,
                'profile': [''] * 6 + [row[10], row[11], row[9], row[2]],
@@ -498,6 +513,8 @@ def build(contests, tv, nccu):
                 subtotal = sum(votes.values())
                 s['townProfiles'].append({'office': office, 'county': county, 'town': norm(ct['town_labels'][key]),
                                           'valid_votes': subtotal, **profile_fields(ct['town_profiles'].get(key), subtotal)})
+                if year == 1993 and county == '金门县' and norm(ct['town_labels'][key]) == '乌丘乡' and s['townProfiles'][-1]['registered_voters'] is not None:
+                    s['townProfiles'][-1].update(profile_method='county_total_minus_all_other_towns', profile_source=NCCU_1993)
         for p in ct['roster']:
             sources = {name: match_candidate(ct, p, index, name) for name, index in (('tv', tv), ('nccu', nccu))}
             flags = {}
