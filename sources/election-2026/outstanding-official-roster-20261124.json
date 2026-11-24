@@ -1,24 +1,9 @@
 {
   "checkedAt": "2026-11-24",
   "scope": "待官方正式名单逐人原件复核；并非候选人资料为空。目录入口仅供后续定位，不能作为已核验证据。",
-  "finalPending": 249,
-  "officialNumberPending": 104,
+  "finalPending": 232,
+  "officialNumberPending": 87,
   "groups": [
-    {
-      "county": "新竹市",
-      "type": "council",
-      "officialDirectory": "https://eebulletin.cec.gov.tw/?dir=115%2F19%E6%96%B0%E7%AB%B9%E5%B8%82%2F02%E5%B8%82%E8%AD%B0%E5%93%A1",
-      "candidates": [
-        {
-          "id": "council:10018:05:007",
-          "districtId": "council:10018:05",
-          "name": "陳啓源",
-          "number": 3,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E6%96%B0%E7%AB%B9%E5%B8%82/"
-        }
-      ]
-    },
     {
       "county": "苗栗县",
       "type": "council",
@@ -339,21 +324,6 @@
       ]
     },
     {
-      "county": "云林县",
-      "type": "council",
-      "officialDirectory": "https://eebulletin.cec.gov.tw/?dir=115%2F11%E9%9B%B2%E6%9E%97%E7%B8%A3%2F02%E7%B8%A3%E8%AD%B0%E5%93%A1",
-      "candidates": [
-        {
-          "id": "council:10009:05:004",
-          "districtId": "council:10009:05",
-          "name": "林宜豊",
-          "number": 9,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E9%9B%B2%E6%9E%97%E7%B8%A3/"
-        }
-      ]
-    },
-    {
       "county": "嘉义市",
       "type": "council",
       "officialDirectory": "https://eebulletin.cec.gov.tw/?dir=115%2F20%E5%98%89%E7%BE%A9%E5%B8%82%2F02%E5%B8%82%E8%AD%B0%E5%93%A1",
@@ -668,154 +638,6 @@
           "number": 1,
           "numberVerification": "official",
           "existingNumberSource": "https://www.nankan.gov.tw/Chhtml/Detail/2221?mcid=114026"
-        }
-      ]
-    },
-    {
-      "county": "新北市",
-      "type": "township",
-      "officialDirectory": "https://eebulletin.cec.gov.tw/?dir=115%2F02%E6%96%B0%E5%8C%97%E5%B8%82",
-      "candidates": [
-        {
-          "id": "township:65000:65000290:001",
-          "districtId": "township:65000:65000290",
-          "name": "周至剛",
-          "number": 3,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E6%96%B0%E5%8C%97%E5%B8%82/"
-        },
-        {
-          "id": "township:65000:65000290:002",
-          "districtId": "township:65000:65000290",
-          "name": "周志國",
-          "number": 1,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E6%96%B0%E5%8C%97%E5%B8%82/"
-        },
-        {
-          "id": "township:65000:65000290:003",
-          "districtId": "township:65000:65000290",
-          "name": "施俊雄",
-          "number": 2,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E6%96%B0%E5%8C%97%E5%B8%82/"
-        }
-      ]
-    },
-    {
-      "county": "桃园市",
-      "type": "township",
-      "officialDirectory": "https://eebulletin.cec.gov.tw/?dir=115%2F06%E6%A1%83%E5%9C%92%E5%B8%82",
-      "candidates": [
-        {
-          "id": "township:68000:68000130:001",
-          "districtId": "township:68000:68000130",
-          "name": "蘇佐璽",
-          "number": 1,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E6%A1%83%E5%9C%92%E5%B8%82/"
-        }
-      ]
-    },
-    {
-      "county": "台中市",
-      "type": "township",
-      "officialDirectory": "https://eebulletin.cec.gov.tw/?dir=115%2F03%E8%87%BA%E4%B8%AD%E5%B8%82",
-      "candidates": [
-        {
-          "id": "township:66000:66000290:001",
-          "districtId": "township:66000:66000290",
-          "name": "林吉財",
-          "number": 4,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E8%87%BA%E4%B8%AD%E5%B8%82/"
-        },
-        {
-          "id": "township:66000:66000290:002",
-          "districtId": "township:66000:66000290",
-          "name": "陳文書",
-          "number": 3,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E8%87%BA%E4%B8%AD%E5%B8%82/"
-        },
-        {
-          "id": "township:66000:66000290:003",
-          "districtId": "township:66000:66000290",
-          "name": "簡正忠",
-          "number": 1,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E8%87%BA%E4%B8%AD%E5%B8%82/"
-        },
-        {
-          "id": "township:66000:66000290:004",
-          "districtId": "township:66000:66000290",
-          "name": "羅清輝",
-          "number": 2,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E8%87%BA%E4%B8%AD%E5%B8%82/"
-        },
-        {
-          "id": "township:66000:66000290:006",
-          "districtId": "township:66000:66000290",
-          "name": "陳茂井",
-          "number": 5,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E8%87%BA%E4%B8%AD%E5%B8%82/"
-        }
-      ]
-    },
-    {
-      "county": "高雄市",
-      "type": "township",
-      "officialDirectory": "https://eebulletin.cec.gov.tw/?dir=115%2F05%E9%AB%98%E9%9B%84%E5%B8%82",
-      "candidates": [
-        {
-          "id": "township:64000:64000360:001",
-          "districtId": "township:64000:64000360",
-          "name": "駱韋志",
-          "number": 1,
-          "numberVerification": "single-candidate-rule",
-          "existingNumberSource": "https://news.tvbs.com.tw/politics/4041834"
-        },
-        {
-          "id": "township:64000:64000370:001",
-          "districtId": "township:64000:64000370",
-          "name": "杜司偉 Andrew Isbabanal",
-          "number": 1,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E9%AB%98%E9%9B%84%E5%B8%82/%E6%A1%83%E6%BA%90%E5%8D%80/"
-        },
-        {
-          "id": "township:64000:64000370:002",
-          "districtId": "township:64000:64000370",
-          "name": "陳德福",
-          "number": 4,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E9%AB%98%E9%9B%84%E5%B8%82/%E6%A1%83%E6%BA%90%E5%8D%80/"
-        },
-        {
-          "id": "township:64000:64000370:003",
-          "districtId": "township:64000:64000370",
-          "name": "張志誠 Haisul· Ispalavi",
-          "number": 2,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E9%AB%98%E9%9B%84%E5%B8%82/%E6%A1%83%E6%BA%90%E5%8D%80/"
-        },
-        {
-          "id": "township:64000:64000370:004",
-          "districtId": "township:64000:64000370",
-          "name": "伊斯坦大·貝雅夫·正福 Istanda· Paingav",
-          "number": 3,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E9%AB%98%E9%9B%84%E5%B8%82/%E6%A1%83%E6%BA%90%E5%8D%80/"
-        },
-        {
-          "id": "township:64000:64000380:001",
-          "districtId": "township:64000:64000380",
-          "name": "孔賢傑",
-          "number": 1,
-          "numberVerification": "single-candidate-rule",
-          "existingNumberSource": "https://news.tvbs.com.tw/politics/4041834"
         }
       ]
     },
@@ -2104,7 +1926,7 @@
       "source": "MTCF"
     }
   ],
-  "limitations": "部分电子公报超过网页工具PDF读取限制，部分截图缓存缺失；原始附件无法访问时不升级证据。；高雄四区改用官方有声公报名录复核，苗栗部分大PDF仍超限。；南投县部分单独公报可读，仍有5个乡镇公报待复核。；苗栗第1、4、5议员选区已取得官方抽签结果，正式公报仍待核。；嘉义市抽签表6处姓名文字差异尚待原图复核。；本轮官方公告索引可检索，但候选人附件缓存未命中，未提升逐人证据等级。新增官方汇总差异待核。",
+  "limitations": "部分电子公报超过网页工具PDF读取限制，部分截图缓存缺失；原始附件无法访问时不升级证据。；高雄四区改用官方有声公报名录复核，苗栗部分大PDF仍超限。；南投县部分单独公报可读，仍有5个乡镇公报待复核。；苗栗第1、4、5议员选区已取得官方抽签结果，正式公报仍待核。；嘉义市抽签表6处姓名文字差异尚待原图复核。；本轮官方公告索引可检索，但候选人附件缓存未命中，未提升逐人证据等级。新增官方汇总差异待核。；新增17人已由官方公报/抽签表核验；仍有其他候选人待正式公报逐人核对。",
   "chiayiCityDrawTextVariants": [
     {
       "districtId": "council:10020:01",

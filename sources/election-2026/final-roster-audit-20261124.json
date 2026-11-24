@@ -3,7 +3,7 @@
   "checkedAt": "2026-11-24",
   "baseCandidateBlob": "cde314259e932bc4a9a45e319fcdc3336d051a87",
   "status": "partial",
-  "scope": "正式名单及号次；台北、新北、台南、高雄、基隆、新竹市市长公报及新竹市第6、7议员选区公报同时核对性别及推荐政党；其他公告仅姓名及号次。未核验现任状态。；本次电子公报补核县市长28人（其中嘉义县2人使用正式名单公告）及金门、马祖部分议员8人，公报可见的性别和推荐政党亦对照，未更改现任字段。；澎湖县正式公告整县对照，存在2处文字抽取字形差异待复核。；新增旧版公报及选委会公报文字核对14名县市长，另1人仅核对官方抽签结果，未升级为最终名单。；追加澎湖第2、5选区存疑姓名原图复核及马祖第4议员选区、东引乡长正式公报文字核对。；宜兰县、台东县11月17日正式名单公告原图复核。；花莲县11月17日正式名单原图对账，恢复周骏宥；宜兰胡文聪正式双语名补录。；三湾乡公报剔除未列名登记者，彰化县议员公告及花莲第6选区公报复核，宜兰头城镇蔡文益推荐政党修正。；苗栗县第7、8选区及云林第7选区双语姓名差异已通过公报、抽签记录解决。；桃园市14个议员选区108人正式公告原图逐人核对姓名与号次，未核验性别、推荐政党或现任。；台北、台中、台南三市共285人按正式公告逐区核对姓名、号次，未核验性别、政党或现任；台中原图接口失败，依据可提取的完整正式附件文字。；基隆、金门议员正式名单原图对账，及新竹市部分议员原图/文字对账；未改变其他字段。；追加云林、南投议员及云林乡镇市长正式名单原图，以及新北、高雄议员抽签原图核对；抽签不等于正式名单，字形不一致暂留待核。；本批集中核对新北、高雄可读取的议员公报及马祖正式名单、嘉义县议员及金门乡镇长抽签表，未核验现任。；新增高雄四个议员选区38人官方有声公报名录，以及苗栗14人电子公报原图姓名和号次复核。未改变候选人字段实值或现任状态。；追加南投县8个乡镇市22人公报原图或文字核对（姓名及号次），现任不在本批范围。；嘉义县七个议员选区52人官方有声公报名录逐项核对；苗栗县第1、4、5议员选区39人按10月27日官方抽签新闻稿核对号次，不标记正式名单。；嘉义市两区抽签表文字核对31人号次；6处姓名文字差异保留待原图复核。",
+  "scope": "正式名单及号次；台北、新北、台南、高雄、基隆、新竹市市长公报及新竹市第6、7议员选区公报同时核对性别及推荐政党；其他公告仅姓名及号次。未核验现任状态。；本次电子公报补核县市长28人（其中嘉义县2人使用正式名单公告）及金门、马祖部分议员8人，公报可见的性别和推荐政党亦对照，未更改现任字段。；澎湖县正式公告整县对照，存在2处文字抽取字形差异待复核。；新增旧版公报及选委会公报文字核对14名县市长，另1人仅核对官方抽签结果，未升级为最终名单。；追加澎湖第2、5选区存疑姓名原图复核及马祖第4议员选区、东引乡长正式公报文字核对。；宜兰县、台东县11月17日正式名单公告原图复核。；花莲县11月17日正式名单原图对账，恢复周骏宥；宜兰胡文聪正式双语名补录。；三湾乡公报剔除未列名登记者，彰化县议员公告及花莲第6选区公报复核，宜兰头城镇蔡文益推荐政党修正。；苗栗县第7、8选区及云林第7选区双语姓名差异已通过公报、抽签记录解决。；桃园市14个议员选区108人正式公告原图逐人核对姓名与号次，未核验性别、推荐政党或现任。；台北、台中、台南三市共285人按正式公告逐区核对姓名、号次，未核验性别、政党或现任；台中原图接口失败，依据可提取的完整正式附件文字。；基隆、金门议员正式名单原图对账，及新竹市部分议员原图/文字对账；未改变其他字段。；追加云林、南投议员及云林乡镇市长正式名单原图，以及新北、高雄议员抽签原图核对；抽签不等于正式名单，字形不一致暂留待核。；本批集中核对新北、高雄可读取的议员公报及马祖正式名单、嘉义县议员及金门乡镇长抽签表，未核验现任。；新增高雄四个议员选区38人官方有声公报名录，以及苗栗14人电子公报原图姓名和号次复核。未改变候选人字段实值或现任状态。；追加南投县8个乡镇市22人公报原图或文字核对（姓名及号次），现任不在本批范围。；嘉义县七个议员选区52人官方有声公报名录逐项核对；苗栗县第1、4、5议员选区39人按10月27日官方抽签新闻稿核对号次，不标记正式名单。；嘉义市两区抽签表文字核对31人号次；6处姓名文字差异保留待原图复核。；新增核验新北市乌来区3人、桃园复兴区1人、台中和平区5人、高雄原住民区长6人、新竹市议员1人、云林县议员1人，全部依据官方公报或官方抽签结果。",
   "sources": {
     "P": {
       "url": "https://web.cec.gov.tw/api/file/0a48ccd3-268d-4cb9-924c-dc777af8705a.pdf",
@@ -559,14 +559,44 @@
       "date": "2026-10-27",
       "title": "嘉义市第12届议员第2选区候选人抽签结果",
       "method": "官方PDF可提取文字；截图缓存不可用；只确认姓名与号次完全一致项"
+    },
+    "WULAI": {
+      "url": "https://eebulletin.cec.gov.tw/115/02%E6%96%B0%E5%8C%97%E5%B8%82/04%E5%8D%80%E9%95%B7/115%E5%B9%B4%E6%96%B0%E5%8C%97%E5%B8%82%E7%83%8F%E4%BE%86%E5%8D%80%E7%AC%AC4%E5%B1%86%E5%8D%80%E9%95%B7%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1.pdf",
+      "title": "新北市乌来区第4届区长选举公报",
+      "method": "electionBulletin"
+    },
+    "TYCFX": {
+      "url": "https://web.cec.gov.tw/api/file/ead5858d-0c79-4aaf-b139-a58e3bd41d81.pdf",
+      "title": "桃园市复兴区长候选人姓名号次抽签结果",
+      "method": "officialDrawResult"
+    },
+    "TCHP": {
+      "url": "https://eebulletin.cec.gov.tw/115/03%E8%87%BA%E4%B8%AD%E5%B8%82/04%E5%8D%80%E9%95%B7/%E5%92%8C%E5%B9%B3%E5%8D%80%E5%8D%80%E9%95%B7.pdf",
+      "title": "台中市和平区第4届区长选举公报",
+      "method": "electionBulletin"
+    },
+    "KHIND": {
+      "url": "https://orgws.kcg.gov.tw/001/KcgOrgUploadFiles/289/RelFile/66854/544707/29fcb22d-1f93-43f3-95e0-76d4dec6870b.pdf",
+      "title": "高雄市桃源、那玛夏、茂林区长候选人名单公告",
+      "method": "officialCandidateList"
+    },
+    "HSZC05": {
+      "url": "https://eebulletin.cec.gov.tw/115/19%E6%96%B0%E7%AB%B9%E5%B8%82/02%E5%B8%82%E8%AD%B0%E5%93%A1/%E6%96%B0%E7%AB%B9%E5%B8%82%E8%AD%B0%E5%93%A1%E7%AC%AC5%E9%81%B8%E8%88%89%E5%8D%80.pdf",
+      "title": "新竹市议员第5选举区选举公报",
+      "method": "electionBulletin"
+    },
+    "YLC05": {
+      "url": "https://eebulletin.cec.gov.tw/115/11%E9%9B%B2%E6%9E%97%E7%B8%A3/02%E7%B8%A3%E8%AD%B0%E5%93%A1/%E9%9B%B2%E6%9E%97%E7%B8%A3%E7%AC%AC05%E9%81%B8%E8%88%89%E5%8D%80.pdf",
+      "title": "云林县议员第5选举区选举公报",
+      "method": "electionBulletin"
     }
   },
   "counts": {
     "mayor": 81,
-    "council": 1414,
-    "township": 307
+    "council": 1416,
+    "township": 322
   },
-  "newOfficial": 1947,
+  "newOfficial": 1964,
   "rows": [
     {
       "candidateId": "council:10013:01:009",
@@ -28146,6 +28176,210 @@
       "previousNumber": 1,
       "previousVerification": "official",
       "source": "CYC_A7",
+      "page": null
+    },
+    {
+      "candidateId": "township:65000:65000290:001",
+      "districtId": "township:65000:65000290",
+      "type": "township",
+      "nameOriginal": "周至剛",
+      "officialName": "周至剛",
+      "number": 3,
+      "previousNumber": 3,
+      "previousVerification": "referenceSite",
+      "source": "WULAI",
+      "page": null
+    },
+    {
+      "candidateId": "township:65000:65000290:002",
+      "districtId": "township:65000:65000290",
+      "type": "township",
+      "nameOriginal": "周志國",
+      "officialName": "周志國",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "referenceSite",
+      "source": "WULAI",
+      "page": null
+    },
+    {
+      "candidateId": "township:65000:65000290:003",
+      "districtId": "township:65000:65000290",
+      "type": "township",
+      "nameOriginal": "施俊雄",
+      "officialName": "施俊雄",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "referenceSite",
+      "source": "WULAI",
+      "page": null
+    },
+    {
+      "candidateId": "township:68000:68000130:001",
+      "districtId": "township:68000:68000130",
+      "type": "township",
+      "nameOriginal": "蘇佐璽",
+      "officialName": "蘇佐璽",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "referenceSite",
+      "source": "TYCFX",
+      "page": null
+    },
+    {
+      "candidateId": "township:66000:66000290:003",
+      "districtId": "township:66000:66000290",
+      "type": "township",
+      "nameOriginal": "簡正忠",
+      "officialName": "簡正忠",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "referenceSite",
+      "source": "TCHP",
+      "page": null
+    },
+    {
+      "candidateId": "township:66000:66000290:004",
+      "districtId": "township:66000:66000290",
+      "type": "township",
+      "nameOriginal": "羅清輝",
+      "officialName": "羅清輝",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "referenceSite",
+      "source": "TCHP",
+      "page": null
+    },
+    {
+      "candidateId": "township:66000:66000290:002",
+      "districtId": "township:66000:66000290",
+      "type": "township",
+      "nameOriginal": "陳文書",
+      "officialName": "陳文書",
+      "number": 3,
+      "previousNumber": 3,
+      "previousVerification": "referenceSite",
+      "source": "TCHP",
+      "page": null
+    },
+    {
+      "candidateId": "township:66000:66000290:001",
+      "districtId": "township:66000:66000290",
+      "type": "township",
+      "nameOriginal": "林吉財",
+      "officialName": "林吉財",
+      "number": 4,
+      "previousNumber": 4,
+      "previousVerification": "referenceSite",
+      "source": "TCHP",
+      "page": null
+    },
+    {
+      "candidateId": "township:66000:66000290:006",
+      "districtId": "township:66000:66000290",
+      "type": "township",
+      "nameOriginal": "陳茂井",
+      "officialName": "陳茂井",
+      "number": 5,
+      "previousNumber": 5,
+      "previousVerification": "referenceSite",
+      "source": "TCHP",
+      "page": null
+    },
+    {
+      "candidateId": "township:64000:64000370:001",
+      "districtId": "township:64000:64000370",
+      "type": "township",
+      "nameOriginal": "杜司偉\nAndrew\nIsbabanal",
+      "officialName": "杜司偉 Andrew Isbabanal",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "referenceSite",
+      "source": "KHIND",
+      "page": null
+    },
+    {
+      "candidateId": "township:64000:64000370:003",
+      "districtId": "township:64000:64000370",
+      "type": "township",
+      "nameOriginal": "張志誠\nHaisul·\nIspalavi",
+      "officialName": "張志誠 Haisul· Ispalavi",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "referenceSite",
+      "source": "KHIND",
+      "page": null
+    },
+    {
+      "candidateId": "township:64000:64000370:004",
+      "districtId": "township:64000:64000370",
+      "type": "township",
+      "nameOriginal": "伊斯坦大·貝雅夫·正福\nIstanda·\nPaingav",
+      "officialName": "伊斯坦大·貝雅夫·正福 Istanda· Paingav",
+      "number": 3,
+      "previousNumber": 3,
+      "previousVerification": "referenceSite",
+      "source": "KHIND",
+      "page": null
+    },
+    {
+      "candidateId": "township:64000:64000370:002",
+      "districtId": "township:64000:64000370",
+      "type": "township",
+      "nameOriginal": "陳德福",
+      "officialName": "陳德福",
+      "number": 4,
+      "previousNumber": 4,
+      "previousVerification": "referenceSite",
+      "source": "KHIND",
+      "page": null
+    },
+    {
+      "candidateId": "township:64000:64000380:001",
+      "districtId": "township:64000:64000380",
+      "type": "township",
+      "nameOriginal": "孔賢傑",
+      "officialName": "孔賢傑",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "single-candidate-rule",
+      "source": "KHIND",
+      "page": null
+    },
+    {
+      "candidateId": "township:64000:64000360:001",
+      "districtId": "township:64000:64000360",
+      "type": "township",
+      "nameOriginal": "駱韋志",
+      "officialName": "駱章志",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "single-candidate-rule",
+      "source": "KHIND",
+      "page": null
+    },
+    {
+      "candidateId": "council:10018:05:007",
+      "districtId": "council:10018:05",
+      "type": "council",
+      "nameOriginal": "陳啓源",
+      "officialName": "陳啟源",
+      "number": 3,
+      "previousNumber": 3,
+      "previousVerification": "referenceSite",
+      "source": "HSZC05",
+      "page": null
+    },
+    {
+      "candidateId": "council:10009:05:004",
+      "districtId": "council:10009:05",
+      "type": "council",
+      "nameOriginal": "林宜豊",
+      "officialName": "林宜豐",
+      "number": 9,
+      "previousNumber": 9,
+      "previousVerification": "referenceSite",
+      "source": "YLC05",
       "page": null
     }
   ],
