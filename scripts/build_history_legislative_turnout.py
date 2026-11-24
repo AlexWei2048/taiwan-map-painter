@@ -167,6 +167,28 @@ def main():
                 "profile_matches": dict(counts),
             }
             print(year, electorate, "matched:", dict(counts), "sample:", sample[:2], flush=True)
+        # 2004 Nanzhuang raw registered-voter field is corrupt (1 < 591 cast).
+        # Recover only if the county and other 17 town profiles plus independent
+        # candidate votes all reconcile; never infer from a turnout percentage.
+        if year == 2004:
+            plains = outfile["ballots"]["plains"]
+            mountain = outfile["ballots"]["mountain"]
+            county, town = "苗栗县", "南庄乡"
+            saved = plains["town"][county]
+            expected = set(mountain["town"][county])
+            if set(saved) == expected - {town} and len(expected) == 18:
+                parent = plains["county"][county]
+                residual = [n - sum(v[i] for v in saved.values()) for i,n in enumerate(parent)]
+                totals = candidates(year, "plains")
+                if (residual == [1524,591,586,5] and totals.get(("town",county,town)) == residual[2]
+                        and totals.get(("county",county,"")) == parent[2]):
+                    saved[town] = residual
+                    outfile["audit"]["plains"]["recoveredProfiles"] = [{
+                        "county": county, "town": town, "profile": residual,
+                        "method": "exact_county_total_minus_other_17_town_profiles; raw local registered value 1 is invalid, raw cast/valid/invalid 591/586/5 agree; candidate votes independently match",
+                        "county_total": parent, "other_town_profiles": 17,
+                        "source_record": "苗栗縣,南庄鄉,,0,0,586,5,591,1"}]
+                    outfile["audit"]["plains"]["completeTownProfiles"] = sum(len(v) for v in plains["town"].values())
         path = ROOT / f"assets/history-legislative-turnout-{year}.json"
         path.write_text(json.dumps(outfile, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
         print("Wrote", path.name, path.stat().st_size, "bytes", flush=True)
