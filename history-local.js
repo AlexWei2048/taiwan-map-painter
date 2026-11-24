@@ -70,6 +70,17 @@
   }
   return supplementRequest;
  }
+ // 1999-01-25 local-government rules, Article 33: a regional council
+ // constituency has one reserved women's seat per four allocated seats.
+ // Do not infer earlier-era quotas or indigenous identity-wide allocations.
+ const QUOTA_RULE_SOURCE='https://web.cec.gov.tw/api/file/e516071d-517a-4dcf-bbac-9a1e4137fd3f.pdf';
+ function fillRegionalCouncilQuotas(shard){
+  if(shard.year<1999)return shard;
+  const councilIds=new Set(shard.elections.filter(e=>e.office==='council').map(e=>e.election_id));
+  return {...shard,contests:shard.contests.map(c=>councilIds.has(c.election_id)&&c.electorate==='regional'&&
+   c.reserved_seats==null&&Number.isInteger(c.seats)&&c.seats>0?
+   {...c,reserved_seats:Math.floor(c.seats/4),reserved_seats_source:QUOTA_RULE_SOURCE,reserved_seats_method:'statutory'}:c)};
+ }
  function applyCouncilSupplement(shard,supplement){
   const addition=supplement?.years[shard.year];
   if(!addition)return shard;
@@ -114,7 +125,7 @@
    const shard=await response.json();
    if(shard.schemaVersion!==2||shard.year!==year||!shard.rows?.length||!shard.candidacies?.length||
       !shard.contests?.length||!shard.elections?.length)throw Error('历史选举数据不完整');
-   return applyCouncilSupplement(shard,supplement);
+   return fillRegionalCouncilQuotas(applyCouncilSupplement(shard,supplement));
   })();
   pending.set(year,request);
   try{return await request}catch(error){pending.delete(year);throw error}
@@ -215,8 +226,8 @@
    const complete=Boolean(split?.d)||towns.length>0&&(mergedTainan||towns.length===scopeTowns.length&&(!shared||contest.electorate!=='regional'));
    const district={
     id:contest.contest_id,county,name:contest.district_name,number,electorate:contest.electorate,
-    scope:split?.villages?.join('、')||contest.scope_label||scopeTowns.join('、'),scopeTowns,seats:contest.seats,
-    womenReserved:contest.reserved_seats,mapAvailable:complete
+    scope:contest.scope_label||scopeTowns.join('、'),scopeTowns,scopeVillages:split?.villages||[],seats:contest.seats,
+    womenReserved:contest.reserved_seats,womenReservedMethod:contest.reserved_seats_method,mapAvailable:complete
    };
    districts.push(district);
    if(!complete)continue;
@@ -226,7 +237,7 @@
   }
   return {features,districts};
  }
- const api={YEARS,years,yearLabel,cycleYear,load,loadCycle,geometry,councilMap,applyCouncilSupplement};
+ const api={YEARS,years,yearLabel,cycleYear,load,loadCycle,geometry,councilMap,applyCouncilSupplement,fillRegionalCouncilQuotas};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;
  else root.HistoryLocal=api;
 })(typeof window==='undefined'?{}:window);

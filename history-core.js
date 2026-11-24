@@ -56,6 +56,42 @@
   present=[...new Set(present)].sort();
   return old.length>0&&old.length===present.length&&old.every((name,i)=>name===present[i]);
  }
+ // Geographic membership is separate from geometry: an old polygon can be
+ // approximate even when its election-year town or village roster is known.
+ const uniqueNames=values=>[...new Set((values||[]).filter(Boolean))];
+ function councilScope(district,peers=[],villages=[]){
+  if(!district)return '';
+  const towns=uniqueNames(district.scopeTowns),label=String(district.scope||'').trim();
+  const shared=new Set(towns.filter(t=>peers.some(other=>other!==district&&
+   other.county===district.county&&identity(other.electorate)===identity(district.electorate)&&
+   String(other.number)!==String(district.number)&&(other.scopeTowns||[]).includes(t))));
+  // Preserve archive text for districts with a written scope but no structured roster.
+  if(!towns.length)return label||'当届乡镇市区范围尚待核实';
+  const details=uniqueNames(villages);
+  const parts=towns.map(t=>{
+   if(!shared.has(t))return t;
+   return t+'（部分里'+(towns.length===1&&details.length?'：'+details.join('、'):'；具体里别待核')+'）';
+  });
+  // If a source already supplied explicit historical village/partial text, retain it.
+  const explicit=label&&/部分|等\s*\d+\s*里|(?:旧|舊).+区/.test(label)&&label!==towns.join('、');
+  return parts.join('、')+(explicit&&!details.length?'；原资料：'+label:'');
+ }
+ function legislativeScopeIndex(rows,normalize=String){
+  const districts=new Map(),owners=new Map();
+  for(const row of rows||[]){
+   if(row.level!=='town'||identity(row.electorate)!=='regional'||!row.county||!row.town)continue;
+   const county=normalize(row.county),town=normalize(row.town),n=districtNumber(row.district)||'0',id=county+'|'+n,tk=county+'|'+town;
+   if(!districts.has(id))districts.set(id,new Set());
+   districts.get(id).add(town);
+   if(!owners.has(tk))owners.set(tk,new Set());
+   owners.get(tk).add(id);
+  }
+  return {districts,owners};
+ }
+ function legislativeScope(index,county,number){
+  const id=county+'|'+(districtNumber(number)||'0'),towns=[...(index?.districts.get(id)||[])];
+  return towns.map(town=>town+((index.owners.get(county+'|'+town)?.size||0)>1?'（部分里）':'')).join('、');
+ }
  function csv(rows){
   const cell=value=>{let text=exportedWording(value);if(/^[=+@\t\r-]/.test(text))text="'"+text;return'"'+text.replace(/"/g,'""')+'"'};
   return'\uFEFF'+rows.map(row=>row.map(cell).join(',')).join('\r\n');
@@ -202,6 +238,6 @@
   }
   return rings.join('');
  }
- const api={identity,districtNumber,compareResultRows,key,sameScope,csv,index,filter,contestSummary,overview,councilBadges,mergePaths};
+ const api={identity,districtNumber,compareResultRows,key,sameScope,councilScope,legislativeScopeIndex,legislativeScope,csv,index,filter,contestSummary,overview,councilBadges,mergePaths};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.HistoryCore=api;
 })(typeof window==='undefined'?{}:window);

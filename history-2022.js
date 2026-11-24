@@ -662,9 +662,9 @@
    for(const d of list.sort((a,b)=>a.number-b.number)){
     const tr=document.createElement('tr'),th=document.createElement('th');th.scope='row';th.textContent=d.name;tr.append(th);
     const cat=document.createElement('td');cat.textContent=DistrictCore.identityName(d);tr.append(cat);
-    const scope=document.createElement('td');scope.className='reference-scope';scope.textContent=mainlandTerms(norm(d.scope))||'无乡镇市区得票记录';tr.append(scope);
+    const scope=document.createElement('td');scope.className='reference-scope';scope.textContent=mainlandTerms(councilScopeText(d))||'当届乡镇市区范围尚待核实';tr.append(scope);
     const seat=document.createElement('td');seat.className='reference-number';seat.textContent=d.seats+'席';tr.append(seat);
-    const women=document.createElement('td');women.className='reference-number';women.textContent=d.womenReserved==null?'—':d.womenReserved+'席';tr.append(women);
+    const women=document.createElement('td');women.className='reference-number';women.textContent=d.womenReserved==null?'—':d.womenReserved+'席';if(d.womenReservedMethod==='statutory')women.title='依据当届适用规定及应选席次计算';tr.append(women);
     const map=document.createElement('td');const matchKey=HistoryCore.key(d.county,d.electorate,d.number,norm);map.textContent=d.mapAvailable===false?'查看候选人结果':yearLabel()+'年选区范围';map.className=d.mapAvailable===false||unmatchedDistricts.has(matchKey)?'history-map-mismatch':'history-map-match';tr.append(map);
     tbody.append(tr)
    }
@@ -785,7 +785,39 @@
   return items.filter(f=>!county||f.county===county);
  }
  function noElection(f){return f.name!==f.county&&active&&kind==='township'&&(loaded||localGeometry)&&!db.township.some(r=>r.county===f.county&&r.town===f.name)}
- function historicalDistrictFor(f){return districtMetadata.find(d=>d.id===f.historyId)||
+ function councilScopeText(d){
+  if(!d)return '';
+  const split=localYear===2022&&d.county==='新竹市'&&d.electorate==='regional'?
+   hsinchuGeometry?.features?.find(f=>Number(f.number)===Number(d.number)):null;
+  return HistoryCore.councilScope(d,districtMetadata,(d.scopeVillages?.length?d.scopeVillages:split?.scopeVillages||[]).map(norm));
+ }
+ let scopeIndexSnapshot=null,scopeIndex=null;
+ function legislativeScopeText(f){
+  if(legislativeBallot==='party')return '';
+  if(legislativeBallot!=='regional')return '全部地区的'+(legislativeBallot==='plains'?'平地':'山地')+'少数民族选区；县市或乡镇市区仅为本地得票统计范围，并非独立选区。';
+  if(!f||!f.county)return '';
+  if(f.name===f.county&&scale==='county')return '本县市汇总，包含本县市各区域民代选区。';
+  if(scopeIndexSnapshot!==snapshotData){scopeIndexSnapshot=snapshotData;scopeIndex=HistoryCore.legislativeScopeIndex(snapshotData?.rows,norm)}
+  const actual=HistoryCore.legislativeScope(scopeIndex,norm(f.county),f.number||f.name);
+  if(actual)return actual+(actual.includes('部分里')?'；具体里别以当届选区公告为准':'');
+  // 1992 has no election-year town detail: show the reference only as such.
+  if(f.historicalBoundarySourceTowns?.length&&f.historicalBoundarySourceYear!==legislativeYear){
+   const names=f.historicalBoundarySourceTowns.map(n=>legislativeAreaGeometry?.towns.find(t=>t.county===f.county&&HistoryPresidential.baseTown(t.name)===n)?.name||n);
+   return '当届乡镇划分尚待核实；'+f.historicalBoundarySourceYear+'年参考范围：'+names.join('、')+'（非当届确认范围）';
+  }
+  return '当届乡镇市区范围尚待核实';
+ }
+ function renderDialogScope(f,d){
+  let node=el('historyDialogScope');
+  if(!node){node=document.createElement('p');node.id='historyDialogScope';node.className='data-help';el('historyDialogMessage').after(node)}
+  const value=legislativeMode?legislativeScopeText(f):kind==='council'?councilScopeText(d):'';
+  node.replaceChildren();node.hidden=!value;if(!value)return;
+  const label=document.createElement('strong');label.textContent='选区范围：';node.append(label,mainlandTerms(value));
+  if(legislativeMode&&legislativeYear===2024&&legislativeBallot==='regional'&&value.includes('部分里')){
+   const link=document.createElement('a');link.href='https://2024.cec.gov.tw/data/file/03636e7bc6dc417f8f2293d27b690b25.pdf';link.target='_blank';link.rel='noopener';link.textContent='当届完整里别公告';node.append(' · ',link)
+  }
+ }
+ function historicalDistrictFor(f){if(legislativeMode||kind!=='council')return null;return districtMetadata.find(d=>d.id===f.historyId)||
   (localYear===2026?districtMetadata.find(d=>d.county===norm(f.county)&&d.electorate===HistoryCore.identity(f.electorate)&&String(d.number)===districtNumber(f.number??f.name)):null)}
  function historicalSeatRows(d){
   const cs=db.council.filter(r=>r.level==='district'&&r.county===norm(d.county)&&r.electorate===d.electorate&&districtNumber(r.district)===String(d.number)&&r.elected).map(r=>({...r,id:yearLabel()+'|'+candidateKey(r),history:true}));
@@ -946,13 +978,15 @@
    if(contest?.election_date)el('historyDialogMessage').append(' · 投票日期 '+contest.election_date);
    if(archivedCouncil())appendContestSource(contest);
   }
+  renderDialogScope(f,district);
+  if(district?.womenReservedMethod==='statutory')el('historyDialogMessage').append(' · 妇保按当届规定计算');
   if(f.historicalBoundaryNote)el('historyDialogMessage').append(' · '+f.historicalBoundaryNote);
   if(kind==='mayor'&&localYear===2022&&f.county==='嘉义市')el('historyDialogMessage').append(' · 2022年12月18日重行投票');
   const dialog=el('historyResultDialog'),hint=el('historyDialogScroll');
   const overviewButton=el('historyDialogOverview');
   if(overviewButton){
    overviewButton.hidden=!window.HistoryWorkspace?.openFeatureOverview;
-   overviewButton.textContent=kind==='council'?'查看本议员选区概况':
+   overviewButton.textContent=kind==='council'?'查看本议员选区概况':legislativeMode&&legislativeBallot==='regional'&&f.name!==f.county?'查看本选区概况':
     f.county===f.name?'查看本县市概况':'查看本乡镇市区概况';
    overviewButton.onclick=()=>{dialog.close();window.HistoryWorkspace?.openFeatureOverview?.(f)};
   }
@@ -974,6 +1008,10 @@
   if(el('historyDialogScroll'))el('historyDialogScroll').hidden=true;
   lastOpenedFeature=null;const contest=summary.contest,rows=summary.candidacies,body=el('historyDialogRows');el('historyDialogTitle').textContent=(contest.county_name===contest.district_name?contest.county_name:contest.county_name+' · '+contest.district_name)+' · '+contestYear(contest)+'年 '+officeTitle()+'选举结果';el('historyDialogMessage').textContent=(contest.seats!=null?'应选 '+contest.seats+' 席 · 妇保 '+(contest.reserved_seats==null?'暂无资料':contest.reserved_seats+' 席')+' · ':'')+'有效票 '+summary.validVotes.toLocaleString('zh-CN')+' · '+rows.length+' 位候选人 · 按得票数排序';body.replaceChildren();
   if(contest.election_date)el('historyDialogMessage').append(' · 投票日期 '+contest.election_date);
+  const detailDistrict=kind==='council'?districtMetadata.find(d=>d.id===contestId||d.county===norm(contest.county_name)&&d.electorate===HistoryCore.identity(contest.electorate)&&String(d.number)===districtNumber(contest.district_name)):null;
+  const detailFeature=legislativeMode?legislativeGeometry.find(f=>f.county===norm(contest.county_name)&&String(f.number)===String(HistoryLegislative.districtNumber(contest.district_name)))||{county:norm(contest.county_name),name:norm(contest.district_name)}:null;
+  renderDialogScope(detailFeature,detailDistrict);
+  if(contest.reserved_seats_method==='statutory')el('historyDialogMessage').append(' · 妇保按当届规定计算');
   if(archivedCouncil())appendContestSource(contest);
   for(const r of [...rows].sort((a,b)=>b.votes-a.votes)){const tr=document.createElement('tr');if(r.elected_official)tr.className='history-elected-row';for(const [i,value] of [r.ballot_number||'—',r.candidate_name,r.gender||'—',r.incumbent_at_election===true?'是':'',r.party_name,r.votes.toLocaleString('zh-CN'),Number(r.vote_share||0).toFixed(2)+'%',''].entries()){const td=document.createElement('td');if(i===7&&r.elected_official){const mark=document.createElement('img');mark.src='assets/elected-mark.png';mark.alt='当选';mark.width=18;mark.height=18;td.append(mark)}else if(i===4){const logo=logoFor(predictionParty(value));if(logo){const img=document.createElement('img');img.src=logo;img.alt='';const party=document.createElement('span');party.className='history-party-cell';party.append(img,value);td.append(party)}else td.textContent=value}else td.textContent=value;if(i===3&&r.incumbent_at_election==null)td.title='现任资料缺失';tr.append(td)}
    appendMobileCandidateDetails(tr,[['号次',r.ballot_number],['性别',r.gender],['选举时现任',tr.cells[3].textContent],['得票率',tr.cells[6].textContent]]);
@@ -1108,7 +1146,7 @@
  const defaultDistrictSearch=el('districtTableSearch').oninput;
  el('districtTableSearch').oninput=event=>{if(active&&kind==='council')renderHistoryDistrictReference();else defaultDistrictSearch?.(event)};
  const defaultDistrictDownload=el('downloadDistrictTable').onclick;
- el('downloadDistrictTable').onclick=event=>{if(!active||kind!=='council')return defaultDistrictDownload?.(event);const lines=[['县市','选区','类别','选区范围','应选名额','妇保名额','地图匹配'],...districtMetadata.filter(d=>(!county||norm(d.county)===county)).map(d=>[norm(d.county),d.name,DistrictCore.identityName(d),mainlandTerms(norm(d.scope)),d.seats,d.womenReserved,d.mapAvailable===false||unmatchedDistricts.has(norm(d.county)+'|'+d.electorate+'|'+d.number)?'未匹配':'已匹配'])];const blob=new Blob(['\uFEFF'+lines.map(row=>row.map(csvCell).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=yearLabel().replaceAll('/','_')+'议员选区范围与名额.csv';a.click();URL.revokeObjectURL(url)};
+ el('downloadDistrictTable').onclick=event=>{if(!active||kind!=='council')return defaultDistrictDownload?.(event);const lines=[['县市','选区','类别','选区范围','应选名额','妇保名额','地图匹配'],...districtMetadata.filter(d=>(!county||norm(d.county)===county)).map(d=>[norm(d.county),d.name,DistrictCore.identityName(d),mainlandTerms(councilScopeText(d)),d.seats,d.womenReserved,d.mapAvailable===false||unmatchedDistricts.has(norm(d.county)+'|'+d.electorate+'|'+d.number)?'未匹配':'已匹配'])];const blob=new Blob(['\uFEFF'+lines.map(row=>row.map(csvCell).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=yearLabel().replaceAll('/','_')+'议员选区范围与名额.csv';a.click();URL.revokeObjectURL(url)};
  const historicTownToggle=el('historyTownBoundaries');
  if(historicTownToggle)historicTownToggle.onchange=()=>{
   pushHistory();state.showTownBoundaries=historicTownToggle.checked;

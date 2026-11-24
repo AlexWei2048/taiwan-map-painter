@@ -1689,7 +1689,7 @@ test('Mobile historical results show candidate, party, votes and election mark b
 
  await page.locator('#regions [data-region="63000"]').press('Enter');
  const dialog=page.locator('#historyResultDialog');
- assert.match(await dialog.locator('h2').textContent(),/台北市 · 2022 市长选举结果/);
+ assert.match(await dialog.locator('h2').textContent(),/台北市 · 2022年 市长选举结果/);
  const headers=dialog.locator('thead th:visible');
  assert.deepEqual(await headers.allTextContents(),['候选人','政党','得票数','当选','详情']);
  const row=dialog.locator('.history-elected-row');
@@ -3002,6 +3002,7 @@ test('Recovered historical Hsinchu council districts show official results and s
  const message=await page.locator('#historyDialogMessage').textContent();
  assert.match(message,/妇保 3 席/);
  assert.match(message,/里界近似绘制/);
+ assert.match(await page.locator('#historyDialogScope').textContent(),/东区（部分里.*东门里/);
 });
 
 test('The earliest local cycle shows dated council returns and preserves actual mayoral years in CSV',async t=>{
