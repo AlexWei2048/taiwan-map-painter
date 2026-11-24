@@ -108,7 +108,78 @@ function value(row,party,metric){
  return null;
 }
 function difference(a,b,party,metric){const x=value(a,party,metric),y=value(b,party,metric);return Number.isFinite(x)&&Number.isFinite(y)?y-x:null}
-const api={aggregate,value,difference,modern,percent};
+// Match the map grain and filter exactly. A trend over leading candidates
+// uses each region's top individual, NOT the aggregate of all party nominees.
+function mapTrend(snapshot,selection,anchor){
+ const {office,electorate='regional',county='',level='county',focus='',metric='party',candidateScope='top',candidate=null,party='',normalize=String}=selection;
+ const norm=v=>normalize(String(v||''));
+ const partyName=v=>keyParty(norm(v||'无党籍'));
+ const isLeg=office==='legislative',isList=isLeg&&electorate==='party';
+ const grain=office==='council'||isLeg&&electorate==='regional'?'district':office==='township'||level==='town'?'town':'county';
+ const candidateMetric=metric==='share'||metric==='votes';
+ const leading=office==='president'||isLeg&&electorate!=='regional'||office==='mayor'&&grain==='town';
+ const identity=Core.identity;
+ const year=snapshot.year;
+ const dates=(snapshot.elections||[]).filter(e=>e.office===office).map(e=>String(e.year||year));
+ const localDates=(snapshot.contests||[]).filter(c=>norm(c.county_name)===county&&identity(c.electorate)===electorate||norm(c.county_name)===county&&electorate==='all').map(c=>c.election_date?.slice(0,4)).filter(Boolean);
+ const displayYear=county&&localDates.length?[...new Set(localDates)].sort().join('/'):String(year);
+ const empty=reason=>({year,label:displayYear,complete:false,reason,parties:{},values:{},valid:null,areas:0});
+ if(office==='council'&&year===1994&&(!county||county==='金门县'))return empty('当届议员完整得票资料缺档');
+ if(office==='mayor'&&grain==='town'&&year===2018&&(!county||county==='台北市'))return empty('台北市重计后的区级得票缺档');
+ if(focus&&grain==='district'&&anchor&&year!==anchor.year){
+  // District number alone is never a cross-year geographic identifier.
+  const getSignature=s=>{
+   const idx=Core.legislativeScopeIndex(s.rows,norm),id=county+'|'+(Core.districtNumber(focus)||'0'),towns=[...(idx.districts.get(id)||[])].sort();
+   if(!towns.length||towns.some(t=>(idx.owners.get(county+'|'+t)?.size||0)>1))return null;
+   return towns.join('|');
+  };
+  const a=getSignature(anchor),b=getSignature(snapshot);
+  if(!a||!b||a!==b)return empty('选区历届范围不能确认一致');
+ }
+ let rows=(snapshot.rows||[]).filter(r=>r.type===office&&r.level===grain&&(electorate==='all'||identity(r.electorate)===electorate)&&(!county||norm(r.county)===county)&&(!focus||(grain==='town'?norm(r.town)===focus:grain==='district'?Core.districtNumber(r.district)===Core.districtNumber(focus):true)));
+ // 1992 has national-only indigenous returns. Use the actual national
+ // electoral district only for an all-area selection, never invent local votes.
+ if(!rows.length&&isLeg&&year===1992&&!county&&!focus&&['plains','mountain'].includes(electorate)&&grain==='county')
+  rows=(snapshot.rows||[]).filter(r=>r.type===office&&identity(r.electorate)===electorate&&r.level==='national');
+ if(!rows.length)return empty('所选范围无可核实的当届记录');
+ if(rows.some(r=>!Number.isFinite(r.votes)||r.votes<0))return empty('得票资料不完整');
+ const groups=new Map();
+ for(const r of rows){
+  const id=[norm(r.county),identity(r.electorate),grain==='district'?Core.districtNumber(r.district)||norm(r.district):grain==='town'?norm(r.town):''].join('|');
+  if(!groups.has(id))groups.set(id,[]);groups.get(id).push(r);
+ }
+ const selected={};const add=(key,n)=>{if(!Object.hasOwn(selected,key))Object.defineProperty(selected,key,{value:0,writable:true,enumerable:true});selected[key]+=n};
+ let valid=0,selectedVotes=0,selectedFound=false;
+ for(const list of groups.values()){
+  const total=list.reduce((n,r)=>n+r.votes,0);valid+=total;
+  const ranked=[...list].sort((a,b)=>b.votes-a.votes);
+  if(candidateMetric){
+   if(candidateScope==='candidate'){
+    const found=ranked.filter(r=>candidate&&(isList?partyName(r.party)===partyName(candidate.party):norm(r.name)===norm(candidate.name)&&partyName(r.party)===partyName(candidate.party)&&(!candidate.county||office==='president'||norm(r.county)===norm(candidate.county))&&(!['council','legislative'].includes(office)||!candidate.district||Core.districtNumber(r.district)===Core.districtNumber(candidate.district))&&(!(office==='township')||!candidate.town||norm(r.town)===norm(candidate.town))));
+    if(found.length===1){selectedVotes+=found[0].votes;selectedFound=true}
+   }else if(ranked.length){selectedVotes+=ranked[0].votes;selectedFound=true}
+  }else if(leading&&metric==='party'){
+   if(ranked.length){const first=ranked[0],tie=ranked[1]?.votes===first.votes;add(tie?'并列':partyName(first.party),1)}
+  }else for(const r of ranked.filter(r=>r.elected===true||r.elected==='true'))add(partyName(r.party),1);
+ }
+ // Whole-scope candidate share is weighted by the valid vote of the selected
+ // geographic grain, not the mean of percentages in unequal-sized areas.
+ if(candidateMetric&&candidateScope==='candidate'&&candidate&&!isList){
+  // A named candidate may be absent from some areas or an entire election.
+  // For regional candidates, use only the contest(s) where the candidate is
+  // recorded, rather than unrelated districts' votes in the denominator.
+  let candidateValid=0;
+  for(const list of groups.values())if(list.some(r=>norm(r.name)===norm(candidate.name)&&partyName(r.party)===partyName(candidate.party)&&(!candidate.county||office==='president'||norm(r.county)===norm(candidate.county))&&(!['council','legislative'].includes(office)||!candidate.district||Core.districtNumber(r.district)===Core.districtNumber(candidate.district))&&(office!=='township'||!candidate.town||norm(r.town)===norm(candidate.town))))candidateValid+=list.reduce((n,r)=>n+r.votes,0);
+  valid=candidateValid;
+ }
+ if(candidateMetric){
+  const v=selectedFound?(metric==='share'?percent(selectedVotes,valid):selectedVotes):null;
+  return {year,label:displayYear,complete:Number.isFinite(v),reason:Number.isFinite(v)?'':'本届无匹配的指定候选人或政党',parties:{},values:{value:v},valid,areas:groups.size};
+ }
+ if(metric==='seats')return {year,label:displayYear,complete:true,reason:'',parties:selected,values:{value:selected[partyName(party)]||0},valid,areas:groups.size};
+ return {year,label:displayYear,complete:true,reason:'',parties:selected,values:{},valid,areas:groups.size};
+}
+const api={aggregate,value,difference,modern,percent,mapTrend};
 if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
 root.HistoryTrends=api;
 })(typeof window==='undefined'?{}:window);

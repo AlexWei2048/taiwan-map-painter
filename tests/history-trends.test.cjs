@@ -43,3 +43,17 @@ test('Real 2022 council counts reconcile to the 910 official seats',()=>{
  const regions=T.aggregate(s,{office:'council',electorate:'all',county:'台北市',normalize:norm});
  assert.equal(regions.seats,61);
 });
+test('Map trends follow county and metric; top individual votes are not party totals',()=>{
+ const s={year:2022,rows:[
+ {type:'council',electorate:'regional',level:'district',county:'甲县',district:'第1选举区',name:'甲',party:'A',votes:45,elected:true},
+ {type:'council',electorate:'regional',level:'district',county:'甲县',district:'第1选举区',name:'乙',party:'A',votes:20,elected:true},
+ {type:'council',electorate:'regional',level:'district',county:'甲县',district:'第1选举区',name:'丙',party:'B',votes:35,elected:false},
+ {type:'council',electorate:'regional',level:'district',county:'乙县',district:'第1选举区',name:'丁',party:'B',votes:100,elected:true}]};
+ const conf={office:'council',county:'甲县',electorate:'regional',level:'district'};
+ assert.equal(T.mapTrend(s,{...conf,metric:'share'}).values.value,45);
+ assert.equal(T.mapTrend(s,{...conf,metric:'votes'}).values.value,45);
+ assert.equal(T.mapTrend(s,{...conf,metric:'seats',party:'A'}).values.value,2);
+ assert.deepEqual(T.mapTrend(s,{...conf,metric:'party'}).parties,{A:2});
+ assert.equal(T.mapTrend(s,{...conf,metric:'votes',candidateScope:'candidate',candidate:{name:'乙',party:'A',county:'甲县',district:'第1选举区'}}).values.value,20);
+ assert.equal(T.mapTrend(s,{...conf,metric:'share',candidateScope:'candidate',candidate:{name:'未参选',party:'A'}}).complete,false);
+});

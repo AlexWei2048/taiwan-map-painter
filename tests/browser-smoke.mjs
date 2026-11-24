@@ -3085,25 +3085,30 @@ test('All archived mayor and council national maps use official winners and seat
 });
 
 
-test('Historical trends load real election results, filter years and export a chart and CSV',async t=>{
+test('Historical trends follow sidebar election, year, scope and metric with one relevant chart',async t=>{
  const page=await pageFor(t,{width:1440,height:950});
  await page.locator('#categoryHistory').click();
  await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
  await page.locator('#historyViewTrends').click();
  await page.locator('#trendCharts svg').first().waitFor({timeout:60000});
  assert.equal(await page.locator('#historyTrendsPanel').isVisible(),true);
- assert.match(await page.locator('#trendStatus').textContent(),/届有完整可用结果/);
- assert.ok(await page.locator('#trendCharts svg').count()>=5);
- await page.locator('#trendCounty').selectOption('台北市');
+ assert.equal(await page.locator('#trendCharts .trend-card svg').count(),1);
+ assert.equal(await page.locator('#trendOffice,#trendCounty,#trendMetric,#trendBallot').count(),0);
+ await page.locator('#historyCounty').selectOption('台北市');
  await page.locator('#trendStart').selectOption('2018');
- await page.locator('#trendEnd').selectOption('2022');
- assert.equal(await page.locator('#trendCounty').inputValue(),'台北市');
- assert.match(await page.locator('#trendStatus').textContent(),/2 届/);
+ await page.waitForFunction(()=>document.querySelector('#trendStatus').textContent.includes('2 届'));
+ assert.match(await page.locator('#trendScope').textContent(),/台北市/);
+ await page.locator('#historyMetric').selectOption('share');
+ await page.waitForFunction(()=>document.querySelector('#trendCharts h4')?.textContent.includes('得票率'));
+ assert.equal(await page.locator('#trendCharts .trend-card svg').count(),1);
+ assert.doesNotMatch(await page.locator('#trendCharts').textContent(),/投票率与有效率|候选人与当选人结构/);
  const graph=page.locator('#trendCharts .trend-card svg').first();
  assert.ok(await graph.locator('circle[role="button"]').count()>0);
  const csvDownload=page.waitForEvent('download');await page.locator('#trendCsv').click();assert.match((await csvDownload).suggestedFilename(),/历史趋势.*csv/);
  const svgDownload=page.waitForEvent('download');await page.locator('#trendCharts .trend-card').first().getByRole('button',{name:'SVG',exact:true}).click();assert.match((await svgDownload).suggestedFilename(),/\.svg$/);
+ await page.locator('#historyYear').selectOption('2018');
+ await page.waitForFunction(()=>document.querySelector('#trendEndLabel').textContent.includes('2018')&&document.querySelector('#trendStatus').textContent.includes('1 届'));
+ assert.doesNotMatch(await page.locator('#trendCharts svg').first().textContent(),/2022/);
  await page.locator('#historyViewTrends').click();assert.equal(await page.locator('#historyTrendsPanel').isVisible(),false);
  await page.locator('#historyViewTrends').click();assert.equal(await page.locator('#historyTrendsPanel').isVisible(),true);
- assert.equal(await page.locator('#trendCounty').inputValue(),'台北市');
 });
