@@ -15,3 +15,4 @@ test('Inventory missing party values across all historical snapshot files',()=>{
  }
  console.log('PARTY_COVERAGE_AUDIT '+JSON.stringify(summary));assert.ok(Array.isArray(summary));
 });
+ test('Kinmen 1994 winner votes and membership match the separately documented partial return',()=>{const k=archive.partial_returns[0];assert.deepEqual(k,require('../sources/history-1994-kinmen-partial.json'));const winners=k.districts.flatMap(d=>d.winners);assert.equal(winners.length,16);assert.ok(winners.every(w=>Number.isInteger(w[2])&&w[2]>0&&w[3]==='中國國民黨'));assert.equal(winners.reduce((n,w)=>n+w[2],0),9991);assert.equal(k.valid_votes,null);assert.match(k.winner_detail_source_url,/^https:/);});

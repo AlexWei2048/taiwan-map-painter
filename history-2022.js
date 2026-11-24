@@ -611,7 +611,7 @@
   const wrap=document.createElement('div');wrap.className='history-table-wrap';
   const table=document.createElement('table');table.className='history-candidate-table history-mobile-list';
   const head=document.createElement('thead'),hr=document.createElement('tr');
-  for(const label of ['县市','选区／乡镇市区','号次','候选人',presidentialMode?'性别（正/副）':'性别','选举时现任','政党','得票数','得票率','当选']){const th=document.createElement('th');th.textContent=label;hr.append(th)}
+  for(const label of ['县市','选区／乡镇市区','号次','候选人',presidentialMode?'性别（正/副）':'性别','选举时现任','党籍（县志）','得票数','得票率','当选']){const th=document.createElement('th');th.textContent=label;hr.append(th)}
   const mobileHeading=document.createElement('th');mobileHeading.className='history-mobile-details';mobileHeading.textContent='详情';hr.append(mobileHeading);
   head.append(hr);table.append(head);const body=document.createElement('tbody');
   let previousArea='';
@@ -838,7 +838,7 @@
   const summary=document.createElement('summary');summary.textContent='金门1994年议员当选名单（已核实）';details.append(summary);
   for(const archive of records){
    const intro=document.createElement('p');
-   intro.textContent=archive.election_date+' 投票 · '+archive.candidate_count+' 人参选 · '+archive.elected_count+' 人当选 · 选举人数 '+archive.registered_voters.toLocaleString('zh-CN')+' · 投票人数 '+archive.ballots_cast.toLocaleString('zh-CN')+' · 投票率 '+archive.turnout_pct.toFixed(2)+'%。尚缺完整候选人得票、号次和推荐政党；本表不纳入已收录完整结果的统计或地图着色。';
+   intro.textContent=archive.election_date+' 投票 · '+archive.candidate_count+' 人参选 · '+archive.elected_count+' 人当选 · 选举人数 '+archive.registered_voters.toLocaleString('zh-CN')+' · 投票人数 '+archive.ballots_cast.toLocaleString('zh-CN')+' · 投票率 '+archive.turnout_pct.toFixed(2)+'%。已补齐16名当选人得票与当时党籍；尚缺落选者明细、号次、选区有效票和正式推荐政党。本表党籍不等同推荐政党，不纳入完整结果统计或地图着色。';
    details.append(intro);
    const wrap=document.createElement('div');wrap.className='history-table-wrap';
    const table=document.createElement('table');table.className='history-candidate-table';
@@ -852,15 +852,15 @@
     const divider=document.createElement('tr'),heading=document.createElement('th');
     divider.className='history-district-divider';heading.scope='rowgroup';heading.colSpan=9;
     heading.textContent='1994年 · 第'+district.number+'选举区（'+norm(district.scope)+'）';divider.append(heading);body.append(divider);
-    for(const [name,gender] of district.winners){
+    for(const [name,gender,votes,membership] of district.winners){
      const tr=document.createElement('tr');tr.className='history-elected-row';
-     for(const value of ['第'+district.number+'选举区','',normCandidate(name),gender,'','','','']){const td=document.createElement('td');td.textContent=value;tr.append(td)}
+     for(const value of ['第'+district.number+'选举区','',normCandidate(name),gender,'',norm(membership||''),Number.isFinite(votes)?votes.toLocaleString('zh-CN'):'','']){const td=document.createElement('td');td.textContent=value;tr.append(td)}
      const td=document.createElement('td'),mark=document.createElement('img');mark.src='assets/elected-mark.png';mark.alt='当选';mark.width=18;mark.height=18;td.append(mark);tr.append(td);body.append(tr)
     }
    }
    table.append(body);wrap.append(table);details.append(wrap);
    const sources=document.createElement('p');
-   for(const [label,url] of [['当选名单：金门县志',archive.source_url],['投票统计：金门县统计年报表3-9',archive.statistics_source_url]]){
+   for(const [label,url] of [['当选名单：金门县志',archive.source_url],['投票统计：金门县统计年报表3-9',archive.statistics_source_url],['得票与党籍：续修金门县志第281页',archive.winner_detail_source_url]]){
     const link=document.createElement('a');link.href=url;link.target='_blank';link.rel='noopener';link.textContent=label;sources.append(link,'　')
    }details.append(sources);
   }

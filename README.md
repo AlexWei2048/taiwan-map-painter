@@ -328,3 +328,5 @@ The official result importer supports an optional --town-turnout CSV for county-
 2022年嘉义市市长重行选举日期为12月18日，议员选举为11月26日；在历史快照载入及构建脚本按选举类别分别处理，不改动票数或席次。
 
 1994年议员政党缺项逐人核查，补录有当届证据的记录，并在 `sources/history-1994-party-audit.json` 保留证据及未核实清单；不把未知政党自动归为无党籍。`tests/history-party-coverage.test.cjs` 扫描历届快照及核验补录前后票数、当选人数。
+
+1994年金门议员部分结果：依据《续修金门县志》卷四政事志下卷第281页补齐16名当选人票数与当时党籍；党籍与正式推荐政党分开处理，不以部分名单推算全县得票率或政党席次。

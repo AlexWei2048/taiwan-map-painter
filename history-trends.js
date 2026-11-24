@@ -160,7 +160,7 @@ function historicalScopeRows(snapshot,selection,anchor){
 function mapTrend(snapshot,selection,anchor){
  const {office,electorate='regional',county='',anchorCounty=county,level='county',focus='',metric='party',candidateScope='top',candidate=null,party='',normalize=String}=selection;
  const norm=v=>normalize(String(v||''));
- const partyName=v=>keyParty(norm(v||'无党籍'));
+ const partyName=v=>keyParty(norm(v||'政党资料缺失'));
  const isLeg=office==='legislative',isList=isLeg&&electorate==='party';
  const grain=office==='council'||isLeg&&electorate==='regional'?'district':office==='township'||level==='town'?'town':'county';
  const candidateMetric=metric==='share'||metric==='votes';
