@@ -64,6 +64,13 @@ test('Historical county mayors and councils use five shared election cycles with
    assert.equal(councilRows.reduce((sum,c)=>sum+c.seats,0),963);
    const archive=councilRows.filter(c=>c.election_id==='1994-council-counties');
    assert.equal(archive.length,183);
+   const partial=council.partialCouncilReturns[0];
+   assert.equal(partial.districts.length,5);
+   assert.equal(partial.districts.flatMap(d=>d.winners).length,16);
+   assert.equal(partial.registered_voters,27458);
+   assert.equal(partial.ballots_cast,22227);
+   assert.equal(partial.valid_votes,null);
+   assert.equal(archive.some(c=>c.county_name==='金门县'),false);
    assert.equal(archive.reduce((sum,c)=>sum+contestants(council,c).length,0),1807);
    assert.equal(archive.reduce((sum,c)=>sum+c.seats,0),867);
    const taipei=councilRows.filter(c=>c.county_name==='台北县');

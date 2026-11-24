@@ -792,6 +792,47 @@
   cs.sort((a,b)=>state.palette.findIndex(p=>p.id===predictionParty(a.party).id)-state.palette.findIndex(p=>p.id===predictionParty(b.party).id)||a.party.localeCompare(b.party)||b.votes-a.votes);
   return Array.from({length:d.seats},(_,i)=>cs[i]||null);
  }
+ // A winner-only archive is useful, but it must never enter the full-vote or
+ // party-seat aggregation: missing candidates and party endorsements stay unknown.
+ function renderPartialCouncilReturns(){
+  const note=el('historyBoundaryNote');if(!note)return;
+  let details=el('historyPartialCouncilReturns');
+  const records=archivedCouncil()?(snapshotData?.partialCouncilReturns||[]):[];
+  if(!records.length){if(details)details.hidden=true;return}
+  if(!details){details=document.createElement('details');details.id='historyPartialCouncilReturns';details.className='data-help';note.after(details)}
+  details.hidden=false;
+  if(details.dataset.loaded==='true')return;
+  details.dataset.loaded='true';
+  const summary=document.createElement('summary');summary.textContent='金门1994年议员当选名单（已核实）';details.append(summary);
+  for(const archive of records){
+   const intro=document.createElement('p');
+   intro.textContent=archive.election_date+' 投票 · '+archive.candidate_count+' 人参选 · '+archive.elected_count+' 人当选 · 选举人数 '+archive.registered_voters.toLocaleString('zh-CN')+' · 投票人数 '+archive.ballots_cast.toLocaleString('zh-CN')+' · 投票率 '+archive.turnout_pct.toFixed(2)+'%。尚缺完整候选人得票、号次和推荐政党；本表不纳入已收录完整结果的统计或地图着色。';
+   details.append(intro);
+   const wrap=document.createElement('div');wrap.className='history-table-wrap';
+   const table=document.createElement('table');table.className='history-candidate-table';
+   const thead=document.createElement('thead'),hr=document.createElement('tr');
+   for(const label of ['选区','号次','候选人','性别','选举时现任','政党','得票数','得票率','当选']){
+    const th=document.createElement('th');th.textContent=label;hr.append(th)
+   }
+   thead.append(hr);table.append(thead);
+   const body=document.createElement('tbody');
+   for(const district of archive.districts){
+    const divider=document.createElement('tr'),heading=document.createElement('th');
+    divider.className='history-district-divider';heading.scope='rowgroup';heading.colSpan=9;
+    heading.textContent='1994年 · 第'+district.number+'选举区（'+norm(district.scope)+'）';divider.append(heading);body.append(divider);
+    for(const [name,gender] of district.winners){
+     const tr=document.createElement('tr');tr.className='history-elected-row';
+     for(const value of ['第'+district.number+'选举区','',normCandidate(name),gender,'','','','']){const td=document.createElement('td');td.textContent=value;tr.append(td)}
+     const td=document.createElement('td'),mark=document.createElement('img');mark.src='assets/elected-mark.png';mark.alt='当选';mark.width=18;mark.height=18;td.append(mark);tr.append(td);body.append(tr)
+    }
+   }
+   table.append(body);wrap.append(table);details.append(wrap);
+   const sources=document.createElement('p');
+   for(const [label,url] of [['当选名单：金门县志',archive.source_url],['投票统计：金门县统计年报表3-9',archive.statistics_source_url]]){
+    const link=document.createElement('a');link.href=url;link.target='_blank';link.rel='noopener';link.textContent=label;sources.append(link,'　')
+   }details.append(sources);
+  }
+ }
  function syncHistoryControls(){
   const titleEyebrow=el('historyResultSection')?.querySelector('.eyebrow');
   if(titleEyebrow)titleEyebrow.textContent=yearLabel()+' 历史数据';
@@ -804,12 +845,13 @@
   else if(localYear===2026)el('historyBoundaryNote').textContent='2026年正式结果仅在中选会或地方选委会资料逐项核对、选区得票与席次校验通过后发布；预测与官方结果分开保存。未核实的乡镇得票不推算。';
   else if(!presidentialMode&&localGeometry){
    const cycle=snapshotData?.cycleYears?'按选举批次合并显示，各地实际投票日期见选区结果。':'按实际投票年显示。';
-   const coverage=archivedCouncil()?' 1994年1月的县市议员资料采用地方选务档案转录，经选区有效票和当选席次对账。金门县完整候选人得票明细待补，合计仅计入已收录结果。':'';
+   const coverage=archivedCouncil()?' 1994年1月的县市议员资料采用地方选务档案转录，经选区有效票和当选席次对账。金门县完整候选人得票明细待补，已核实当选名单可单独查看；合计仅计入已收录完整结果。':'';
    el('historyBoundaryNote').textContent=cycle+coverage+' 历史边界采用可对应的现行轮廓，缺少可靠边界的选区仍可查看候选人结果。'+(localYear===2018&&kind==='mayor'?' 台北市采用法院重计结果，区级重计明细缺失。':'');
   }
   else if(presidentialMode)el('historyBoundaryNote').textContent='县市和乡镇市区按当届归属显示，边界采用现行底图近似；'+
    (presidentialYear<=2000?'不同“连署”候选人使用不同图示色，不代表政党。':'颜色表示各地区最高票候选人所属政党。');
  }
+  renderPartialCouncilReturns();
   el('historyCounty').value=county;el('historyScaleBox').hidden=kind!=='mayor'&&!legislativeMode;
   if(legislativeMode){
    const ballot=el('historyElectorate');ballot.replaceChildren(...HistoryLegislative.ballots(legislativeYear).map(item=>new Option(item.label,item.value)));ballot.value=legislativeBallot;

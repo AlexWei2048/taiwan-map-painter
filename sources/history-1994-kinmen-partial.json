@@ -1,0 +1,111 @@
+{
+  "county": "金門縣",
+  "election_date": "1994-01-29",
+  "candidate_count": 62,
+  "elected_count": 16,
+  "registered_voters": 27458,
+  "ballots_cast": 22227,
+  "turnout_pct": 80.95,
+  "valid_votes": null,
+  "invalid_votes": null,
+  "source_url": "https://cabkc.kinmen.gov.tw/uploads/files/202304/ddcac480-e969-4887-89bb-91898049b65e.pdf",
+  "source_page": "卷二 大事志，第336页",
+  "statistics_source_url": "https://ws.kinmen.gov.tw/Download.ashx?n=6KGM5pS%2F57WE57mU5ZCI5L21LnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvMzExL3JlbGZpbGUvODA0Ni8xNDY2NS9hODE0ZTRhZi04MWVmLTRjYjItYjMzNy0zYmE1ZTA1NDZlOWYucGRm",
+  "statistics_source_page": "表3-9",
+  "districts": [
+    {
+      "number": 1,
+      "scope": "金城鎮、烏坵鄉",
+      "winners": [
+        [
+          "盧志權",
+          "男"
+        ],
+        [
+          "陳水賜",
+          "男"
+        ],
+        [
+          "王振權",
+          "男"
+        ],
+        [
+          "趙瑞英",
+          "女"
+        ],
+        [
+          "歐陽彥木",
+          "男"
+        ]
+      ]
+    },
+    {
+      "number": 2,
+      "scope": "金湖鎮",
+      "winners": [
+        [
+          "李成義",
+          "男"
+        ],
+        [
+          "陳恩賜",
+          "男"
+        ],
+        [
+          "陳福海",
+          "男"
+        ],
+        [
+          "楊淑媛",
+          "女"
+        ]
+      ]
+    },
+    {
+      "number": 3,
+      "scope": "金沙鎮",
+      "winners": [
+        [
+          "王水彰",
+          "男"
+        ],
+        [
+          "張光海",
+          "男"
+        ],
+        [
+          "王再生",
+          "男"
+        ]
+      ]
+    },
+    {
+      "number": 4,
+      "scope": "金寧鄉",
+      "winners": [
+        [
+          "楊永立",
+          "男"
+        ],
+        [
+          "許建中",
+          "男"
+        ],
+        [
+          "賴育千",
+          "女"
+        ]
+      ]
+    },
+    {
+      "number": 5,
+      "scope": "烈嶼鄉",
+      "winners": [
+        [
+          "林登惠",
+          "男"
+        ]
+      ]
+    }
+  ]
+}

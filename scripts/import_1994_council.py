@@ -123,6 +123,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('html',type=Path)
     parser.add_argument('--corrections',type=Path)
+    parser.add_argument('--partial-returns',type=Path,default=Path(__file__).resolve().parents[1]/'sources/history-1994-kinmen-partial.json')
     parser.add_argument('--audit',action='store_true')
     args=parser.parse_args()
     data=extract(args.html,json.loads(args.corrections.read_text()) if args.corrections else {})
@@ -134,5 +135,7 @@ if __name__ == '__main__':
                           'excluded':data['excluded']},ensure_ascii=False,indent=2))
     else:
         districts = data.pop('districts')
+        if args.partial_returns.is_file():
+            data['partial_returns'] = [json.loads(args.partial_returns.read_text(encoding='utf-8'))]
         encode = lambda value: json.dumps(value,ensure_ascii=False,separators=(',',':'))
         print(encode(data)[:-1] + ',\n"districts":[\n' + ',\n'.join(map(encode,districts)) + '\n]}')

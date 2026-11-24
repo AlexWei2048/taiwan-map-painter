@@ -3024,6 +3024,10 @@ test('The earliest local cycle shows dated council returns and preserves actual 
  await page.locator('#historyOffice').selectOption('council');
  await page.waitForFunction(()=>History2022View.office()==='council'&&History2022View.snapshot()?.contests.some(c=>c.election_id==='1994-council-counties'));
  assert.match(await page.locator('#historyBoundaryNote').textContent(),/金门(?:县)?完整候选人得票明细待补/);
+ await page.locator('#historyPartialCouncilReturns summary').click();
+ assert.equal(await page.locator('#historyPartialCouncilReturns tbody tr.history-elected-row').count(),16);
+ assert.match(await page.locator('#historyPartialCouncilReturns').textContent(),/22,227/);
+ await page.locator('#historyPartialCouncilReturns summary').click();
  await page.locator('#historyCounty').selectOption('台北县');
  await page.locator('#returnTaiwanMap').waitFor({state:'visible'});
  assert.match(await page.locator('#scopeTitle').textContent(),/^台北县 · 1993\/1994/);
