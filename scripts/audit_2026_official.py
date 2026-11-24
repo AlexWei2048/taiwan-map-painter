@@ -92,7 +92,7 @@ def candidate_index(data):
     return by_id, by_name
 
 def write_official_template(data,path):
-    """All 2051 roster IDs retained; no claim of official verification in blank fields."""
+    """All current roster IDs retained; no claim of official verification in blank fields."""
     districts={d["id"]:d for d in data["districts"]}
     fieldnames=["candidate_id","type","county","districtId","name","number","party","gender","eligible","source_url","source_date",
                 "local_ballot_reference","local_party_reference","local_gender_reference","roster_as_of"]

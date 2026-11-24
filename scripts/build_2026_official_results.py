@@ -19,7 +19,7 @@ COLUMNS=["candidate_id","number","votes","elected","source_url","source_date"]
 TOWN_COLS=["candidate_id","county","town","votes","source_url","source_date"]
 TURNOUT_COLS=["district_id","registered_voters","ballots_cast","valid_votes","invalid_votes","source_url","source_date"]
 TOWN_TURNOUT_COLS=["county","town","registered_voters","ballots_cast","valid_votes","invalid_votes","source_url","source_date"]
-EXPECTED={"mayor":(22,81),"council":(221,1493),"township":(204,477)}
+EXPECTED={"mayor":(22,81),"council":(221,1493),"township":(204,475)}
 ELECTION_DAY=date(2026,11,28)
 CERTIFICATION_DAY=date(2026,12,4)
 

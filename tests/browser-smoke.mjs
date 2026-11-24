@@ -1032,10 +1032,10 @@ test('All 2026 township candidates have complete, source-traced ballot numbers w
    failures,sample};
  });
  assert.match(status.asOf,/^2026-11-(?:08|[12]\d)$/);
- assert.equal(status.summary.township.numbered,477);
+ assert.equal(status.summary.township.numbered,475);
  assert.equal(status.summary.mayor.numbered,81);
  assert.equal(status.summary.council.numbered,1493);
- assert.equal(status.townshipCount,477);
+ assert.equal(status.townshipCount,475);
  assert.equal(status.stillPending,0);
  assert.equal(status.pending,0);
  assert.equal(status.unresolved,0);
@@ -2875,7 +2875,7 @@ test('Published-only 2026 results can load in history, switch offices and return
  const page=await context.newPage(),errors=[];
  page.on('pageerror',err=>errors.push(err.message));
  await page.route('**/assets/history-2026-availability.json*',route=>route.fulfill({contentType:'application/json',body:JSON.stringify({
-  schemaVersion:1,year:2026,status:'published',candidateCount:2051,districtCount:447,sha256:'a'.repeat(64)
+  schemaVersion:1,year:2026,status:'published',candidateCount:2049,districtCount:447,sha256:'a'.repeat(64)
  })}));
  await page.goto(base);
  await page.locator('#regions path[data-region]').first().waitFor();
@@ -2912,7 +2912,7 @@ test('Published-only 2026 results can load in history, switch offices and return
    elections,contests,candidacies,rows};
  });
  assert.equal(fake.contests.length,447);
- assert.equal(fake.candidacies.length,2051);
+ assert.equal(fake.candidacies.length,2049);
  await page.route('**/assets/history-2026.json*',route=>route.fulfill({contentType:'application/json',body:JSON.stringify(fake)}));
  await page.locator('#categoryHistory').click();
  await page.waitForFunction(()=>document.querySelector('#historyYear option[value="2026"]'));

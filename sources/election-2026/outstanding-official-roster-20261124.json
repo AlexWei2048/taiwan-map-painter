@@ -1,1303 +1,20 @@
 {
   "checkedAt": "2026-11-24",
-  "scope": "待官方正式名单逐人原件复核；并非候选人资料为空。目录入口仅供后续定位，不能作为已核验证据。",
-  "finalPending": 147,
-  "officialNumberPending": 52,
-  "groups": [
-    {
-      "county": "苗栗县",
-      "type": "council",
-      "officialDirectory": "https://eebulletin.cec.gov.tw/?dir=115%2F08%E8%8B%97%E6%A0%97%E7%B8%A3%2F02%E7%B8%A3%E8%AD%B0%E5%93%A1",
-      "candidates": [
-        {
-          "id": "council:10005:01:001",
-          "districtId": "council:10005:01",
-          "name": "楊明燁",
-          "number": 7,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:01:002",
-          "districtId": "council:10005:01",
-          "name": "曾美露",
-          "number": 4,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:01:003",
-          "districtId": "council:10005:01",
-          "name": "孫素娥",
-          "number": 11,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:01:004",
-          "districtId": "council:10005:01",
-          "name": "鄭碧玉",
-          "number": 14,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:01:005",
-          "districtId": "council:10005:01",
-          "name": "張志宇",
-          "number": 9,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:01:006",
-          "districtId": "council:10005:01",
-          "name": "黃萬盛",
-          "number": 15,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:01:007",
-          "districtId": "council:10005:01",
-          "name": "徐筱菁",
-          "number": 5,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:01:008",
-          "districtId": "council:10005:01",
-          "name": "許櫻萍",
-          "number": 3,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:01:009",
-          "districtId": "council:10005:01",
-          "name": "魏漢相",
-          "number": 6,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:01:010",
-          "districtId": "council:10005:01",
-          "name": "林志豪",
-          "number": 13,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:01:011",
-          "districtId": "council:10005:01",
-          "name": "彭賢淳",
-          "number": 1,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:01:012",
-          "districtId": "council:10005:01",
-          "name": "湯維岳",
-          "number": 10,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:01:013",
-          "districtId": "council:10005:01",
-          "name": "彭晧宇",
-          "number": 12,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:01:014",
-          "districtId": "council:10005:01",
-          "name": "呂晟",
-          "number": 2,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:01:015",
-          "districtId": "council:10005:01",
-          "name": "巫召清",
-          "number": 8,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:04:001",
-          "districtId": "council:10005:04",
-          "name": "李文斌",
-          "number": 5,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:04:002",
-          "districtId": "council:10005:04",
-          "name": "林寶珠",
-          "number": 3,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:04:003",
-          "districtId": "council:10005:04",
-          "name": "廖秀紅",
-          "number": 9,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:04:004",
-          "districtId": "council:10005:04",
-          "name": "廖英利",
-          "number": 1,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:04:005",
-          "districtId": "council:10005:04",
-          "name": "邱毓興",
-          "number": 6,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:04:006",
-          "districtId": "council:10005:04",
-          "name": "吳亭亭",
-          "number": 4,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:04:007",
-          "districtId": "council:10005:04",
-          "name": "蔡君婷",
-          "number": 12,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:04:008",
-          "districtId": "council:10005:04",
-          "name": "吳翌立",
-          "number": 7,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:04:009",
-          "districtId": "council:10005:04",
-          "name": "鄭秋風",
-          "number": 2,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:04:010",
-          "districtId": "council:10005:04",
-          "name": "陳碧華",
-          "number": 11,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:04:011",
-          "districtId": "council:10005:04",
-          "name": "張佳玲",
-          "number": 10,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:04:012",
-          "districtId": "council:10005:04",
-          "name": "謝美香",
-          "number": 8,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:05:001",
-          "districtId": "council:10005:05",
-          "name": "張淑芬",
-          "number": 12,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:05:002",
-          "districtId": "council:10005:05",
-          "name": "鄭聚然",
-          "number": 7,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:05:003",
-          "districtId": "council:10005:05",
-          "name": "陳光軒",
-          "number": 6,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:05:004",
-          "districtId": "council:10005:05",
-          "name": "陳詩弦",
-          "number": 11,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:05:005",
-          "districtId": "council:10005:05",
-          "name": "林志學",
-          "number": 8,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:05:006",
-          "districtId": "council:10005:05",
-          "name": "蕭詠萱",
-          "number": 4,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:05:007",
-          "districtId": "council:10005:05",
-          "name": "温俊勇",
-          "number": 10,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:05:008",
-          "districtId": "council:10005:05",
-          "name": "陳永賢",
-          "number": 3,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:05:009",
-          "districtId": "council:10005:05",
-          "name": "古益弦",
-          "number": 5,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:05:010",
-          "districtId": "council:10005:05",
-          "name": "彭茜柔",
-          "number": 1,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:05:011",
-          "districtId": "council:10005:05",
-          "name": "黎煥強",
-          "number": 9,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        },
-        {
-          "id": "council:10005:05:012",
-          "districtId": "council:10005:05",
-          "name": "鍾孟儒",
-          "number": 2,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/mlec/article/65362"
-        }
-      ]
-    },
-    {
-      "county": "嘉义市",
-      "type": "council",
-      "officialDirectory": "https://eebulletin.cec.gov.tw/?dir=115%2F20%E5%98%89%E7%BE%A9%E5%B8%82%2F02%E5%B8%82%E8%AD%B0%E5%93%A1",
-      "candidates": [
-        {
-          "id": "council:10020:01:001",
-          "districtId": "council:10020:01",
-          "name": "張敏琪",
-          "number": 4,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/b4e3e76b-2cc8-4bbe-b77a-c586e69d205b.pdf"
-        },
-        {
-          "id": "council:10020:01:002",
-          "districtId": "council:10020:01",
-          "name": "陳家平",
-          "number": 13,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/b4e3e76b-2cc8-4bbe-b77a-c586e69d205b.pdf"
-        },
-        {
-          "id": "council:10020:01:003",
-          "districtId": "council:10020:01",
-          "name": "郭定緯",
-          "number": 7,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/b4e3e76b-2cc8-4bbe-b77a-c586e69d205b.pdf"
-        },
-        {
-          "id": "council:10020:01:004",
-          "districtId": "council:10020:01",
-          "name": "傅大偉",
-          "number": 2,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/b4e3e76b-2cc8-4bbe-b77a-c586e69d205b.pdf"
-        },
-        {
-          "id": "council:10020:01:005",
-          "districtId": "council:10020:01",
-          "name": "梁樹綸",
-          "number": 11,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/b4e3e76b-2cc8-4bbe-b77a-c586e69d205b.pdf"
-        },
-        {
-          "id": "council:10020:01:006",
-          "districtId": "council:10020:01",
-          "name": "黃露慧",
-          "number": 3,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/b4e3e76b-2cc8-4bbe-b77a-c586e69d205b.pdf"
-        },
-        {
-          "id": "council:10020:01:007",
-          "districtId": "council:10020:01",
-          "name": "黃盈智",
-          "number": 6,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/b4e3e76b-2cc8-4bbe-b77a-c586e69d205b.pdf"
-        },
-        {
-          "id": "council:10020:01:008",
-          "districtId": "council:10020:01",
-          "name": "凌子楚",
-          "number": 9,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/b4e3e76b-2cc8-4bbe-b77a-c586e69d205b.pdf"
-        },
-        {
-          "id": "council:10020:01:009",
-          "districtId": "council:10020:01",
-          "name": "林昱孜",
-          "number": 16,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E5%B8%82/"
-        },
-        {
-          "id": "council:10020:01:010",
-          "districtId": "council:10020:01",
-          "name": "何苡睿",
-          "number": 15,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E5%B8%82/"
-        },
-        {
-          "id": "council:10020:01:011",
-          "districtId": "council:10020:01",
-          "name": "陳玥妗",
-          "number": 8,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E5%B8%82/"
-        },
-        {
-          "id": "council:10020:01:012",
-          "districtId": "council:10020:01",
-          "name": "顏翎熹",
-          "number": 1,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E5%B8%82/"
-        },
-        {
-          "id": "council:10020:01:013",
-          "districtId": "council:10020:01",
-          "name": "郭文居",
-          "number": 14,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/b4e3e76b-2cc8-4bbe-b77a-c586e69d205b.pdf"
-        },
-        {
-          "id": "council:10020:01:014",
-          "districtId": "council:10020:01",
-          "name": "柯莉絲汀",
-          "number": 10,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/b4e3e76b-2cc8-4bbe-b77a-c586e69d205b.pdf"
-        },
-        {
-          "id": "council:10020:01:015",
-          "districtId": "council:10020:01",
-          "name": "吳宗泓",
-          "number": 12,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/b4e3e76b-2cc8-4bbe-b77a-c586e69d205b.pdf"
-        },
-        {
-          "id": "council:10020:01:016",
-          "districtId": "council:10020:01",
-          "name": "洪斐昭",
-          "number": 5,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/b4e3e76b-2cc8-4bbe-b77a-c586e69d205b.pdf"
-        },
-        {
-          "id": "council:10020:02:001",
-          "districtId": "council:10020:02",
-          "name": "鄭光宏",
-          "number": 3,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/f52381ae-dde4-427b-9ae0-0cd9ffdbb32c.pdf"
-        },
-        {
-          "id": "council:10020:02:002",
-          "districtId": "council:10020:02",
-          "name": "張秀華",
-          "number": 5,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/f52381ae-dde4-427b-9ae0-0cd9ffdbb32c.pdf"
-        },
-        {
-          "id": "council:10020:02:003",
-          "districtId": "council:10020:02",
-          "name": "黃思婷",
-          "number": 7,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/f52381ae-dde4-427b-9ae0-0cd9ffdbb32c.pdf"
-        },
-        {
-          "id": "council:10020:02:004",
-          "districtId": "council:10020:02",
-          "name": "林煒軒",
-          "number": 4,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E5%B8%82/"
-        },
-        {
-          "id": "council:10020:02:005",
-          "districtId": "council:10020:02",
-          "name": "黃大祐",
-          "number": 18,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/f52381ae-dde4-427b-9ae0-0cd9ffdbb32c.pdf"
-        },
-        {
-          "id": "council:10020:02:006",
-          "districtId": "council:10020:02",
-          "name": "陳品蓁",
-          "number": 21,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/f52381ae-dde4-427b-9ae0-0cd9ffdbb32c.pdf"
-        },
-        {
-          "id": "council:10020:02:007",
-          "districtId": "council:10020:02",
-          "name": "曾奕豪",
-          "number": 15,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/f52381ae-dde4-427b-9ae0-0cd9ffdbb32c.pdf"
-        },
-        {
-          "id": "council:10020:02:008",
-          "districtId": "council:10020:02",
-          "name": "林詩涵",
-          "number": 19,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/f52381ae-dde4-427b-9ae0-0cd9ffdbb32c.pdf"
-        },
-        {
-          "id": "council:10020:02:009",
-          "districtId": "council:10020:02",
-          "name": "陳姿妏",
-          "number": 12,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/f52381ae-dde4-427b-9ae0-0cd9ffdbb32c.pdf"
-        },
-        {
-          "id": "council:10020:02:010",
-          "districtId": "council:10020:02",
-          "name": "王浩",
-          "number": 8,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/f52381ae-dde4-427b-9ae0-0cd9ffdbb32c.pdf"
-        },
-        {
-          "id": "council:10020:02:011",
-          "districtId": "council:10020:02",
-          "name": "李忠曆",
-          "number": 9,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/f52381ae-dde4-427b-9ae0-0cd9ffdbb32c.pdf"
-        },
-        {
-          "id": "council:10020:02:012",
-          "districtId": "council:10020:02",
-          "name": "蔡坤叡",
-          "number": 13,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/f52381ae-dde4-427b-9ae0-0cd9ffdbb32c.pdf"
-        },
-        {
-          "id": "council:10020:02:013",
-          "districtId": "council:10020:02",
-          "name": "黃敏修",
-          "number": 14,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/f52381ae-dde4-427b-9ae0-0cd9ffdbb32c.pdf"
-        },
-        {
-          "id": "council:10020:02:014",
-          "districtId": "council:10020:02",
-          "name": "孫貫志",
-          "number": 16,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E5%B8%82/"
-        },
-        {
-          "id": "council:10020:02:015",
-          "districtId": "council:10020:02",
-          "name": "陳嘉弘",
-          "number": 2,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/f52381ae-dde4-427b-9ae0-0cd9ffdbb32c.pdf"
-        },
-        {
-          "id": "council:10020:02:016",
-          "districtId": "council:10020:02",
-          "name": "林子淨",
-          "number": 20,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/f52381ae-dde4-427b-9ae0-0cd9ffdbb32c.pdf"
-        },
-        {
-          "id": "council:10020:02:017",
-          "districtId": "council:10020:02",
-          "name": "蔡坤達",
-          "number": 17,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/f52381ae-dde4-427b-9ae0-0cd9ffdbb32c.pdf"
-        },
-        {
-          "id": "council:10020:02:018",
-          "districtId": "council:10020:02",
-          "name": "李明燦",
-          "number": 6,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/f52381ae-dde4-427b-9ae0-0cd9ffdbb32c.pdf"
-        },
-        {
-          "id": "council:10020:02:019",
-          "districtId": "council:10020:02",
-          "name": "黃政融",
-          "number": 1,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/f52381ae-dde4-427b-9ae0-0cd9ffdbb32c.pdf"
-        },
-        {
-          "id": "council:10020:02:020",
-          "districtId": "council:10020:02",
-          "name": "陳致愷",
-          "number": 10,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/f52381ae-dde4-427b-9ae0-0cd9ffdbb32c.pdf"
-        },
-        {
-          "id": "council:10020:02:021",
-          "districtId": "council:10020:02",
-          "name": "魏志軒",
-          "number": 11,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/f52381ae-dde4-427b-9ae0-0cd9ffdbb32c.pdf"
-        }
-      ]
-    },
-    {
-      "county": "连江县",
-      "type": "council",
-      "officialDirectory": "https://eebulletin.cec.gov.tw/?dir=115%2F22%E9%80%A3%E6%B1%9F%E7%B8%A3%2F02%E7%B8%A3%E8%AD%B0%E5%93%A1",
-      "candidates": [
-        {
-          "id": "council:09007:03:001",
-          "districtId": "council:09007:03",
-          "name": "陳貽斌",
-          "number": 1,
-          "numberVerification": "official",
-          "existingNumberSource": "https://www.nankan.gov.tw/Chhtml/Detail/2221?mcid=114026"
-        }
-      ]
-    },
-    {
-      "county": "彰化县",
-      "type": "township",
-      "officialDirectory": "https://eebulletin.cec.gov.tw/?dir=115%2F09%E5%BD%B0%E5%8C%96%E7%B8%A3%2F03%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
-      "candidates": [
-        {
-          "id": "township:10007:10007020:002",
-          "districtId": "township:10007:10007020",
-          "name": "施佩妤",
-          "number": 2,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%BD%B0%E5%8C%96%E7%B8%A3/"
-        },
-        {
-          "id": "township:10007:10007030:001",
-          "districtId": "township:10007:10007030",
-          "name": "林庚壬",
-          "number": 2,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/fc3216f9-62be-4a43-aea3-4747ce4f6d1b.pdf"
-        },
-        {
-          "id": "township:10007:10007040:003",
-          "districtId": "township:10007:10007040",
-          "name": "鐘帷茲",
-          "number": 3,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%BD%B0%E5%8C%96%E7%B8%A3/"
-        },
-        {
-          "id": "township:10007:10007050:001",
-          "districtId": "township:10007:10007050",
-          "name": "黄永欽",
-          "number": 1,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/fc3216f9-62be-4a43-aea3-4747ce4f6d1b.pdf"
-        },
-        {
-          "id": "township:10007:10007060:002",
-          "districtId": "township:10007:10007060",
-          "name": "黃椿𩃀",
-          "number": 3,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/fc3216f9-62be-4a43-aea3-4747ce4f6d1b.pdf"
-        },
-        {
-          "id": "township:10007:10007100:001",
-          "districtId": "township:10007:10007100",
-          "name": "凃俊任",
-          "number": 3,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/fc3216f9-62be-4a43-aea3-4747ce4f6d1b.pdf"
-        },
-        {
-          "id": "township:10007:10007200:001",
-          "districtId": "township:10007:10007200",
-          "name": "陳一惇",
-          "number": 3,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/fc3216f9-62be-4a43-aea3-4747ce4f6d1b.pdf"
-        },
-        {
-          "id": "township:10007:10007220:003",
-          "districtId": "township:10007:10007220",
-          "name": "許豊麟",
-          "number": 1,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/fc3216f9-62be-4a43-aea3-4747ce4f6d1b.pdf"
-        }
-      ]
-    },
-    {
-      "county": "南投县",
-      "type": "township",
-      "officialDirectory": "https://eebulletin.cec.gov.tw/?dir=115%2F10%E5%8D%97%E6%8A%95%E7%B8%A3%2F03%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
-      "candidates": [
-        {
-          "id": "township:10008:10008020:001",
-          "districtId": "township:10008:10008020",
-          "name": "黃世芳",
-          "number": 1,
-          "numberVerification": "dated-news",
-          "existingNumberSource": "https://more-news.tw/753032/"
-        },
-        {
-          "id": "township:10008:10008020:002",
-          "districtId": "township:10008:10008020",
-          "name": "葉仁創",
-          "number": 2,
-          "numberVerification": "user-specified-wikipedia",
-          "existingNumberSource": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表"
-        },
-        {
-          "id": "township:10008:10008050:001",
-          "districtId": "township:10008:10008050",
-          "name": "吳大村",
-          "number": 2,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%8D%97%E6%8A%95%E7%B8%A3/"
-        },
-        {
-          "id": "township:10008:10008050:002",
-          "districtId": "township:10008:10008050",
-          "name": "陳紀衡",
-          "number": 1,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%8D%97%E6%8A%95%E7%B8%A3/"
-        },
-        {
-          "id": "township:10008:10008090:001",
-          "districtId": "township:10008:10008090",
-          "name": "王若嵐",
-          "number": 1,
-          "numberVerification": "dated-news",
-          "existingNumberSource": "https://more-news.tw/753032/"
-        },
-        {
-          "id": "township:10008:10008090:002",
-          "districtId": "township:10008:10008090",
-          "name": "黃莠馨",
-          "number": 2,
-          "numberVerification": "user-specified-wikipedia",
-          "existingNumberSource": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表"
-        },
-        {
-          "id": "township:10008:10008100:001",
-          "districtId": "township:10008:10008100",
-          "name": "邱美玲",
-          "number": 1,
-          "numberVerification": "dated-news",
-          "existingNumberSource": "https://more-news.tw/753032/"
-        },
-        {
-          "id": "township:10008:10008100:002",
-          "districtId": "township:10008:10008100",
-          "name": "李明杰",
-          "number": 2,
-          "numberVerification": "user-specified-wikipedia",
-          "existingNumberSource": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表"
-        },
-        {
-          "id": "township:10008:10008130:001",
-          "districtId": "township:10008:10008130",
-          "name": "江子信",
-          "number": 1,
-          "numberVerification": "dated-news",
-          "existingNumberSource": "https://more-news.tw/753032/"
-        },
-        {
-          "id": "township:10008:10008130:002",
-          "districtId": "township:10008:10008130",
-          "name": "林瑞祥",
-          "number": 2,
-          "numberVerification": "user-specified-wikipedia",
-          "existingNumberSource": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表"
-        }
-      ]
-    },
-    {
-      "county": "嘉义县",
-      "type": "township",
-      "officialDirectory": "https://eebulletin.cec.gov.tw/?dir=115%2F12%E5%98%89%E7%BE%A9%E7%B8%A3%2F03%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
-      "candidates": [
-        {
-          "id": "township:10010:10010010:001",
-          "districtId": "township:10010:10010010",
-          "name": "呂慧瑜",
-          "number": 1,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010010:002",
-          "districtId": "township:10010:10010010",
-          "name": "鄭淑分",
-          "number": 2,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010020:001",
-          "districtId": "township:10010:10010020",
-          "name": "王如經",
-          "number": 1,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010020:002",
-          "districtId": "township:10010:10010020",
-          "name": "黃嫈珺",
-          "number": 2,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010030:001",
-          "districtId": "township:10010:10010030",
-          "name": "蔡瑋傑",
-          "number": 2,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010030:002",
-          "districtId": "township:10010:10010030",
-          "name": "陳全明",
-          "number": 1,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010040:001",
-          "districtId": "township:10010:10010040",
-          "name": "許有疆",
-          "number": 1,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010050:001",
-          "districtId": "township:10010:10010050",
-          "name": "林于玲",
-          "number": 1,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010050:002",
-          "districtId": "township:10010:10010050",
-          "name": "陳琮貽",
-          "number": 2,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010060:001",
-          "districtId": "township:10010:10010060",
-          "name": "劉雅文",
-          "number": 3,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010060:002",
-          "districtId": "township:10010:10010060",
-          "name": "王梅蜂",
-          "number": 2,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010060:003",
-          "districtId": "township:10010:10010060",
-          "name": "陳志明",
-          "number": 4,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010060:004",
-          "districtId": "township:10010:10010060",
-          "name": "蘇俊榮",
-          "number": 1,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010070:001",
-          "districtId": "township:10010:10010070",
-          "name": "葉孟龍",
-          "number": 1,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010070:002",
-          "districtId": "township:10010:10010070",
-          "name": "陳木焜",
-          "number": 2,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010080:001",
-          "districtId": "township:10010:10010080",
-          "name": "黃鉦凱",
-          "number": 1,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010090:001",
-          "districtId": "township:10010:10010090",
-          "name": "林俊雄",
-          "number": 1,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010100:001",
-          "districtId": "township:10010:10010100",
-          "name": "翁雲",
-          "number": 2,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010100:002",
-          "districtId": "township:10010:10010100",
-          "name": "黃政傑",
-          "number": 1,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010110:001",
-          "districtId": "township:10010:10010110",
-          "name": "吳玉琴",
-          "number": 2,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010110:002",
-          "districtId": "township:10010:10010110",
-          "name": "黃軒凱",
-          "number": 1,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010120:001",
-          "districtId": "township:10010:10010120",
-          "name": "陳德榮",
-          "number": 1,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010120:002",
-          "districtId": "township:10010:10010120",
-          "name": "林緗亭",
-          "number": 2,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010130:001",
-          "districtId": "township:10010:10010130",
-          "name": "李碧雲",
-          "number": 2,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010130:002",
-          "districtId": "township:10010:10010130",
-          "name": "王俊智",
-          "number": 1,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010140:001",
-          "districtId": "township:10010:10010140",
-          "name": "陳宏吉",
-          "number": 2,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010140:002",
-          "districtId": "township:10010:10010140",
-          "name": "何子凡",
-          "number": 3,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010140:003",
-          "districtId": "township:10010:10010140",
-          "name": "邱豐銘",
-          "number": 4,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010140:004",
-          "districtId": "township:10010:10010140",
-          "name": "葉志紘",
-          "number": 1,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010150:001",
-          "districtId": "township:10010:10010150",
-          "name": "吳福仁",
-          "number": 2,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010150:002",
-          "districtId": "township:10010:10010150",
-          "name": "陳信文",
-          "number": 1,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010160:001",
-          "districtId": "township:10010:10010160",
-          "name": "蕭博勝",
-          "number": 1,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010170:001",
-          "districtId": "township:10010:10010170",
-          "name": "吳倚豪",
-          "number": 1,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        },
-        {
-          "id": "township:10010:10010180:001",
-          "districtId": "township:10010:10010180",
-          "name": "高瑞芳",
-          "number": 1,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%98%89%E7%BE%A9%E7%B8%A3/"
-        }
-      ]
-    },
-    {
-      "county": "金门县",
-      "type": "township",
-      "officialDirectory": "https://eebulletin.cec.gov.tw/?dir=115%2F21%E9%87%91%E9%96%80%E7%B8%A3%2F03%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
-      "candidates": [
-        {
-          "id": "township:09020:09020010:001",
-          "districtId": "township:09020:09020010",
-          "name": "許燕輝",
-          "number": 1,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/7432a2d5-7612-403d-bdaa-e050e007c8da.pdf"
-        },
-        {
-          "id": "township:09020:09020010:002",
-          "districtId": "township:09020:09020010",
-          "name": "石兆瑉",
-          "number": 2,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/7432a2d5-7612-403d-bdaa-e050e007c8da.pdf"
-        },
-        {
-          "id": "township:09020:09020020:001",
-          "districtId": "township:09020:09020020",
-          "name": "黃奕焮",
-          "number": 4,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/7432a2d5-7612-403d-bdaa-e050e007c8da.pdf"
-        },
-        {
-          "id": "township:09020:09020020:002",
-          "districtId": "township:09020:09020020",
-          "name": "馬自壯",
-          "number": 2,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/7432a2d5-7612-403d-bdaa-e050e007c8da.pdf"
-        },
-        {
-          "id": "township:09020:09020020:003",
-          "districtId": "township:09020:09020020",
-          "name": "王石堆",
-          "number": 1,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/7432a2d5-7612-403d-bdaa-e050e007c8da.pdf"
-        },
-        {
-          "id": "township:09020:09020020:004",
-          "districtId": "township:09020:09020020",
-          "name": "陳憶萍",
-          "number": 3,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/7432a2d5-7612-403d-bdaa-e050e007c8da.pdf"
-        },
-        {
-          "id": "township:09020:09020030:001",
-          "districtId": "township:09020:09020030",
-          "name": "陳向鑫",
-          "number": 1,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/7432a2d5-7612-403d-bdaa-e050e007c8da.pdf"
-        },
-        {
-          "id": "township:09020:09020030:002",
-          "districtId": "township:09020:09020030",
-          "name": "蔡乃靖",
-          "number": 3,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/7432a2d5-7612-403d-bdaa-e050e007c8da.pdf"
-        },
-        {
-          "id": "township:09020:09020030:003",
-          "districtId": "township:09020:09020030",
-          "name": "蔡西湖",
-          "number": 2,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/7432a2d5-7612-403d-bdaa-e050e007c8da.pdf"
-        },
-        {
-          "id": "township:09020:09020040:001",
-          "districtId": "township:09020:09020040",
-          "name": "翁紹輝",
-          "number": 4,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/7432a2d5-7612-403d-bdaa-e050e007c8da.pdf"
-        },
-        {
-          "id": "township:09020:09020040:002",
-          "districtId": "township:09020:09020040",
-          "name": "陳成泉",
-          "number": 1,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/7432a2d5-7612-403d-bdaa-e050e007c8da.pdf"
-        },
-        {
-          "id": "township:09020:09020040:003",
-          "districtId": "township:09020:09020040",
-          "name": "翁品洋",
-          "number": 3,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/7432a2d5-7612-403d-bdaa-e050e007c8da.pdf"
-        },
-        {
-          "id": "township:09020:09020040:004",
-          "districtId": "township:09020:09020040",
-          "name": "李正騰",
-          "number": 2,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/7432a2d5-7612-403d-bdaa-e050e007c8da.pdf"
-        },
-        {
-          "id": "township:09020:09020050:001",
-          "districtId": "township:09020:09020050",
-          "name": "洪燕玉",
-          "number": 1,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/7432a2d5-7612-403d-bdaa-e050e007c8da.pdf"
-        },
-        {
-          "id": "township:09020:09020050:002",
-          "districtId": "township:09020:09020050",
-          "name": "洪鴻斌",
-          "number": 2,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/7432a2d5-7612-403d-bdaa-e050e007c8da.pdf"
-        },
-        {
-          "id": "township:09020:09020060:001",
-          "districtId": "township:09020:09020060",
-          "name": "蔡金照",
-          "number": 3,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/7432a2d5-7612-403d-bdaa-e050e007c8da.pdf"
-        },
-        {
-          "id": "township:09020:09020060:002",
-          "districtId": "township:09020:09020060",
-          "name": "吳玉林",
-          "number": 1,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/7432a2d5-7612-403d-bdaa-e050e007c8da.pdf"
-        },
-        {
-          "id": "township:09020:09020060:003",
-          "districtId": "township:09020:09020060",
-          "name": "高丹華",
-          "number": 2,
-          "numberVerification": "official",
-          "existingNumberSource": "https://web.cec.gov.tw/api/file/7432a2d5-7612-403d-bdaa-e050e007c8da.pdf"
-        }
-      ]
-    }
-  ],
-  "nameMismatches": [
-    {
-      "districtId": "council:09007:03",
-      "number": 1,
-      "officialName": "陳怡斌",
-      "existing": "陳貽斌",
-      "source": "MTCF"
-    }
-  ],
-  "limitations": "部分电子公报超过网页工具PDF读取限制，部分截图缓存缺失；原始附件无法访问时不升级证据。；高雄四区改用官方有声公报名录复核，苗栗部分大PDF仍超限。；南投县部分单独公报可读，仍有5个乡镇公报待复核。；苗栗第1、4、5议员选区已取得官方抽签结果，正式公报仍待核。；嘉义市抽签表6处姓名文字差异尚待原图复核。；本轮官方公告索引可检索，但候选人附件缓存未命中，未提升逐人证据等级。新增官方汇总差异待核。；新增17人已由官方公报/抽签表核验；仍有其他候选人待正式公报逐人核对。；此前彰化正式公告文字48人精确匹配已合并，8人保留待原图。；苗栗乡镇市长正式原件现已取得并核对。",
-  "chiayiCityDrawTextVariants": [
-    {
-      "districtId": "council:10020:01",
-      "number": 1,
-      "officialExtractedName": "顏翎慧",
-      "existing": "顏翎熹",
-      "source": "CYCITYD1",
-      "note": "PDF文字与现有姓名不一致；原图不可访问，不作更名或升级"
-    },
-    {
-      "districtId": "council:10020:01",
-      "number": 8,
-      "officialExtractedName": "陳玥妤",
-      "existing": "陳玥妗",
-      "source": "CYCITYD1",
-      "note": "PDF文字与现有姓名不一致；原图不可访问，不作更名或升级"
-    },
-    {
-      "districtId": "council:10020:01",
-      "number": 15,
-      "officialExtractedName": "何芯睿",
-      "existing": "何苡睿",
-      "source": "CYCITYD1",
-      "note": "PDF文字与现有姓名不一致；原图不可访问，不作更名或升级"
-    },
-    {
-      "districtId": "council:10020:01",
-      "number": 16,
-      "officialExtractedName": "林昱玫",
-      "existing": "林昱孜",
-      "source": "CYCITYD1",
-      "note": "PDF文字与现有姓名不一致；原图不可访问，不作更名或升级"
-    },
-    {
-      "districtId": "council:10020:02",
-      "number": 4,
-      "officialExtractedName": "林焯軒",
-      "existing": "林煒軒",
-      "source": "CYCITYD2",
-      "note": "PDF文字与现有姓名不一致；原图不可访问，不作更名或升级"
-    },
-    {
-      "districtId": "council:10020:02",
-      "number": 16,
-      "officialExtractedName": "孫賢志",
-      "existing": "孫貫志",
-      "source": "CYCITYD2",
-      "note": "PDF文字与现有姓名不一致；原图不可访问，不作更名或升级"
-    }
-  ],
+  "scope": "正式候选人姓名、选区及号次逐人核对已完成。",
+  "finalPending": 0,
+  "officialNumberPending": 0,
+  "groups": [],
+  "nameMismatches": [],
+  "limitations": "部分电子公报超过网页工具PDF读取限制，部分截图缓存缺失；原始附件无法访问时不升级证据。；高雄四区改用官方有声公报名录复核，苗栗部分大PDF仍超限。；南投县部分单独公报可读，仍有5个乡镇公报待复核。；苗栗第1、4、5议员选区已取得官方抽签结果，正式公报仍待核。；嘉义市抽签表6处姓名文字差异尚待原图复核。；本轮官方公告索引可检索，但候选人附件缓存未命中，未提升逐人证据等级。新增官方汇总差异待核。；新增17人已由官方公报/抽签表核验；仍有其他候选人待正式公报逐人核对。；此前彰化正式公告文字48人精确匹配已合并，8人保留待原图。；苗栗乡镇市长正式原件现已取得并核对。；金门全县正式公报原件已全部核对。",
+  "chiayiCityDrawTextVariants": [],
   "officialAggregateReconciliation": {
     "checkedAt": "2026-11-24",
-    "status": "unresolved",
+    "status": "reconciled",
     "sourceUrl": "https://info.cec.gov.tw/vote2026/question/",
     "alternateSourceUrl": "https://info.cec.gov.tw/vote2026/article/content/?target=%2Farticle%2FA0096",
     "sourceTitle": "中选会2026选举专区常见问答第44题及竞选活动期间答客问第2题",
     "officialTotal": 2049,
-    "localTotal": 2051,
+    "localTotal": 2049,
     "counts": {
       "mayor": {
         "official": 81,
@@ -1311,8 +28,8 @@
       },
       "ordinaryTownship": {
         "official": 460,
-        "local": 462,
-        "difference": 2
+        "local": 460,
+        "difference": 0
       },
       "mountainDistrictHead": {
         "official": 15,
@@ -1320,7 +37,7 @@
         "difference": 0
       }
     },
-    "note": "官方公布的是资格审定人数；本站当前收录数多2人，差异集中于普通乡镇市长。具体名单及统计时点差异尚未厘清，不据总数猜测删人。此前与第三方名录总数一致，不等同于与官方汇总一致。",
+    "note": "中选会资格审定统计与修正后本站正式名单数完全相符。金沙镇原抽签4号、金湖镇原抽签2号依金门正式选举公报排除，未重新编号。",
     "sourceDiscovery": [
       {
         "county": "苗栗县",
@@ -1346,9 +63,100 @@
         "kind": "官方抽签公告入口",
         "status": "已检索到复兴区长抽签附件标题；未取得逐人附件"
       }
+    ],
+    "exclusions": [
+      {
+        "candidateId": "township:09020:09020020:001",
+        "districtId": "township:09020:09020020",
+        "name": "黃奕焮",
+        "county": "金门县",
+        "type": "township",
+        "reason": "金沙鎮正式選舉公報注明原抽签第4号因资格不符未列为正式候选人。",
+        "status": "资格不符，未列正式候选人",
+        "originalBallotNumber": 4,
+        "drawingSource": "https://web.cec.gov.tw/api/file/7432a2d5-7612-403d-bdaa-e050e007c8da.pdf",
+        "url": "https://eebulletin.cec.gov.tw/115/21%E9%87%91%E9%96%80%E7%B8%A3/03%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7/%E9%87%91%E9%96%80%E7%B8%A3%E7%AC%AC14%E5%B1%86%E9%8E%AE%E9%95%B7%E3%80%81%E9%8E%AE%E6%B0%91%E4%BB%A3%E8%A1%A8%E6%9A%A8%E9%87%8C%E9%95%B7%E9%81%B8%E8%88%89%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1-%E9%87%91%E6%B2%99%E9%8E%AE.pdf",
+        "checkedAt": "2026-11-24"
+      },
+      {
+        "candidateId": "township:09020:09020030:003",
+        "districtId": "township:09020:09020030",
+        "name": "蔡西湖",
+        "county": "金门县",
+        "type": "township",
+        "reason": "金湖鎮正式選舉公報注明原抽签第2号因资格不符未列为正式候选人。",
+        "status": "资格不符，未列正式候选人",
+        "originalBallotNumber": 2,
+        "drawingSource": "https://web.cec.gov.tw/api/file/7432a2d5-7612-403d-bdaa-e050e007c8da.pdf",
+        "url": "https://eebulletin.cec.gov.tw/115/21%E9%87%91%E9%96%80%E7%B8%A3/03%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7/%E9%87%91%E9%96%80%E7%B8%A3%E7%AC%AC14%E5%B1%86%E9%8E%AE%E9%95%B7%E3%80%81%E9%8E%AE%E6%B0%91%E4%BB%A3%E8%A1%A8%E6%9A%A8%E9%87%8C%E9%95%B7%E9%81%B8%E8%88%89%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1-%E9%87%91%E6%B9%96%E9%8E%AE.pdf",
+        "checkedAt": "2026-11-24"
+      }
     ]
   },
-  "changhuaTownshipTextVariants": [
+  "changhuaTownshipTextVariants": [],
+  "resolvedTextVariants": [
+    {
+      "districtId": "council:09007:03",
+      "number": 1,
+      "officialName": "陳怡斌",
+      "existing": "陳貽斌",
+      "source": "MTCF",
+      "status": "已由正式公报复核"
+    },
+    {
+      "districtId": "council:10020:01",
+      "number": 1,
+      "officialExtractedName": "顏翎慧",
+      "existing": "顏翎熹",
+      "source": "CYCITYD1",
+      "note": "PDF文字与现有姓名不一致；原图不可访问，不作更名或升级",
+      "status": "已由正式公报复核"
+    },
+    {
+      "districtId": "council:10020:01",
+      "number": 8,
+      "officialExtractedName": "陳玥妤",
+      "existing": "陳玥妗",
+      "source": "CYCITYD1",
+      "note": "PDF文字与现有姓名不一致；原图不可访问，不作更名或升级",
+      "status": "已由正式公报复核"
+    },
+    {
+      "districtId": "council:10020:01",
+      "number": 15,
+      "officialExtractedName": "何芯睿",
+      "existing": "何苡睿",
+      "source": "CYCITYD1",
+      "note": "PDF文字与现有姓名不一致；原图不可访问，不作更名或升级",
+      "status": "已由正式公报复核"
+    },
+    {
+      "districtId": "council:10020:01",
+      "number": 16,
+      "officialExtractedName": "林昱玫",
+      "existing": "林昱孜",
+      "source": "CYCITYD1",
+      "note": "PDF文字与现有姓名不一致；原图不可访问，不作更名或升级",
+      "status": "已由正式公报复核"
+    },
+    {
+      "districtId": "council:10020:02",
+      "number": 4,
+      "officialExtractedName": "林焯軒",
+      "existing": "林煒軒",
+      "source": "CYCITYD2",
+      "note": "PDF文字与现有姓名不一致；原图不可访问，不作更名或升级",
+      "status": "已由正式公报复核"
+    },
+    {
+      "districtId": "council:10020:02",
+      "number": 16,
+      "officialExtractedName": "孫賢志",
+      "existing": "孫貫志",
+      "source": "CYCITYD2",
+      "note": "PDF文字与现有姓名不一致；原图不可访问，不作更名或升级",
+      "status": "已由正式公报复核"
+    },
     {
       "candidateId": "township:10007:10007020:002",
       "districtId": "township:10007:10007020",
@@ -1358,7 +166,8 @@
       "exact": false,
       "previousVerification": "referenceSite",
       "source": "CHT_FINAL_TEXT_20261124",
-      "note": "正式公告文字提取差异；不更名、不升级证据"
+      "note": "正式公告文字提取差异；不更名、不升级证据",
+      "status": "已由正式公报复核"
     },
     {
       "candidateId": "township:10007:10007030:001",
@@ -1369,7 +178,8 @@
       "exact": false,
       "previousVerification": "official",
       "source": "CHT_FINAL_TEXT_20261124",
-      "note": "正式公告文字提取差异；不更名、不升级证据"
+      "note": "正式公告文字提取差异；不更名、不升级证据",
+      "status": "已由正式公报复核"
     },
     {
       "candidateId": "township:10007:10007040:003",
@@ -1380,7 +190,8 @@
       "exact": false,
       "previousVerification": "referenceSite",
       "source": "CHT_FINAL_TEXT_20261124",
-      "note": "正式公告文字提取差异；不更名、不升级证据"
+      "note": "正式公告文字提取差异；不更名、不升级证据",
+      "status": "已由正式公报复核"
     },
     {
       "candidateId": "township:10007:10007050:001",
@@ -1391,7 +202,8 @@
       "exact": false,
       "previousVerification": "official",
       "source": "CHT_FINAL_TEXT_20261124",
-      "note": "正式公告文字提取差异；不更名、不升级证据"
+      "note": "正式公告文字提取差异；不更名、不升级证据",
+      "status": "已由正式公报复核"
     },
     {
       "candidateId": "township:10007:10007060:002",
@@ -1402,7 +214,8 @@
       "exact": false,
       "previousVerification": "official",
       "source": "CHT_FINAL_TEXT_20261124",
-      "note": "正式公告文字提取差异；不更名、不升级证据"
+      "note": "正式公告文字提取差异；不更名、不升级证据",
+      "status": "已由正式公报复核"
     },
     {
       "candidateId": "township:10007:10007100:001",
@@ -1413,7 +226,8 @@
       "exact": false,
       "previousVerification": "official",
       "source": "CHT_FINAL_TEXT_20261124",
-      "note": "正式公告文字提取差异；不更名、不升级证据"
+      "note": "正式公告文字提取差异；不更名、不升级证据",
+      "status": "已由正式公报复核"
     },
     {
       "candidateId": "township:10007:10007200:001",
@@ -1424,7 +238,8 @@
       "exact": false,
       "previousVerification": "official",
       "source": "CHT_FINAL_TEXT_20261124",
-      "note": "正式公告文字提取差异；不更名、不升级证据"
+      "note": "正式公告文字提取差异；不更名、不升级证据",
+      "status": "已由正式公报复核"
     },
     {
       "candidateId": "township:10007:10007220:003",
@@ -1435,7 +250,8 @@
       "exact": false,
       "previousVerification": "official",
       "source": "CHT_FINAL_TEXT_20261124",
-      "note": "正式公告文字提取差异；不更名、不升级证据"
+      "note": "正式公告文字提取差异；不更名、不升级证据",
+      "status": "已由正式公报复核"
     }
   ]
 }

@@ -21,7 +21,7 @@ class ImportTests(unittest.TestCase):
   self.assertEqual(snap["contests"][0]["valid_votes"],25)
   self.assertEqual(snap["candidacies"][0]["vote_share"],60)
   self.assertEqual(sum(r["elected"] for r in snap["rows"]),1)
-  self.assertFalse(audit["readyToPublish"],"Synthetic fixture must not be mistaken for complete 2051-person archive")
+  self.assertFalse(audit["readyToPublish"],"Synthetic fixture must not be mistaken for complete 2049-person archive")
  def test_missing_winner_does_not_infer_from_votes(self):
   snap,audit=prepare(fixture(),[source("a",15,""),source("b",10,"0")])
   self.assertFalse(audit["readyToPublish"])

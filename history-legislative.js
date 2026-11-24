@@ -92,7 +92,7 @@
    (!selection.county||row.county===selection.county));
  }
  function note(year,electorate){
-  if(Number(year)===2001&&(electorate==='regional'||electorate==='party'))return '2001年原始资料中，新店市与汐止镇共缺1,447票候选人细项；已核实的票数照实呈现，不作推估。'+(electorate==='party'?' 2008年前无独立不分区政党票。':'');
+  if(Number(year)===2001&&(electorate==='regional'||electorate==='party'))return '2001年全区、县市和区域选区已与官方结果对账。新店市与汐止镇的逐所明细仍缺1,447票。'+(electorate==='party'?' 2008年前无独立不分区政党票。':'');
   if(electorate==='party'&&Number(year)<2008)return '2008年前无独立不分区政党票；政党席次以政党推荐的区域及少数民族候选人得票按旧制计算，详见下方席次与名单。';
   if(Number(year)===1992)return '1992年公开机器资料只到选区层，本页不推算乡镇市区票数。';
   return '';
@@ -359,6 +359,48 @@
  assert(total(shard.rows.filter(x=>x.electorate==='party'&&x.level==='national'))===10326408,'旧制计算票合计');
  return shard;
 }
+ // The official district summary closes the aggregate gap without distributing
+ // the two missing polling-station returns between Xindian and Xizhi.
+ const CEC_2001_DISTRICT_3=[["1","雷倩","新党",32583,32665],["2","周荃","无党籍",7102,7117],["3","洪秀柱","中国国民党",38807,38884],["4","陈鹏宇","无党籍",435,436],["6","杨悟空","台湾团结联盟",1599,1600],["7","周雅淑","民主进步党",48100,48274],["8","赵永清","无党籍",36766,36774],["9","傅台安","无党籍",156,157],["10","吕学图","中国国民党",33011,33024],["11","刘盛良","中国国民党",31113,31173],["13","罗明才","中国国民党",34533,34845],["14","李庆华","亲民党",61011,61112],["15","陈朝龙","民主进步党",54096,54213],["17","赖劲麟","民主进步党",42318,42398],["19","张正修","台湾团结联盟",18605,18648],["20","郑三元","亲民党",50241,50400],["22","杜震华","新党",6360,6362],["23","吴梅寿","亲民党",10194,10291],["24","林德福","亲民党",44754,44773],["25","廖学广","无党籍",11943,12022],["27","周武荣","无党籍",947,953]];
+ function complete2001Aggregates(shard){
+  const district='台北县第3选区',county='台北县';
+  const regionId='legislative:2001:regional:'+county+':'+district,partyId='legislative:2001:party:national';
+  const aggregateLevels=['district','county','national'];
+  const sum=list=>list.reduce((total,row)=>total+row.votes,0);
+  const aggregateVotes=level=>sum(shard.rows.filter(row=>row.electorate==='regional'&&row.level===level));
+  if(aggregateVotes('national')===10174005)return shard;
+  if(aggregateLevels.some(level=>aggregateVotes(level)!==10172558))throw Error('2001年区域民代汇总票数与来源不符');
+  const unique=(rows,message)=>{
+   if(rows.length!==1)throw Error('2001年第3选区：'+message);
+   return rows[0];
+  };
+  for(const [number,name,party,prior,official] of CEC_2001_DISTRICT_3){
+   const candidate=unique(shard.candidacies.filter(row=>row.contest_id===regionId&&
+    row.ballot_number===number&&row.candidate_name===name&&row.party_name===party),'候选人身份');
+   if(candidate.votes!==prior)throw Error('2001年第3选区候选人原记录票数不符');
+   const targets=aggregateLevels.map(level=>unique(shard.rows.filter(row=>row.electorate==='regional'&&
+    row.level===level&&row.district===district&&row.number===number&&row.name===name&&row.party===party),'各级候选人身份'));
+   if(targets.some(row=>row.votes!==prior))throw Error('2001年第3选区候选人各级原票数不符');
+   const partyRows=['national','county'].map(level=>unique(shard.rows.filter(row=>row.electorate==='party'&&
+    row.level===level&&row.party===party&&(level==='national'||row.county===county)),'旧制计算票政党身份'));
+   const partyRecord=unique(shard.candidacies.filter(row=>row.contest_id===partyId&&row.party_name===party),'旧制政党记录');
+   candidate.votes=official;
+   for(const row of targets)row.votes=official;
+   for(const row of [...partyRows,partyRecord])row.votes+=official-prior;
+  }
+  for(const id of [regionId,partyId]){
+   const contest=unique(shard.contests.filter(row=>row.contest_id===id),'统计范围');
+   const candidates=shard.candidacies.filter(row=>row.contest_id===id);
+   contest.valid_votes=sum(candidates);
+   for(const row of candidates)row.vote_share=Math.round(row.votes/contest.valid_votes*1e10)/1e8;
+  }
+  if(aggregateLevels.some(level=>aggregateVotes(level)!==10174005)||aggregateVotes('town')!==10172558)
+   throw Error('2001年区域民代汇总范围对账失败');
+  return shard;
+ }
+ function verified2001(shard){
+  return shard.year===2001?complete2001Aggregates(apply2001Corrections(shard,VOTE_CORRECTIONS_2001)):shard;
+ }
  function enrichCandidates(shard){
   const metadata=(typeof module!=='undefined'&&module.exports?
    require('./assets/history-legislative-candidates.js'):root.HistoryLegislativeCandidates)?.[shard.year];
@@ -393,7 +435,7 @@
    if(!response.ok)throw Error(year+'年立法机构民代历史数据 HTTP '+response.status);
    const shard=await response.json();
    if(shard.schemaVersion!==2||shard.year!==year||shard.office!=='legislative'||!Array.isArray(shard.rows)||!shard.rows.length)throw Error(year+'年立法机构民代历史数据校验未通过');
-   return enrichCandidates(year===2001?apply2001Corrections(shard,VOTE_CORRECTIONS_2001):shard);
+   return enrichCandidates(verified2001(shard));
   })();
   loads.set(year,promise);
   try{return await promise}catch(error){loads.delete(year);throw error}
@@ -402,7 +444,7 @@
   if(!mapLoad)mapLoad=(async()=>{const response=await fetcher('assets/map-legislative.json?v=20261031-split-v25',{cache:'default'});if(!response.ok)throw Error('立法机构民代选区地图 HTTP '+response.status);const map=await response.json();if(!Array.isArray(map.legislative)||map.legislative.length!==73)throw Error('立法机构民代选区地图校验未通过');return map})().catch(error=>{mapLoad=null;throw error});
   return mapLoad;
  }
- const api={apply2001Corrections:shard=>apply2001Corrections(shard,VOTE_CORRECTIONS_2001),YEARS,ballots,levels,multiMember,countyLabelsOnly,seatBadgeComposition,districtKey,winners,composition,renderMode,rows,note,districtNumber,districtGeometry,scopeGeometry,auditPartyTownVotes,singleMemberGeometry,periodSingleMemberGeometry,load,loadMap,loadKaohsiungVillages,kaohsiungSplitFragment};
+ const api={apply2001Corrections:verified2001,YEARS,ballots,levels,multiMember,countyLabelsOnly,seatBadgeComposition,districtKey,winners,composition,renderMode,rows,note,districtNumber,districtGeometry,scopeGeometry,auditPartyTownVotes,singleMemberGeometry,periodSingleMemberGeometry,load,loadMap,loadKaohsiungVillages,kaohsiungSplitFragment};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;
  else root.HistoryLegislative=api;
 })(typeof window==='undefined'?{}:window);

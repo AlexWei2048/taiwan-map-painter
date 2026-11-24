@@ -64,7 +64,8 @@
     electorate,valid_votes,registered_voters:null,ballots_cast:null,invalid_votes:null};
    const rows=part.map((r,i)=>({
     candidacy_id:contest_id+':'+i,contest_id,candidate_name:r.name,party_name:r.party,
-    ballot_number:r.number||null,votes:r.votes,vote_share:valid_votes?r.votes/valid_votes*100:0,
+    ballot_number:r.number||null,gender:r.gender??null,incumbent_at_election:r.incumbent??null,
+    votes:r.votes,vote_share:valid_votes?r.votes/valid_votes*100:0,
     elected_official:false
    }));
    rows.sort((a,b)=>b.votes-a.votes);
