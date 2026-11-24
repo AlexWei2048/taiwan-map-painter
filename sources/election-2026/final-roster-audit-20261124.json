@@ -3,7 +3,7 @@
   "checkedAt": "2026-11-24",
   "baseCandidateBlob": "cde314259e932bc4a9a45e319fcdc3336d051a87",
   "status": "partial",
-  "scope": "正式名单及号次；台北、新北、台南、高雄、基隆、新竹市市长公报及新竹市第6、7议员选区公报同时核对性别及推荐政党；其他公告仅姓名及号次。未核验现任状态。；本次电子公报补核县市长28人（其中嘉义县2人使用正式名单公告）及金门、马祖部分议员8人，公报可见的性别和推荐政党亦对照，未更改现任字段。；澎湖县正式公告整县对照，存在2处文字抽取字形差异待复核。；新增旧版公报及选委会公报文字核对14名县市长，另1人仅核对官方抽签结果，未升级为最终名单。；追加澎湖第2、5选区存疑姓名原图复核及马祖第4议员选区、东引乡长正式公报文字核对。；宜兰县、台东县11月17日正式名单公告原图复核。；花莲县11月17日正式名单原图对账，恢复周骏宥；宜兰胡文聪正式双语名补录。",
+  "scope": "正式名单及号次；台北、新北、台南、高雄、基隆、新竹市市长公报及新竹市第6、7议员选区公报同时核对性别及推荐政党；其他公告仅姓名及号次。未核验现任状态。；本次电子公报补核县市长28人（其中嘉义县2人使用正式名单公告）及金门、马祖部分议员8人，公报可见的性别和推荐政党亦对照，未更改现任字段。；澎湖县正式公告整县对照，存在2处文字抽取字形差异待复核。；新增旧版公报及选委会公报文字核对14名县市长，另1人仅核对官方抽签结果，未升级为最终名单。；追加澎湖第2、5选区存疑姓名原图复核及马祖第4议员选区、东引乡长正式公报文字核对。；宜兰县、台东县11月17日正式名单公告原图复核。；花莲县11月17日正式名单原图对账，恢复周骏宥；宜兰胡文聪正式双语名补录。；三湾乡公报剔除未列名登记者，彰化县议员公告及花莲第6选区公报复核，宜兰头城镇蔡文益推荐政党修正。",
   "sources": {
     "P": {
       "url": "https://web.cec.gov.tw/api/file/0a48ccd3-268d-4cb9-924c-dc777af8705a.pdf",
@@ -175,14 +175,38 @@
       "date": "2026-11-17",
       "title": "宜兰县选举委员会正式候选人名单（苏澳镇公所转载）",
       "method": "official government notice text"
+    },
+    "MLSW": {
+      "url": "https://eebulletin.cec.gov.tw/115/08%E8%8B%97%E6%A0%97%E7%B8%A3/03%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7/%E8%8B%97%E6%A0%97%E7%B8%A3%E4%B8%89%E7%81%A3%E9%84%89%E9%84%89%E9%95%B7%E9%81%B8%E8%88%89.pdf",
+      "date": null,
+      "title": "苗栗县三湾乡乡长正式选举公报",
+      "method": "official bulletin text; screenshot unavailable"
+    },
+    "HLC6": {
+      "url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/115%E5%B9%B4/15%E8%8A%B1%E8%93%AE%E7%B8%A3/%E8%8A%B1%E8%93%AE%E7%B8%A3%E7%B8%A3%E8%AD%B0%E5%93%A1%E7%AC%AC6%E3%80%817%E9%81%B8%E5%8D%80.pdf",
+      "date": null,
+      "title": "花莲县第6、7选区议员公报",
+      "method": "official bulletin page image"
+    },
+    "CH": {
+      "url": "https://web.cec.gov.tw/api/file/7069821d-5e42-484f-bfe3-5c07060ea863.pdf",
+      "date": "2026-11-17",
+      "title": "彰化县正式候选人名单",
+      "method": "official announcement page image"
+    },
+    "YLTC": {
+      "url": "https://web.cec.gov.tw/api/file/0b7dd493-dad1-4c71-9efb-e02717a8556e.pdf",
+      "date": null,
+      "title": "宜兰县乡镇市长候选人资料",
+      "method": "official candidate list text"
     }
   },
   "counts": {
     "mayor": 81,
-    "council": 377,
-    "township": 231
+    "council": 464,
+    "township": 233
   },
-  "newOfficial": 636,
+  "newOfficial": 947,
   "rows": [
     {
       "candidateId": "council:10013:01:009",
@@ -6878,13 +6902,15 @@
       "officialName": "蔡文益",
       "number": 2,
       "previousNumber": 2,
-      "previousVerification": "referenceSite",
-      "source": "YL",
-      "page": 2,
+      "previousVerification": "official",
+      "source": "YLTC",
+      "page": null,
       "section": "乡镇市长候选人",
       "verifiedFields": [
         "name",
-        "number"
+        "number",
+        "gender",
+        "party"
       ]
     },
     {
@@ -10354,6 +10380,1521 @@
         "name",
         "number"
       ]
+    },
+    {
+      "candidateId": "township:10005:10005160:001",
+      "districtId": "township:10005:10005160",
+      "type": "township",
+      "nameOriginal": "李運光",
+      "officialName": "李運光",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "user-specified-wikipedia",
+      "source": "MLSW",
+      "page": 1,
+      "section": "乡镇市长候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "township:10005:10005160:002",
+      "districtId": "township:10005:10005160",
+      "type": "township",
+      "nameOriginal": "陳光洋",
+      "officialName": "陳光洋",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "user-specified-wikipedia",
+      "source": "MLSW",
+      "page": 1,
+      "section": "乡镇市长候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10015:06:002",
+      "districtId": "council:10015:06",
+      "type": "council",
+      "nameOriginal": "蔡依靜\nLamenǸPanay",
+      "officialName": "蔡依靜 Lamen・Panay",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "official",
+      "source": "HLC6",
+      "page": 1,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number",
+        "gender",
+        "party"
+      ]
+    },
+    {
+      "candidateId": "council:10007:08:008",
+      "districtId": "council:10007:08",
+      "type": "council",
+      "nameOriginal": "洪健興",
+      "officialName": "洪建興",
+      "number": 9,
+      "previousNumber": 9,
+      "previousVerification": "user-specified-wikipedia",
+      "source": "CH",
+      "page": 3,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:01:007",
+      "districtId": "council:10007:01",
+      "type": "council",
+      "nameOriginal": "許雅琳",
+      "officialName": "許雅琳",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:01:001",
+      "districtId": "council:10007:01",
+      "type": "council",
+      "nameOriginal": "許原龍",
+      "officialName": "許原龍",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:01:013",
+      "districtId": "council:10007:01",
+      "type": "council",
+      "nameOriginal": "陳銌銌",
+      "officialName": "陳銌銌",
+      "number": 3,
+      "previousNumber": 3,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:01:004",
+      "districtId": "council:10007:01",
+      "type": "council",
+      "nameOriginal": "温芝樺",
+      "officialName": "温芝樺",
+      "number": 4,
+      "previousNumber": 4,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:01:006",
+      "districtId": "council:10007:01",
+      "type": "council",
+      "nameOriginal": "莊陞漢",
+      "officialName": "莊陞漢",
+      "number": 5,
+      "previousNumber": 5,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:01:015",
+      "districtId": "council:10007:01",
+      "type": "council",
+      "nameOriginal": "黃玉如",
+      "officialName": "黃玉如",
+      "number": 6,
+      "previousNumber": 6,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:01:002",
+      "districtId": "council:10007:01",
+      "type": "council",
+      "nameOriginal": "黃千宴",
+      "officialName": "黃千宴",
+      "number": 7,
+      "previousNumber": 7,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:01:005",
+      "districtId": "council:10007:01",
+      "type": "council",
+      "nameOriginal": "顧勝敏",
+      "officialName": "顧勝敏",
+      "number": 8,
+      "previousNumber": 8,
+      "previousVerification": "referenceSite",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:01:003",
+      "districtId": "council:10007:01",
+      "type": "council",
+      "nameOriginal": "白玉如",
+      "officialName": "白玉如",
+      "number": 9,
+      "previousNumber": 9,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:01:009",
+      "districtId": "council:10007:01",
+      "type": "council",
+      "nameOriginal": "李成濟",
+      "officialName": "李成濟",
+      "number": 10,
+      "previousNumber": 10,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:01:011",
+      "districtId": "council:10007:01",
+      "type": "council",
+      "nameOriginal": "林世賢",
+      "officialName": "林世賢",
+      "number": 11,
+      "previousNumber": 11,
+      "previousVerification": "referenceSite",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:01:010",
+      "districtId": "council:10007:01",
+      "type": "council",
+      "nameOriginal": "林世明",
+      "officialName": "林世明",
+      "number": 12,
+      "previousNumber": 12,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:01:012",
+      "districtId": "council:10007:01",
+      "type": "council",
+      "nameOriginal": "吳韋達",
+      "officialName": "吳韋達",
+      "number": 13,
+      "previousNumber": 13,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:01:008",
+      "districtId": "council:10007:01",
+      "type": "council",
+      "nameOriginal": "楊子賢",
+      "officialName": "楊子賢",
+      "number": 14,
+      "previousNumber": 14,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:01:014",
+      "districtId": "council:10007:01",
+      "type": "council",
+      "nameOriginal": "謝宗樺",
+      "officialName": "謝宗樺",
+      "number": 15,
+      "previousNumber": 15,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:02:002",
+      "districtId": "council:10007:02",
+      "type": "council",
+      "nameOriginal": "楊竣程",
+      "officialName": "楊竣程",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:02:001",
+      "districtId": "council:10007:02",
+      "type": "council",
+      "nameOriginal": "凃淑媚",
+      "officialName": "凃淑媚",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:02:007",
+      "districtId": "council:10007:02",
+      "type": "council",
+      "nameOriginal": "蔣煙燈",
+      "officialName": "蔣煙燈",
+      "number": 3,
+      "previousNumber": 3,
+      "previousVerification": "referenceSite",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:02:005",
+      "districtId": "council:10007:02",
+      "type": "council",
+      "nameOriginal": "藍駿宇",
+      "officialName": "藍駿宇",
+      "number": 4,
+      "previousNumber": 4,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:02:009",
+      "districtId": "council:10007:02",
+      "type": "council",
+      "nameOriginal": "林英嘉",
+      "officialName": "林英嘉",
+      "number": 5,
+      "previousNumber": 5,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:02:006",
+      "districtId": "council:10007:02",
+      "type": "council",
+      "nameOriginal": "蔡匡威",
+      "officialName": "蔡匡威",
+      "number": 6,
+      "previousNumber": 6,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:02:003",
+      "districtId": "council:10007:02",
+      "type": "council",
+      "nameOriginal": "許志宏",
+      "officialName": "許志宏",
+      "number": 7,
+      "previousNumber": 7,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:02:004",
+      "districtId": "council:10007:02",
+      "type": "council",
+      "nameOriginal": "王信筌",
+      "officialName": "王信筌",
+      "number": 8,
+      "previousNumber": 8,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:02:008",
+      "districtId": "council:10007:02",
+      "type": "council",
+      "nameOriginal": "郭燕陵",
+      "officialName": "郭燕陵",
+      "number": 9,
+      "previousNumber": 9,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:03:007",
+      "districtId": "council:10007:03",
+      "type": "council",
+      "nameOriginal": "蘇智弦",
+      "officialName": "蘇智弦",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:03:004",
+      "districtId": "council:10007:03",
+      "type": "council",
+      "nameOriginal": "蕭文雄",
+      "officialName": "蕭文雄",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:03:002",
+      "districtId": "council:10007:03",
+      "type": "council",
+      "nameOriginal": "柯振杯",
+      "officialName": "柯振杯",
+      "number": 3,
+      "previousNumber": 3,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:03:006",
+      "districtId": "council:10007:03",
+      "type": "council",
+      "nameOriginal": "曾煥燁",
+      "officialName": "曾煥燁",
+      "number": 4,
+      "previousNumber": 4,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:03:005",
+      "districtId": "council:10007:03",
+      "type": "council",
+      "nameOriginal": "周君綾",
+      "officialName": "周君綾",
+      "number": 5,
+      "previousNumber": 5,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:03:010",
+      "districtId": "council:10007:03",
+      "type": "council",
+      "nameOriginal": "林明鴻",
+      "officialName": "林明鴻",
+      "number": 6,
+      "previousNumber": 6,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:03:003",
+      "districtId": "council:10007:03",
+      "type": "council",
+      "nameOriginal": "鍾雅茹",
+      "officialName": "鍾雅茹",
+      "number": 7,
+      "previousNumber": 7,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:03:008",
+      "districtId": "council:10007:03",
+      "type": "council",
+      "nameOriginal": "林宗翰",
+      "officialName": "林宗翰",
+      "number": 8,
+      "previousNumber": 8,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:03:009",
+      "districtId": "council:10007:03",
+      "type": "council",
+      "nameOriginal": "王國忠",
+      "officialName": "王國忠",
+      "number": 9,
+      "previousNumber": 9,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:03:001",
+      "districtId": "council:10007:03",
+      "type": "council",
+      "nameOriginal": "林小琪",
+      "officialName": "林小琪",
+      "number": 10,
+      "previousNumber": 10,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:04:005",
+      "districtId": "council:10007:04",
+      "type": "council",
+      "nameOriginal": "游筑凱",
+      "officialName": "游筑凱",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:04:009",
+      "districtId": "council:10007:04",
+      "type": "council",
+      "nameOriginal": "張雪如",
+      "officialName": "張雪如",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "referenceSite",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:04:008",
+      "districtId": "council:10007:04",
+      "type": "council",
+      "nameOriginal": "陳秋蓉",
+      "officialName": "陳秋蓉",
+      "number": 3,
+      "previousNumber": 3,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:04:003",
+      "districtId": "council:10007:04",
+      "type": "council",
+      "nameOriginal": "張愉婕",
+      "officialName": "張愉婕",
+      "number": 4,
+      "previousNumber": 4,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:04:002",
+      "districtId": "council:10007:04",
+      "type": "council",
+      "nameOriginal": "曹嘉豪",
+      "officialName": "曹嘉豪",
+      "number": 5,
+      "previousNumber": 5,
+      "previousVerification": "referenceSite",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:04:007",
+      "districtId": "council:10007:04",
+      "type": "council",
+      "nameOriginal": "賴澤民",
+      "officialName": "賴澤民",
+      "number": 6,
+      "previousNumber": 6,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:04:012",
+      "districtId": "council:10007:04",
+      "type": "council",
+      "nameOriginal": "張詩怡",
+      "officialName": "張詩怡",
+      "number": 7,
+      "previousNumber": 7,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:04:006",
+      "districtId": "council:10007:04",
+      "type": "council",
+      "nameOriginal": "張欣倩",
+      "officialName": "張欣倩",
+      "number": 8,
+      "previousNumber": 8,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:04:001",
+      "districtId": "council:10007:04",
+      "type": "council",
+      "nameOriginal": "黃正盛",
+      "officialName": "黃正盛",
+      "number": 9,
+      "previousNumber": 9,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:04:010",
+      "districtId": "council:10007:04",
+      "type": "council",
+      "nameOriginal": "劉惠娟",
+      "officialName": "劉惠娟",
+      "number": 10,
+      "previousNumber": 10,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:04:013",
+      "districtId": "council:10007:04",
+      "type": "council",
+      "nameOriginal": "林俊毅",
+      "officialName": "林俊毅",
+      "number": 11,
+      "previousNumber": 11,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:04:004",
+      "districtId": "council:10007:04",
+      "type": "council",
+      "nameOriginal": "張詠勝",
+      "officialName": "張詠勝",
+      "number": 12,
+      "previousNumber": 12,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:04:011",
+      "districtId": "council:10007:04",
+      "type": "council",
+      "nameOriginal": "詹雅婷",
+      "officialName": "詹雅婷",
+      "number": 13,
+      "previousNumber": 13,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:05:006",
+      "districtId": "council:10007:05",
+      "type": "council",
+      "nameOriginal": "許文萍",
+      "officialName": "許文萍",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:05:003",
+      "districtId": "council:10007:05",
+      "type": "council",
+      "nameOriginal": "黃佳惠",
+      "officialName": "黃佳惠",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:05:002",
+      "districtId": "council:10007:05",
+      "type": "council",
+      "nameOriginal": "楊仁彬",
+      "officialName": "楊仁彬",
+      "number": 3,
+      "previousNumber": 3,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:05:001",
+      "districtId": "council:10007:05",
+      "type": "council",
+      "nameOriginal": "陳玉姫",
+      "officialName": "陳玉姫",
+      "number": 4,
+      "previousNumber": 4,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:05:004",
+      "districtId": "council:10007:05",
+      "type": "council",
+      "nameOriginal": "劉珊伶",
+      "officialName": "劉珊伶",
+      "number": 5,
+      "previousNumber": 5,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:05:005",
+      "districtId": "council:10007:05",
+      "type": "council",
+      "nameOriginal": "張春洋",
+      "officialName": "張春洋",
+      "number": 6,
+      "previousNumber": 6,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:06:001",
+      "districtId": "council:10007:06",
+      "type": "council",
+      "nameOriginal": "蕭妤亘",
+      "officialName": "蕭妤亘",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:06:003",
+      "districtId": "council:10007:06",
+      "type": "council",
+      "nameOriginal": "彭世和",
+      "officialName": "彭世和",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:06:006",
+      "districtId": "council:10007:06",
+      "type": "council",
+      "nameOriginal": "詹琬惠",
+      "officialName": "詹琬惠",
+      "number": 3,
+      "previousNumber": 3,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:06:004",
+      "districtId": "council:10007:06",
+      "type": "council",
+      "nameOriginal": "蕭岳倫",
+      "officialName": "蕭岳倫",
+      "number": 4,
+      "previousNumber": 4,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:06:005",
+      "districtId": "council:10007:06",
+      "type": "council",
+      "nameOriginal": "許書維",
+      "officialName": "許書維",
+      "number": 5,
+      "previousNumber": 5,
+      "previousVerification": "referenceSite",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:06:002",
+      "districtId": "council:10007:06",
+      "type": "council",
+      "nameOriginal": "鄭俊雄",
+      "officialName": "鄭俊雄",
+      "number": 6,
+      "previousNumber": 6,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:07:007",
+      "districtId": "council:10007:07",
+      "type": "council",
+      "nameOriginal": "鄭朝元",
+      "officialName": "鄭朝元",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:07:006",
+      "districtId": "council:10007:07",
+      "type": "council",
+      "nameOriginal": "江熊一楓",
+      "officialName": "江熊一楓",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "referenceSite",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:07:003",
+      "districtId": "council:10007:07",
+      "type": "council",
+      "nameOriginal": "謝典霖",
+      "officialName": "謝典霖",
+      "number": 3,
+      "previousNumber": 3,
+      "previousVerification": "referenceSite",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:07:002",
+      "districtId": "council:10007:07",
+      "type": "council",
+      "nameOriginal": "李浩誠",
+      "officialName": "李浩誠",
+      "number": 4,
+      "previousNumber": 4,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:07:001",
+      "districtId": "council:10007:07",
+      "type": "council",
+      "nameOriginal": "劉淑芳",
+      "officialName": "劉淑芳",
+      "number": 5,
+      "previousNumber": 5,
+      "previousVerification": "referenceSite",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:07:008",
+      "districtId": "council:10007:07",
+      "type": "council",
+      "nameOriginal": "杜懿彩",
+      "officialName": "杜懿彩",
+      "number": 6,
+      "previousNumber": 6,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:07:005",
+      "districtId": "council:10007:07",
+      "type": "council",
+      "nameOriginal": "陳世凱",
+      "officialName": "陳世凱",
+      "number": 7,
+      "previousNumber": 7,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:07:004",
+      "districtId": "council:10007:07",
+      "type": "council",
+      "nameOriginal": "李俊諭",
+      "officialName": "李俊諭",
+      "number": 8,
+      "previousNumber": 8,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:08:001",
+      "districtId": "council:10007:08",
+      "type": "council",
+      "nameOriginal": "張國棟",
+      "officialName": "張國棟",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:08:004",
+      "districtId": "council:10007:08",
+      "type": "council",
+      "nameOriginal": "洪騰明",
+      "officialName": "洪騰明",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:08:007",
+      "districtId": "council:10007:08",
+      "type": "council",
+      "nameOriginal": "謝淑如",
+      "officialName": "謝淑如",
+      "number": 3,
+      "previousNumber": 3,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:08:009",
+      "districtId": "council:10007:08",
+      "type": "council",
+      "nameOriginal": "黄淑儀",
+      "officialName": "黄淑儀",
+      "number": 4,
+      "previousNumber": 4,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:08:005",
+      "districtId": "council:10007:08",
+      "type": "council",
+      "nameOriginal": "洪雅婷",
+      "officialName": "洪雅婷",
+      "number": 5,
+      "previousNumber": 5,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:08:006",
+      "districtId": "council:10007:08",
+      "type": "council",
+      "nameOriginal": "吳淑娟",
+      "officialName": "吳淑娟",
+      "number": 6,
+      "previousNumber": 6,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:08:002",
+      "districtId": "council:10007:08",
+      "type": "council",
+      "nameOriginal": "曾温泉",
+      "officialName": "曾温泉",
+      "number": 7,
+      "previousNumber": 7,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:08:003",
+      "districtId": "council:10007:08",
+      "type": "council",
+      "nameOriginal": "洪子超",
+      "officialName": "洪子超",
+      "number": 8,
+      "previousNumber": 8,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:09:002",
+      "districtId": "council:10007:09",
+      "type": "council",
+      "nameOriginal": "陳明義",
+      "officialName": "陳明義",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:09:001",
+      "districtId": "council:10007:09",
+      "type": "council",
+      "nameOriginal": "陳榮妹",
+      "officialName": "陳榮妹",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:10:007",
+      "districtId": "council:10007:10",
+      "type": "council",
+      "nameOriginal": "謝秀美",
+      "officialName": "謝秀美",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:10:003",
+      "districtId": "council:10007:10",
+      "type": "council",
+      "nameOriginal": "張瑋婷",
+      "officialName": "張瑋婷",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:10:004",
+      "districtId": "council:10007:10",
+      "type": "council",
+      "nameOriginal": "高采翎",
+      "officialName": "高采翎",
+      "number": 3,
+      "previousNumber": 3,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:10:008",
+      "districtId": "council:10007:10",
+      "type": "council",
+      "nameOriginal": "肯當．迪洛安",
+      "officialName": "肯當．迪洛安",
+      "number": 4,
+      "previousNumber": 4,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:10:006",
+      "districtId": "council:10007:10",
+      "type": "council",
+      "nameOriginal": "王昌智",
+      "officialName": "王昌智 Mac Lunai",
+      "number": 5,
+      "previousNumber": 5,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:10:005",
+      "districtId": "council:10007:10",
+      "type": "council",
+      "nameOriginal": "高世鴻",
+      "officialName": "高世鴻",
+      "number": 6,
+      "previousNumber": 6,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:10:001",
+      "districtId": "council:10007:10",
+      "type": "council",
+      "nameOriginal": "金凱傑\nIlia．\nNangavulan",
+      "officialName": "金凱傑 Ilia． Nangavulan",
+      "number": 7,
+      "previousNumber": 7,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "council:10007:10:002",
+      "districtId": "council:10007:10",
+      "type": "council",
+      "nameOriginal": "吳秋祿",
+      "officialName": "吳秋祿",
+      "number": 8,
+      "previousNumber": 8,
+      "previousVerification": "official",
+      "source": "CH",
+      "page": null,
+      "section": "议员候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
     }
   ],
   "unresolved": [
@@ -10399,5 +11940,27 @@
       "officialFinalRosterUrl": "https://web.cec.gov.tw/api/file/6bd6ef5c-b17d-464f-9bd9-a6c216f40dd2.pdf",
       "courtReportUrl": "https://www.cna.com.tw/news/asoc/202611040348.aspx"
     }
-  ]
+  ],
+  "corrections": [
+    {
+      "candidateId": "council:10015:06:002",
+      "field": "name",
+      "value": "蔡依靜 Lamen・Panay",
+      "source": "HLC6"
+    },
+    {
+      "candidateId": "council:10007:08:008",
+      "field": "name",
+      "value": "洪建興",
+      "source": "CH"
+    },
+    {
+      "candidateId": "township:10002:10002040:001",
+      "field": "party",
+      "value": "中国国民党",
+      "source": "YLTC"
+    }
+  ],
+  "secondaryCrosscheck": "sources/election-2026/secondary-roster-crosscheck-20261124.json",
+  "changhuaUnresolved": []
 }
