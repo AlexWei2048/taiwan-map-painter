@@ -3,7 +3,7 @@
   "checkedAt": "2026-11-24",
   "baseCandidateBlob": "cde314259e932bc4a9a45e319fcdc3336d051a87",
   "status": "partial",
-  "scope": "正式名单及号次；台北、新北、台南、高雄、基隆、新竹市市长公报及新竹市第6、7议员选区公报同时核对性别及推荐政党；其他公告仅姓名及号次。未核验现任状态。；本次电子公报补核县市长28人（其中嘉义县2人使用正式名单公告）及金门、马祖部分议员8人，公报可见的性别和推荐政党亦对照，未更改现任字段。；澎湖县正式公告整县对照，存在2处文字抽取字形差异待复核。；新增旧版公报及选委会公报文字核对14名县市长，另1人仅核对官方抽签结果，未升级为最终名单。；追加澎湖第2、5选区存疑姓名原图复核及马祖第4议员选区、东引乡长正式公报文字核对。；宜兰县、台东县11月17日正式名单公告原图复核。；花莲县11月17日正式名单原图对账，恢复周骏宥；宜兰胡文聪正式双语名补录。；三湾乡公报剔除未列名登记者，彰化县议员公告及花莲第6选区公报复核，宜兰头城镇蔡文益推荐政党修正。；苗栗县第7、8选区及云林第7选区双语姓名差异已通过公报、抽签记录解决。；桃园市14个议员选区108人正式公告原图逐人核对姓名与号次，未核验性别、推荐政党或现任。；台北、台中、台南三市共285人按正式公告逐区核对姓名、号次，未核验性别、政党或现任；台中原图接口失败，依据可提取的完整正式附件文字。；基隆、金门议员正式名单原图对账，及新竹市部分议员原图/文字对账；未改变其他字段。；追加云林、南投议员及云林乡镇市长正式名单原图，以及新北、高雄议员抽签原图核对；抽签不等于正式名单，字形不一致暂留待核。；本批集中核对新北、高雄可读取的议员公报及马祖正式名单、嘉义县议员及金门乡镇长抽签表，未核验现任。；新增高雄四个议员选区38人官方有声公报名录，以及苗栗14人电子公报原图姓名和号次复核。未改变候选人字段实值或现任状态。；追加南投县8个乡镇市22人公报原图或文字核对（姓名及号次），现任不在本批范围。；嘉义县七个议员选区52人官方有声公报名录逐项核对；苗栗县第1、4、5议员选区39人按10月27日官方抽签新闻稿核对号次，不标记正式名单。",
+  "scope": "正式名单及号次；台北、新北、台南、高雄、基隆、新竹市市长公报及新竹市第6、7议员选区公报同时核对性别及推荐政党；其他公告仅姓名及号次。未核验现任状态。；本次电子公报补核县市长28人（其中嘉义县2人使用正式名单公告）及金门、马祖部分议员8人，公报可见的性别和推荐政党亦对照，未更改现任字段。；澎湖县正式公告整县对照，存在2处文字抽取字形差异待复核。；新增旧版公报及选委会公报文字核对14名县市长，另1人仅核对官方抽签结果，未升级为最终名单。；追加澎湖第2、5选区存疑姓名原图复核及马祖第4议员选区、东引乡长正式公报文字核对。；宜兰县、台东县11月17日正式名单公告原图复核。；花莲县11月17日正式名单原图对账，恢复周骏宥；宜兰胡文聪正式双语名补录。；三湾乡公报剔除未列名登记者，彰化县议员公告及花莲第6选区公报复核，宜兰头城镇蔡文益推荐政党修正。；苗栗县第7、8选区及云林第7选区双语姓名差异已通过公报、抽签记录解决。；桃园市14个议员选区108人正式公告原图逐人核对姓名与号次，未核验性别、推荐政党或现任。；台北、台中、台南三市共285人按正式公告逐区核对姓名、号次，未核验性别、政党或现任；台中原图接口失败，依据可提取的完整正式附件文字。；基隆、金门议员正式名单原图对账，及新竹市部分议员原图/文字对账；未改变其他字段。；追加云林、南投议员及云林乡镇市长正式名单原图，以及新北、高雄议员抽签原图核对；抽签不等于正式名单，字形不一致暂留待核。；本批集中核对新北、高雄可读取的议员公报及马祖正式名单、嘉义县议员及金门乡镇长抽签表，未核验现任。；新增高雄四个议员选区38人官方有声公报名录，以及苗栗14人电子公报原图姓名和号次复核。未改变候选人字段实值或现任状态。；追加南投县8个乡镇市22人公报原图或文字核对（姓名及号次），现任不在本批范围。；嘉义县七个议员选区52人官方有声公报名录逐项核对；苗栗县第1、4、5议员选区39人按10月27日官方抽签新闻稿核对号次，不标记正式名单。；嘉义市两区抽签表文字核对31人号次；6处姓名文字差异保留待原图复核。",
   "sources": {
     "P": {
       "url": "https://web.cec.gov.tw/api/file/0a48ccd3-268d-4cb9-924c-dc777af8705a.pdf",
@@ -547,6 +547,18 @@
       "date": "2026-10-27",
       "title": "苗栗县选委会2026年10月27日候选人姓名号次抽签结果",
       "method": "官方新闻稿逐项姓名、号次核对；非正式名单"
+    },
+    "CYCITYD1": {
+      "url": "https://web.cec.gov.tw/api/file/b4e3e76b-2cc8-4bbe-b77a-c586e69d205b.pdf",
+      "date": "2026-10-27",
+      "title": "嘉义市第12届议员第1选区候选人抽签结果",
+      "method": "官方PDF可提取文字；截图缓存不可用；只确认姓名与号次完全一致项"
+    },
+    "CYCITYD2": {
+      "url": "https://web.cec.gov.tw/api/file/f52381ae-dde4-427b-9ae0-0cd9ffdbb32c.pdf",
+      "date": "2026-10-27",
+      "title": "嘉义市第12届议员第2选区候选人抽签结果",
+      "method": "官方PDF可提取文字；截图缓存不可用；只确认姓名与号次完全一致项"
     }
   },
   "counts": {
@@ -554,7 +566,7 @@
     "council": 1414,
     "township": 307
   },
-  "newOfficial": 1916,
+  "newOfficial": 1947,
   "rows": [
     {
       "candidateId": "council:10013:01:009",
@@ -31452,6 +31464,366 @@
       "page": null,
       "previousVerification": "referenceSite",
       "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:01:004",
+      "districtId": "council:10020:01",
+      "name": "傅大偉",
+      "number": 2,
+      "source": "CYCITYD1",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:01:006",
+      "districtId": "council:10020:01",
+      "name": "黃露慧",
+      "number": 3,
+      "source": "CYCITYD1",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:01:001",
+      "districtId": "council:10020:01",
+      "name": "張敏琪",
+      "number": 4,
+      "source": "CYCITYD1",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:01:016",
+      "districtId": "council:10020:01",
+      "name": "洪斐昭",
+      "number": 5,
+      "source": "CYCITYD1",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:01:007",
+      "districtId": "council:10020:01",
+      "name": "黃盈智",
+      "number": 6,
+      "source": "CYCITYD1",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:01:003",
+      "districtId": "council:10020:01",
+      "name": "郭定緯",
+      "number": 7,
+      "source": "CYCITYD1",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:01:008",
+      "districtId": "council:10020:01",
+      "name": "凌子楚",
+      "number": 9,
+      "source": "CYCITYD1",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:01:014",
+      "districtId": "council:10020:01",
+      "name": "柯莉絲汀",
+      "number": 10,
+      "source": "CYCITYD1",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:01:005",
+      "districtId": "council:10020:01",
+      "name": "梁樹綸",
+      "number": 11,
+      "source": "CYCITYD1",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:01:015",
+      "districtId": "council:10020:01",
+      "name": "吳宗泓",
+      "number": 12,
+      "source": "CYCITYD1",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:01:002",
+      "districtId": "council:10020:01",
+      "name": "陳家平",
+      "number": 13,
+      "source": "CYCITYD1",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:01:013",
+      "districtId": "council:10020:01",
+      "name": "郭文居",
+      "number": 14,
+      "source": "CYCITYD1",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:02:019",
+      "districtId": "council:10020:02",
+      "name": "黃政融",
+      "number": 1,
+      "source": "CYCITYD2",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:02:015",
+      "districtId": "council:10020:02",
+      "name": "陳嘉弘",
+      "number": 2,
+      "source": "CYCITYD2",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:02:001",
+      "districtId": "council:10020:02",
+      "name": "鄭光宏",
+      "number": 3,
+      "source": "CYCITYD2",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:02:002",
+      "districtId": "council:10020:02",
+      "name": "張秀華",
+      "number": 5,
+      "source": "CYCITYD2",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:02:018",
+      "districtId": "council:10020:02",
+      "name": "李明燦",
+      "number": 6,
+      "source": "CYCITYD2",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:02:003",
+      "districtId": "council:10020:02",
+      "name": "黃思婷",
+      "number": 7,
+      "source": "CYCITYD2",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:02:010",
+      "districtId": "council:10020:02",
+      "name": "王浩",
+      "number": 8,
+      "source": "CYCITYD2",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:02:011",
+      "districtId": "council:10020:02",
+      "name": "李忠曆",
+      "number": 9,
+      "source": "CYCITYD2",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:02:020",
+      "districtId": "council:10020:02",
+      "name": "陳致愷",
+      "number": 10,
+      "source": "CYCITYD2",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:02:021",
+      "districtId": "council:10020:02",
+      "name": "魏志軒",
+      "number": 11,
+      "source": "CYCITYD2",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:02:009",
+      "districtId": "council:10020:02",
+      "name": "陳姿妏",
+      "number": 12,
+      "source": "CYCITYD2",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:02:012",
+      "districtId": "council:10020:02",
+      "name": "蔡坤叡",
+      "number": 13,
+      "source": "CYCITYD2",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:02:013",
+      "districtId": "council:10020:02",
+      "name": "黃敏修",
+      "number": 14,
+      "source": "CYCITYD2",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:02:007",
+      "districtId": "council:10020:02",
+      "name": "曾奕豪",
+      "number": 15,
+      "source": "CYCITYD2",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:02:017",
+      "districtId": "council:10020:02",
+      "name": "蔡坤達",
+      "number": 17,
+      "source": "CYCITYD2",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:02:005",
+      "districtId": "council:10020:02",
+      "name": "黃大祐",
+      "number": 18,
+      "source": "CYCITYD2",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:02:008",
+      "districtId": "council:10020:02",
+      "name": "林詩涵",
+      "number": 19,
+      "source": "CYCITYD2",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:02:016",
+      "districtId": "council:10020:02",
+      "name": "林子淨",
+      "number": 20,
+      "source": "CYCITYD2",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    },
+    {
+      "candidateId": "council:10020:02:006",
+      "districtId": "council:10020:02",
+      "name": "陳品蓁",
+      "number": 21,
+      "source": "CYCITYD2",
+      "page": null,
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24"
+    }
+  ],
+  "chiayiCityDrawTextVariants": [
+    {
+      "districtId": "council:10020:01",
+      "number": 1,
+      "officialExtractedName": "顏翎慧",
+      "existing": "顏翎熹",
+      "source": "CYCITYD1",
+      "note": "PDF文字与现有姓名不一致；原图不可访问，不作更名或升级"
+    },
+    {
+      "districtId": "council:10020:01",
+      "number": 8,
+      "officialExtractedName": "陳玥妤",
+      "existing": "陳玥妗",
+      "source": "CYCITYD1",
+      "note": "PDF文字与现有姓名不一致；原图不可访问，不作更名或升级"
+    },
+    {
+      "districtId": "council:10020:01",
+      "number": 15,
+      "officialExtractedName": "何芯睿",
+      "existing": "何苡睿",
+      "source": "CYCITYD1",
+      "note": "PDF文字与现有姓名不一致；原图不可访问，不作更名或升级"
+    },
+    {
+      "districtId": "council:10020:01",
+      "number": 16,
+      "officialExtractedName": "林昱玫",
+      "existing": "林昱孜",
+      "source": "CYCITYD1",
+      "note": "PDF文字与现有姓名不一致；原图不可访问，不作更名或升级"
+    },
+    {
+      "districtId": "council:10020:02",
+      "number": 4,
+      "officialExtractedName": "林焯軒",
+      "existing": "林煒軒",
+      "source": "CYCITYD2",
+      "note": "PDF文字与现有姓名不一致；原图不可访问，不作更名或升级"
+    },
+    {
+      "districtId": "council:10020:02",
+      "number": 16,
+      "officialExtractedName": "孫賢志",
+      "existing": "孫貫志",
+      "source": "CYCITYD2",
+      "note": "PDF文字与现有姓名不一致；原图不可访问，不作更名或升级"
     }
   ]
 }
