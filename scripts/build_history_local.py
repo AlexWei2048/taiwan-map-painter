@@ -382,6 +382,7 @@ def nccu_1993_contests(nccu, profiles_file):
         # Wuqiu is the only missing Kinmen township profile in this archive.
         # Derive exact residual counts only from a complete six-town return,
         # with independently reconciled candidate totals and five valid profiles.
+        residual_towns = set()
         kinmen_towns = {'金城镇', '金沙镇', '金湖镇', '金宁乡', '烈屿乡', '乌丘乡'}
         if county == '金门县' and set(detail) == kinmen_towns and set(town_profiles) == kinmen_towns - {'乌丘乡'}:
             official = list(map(int, (row[10], row[11], row[9], row[2])))
@@ -394,11 +395,12 @@ def nccu_1993_contests(nccu, profiles_file):
                 a,b,c,d = residual
                 if a == sum(detail['乌丘乡'].values()) and a >= 0 and b >= 0 and a+b == c and d >= c:
                     town_profiles['乌丘乡'] = [''] * 6 + list(map(str, residual))
+                    residual_towns.add('乌丘乡')
         yield {'year': 1993, 'office': 'mayor', 'electorate': 'regional', 'county': row[0],
                'district': row[0], 'region': 0, 'date': '1993-11-27', 'roster': roster,
                'profile': [''] * 6 + [row[10], row[11], row[9], row[2]],
                'local': 'NCCU candidate records and election overview (attributed to CEC)',
-               'scope': [], 'detail': detail, 'town_labels': labels, 'town_profiles': town_profiles}
+               'scope': [], 'detail': detail, 'town_labels': labels, 'town_profiles': town_profiles, 'residual_towns': residual_towns}
 
 
 def match_candidate(contest, candidate, index, source):
@@ -513,7 +515,7 @@ def build(contests, tv, nccu):
                 subtotal = sum(votes.values())
                 s['townProfiles'].append({'office': office, 'county': county, 'town': norm(ct['town_labels'][key]),
                                           'valid_votes': subtotal, **profile_fields(ct['town_profiles'].get(key), subtotal)})
-                if year == 1993 and county == '金门县' and norm(ct['town_labels'][key]) == '乌丘乡' and s['townProfiles'][-1]['registered_voters'] is not None:
+                if key in ct.get('residual_towns', set()) and s['townProfiles'][-1]['registered_voters'] is not None:
                     s['townProfiles'][-1].update(profile_method='county_total_minus_all_other_towns', profile_source=NCCU_1993)
         for p in ct['roster']:
             sources = {name: match_candidate(ct, p, index, name) for name, index in (('tv', tv), ('nccu', nccu))}
@@ -650,6 +652,9 @@ def main():
             audit[year]['nccuTownProfiles'] = {
                 'verifiedTownVoteRows': len(snapshot['rows']) - len(snapshot['candidacies']),
                 'verifiedTownsWithTurnout': sum(p['registered_voters'] is not None for p in snapshot['townProfiles']),
+                'residualProfiles': [{**{k: p[k] for k in ('county', 'town', 'registered_voters', 'ballots_cast', 'valid_votes', 'invalid_votes')},
+                                      'method': 'county total minus all other five town profiles; valid votes independently matched to candidate returns',
+                                      'source': NCCU_1993} for p in snapshot['townProfiles'] if p.get('profile_method') == 'county_total_minus_all_other_towns'],
             }
             audit[year]['countiesWithoutReconciledTownVotes'] = sorted(
                 {c['county_name'] for c in snapshot['contests']} - {p['county'] for p in snapshot['townProfiles']})
