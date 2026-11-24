@@ -3,7 +3,7 @@
   "checkedAt": "2026-11-24",
   "baseCandidateBlob": "cde314259e932bc4a9a45e319fcdc3336d051a87",
   "status": "partial",
-  "scope": "正式名单及号次；台北、新北、台南、高雄、基隆、新竹市市长公报及新竹市第6、7议员选区公报同时核对性别及推荐政党；其他公告仅姓名及号次。未核验现任状态。；本次电子公报补核县市长28人（其中嘉义县2人使用正式名单公告）及金门、马祖部分议员8人，公报可见的性别和推荐政党亦对照，未更改现任字段。；澎湖县正式公告整县对照，存在2处文字抽取字形差异待复核。",
+  "scope": "正式名单及号次；台北、新北、台南、高雄、基隆、新竹市市长公报及新竹市第6、7议员选区公报同时核对性别及推荐政党；其他公告仅姓名及号次。未核验现任状态。；本次电子公报补核县市长28人（其中嘉义县2人使用正式名单公告）及金门、马祖部分议员8人，公报可见的性别和推荐政党亦对照，未更改现任字段。；澎湖县正式公告整县对照，存在2处文字抽取字形差异待复核。；新增旧版公报及选委会公报文字核对14名县市长，另1人仅核对官方抽签结果，未升级为最终名单。",
   "sources": {
     "P": {
       "url": "https://web.cec.gov.tw/api/file/0a48ccd3-268d-4cb9-924c-dc777af8705a.pdf",
@@ -103,14 +103,44 @@
       "date": "2026-11-17",
       "title": "澎選一字第1153150128號",
       "method": "official final candidate notice, text and page images"
+    },
+    "MLB": {
+      "url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/115%E5%B9%B4/08%E8%8B%97%E6%A0%97%E7%B8%A3/%E8%8B%97%E6%A0%97%E7%B8%A3%E8%AD%B0%E5%93%A1%E7%AC%AC4%E9%81%B8%E5%8D%80.pdf",
+      "date": null,
+      "title": "苗栗县县市长选举公报",
+      "method": "official bulletin extracted text, original name and number matched; screenshot unavailable due to size"
+    },
+    "YLB": {
+      "url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/115%E5%B9%B4/16%E5%AE%9C%E8%98%AD%E7%B8%A3/%E5%AE%9C%E8%98%AD%E7%B8%A3%E8%AD%B0%E6%9C%83%E8%AD%B0%E5%93%A1%E7%AC%AC%201%E3%80%8111%E3%80%8112%E9%81%B8%E8%88%89%E5%8D%80%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1.pdf",
+      "date": null,
+      "title": "宜兰县县市长选举公报",
+      "method": "official bulletin extracted text, original name and number matched; screenshot unavailable due to size"
+    },
+    "TTB": {
+      "url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/04%E7%B8%A3%E5%B8%82%E9%95%B7/115%E5%B9%B4/%E8%87%BA%E6%9D%B1%E7%B8%A3%E7%B8%A3%E9%95%B7.pdf",
+      "date": null,
+      "title": "台东县县市长选举公报",
+      "method": "official bulletin extracted text, original name and number matched; screenshot unavailable due to size"
+    },
+    "CYB": {
+      "url": "https://web.cec.gov.tw/api/file/7776fb6c-7d6c-49c6-9528-8b8dee9f5d2d.pdf",
+      "date": null,
+      "title": "嘉义市县市长选举公报",
+      "method": "official bulletin extracted text, original name and number matched; screenshot unavailable due to size"
+    },
+    "CYB2": {
+      "url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/04%E7%B8%A3%E5%B8%82%E9%95%B7/115%E5%B9%B4/%E5%98%89%E7%BE%A9%E5%B8%82%E5%B8%82%E9%95%B7.pdf",
+      "date": null,
+      "title": "嘉义市县市长选举公报",
+      "method": "official bulletin extracted text, original name and number matched; screenshot unavailable due to size"
     }
   },
   "counts": {
-    "mayor": 65,
+    "mayor": 79,
     "council": 204,
     "township": 127
   },
-  "newOfficial": 386,
+  "newOfficial": 400,
   "rows": [
     {
       "candidateId": "council:10013:01:009",
@@ -5289,6 +5319,244 @@
         "name",
         "number"
       ]
+    },
+    {
+      "candidateId": "mayor:10005:002",
+      "districtId": "mayor:10005",
+      "type": "mayor",
+      "nameOriginal": "陳品安",
+      "officialName": "陳品安",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "referenceSite",
+      "source": "MLB",
+      "page": null,
+      "section": "县市长候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "mayor:10005:001",
+      "districtId": "mayor:10005",
+      "type": "mayor",
+      "nameOriginal": "鍾東錦",
+      "officialName": "鍾東錦",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "referenceSite",
+      "source": "MLB",
+      "page": null,
+      "section": "县市长候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "mayor:10002:002",
+      "districtId": "mayor:10002",
+      "type": "mayor",
+      "nameOriginal": "林國漳",
+      "officialName": "林國漳",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "referenceSite",
+      "source": "YLB",
+      "page": null,
+      "section": "县市长候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "mayor:10002:003",
+      "districtId": "mayor:10002",
+      "type": "mayor",
+      "nameOriginal": "陳宏毅",
+      "officialName": "陳宏毅",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "referenceSite",
+      "source": "YLB",
+      "page": null,
+      "section": "县市长候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "mayor:10002:001",
+      "districtId": "mayor:10002",
+      "type": "mayor",
+      "nameOriginal": "吳宗憲",
+      "officialName": "吳宗憲",
+      "number": 3,
+      "previousNumber": 3,
+      "previousVerification": "referenceSite",
+      "source": "YLB",
+      "page": null,
+      "section": "县市长候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "mayor:10002:004",
+      "districtId": "mayor:10002",
+      "type": "mayor",
+      "nameOriginal": "劉燦輝",
+      "officialName": "劉燦輝",
+      "number": 4,
+      "previousNumber": 4,
+      "previousVerification": "referenceSite",
+      "source": "YLB",
+      "page": null,
+      "section": "县市长候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "mayor:10014:002",
+      "districtId": "mayor:10014",
+      "type": "mayor",
+      "nameOriginal": "陳瑩",
+      "officialName": "陳瑩",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "referenceSite",
+      "source": "TTB",
+      "page": null,
+      "section": "县市长候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "mayor:10014:004",
+      "districtId": "mayor:10014",
+      "type": "mayor",
+      "nameOriginal": "王志偉",
+      "officialName": "王志偉",
+      "number": 3,
+      "previousNumber": 3,
+      "previousVerification": "referenceSite",
+      "source": "TTB",
+      "page": null,
+      "section": "县市长候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "mayor:10014:001",
+      "districtId": "mayor:10014",
+      "type": "mayor",
+      "nameOriginal": "吳秀華",
+      "officialName": "吳秀華",
+      "number": 4,
+      "previousNumber": 4,
+      "previousVerification": "referenceSite",
+      "source": "TTB",
+      "page": null,
+      "section": "县市长候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "mayor:10020:004",
+      "districtId": "mayor:10020",
+      "type": "mayor",
+      "nameOriginal": "陳愷璜",
+      "officialName": "陳愷璜",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "referenceSite",
+      "source": "CYB",
+      "page": 1,
+      "section": "县市长候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "mayor:10020:005",
+      "districtId": "mayor:10020",
+      "type": "mayor",
+      "nameOriginal": "王義成",
+      "officialName": "王義成",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "referenceSite",
+      "source": "CYB2",
+      "page": 1,
+      "section": "县市长候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "mayor:10020:002",
+      "districtId": "mayor:10020",
+      "type": "mayor",
+      "nameOriginal": "張啓楷",
+      "officialName": "張啓楷",
+      "number": 3,
+      "previousNumber": 3,
+      "previousVerification": "referenceSite",
+      "source": "CYB2",
+      "page": 1,
+      "section": "县市长候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "mayor:10020:001",
+      "districtId": "mayor:10020",
+      "type": "mayor",
+      "nameOriginal": "王美惠",
+      "officialName": "王美惠",
+      "number": 4,
+      "previousNumber": 4,
+      "previousVerification": "referenceSite",
+      "source": "CYB2",
+      "page": 1,
+      "section": "县市长候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
+    },
+    {
+      "candidateId": "mayor:10020:003",
+      "districtId": "mayor:10020",
+      "type": "mayor",
+      "nameOriginal": "黃宏成台灣阿成世界偉人財神總統",
+      "officialName": "黃宏成台灣阿成世界偉人財神總統",
+      "number": 5,
+      "previousNumber": 5,
+      "previousVerification": "referenceSite",
+      "source": "CYB2",
+      "page": 1,
+      "section": "县市长候选人",
+      "verifiedFields": [
+        "name",
+        "number"
+      ]
     }
   ],
   "unresolved": [
@@ -5319,6 +5587,22 @@
       "source": "PH",
       "page": 2,
       "note": "文字抽取与原网站字形有差异，暂不改名，需清晰公报复核"
+    },
+    {
+      "districtId": "mayor:10014",
+      "officialNameText": "李昊賴智",
+      "officialNumber": 1,
+      "localName": "李吳穎智",
+      "source": "TTB",
+      "note": "正式公报文字抽取与中选会审定及官方抽签姓名不一致，须原图复核；不改名。"
+    },
+    {
+      "county": "宜兰县",
+      "type": "mayor",
+      "localName": "楊鉯婷",
+      "localNumber": 5,
+      "source": "YLB",
+      "note": "公开公报文字抽取未找到该姓名，原图文件超出读取限制，暂保留原资料。"
     }
   ],
   "externalCountDiscrepancy": {
@@ -5326,5 +5610,16 @@
     "mediaCouncil": 1493,
     "source": "https://udn.com/vote2026/story/124652/9887492",
     "status": "待正式逐人核实，不自动增加候选人"
-  }
+  },
+  "additionalDrawChecks": [
+    {
+      "candidateId": "mayor:10014:003",
+      "name": "李吳穎智",
+      "number": 1,
+      "sourceUrl": "https://www.cec.gov.tw/api/file/fabcff0f-fa7f-4318-9a71-831f3204db14.pdf",
+      "previousVerification": "referenceSite",
+      "checkedAt": "2026-11-24",
+      "note": "官方抽签结果文字明确对应；正式公报抽取姓名有误，未标记最终名单已核对。"
+    }
+  ]
 }
