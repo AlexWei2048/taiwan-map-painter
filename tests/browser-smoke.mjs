@@ -3141,3 +3141,20 @@ test('Legislative seat trends default to all years and show complete integer par
  await page.waitForFunction(()=>document.querySelectorAll('.trend-parliament-card [data-seat-dot]').length===113);
  assert.equal(await page.locator('.trend-parliament-card').count(),1);
 });
+
+test('Historical council trends resolve former names and show pre-merger county and city separately',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ await page.locator('#categoryHistory').click();
+ await page.waitForFunction(()=>History2022View.snapshot()?.year===2022);
+ await page.locator('#historyOffice').selectOption('council');
+ await page.waitForFunction(()=>History2022View.office()==='council');
+ await page.locator('#historyCounty').selectOption('新北市');
+ await page.locator('#historyViewTrends').click();
+ await page.waitForFunction(()=>document.querySelectorAll('.trend-parliament-card [data-seat-year]').length===8,{},{timeout:60000});
+ assert.match(await page.locator('.trend-parliament-card [data-seat-year]').first().textContent(),/1994 · 台北县/);
+ await page.locator('#historyCounty').selectOption('高雄市');
+ await page.waitForFunction(()=>document.querySelectorAll('.trend-parliament-card [data-seat-year]').length===12);
+ const labels=await page.locator('.trend-parliament-card [data-seat-year]').allTextContents();
+ assert.ok(labels.includes('1994 · 高雄县'));assert.ok(labels.includes('1994 · 高雄市'));assert.ok(labels.includes('2010 · 高雄市'));
+ assert.equal(labels.filter(x=>x.startsWith('2010')).length,1);
+});

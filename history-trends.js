@@ -110,8 +110,49 @@ function value(row,party,metric){
 function difference(a,b,party,metric){const x=value(a,party,metric),y=value(b,party,metric);return Number.isFinite(x)&&Number.isFinite(y)?y-x:null}
 // Match the map grain and filter exactly. A trend over leading candidates
 // uses each region's top individual, NOT the aggregate of all party nominees.
+// Resolve names from the original election records, never from a modern map.
+const RENAME_FAMILIES=[['台北县','新北市'],['桃园县','桃园市']];
+const MERGE_FAMILIES=[['台中县','台中市'],['台南县','台南市'],['高雄县','高雄市']];
+function historicalCountyFamily(county){
+ return [...RENAME_FAMILIES,...MERGE_FAMILIES].find(group=>group.includes(county))||[county];
+}
+function historicalCountyScopes(snapshot,selection){
+ const {county='',office,normalize=String}=selection;
+ if(!county)return [''];
+ const family=historicalCountyFamily(county);
+ if(family.length===1)return [county];
+ const norm=v=>normalize(String(v||''));
+ const ids=electionIds(snapshot,office);
+ // County membership is based on this office, not another election in the
+ // same two-year batch. Prefer original contests; vote-only records can also
+ // establish a geographic name (e.g. party-list or indigenous local tallies).
+ const present=new Set([
+  ...(snapshot.contests||[]).filter(c=>ids.has(c.election_id)).map(c=>norm(c.county_name)),
+  ...(snapshot.rows||[]).filter(r=>r.type===office).map(r=>norm(r.county))
+ ]);
+ const available=family.filter(n=>present.has(n));
+ return available.length?available:[county];
+}
+function historicalScopeRows(snapshot,selection,anchor){
+ const {county='',office,normalize=String}=selection;
+ const family=historicalCountyFamily(county),merged=MERGE_FAMILIES.some(g=>g.includes(county));
+ const scopes=historicalCountyScopes(snapshot,selection);
+ return scopes.map(actualCounty=>{
+  const result=mapTrend(snapshot,{...selection,county:actualCounty,anchorCounty:county},anchor);
+  const ids=electionIds(snapshot,office);
+  const dates=[...new Set((snapshot.contests||[]).filter(c=>ids.has(c.election_id)&&normalize(String(c.county_name||''))===actualCounty).map(c=>c.election_date?.slice(0,4)).filter(Boolean))].sort();
+  if(actualCounty&&dates.length)result.label=dates.join('/');
+  result.county=actualCounty;
+  // Different pre-merger county and city are separate comparison units.
+  // Do not join vote trends across their merger as if the boundaries stayed fixed.
+  const oldPair=merged&&(scopes.length>1||actualCounty===family[0]||Number(dates[0]||snapshot.year)<2010);
+  result.scopeSeries=merged?(oldPair?'旧'+actualCounty:'合并后'+actualCounty):family[0];
+  result.scopeLabel=family.length>1?actualCounty:'';
+  return result;
+ });
+}
 function mapTrend(snapshot,selection,anchor){
- const {office,electorate='regional',county='',level='county',focus='',metric='party',candidateScope='top',candidate=null,party='',normalize=String}=selection;
+ const {office,electorate='regional',county='',anchorCounty=county,level='county',focus='',metric='party',candidateScope='top',candidate=null,party='',normalize=String}=selection;
  const norm=v=>normalize(String(v||''));
  const partyName=v=>keyParty(norm(v||'无党籍'));
  const isLeg=office==='legislative',isList=isLeg&&electorate==='party';
@@ -121,21 +162,23 @@ function mapTrend(snapshot,selection,anchor){
  const identity=Core.identity;
  const year=snapshot.year;
  const dates=(snapshot.elections||[]).filter(e=>e.office===office).map(e=>String(e.year||year));
- const localDates=(snapshot.contests||[]).filter(c=>norm(c.county_name)===county&&identity(c.electorate)===electorate||norm(c.county_name)===county&&electorate==='all').map(c=>c.election_date?.slice(0,4)).filter(Boolean);
+ const ids=electionIds(snapshot,office);
+ const localDates=(snapshot.contests||[]).filter(c=>ids.has(c.election_id)&&norm(c.county_name)===county&&(identity(c.electorate)===electorate||electorate==='all')).map(c=>c.election_date?.slice(0,4)).filter(Boolean);
  const displayYear=county&&localDates.length?[...new Set(localDates)].sort().join('/'):String(year);
  const empty=reason=>({year,label:displayYear,complete:false,reason,parties:{},values:{},valid:null,areas:0});
  if(office==='council'&&year===1994&&(!county||county==='金门县'))return empty('当届议员完整得票资料缺档');
  if(office==='mayor'&&grain==='town'&&year===2018&&(!county||county==='台北市'))return empty('台北市重计后的区级得票缺档');
- if(focus&&grain==='district'&&anchor&&year!==anchor.year){
+ if(focus&&grain==='district'&&anchor&&(year!==anchor.year||county!==anchorCounty)){
   // District number alone is never a cross-year geographic identifier.
-  const getSignature=s=>{
-   const idx=Core.legislativeScopeIndex(s.rows,norm),id=county+'|'+(Core.districtNumber(focus)||'0'),towns=[...(idx.districts.get(id)||[])].sort();
-   if(!towns.length||towns.some(t=>(idx.owners.get(county+'|'+t)?.size||0)>1))return null;
+  const getSignature=(s,area)=>{
+   const idx=Core.legislativeScopeIndex(s.rows,norm),id=area+'|'+(Core.districtNumber(focus)||'0'),towns=[...(idx.districts.get(id)||[])].sort();
+   if(!towns.length||towns.some(t=>(idx.owners.get(area+'|'+t)?.size||0)>1))return null;
    return towns.join('|');
   };
-  const a=getSignature(anchor),b=getSignature(snapshot);
+  const a=getSignature(anchor,anchorCounty),b=getSignature(snapshot,county);
   if(!a||!b||a!==b)return empty('选区历届范围不能确认一致');
  }
+ const candidateCountyMatches=r=>!candidate?.county||office==='president'||norm(r.county)===norm(candidate.county)||RENAME_FAMILIES.some(g=>g.includes(norm(r.county))&&g.includes(norm(candidate.county)));
  let rows=(snapshot.rows||[]).filter(r=>r.type===office&&r.level===grain&&(electorate==='all'||identity(r.electorate)===electorate)&&(!county||norm(r.county)===county)&&(!focus||(grain==='town'?norm(r.town)===focus:grain==='district'?Core.districtNumber(r.district)===Core.districtNumber(focus):true)));
  // 1992 has national-only indigenous returns. Use the actual national
  // electoral district only for an all-area selection, never invent local votes.
@@ -155,7 +198,7 @@ function mapTrend(snapshot,selection,anchor){
   const ranked=[...list].sort((a,b)=>b.votes-a.votes);
   if(candidateMetric){
    if(candidateScope==='candidate'){
-    const found=ranked.filter(r=>candidate&&(isList?partyName(r.party)===partyName(candidate.party):norm(r.name)===norm(candidate.name)&&partyName(r.party)===partyName(candidate.party)&&(!candidate.county||office==='president'||norm(r.county)===norm(candidate.county))&&(!['council','legislative'].includes(office)||!candidate.district||Core.districtNumber(r.district)===Core.districtNumber(candidate.district))&&(!(office==='township')||!candidate.town||norm(r.town)===norm(candidate.town))));
+    const found=ranked.filter(r=>candidate&&(isList?partyName(r.party)===partyName(candidate.party):norm(r.name)===norm(candidate.name)&&partyName(r.party)===partyName(candidate.party)&&candidateCountyMatches(r)&&(!['council','legislative'].includes(office)||!candidate.district||Core.districtNumber(r.district)===Core.districtNumber(candidate.district))&&(!(office==='township')||!candidate.town||norm(r.town)===norm(candidate.town))));
     if(found.length===1){selectedVotes+=found[0].votes;selectedFound=true}
    }else if(ranked.length){selectedVotes+=ranked[0].votes;selectedFound=true}
   }else if(leading&&metric==='party'){
@@ -169,7 +212,7 @@ function mapTrend(snapshot,selection,anchor){
   // For regional candidates, use only the contest(s) where the candidate is
   // recorded, rather than unrelated districts' votes in the denominator.
   let candidateValid=0;
-  for(const list of groups.values())if(list.some(r=>norm(r.name)===norm(candidate.name)&&partyName(r.party)===partyName(candidate.party)&&(!candidate.county||office==='president'||norm(r.county)===norm(candidate.county))&&(!['council','legislative'].includes(office)||!candidate.district||Core.districtNumber(r.district)===Core.districtNumber(candidate.district))&&(office!=='township'||!candidate.town||norm(r.town)===norm(candidate.town))))candidateValid+=list.reduce((n,r)=>n+r.votes,0);
+  for(const list of groups.values())if(list.some(r=>norm(r.name)===norm(candidate.name)&&partyName(r.party)===partyName(candidate.party)&&candidateCountyMatches(r)&&(!['council','legislative'].includes(office)||!candidate.district||Core.districtNumber(r.district)===Core.districtNumber(candidate.district))&&(office!=='township'||!candidate.town||norm(r.town)===norm(candidate.town))))candidateValid+=list.reduce((n,r)=>n+r.votes,0);
   valid=candidateValid;
  }
  if(candidateMetric){
@@ -235,7 +278,7 @@ function majorityBoundary(points){
  const angle=seats===total?0:(points[seats-1].angle+points[seats].angle)/2;
  return {seats,angle};
 }
-const api={aggregate,value,difference,modern,percent,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,LEGISLATIVE_TOTALS};
+const api={aggregate,value,difference,modern,percent,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,historicalScopeRows,LEGISLATIVE_TOTALS};
 if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
 root.HistoryTrends=api;
 })(typeof window==='undefined'?{}:window);

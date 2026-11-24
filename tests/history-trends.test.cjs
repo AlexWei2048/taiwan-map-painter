@@ -83,3 +83,29 @@ test('Parliament layout groups major parties at opposite ends and preserves neut
   const m=T.majorityBoundary(T.parliamentPoints(total));assert.equal(m.seats,expected);assert.ok(m.angle>=0&&m.angle<=Math.PI)
  }
 });
+
+test('Historic county trends retain actual county names and separate pre-merger municipalities',async()=>{
+ const L=require('../history-local.js');
+ const norm=require('../assets/opencc.js').Converter({from:'t',to:'cn'});
+ const fetcher=async url=>({ok:true,json:async()=>url.includes('supplement')?require('../assets/history-local-council-supplement.json'):url.includes('1994-council')?require('../assets/history-local-1994-council.json'):require('../assets/history-local-'+url.match(/local-(\d{4})/)[1]+'.json')});
+ const conf={office:'council',electorate:'all',metric:'party',normalize:norm};
+ for(const year of [1994,1998,2002,2006,2010,2014,2018,2022]){
+  const s=year===2022?require('../assets/history-2022.json'):await L.loadCycle(year,'council',fetcher);
+  const get=county=>T.historicalScopeRows(s,{...conf,county});
+  const taipei=get('新北市');assert.equal(taipei.length,1);assert.equal(taipei[0].county,year<2010?'台北县':'新北市');assert.equal(taipei[0].complete,true,year+' '+taipei[0].reason);
+  const taoyuan=get('桃园市');assert.equal(taoyuan[0].county,year<2014?'桃园县':'桃园市');assert.equal(taoyuan[0].complete,true);
+  for(const city of ['台中','台南','高雄']){
+   const rows=get(city+'市');
+   assert.deepEqual(rows.map(r=>r.county),year<2010?[city+'县',city+'市']:[city+'市'],city+' '+year);
+   for(const r of rows){
+    assert.equal(r.complete,true,city+' '+year+' '+r.reason);
+    const ids=new Set(s.elections.filter(e=>e.office==='council').map(e=>e.election_id));
+    const expected=s.contests.filter(c=>ids.has(c.election_id)&&norm(c.county_name)===r.county).reduce((n,c)=>n+c.seats,0);
+    assert.equal(Object.values(r.parties).reduce((n,v)=>n+v,0),expected,city+' '+year+' '+r.county);
+   }
+  }
+ }
+ const s=await L.loadCycle(2002,'council',fetcher);
+ const kaohsiung=T.historicalScopeRows(s,{...conf,county:'高雄市'});
+ assert.ok(kaohsiung.every(r=>/^2002$/.test(r.label)));
+});
