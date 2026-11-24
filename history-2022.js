@@ -839,7 +839,7 @@
   for(const archive of records){
    const otherCandidates=archive.other_candidates||[];
    const intro=document.createElement('p');
-   intro.textContent=archive.election_date+' 投票 · '+archive.candidate_count+' 人参选 · '+archive.elected_count+' 人当选 · 选举人数 '+archive.registered_voters.toLocaleString('zh-CN')+' · 投票人数 '+archive.ballots_cast.toLocaleString('zh-CN')+' · 投票率 '+archive.turnout_pct.toFixed(2)+'%。已核实 '+archive.elected_count+' 名当选人及 '+otherCandidates.length+' 名未当选人。号次、选区有效票和推荐政党仍待补。';
+   intro.textContent=archive.election_date+' 投票 · '+archive.candidate_count+' 人参选 · '+archive.elected_count+' 人当选 · 选举人数 '+archive.registered_voters.toLocaleString('zh-CN')+' · 投票人数 '+archive.ballots_cast.toLocaleString('zh-CN')+' · 投票率 '+archive.turnout_pct.toFixed(2)+'%。已核实 '+archive.elected_count+' 名当选人及 '+otherCandidates.length+' 名未当选人；另有 '+(archive.candidate_count-archive.elected_count-otherCandidates.length)+' 名参选人待核。号次、选区有效票和推荐政党仍待补。';
    details.append(intro);
    const wrap=document.createElement('div');wrap.className='history-table-wrap';
    const table=document.createElement('table');table.className='history-candidate-table';
@@ -879,7 +879,7 @@
    }
    table.append(body);wrap.append(table);details.append(wrap);
    const sources=document.createElement('p');
-   for(const [label,url] of [['当选名单：金门县志',archive.source_url],['投票统计：金门县统计年报表3-9',archive.statistics_source_url],['当选人得票与党籍：续修金门县志第281页',archive.winner_detail_source_url],['其他参选人：金门日报',archive.other_candidate_sources?.reported_returns],['陈沧江党籍：人物专访',archive.other_candidate_sources?.chen_membership]]){
+   for(const [label,url] of [['当选名单：金门县志',archive.source_url],['投票统计：金门县统计年报表3-9',archive.statistics_source_url],['当选人得票与党籍：续修金门县志第281页',archive.winner_detail_source_url],['其他参选人：金门日报',archive.other_candidate_sources?.reported_returns],['陈沧江党籍：人物专访',archive.other_candidate_sources?.chen_membership],['翁明志选区：本人回忆',archive.other_candidate_sources?.weng_district]]){
     if(!url)continue;
     const link=document.createElement('a');link.href=url;link.target='_blank';link.rel='noopener';link.textContent=label;sources.append(link,'　')
    }details.append(sources);

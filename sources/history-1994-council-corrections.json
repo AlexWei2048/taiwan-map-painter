@@ -1333,11 +1333,20 @@
   },
   "連江縣:2": {
     "by_ballot": {
+      "1": {
+        "gender": "男"
+      },
       "3": {
         "gender": "男"
       }
     },
     "gender_sources": {
+      "1": {
+        "source_url": "https://client.matsu.idv.tw/gov/jshjh/history-events.html",
+        "document_title": "連江縣立中山國中大事記：104年9月家長會副會長",
+        "secondary_url": "https://client.matsu.idv.tw/gov/council/meeting/01_08.pdf",
+        "basis": "北竿同名人士在地方校史及議事錄均稱先生"
+      },
       "3": {
         "source_url": "https://www.mtcc.gov.tw/ch/content/7230?mcid=108566",
         "document_title": "連江縣議會諮詢代表簡歷"

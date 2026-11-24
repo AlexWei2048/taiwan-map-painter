@@ -147,7 +147,8 @@
   "winner_votes_total": 9991,
   "other_candidate_sources": {
     "reported_returns": "https://www.kmdn.gov.tw/1117/1271/4189/49195/",
-    "chen_membership": "https://hk.on.cc/tw/bkn/cnt/news/20140921/bkntw-20140921000517666-0921_04011_001.html"
+    "chen_membership": "https://hk.on.cc/tw/bkn/cnt/news/20140921/bkntw-20140921000517666-0921_04011_001.html",
+    "weng_district": "https://www.kmdn.gov.tw/1117/1271/1272/124938/?cprint=pt"
   },
   "other_candidates": [
     {
@@ -162,7 +163,8 @@
     },
     {
       "name": "翁明志",
-      "membership": "民主進步黨"
+      "membership": "民主進步黨",
+      "district_number": 1
     },
     {
       "name": "黃積軍"
