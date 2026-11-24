@@ -62,9 +62,10 @@ async function load(){
   if(token!==request)return;models=result;loading=false;render()
  }catch(e){if(token===request){loading=false;$('trendStatus').textContent='趋势载入失败：'+e.message}}
 }
+function fullLegislature(conf){return conf.office==='legislative'&&!conf.county&&!conf.focus&&(conf.metric==='seats'||conf.metric==='party'&&conf.electorate==='regional')}
 function description(conf){
  const selected=conf.candidateScope==='candidate'&&(conf.metric==='share'||conf.metric==='votes');
- return [offices[conf.office],optionText('historyElectorate'),conf.county||'全部地区（含金门、马祖）',optionText('historyScale'),conf.focus,optionText('historyMetric'),conf.metric==='seats'?conf.party:selected?(conf.candidate?.name||conf.candidate?.party||'未指定候选人'):''].filter(Boolean).join(' · ');
+ return [offices[conf.office],fullLegislature(conf)?'全部民代类型（总席次）':optionText('historyElectorate'),conf.county||'全部地区（含金门、马祖）',optionText('historyScale'),conf.focus,optionText('historyMetric'),conf.metric==='seats'?conf.party:selected?(conf.candidate?.name||conf.candidate?.party||'未指定候选人'):''].filter(Boolean).join(' · ');
 }
 function exportFile(content,name,mime){const url=URL.createObjectURL(new Blob([content],{type:mime}));const a=node('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),2000)}
 function chartExport(graph,title,png){
@@ -154,7 +155,7 @@ function renderParliaments(out,rows,conf,totalLeg){
 function render(){
  if(!panel||panel.hidden||loading||!models.length||!selection)return;
  const conf=settings(),anchor=History2022View.snapshot?.();
- const totalLeg=conf.office==='legislative'&&!conf.county&&!conf.focus&&(conf.metric==='seats'||conf.metric==='party'&&conf.electorate==='regional');
+ const totalLeg=fullLegislature(conf);
  const rows=models.map(item=>{
   if(!item.snapshot)return{year:item.year,label:label(item.year,conf.office),complete:false,reason:item.error,parties:{},values:{}};
   const r=totalLeg?T.allLegislativeSeats(item.snapshot,HistoryLegislativeParty.build(item.year,item.snapshot),norm):T.mapTrend(item.snapshot,conf,anchor);
@@ -189,8 +190,9 @@ function render(){
  if(!voteMetric&&!leading&&['legislative','council'].includes(conf.office))renderParliaments(out,rows,conf,totalLeg);
  // A compact exact-value table is limited to the same metric as the chart.
  const wrap=node('div','history-table-wrap'),table=node('table','history-candidate-table'),thead=node('thead'),header=node('tr');
- for(const v of ['届次',...series.map(s=>s.name)])header.append(node('th','',v));thead.append(header);table.append(thead);
- const body=node('tbody');for(const r of rows){const tr=node('tr');tr.append(node('td','',r.label));for(const s of series)tr.append(node('td','',fmt(s.get(r),pct)));body.append(tr)}table.append(body);wrap.append(table);out.append(wrap);
+ const showTotal=!voteMetric&&conf.metric==='party';
+ for(const v of ['届次',...series.map(s=>s.name),...(showTotal?['合计']:[])])header.append(node('th','',v));thead.append(header);table.append(thead);
+ const body=node('tbody');for(const r of rows){const tr=node('tr');tr.append(node('td','',r.label));for(const s of series)tr.append(node('td','',fmt(s.get(r),pct)));if(showTotal)tr.append(node('td','',r.complete?fmt(Object.values(r.parties).reduce((n,v)=>n+v,0)):'—'));body.append(tr)}table.append(body);wrap.append(table);out.append(wrap);
  lastRows=rows;lastSeries=series;lastTitle=title;$('trendCsv').disabled=!rows.length;
  renderedKey=JSON.stringify([conf.office,conf.year,conf.electorate,conf.county,conf.level,conf.focus,conf.metric,conf.party,conf.candidateScope,conf.candidate,range(conf).join(',')]);
 }
@@ -200,7 +202,7 @@ function exportCsv(){
  const out=[['选举类别','票种','范围','地图层级','届次','指标','对象','数值','资料状态']];
  for(const r of lastRows){
   const items=single?[[lastSeries[0]?.name||lastTitle,r.values?.value]]:Object.entries(r.parties);
-  for(const [p,v] of items.length?items:[['',null]])out.push([offices[conf.office],conf.office==='legislative'&&!conf.county&&!conf.focus&&(conf.metric==='seats'||conf.metric==='party'&&conf.electorate==='regional')?'全部民代类型':conf.electorate,[conf.county||'全部地区',conf.focus].filter(Boolean).join(' · '),conf.level,r.label,optionText('historyMetric'),p,Number.isFinite(v)?Math.round(v*100)/100:'',r.complete?'完整结果':r.reason]);
+  for(const [p,v] of items.length?items:[['',null]])out.push([offices[conf.office],fullLegislature(conf)?'全部民代类型':conf.electorate,[conf.county||'全部地区',conf.focus].filter(Boolean).join(' · '),conf.level,r.label,optionText('historyMetric'),p,Number.isFinite(v)?Math.round(v*100)/100:'',r.complete?'完整结果':r.reason]);
  }
  exportFile(C.csv(out),'历史趋势-'+offices[conf.office]+'-'+lastTitle+'.csv','text/csv;charset=utf-8')
 }

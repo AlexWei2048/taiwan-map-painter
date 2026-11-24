@@ -3125,6 +3125,8 @@ test('Legislative seat trends default to all years and show complete integer par
  await page.locator('#historyViewTrends').click();
  await page.locator('.trend-parliament-card svg').first().waitFor({timeout:60000});
  assert.equal(await page.locator('#trendYears input:checked').count(),10);
+ assert.match(await page.locator('#trendScope').textContent(),/全部民代类型（总席次）/);
+ assert.equal(await page.locator('#trendCharts table thead th').last().textContent(),'合计');
  const graph=page.locator('#trendCharts > .trend-card svg').first();
  assert.ok((await graph.locator('[data-trend-axis-tick]').allTextContents()).every(v=>/^\d+$/.test(v)));
  assert.deepEqual((await graph.locator('[data-trend-total]').allTextContents()).map(Number),[161,164,225,225,225,113,113,113,113,113]);
