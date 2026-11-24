@@ -653,7 +653,6 @@
   if(kind!=='council'&&!(legislativeMode&&legislativeBallot==='regional'&&legislativeYear<2008)&&metric==='seats')metric='party';el('historyMetric').value=metric;currentResult=loaded?analyze():null;
  }
  function activate(){
-  if(!window.HistoryAccess?.canAccess()){window.HistoryAccess?.notice();return}
   if(!active)savedMapScope=clone(state);
   active=true;document.body.classList.add('history-mode');
   el('historyControls').hidden=false;el('mapSettings').hidden=true;
@@ -971,11 +970,11 @@
   for(const card of el('labels').querySelectorAll('[data-seat-region]'))
    card.classList.toggle('seat-region-highlighted',!!targetId&&card.dataset.seatRegion===targetId);
  }
- window.History2022View={metricLabel,exportRows,exportMetadata,featurePresentation,active:()=>active,activate,deactivate,syncOverviewMap,
+ window.History2022View={metricLabel,exportRows,exportMetadata,featurePresentation,active:()=>active,activate,activateFromPrediction,deactivate,syncOverviewMap,
   countySeatLeader,kind:()=>kind,office:()=>presidentialMode?'president':legislativeMode?'legislative':kind,year:()=>presidentialMode?presidentialYear:legislativeMode?legislativeYear:localYear,overview:historyOverview,seatMode:historyCouncilSeats,items:historyItems,noElection,districtFor:historicalDistrictFor,seatRows:historicalSeatRows,historicTownFeatures:()=>presidentialMode?presidentialGeometry?.towns||[]:legislativeMode?legislativeAreaGeometry?.towns||[]:localGeometry?.towns||null,allTowns:()=>presidentialMode?presidentialGeometry?.towns||[]:legislativeMode?legislativeAreaGeometry?.towns||[]:localGeometry?.towns||data?.towns||[],openRegion:openHistoryRegion,openContest:openContestById,features:()=>historicalFeatures,legislativeFeatures:()=>legislativeMode?legislativeGeometry:[],legislativeNationwide:legislativeNationalView,legislativeBadgesMode:legislativeMultiView,legislativeCountyFeatures:()=>legislativeMode?legislativeAreaGeometry?.counties||[]:[],legislativeSeatRows:f=>legislativeMode?HistoryLegislative.winners(snapshotData,{county:f.county,district:f.electorate==='regional'?f.name:''}):[],legislativeBallot:()=>legislativeBallot,legislativeScale:()=>scale,snapshot:()=>snapshotData};
  const resultSection=el('historyResultSection')||(()=>{const section=document.createElement('section');section.id='historyResultSection';section.hidden=true;section.className='history-result-section';const heading=document.createElement('h3');heading.textContent='2022 选举结果';section.append(heading,el('historySummary'),el('historySearchTools'),el('historyResults'),el('historyPager'),el('historyCompare'));el('districtReference').before(section);return section})();
  if(!el('historyResultParty')){const partyLabel=document.createElement('label');partyLabel.className='label';partyLabel.htmlFor='historyResultParty';partyLabel.textContent='筛选政党';const partySelect=document.createElement('select');partySelect.id='historyResultParty';partySelect.append(new Option('全部政党',''));el('historySearchTools').append(partyLabel,partySelect)}
- const dialogNav=document.createElement('div');dialogNav.className='history-dialog-navigation';const dialogBack=document.createElement('button');dialogBack.type='button';dialogBack.id='historyDialogBack';dialogBack.className='button quiet';dialogBack.textContent='返回上一级';const dialogDrilldown=document.createElement('button');dialogDrilldown.type='button';dialogDrilldown.id='historyDialogDrilldown';dialogDrilldown.className='button primary';dialogDrilldown.textContent='查看乡镇市区得票分布';dialogNav.append(dialogBack,dialogDrilldown);el('historyResultDialog').append(dialogNav);
+ const dialogNav=document.createElement('div');dialogNav.className='history-dialog-navigation';const dialogBack=document.createElement('button');dialogBack.type='button';dialogBack.id='historyDialogBack';dialogBack.className='button quiet';dialogBack.textContent='返回上一级';const dialogDrilldown=document.createElement('button');dialogDrilldown.type='button';dialogDrilldown.id='historyDialogDrilldown';dialogDrilldown.className='button primary';dialogDrilldown.textContent='查看乡镇市区得票分布';dialogNav.append(dialogBack,dialogDrilldown);const resultDialog=el('historyResultDialog');(resultDialog.querySelector('.floating-dialog-scroll')||resultDialog).append(dialogNav);
  dialogDrilldown.onclick=()=>{if(!lastOpenedFeature||kind!=='mayor')return;county=lastOpenedFeature.county;scale='town';el('historyCounty').value=county;el('historyScale').value=scale;el('historyResultDialog').close();switchMode();render()};
  dialogBack.onclick=()=>{county='';if(kind==='mayor')scale='district';el('historyCounty').value='';el('historyScale').value=scale;el('historyResultDialog').close();switchMode();render()};
  const historyTableWrap=el('historyDialogRows').closest('.history-table-wrap');
@@ -1005,12 +1004,11 @@
  el('historyPrev').onclick=()=>{resultPage--;showRows(currentResult)};
  el('historyNext').onclick=()=>{resultPage++;showRows(currentResult)};
  if(el('historyRetry'))el('historyRetry').onclick=()=>{if(el('historyOffice').value==='president'){activatePresidential(Number(el('historyYear').value));return}if(el('historyOffice').value==='legislative'){activateLegislative(Number(el('historyYear').value));return}activateLocalYear(Number(el('historyYear').value))};
- el('historyFromPrediction').onclick=()=>{
-  if(!window.HistoryAccess?.canAccess()){window.HistoryAccess?.notice();return}
+ function activateFromPrediction(){
   kind=state.predictionOffice;county=state.county;scale=kind==='mayor'&&state.predictionScale!=='district'?'town':'district';
-  metric='party';candidateScope='top';selectedCandidate='';resultPage=0;el('historyOffice').value=kind;el('historyYear').value='2022';
-  el('categoryHistory').click();activateLocalYear(2022,kind);
- };
+  metric='party';candidateScope='top';selectedCandidate='';resultPage=0;el('historyOffice').value=kind;updateYearOptions(kind);el('historyYear').value='2022';
+  activate();return activateLocalYear(2022,kind);
+ }
  el('historyScale').onchange=()=>{scale=el('historyScale').value;if(legislativeMode){legislativeFocus='';el('historyCounty').value=county}switchMode();render()};
  if(el('historyFocus'))el('historyFocus').onchange=()=>{legislativeFocus=el('historyFocus').value;resultPage=0;switchMode();render()};
  el('historyCandidateScope').onchange=()=>{candidateScope=el('historyCandidateScope').value;render()};

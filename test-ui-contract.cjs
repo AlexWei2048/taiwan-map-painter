@@ -940,10 +940,11 @@ const history=read('history-2022.js');
 test('2022 history opens directly from its tab without a redundant sub-button',()=>{
  const categories=read('workspace-categories.js'),history=read('history-2022.js');
  for(const page of ['index.html','map-v60.html'])assert.doesNotMatch(read(page),/id="workspaceHistory"|id="historyModes"|2022 九合一<\/button>/);
- assert.match(categories,/history\.addEventListener\('click',[^\n]*History2022View\?\.activate\?\.\(\)/);
+ assert.match(categories,/await window\.HistoryLoader\.load\(\)/);
+ assert.match(categories,/else view\.activate\(\)/);
  assert.doesNotMatch(categories,/workspaceHistory|historyModes/);
  assert.doesNotMatch(history,/workspaceHistory/);
- assert.doesNotMatch(read('history-access.js'),/workspaceHistory/);
+ assert.doesNotMatch(history,/HistoryAccess/);
 });
 
 test('2022 history remains isolated from saved 2026 state',()=>{
@@ -1016,7 +1017,7 @@ test('Both historical entry pages include the controls wired by history JavaScri
 test('Historical workspace offers 1992-2024 legislative election modes',()=>{
  assert.match(index,/<option value="legislative">立法机构民代<\/option>/);
  assert.match(index,/id="historyElectorate"[\s\S]*<option value="party">不分区民代<\/option>/);
- assert.match(index,/history-legislative\.js/);
+ assert.match(read('history-loader.js'),/history-legislative\.js/);
  assert.match(index,/1992—2004年依据政党推荐候选人票分配不分区及侨选席次/);
 });
 
@@ -1032,7 +1033,7 @@ test('Unified historical workspace keeps the map and has two toggleable result d
  assert.doesNotMatch(read('history-2022.js'),/回看2022选举结果|选一类选举，点击地图查看实际得票与当选结果|已载入 2022 年县市长/);
  assert.match(read('style.css'),/body\.history-mode \.intro > h1,body\.history-mode \.intro > p/);
  assert.match(read('history-workspace.js'),/setView\(state\.view===view\?'map':view\)/);
- assert.match(index,/history-workspace\.js\?v=[\w-]+/);
+ assert.match(read('history-loader.js'),/history-workspace\.js/);
  const controls=index.slice(index.indexOf('id="historyControls"'),index.indexOf('id="mapSettings"'));
  assert.doesNotMatch(controls,/>议员<\/option>/);
  assert.doesNotMatch(index,/historyVoteUnitBox|id="historyVoteUnit"|得票显示单位/);
@@ -1066,7 +1067,7 @@ test('Historical actual-result dashboard exposes revised KPI labels, chart panel
 });
 
 test('Historical exports use normalized metadata without entering saved prediction state',()=>{
- const historyWorkspace=read('history-workspace.js'),historyView=read('history-2022.js'),access=read('history-access.js');
+ const historyWorkspace=read('history-workspace.js'),historyView=read('history-2022.js');
  assert.match(app,/HistoryWorkspace\.exportStem\(HistoryWorkspace\.selection\(\)\)/);
  assert.match(historyWorkspace,/id='historyExportCsv'/);
  assert.match(historyWorkspace,/csvPercent/);
@@ -1074,7 +1075,7 @@ test('Historical exports use normalized metadata without entering saved predicti
  assert.doesNotMatch(historyWorkspace,/县市规范名称|县市官方名称|候选人规范姓名|候选人官方姓名|官方当选/);
  assert.match(historyView,/projectStateForSave=function\(\)\{return active&&savedMapScope\?savedMapScope:defaultSaveState\(\)\}/);
  assert.doesNotMatch(historyWorkspace,/localStorage\.setItem\([^,]+JSON\.stringify\(state/);
- assert.match(access,/开发中，敬请期待/);assert.match(access,/event\.preventDefault\(\);event\.stopImmediatePropagation\(\)/);
+ assert.doesNotMatch(historyView,/HistoryAccess|开发中，敬请期待/);
 });
 
 test('Historical councillor identity state stays aligned between the adapter and overview',()=>{
@@ -1104,11 +1105,8 @@ test('Historical map legend has no subtitle and export images omit provenance pa
  assert.match(history,/return 71\+/);
  assert.doesNotMatch(app,/data-export-history-metadata/);
  assert.doesNotMatch(app,/appendHistoryExportMetadata/);
- for(const file of ['index.html','map-v60.html']){
-  const html=read(file);
-  assert.match(html,/history-2022\.js\?v=[\w-]+/);
-  assert.match(html,/app\.js\?v=[\w-]+/);
- }
+ assert.match(read('history-loader.js'),/history-2022\.js/);
+ for(const file of ['index.html','map-v60.html'])assert.match(read(file),/app\.js\?v=[\w-]+/);
 });
 
 test('2022 history has separate vote-share and vote-count gradients with full width',()=>{

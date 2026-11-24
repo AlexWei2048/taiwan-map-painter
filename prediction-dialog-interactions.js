@@ -13,10 +13,12 @@
   while(dialog.firstChild)scroll.append(dialog.firstChild);
   const bar=document.createElement('div');
   bar.className='floating-dialog-drag';
-  bar.tabIndex=0;
-  bar.setAttribute('role','button');
-  bar.setAttribute('aria-label','拖动移动窗口，方向键也可移动');
-  bar.innerHTML='<span class="floating-dialog-grip" aria-hidden="true">⠿</span><span>按住此处移动窗口</span>';
+  const move=document.createElement('button');
+  move.type='button';move.className='floating-dialog-move';
+  move.setAttribute('aria-label','移动窗口，使用方向键移动，按住标题栏空白处也可拖动');
+  move.innerHTML='<span class="floating-dialog-grip" aria-hidden="true">⠿</span>';
+  const dragHint=document.createElement('span');dragHint.textContent='按住标题栏空白处移动窗口';
+  bar.append(move,dragHint);
   // The close button belongs in the fixed header, never in the scrolling form.
   // Moving the existing DOM node retains its application close handler.
   const close=scroll.querySelector(':scope > .dialog-close');
@@ -24,11 +26,10 @@
   dialog.append(bar,scroll);
   const handles={};
   for(const corner of ['nw','ne','sw','se']){
-   const el=document.createElement('span');
+   const el=document.createElement('button');
+   el.type='button';
    el.className='floating-dialog-corner';
    el.dataset.dialogResize=corner;
-   el.setAttribute('role','button');
-   el.tabIndex=0;
    const names={nw:'左上角',ne:'右上角',sw:'左下角',se:'右下角'};
    el.setAttribute('aria-label',names[corner]+'：拖动调整窗口大小，方向键微调');
    dialog.append(el);
@@ -81,7 +82,7 @@
    if(pending||(event.pointerType==='mouse'&&event.button!==0))return;
    if(!dialog.open)return;
    // Clicking the close control must not start a drag or cancel its click.
-   if(event.target.closest('button, a, input, select, textarea'))return;
+   if(mode==='drag'&&event.target.closest('button, a, input, select, textarea'))return;
    event.preventDefault();
    const target=event.currentTarget,pointerId=event.pointerId;
    const origin={...frame},x=event.clientX,y=event.clientY;
@@ -110,8 +111,7 @@
     paint(resized(frame,corner,dx*step,dy*step));
    });
   }
-  bar.addEventListener('keydown',e=>{
-   if(e.target!==bar)return;
+  move.addEventListener('keydown',e=>{
    const keys={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]};
    if(!keys[e.key])return;
    e.preventDefault();
@@ -121,6 +121,8 @@
   bar.addEventListener('dblclick',e=>{if(!e.target.closest('button'))paint(initial())});
   window.addEventListener('resize',()=>paint(frame||initial()));
   dialog.addEventListener('close',stop);
+  const titleIds={predictionDialog:'predictionDialogTitle',localDialog:'localDialogTitle',historyResultDialog:'historyDialogTitle'},title=document.getElementById(titleIds[id]);
+  if(title){dialog.setAttribute('aria-labelledby',title.id);title.tabIndex=-1;title.setAttribute('autofocus','')}
  }
  init('predictionDialog',920);
  init('localDialog',850);

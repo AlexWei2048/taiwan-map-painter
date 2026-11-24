@@ -5,13 +5,13 @@ import {readFile} from 'node:fs/promises';
 import {chromium} from 'playwright';
 import ElectionCore from '../election-core.js';
 let browser;
-before(async()=>{browser=await chromium.launch({headless:true})});
+before(async()=>{browser=await chromium.launch({headless:true,...(process.env.CHROMIUM_EXECUTABLE_PATH?{executablePath:process.env.CHROMIUM_EXECUTABLE_PATH}:{})})});
 after(async()=>{await browser?.close()});
 const base=process.env.MAP_TEST_URL||'http://127.0.0.1:8765/';
-async function pageFor(t,viewport,owner=true){
+async function pageFor(t,viewport){
  const context=await browser.newContext(viewport?{viewport}:{});t.after(()=>context.close());
  const page=await context.newPage(),errors=[];
- if(owner)await page.route('**/history-access.js*',route=>route.fulfill({contentType:'application/javascript',body:'window.HistoryAccess={ready:Promise.resolve(true),canAccess:()=>true,notice:()=>{}};'}));page.on('pageerror',error=>errors.push(error.message));
+ page.on('pageerror',error=>errors.push(error.message));
  t.after(()=>assert.deepEqual(errors,[],'No application exceptions'));
  await page.goto(base);await page.locator('#regions path[data-region]').first().waitFor();assert.equal(await page.locator('#loadError').isVisible(),false);return page;
 }
@@ -30,6 +30,15 @@ test('Candidate prediction and township dialogs drag freely and resize from all 
  const modal=page.locator('#predictionDialog');
  const header=modal.locator('.floating-dialog-drag');
  await header.waitFor({state:'visible'});
+ const semantics=await modal.evaluate(dialog=>({
+  labelledBy:dialog.getAttribute('aria-labelledby'),
+  titleId:document.activeElement?.id,
+  dragRole:dialog.querySelector('.floating-dialog-drag').getAttribute('role'),
+  dragTabIndex:dialog.querySelector('.floating-dialog-drag').tabIndex,
+  moveTag:dialog.querySelector('.floating-dialog-move')?.tagName,
+  resizeTags:[...dialog.querySelectorAll('.floating-dialog-corner')].map(node=>node.tagName)
+ }));
+ assert.deepEqual(semantics,{labelledBy:'predictionDialogTitle',titleId:'predictionDialogTitle',dragRole:null,dragTabIndex:-1,moveTag:'BUTTON',resizeTags:['BUTTON','BUTTON','BUTTON','BUTTON']});
  assert.equal(await modal.locator('.floating-dialog-corner').count(),4);
  const before=await modal.boundingBox();
  assert.ok(before.width>=800&&before.height>=500);
@@ -51,6 +60,11 @@ test('Candidate prediction and township dialogs drag freely and resize from all 
   if(corner.includes('w'))assert.ok(Math.abs((prev.x+prev.width)-(next.x+next.width))<=3,'west resize anchors east edge');
   else assert.ok(Math.abs(next.x-prev.x)<=3,'east resize anchors west edge');
  }
+ const keyboardStart=await modal.boundingBox();
+ await modal.locator('.floating-dialog-move').focus();
+ await page.keyboard.press('ArrowRight');
+ const keyboardMoved=await modal.boundingBox();
+ assert.ok(keyboardMoved.x>keyboardStart.x,'Dedicated move button supports keyboard movement');
  const older=await modal.boundingBox();
  await modal.locator('[data-dialog-resize="nw"]').focus();
  await page.keyboard.press('ArrowLeft');
@@ -1381,13 +1395,47 @@ test('2022 vote percentage and absolute-count maps have distinct color ranges an
  assert.equal(await page.locator('#historyVoteUnit').count(),0);
 });
 
-test('Public history entry stays in the current workspace and displays the development notice',async t=>{
- const page=await pageFor(t,undefined,false);let historyRequests=0;page.on('request',r=>{if(r.url().includes('assets/history-'))historyRequests++});
- await page.locator('#categoryHistory').click();await page.locator('#historyDevelopmentNotice').waitFor({state:'visible'});
- assert.match(await page.locator('#historyDevelopmentNotice').textContent(),/开发中，敬请期待/);
- assert.equal(await page.locator('#categoryFuture').getAttribute('aria-selected'),'true');assert.equal(await page.locator('#historyControls').isVisible(),false);assert.equal(historyRequests,0);
- await page.getByRole('button',{name:'知道了',exact:true}).click();
+test('A fresh visitor can open history and loads its resources only when needed',async t=>{
+ const page=await pageFor(t);
+ const loaded=()=>page.evaluate(()=>performance.getEntriesByType('resource').filter(entry=>/\/history-(?:2022\.js|legislative\.css)/.test(entry.name)).length);
+ assert.equal(await loaded(),0);
+ await page.locator('#categoryHistory').click();
+ await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
+ assert.equal(await page.locator('#categoryHistory').getAttribute('aria-selected'),'true');
+ assert.equal(await page.locator('#historyControls').isVisible(),true);
+ assert.equal(await loaded(),2);
+ await page.locator('#categoryFuture').click();
+ assert.equal(await page.locator('#historyControls').isVisible(),false);
  assert.match(await page.locator('.sidebar-footer').innerText(),/网页开发：Alex Wei\n测试和推广：星夜长街/);
+});
+test('Nationwide council prediction uses a county picker and filters multi-seat candidates',async t=>{
+ const page=await pageFor(t,{width:1440,height:920});
+ await page.locator('#predictionOffice').selectOption('council');
+ assert.ok((await page.locator('#canvas').boundingBox()).height>=900);
+ assert.equal(await page.locator('#predictionCountyPicker option').count(),22);
+ assert.equal(await page.evaluate(()=>{
+  const county=document.getElementById('predictionCountyPicker'),district=document.getElementById('predictionRegion');
+  return [...county.options].map(option=>option.value).reduce((sum,value)=>{
+   county.value=value;county.dispatchEvent(new Event('change'));return sum+district.options.length;
+  },0);
+ }),221);
+ await page.locator('#predictionCountyPicker').selectOption({label:'台北市'});
+ assert.equal(await page.locator('#county').inputValue(),'');
+ assert.ok(await page.locator('#predictionRegion option').count()<30);
+ const target=await page.evaluate(()=>candidateDatabase.districts.find(d=>d.county==='台北市'&&d.type==='council'&&d.seats>4).id);
+ await page.locator('#predictionRegion').selectOption(target);
+ const picks=page.locator('#predictionRows input[type=checkbox]');
+ await picks.first().focus();
+ await page.keyboard.press('Space');
+ assert.equal(await page.locator('#predictionRows input:focus').count(),1);
+ assert.match(await page.locator('#predictionSelectionStatus').innerText(),/已选 1/);
+ await page.locator('#predictionStatusFilter').selectOption('selected');
+ assert.equal(await picks.count(),1);
+ await page.locator('#predictionCandidateSearch').fill('无匹配字符串');
+ assert.equal(await picks.count(),0);
+ assert.match(await page.locator('#predictionSelectionStatus').innerText(),/无匹配候选人/);
+ await page.keyboard.press('Escape');
+ assert.equal(await page.locator('#predictionDialog').isVisible(),false);
 });
 test('All exported image titles and filenames preserve the office even with a custom title',async t=>{
  const page=await pageFor(t);
@@ -2831,13 +2879,12 @@ test('Published-only 2026 results can load in history, switch offices and return
  t.after(()=>context.close());
  const page=await context.newPage(),errors=[];
  page.on('pageerror',err=>errors.push(err.message));
- await page.route('**/history-access.js*',route=>route.fulfill({contentType:'application/javascript',
-  body:'window.HistoryAccess={ready:Promise.resolve(true),canAccess:()=>true,notice:()=>{}};'}));
  await page.route('**/assets/history-2026-availability.json*',route=>route.fulfill({contentType:'application/json',body:JSON.stringify({
   schemaVersion:1,year:2026,status:'published',candidateCount:2051,districtCount:447,sha256:'a'.repeat(64)
  })}));
  await page.goto(base);
  await page.locator('#regions path[data-region]').first().waitFor();
+ await page.locator('#categoryHistory').click();
  await page.waitForFunction(()=>window.HISTORY_2026_RESULTS_AVAILABLE===true);
  const fake=await page.evaluate(()=>{
   const ds=candidateDatabase.districts,cs=candidateDatabase.candidates,byDistrict=new Map(ds.map(d=>[d.id,d]));
@@ -2901,7 +2948,7 @@ test('Published-only 2026 results can load in history, switch offices and return
 test('Historical national township maps colour every elected township, including Wuqiu, and drill down by county',async t=>{
  const page=await pageFor(t,{width:1440,height:960});
  await page.locator('#categoryHistory').click();
- await page.waitForFunction(()=>History2022View.snapshot()?.year===2022);
+ await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
  await page.locator('#historyOffice').selectOption('township');
  for(const year of [1998,2002,2005,2009,2014,2018,2022]){
   await page.locator('#historyYear').selectOption(String(year));
@@ -2959,7 +3006,7 @@ test('Recovered historical Hsinchu council districts show official results and s
 test('All archived mayor and council national maps use official winners and seat pluralities',async t=>{
  const page=await pageFor(t);
  await page.locator('#categoryHistory').click();
- await page.waitForFunction(()=>History2022View.snapshot()?.year===2022);
+ await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
  for(const office of ['mayor','council']){
   await page.locator('#historyOffice').selectOption(office);
   for(const year of await page.locator('#historyYear option').evaluateAll(options=>options.map(option=>Number(option.value)))){
