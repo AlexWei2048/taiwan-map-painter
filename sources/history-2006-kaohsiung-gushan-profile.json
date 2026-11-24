@@ -624,7 +624,7 @@
       668,
       13,
       681,
-      977
+      1017
     ],
     [
       314,
@@ -724,7 +724,8 @@
     62691,
     547,
     63238,
-    90504
+    90544
   ],
-  "method": "63 consecutive precincts; all five candidate totals and row arithmetic reconciled."
+  "method": "63 consecutive precincts; all five candidate totals and row arithmetic reconciled.",
+  "correction": "2026-11-24 recheck official PDF p3 precinct 78: registered voters 1017 = 681 ballots + 336 unused; previous 977 corrected."
 }
