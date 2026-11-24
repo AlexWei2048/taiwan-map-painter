@@ -6,8 +6,58 @@
   council:[1994,1998,2002,2005,2006,2009,2010,2014,2018,2022],
   township:[1998,2002,2005,2009,2014,2018,2022]
  };
+ const CYCLES={1994:1993,1998:1997,2002:2001,2006:2005,2010:2009};
+ const groupedOffice=office=>office==='mayor'||office==='council';
+ function cycleYear(year,office){
+  if(!groupedOffice(office))return year;
+  return Number(Object.keys(CYCLES).find(end=>CYCLES[end]===year))||year;
+ }
+ function yearLabel(year,office,separator='/'){
+  return groupedOffice(office)&&CYCLES[year]?CYCLES[year]+separator+year:String(year);
+ }
  const pending=new Map(),supplementYears=new Set([2002,2005,2009,2010,2014,2018]);
  let supplementRequest;
+ let legacyCouncilRequest;
+ function loadLegacyCouncil(fetcher){
+  if(!legacyCouncilRequest)legacyCouncilRequest=(async()=>{
+   const response=await fetcher('assets/history-local-1994-council.json?v=1');
+   if(!response.ok)throw Error('1994县市议员补充资料 HTTP '+response.status);
+   const archive=await response.json();
+   if(archive.version!==1||!archive.districts?.length)throw Error('1994县市议员补充资料不完整');
+   return archive;
+  })().catch(error=>{legacyCouncilRequest=null;throw error});
+  return legacyCouncilRequest;
+ }
+ function addLegacyCouncil(shard,archive){
+  const convert=(root.OpenCC||(typeof module!=='undefined'&&module.exports?require('./assets/opencc.js'):null)).Converter({from:'t',to:'cn'});
+  const normalize=value=>convert(String(value||'')).replaceAll('臺','台');
+  const electionId='1994-council-counties';
+  const contests=[],candidacies=[],rows=[];
+  for(const item of archive.districts){
+   const county=normalize(item.county),district='第'+item.number+'选举区';
+   const id=electionId+':'+county+':'+item.electorate+':'+district;
+   const {seats,reserved_seats,registered_voters,ballots_cast,valid_votes,invalid_votes,electorate,source_url}=item;
+   const scope_names=item.scope_names.map(normalize);
+   contests.push({
+    contest_id:id,election_id:electionId,county_id:county,county_name:county,county_name_official:item.county,
+    district_id:id,district_name:district,district_name_official:'第'+item.number+'選舉區',
+    district_number:item.number,election_date:'1994-01-29',source_url,scope_names,scope_label:normalize(item.scope).replaceAll('山胞','少数民族'),
+    electorate,seats,reserved_seats,registered_voters,ballots_cast,valid_votes,invalid_votes
+   });
+   for(const [ballot,originalName,votes,originalParty,gender,elected] of item.candidates){
+    const number=String(ballot),name=normalize(originalName),party=normalize(originalParty)||'政党资料缺失';
+    candidacies.push({
+     candidacy_id:id+':'+number,contest_id:id,ballot_number:number,candidate_name:name,candidate_name_official:originalName,
+     party_name:party,party_name_official:originalParty,gender,incumbent_at_election:null,votes,
+     vote_share:valid_votes?100*votes/valid_votes:0,elected_official:elected
+    });
+    rows.push({type:'council',level:'district',county,district,electorate,number,name,party,gender,votes,elected,incumbent:null,town:''});
+   }
+  }
+  const election={election_id:electionId,year:1994,office:'council',source_url:archive.source_url,source_name:'地方选务档案转录'};
+  return {...shard,elections:[...shard.elections,election],contests:[...shard.contests,...contests],
+   candidacies:[...shard.candidacies,...candidacies],rows:[...shard.rows,...rows]};
+ }
  async function loadSupplement(fetcher){
   if(!supplementRequest){
    supplementRequest=(async()=>{
@@ -29,8 +79,27 @@
    Object.entries(addition.districts||{}).map(([id,entry])=>[id,{...supplement.paths[entry.path],villages:entry.villages}]))};
  }
  function years(office,include2026=false){
-  const list=YEARS[office]||[2022];
+  const list=groupedOffice(office)?[...Object.keys(CYCLES).map(Number),2014,2018,2022]:YEARS[office]||[2022];
   return include2026?[...list,2026]:list;
+ }
+ async function loadCycle(year,office,fetcher=root.fetch){
+  year=cycleYear(year,office);
+  const earlier=groupedOffice(office)&&CYCLES[year];
+  if(!earlier)return load(year,fetcher);
+  const [first,second,legacy]=await Promise.all([load(earlier,fetcher),load(year,fetcher),
+   year===1994&&office==='council'?loadLegacyCouncil(fetcher):null]);
+  const shards=[first,legacy?addLegacyCouncil(second,legacy):second];
+  const elections=shards.flatMap(shard=>shard.elections.filter(item=>groupedOffice(item.office)));
+  const electionIds=new Set(elections.map(item=>item.election_id));
+  const contests=shards.flatMap(shard=>shard.contests.filter(item=>electionIds.has(item.election_id)));
+  const contestIds=new Set(contests.map(item=>item.contest_id));
+  return {
+   schemaVersion:2,year,cycleYears:[earlier,year],elections,contests,
+   candidacies:shards.flatMap(shard=>shard.candidacies.filter(item=>contestIds.has(item.contest_id))),
+   rows:shards.flatMap(shard=>shard.rows.filter(item=>groupedOffice(item.type))),
+   townProfiles:shards.flatMap(shard=>(shard.townProfiles||[]).filter(item=>groupedOffice(item.office))),
+   councilDistrictGeometry:Object.assign({},...shards.map(shard=>shard.councilDistrictGeometry))
+  };
  }
  async function load(year,fetcher=root.fetch){
   if(!Object.values(YEARS).some(list=>list.includes(year))||year===2022)throw Error('不支持的地方选举年份');
@@ -112,17 +181,23 @@
    Math.max(...towns.map(t=>t.box[2])),Math.max(...towns.map(t=>t.box[3]))];
   return {d:mergePaths(towns.map(t=>t.d)),box,center:[(box[0]+box[2])/2,(box[1]+box[3])/2]};
  }
- // Truncated names in the 2002 and 2005 official area tables.
+ // Truncated names in the official 2002 and 2005 area tables, plus 1994 names
+ // that differ from the geometry's earlier mayoral data labels.
  const councilTownAliases={'嘉义县|里山乡':'阿里山乡','屏东县|地门乡':'三地门乡','台东县|麻里乡':'太麻里乡'};
- function councilTownName(county,town){
-  return councilTownAliases[county+'|'+town]||town;
+ const archiveTownAliases={
+  '桃园县|八德乡':'八德市','苗栗县|头份镇':'头份市','台中县|太平乡':'太平市','彰化县|员林镇':'员林市'
+ };
+ function councilTownName(contest,town){
+  const key=contest.county_name+'|'+town;
+  return (contest.election_id==='1994-council-counties'&&archiveTownAliases[key])||councilTownAliases[key]||town;
  }
  function councilMap(shard,geography,mergePaths){
-  const groups=shard.contests.filter(contest=>contest.election_id===shard.year+'-council');
+  const councilElections=new Set(shard.elections.filter(item=>item.office==='council').map(item=>item.election_id));
+  const groups=shard.contests.filter(contest=>councilElections.has(contest.election_id));
   const owners=new Map();
   for(const contest of groups.filter(c=>c.electorate==='regional')){
    for(const town of contest.scope_names||[]){
-    const key=contest.county_name+'|'+councilTownName(contest.county_name,town);
+    const key=contest.county_name+'|'+councilTownName(contest,town);
     owners.set(key,(owners.get(key)||0)+1);
    }
   }
@@ -130,7 +205,7 @@
   const lookup=new Map(geography.towns.map(town=>[town.county+'|'+town.name,town]));
   for(const contest of groups){
    const county=contest.county_name,number=contest.district_number;
-   const scopeTowns=(contest.scope_names||[]).map(name=>councilTownName(county,name));
+   const scopeTowns=(contest.scope_names||[]).map(name=>councilTownName(contest,name));
    const split=shard.councilDistrictGeometry?.[contest.contest_id];
    const mergedTainan=county==='台南市'&&shard.year<=2002&&scopeTowns.length===2&&scopeTowns.includes('中区')&&scopeTowns.includes('西区');
    const towns=mergedTainan?[lookup.get(county+'|中西区')].filter(Boolean):
@@ -139,7 +214,7 @@
    const complete=Boolean(split?.d)||towns.length>0&&(mergedTainan||towns.length===scopeTowns.length&&(!shared||contest.electorate!=='regional'));
    const district={
     id:contest.contest_id,county,name:contest.district_name,number,electorate:contest.electorate,
-    scope:(split?.villages||scopeTowns).join('、'),scopeTowns,seats:contest.seats,
+    scope:split?.villages?.join('、')||contest.scope_label||scopeTowns.join('、'),scopeTowns,seats:contest.seats,
     womenReserved:contest.reserved_seats,mapAvailable:complete
    };
    districts.push(district);
@@ -150,7 +225,7 @@
   }
   return {features,districts};
  }
- const api={YEARS,years,load,geometry,councilMap,applyCouncilSupplement};
+ const api={YEARS,years,yearLabel,cycleYear,load,loadCycle,geometry,councilMap,applyCouncilSupplement};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;
  else root.HistoryLocal=api;
 })(typeof window==='undefined'?{}:window);

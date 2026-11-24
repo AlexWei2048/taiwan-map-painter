@@ -9,6 +9,7 @@
  const OFFICES=new Set(['mayor','council','township','president','legislative']);
  const PRESIDENT_YEARS=[1996,2000,2004,2008,2012,2016,2020,2024];
  const Local=typeof module!=='undefined'&&module.exports?require('./history-local.js'):null;
+ const displayYear=(year,office,separator)=> (root.HistoryLocal||Local)?.yearLabel(year,office,separator)||String(year);
  const yearsForOffice=office=>office==='president'?PRESIDENT_YEARS:office==='legislative'?(root.HistoryLegislative?.YEARS||[1992,1995,1998,2001,2004,2008,2012,2016,2020,2024]):(root.HistoryLocal||Local)?.years(office,root.HISTORY_2026_RESULTS_AVAILABLE===true)||[2022];
  const Core=typeof module!=='undefined'&&module.exports?require('./history-core.js'):root.HistoryCore;
  const VIEWS=new Set(['map','candidates','overview']);
@@ -29,7 +30,8 @@
  const electorateOptions=(office,year=2024)=>office==='legislative'?(root.HistoryLegislative?.ballots(year)||[]).map(item=>[item.value,item.label]):office==='council'?[['all','全部类型（分别统计）'],['regional','区域议员'],['plains','平地少数民族议员'],['mountain','山地少数民族议员']]:[['regional','区域选举']];
  function normalizeSelection(input={},years=null){
   const office=OFFICES.has(input.office)?input.office:'mayor';
-  const available=(years||yearsForOffice(office)).map(Number).filter(Number.isFinite),requested=Number(input.year);
+  const available=(years||yearsForOffice(office)).map(Number).filter(Number.isFinite);
+  const requested=(root.HistoryLocal||Local).cycleYear(Number(input.year),office);
   const year=available.includes(requested)?requested:(office==='president'||office==='legislative'?2024:2022);
   const requestedElectorate=['regional','plains','mountain','party'].includes(input.electorate)?input.electorate:'regional';
   const allowedLevels=levelOptions(office,year,requestedElectorate).map(item=>item[0]);
@@ -257,7 +259,7 @@
  }
  function exportStem(selection={}){
   const offices={mayor:'县市长',council:'县市议员',township:'乡镇市区长',president:'台湾地区领导人',legislative:'立法机构民代'},metrics={party:selection.office==='legislative'?((selection.electorate||'regional')==='regional'?'当选席次':'领先政党'):selection.office==='council'?'当选席次':selection.office==='president'||selection.level==='town'?(selection.level==='town'?'各乡镇市区最高票候选人':'各县市最高票候选人'):'当选政党',seats:'指定政党席次',vote:'得票率',share:'得票率',votes:'得票数'};
-  return[selection.year||2022,offices[selection.office]||'历史选举',selection.office==='president'?(selection.level==='town'?'乡镇市区':'县市'):null,selection.county||'全台',metrics[selection.metric]||selection.metric||'结果'].filter(Boolean).join('-').replace(/[\\/:*?"<>|]/g,'_');
+  return[displayYear(selection.year||2022,selection.office,'_'),offices[selection.office]||'历史选举',selection.office==='president'?(selection.level==='town'?'乡镇市区':'县市'):null,selection.county||'全台',metrics[selection.metric]||selection.metric||'结果'].filter(Boolean).join('-').replace(/[\\/:*?"<>|]/g,'_');
  }
  function historyCsv(result={contests:[],candidacies:[]},selection={}){
   const presidential=selection.office==='president',council=['council','legislative'].includes(selection.office);
@@ -265,7 +267,7 @@
   const headers=['年份','选举类别','县市','选区',...(council?['选区类型']:[]),presidential?'正领导人候选人':'候选人',...extra,'政党','号次','得票数','得票率','当选'];
   const contests=new Map((result.contests||[]).map(item=>[item.contest_id,item]));
   const offices={mayor:'县市长',council:'县市议员',township:'乡镇市区长',president:'台湾地区领导人',legislative:'立法机构民代'};
-  const identities={regional:'区域',plains:'平地少数民族',mountain:'山地少数民族'};
+  const identities={regional:'区域',plains:'平地少数民族',mountain:'山地少数民族',indigenous:'少数民族'};
   const ordered=[...(result.candidacies||[])].sort((a,b)=>{
    const ca=contests.get(a.contest_id)||{},cb=contests.get(b.contest_id)||{};
    return Core.compareResultRows({...a,county_name:ca.county_name,district_name:ca.district_name,electorate:ca.electorate},
@@ -276,7 +278,8 @@
    const contest=contests.get(item.contest_id)||{};
    const county=contest.county_name||contest.county_name_official||'';
    const district=contest.district_name||contest.district_name_official||'';
-   rows.push([selection.year||2022,offices[selection.office]||selection.office,county,district===county?'':district,
+   const actualYear=result.index?.snapshot?.cycleYears?contest.election_date?.slice(0,4):null;
+   rows.push([actualYear||selection.year||2022,offices[selection.office]||selection.office,county,district===county?'':district,
     ...(council?[identities[contest.electorate]||'区域']:[]),item.candidate_name||item.candidate_name_official||'',
     ...(presidential?[item.deputy_name||'',item.gender||'',item.deputy_gender||'',item.incumbent_at_election===true?'是':'']:[]),
     item.party_name||item.party_name_official||'',item.ballot_number,item.votes,csvPercent(item.vote_share),item.elected_official?'是':'']);
@@ -430,7 +433,7 @@
    scoped?.result?.contests?.[0]?.district_name||geographicArea||'':'';
   const identity=scoped?.result?.contests?.length===1&&state.office==='council'?
    labels[scoped.result.contests[0].electorate]||'议员':name;
-  title.textContent=[state.year+'年',all?'全部地区（含金门、马祖）':county,district,
+  title.textContent=[displayYear(state.year,state.office)+'年',all?'全部地区（含金门、马祖）':county,district,
    identity].filter(Boolean).join(' · ')+'选举概况';
   if(description){
    const fullArea=all?'全部地区（含金门、马祖）':
@@ -500,9 +503,13 @@
  function refreshYearOptions(){
   const select=el('historyYear');if(!select)return;
   const office=el('historyOffice')?.value||state.office,years=yearsForOffice(office);
-  const current=Number(select.value),preferred=years.includes(current)?current:(office==='president'||office==='legislative'?2024:2022);
+  const current=root.HistoryLocal.cycleYear(Number(select.value),office),preferred=years.includes(current)?current:(office==='president'||office==='legislative'?2024:2022);
   if(select.options.length!==years.length||years.some((y,i)=>Number(select.options[i]?.value)!==y)){
-   select.replaceChildren(...years.map(y=>new Option(String(y),String(y))));
+   select.replaceChildren(...years.map(y=>new Option(displayYear(y,office),String(y))));
+  }
+  for(const option of select.options){
+   const label=displayYear(Number(option.value),office);
+   if(option.textContent!==label)option.textContent=label;
   }
   select.value=String(preferred);
  }

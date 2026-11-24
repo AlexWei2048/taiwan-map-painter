@@ -14,7 +14,7 @@ test('Local history follows actual election years and balances candidate votes f
  for(const [office,years] of Object.entries(Local.YEARS)){
   for(const year of years.filter(y=>y!==2022)){
    const s=data(year);
-   assert.equal(Workspace.normalizeSelection({office,year}).year,year);
+   if(Local.years(office).includes(year))assert.equal(Workspace.normalizeSelection({office,year}).year,year);
    const contests=Core.filter(Core.index(s),{year,office,electorate:'all'}).contests;
    assert.ok(contests.length>0);
    for(const contest of contests){
@@ -33,6 +33,58 @@ test('Local history follows actual election years and balances candidate votes f
  assert.ok(Local.years('mayor',true).includes(2026));
  assert.deepEqual(data(2009).contests.filter(c=>c.election_id==='2009-mayor').length,17);
  assert.deepEqual(data(2010).contests.filter(c=>c.election_id==='2010-mayor').length,5);
+});
+
+test('Historical county mayors and councils use five shared election cycles without losing original dates',async()=>{
+ const batches=[[1993,1994,25],[1997,1998,25],[2001,2002,25],[2005,2006,25],[2009,2010,22]];
+ assert.deepEqual(Local.years('mayor'),[1994,1998,2002,2006,2010,2014,2018,2022]);
+ assert.deepEqual(Local.years('council'),Local.years('mayor'));
+ assert.deepEqual(Local.years('township'),[1998,2002,2005,2009,2014,2018,2022]);
+ const supplement=require('../assets/history-local-council-supplement.json');
+ const fetcher=async url=>({ok:true,json:async()=>url.includes('supplement')?supplement:
+  url.includes('1994-council')?require('../assets/history-local-1994-council.json'):data(Number(url.match(/local-(\d{4})/)[1]))});
+ for(const [first,last,expected] of batches){
+  assert.equal(Local.yearLabel(last,'mayor'),first+'/'+last);
+  assert.equal(Workspace.normalizeSelection({year:first,office:'mayor'}).year,last);
+  const shard=await Local.loadCycle(last,'mayor',fetcher),indexed=Core.index(shard);
+  const mayors=Core.filter(indexed,{year:last,office:'mayor'});
+  assert.equal(mayors.contests.length,expected);
+  assert.equal(new Set(mayors.contests.map(c=>c.county_id)).size,expected);
+  assert.deepEqual([...new Set(mayors.contests.map(c=>Number(c.election_date.slice(0,4))))].sort(),[first,last]);
+  const csv=Workspace.historyCsv(mayors,{office:'mayor',year:last});
+  assert.match(csv,new RegExp('"'+first+'","县市长",'));
+  assert.match(csv,new RegExp('"'+last+'","县市长",'));
+  assert.match(Workspace.exportStem({year:last,office:'mayor'}),new RegExp('^'+first+'_'+last));
+  const council=await Local.loadCycle(last,'council',fetcher);
+  const councilRows=Core.filter(Core.index(council),{year:last,office:'council',electorate:'all'}).contests;
+  if(last!==1994)assert.equal(new Set(councilRows.map(c=>c.county_id)).size,expected);
+  else {
+   assert.equal(new Set(councilRows.map(c=>c.county_id)).size,24);
+   assert.equal(councilRows.length,197);
+   assert.equal(councilRows.reduce((sum,c)=>sum+c.seats,0),963);
+   const archive=councilRows.filter(c=>c.election_id==='1994-council-counties');
+   assert.equal(archive.length,183);
+   assert.equal(archive.reduce((sum,c)=>sum+contestants(council,c).length,0),1807);
+   assert.equal(archive.reduce((sum,c)=>sum+c.seats,0),867);
+   const taipei=councilRows.filter(c=>c.county_name==='台北县');
+   assert.equal(taipei.length,12);
+   assert.equal(taipei.reduce((sum,c)=>sum+c.valid_votes,0),1217977);
+   const kaohsiung=archive.filter(c=>c.county_name==='高雄县');
+   assert.equal(kaohsiung.reduce((sum,c)=>sum+c.valid_votes,0),588353);
+   assert.equal(councilRows.some(c=>c.county_name==='金门县'),false);
+   for(const contest of councilRows){
+    const rows=contestants(council,contest);
+    assert.equal(rows.reduce((n,c)=>n+c.votes,0),contest.valid_votes);
+    assert.equal(rows.filter(c=>c.elected_official).length,contest.seats);
+   }
+  }
+  const geography=Local.geometry(council,map,reference,String,Core.mergePaths,Presidential.modernCounty,Presidential.baseTown);
+  const districts=Local.councilMap(council,geography,Core.mergePaths).districts;
+  assert.equal(districts.length,councilRows.length);
+  if(last===1994)assert.deepEqual(districts.filter(c=>!c.mapAvailable&&c.electorate==='regional').map(c=>c.county),
+   ['新竹市','新竹市','新竹市','新竹市']);
+  assert.equal(geography.counties.some(c=>c.name==='台中县'),last<2010);
+ }
 });
 
 test('Corrections use the corroborated town tally or certified recount at its actual geographic level',()=>{

@@ -99,8 +99,9 @@
  function filter(indexed,selection={}){
   const year=Number(selection.year||2022),office=selection.office||'mayor';
   const electorate=identity(selection.electorate||'regional');
+  const years=indexed.snapshot.year===year&&Array.isArray(indexed.snapshot.cycleYears)?indexed.snapshot.cycleYears:[year];
   const electionIds=new Set([...indexed.electionsById.values()]
-   .filter(item=>Number(item.year)===year&&item.office===office).map(item=>item.election_id));
+   .filter(item=>years.includes(Number(item.year))&&item.office===office).map(item=>item.election_id));
   const contests=[...indexed.contestsById.values()].filter(item=>
    electionIds.has(item.election_id)&&
    (!selection.countyId||item.county_id===selection.countyId)&&

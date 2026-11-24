@@ -1791,7 +1791,7 @@ test('Presidential history loads real 2024 and 1996 shards, navigates historical
  await page.locator('#historyOffice').selectOption('mayor');
  await page.waitForFunction(()=>History2022View.office()==='mayor'&&History2022View.year()===2022&&
   document.querySelector('#historySummary').textContent.includes('个地区'));
- assert.deepEqual(await page.locator('#historyYear option').allTextContents(),['1993','1994','1997','1998','2001','2002','2005','2006','2009','2010','2014','2018','2022']);
+ assert.deepEqual(await page.locator('#historyYear option').allTextContents(),['1993/1994','1997/1998','2001/2002','2005/2006','2009/2010','2014','2018','2022']);
  assert.equal(await page.locator('#historyYear').inputValue(),'2022');
 });
 
@@ -2984,7 +2984,7 @@ test('Recovered historical Hsinchu council districts show official results and s
  const page=await pageFor(t);
  await page.locator('#categoryHistory').click();
  await page.locator('#historyOffice').selectOption('council');
- for(const year of [2002,2005,2009,2014,2018]){
+ for(const year of [2002,2006,2010,2014,2018]){
   await page.locator('#historyYear').selectOption(String(year));
   await page.waitForFunction(y=>History2022View.office()==='council'&&History2022View.snapshot()?.year===y,year);
   await page.locator('#historyCounty').selectOption('新竹市');
@@ -3001,6 +3001,26 @@ test('Recovered historical Hsinchu council districts show official results and s
  const message=await page.locator('#historyDialogMessage').textContent();
  assert.match(message,/妇保 3 席/);
  assert.match(message,/里界近似绘制/);
+});
+
+test('The earliest local cycle shows dated council returns and preserves actual mayoral years in CSV',async t=>{
+ const page=await pageFor(t);
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('mayor');
+ await page.locator('#historyYear').selectOption({label:'1993/1994'});
+ await page.waitForFunction(()=>History2022View.year()===1994&&HistoryWorkspace.result()?.contests.length===25);
+ const mayorCsv=await download(page,'#historyExportCsv');
+ assert.match(mayorCsv,/"1993","县市长","台北县"/);
+ assert.match(mayorCsv,/"1994","县市长","台北市"/);
+
+ await page.locator('#historyOffice').selectOption('council');
+ await page.waitForFunction(()=>History2022View.office()==='council'&&History2022View.snapshot()?.contests.some(c=>c.election_id==='1994-council-counties'));
+ assert.match(await page.locator('#historyBoundaryNote').textContent(),/金门县完整候选人得票明细待补/);
+ await page.locator('#historyCounty').selectOption('台北县');
+ await page.locator('#regions [data-region="history-1994-council-counties:台北县:regional:第8选举区"]').press('Enter');
+ assert.match(await page.locator('#historyDialogMessage').textContent(),/1994-01-29/);
+ assert.equal(await page.locator('#historyDialogMessage a').getAttribute('href'),'https://web.cec.gov.tw/tpcec/article/list/1271');
+ assert.match(await page.locator('#historyDialogRows').textContent(),/周雅淑/);
 });
 
 test('All archived mayor and council national maps use official winners and seat pluralities',async t=>{
