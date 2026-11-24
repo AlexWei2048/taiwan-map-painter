@@ -611,7 +611,7 @@
   const wrap=document.createElement('div');wrap.className='history-table-wrap';
   const table=document.createElement('table');table.className='history-candidate-table history-mobile-list';
   const head=document.createElement('thead'),hr=document.createElement('tr');
-  for(const label of ['县市','选区／乡镇市区','号次','候选人',presidentialMode?'性别（正/副）':'性别','选举时现任','党籍（县志）','得票数','得票率','当选']){const th=document.createElement('th');th.textContent=label;hr.append(th)}
+  for(const label of ['县市','选区／乡镇市区','号次','候选人',presidentialMode?'性别（正/副）':'性别','选举时现任','政党','得票数','得票率','当选']){const th=document.createElement('th');th.textContent=label;hr.append(th)}
   const mobileHeading=document.createElement('th');mobileHeading.className='history-mobile-details';mobileHeading.textContent='详情';hr.append(mobileHeading);
   head.append(hr);table.append(head);const body=document.createElement('tbody');
   let previousArea='';
@@ -843,7 +843,7 @@
    const wrap=document.createElement('div');wrap.className='history-table-wrap';
    const table=document.createElement('table');table.className='history-candidate-table';
    const thead=document.createElement('thead'),hr=document.createElement('tr');
-   for(const label of ['选区','号次','候选人','性别','选举时现任','政党','得票数','得票率','当选']){
+   for(const label of ['选区','号次','候选人','性别','选举时现任','党籍（县志）','得票数','得票率','当选']){
     const th=document.createElement('th');th.textContent=label;hr.append(th)
    }
    thead.append(hr);table.append(thead);

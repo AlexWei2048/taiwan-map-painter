@@ -18,13 +18,49 @@
  const pending=new Map(),supplementYears=new Set([2002,2005,2009,2010,2014,2018]);
  let supplementRequest;
  let legacyCouncilRequest;
+ function enrichLegacyGender(archive,references){
+  // Never infer sex from a name or party from a later election. Require
+  // unique exact candidate, county, district and electorate matches in
+  // both independent 1998 and 2002 election snapshots.
+  if(references.length!==2||references.some(s=>!s))return archive;
+  const convert=(root.OpenCC||(typeof module!=='undefined'&&module.exports?require('./assets/opencc.js'):null)).Converter({from:'t',to:'cn'});
+  const norm=s=>convert(String(s||'')).replaceAll('臺','台').trim();
+  const key=(county,number,electorate,name)=>JSON.stringify([norm(county),String(number),electorate,norm(name)]);
+  const maps=references.map(s=>{
+   const ids=new Set(s.elections.filter(e=>e.office==='council').map(e=>e.election_id));
+   const contests=new Map(s.contests.filter(c=>ids.has(c.election_id)).map(c=>[c.contest_id,c]));
+   const map=new Map();
+   for(const c of s.candidacies){
+    const d=contests.get(c.contest_id);if(!d)continue;
+    const number=d.district_number??String(d.district_name).match(/\d+/)?.[0];
+    if(number==null)continue;
+    const k=key(d.county_name,Number(number),d.electorate,c.candidate_name_official||c.candidate_name);
+    const arr=map.get(k)||[];arr.push(c);map.set(k,arr);
+   }
+   return map;
+  });
+  return {...archive,districts:archive.districts.map(d=>{
+   const gender_sources={...(d.gender_sources||{})};
+   const candidates=d.candidates.map(c=>{
+    if(c[4])return c;
+    const k=key(d.county,d.number,d.electorate,c[1]),matches=maps.map(m=>m.get(k)||[]);
+    if(matches.some(m=>m.length!==1))return c;
+    const [a,b]=matches.map(m=>m[0]);
+    if(!['男','女'].includes(a.gender)||a.gender!==b.gender)return c;
+    gender_sources[String(c[0])]={method:'cross-election exact match',years:references.map(s=>s.year),candidacy_ids:[a.candidacy_id,b.candidacy_id]};
+    return c.map((v,i)=>i===4?a.gender:v);
+   });
+   return {...d,candidates,gender_sources};
+  })};
+ }
  function loadLegacyCouncil(fetcher){
   if(!legacyCouncilRequest)legacyCouncilRequest=(async()=>{
    const response=await fetcher('assets/history-local-1994-council.json?v=4');
    if(!response.ok)throw Error('1994县市议员补充资料 HTTP '+response.status);
    const archive=await response.json();
    if(archive.version!==1||!archive.districts?.length)throw Error('1994县市议员补充资料不完整');
-   return archive;
+   const refs=await Promise.allSettled([load(1998,fetcher),load(2002,fetcher)]);
+   return enrichLegacyGender(archive,refs.map(r=>r.status==='fulfilled'?r.value:null));
   })().catch(error=>{legacyCouncilRequest=null;throw error});
   return legacyCouncilRequest;
  }
@@ -48,7 +84,7 @@
     const number=String(ballot),name=normalize(originalName),party=normalize(originalParty)||'政党资料缺失';
     candidacies.push({
      candidacy_id:id+':'+number,contest_id:id,ballot_number:number,candidate_name:name,candidate_name_official:originalName,
-     party_name:party,party_name_official:originalParty,gender,incumbent_at_election:null,votes,
+     party_name:party,party_name_official:originalParty,gender,gender_source:item.gender_sources?.[number]||null,incumbent_at_election:null,votes,
      vote_share:valid_votes?100*votes/valid_votes:0,elected_official:elected
     });
     rows.push({type:'council',level:'district',county,district,electorate,number,name,party,gender,votes,elected,incumbent:null,town:''});
@@ -249,7 +285,7 @@
    return {...c,election_date:office==='mayor'?'2022-12-18':'2022-11-26'};
   })};
  }
- const api={YEARS,years,yearLabel,cycleYear,load,loadCycle,geometry,councilMap,applyCouncilSupplement,fillRegionalCouncilQuotas,correctElectionDates};
+ const api={YEARS,years,yearLabel,cycleYear,load,loadCycle,geometry,councilMap,applyCouncilSupplement,fillRegionalCouncilQuotas,correctElectionDates,enrichLegacyGender};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;
  else root.HistoryLocal=api;
 })(typeof window==='undefined'?{}:window);
