@@ -4,7 +4,7 @@
   "historyYear": 2022,
   "note": "Source hashes identify dataset versions, not new verification of every candidate. The 2026-11-24 update changes only the candidate file hash and partial official audit metadata.",
   "sha256": {
-    "assets/election-2026.js": "4c0e46a9cfac907af9d928f4e89938c995f14af19bdc61d70ce0cd59821f833b",
+    "assets/election-2026.js": "09e13755fb79a6329688823a2d03ab87e7c2bd0923e08cf8bf16341c6b7f403b",
     "assets/map.json": "958ca1185f34b60c69fc36d372aa3ddef7bc909bad1de3fdc98dc462d8cd9398",
     "assets/history-2022.json": "91b947babbc16109d4bd01ce4599eb6e21d6c24c6a47aa5f1818968bbae6ffd5",
     "assets/history-council-districts-2022.json": "742f149586b7a3a1a8059e48761a1b76b4ab3e7862b0a1f73082f23759cfcaa6",

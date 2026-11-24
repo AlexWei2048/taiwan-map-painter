@@ -3,7 +3,7 @@
   "checkedAt": "2026-11-24",
   "baseCandidateBlob": "cde314259e932bc4a9a45e319fcdc3336d051a87",
   "status": "partial",
-  "scope": "正式名单及号次；台北、新北、台南、高雄、基隆、新竹市市长公报及新竹市第6、7议员选区公报同时核对性别及推荐政党；其他公告仅姓名及号次。未核验现任状态。；本次电子公报补核县市长28人（其中嘉义县2人使用正式名单公告）及金门、马祖部分议员8人，公报可见的性别和推荐政党亦对照，未更改现任字段。；澎湖县正式公告整县对照，存在2处文字抽取字形差异待复核。；新增旧版公报及选委会公报文字核对14名县市长，另1人仅核对官方抽签结果，未升级为最终名单。",
+  "scope": "正式名单及号次；台北、新北、台南、高雄、基隆、新竹市市长公报及新竹市第6、7议员选区公报同时核对性别及推荐政党；其他公告仅姓名及号次。未核验现任状态。；本次电子公报补核县市长28人（其中嘉义县2人使用正式名单公告）及金门、马祖部分议员8人，公报可见的性别和推荐政党亦对照，未更改现任字段。；澎湖县正式公告整县对照，存在2处文字抽取字形差异待复核。；新增旧版公报及选委会公报文字核对14名县市长，另1人仅核对官方抽签结果，未升级为最终名单。；追加澎湖第2、5选区存疑姓名原图复核及马祖第4议员选区、东引乡长正式公报文字核对。",
   "sources": {
     "P": {
       "url": "https://web.cec.gov.tw/api/file/0a48ccd3-268d-4cb9-924c-dc777af8705a.pdf",
@@ -133,14 +133,32 @@
       "date": null,
       "title": "嘉义市县市长选举公报",
       "method": "official bulletin extracted text, original name and number matched; screenshot unavailable due to size"
+    },
+    "PH2B": {
+      "url": "https://eebulletin.cec.gov.tw/115/17%E6%BE%8E%E6%B9%96%E7%B8%A3/02%E7%B8%A3%E8%AD%B0%E5%93%A1/02.%E6%BE%8E%E6%B9%96%E7%B8%A3%E8%AD%B0%E6%9C%83%E7%AC%AC21%E5%B1%86%E8%AD%B0%E5%93%A1%E9%81%B8%E8%88%89%E7%AC%AC2%E9%81%B8%E8%88%89%E5%8D%80%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1.pdf",
+      "date": null,
+      "title": "澎湖縣議會第21屆議員選舉第2選舉區選舉公報",
+      "method": "official bulletin screenshot"
+    },
+    "PH5B": {
+      "url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/115%E5%B9%B4/17%E6%BE%8E%E6%B9%96%E7%B8%A3/05.%E6%BE%8E%E6%B9%96%E7%B8%A3%E8%AD%B0%E6%9C%83%E7%AC%AC21%E5%B1%86%E8%AD%B0%E5%93%A1%E9%81%B8%E8%88%89%E7%AC%AC5%E9%81%B8%E8%88%89%E5%8D%80%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1.pdf",
+      "date": null,
+      "title": "澎湖縣議會第21屆議員選舉第5選舉區選舉公報",
+      "method": "official bulletin screenshot"
+    },
+    "EB22D4": {
+      "url": "https://eebulletin.cec.gov.tw/115/22%E9%80%A3%E6%B1%9F%E7%B8%A3/02%E7%B8%A3%E8%AD%B0%E5%93%A1/115%E5%B9%B4%E9%80%A3%E6%B1%9F%E7%B8%A3-%E7%AC%AC%E5%9B%9B%E9%81%B8%E5%8D%80%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1.pdf",
+      "date": null,
+      "title": "115年連江縣-第四選區選舉公報",
+      "method": "official bulletin text; screenshot unavailable"
     }
   },
   "counts": {
     "mayor": 79,
-    "council": 204,
-    "township": 127
+    "council": 208,
+    "township": 129
   },
-  "newOfficial": 400,
+  "newOfficial": 404,
   "rows": [
     {
       "candidateId": "council:10013:01:009",
@@ -5557,37 +5575,123 @@
         "name",
         "number"
       ]
+    },
+    {
+      "candidateId": "council:10016:02:005",
+      "districtId": "council:10016:02",
+      "type": "council",
+      "nameOriginal": "廖璟華",
+      "officialName": "廖璟華",
+      "number": 4,
+      "previousNumber": 4,
+      "previousVerification": "referenceSite",
+      "source": "PH2B",
+      "page": 1,
+      "section": "县议员候选人",
+      "verifiedFields": [
+        "name",
+        "number",
+        "gender",
+        "party"
+      ]
+    },
+    {
+      "candidateId": "council:10016:05:002",
+      "districtId": "council:10016:05",
+      "type": "council",
+      "nameOriginal": "黃榮焜",
+      "officialName": "黃榮焜",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "referenceSite",
+      "source": "PH5B",
+      "page": 1,
+      "section": "县议员候选人",
+      "verifiedFields": [
+        "name",
+        "number",
+        "gender",
+        "party"
+      ]
+    },
+    {
+      "candidateId": "council:09007:04:001",
+      "districtId": "council:09007:04",
+      "type": "council",
+      "nameOriginal": "林德建",
+      "officialName": "林德建",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "official",
+      "source": "EB22D4",
+      "page": 1,
+      "section": "县议员候选人",
+      "verifiedFields": [
+        "name",
+        "number",
+        "gender",
+        "party"
+      ]
+    },
+    {
+      "candidateId": "council:09007:04:002",
+      "districtId": "council:09007:04",
+      "type": "council",
+      "nameOriginal": "馮印才",
+      "officialName": "馮印才",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "official",
+      "source": "EB22D4",
+      "page": 1,
+      "section": "县议员候选人",
+      "verifiedFields": [
+        "name",
+        "number",
+        "gender",
+        "party"
+      ]
+    },
+    {
+      "candidateId": "township:09007:09007040:001",
+      "districtId": "township:09007:09007040",
+      "type": "township",
+      "nameOriginal": "馮印樂",
+      "officialName": "馮印樂",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "referenceSite",
+      "source": "EB22D4",
+      "page": 2,
+      "section": "乡长候选人",
+      "verifiedFields": [
+        "name",
+        "number",
+        "gender",
+        "party"
+      ]
+    },
+    {
+      "candidateId": "township:09007:09007040:002",
+      "districtId": "township:09007:09007040",
+      "type": "township",
+      "nameOriginal": "林宇超",
+      "officialName": "林宇超",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "referenceSite",
+      "source": "EB22D4",
+      "page": 2,
+      "section": "乡长候选人",
+      "verifiedFields": [
+        "name",
+        "number",
+        "gender",
+        "party"
+      ]
     }
   ],
   "unresolved": [
-    {
-      "districtId": "council:10016:02",
-      "officialNameText": "廖環華",
-      "officialNumber": 4,
-      "local": [
-        [
-          "council:10016:02:005",
-          "廖璟華"
-        ]
-      ],
-      "source": "PH",
-      "page": 2,
-      "note": "文字抽取与原网站字形有差异，暂不改名，需清晰公报复核"
-    },
-    {
-      "districtId": "council:10016:05",
-      "officialNameText": "黃榮煇",
-      "officialNumber": 1,
-      "local": [
-        [
-          "council:10016:05:002",
-          "黃榮焜"
-        ]
-      ],
-      "source": "PH",
-      "page": 2,
-      "note": "文字抽取与原网站字形有差异，暂不改名，需清晰公报复核"
-    },
     {
       "districtId": "mayor:10014",
       "officialNameText": "李昊賴智",
@@ -5620,6 +5724,17 @@
       "previousVerification": "referenceSite",
       "checkedAt": "2026-11-24",
       "note": "官方抽签结果文字明确对应；正式公报抽取姓名有误，未标记最终名单已核对。"
+    }
+  ],
+  "numberSequenceReview": [
+    {
+      "id": "council:10015:05",
+      "ns": [
+        1,
+        2,
+        4,
+        5
+      ]
     }
   ]
 }
