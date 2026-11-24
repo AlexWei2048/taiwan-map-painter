@@ -640,7 +640,7 @@ def main():
     contests.extend(nccu_1993_contests(nccu, args.nccu_pages / 'island-nccu-1993-profile.html'))
     snapshots, audit = build(contests, tv_index(args.taiwan_votes_csv), nccu)
     # Source-backed precinct supplements; never replace conflicting votes.
-    for district, slug, expected in [('盐埕区', 'yancheng', 23), ('鼓山区', 'gushan', 63), ('旗津区', 'qijin', 18), ('新兴区', 'xinxing', 42), ('前金区', 'qianjin', 22), ('苓雅区', 'lingya', 116), ('前镇区', 'qianzhen', 113)]:
+    for district, slug, expected in [('盐埕区', 'yancheng', 23), ('鼓山区', 'gushan', 63), ('旗津区', 'qijin', 18), ('新兴区', 'xinxing', 42), ('前金区', 'qianjin', 22), ('苓雅区', 'lingya', 116), ('前镇区', 'qianzhen', 113), ('左营区', 'zuoying', 94), ('楠梓区', 'nanzi', 82), ('三民区', 'sanmin', 188)]:
         proof_path = ROOT / f'sources/history-2006-kaohsiung-{slug}-profile.json'
         if 2006 not in snapshots or not proof_path.is_file():
             continue
@@ -659,6 +659,16 @@ def main():
             raise ValueError(f'2006 {district} conflicting existing turnout')
         targets[0].update(values, profile_source=proof['source'], profile_method=f'sum_{expected}_official_precinct_returns')
         audit[2006].setdefault('precinctProfileSupplements', []).append({'county': '高雄市', 'town': district, 'source': proof['source'], 'precincts': expected, 'valid_votes': sums[5], **values})
+    if 2006 in snapshots:
+        snapshot = snapshots[2006]
+        towns = [p for p in snapshot['townProfiles'] if p['county'] == '高雄市' and p['office'] == 'mayor']
+        if len(towns) == 11 and all(p.get(k) is not None for p in towns for k in ('registered_voters', 'ballots_cast', 'valid_votes', 'invalid_votes')):
+            city = next(c for c in snapshot['contests'] if c['county_name'] == '高雄市' and c['election_id'] == '2006-mayor')
+            fields = ('registered_voters', 'ballots_cast', 'valid_votes', 'invalid_votes')
+            totals = {k: sum(p[k] for p in towns) for k in fields}
+            if any(totals[k] != city[k] for k in fields):
+                raise ValueError('2006 Kaohsiung 11-district official turnout totals do not reconcile')
+            audit[2006]['kaohsiungDistrictProfileReconciliation'] = {'complete_districts': 11, 'totals': totals, 'difference': {k: 0 for k in fields}}
     with args.cec_zip.open('rb') as source:
         source_hash = hashlib.file_digest(source, 'sha256').hexdigest()
     for year, snapshot in sorted(snapshots.items()):
