@@ -639,6 +639,22 @@ def main():
     nccu = nccu_index(args.nccu_pages)
     contests.extend(nccu_1993_contests(nccu, args.nccu_pages / 'island-nccu-1993-profile.html'))
     snapshots, audit = build(contests, tv_index(args.taiwan_votes_csv), nccu)
+    if 2002 in snapshots:
+        proof = json.loads((ROOT / 'sources/history-2002-taichung-council-profiles.json').read_text(encoding='utf-8'))
+        snapshot = snapshots[2002]
+        contests_by_id = {contest['contest_id']: contest for contest in snapshot['contests']}
+        for contest_id, values in proof['rows'].items():
+            contest = contests_by_id[contest_id]
+            registered = values['registered_voters']
+            cast = values['ballots_cast']
+            valid = values['valid_votes']
+            invalid = values['invalid_votes']
+            if not (registered >= cast == valid + invalid and contest['valid_votes'] == valid):
+                raise ValueError(f'2002 {contest_id} yearbook turnout does not reconcile')
+            if any(contest.get(field) not in (None, value) for field, value in values.items()):
+                raise ValueError(f'2002 {contest_id} existing turnout conflicts with yearbook')
+            contest.update(values, profile_source=proof['source'])
+        audit[2002]['taichungCouncilYearbookProfiles'] = {'source': proof['source'], 'count': len(proof['rows'])}
     # Source-backed precinct supplements; never replace conflicting votes.
     for district, slug, expected in [('盐埕区', 'yancheng', 23), ('鼓山区', 'gushan', 63), ('旗津区', 'qijin', 18), ('新兴区', 'xinxing', 42), ('前金区', 'qianjin', 22), ('苓雅区', 'lingya', 116), ('前镇区', 'qianzhen', 113), ('左营区', 'zuoying', 94), ('楠梓区', 'nanzi', 82), ('三民区', 'sanmin', 188)]:
         proof_path = ROOT / f'sources/history-2006-kaohsiung-{slug}-profile.json'

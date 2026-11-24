@@ -359,6 +359,32 @@
  assert(total(shard.rows.filter(x=>x.electorate==='party'&&x.level==='national'))===10326408,'旧制计算票合计');
  return shard;
 }
+ function enrichCandidates(shard){
+  const metadata=(typeof module!=='undefined'&&module.exports?
+   require('./assets/history-legislative-candidates.js'):root.HistoryLegislativeCandidates)?.[shard.year];
+  if(!metadata)return shard;
+  const contests=new Map(shard.contests.map(contest=>[contest.contest_id,contest]));
+  const key=(electorate,district,name,number)=>JSON.stringify([electorate,district,name,Number(number)]);
+  const profiles=new Map();
+  for(const candidate of shard.candidacies){
+   const details=metadata.candidates[candidate.candidacy_id];
+   if(!details)continue;
+   const [gender,incumbent]=details;
+   candidate.gender=candidate.gender??gender;
+   candidate.incumbent_at_election=candidate.incumbent_at_election??incumbent;
+   const contest=contests.get(candidate.contest_id);
+   const identity=key(contest.electorate,contest.district_name,candidate.candidate_name,candidate.ballot_number);
+   profiles.set(identity,profiles.has(identity)?null:candidate);
+  }
+  for(const row of shard.rows){
+   if(row.electorate==='party')continue;
+   const candidate=profiles.get(key(row.electorate,row.district,row.name,row.number));
+   if(!candidate)continue;
+   row.gender=row.gender??candidate.gender;
+   row.incumbent=row.incumbent??candidate.incumbent_at_election;
+  }
+  return shard;
+ }
  async function load(year,fetcher=root.fetch){
   year=Number(year);if(!YEAR_SET.has(year))throw Error('不支持的立法机构民代选举年份：'+year);
   if(loads.has(year))return loads.get(year);
@@ -367,7 +393,7 @@
    if(!response.ok)throw Error(year+'年立法机构民代历史数据 HTTP '+response.status);
    const shard=await response.json();
    if(shard.schemaVersion!==2||shard.year!==year||shard.office!=='legislative'||!Array.isArray(shard.rows)||!shard.rows.length)throw Error(year+'年立法机构民代历史数据校验未通过');
-   return year===2001?apply2001Corrections(shard,VOTE_CORRECTIONS_2001):shard;
+   return enrichCandidates(year===2001?apply2001Corrections(shard,VOTE_CORRECTIONS_2001):shard);
   })();
   loads.set(year,promise);
   try{return await promise}catch(error){loads.delete(year);throw error}

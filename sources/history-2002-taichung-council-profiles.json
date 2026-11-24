@@ -1,0 +1,42 @@
+{
+  "source": "https://www.dbas.taichung.gov.tw/media/296527/90%E5%B9%B4%E8%87%BA%E4%B8%AD%E7%B8%A3%E7%B5%B1%E8%A8%88%E8%A6%81%E8%A6%BD.pdf",
+  "table": "第十五屆縣議員選舉統計，分選舉區",
+  "rows": {
+    "2002-council:台中县:regional:第2选举区": {
+      "registered_voters": 156063,
+      "ballots_cast": 86717,
+      "valid_votes": 85389,
+      "invalid_votes": 1328
+    },
+    "2002-council:台中县:regional:第3选举区": {
+      "registered_voters": 77994,
+      "ballots_cast": 50826,
+      "valid_votes": 50006,
+      "invalid_votes": 820
+    },
+    "2002-council:台中县:regional:第5选举区": {
+      "registered_voters": 141960,
+      "ballots_cast": 96000,
+      "valid_votes": 94528,
+      "invalid_votes": 1472
+    },
+    "2002-council:台中县:regional:第6选举区": {
+      "registered_voters": 126049,
+      "ballots_cast": 73435,
+      "valid_votes": 72189,
+      "invalid_votes": 1246
+    },
+    "2002-council:台中县:regional:第7选举区": {
+      "registered_voters": 162151,
+      "ballots_cast": 86447,
+      "valid_votes": 85329,
+      "invalid_votes": 1118
+    },
+    "2002-council:台中县:plains:第9选举区": {
+      "registered_voters": 2666,
+      "ballots_cast": 1422,
+      "valid_votes": 1387,
+      "invalid_votes": 35
+    }
+  }
+}

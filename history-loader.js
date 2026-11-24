@@ -11,11 +11,11 @@
  const HISTORY_STYLES=['history-legislative.css'];
  const HISTORY_SCRIPTS=[
   'assets/party-logos-archive.js','history-core.js','history-presidential-turnout.js',
-  'history-presidential.js','history-legislative.js','history-legislative-party.js',
+  'history-presidential.js','assets/history-legislative-candidates.js','history-legislative.js','history-legislative-party.js',
   'history-legislative-turnout.js','history-legislative-data.js','history-local.js',
   'history-workspace.js','history-2022.js','history-trends.js','history-trends-ui.js'
  ];
- const tagged=path=>path+(path.includes('?')?'&':'?')+'v=20261124-history-archive-v15';
+ const tagged=path=>path+(path.includes('?')?'&':'?')+'v=20261124-verified-data-v16';
  function domStyleLoader(document){return href=>new Promise((resolve,reject)=>{
   const selector='link[data-history-asset="'+href+'"]',existing=document.querySelector(selector);
   if(existing){if(existing.dataset.loaded==='true')return resolve();existing.addEventListener('load',resolve,{once:true});existing.addEventListener('error',reject,{once:true});return}

@@ -22,7 +22,7 @@
   if(regions.has(year))return regions.get(year);
   if(loading.has(year))return loading.get(year);
   const promise=(async()=>{
-   const response=await fetcher('assets/history-legislative-turnout-'+year+'.json?v=20261124-cec-reconciled-v5',{cache:'default'});
+   const response=await fetcher('assets/history-legislative-turnout-'+year+'.json?v=20261124-cec-reconciled-v6',{cache:'default'});
    if(!response.ok)throw Error('历史选举概况资料 HTTP '+response.status);
    const content=await response.json();
    if(content.schemaVersion!==1||content.year!==year||!content.ballots)

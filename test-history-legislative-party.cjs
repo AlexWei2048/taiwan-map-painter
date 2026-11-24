@@ -31,13 +31,16 @@ test("Women\u0027s guarantee modifies original winners rather than replacing nom
   assert.equal(names.find(c=>c.rank===lost)?.elected,false,year+' '+party+' rank '+lost);
  }
 });
-test('1992 and 1998 never invent an unverified rank or an unsuccessful nominee',()=>{
- for(const year of [1992,1998])for(const party of Object.keys(Party.VERIFIED[year])){
-  for(const item of Party.nominees(year,party))assert.equal(item.rank,null,year+' '+party);
- }
+test('1992 and 1998 final nomination lists retain published ranks for elected and unelected candidates',()=>{
+ assert.equal(Party.nominationCount(1992),55);
+ assert.equal(Party.nominationCount(1998),101);
+ assert.equal(Party.nominees(1992,'中国国民党')[23].name,'尹祚芊');
+ assert.equal(Party.nominees(1992,'民主进步党')[15].elected,false);
+ assert.equal(Party.nominees(1998,'民主联盟')[0].name,'何泗聪');
+ assert.equal(Party.nominees(1998,'中国国民党').some(row=>row.name==='陈玺安'),false);
 });
 test('1995 CEC published full candidate lists and official order are restored',()=>{
- assert.equal(Party.nominationCount(1995),55);
+ assert.equal(Party.nominationCount(1995),66);
  assert.deepEqual(['中国国民党','民主进步党','新党'].map(p=>Party.nominees(1995,p).length),[28,19,8]);
  assert.equal(Party.nominees(1995,'中国国民党')[14].name,'陈琼赞');
  assert.equal(Party.nominees(1995,'民主进步党')[11].name,'范巽绿');

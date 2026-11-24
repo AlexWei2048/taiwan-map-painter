@@ -190,6 +190,18 @@ def main():
                         "source_record": "苗栗縣,南庄鄉,,0,0,586,5,591,1"}]
                     outfile["audit"]["plains"]["completeTownProfiles"] = sum(len(v) for v in plains["town"].values())
         path = ROOT / f"assets/history-legislative-turnout-{year}.json"
+        # Older CEC party-vote profiles use a different official archive. Keep
+        # the independently verified data when refreshing candidate ballots.
+        if year >= 2008 and path.is_file():
+            existing = json.loads(path.read_text(encoding="utf-8"))
+            if party := existing["ballots"].get("party"):
+                actual = {("national", "", ""): party["national"][2]}
+                actual.update({("county", county, ""): v[2] for county, v in party["county"].items()})
+                actual.update({("town", county, town): v[2] for county, towns in party["town"].items() for town, v in towns.items()})
+                if actual != candidates(year, "party"):
+                    raise ValueError(f"{year} published party-vote profiles no longer match geographic vote results")
+                outfile["ballots"]["party"] = party
+                outfile["audit"]["party"] = existing["audit"]["party"]
         path.write_text(json.dumps(outfile, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
         print("Wrote", path.name, path.stat().st_size, "bytes", flush=True)
 
