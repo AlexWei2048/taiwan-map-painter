@@ -640,7 +640,7 @@ def main():
     contests.extend(nccu_1993_contests(nccu, args.nccu_pages / 'island-nccu-1993-profile.html'))
     snapshots, audit = build(contests, tv_index(args.taiwan_votes_csv), nccu)
     # Source-backed precinct supplements; never replace conflicting votes.
-    for district, slug, expected in [('盐埕区', 'yancheng', 23), ('鼓山区', 'gushan', 63), ('旗津区', 'qijin', 18), ('新兴区', 'xinxing', 42), ('前金区', 'qianjin', 22), ('苓雅区', 'lingya', 116)]:
+    for district, slug, expected in [('盐埕区', 'yancheng', 23), ('鼓山区', 'gushan', 63), ('旗津区', 'qijin', 18), ('新兴区', 'xinxing', 42), ('前金区', 'qianjin', 22), ('苓雅区', 'lingya', 116), ('前镇区', 'qianzhen', 113)]:
         proof_path = ROOT / f'sources/history-2006-kaohsiung-{slug}-profile.json'
         if 2006 not in snapshots or not proof_path.is_file():
             continue
