@@ -92,7 +92,7 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
  const vals=rows.flatMap((row,i)=>stack?[series.reduce((n,s)=>n+(s.get(row)||0),0)]:series.map(s=>s.get(row))).filter(Number.isFinite);
  const ticks=integer?T.integerTicks(Math.max(1,...vals)):null;
  const max=ticks?ticks.at(-1):pct?100:rank?Math.max(3,...vals):Math.max(1,...vals)*1.08;
- const slots=rows.map((row,i)=>i&&rows[i-1].year===row.year?.valueOf()?0.72:1.18);
+ const slots=rows.map((row,i)=>i&&rows[i-1].year===row.year?0.72:1.18);
  const centers=[];let offset=0;for(let i=0;i<rows.length;i++){if(i)offset+=slots[i];centers.push(offset)}
  const unit=(r-l)/Math.max(1,offset+1.18),barWidth=Math.min(58,unit*.66);
  const x=i=>l+unit*(.59+centers[i]),y=v=>rank?top+(v-1)/(max-1)*(bottom-top):bottom-v/max*(bottom-top);
@@ -187,6 +187,7 @@ function renderParliaments(out,rows,conf,totalLeg){
  section.append(node('h4','','历届席次分布'),node('p','data-help','每个圆点代表一席；民进党居左、国民党居右，明确的传统亲绿或亲蓝政党邻近排列，其余政党和无党籍居中。标线为过半门槛。合并前原县与原市并排展示，分别计算。'));
  const grid=node('div','trend-parliament-grid');section.append(grid);
  const groups=new Map();for(const row of rows){if(!groups.has(row.year))groups.set(row.year,[]);groups.get(row.year).push(row)}
+ if([...groups.values()].some(list=>list.length>1))grid.classList.add('trend-parliament-paired-grid');
  for(const [year,list] of groups){
   const title=list.map(r=>r.label+(r.scopeLabel?' · '+r.scopeLabel:'')).join(' / ')+' · 席次分布';
   const graphs=list.map(row=>parliamentSvg(row,conf,totalLeg));

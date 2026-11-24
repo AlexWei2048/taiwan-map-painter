@@ -237,7 +237,19 @@
   }
   return {features,districts};
  }
- const api={YEARS,years,yearLabel,cycleYear,load,loadCycle,geometry,councilMap,applyCouncilSupplement,fillRegionalCouncilQuotas};
+ // The 2022 Chiayi City rerun applied only to the mayor election.
+ // Source: https://web.cec.gov.tw/api/file/72529fa8-25c6-4260-bcbc-7de268017766.pdf
+ function correctElectionDates(shard){
+  if(shard.year!==2022)return shard;
+  const offices=new Map(shard.elections.map(e=>[e.election_id,e.office]));
+  return {...shard,contests:shard.contests.map(c=>{
+   if(!['嘉义市','嘉義市'].includes(c.county_name))return c;
+   const office=offices.get(c.election_id);
+   if(!['mayor','council'].includes(office))return c;
+   return {...c,election_date:office==='mayor'?'2022-12-18':'2022-11-26'};
+  })};
+ }
+ const api={YEARS,years,yearLabel,cycleYear,load,loadCycle,geometry,councilMap,applyCouncilSupplement,fillRegionalCouncilQuotas,correctElectionDates};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;
  else root.HistoryLocal=api;
 })(typeof window==='undefined'?{}:window);

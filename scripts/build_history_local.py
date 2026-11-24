@@ -128,12 +128,12 @@ def read_table(archive, path, name):
     raise ValueError(f'Unrecognized encoding: {path}/{name}')
 
 
-def election_date(year, county):
+def election_date(year, county, office):
     date = DATES.get(year)
     if year in (1998, 2002):
         direct = county in ('台北市', '高雄市')
         date = ('12-05' if year == 1998 else '12-07') if direct else ('01-24' if year == 1998 else '01-26')
-    if (year, county) == (2022, '嘉义市'):
+    if (year, county, office) == (2022, '嘉义市', 'mayor'):
         date = '12-18'
     return f'{year}-{date}'
 
@@ -260,7 +260,7 @@ def source_contests(archive, path, office, electorate):
         yield {
             'year': year, 'office': office, 'electorate': electorate, 'county': county,
             'district': district_name, 'region': region, 'local': local,
-            'date': election_date(year, norm(county)), 'roster': roster, 'profile': profile,
+            'date': election_date(year, norm(county), office), 'roster': roster, 'profile': profile,
             'detail': detail, 'town_labels': town_labels, 'town_profiles': town_profiles,
             'scope': sorted({label for labels in scope.values() for label in labels}),
         }

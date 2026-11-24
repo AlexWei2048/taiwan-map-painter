@@ -126,3 +126,9 @@ test('Council and mayor dates use their own original contests in every old elect
   assert.ok(mayor.every(d=>d.startsWith(String(Number(year)-1))),year+' '+mayor);
  }
 });
+
+test('Chiayi City 2022 mayor rerun does not change the date of council election',()=>{
+ const L=require('../history-local.js'),s=L.correctElectionDates(require('../assets/history-2022.json'));
+ assert.deepEqual(T.electionDates(s,'mayor','嘉义市'),['2022-12-18']);
+ assert.deepEqual(T.electionDates(s,'council','嘉义市'),['2022-11-26']);
+});
