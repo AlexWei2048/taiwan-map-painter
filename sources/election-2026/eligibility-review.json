@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-29",
+  "checkedAt": "2026-11-24",
   "exclusions": [
     {
       "type": "council",
@@ -94,19 +94,6 @@
     },
     {
       "type": "council",
-      "county": "花莲县",
-      "name": "周駿宥",
-      "districtNumber": 5,
-      "district": "第5选举区",
-      "reason": "酒驾判刑确定且尚未执行完毕",
-      "status": "资格不符",
-      "url": "https://web.cec.gov.tw/central/article/65212",
-      "decisionDate": "2026-10-16",
-      "checkedAt": "2026-10-29",
-      "official": true
-    },
-    {
-      "type": "council",
       "county": "金门县",
       "name": "石永城",
       "districtNumber": 1,
@@ -177,6 +164,18 @@
       "checkedAt": "2026-10-29",
       "official": false,
       "sourceNote": "中央社引述花莲县选委会审定；官方第445次会议记录尚待获取"
+    },
+    {
+      "type": "township",
+      "county": "苗栗县",
+      "name": "廖芳毅",
+      "district": "三湾乡",
+      "reason": "三湾乡正式选举公报仅列1号李运光、2号陈光洋；未列此登记者，具体原因未核实。",
+      "status": "未列正式选举公报",
+      "url": "https://eebulletin.cec.gov.tw/115/08%E8%8B%97%E6%A0%97%E7%B8%A3/03%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7/%E8%8B%97%E6%A0%97%E7%B8%A3%E4%B8%89%E7%81%A3%E9%84%89%E9%84%89%E9%95%B7%E9%81%B8%E8%88%89.pdf",
+      "checkedAt": "2026-11-24",
+      "official": true,
+      "sourceNote": "仅确认未列正式公报；不推断具体原因"
     }
   ],
   "countyCoverage": [
@@ -259,10 +258,13 @@
       "mayorCouncilUrl": "https://web.cec.gov.tw/central/article/65212",
       "checkedAt": "2026-10-29",
       "excludedCouncil": 0,
-      "townshipStatus": "已核对已公布不符者及官方抽签名单",
+      "townshipStatus": "已逐人核对11月17日正式候选人名单及号次",
       "townshipUrls": [
-        "https://www.hsinchu.gov.tw/News_Content.aspx?n=153&s=357125"
-      ]
+        "https://www.hsinchu.gov.tw/News_Content.aspx?n=153&s=357125",
+        "https://web.cec.gov.tw/api/file/2502d1d2-d378-4bae-bbf9-495a06538c47.pdf"
+      ],
+      "finalRosterCheckedAt": "2026-11-24",
+      "finalRosterUrl": "https://web.cec.gov.tw/api/file/2502d1d2-d378-4bae-bbf9-495a06538c47.pdf"
     },
     {
       "county": "新竹市",
@@ -278,11 +280,11 @@
       "mayorCouncilUrl": "https://web.cec.gov.tw/central/article/65212",
       "checkedAt": "2026-10-29",
       "excludedCouncil": 0,
-      "townshipStatus": "待补：官方不公开不符姓名，媒体确认有1名乡镇市长不符；仍须合格抽签名单辨识",
+      "townshipStatus": "三湾乡正式公报确认仅两名候选人，廖芳毅未列；具体资格原因不作推断",
       "townshipUrls": [
-        "https://www.cna.com.tw/news/aloc/202609290282.aspx"
-      ],
-      "unidentifiedIneligibleCount": 1
+        "https://www.cna.com.tw/news/aloc/202609290282.aspx",
+        "https://eebulletin.cec.gov.tw/115/08%E8%8B%97%E6%A0%97%E7%B8%A3/03%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7/%E8%8B%97%E6%A0%97%E7%B8%A3%E4%B8%89%E7%81%A3%E9%84%89%E9%84%89%E9%95%B7%E9%81%B8%E8%88%89.pdf"
+      ]
     },
     {
       "county": "彰化县",
@@ -336,21 +338,26 @@
       "mayorCouncilUrl": "https://web.cec.gov.tw/central/article/65212",
       "checkedAt": "2026-10-29",
       "excludedCouncil": 0,
-      "townshipStatus": "已核对媒体引述选委会：不符者限代表和村里长，乡镇市长未列不符",
+      "townshipStatus": "已逐人核对11月17日正式候选人名单及号次",
       "townshipUrls": [
-        "https://udn.com/vote2026/story/7327/9803843"
-      ]
+        "https://udn.com/vote2026/story/7327/9803843",
+        "https://web.cec.gov.tw/api/file/0a48ccd3-268d-4cb9-924c-dc777af8705a.pdf"
+      ],
+      "finalRosterCheckedAt": "2026-11-24",
+      "finalRosterUrl": "https://web.cec.gov.tw/api/file/0a48ccd3-268d-4cb9-924c-dc777af8705a.pdf"
     },
     {
       "county": "花莲县",
-      "mayorCouncilStatus": "已核对全国官方审定",
+      "mayorCouncilStatus": "10月16日审定后，周骏宥经法院裁定暂列候选人；11月17日正式名单确认",
       "mayorCouncilUrl": "https://web.cec.gov.tw/central/article/65212",
       "checkedAt": "2026-10-29",
-      "excludedCouncil": 1,
-      "townshipStatus": "已核对中央社引述选委会：36人登记、35人合格、張榮法不符",
+      "excludedCouncil": 0,
+      "townshipStatus": "11月17日正式名单逐选区对账",
       "townshipUrls": [
         "https://www.cna.com.tw/news/aloc/202610170067.aspx"
-      ]
+      ],
+      "finalRosterUrl": "https://web.cec.gov.tw/api/file/6bd6ef5c-b17d-464f-9bd9-a6c216f40dd2.pdf",
+      "finalRosterCheckedAt": "2026-11-24"
     },
     {
       "county": "台东县",
@@ -369,7 +376,12 @@
       "mayorCouncilUrl": "https://web.cec.gov.tw/central/article/65212",
       "checkedAt": "2026-10-29",
       "excludedCouncil": 0,
-      "townshipStatus": "已检索官方站及公开资料，未取得完整合格名册，不能视为已审定通过"
+      "townshipStatus": "已逐人核对11月17日正式候选人名单及号次",
+      "townshipUrls": [
+        "https://web.cec.gov.tw/api/file/bdf856d5-67ea-4fbd-924f-ecbfcb5aac3b.pdf"
+      ],
+      "finalRosterCheckedAt": "2026-11-24",
+      "finalRosterUrl": "https://web.cec.gov.tw/api/file/bdf856d5-67ea-4fbd-924f-ecbfcb5aac3b.pdf"
     },
     {
       "county": "金门县",
@@ -392,22 +404,42 @@
       ]
     }
   ],
-  "reviewNote": "已明确排除13人：10名议员、3名乡镇市区长。县市长81人全数符合中选会10月16日审定。苗栗县另有1名乡镇市长资格不符但姓名尚未由官方合格名单辨识，不能据媒体未点名猜测删除。登记人数为原始受理登记人数，不应随排除资格不符者改写；可另列有效候选人数。未取得完整地方合格名册的记录不得标为已通过资格审定。",
-  "unknownExclusions": [
-    {
-      "type": "township",
-      "county": "苗栗县",
-      "name": null,
-      "count": 1,
-      "status": "待核身份",
-      "url": "https://www.cna.com.tw/news/aloc/202609290282.aspx"
-    }
-  ],
+  "reviewNote": "已明确排除13人：10名议员、3名乡镇市区长。县市长81人全数符合中选会10月16日审定。苗栗县另有1名乡镇市长资格不符但姓名尚未由官方合格名单辨识，不能据媒体未点名猜测删除。登记人数为原始受理登记人数，不应随排除资格不符者改写；可另列有效候选人数。未取得完整地方合格名册的记录不得标为已通过资格审定。；11月24日正式名单复核：恢复周骏宥，三湾乡公报未列廖芳毅，具体原因未核实；原资格决定及后续变更分别留档。",
+  "unknownExclusions": [],
   "sourceRefs": {
     "national": "turn1search0",
     "li": "turn8search1",
     "wu": "turn28search7",
     "zhang": "turn20search9",
     "miaoliPending": "turn5search2"
-  }
+  },
+  "reinstatements": [
+    {
+      "type": "council",
+      "county": "花莲县",
+      "name": "周駿宥",
+      "districtNumber": 5,
+      "district": "第5选举区",
+      "reason": "酒驾判刑确定且尚未执行完毕",
+      "status": "法院裁定暂列正式候选人",
+      "url": "https://web.cec.gov.tw/api/file/6bd6ef5c-b17d-464f-9bd9-a6c216f40dd2.pdf",
+      "decisionDate": "2026-10-16",
+      "checkedAt": "2026-11-24",
+      "official": true,
+      "candidateId": "council:10015:05:004",
+      "previousDecision": {
+        "type": "council",
+        "county": "花莲县",
+        "name": "周駿宥",
+        "districtNumber": 5,
+        "district": "第5选举区",
+        "reason": "酒驾判刑确定且尚未执行完毕",
+        "status": "资格不符",
+        "url": "https://web.cec.gov.tw/central/article/65212",
+        "decisionDate": "2026-10-16",
+        "checkedAt": "2026-10-29",
+        "official": true
+      }
+    }
+  ]
 }
