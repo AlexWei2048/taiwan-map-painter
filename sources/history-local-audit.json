@@ -3363,7 +3363,7 @@
           "town": "鼓山区",
           "source": "https://web.cec.gov.tw/api/file/265720de-f897-4000-96e1-87ad5d7e8797.pdf",
           "precincts": 63,
-          "registered_voters": 90504,
+          "registered_voters": 90544,
           "ballots_cast": 63238,
           "valid_votes": 62691,
           "invalid_votes": 547
@@ -3377,6 +3377,26 @@
           "ballots_cast": 16535,
           "valid_votes": 16316,
           "invalid_votes": 219
+        },
+        {
+          "county": "高雄市",
+          "town": "新兴区",
+          "source": "https://web.cec.gov.tw/api/file/265720de-f897-4000-96e1-87ad5d7e8797.pdf",
+          "precincts": 42,
+          "registered_voters": 46134,
+          "ballots_cast": 30895,
+          "valid_votes": 30671,
+          "invalid_votes": 224
+        },
+        {
+          "county": "高雄市",
+          "town": "前金区",
+          "source": "https://web.cec.gov.tw/api/file/265720de-f897-4000-96e1-87ad5d7e8797.pdf",
+          "precincts": 22,
+          "registered_voters": 24818,
+          "ballots_cast": 16473,
+          "valid_votes": 16344,
+          "invalid_votes": 129
         }
       ]
     },
