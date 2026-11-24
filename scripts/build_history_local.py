@@ -639,24 +639,26 @@ def main():
     nccu = nccu_index(args.nccu_pages)
     contests.extend(nccu_1993_contests(nccu, args.nccu_pages / 'island-nccu-1993-profile.html'))
     snapshots, audit = build(contests, tv_index(args.taiwan_votes_csv), nccu)
-    # Source-backed 2006 precinct supplement; never replace conflicting votes.
-    proof_path = ROOT / 'sources/history-2006-kaohsiung-yancheng-profile.json'
-    if 2006 in snapshots and proof_path.is_file():
+    # Source-backed precinct supplements; never replace conflicting votes.
+    for district, slug, expected in [('盐埕区', 'yancheng', 23), ('鼓山区', 'gushan', 63), ('旗津区', 'qijin', 18)]:
+        proof_path = ROOT / f'sources/history-2006-kaohsiung-{slug}-profile.json'
+        if 2006 not in snapshots or not proof_path.is_file():
+            continue
         proof = json.loads(proof_path.read_text(encoding='utf-8'))
         snapshot = snapshots[2006]
         rows = proof['rows']
         sums = [sum(row[i] for row in rows) for i in range(9)]
-        targets = [p for p in snapshot['townProfiles'] if p['office'] == 'mayor' and p['county'] == '高雄市' and p['town'] == '盐埕区']
-        candidate_rows = [r for r in snapshot['rows'] if r['type'] == 'mayor' and r['county'] == '高雄市' and r['town'] == '盐埕区' and r['level'] == 'town']
-        if (len(rows) != 23 or any(len(row) != 9 or not all(isinstance(n, int) and n >= 0 for n in row) or sum(row[:5]) != row[5] or row[5]+row[6] != row[7] or row[7] > row[8] for row in rows)
+        targets = [p for p in snapshot['townProfiles'] if p['office'] == 'mayor' and p['county'] == '高雄市' and p['town'] == district]
+        candidate_rows = [r for r in snapshot['rows'] if r['type'] == 'mayor' and r['county'] == '高雄市' and r['town'] == district and r['level'] == 'town']
+        if (len(rows) != expected or any(len(row) != 9 or not all(isinstance(n, int) and n >= 0 for n in row) or sum(row[:5]) != row[5] or row[5]+row[6] != row[7] or row[7] > row[8] for row in rows)
                 or sums != proof['totals'] or len(targets) != 1 or targets[0]['valid_votes'] != sums[5]
                 or len(candidate_rows) != 5 or any(sum(r['votes'] for r in candidate_rows if r['name'] == name) != sums[i] for i,name in enumerate(proof['columns'][:5]))):
-            raise ValueError('2006 Yancheng official precinct supplement does not reconcile')
+            raise ValueError(f'2006 {district} official precinct supplement does not reconcile')
         values = dict(registered_voters=sums[8], ballots_cast=sums[7], invalid_votes=sums[6])
         if any(targets[0].get(k) is not None and targets[0][k] != v for k,v in values.items()):
-            raise ValueError('2006 Yancheng conflicting existing turnout')
-        targets[0].update(values, profile_source=proof['source'], profile_method='sum_23_official_precinct_returns')
-        audit[2006]['precinctProfileSupplement'] = {'county': '高雄市', 'town': '盐埕区', 'source': proof['source'], 'precincts': 23, 'valid_votes': sums[5], **values}
+            raise ValueError(f'2006 {district} conflicting existing turnout')
+        targets[0].update(values, profile_source=proof['source'], profile_method=f'sum_{expected}_official_precinct_returns')
+        audit[2006].setdefault('precinctProfileSupplements', []).append({'county': '高雄市', 'town': district, 'source': proof['source'], 'precincts': expected, 'valid_votes': sums[5], **values})
     with args.cec_zip.open('rb') as source:
         source_hash = hashlib.file_digest(source, 'sha256').hexdigest()
     for year, snapshot in sorted(snapshots.items()):
