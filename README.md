@@ -326,3 +326,5 @@ The official result importer supports an optional --town-turnout CSV for county-
 议员历史趋势1994、1998、2002直接显示实际年份；实际投票日期从对应选举类别原始记录读取（不混用县市长日期），显示于半圆图、表格、CSV及柱图提示。合并前县市以同届双半圆图共同导出，独立计算席次与过半门槛；柱图同批次紧邻排列。
 
 2022年嘉义市市长重行选举日期为12月18日，议员选举为11月26日；在历史快照载入及构建脚本按选举类别分别处理，不改动票数或席次。
+
+1994年议员政党缺项逐人核查，补录有当届证据的记录，并在 `sources/history-1994-party-audit.json` 保留证据及未核实清单；不把未知政党自动归为无党籍。`tests/history-party-coverage.test.cjs` 扫描历届快照及核验补录前后票数、当选人数。
