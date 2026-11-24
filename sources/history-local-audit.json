@@ -3417,8 +3417,53 @@
           "registered_voters": 152464,
           "ballots_cast": 103540,
           "invalid_votes": 898
+        },
+        {
+          "county": "高雄市",
+          "town": "左营区",
+          "source": "https://web.cec.gov.tw/api/file/265720de-f897-4000-96e1-87ad5d7e8797.pdf",
+          "precincts": 94,
+          "valid_votes": 89975,
+          "registered_voters": 133230,
+          "ballots_cast": 90696,
+          "invalid_votes": 721
+        },
+        {
+          "county": "高雄市",
+          "town": "楠梓区",
+          "source": "https://web.cec.gov.tw/api/file/265720de-f897-4000-96e1-87ad5d7e8797.pdf",
+          "precincts": 82,
+          "valid_votes": 80878,
+          "registered_voters": 119435,
+          "ballots_cast": 81594,
+          "invalid_votes": 716
+        },
+        {
+          "county": "高雄市",
+          "town": "三民区",
+          "source": "https://web.cec.gov.tw/api/file/265720de-f897-4000-96e1-87ad5d7e8797.pdf",
+          "precincts": 188,
+          "valid_votes": 178051,
+          "registered_voters": 268285,
+          "ballots_cast": 179472,
+          "invalid_votes": 1421
         }
-      ]
+      ],
+      "kaohsiungDistrictProfileReconciliation": {
+        "complete_districts": 11,
+        "totals": {
+          "registered_voters": 1140110,
+          "ballots_cast": 774490,
+          "valid_votes": 767868,
+          "invalid_votes": 6622
+        },
+        "difference": {
+          "registered_voters": 0,
+          "ballots_cast": 0,
+          "valid_votes": 0,
+          "invalid_votes": 0
+        }
+      }
     },
     "2009": {
       "counts": {
