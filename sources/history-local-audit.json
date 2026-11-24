@@ -5,6 +5,34 @@
   "nccu1993Summary": "https://vote.nccu.edu.tw/cec/F1993005.PDF",
   "taiwanVotes": "https://www.taiwanvotes.tw/download/",
   "years": {
+    "1993": {
+      "counts": {
+        "tv_unmatched": 77,
+        "nccu_matched": 77,
+        "candidates": 77
+      },
+      "differences": [],
+      "sourceFolders": [
+        "NCCU candidate records and election overview (attributed to CEC)"
+      ],
+      "nccuTownProfiles": {
+        "verifiedTownVoteRows": 1252,
+        "verifiedTownsWithTurnout": 346,
+        "residualProfiles": [
+          {
+            "county": "金门县",
+            "town": "乌丘乡",
+            "registered_voters": 70,
+            "ballots_cast": 26,
+            "valid_votes": 26,
+            "invalid_votes": 0,
+            "method": "county total minus all other five town profiles; valid votes independently matched to candidate returns",
+            "source": "https://vote.nccu.edu.tw/cec/F1993005.PDF"
+          }
+        ]
+      },
+      "countiesWithoutReconciledTownVotes": []
+    },
     "1994": {
       "counts": {
         "tv_matched": 283,
@@ -4643,22 +4671,6 @@
         "2022-111年地方公職人員選舉/T3/prv",
         "https://web.cec.gov.tw/cyec/article/37711"
       ]
-    },
-    "1993": {
-      "counts": {
-        "tv_unmatched": 77,
-        "nccu_matched": 77,
-        "candidates": 77
-      },
-      "differences": [],
-      "sourceFolders": [
-        "NCCU candidate records and election overview (attributed to CEC)"
-      ],
-      "nccuTownProfiles": {
-        "verifiedTownVoteRows": 1252,
-        "verifiedTownsWithTurnout": 345
-      },
-      "countiesWithoutReconciledTownVotes": []
     }
   }
 }
