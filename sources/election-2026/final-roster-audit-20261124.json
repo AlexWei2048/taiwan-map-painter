@@ -3,7 +3,7 @@
   "checkedAt": "2026-11-24",
   "baseCandidateBlob": "cde314259e932bc4a9a45e319fcdc3336d051a87",
   "status": "partial",
-  "scope": "正式名单及号次；台北市长公报同时核实性别及推荐政党；其他公告仅姓名及号次。未核验现任状态。",
+  "scope": "正式名单及号次；台北、新北、台南、高雄、基隆、新竹市市长公报及新竹市第6、7议员选区公报同时核对性别及推荐政党；其他公告仅姓名及号次。未核验现任状态。",
   "sources": {
     "P": {
       "url": "https://web.cec.gov.tw/api/file/0a48ccd3-268d-4cb9-924c-dc777af8705a.pdf",
@@ -24,14 +24,39 @@
       "url": "https://web.cec.gov.tw/api/file/2502d1d2-d378-4bae-bbf9-495a06538c47.pdf",
       "date": "2026-11-17",
       "title": "竹縣選一字第11531501781號；以原公告截图复核，避免PDF抽取错字"
+    },
+    "N": {
+      "url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/03%E7%9B%B4%E8%BD%84%E5%B8%82%E9%95%B7/115%E5%B9%B4/%E6%96%B0%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7.pdf",
+      "date": null,
+      "title": "新北市市长选举公报"
+    },
+    "TN": {
+      "url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/03%E7%9B%B4%E8%BD%84%E5%B8%82%E9%95%B7/115%E5%B9%B4/%E8%87%BA%E5%8D%97%E5%B8%82%E5%B8%82%E9%95%B7.pdf",
+      "date": null,
+      "title": "台南市市长选举公报"
+    },
+    "K": {
+      "url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/03%E7%9B%B4%E8%BD%84%E5%B8%82%E9%95%B7/115%E5%B9%B4/%E9%AB%98%E9%9B%84%E5%B8%82%E5%B8%82%E9%95%B7.pdf",
+      "date": null,
+      "title": "高雄市市长选举公报"
+    },
+    "KL": {
+      "url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/04%E7%B8%A3%E5%B8%82%E9%95%B7/115%E5%B9%B4/%E5%9F%BA%E9%9A%86%E5%B8%82%E5%B8%82%E9%95%B7.pdf",
+      "date": null,
+      "title": "基隆市市长选举公报"
+    },
+    "HC": {
+      "url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/04%E7%B8%A3%E5%B8%82%E9%95%B7/115%E5%B9%B4/%E6%96%B0%E7%AB%B9%E5%B8%82%E5%B8%82%E9%95%B7.pdf",
+      "date": null,
+      "title": "新竹市市长选举公报"
     }
   },
   "counts": {
-    "mayor": 13,
-    "council": 155,
+    "mayor": 31,
+    "council": 162,
     "township": 114
   },
-  "newOfficial": 276,
+  "newOfficial": 301,
   "rows": [
     {
       "candidateId": "council:10013:01:009",
@@ -3418,6 +3443,306 @@
       "previousVerification": "referenceSite",
       "source": "H",
       "page": 1
+    },
+    {
+      "candidateId": "mayor:65000:002",
+      "districtId": "mayor:65000",
+      "type": "mayor",
+      "nameOriginal": "蘇巧慧",
+      "officialName": "蘇巧慧",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "referenceSite",
+      "source": "N",
+      "page": 1
+    },
+    {
+      "candidateId": "mayor:65000:003",
+      "districtId": "mayor:65000",
+      "type": "mayor",
+      "nameOriginal": "蘇輝湟",
+      "officialName": "蘇輝湟",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "referenceSite",
+      "source": "N",
+      "page": 1
+    },
+    {
+      "candidateId": "mayor:65000:001",
+      "districtId": "mayor:65000",
+      "type": "mayor",
+      "nameOriginal": "李四川",
+      "officialName": "李四川",
+      "number": 3,
+      "previousNumber": 3,
+      "previousVerification": "referenceSite",
+      "source": "N",
+      "page": 1
+    },
+    {
+      "candidateId": "mayor:67000:003",
+      "districtId": "mayor:67000",
+      "type": "mayor",
+      "nameOriginal": "蕭燐洪",
+      "officialName": "蕭燐洪",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "referenceSite",
+      "source": "TN",
+      "page": 1
+    },
+    {
+      "candidateId": "mayor:67000:001",
+      "districtId": "mayor:67000",
+      "type": "mayor",
+      "nameOriginal": "謝龍介",
+      "officialName": "謝龍介",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "referenceSite",
+      "source": "TN",
+      "page": 1
+    },
+    {
+      "candidateId": "mayor:67000:002",
+      "districtId": "mayor:67000",
+      "type": "mayor",
+      "nameOriginal": "陳亭妃",
+      "officialName": "陳亭妃",
+      "number": 3,
+      "previousNumber": 3,
+      "previousVerification": "referenceSite",
+      "source": "TN",
+      "page": 1
+    },
+    {
+      "candidateId": "mayor:67000:004",
+      "districtId": "mayor:67000",
+      "type": "mayor",
+      "nameOriginal": "葉人文",
+      "officialName": "葉人文",
+      "number": 4,
+      "previousNumber": 4,
+      "previousVerification": "referenceSite",
+      "source": "TN",
+      "page": 1
+    },
+    {
+      "candidateId": "mayor:64000:003",
+      "districtId": "mayor:64000",
+      "type": "mayor",
+      "nameOriginal": "張靜",
+      "officialName": "張靜",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "referenceSite",
+      "source": "K",
+      "page": 1
+    },
+    {
+      "candidateId": "mayor:64000:004",
+      "districtId": "mayor:64000",
+      "type": "mayor",
+      "nameOriginal": "王肇民",
+      "officialName": "王肇民",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "referenceSite",
+      "source": "K",
+      "page": 1
+    },
+    {
+      "candidateId": "mayor:64000:001",
+      "districtId": "mayor:64000",
+      "type": "mayor",
+      "nameOriginal": "柯志恩",
+      "officialName": "柯志恩",
+      "number": 3,
+      "previousNumber": 3,
+      "previousVerification": "referenceSite",
+      "source": "K",
+      "page": 1
+    },
+    {
+      "candidateId": "mayor:64000:005",
+      "districtId": "mayor:64000",
+      "type": "mayor",
+      "nameOriginal": "洪方隆",
+      "officialName": "洪方隆",
+      "number": 4,
+      "previousNumber": 4,
+      "previousVerification": "referenceSite",
+      "source": "K",
+      "page": 1
+    },
+    {
+      "candidateId": "mayor:64000:002",
+      "districtId": "mayor:64000",
+      "type": "mayor",
+      "nameOriginal": "賴瑞隆",
+      "officialName": "賴瑞隆",
+      "number": 5,
+      "previousNumber": 5,
+      "previousVerification": "referenceSite",
+      "source": "K",
+      "page": 1
+    },
+    {
+      "candidateId": "mayor:10017:002",
+      "districtId": "mayor:10017",
+      "type": "mayor",
+      "nameOriginal": "童子瑋",
+      "officialName": "童子瑋",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "referenceSite",
+      "source": "KL",
+      "page": 1
+    },
+    {
+      "candidateId": "mayor:10017:003",
+      "districtId": "mayor:10017",
+      "type": "mayor",
+      "nameOriginal": "魏造文",
+      "officialName": "魏造文",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "referenceSite",
+      "source": "KL",
+      "page": 1
+    },
+    {
+      "candidateId": "mayor:10017:001",
+      "districtId": "mayor:10017",
+      "type": "mayor",
+      "nameOriginal": "謝國樑",
+      "officialName": "謝國樑",
+      "number": 3,
+      "previousNumber": 3,
+      "previousVerification": "referenceSite",
+      "source": "KL",
+      "page": 1
+    },
+    {
+      "candidateId": "mayor:10018:002",
+      "districtId": "mayor:10018",
+      "type": "mayor",
+      "nameOriginal": "高虹安",
+      "officialName": "高虹安",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "referenceSite",
+      "source": "HC",
+      "page": 1
+    },
+    {
+      "candidateId": "mayor:10018:003",
+      "districtId": "mayor:10018",
+      "type": "mayor",
+      "nameOriginal": "何志勇",
+      "officialName": "何志勇",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "referenceSite",
+      "source": "HC",
+      "page": 1
+    },
+    {
+      "candidateId": "mayor:10018:001",
+      "districtId": "mayor:10018",
+      "type": "mayor",
+      "nameOriginal": "莊競程",
+      "officialName": "莊競程",
+      "number": 3,
+      "previousNumber": 3,
+      "previousVerification": "referenceSite",
+      "source": "HC",
+      "page": 1
+    },
+    {
+      "candidateId": "council:10018:06:001",
+      "districtId": "council:10018:06",
+      "type": "council",
+      "nameOriginal": "林慈愛",
+      "officialName": "林慈愛",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "referenceSite",
+      "source": "HC",
+      "page": 1
+    },
+    {
+      "candidateId": "council:10018:06:002",
+      "districtId": "council:10018:06",
+      "type": "council",
+      "nameOriginal": "李雅雯",
+      "officialName": "李雅雯",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "referenceSite",
+      "source": "HC",
+      "page": 1
+    },
+    {
+      "candidateId": "council:10018:07:001",
+      "districtId": "council:10018:07",
+      "type": "council",
+      "nameOriginal": "林夏陞",
+      "officialName": "林夏陞",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "referenceSite",
+      "source": "HC",
+      "page": 2
+    },
+    {
+      "candidateId": "council:10018:07:005",
+      "districtId": "council:10018:07",
+      "type": "council",
+      "nameOriginal": "雲翔",
+      "officialName": "雲翔",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "referenceSite",
+      "source": "HC",
+      "page": 2
+    },
+    {
+      "candidateId": "council:10018:07:002",
+      "districtId": "council:10018:07",
+      "type": "council",
+      "nameOriginal": "卡伊．馬賴",
+      "officialName": "卡伊．馬賴",
+      "number": 3,
+      "previousNumber": 3,
+      "previousVerification": "referenceSite",
+      "source": "HC",
+      "page": 2
+    },
+    {
+      "candidateId": "council:10018:07:003",
+      "districtId": "council:10018:07",
+      "type": "council",
+      "nameOriginal": "趙若芸",
+      "officialName": "趙若芸",
+      "number": 4,
+      "previousNumber": 4,
+      "previousVerification": "referenceSite",
+      "source": "HC",
+      "page": 2
+    },
+    {
+      "candidateId": "council:10018:07:004",
+      "districtId": "council:10018:07",
+      "type": "council",
+      "nameOriginal": "楊家玲",
+      "officialName": "楊家玲",
+      "number": 5,
+      "previousNumber": 5,
+      "previousVerification": "referenceSite",
+      "source": "HC",
+      "page": 2
     }
   ],
   "unresolved": [],
