@@ -2,7 +2,7 @@
   "checkedAt": "2026-11-24",
   "source": "https://www.chcg.gov.tw/TSO/getFile.aspx?did=441720&dir=xizhou&file=2&file_id=588025&type=1",
   "title": "彰選一字第1153150233號",
-  "scope": "官方正式公告文字提取，26个乡镇市；PDF原图接口未能取得；仅姓名和号次。未核对政党、性别或现任。未写入运行时核验状态，待与候选人完整快照原子合并。",
+  "scope": "官方正式公告文字提取，26个乡镇市；PDF原图接口未能取得；仅姓名和号次。未核对政党、性别或现任。未写入运行时核验状态，待与候选人完整快照原子合并。 已与候选人完整快照合并48条精确匹配；8处差异仍待原图。",
   "rows": [
     {
       "candidateId": "township:10007:10007010:001",
@@ -508,5 +508,11 @@
       "exact": true,
       "previousVerification": "official"
     }
-  ]
+  ],
+  "integration": {
+    "verifiedFinal": 48,
+    "officialNumberAdded": 8,
+    "unresolved": 8,
+    "checkedAt": "2026-11-24"
+  }
 }
