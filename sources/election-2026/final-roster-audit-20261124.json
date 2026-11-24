@@ -3,7 +3,7 @@
   "checkedAt": "2026-11-24",
   "baseCandidateBlob": "cde314259e932bc4a9a45e319fcdc3336d051a87",
   "status": "partial",
-  "scope": "正式名单及号次；台北、新北、台南、高雄、基隆、新竹市市长公报及新竹市第6、7议员选区公报同时核对性别及推荐政党；其他公告仅姓名及号次。未核验现任状态。；本次电子公报补核县市长28人（其中嘉义县2人使用正式名单公告）及金门、马祖部分议员8人，公报可见的性别和推荐政党亦对照，未更改现任字段。；澎湖县正式公告整县对照，存在2处文字抽取字形差异待复核。；新增旧版公报及选委会公报文字核对14名县市长，另1人仅核对官方抽签结果，未升级为最终名单。；追加澎湖第2、5选区存疑姓名原图复核及马祖第4议员选区、东引乡长正式公报文字核对。；宜兰县、台东县11月17日正式名单公告原图复核。；花莲县11月17日正式名单原图对账，恢复周骏宥；宜兰胡文聪正式双语名补录。；三湾乡公报剔除未列名登记者，彰化县议员公告及花莲第6选区公报复核，宜兰头城镇蔡文益推荐政党修正。；苗栗县第7、8选区及云林第7选区双语姓名差异已通过公报、抽签记录解决。；桃园市14个议员选区108人正式公告原图逐人核对姓名与号次，未核验性别、推荐政党或现任。；台北、台中、台南三市共285人按正式公告逐区核对姓名、号次，未核验性别、政党或现任；台中原图接口失败，依据可提取的完整正式附件文字。；基隆、金门议员正式名单原图对账，及新竹市部分议员原图/文字对账；未改变其他字段。；追加云林、南投议员及云林乡镇市长正式名单原图，以及新北、高雄议员抽签原图核对；抽签不等于正式名单，字形不一致暂留待核。；本批集中核对新北、高雄可读取的议员公报及马祖正式名单、嘉义县议员及金门乡镇长抽签表，未核验现任。；新增高雄四个议员选区38人官方有声公报名录，以及苗栗14人电子公报原图姓名和号次复核。未改变候选人字段实值或现任状态。",
+  "scope": "正式名单及号次；台北、新北、台南、高雄、基隆、新竹市市长公报及新竹市第6、7议员选区公报同时核对性别及推荐政党；其他公告仅姓名及号次。未核验现任状态。；本次电子公报补核县市长28人（其中嘉义县2人使用正式名单公告）及金门、马祖部分议员8人，公报可见的性别和推荐政党亦对照，未更改现任字段。；澎湖县正式公告整县对照，存在2处文字抽取字形差异待复核。；新增旧版公报及选委会公报文字核对14名县市长，另1人仅核对官方抽签结果，未升级为最终名单。；追加澎湖第2、5选区存疑姓名原图复核及马祖第4议员选区、东引乡长正式公报文字核对。；宜兰县、台东县11月17日正式名单公告原图复核。；花莲县11月17日正式名单原图对账，恢复周骏宥；宜兰胡文聪正式双语名补录。；三湾乡公报剔除未列名登记者，彰化县议员公告及花莲第6选区公报复核，宜兰头城镇蔡文益推荐政党修正。；苗栗县第7、8选区及云林第7选区双语姓名差异已通过公报、抽签记录解决。；桃园市14个议员选区108人正式公告原图逐人核对姓名与号次，未核验性别、推荐政党或现任。；台北、台中、台南三市共285人按正式公告逐区核对姓名、号次，未核验性别、政党或现任；台中原图接口失败，依据可提取的完整正式附件文字。；基隆、金门议员正式名单原图对账，及新竹市部分议员原图/文字对账；未改变其他字段。；追加云林、南投议员及云林乡镇市长正式名单原图，以及新北、高雄议员抽签原图核对；抽签不等于正式名单，字形不一致暂留待核。；本批集中核对新北、高雄可读取的议员公报及马祖正式名单、嘉义县议员及金门乡镇长抽签表，未核验现任。；新增高雄四个议员选区38人官方有声公报名录，以及苗栗14人电子公报原图姓名和号次复核。未改变候选人字段实值或现任状态。；追加南投县8个乡镇市22人公报原图或文字核对（姓名及号次），现任不在本批范围。",
   "sources": {
     "P": {
       "url": "https://web.cec.gov.tw/api/file/0a48ccd3-268d-4cb9-924c-dc777af8705a.pdf",
@@ -451,14 +451,62 @@
       "date": null,
       "title": "苗栗县议员电子公报第2、3、6选区（亦含第7、8选区）",
       "method": "官方电子公报原图"
+    },
+    "NTT01": {
+      "url": "https://eebulletin.cec.gov.tw/115/10%E5%8D%97%E6%8A%95%E7%B8%A3/03%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7/%E5%8D%97%E6%8A%95%E7%B8%A3%E5%8D%97%E6%8A%95%E5%B8%82%E5%B8%82%E9%95%B7.pdf",
+      "date": null,
+      "title": "南投縣南投市市長選舉公報",
+      "method": "官方电子公报原图"
+    },
+    "NTT03": {
+      "url": "https://eebulletin.cec.gov.tw/115/10%E5%8D%97%E6%8A%95%E7%B8%A3/03%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7/%E5%8D%97%E6%8A%95%E7%B8%A3%E8%8D%89%E5%B1%AF%E9%8E%AE%E9%8E%AE%E9%95%B7.pdf",
+      "date": null,
+      "title": "南投縣草屯鎮鎮長選舉公報",
+      "method": "官方电子公报原图"
+    },
+    "NTT04": {
+      "url": "https://eebulletin.cec.gov.tw/115/10%E5%8D%97%E6%8A%95%E7%B8%A3/03%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7/%E5%8D%97%E6%8A%95%E7%B8%A3%E7%AB%B9%E5%B1%B1%E9%8E%AE%E9%8E%AE%E9%95%B7.pdf",
+      "date": null,
+      "title": "南投縣竹山鎮鎮長選舉公報",
+      "method": "官方电子公报文字"
+    },
+    "NTT06": {
+      "url": "https://eebulletin.cec.gov.tw/115/10%E5%8D%97%E6%8A%95%E7%B8%A3/03%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7/%E5%8D%97%E6%8A%95%E7%B8%A3%E5%90%8D%E9%96%93%E9%84%89%E9%84%89%E9%95%B7.pdf",
+      "date": null,
+      "title": "南投縣名間鄉鄉長選舉公報",
+      "method": "官方电子公报文字"
+    },
+    "NTT07": {
+      "url": "https://eebulletin.cec.gov.tw/115/10%E5%8D%97%E6%8A%95%E7%B8%A3/03%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7/%E5%8D%97%E6%8A%95%E7%B8%A3%E9%B9%BF%E8%B0%B7%E9%84%89%E9%84%89%E9%95%B7.pdf",
+      "date": null,
+      "title": "南投縣鹿谷鄉鄉長選舉公報",
+      "method": "官方电子公报文字"
+    },
+    "NTT08": {
+      "url": "https://eebulletin.cec.gov.tw/115/10%E5%8D%97%E6%8A%95%E7%B8%A3/03%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7/%E5%8D%97%E6%8A%95%E7%B8%A3%E4%B8%AD%E5%AF%AE%E9%84%89%E9%84%89%E9%95%B7.pdf",
+      "date": null,
+      "title": "南投縣中寮鄉鄉長選舉公報",
+      "method": "官方电子公报文字"
+    },
+    "NTT11": {
+      "url": "https://eebulletin.cec.gov.tw/115/10%E5%8D%97%E6%8A%95%E7%B8%A3/03%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7/%E5%8D%97%E6%8A%95%E7%B8%A3%E6%B0%B4%E9%87%8C%E9%84%89%E9%84%89%E9%95%B7.pdf",
+      "date": null,
+      "title": "南投縣水里鄉鄉長選舉公報",
+      "method": "官方电子公报原图"
+    },
+    "NTT12": {
+      "url": "https://eebulletin.cec.gov.tw/115/10%E5%8D%97%E6%8A%95%E7%B8%A3/03%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7/%E5%8D%97%E6%8A%95%E7%B8%A3%E4%BF%A1%E7%BE%A9%E9%84%89%E9%84%89%E9%95%B7.pdf",
+      "date": null,
+      "title": "南投縣信義鄉鄉長選舉公報",
+      "method": "官方电子公报原图"
     }
   },
   "counts": {
     "mayor": 81,
     "council": 1362,
-    "township": 285
+    "township": 307
   },
-  "newOfficial": 1858,
+  "newOfficial": 1877,
   "rows": [
     {
       "candidateId": "council:10013:01:009",
@@ -27151,6 +27199,270 @@
       "previousVerification": "referenceSite",
       "source": "ML236",
       "page": 6
+    },
+    {
+      "candidateId": "township:10008:10008010:001",
+      "districtId": "township:10008:10008010",
+      "type": "township",
+      "nameOriginal": "張嘉哲",
+      "officialName": "張嘉哲",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "referenceSite",
+      "source": "NTT01",
+      "page": 1
+    },
+    {
+      "candidateId": "township:10008:10008010:003",
+      "districtId": "township:10008:10008010",
+      "type": "township",
+      "nameOriginal": "林富紳",
+      "officialName": "林富紳",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "dated-news",
+      "source": "NTT01",
+      "page": 1
+    },
+    {
+      "candidateId": "township:10008:10008010:002",
+      "districtId": "township:10008:10008010",
+      "type": "township",
+      "nameOriginal": "沈夙崢",
+      "officialName": "沈夙崢",
+      "number": 3,
+      "previousNumber": 3,
+      "previousVerification": "dated-news",
+      "source": "NTT01",
+      "page": 1
+    },
+    {
+      "candidateId": "township:10008:10008030:001",
+      "districtId": "township:10008:10008030",
+      "type": "township",
+      "nameOriginal": "簡賜勝",
+      "officialName": "簡賜勝",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "dated-news",
+      "source": "NTT03",
+      "page": 1
+    },
+    {
+      "candidateId": "township:10008:10008030:002",
+      "districtId": "township:10008:10008030",
+      "type": "township",
+      "nameOriginal": "張媛婷",
+      "officialName": "張媛婷",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "user-specified-wikipedia",
+      "source": "NTT03",
+      "page": 1
+    },
+    {
+      "candidateId": "township:10008:10008040:003",
+      "districtId": "township:10008:10008040",
+      "type": "township",
+      "nameOriginal": "余志嘉",
+      "officialName": "余志嘉",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "official",
+      "source": "NTT04",
+      "page": 1
+    },
+    {
+      "candidateId": "township:10008:10008040:001",
+      "districtId": "township:10008:10008040",
+      "type": "township",
+      "nameOriginal": "蔡孟娥",
+      "officialName": "蔡孟娥",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "official",
+      "source": "NTT04",
+      "page": 1
+    },
+    {
+      "candidateId": "township:10008:10008040:002",
+      "districtId": "township:10008:10008040",
+      "type": "township",
+      "nameOriginal": "林賜學",
+      "officialName": "林賜學",
+      "number": 3,
+      "previousNumber": 3,
+      "previousVerification": "official",
+      "source": "NTT04",
+      "page": 1
+    },
+    {
+      "candidateId": "township:10008:10008060:001",
+      "districtId": "township:10008:10008060",
+      "type": "township",
+      "nameOriginal": "陳翰立",
+      "officialName": "陳翰立",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "user-specified-wikipedia",
+      "source": "NTT06",
+      "page": 1
+    },
+    {
+      "candidateId": "township:10008:10008060:002",
+      "districtId": "township:10008:10008060",
+      "type": "township",
+      "nameOriginal": "蔡宗智",
+      "officialName": "蔡宗智",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "dated-news",
+      "source": "NTT06",
+      "page": 1
+    },
+    {
+      "candidateId": "township:10008:10008070:001",
+      "districtId": "township:10008:10008070",
+      "type": "township",
+      "nameOriginal": "邱紹偉",
+      "officialName": "邱紹偉",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "dated-news",
+      "source": "NTT07",
+      "page": 1
+    },
+    {
+      "candidateId": "township:10008:10008070:002",
+      "districtId": "township:10008:10008070",
+      "type": "township",
+      "nameOriginal": "康誌合",
+      "officialName": "康誌合",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "user-specified-wikipedia",
+      "source": "NTT07",
+      "page": 1
+    },
+    {
+      "candidateId": "township:10008:10008070:003",
+      "districtId": "township:10008:10008070",
+      "type": "township",
+      "nameOriginal": "林智鴻",
+      "officialName": "林智鴻",
+      "number": 3,
+      "previousNumber": 3,
+      "previousVerification": "user-specified-wikipedia",
+      "source": "NTT07",
+      "page": 1
+    },
+    {
+      "candidateId": "township:10008:10008080:001",
+      "districtId": "township:10008:10008080",
+      "type": "township",
+      "nameOriginal": "周俊霖",
+      "officialName": "周俊霖",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "dated-news",
+      "source": "NTT08",
+      "page": 1
+    },
+    {
+      "candidateId": "township:10008:10008080:002",
+      "districtId": "township:10008:10008080",
+      "type": "township",
+      "nameOriginal": "張永輝",
+      "officialName": "張永輝",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "user-specified-wikipedia",
+      "source": "NTT08",
+      "page": 1
+    },
+    {
+      "candidateId": "township:10008:10008110:003",
+      "districtId": "township:10008:10008110",
+      "type": "township",
+      "nameOriginal": "詹淵州",
+      "officialName": "詹淵州",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "dated-news",
+      "source": "NTT11",
+      "page": 1
+    },
+    {
+      "candidateId": "township:10008:10008110:001",
+      "districtId": "township:10008:10008110",
+      "type": "township",
+      "nameOriginal": "葉銘豐",
+      "officialName": "葉銘豐",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "user-specified-wikipedia",
+      "source": "NTT11",
+      "page": 1
+    },
+    {
+      "candidateId": "township:10008:10008110:002",
+      "districtId": "township:10008:10008110",
+      "type": "township",
+      "nameOriginal": "王銀斗",
+      "officialName": "王銀斗",
+      "number": 3,
+      "previousNumber": 3,
+      "previousVerification": "user-specified-wikipedia",
+      "source": "NTT11",
+      "page": 1
+    },
+    {
+      "candidateId": "township:10008:10008110:004",
+      "districtId": "township:10008:10008110",
+      "type": "township",
+      "nameOriginal": "陳癸佑",
+      "officialName": "陳癸佑",
+      "number": 4,
+      "previousNumber": 4,
+      "previousVerification": "user-specified-wikipedia",
+      "source": "NTT11",
+      "page": 1
+    },
+    {
+      "candidateId": "township:10008:10008120:001",
+      "districtId": "township:10008:10008120",
+      "type": "township",
+      "nameOriginal": "全志明",
+      "officialName": "全志明",
+      "number": 1,
+      "previousNumber": 1,
+      "previousVerification": "referenceSite",
+      "source": "NTT12",
+      "page": 1
+    },
+    {
+      "candidateId": "township:10008:10008120:003",
+      "districtId": "township:10008:10008120",
+      "type": "township",
+      "nameOriginal": "全秋雄",
+      "officialName": "全秋雄",
+      "number": 2,
+      "previousNumber": 2,
+      "previousVerification": "referenceSite",
+      "source": "NTT12",
+      "page": 1
+    },
+    {
+      "candidateId": "township:10008:10008120:002",
+      "districtId": "township:10008:10008120",
+      "type": "township",
+      "nameOriginal": "松學海\nManan‧Daisnunan",
+      "officialName": "松學海 Manan‧Daisnunan",
+      "number": 3,
+      "previousNumber": 3,
+      "previousVerification": "referenceSite",
+      "source": "NTT12",
+      "page": 1
     }
   ],
   "unresolved": [

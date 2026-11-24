@@ -1,8 +1,8 @@
 {
   "checkedAt": "2026-11-24",
   "scope": "待官方正式名单逐人原件复核；并非候选人资料为空。目录入口仅供后续定位，不能作为已核验证据。",
-  "finalPending": 323,
-  "officialNumberPending": 193,
+  "finalPending": 301,
+  "officialNumberPending": 174,
   "groups": [
     {
       "county": "新竹市",
@@ -2006,30 +2006,6 @@
       "officialDirectory": "https://eebulletin.cec.gov.tw/?dir=115%2F10%E5%8D%97%E6%8A%95%E7%B8%A3%2F03%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7",
       "candidates": [
         {
-          "id": "township:10008:10008010:001",
-          "districtId": "township:10008:10008010",
-          "name": "張嘉哲",
-          "number": 1,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%8D%97%E6%8A%95%E7%B8%A3/"
-        },
-        {
-          "id": "township:10008:10008010:002",
-          "districtId": "township:10008:10008010",
-          "name": "沈夙崢",
-          "number": 3,
-          "numberVerification": "dated-news",
-          "existingNumberSource": "https://news.st-media.com.tw/news/63824"
-        },
-        {
-          "id": "township:10008:10008010:003",
-          "districtId": "township:10008:10008010",
-          "name": "林富紳",
-          "number": 2,
-          "numberVerification": "dated-news",
-          "existingNumberSource": "https://news.st-media.com.tw/news/63824"
-        },
-        {
           "id": "township:10008:10008020:001",
           "districtId": "township:10008:10008020",
           "name": "黃世芳",
@@ -2046,46 +2022,6 @@
           "existingNumberSource": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表"
         },
         {
-          "id": "township:10008:10008030:001",
-          "districtId": "township:10008:10008030",
-          "name": "簡賜勝",
-          "number": 1,
-          "numberVerification": "dated-news",
-          "existingNumberSource": "https://more-news.tw/753032/"
-        },
-        {
-          "id": "township:10008:10008030:002",
-          "districtId": "township:10008:10008030",
-          "name": "張媛婷",
-          "number": 2,
-          "numberVerification": "user-specified-wikipedia",
-          "existingNumberSource": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表"
-        },
-        {
-          "id": "township:10008:10008040:001",
-          "districtId": "township:10008:10008040",
-          "name": "蔡孟娥",
-          "number": 2,
-          "numberVerification": "official",
-          "existingNumberSource": "https://news.ntcc.gov.tw/tw/news"
-        },
-        {
-          "id": "township:10008:10008040:002",
-          "districtId": "township:10008:10008040",
-          "name": "林賜學",
-          "number": 3,
-          "numberVerification": "official",
-          "existingNumberSource": "https://news.ntcc.gov.tw/tw/news"
-        },
-        {
-          "id": "township:10008:10008040:003",
-          "districtId": "township:10008:10008040",
-          "name": "余志嘉",
-          "number": 1,
-          "numberVerification": "official",
-          "existingNumberSource": "https://news.ntcc.gov.tw/tw/news"
-        },
-        {
           "id": "township:10008:10008050:001",
           "districtId": "township:10008:10008050",
           "name": "吳大村",
@@ -2100,62 +2036,6 @@
           "number": 1,
           "numberVerification": "referenceSite",
           "existingNumberSource": "https://www.taiwanvotes.tw/%E5%8D%97%E6%8A%95%E7%B8%A3/"
-        },
-        {
-          "id": "township:10008:10008060:001",
-          "districtId": "township:10008:10008060",
-          "name": "陳翰立",
-          "number": 1,
-          "numberVerification": "user-specified-wikipedia",
-          "existingNumberSource": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表"
-        },
-        {
-          "id": "township:10008:10008060:002",
-          "districtId": "township:10008:10008060",
-          "name": "蔡宗智",
-          "number": 2,
-          "numberVerification": "dated-news",
-          "existingNumberSource": "https://more-news.tw/753032/"
-        },
-        {
-          "id": "township:10008:10008070:001",
-          "districtId": "township:10008:10008070",
-          "name": "邱紹偉",
-          "number": 1,
-          "numberVerification": "dated-news",
-          "existingNumberSource": "https://more-news.tw/753032/"
-        },
-        {
-          "id": "township:10008:10008070:002",
-          "districtId": "township:10008:10008070",
-          "name": "康誌合",
-          "number": 2,
-          "numberVerification": "user-specified-wikipedia",
-          "existingNumberSource": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表"
-        },
-        {
-          "id": "township:10008:10008070:003",
-          "districtId": "township:10008:10008070",
-          "name": "林智鴻",
-          "number": 3,
-          "numberVerification": "user-specified-wikipedia",
-          "existingNumberSource": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表"
-        },
-        {
-          "id": "township:10008:10008080:001",
-          "districtId": "township:10008:10008080",
-          "name": "周俊霖",
-          "number": 1,
-          "numberVerification": "dated-news",
-          "existingNumberSource": "https://more-news.tw/753032/"
-        },
-        {
-          "id": "township:10008:10008080:002",
-          "districtId": "township:10008:10008080",
-          "name": "張永輝",
-          "number": 2,
-          "numberVerification": "user-specified-wikipedia",
-          "existingNumberSource": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表"
         },
         {
           "id": "township:10008:10008090:001",
@@ -2188,62 +2068,6 @@
           "number": 2,
           "numberVerification": "user-specified-wikipedia",
           "existingNumberSource": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表"
-        },
-        {
-          "id": "township:10008:10008110:001",
-          "districtId": "township:10008:10008110",
-          "name": "葉銘豐",
-          "number": 2,
-          "numberVerification": "user-specified-wikipedia",
-          "existingNumberSource": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表"
-        },
-        {
-          "id": "township:10008:10008110:002",
-          "districtId": "township:10008:10008110",
-          "name": "王銀斗",
-          "number": 3,
-          "numberVerification": "user-specified-wikipedia",
-          "existingNumberSource": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表"
-        },
-        {
-          "id": "township:10008:10008110:003",
-          "districtId": "township:10008:10008110",
-          "name": "詹淵州",
-          "number": 1,
-          "numberVerification": "dated-news",
-          "existingNumberSource": "https://more-news.tw/753032/"
-        },
-        {
-          "id": "township:10008:10008110:004",
-          "districtId": "township:10008:10008110",
-          "name": "陳癸佑",
-          "number": 4,
-          "numberVerification": "user-specified-wikipedia",
-          "existingNumberSource": "https://zh.wikipedia.org/wiki/2026年中華民國鄉鎮市區長選舉選舉區投票結果列表"
-        },
-        {
-          "id": "township:10008:10008120:001",
-          "districtId": "township:10008:10008120",
-          "name": "全志明",
-          "number": 1,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%8D%97%E6%8A%95%E7%B8%A3/"
-        },
-        {
-          "id": "township:10008:10008120:002",
-          "districtId": "township:10008:10008120",
-          "name": "松學海 Manan‧Daisnunan",
-          "number": 3,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%8D%97%E6%8A%95%E7%B8%A3/"
-        },
-        {
-          "id": "township:10008:10008120:003",
-          "districtId": "township:10008:10008120",
-          "name": "全秋雄",
-          "number": 2,
-          "numberVerification": "referenceSite",
-          "existingNumberSource": "https://www.taiwanvotes.tw/%E5%8D%97%E6%8A%95%E7%B8%A3/"
         },
         {
           "id": "township:10008:10008130:001",
@@ -2703,5 +2527,5 @@
       "source": "MTCF"
     }
   ],
-  "limitations": "部分电子公报超过网页工具PDF读取限制，部分截图缓存缺失；原始附件无法访问时不升级证据。；高雄四区改用官方有声公报名录复核，苗栗部分大PDF仍超限。"
+  "limitations": "部分电子公报超过网页工具PDF读取限制，部分截图缓存缺失；原始附件无法访问时不升级证据。；高雄四区改用官方有声公报名录复核，苗栗部分大PDF仍超限。；南投县部分单独公报可读，仍有5个乡镇公报待复核。"
 }
