@@ -1397,13 +1397,14 @@ test('2022 vote percentage and absolute-count maps have distinct color ranges an
 
 test('A fresh visitor can open history and loads its resources only when needed',async t=>{
  const page=await pageFor(t);
- const loaded=()=>page.evaluate(()=>performance.getEntriesByType('resource').filter(entry=>/\/history-(?:2022\.js|legislative\.css)/.test(entry.name)).length);
+ const loaded=()=>page.evaluate(()=>[...new Set(performance.getEntriesByType('resource').filter(entry=>/\/history-(?:2022\.js|legislative\.css)$/.test(new URL(entry.name).pathname)).map(entry=>entry.name))].length);
  assert.equal(await loaded(),0);
  await page.locator('#categoryHistory').click();
  await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
  assert.equal(await page.locator('#categoryHistory').getAttribute('aria-selected'),'true');
  assert.equal(await page.locator('#historyControls').isVisible(),true);
  assert.equal(await loaded(),2);
+ for(const asset of ['history-2022.js','history-legislative.css'])assert.equal(await page.locator('[data-history-asset="'+asset+'"][data-loaded="true"]').count(),1);
  await page.locator('#categoryFuture').click();
  assert.equal(await page.locator('#historyControls').isVisible(),false);
  assert.match(await page.locator('.sidebar-footer').innerText(),/网页开发：Alex Wei\n测试和推广：星夜长街/);
@@ -1729,8 +1730,8 @@ test('Historical result windows share prediction drag and resize controls',async
  await page.locator('#regions [data-region="63000"]').press("Enter");
  const dialog=page.locator('#historyResultDialog');
  const before=await dialog.boundingBox();
- const bar=dialog.locator('.floating-dialog-drag');
- await bar.press('ArrowRight');
+ const move=dialog.locator('.floating-dialog-move');
+ await move.press('ArrowRight');
  assert.equal((await dialog.boundingBox()).x,before.x+10);
  assert.equal(await dialog.locator('[data-dialog-resize]').count(),4);
  await dialog.locator('[data-dialog-resize="se"]').press('ArrowRight');
@@ -3012,6 +3013,13 @@ test('The earliest local cycle shows dated council returns and preserves actual 
  const mayorCsv=await download(page,'#historyExportCsv');
  assert.match(mayorCsv,/"1993","县市长","台北县"/);
  assert.match(mayorCsv,/"1994","县市长","台北市"/);
+ for(const [name,actualYear] of [['台北县',1993],['台北市',1994]]){
+  await page.evaluate(name=>History2022View.openRegion(History2022View.items().find(f=>f.name===name)),name);
+  assert.match(await page.locator('#historyDialogTitle').textContent(),new RegExp(actualYear+'年'));
+  assert.doesNotMatch(await page.locator('#historyDialogTitle').textContent(),/1993\/1994/);
+  assert.ok((await page.locator('#historyDialogRows tr td:nth-child(4)').allTextContents()).every(value=>value===''||value==='是'));
+  await page.locator('#closeHistoryResult').click();
+ }
 
  await page.locator('#historyOffice').selectOption('council');
  await page.waitForFunction(()=>History2022View.office()==='council'&&History2022View.snapshot()?.contests.some(c=>c.election_id==='1994-council-counties'));
@@ -3021,7 +3029,10 @@ test('The earliest local cycle shows dated council returns and preserves actual 
  assert.match(await page.locator('#scopeTitle').textContent(),/^台北县 · 1993\/1994/);
  assert.ok(await page.locator('#historySeatBadges [data-history-seat-badge]').count()>0);
  await page.locator('#regions [data-region="history-1994-council-counties:台北县:regional:第8选举区"]').press('Enter');
+ assert.match(await page.locator('#historyDialogTitle').textContent(),/1994年 县市议员选举结果/);
+ assert.doesNotMatch(await page.locator('#historyDialogTitle').textContent(),/1993\/1994/);
  assert.match(await page.locator('#historyDialogMessage').textContent(),/1994-01-29/);
+ assert.ok((await page.locator('#historyDialogRows tr td:nth-child(4)').allTextContents()).every(value=>value===''||value==='是'));
  assert.equal(await page.locator('#historyDialogMessage a').getAttribute('href'),'https://web.cec.gov.tw/tpcec/article/list/1271');
  assert.match(await page.locator('#historyDialogRows').textContent(),/周雅淑/);
  await page.locator('#closeHistoryResult').click();

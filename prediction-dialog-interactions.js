@@ -120,6 +120,13 @@
   });
   bar.addEventListener('dblclick',e=>{if(!e.target.closest('button'))paint(initial())});
   window.addEventListener('resize',()=>paint(frame||initial()));
+  // A focused search input consumes the browser's native Escape default.
+  // Handle it explicitly so all election dialogs close consistently.
+  dialog.addEventListener('keydown',e=>{
+   if(e.key==='Escape'&&dialog.open&&!e.isComposing){
+    e.preventDefault();e.stopPropagation();dialog.close();
+   }
+  },true);
   dialog.addEventListener('close',stop);
   const titleIds={predictionDialog:'predictionDialogTitle',localDialog:'localDialogTitle',historyResultDialog:'historyDialogTitle'},title=document.getElementById(titleIds[id]);
   if(title){dialog.setAttribute('aria-labelledby',title.id);title.tabIndex=-1;title.setAttribute('autofocus','')}
