@@ -144,5 +144,40 @@
   "winner_detail_source_page": 281,
   "winner_detail_note": "《續修金門縣志》卷四政事志下卷第281頁列當選人得票與黨籍；黨籍不等同推薦政黨。",
   "winner_detail_crosscheck_url": "https://zh.wikipedia.org/wiki/1994年中華民國縣市議員選舉選舉區投票結果列表",
-  "winner_votes_total": 9991
+  "winner_votes_total": 9991,
+  "other_candidate_sources": {
+    "reported_returns": "https://www.kmdn.gov.tw/1117/1271/4189/49195/",
+    "chen_membership": "https://hk.on.cc/tw/bkn/cnt/news/20140921/bkntw-20140921000517666-0921_04011_001.html"
+  },
+  "other_candidates": [
+    {
+      "name": "陳滄江",
+      "district_number": 4,
+      "votes": 371,
+      "membership": "中國國民黨"
+    },
+    {
+      "name": "李增城",
+      "ballot_number": 1
+    },
+    {
+      "name": "翁明志",
+      "membership": "民主進步黨"
+    },
+    {
+      "name": "黃積軍"
+    },
+    {
+      "name": "曾貴爵"
+    },
+    {
+      "name": "陳松德"
+    },
+    {
+      "name": "李賢準"
+    },
+    {
+      "name": "李錫添"
+    }
+  ]
 }

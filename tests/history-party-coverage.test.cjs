@@ -15,6 +15,25 @@ test('Inventory missing party values across all historical snapshot files',()=>{
  }
  console.log('PARTY_COVERAGE_AUDIT '+JSON.stringify(summary));assert.ok(Array.isArray(summary));
 });
+test('Kinmen partial results preserve reported non-winner facts separately from complete vote and seat counts',()=>{
+ const kinmen=archive.partial_returns[0];
+ const nonWinners=kinmen.other_candidates;
+ assert.equal(nonWinners.length,8);
+ assert.equal(new Set(nonWinners.map(c=>c.name)).size,8);
+ assert.ok(nonWinners.every(c=>kinmen.districts.every(d=>!d.winners.some(w=>w[0]===c.name))));
+ assert.deepEqual(nonWinners.find(c=>c.name==='陳滄江'),{name:'陳滄江',district_number:4,votes:371,membership:'中國國民黨'});
+ assert.equal(nonWinners.filter(c=>Object.hasOwn(c,'votes')).length,1);
+ assert.equal(nonWinners.find(c=>c.name==='李增城').ballot_number,1);
+ assert.match(kinmen.other_candidate_sources.reported_returns,/^https:/);
+});
+test('Local council biographies resolve two Lienchiang gender fields without changing party coverage',()=>{
+ for(const [district,ballot,name] of [[2,3,'陳兆鎮'],[3,2,'劉美官']]){
+  const contest=archive.districts.find(d=>d.county==='連江縣'&&d.number===district);
+  const candidate=contest.candidates.find(c=>c[0]===ballot);
+  assert.deepEqual([candidate[1],candidate[3],candidate[4]],[name,'','男']);
+  assert.match(contest.gender_sources[ballot].source_url,/^https:\/\/www\.mtcc\.gov\.tw\//);
+ }
+});
  test('Kinmen 1994 winner votes and membership match the separately documented partial return',()=>{const k=archive.partial_returns[0];assert.deepEqual(k,require('../sources/history-1994-kinmen-partial.json'));const winners=k.districts.flatMap(d=>d.winners);assert.equal(winners.length,16);assert.ok(winners.every(w=>Number.isInteger(w[2])&&w[2]>0&&w[3]==='中國國民黨'));assert.equal(winners.reduce((n,w)=>n+w[2],0),9991);assert.equal(k.valid_votes,null);assert.match(k.winner_detail_source_url,/^https:/);});
 
  test('Gender backfill needs two unique, consistent same-district matches and never fills party',()=>{const Local=require('../history-local.js');const a={districts:[{county:'臺南市',number:1,electorate:'regional',candidates:[[1,'測試甲',100,'',null,true],[2,'測試乙',50,'',null,false]]}]};const ref=(year,g)=>({year,elections:[{office:'council',election_id:'e'}],contests:[{election_id:'e',contest_id:'d',county_name:'台南市',district_number:1,electorate:'regional'}],candidacies:[{contest_id:'d',candidacy_id:'a'+year,candidate_name:'測試甲',gender:g}]});const result=Local.enrichLegacyGender(a,[ref(1998,'女'),ref(2002,'女')]);assert.equal(result.districts[0].candidates[0][4],'女');assert.equal(result.districts[0].candidates[0][3],'');assert.equal(result.districts[0].candidates[1][4],null);assert.equal(a.districts[0].candidates[0][4],null);assert.equal(Local.enrichLegacyGender(a,[ref(1998,'女'),ref(2002,'男')]).districts[0].candidates[0][4],null);});

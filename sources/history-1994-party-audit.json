@@ -44,6 +44,16 @@
       "source": "https://zh.wikipedia.org/wiki/臺南市二二八紀念碑",
       "basis": "1994年7月14日同屆議員具名為民進黨籍；1998年同選區參選紀錄一致。未找到原公報。",
       "secondary": "https://votetw.com/data/candidate/%E9%83%AD%E6%9C%9D%E6%AD%A6"
+    },
+    {
+      "county": "臺南市",
+      "district": 2,
+      "number": 10,
+      "name": "曾俊仁",
+      "votes": 1213,
+      "party": "無黨籍",
+      "source": "https://tcmb.culture.tw/zh-tw/detail?id=615034&indexCode=Culture_Object",
+      "basis": "國家文化記憶庫的1994年競選紀錄明載其以無黨籍參選原臺南市南區市議員。"
     }
   ],
   "unresolved": [
@@ -280,15 +290,6 @@
       "name": "葉俊良",
       "votes": 8622,
       "elected": true
-    },
-    {
-      "county": "臺南市",
-      "district": 2,
-      "electorate": "regional",
-      "number": 10,
-      "name": "曾俊仁",
-      "votes": 1213,
-      "elected": false
     },
     {
       "county": "臺南市",

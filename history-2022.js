@@ -824,7 +824,7 @@
   cs.sort((a,b)=>state.palette.findIndex(p=>p.id===predictionParty(a.party).id)-state.palette.findIndex(p=>p.id===predictionParty(b.party).id)||a.party.localeCompare(b.party)||b.votes-a.votes);
   return Array.from({length:d.seats},(_,i)=>cs[i]||null);
  }
- // A winner-only archive is useful, but it must never enter the full-vote or
+ // A partial archive must never enter the full-vote or
  // party-seat aggregation: missing candidates and party endorsements stay unknown.
  function renderPartialCouncilReturns(){
   const note=el('historyBoundaryNote');if(!note)return;
@@ -835,32 +835,52 @@
   details.hidden=false;
   if(details.dataset.loaded==='true')return;
   details.dataset.loaded='true';
-  const summary=document.createElement('summary');summary.textContent='金门1994年议员当选名单（已核实）';details.append(summary);
+  const summary=document.createElement('summary');summary.textContent='金门1994年议员选举档案（部分资料）';details.append(summary);
   for(const archive of records){
+   const otherCandidates=archive.other_candidates||[];
    const intro=document.createElement('p');
-   intro.textContent=archive.election_date+' 投票 · '+archive.candidate_count+' 人参选 · '+archive.elected_count+' 人当选 · 选举人数 '+archive.registered_voters.toLocaleString('zh-CN')+' · 投票人数 '+archive.ballots_cast.toLocaleString('zh-CN')+' · 投票率 '+archive.turnout_pct.toFixed(2)+'%。已补齐16名当选人得票与当时党籍；尚缺落选者明细、号次、选区有效票和正式推荐政党。本表党籍不等同推荐政党，不纳入完整结果统计或地图着色。';
+   intro.textContent=archive.election_date+' 投票 · '+archive.candidate_count+' 人参选 · '+archive.elected_count+' 人当选 · 选举人数 '+archive.registered_voters.toLocaleString('zh-CN')+' · 投票人数 '+archive.ballots_cast.toLocaleString('zh-CN')+' · 投票率 '+archive.turnout_pct.toFixed(2)+'%。已核实 '+archive.elected_count+' 名当选人及 '+otherCandidates.length+' 名未当选人。号次、选区有效票和推荐政党仍待补。';
    details.append(intro);
    const wrap=document.createElement('div');wrap.className='history-table-wrap';
    const table=document.createElement('table');table.className='history-candidate-table';
    const thead=document.createElement('thead'),hr=document.createElement('tr');
-   for(const label of ['选区','号次','候选人','性别','选举时现任','党籍（县志）','得票数','得票率','当选']){
+   for(const label of ['选区','号次','候选人','性别','选举时现任','当时党籍','得票数','得票率','当选']){
     const th=document.createElement('th');th.textContent=label;hr.append(th)
    }
    thead.append(hr);table.append(thead);
    const body=document.createElement('tbody');
-   for(const district of archive.districts){
+   function addGroup(label){
     const divider=document.createElement('tr'),heading=document.createElement('th');
     divider.className='history-district-divider';heading.scope='rowgroup';heading.colSpan=9;
-    heading.textContent='1994年 · 第'+district.number+'选举区（'+norm(district.scope)+'）';divider.append(heading);body.append(divider);
-    for(const [name,gender,votes,membership] of district.winners){
-     const tr=document.createElement('tr');tr.className='history-elected-row';
-     for(const value of ['第'+district.number+'选举区','',normCandidate(name),gender,'',norm(membership||''),Number.isFinite(votes)?votes.toLocaleString('zh-CN'):'','']){const td=document.createElement('td');td.textContent=value;tr.append(td)}
-     const td=document.createElement('td'),mark=document.createElement('img');mark.src='assets/elected-mark.png';mark.alt='当选';mark.width=18;mark.height=18;td.append(mark);tr.append(td);body.append(tr)
+    heading.textContent=label;divider.append(heading);body.append(divider);
+   }
+   function addCandidate({district_number,ballot_number,name,gender,membership,votes,elected}){
+    const row=document.createElement('tr');
+    if(elected)row.className='history-elected-row';
+    const districtLabel=district_number?'第'+district_number+'选举区':'';
+    for(const value of [districtLabel,ballot_number??'',normCandidate(name),gender||'','',norm(membership||''),Number.isFinite(votes)?votes.toLocaleString('zh-CN'):'','']){
+     const cell=document.createElement('td');cell.textContent=value;row.append(cell);
     }
+    const result=document.createElement('td');
+    if(elected){const mark=document.createElement('img');mark.src='assets/elected-mark.png';mark.alt='当选';mark.width=18;mark.height=18;result.append(mark)}
+    row.append(result);body.append(row);
+   }
+   for(const district of archive.districts){
+    addGroup('1994年 · 第'+district.number+'选举区（'+norm(district.scope)+'）');
+    for(const [name,gender,votes,membership] of district.winners){
+     addCandidate({district_number:district.number,name,gender,votes,membership,elected:true});
+    }
+    otherCandidates.filter(candidate=>candidate.district_number===district.number).forEach(addCandidate);
+   }
+   const unplaced=otherCandidates.filter(candidate=>candidate.district_number==null);
+   if(unplaced.length){
+    addGroup('1994年 · 选区待核');
+    unplaced.forEach(addCandidate);
    }
    table.append(body);wrap.append(table);details.append(wrap);
    const sources=document.createElement('p');
-   for(const [label,url] of [['当选名单：金门县志',archive.source_url],['投票统计：金门县统计年报表3-9',archive.statistics_source_url],['得票与党籍：续修金门县志第281页',archive.winner_detail_source_url]]){
+   for(const [label,url] of [['当选名单：金门县志',archive.source_url],['投票统计：金门县统计年报表3-9',archive.statistics_source_url],['当选人得票与党籍：续修金门县志第281页',archive.winner_detail_source_url],['其他参选人：金门日报',archive.other_candidate_sources?.reported_returns],['陈沧江党籍：人物专访',archive.other_candidate_sources?.chen_membership]]){
+    if(!url)continue;
     const link=document.createElement('a');link.href=url;link.target='_blank';link.rel='noopener';link.textContent=label;sources.append(link,'　')
    }details.append(sources);
   }
@@ -877,7 +897,7 @@
   else if(localYear===2026)el('historyBoundaryNote').textContent='2026年正式结果仅在中选会或地方选委会资料逐项核对、选区得票与席次校验通过后发布；预测与官方结果分开保存。未核实的乡镇得票不推算。';
   else if(!presidentialMode&&localGeometry){
    const cycle=snapshotData?.cycleYears?'按选举批次合并显示，各地实际投票日期见选区结果。':'按实际投票年显示。';
-   const coverage=archivedCouncil()?' 1994年1月的县市议员资料采用地方选务档案转录，经选区有效票和当选席次对账。金门县完整候选人得票明细待补，已核实当选名单可单独查看；合计仅计入已收录完整结果。':'';
+   const coverage=archivedCouncil()?' 1994年1月的县市议员资料采用地方选务档案转录，经选区有效票和当选席次对账。金门县可查已核实的部分候选人资料，合计采用已收录的完整结果。':'';
    el('historyBoundaryNote').textContent=cycle+coverage+' 历史边界采用可对应的现行轮廓，缺少可靠边界的选区仍可查看候选人结果。'+(localYear===2018&&kind==='mayor'?' 台北市采用法院重计结果，区级重计明细缺失。':'');
   }
   else if(presidentialMode)el('historyBoundaryNote').textContent='县市和乡镇市区按当届归属显示，边界采用现行底图近似；'+

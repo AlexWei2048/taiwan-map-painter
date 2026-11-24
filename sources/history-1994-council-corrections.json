@@ -1325,6 +1325,35 @@
     "by_ballot": {
       "5": {
         "party": "中國國民黨"
+      },
+      "10": {
+        "party": "無黨籍"
+      }
+    }
+  },
+  "連江縣:2": {
+    "by_ballot": {
+      "3": {
+        "gender": "男"
+      }
+    },
+    "gender_sources": {
+      "3": {
+        "source_url": "https://www.mtcc.gov.tw/ch/content/7230?mcid=108566",
+        "document_title": "連江縣議會諮詢代表簡歷"
+      }
+    }
+  },
+  "連江縣:3": {
+    "by_ballot": {
+      "2": {
+        "gender": "男"
+      }
+    },
+    "gender_sources": {
+      "2": {
+        "source_url": "https://www.mtcc.gov.tw/ch/content/7230?mcid=108566",
+        "document_title": "連江縣議會諮詢代表簡歷"
       }
     }
   }

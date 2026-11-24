@@ -107,13 +107,16 @@ def extract(path, overrides):
             scope_names = []
         if county == '臺北縣' and kind == 'regional':
             scope = '、'.join(TAIPEI_NAMES.get(item,item) for item in scope_names) if scope_names else scope
-        districts.append({
+        district_return = {
             'county':county,'number':district,'electorate':kind,'scope':scope or '',
             'scope_names':scope_names,'seats':seats,'reserved_seats':women,
             'registered_voters':registered,'ballots_cast':cast,'valid_votes':valid,'invalid_votes':invalid,
             'source_url':correction.get('source_url',TAIPEI if correction and county=='臺北縣' else SOURCE),
             'candidates':candidates,
-        })
+        }
+        if correction.get('gender_sources'):
+            district_return['gender_sources'] = correction['gender_sources']
+        districts.append(district_return)
     return {'version':1,'source_url':SOURCE,'source_sha256':hashlib.sha256(raw).hexdigest(),
             'official_overview':'https://web.cec.gov.tw/central/article/18789','expected_seats':884,
             'districts':districts,'excluded':excluded}

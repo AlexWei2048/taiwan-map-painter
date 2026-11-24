@@ -3028,6 +3028,10 @@ test('The earliest local cycle shows dated council returns and preserves actual 
  await page.locator('#historyPartialCouncilReturns summary').click();
  assert.equal(await page.locator('#historyPartialCouncilReturns tbody tr.history-elected-row').count(),16);
  assert.match(await page.locator('#historyPartialCouncilReturns').textContent(),/22,227/);
+ const nonWinners=page.locator('#historyPartialCouncilReturns tbody tr:not(.history-district-divider):not(.history-elected-row)');
+ assert.equal(await nonWinners.count(),8);
+ assert.deepEqual(await nonWinners.filter({hasText:'陈沧江'}).locator('td').allTextContents(),
+  ['第4选举区','','陈沧江','','','中国国民党','371','','']);
  await page.locator('#historyPartialCouncilReturns summary').click();
  await page.locator('#historyCounty').selectOption('台北县');
  await page.locator('#returnTaiwanMap').waitFor({state:'visible'});
@@ -3145,7 +3149,7 @@ test('Legislative seat trends default to all years and show complete integer par
 test('Historical council trends resolve former names and show pre-merger county and city separately',async t=>{
  const page=await pageFor(t,{width:1440,height:950});
  await page.locator('#categoryHistory').click();
- await page.waitForFunction(()=>History2022View.snapshot()?.year===2022);
+ await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
  await page.locator('#historyOffice').selectOption('council');
  await page.waitForFunction(()=>History2022View.office()==='council');
  await page.locator('#historyCounty').selectOption('新北市');
