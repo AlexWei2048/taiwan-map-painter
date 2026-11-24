@@ -1407,7 +1407,13 @@ test('A fresh visitor can open history and loads its resources only when needed'
  for(const asset of ['history-2022.js','history-legislative.css'])assert.equal(await page.locator('[data-history-asset="'+asset+'"][data-loaded="true"]').count(),1);
  await page.locator('#categoryFuture').click();
  assert.equal(await page.locator('#historyControls').isVisible(),false);
+ assert.equal(await page.locator('#siteAbout summary').isVisible(),true);
+ assert.equal(await page.locator('#siteAbout').getAttribute('open'),null);
+ await page.locator('#siteAbout summary').click();
  assert.match(await page.locator('.sidebar-footer').innerText(),/网页开发：Alex Wei\n测试和推广：星夜长街/);
+ assert.match(await page.locator('.sidebar-footer').innerText(),/数据来源/);
+ assert.equal(await page.locator('#siteUpdatedAt').count(),1);
+ await page.locator('#siteAbout summary').click();
 });
 test('Nationwide council prediction uses a county picker and filters multi-seat candidates',async t=>{
  const page=await pageFor(t,{width:1440,height:920});
@@ -3165,4 +3171,22 @@ test('Historical council trends resolve former names and show pre-merger county 
  assert.deepEqual(await pair.locator('[data-seat-date]').allTextContents(),['1994-01-29','1994-12-03']);
  assert.equal(await pair.locator('[data-majority-seats]').count(),2);
  assert.equal(await page.locator('.trend-parliament-card svg').count(),8);
+});
+
+test('Sidebar uses clear headings and keeps site information directly below the mode switch',async t=>{
+ const page=await pageFor(t);
+ assert.equal(await page.locator('.brand small').count(),0);
+ assert.equal(await page.locator('.intro > .eyebrow').count(),0);
+ assert.equal(await page.locator('.workspace-categories + #siteAbout').count(),1);
+ assert.equal(await page.locator('#siteAbout summary').isVisible(),true);
+ assert.equal(await page.locator('.sidebar .section-label > span:first-child').count(),0);
+ await page.locator('#categoryHistory').click();
+ await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
+ assert.equal(await page.locator('#historyControls .section-label').innerText(),'历史选举数据');
+ assert.equal(await page.locator('.settings-panel .section-label').innerText(),'外观与工具');
+ assert.equal(await page.locator('#siteAbout summary').isVisible(),true);
+ await page.locator('#siteAbout summary').click();
+ assert.equal(await page.locator('#siteAbout .sidebar-footer').isVisible(),true);
+ await page.locator('#siteAbout summary').click();
+ assert.equal(await page.locator('#siteAbout .sidebar-footer').isVisible(),false);
 });

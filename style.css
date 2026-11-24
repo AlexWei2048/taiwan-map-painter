@@ -599,10 +599,7 @@ body.history-mode .intro > h1,body.history-mode .intro > p{display:none!importan
 
 /* Historical district source explanations are intentionally suppressed; keep placeholders for 2026 reference tables. */
 body.history-mode #districtReferenceNote,body.history-mode #districtReferenceSource{display:none!important}
-/* 关于本站：简洁展示网站定位，不影响地图编辑空间 */
-.sidebar-footer .site-about{margin-top:10px;padding-top:12px;border-top:1px solid var(--line)}
-.sidebar-footer .site-about h2{margin:0 0 5px;font-size:12px;line-height:1.5;font-weight:650;color:#456b57}
-.sidebar-footer .site-about p{margin:0;font-size:11.5px;line-height:1.8;color:#61766b;overflow-wrap:anywhere}
+
 
 /* Administrative reference: out of the drawing surface on all map types. */
 #mapWithKey.has-number-key{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
@@ -863,3 +860,27 @@ body.history-mode #districtReferenceNote,body.history-mode #districtReferenceSou
 @media(max-width:650px){.prediction-candidate-filters{grid-template-columns:repeat(2,minmax(0,1fr))}.prediction-candidate-filters :is(input[type=search],select){font-size:16px}}
 .canvas.council-overview-mode:not(.atlas-mode),#mapWithKey.has-number-key>.canvas.council-overview-mode:not(.atlas-mode){height:clamp(780px,calc(88vw - 190px),1080px);min-height:720px}
 @media(max-width:700px){.canvas.council-overview-mode:not(.atlas-mode),#mapWithKey.has-number-key>.canvas.council-overview-mode:not(.atlas-mode){height:76dvh;min-height:650px}}
+
+/* Sidebar hierarchy: one title per section and a compact, accessible site information entry. */
+.brand>div{line-height:1.25;letter-spacing:.4px}
+.sidebar .workspace-categories{margin:0 0 10px}
+.sidebar .intro>h1{margin:0 0 7px}
+.sidebar .intro>p{margin:0 0 15px}
+.sidebar .section-label{gap:8px;margin-bottom:12px}
+.sidebar .section-label>h2{font-size:14px;font-weight:650;letter-spacing:.15px;color:var(--ink)}
+.sidebar .section-label>.count{margin-left:auto}
+.sidebar-about{margin:0 0 12px;border:1px solid #d9e5da;border-radius:9px;background:#f0f5ef;overflow:hidden}
+.sidebar-about>summary{display:flex;align-items:center;gap:8px;min-height:40px;padding:9px 11px;color:#315a49;cursor:pointer;list-style:none}
+.sidebar-about>summary::-webkit-details-marker{display:none}
+.sidebar-about>summary::after{content:"";display:block;width:7px;height:7px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg);margin-left:auto;margin-right:3px;flex:none}
+.sidebar-about[open]>summary::after{transform:rotate(225deg)}
+.sidebar-about>summary:focus-visible{outline:2px solid #147d68;outline-offset:-3px;border-radius:8px}
+.sidebar-about>summary:hover{background:#e6efe5}
+.sidebar-about .about-title{font-size:12px;font-weight:650;white-space:nowrap}
+.sidebar-about .about-hint{font-size:10.5px;color:#526d60;line-height:1.4}
+.sidebar-about .sidebar-footer{display:flex;flex-direction:column;gap:8px;margin:0;padding:12px 11px;border-top:1px solid #d9e5da;background:#fff;font-size:11px;line-height:1.75;color:#526d60}
+.sidebar-about .sidebar-footer .site-about-description{display:block;margin:0;font-size:11.5px;line-height:1.75;color:#465e53;overflow-wrap:anywhere}
+.sidebar-about .sidebar-footer .footer-data-source,.sidebar-about .sidebar-footer .footer-credits{margin:0;color:#465e53}
+.sidebar-about .sidebar-footer time{color:#526d60}
+.sidebar-about:not([open])>.sidebar-footer{display:none}
+@media(max-width:700px){.sidebar-about>summary{min-height:44px}.sidebar-about .sidebar-footer{display:flex}.sidebar-about .about-hint{font-size:11px}.sidebar-about .sidebar-footer .site-about-description{display:block}.sidebar .workspace-categories{margin-top:0}}
