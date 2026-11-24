@@ -33,7 +33,7 @@
   const source=document.createElement('a');
   source.href=contest.source_url;source.target='_blank';source.rel='noopener';
   source.textContent='资料来源 ↗';el('historyDialogMessage').append(' · ',source);
-  if(partialTownship()&&contest.profile_source){
+  if(contest.profile_source){
    const profile=source.cloneNode();
    profile.href=contest.profile_source;profile.textContent='投开票统计 ↗';
    el('historyDialogMessage').append(' · ',profile);
@@ -222,7 +222,7 @@
    const wasLegislative=legislativeMode;
     legislativeMode=true;presidentialMode=false;legislativeYear=year;kind='legislative';snapshotData=shard;
     if(!wasLegislative||!['county','district','town'].includes(scale))scale='county';legislativeFocus='';
-    legislativeAreaGeometry=HistoryLegislative.scopeGeometry(geometryReference||shard,data,norm,HistoryCore.mergePaths,HistoryPresidential.modernCounty,HistoryPresidential.baseTown);
+    legislativeAreaGeometry=HistoryLegislative.scopeGeometry(shard,data,norm,HistoryCore.mergePaths,HistoryPresidential.modernCounty,HistoryPresidential.baseTown);
     if(year>=2008){const audit=HistoryLegislative.auditPartyTownVotes(shard,legislativeAreaGeometry);if(!audit.valid)throw Error('不分区政党票乡镇数据与底图未能逐项核对：'+audit.errors.slice(0,4).join('；'))}
     const legacyMap={...data,towns:legislativeAreaGeometry.towns,counties:legislativeAreaGeometry.counties,villages:kaohsiungVillages};
    if(year<2008)legislativeGeometry=HistoryLegislative.districtGeometry(shard,geometryReference||shard,legacyMap,norm,HistoryCore.mergePaths,HistoryPresidential.modernCounty,HistoryPresidential.baseTown);
@@ -292,9 +292,9 @@
   }));
  }
  function legislativeDisplayRows(){
-  if(legislativeMode&&legislativeYear===1992&&!county&&
+  if(legislativeMode&&legislativeYear===1992&&!county&&scale==='county'&&
    ['plains','mountain'].includes(legislativeBallot)){
-   // Preserve verified nationwide totals without inventing county data.
+   // The all-area table retains the official nationwide totals.
    const national=legislativeNationalRows();if(national.length)return national;
   }
   return recordsInView();
@@ -302,7 +302,6 @@
  const legislativePartyTownView=()=>legislativeMode&&legislativeYear>=2008&&legislativeBallot==='party'&&scale==='town';
  function legislativeCurrentLevel(){
   if(legislativeBallot==='regional')return 'district';
-  if(legislativeYear===1992&&['plains','mountain'].includes(legislativeBallot))return 'district';
   return scale==='town'?'town':'county';
  }
  function recordsInView(){
@@ -540,7 +539,7 @@
    const note=createHistoryElement('p','history-legislative-source-note',
     legislativeBallot==='party'?(legislativeYear<2008?'本届为依据候选人票汇总的席次计算票，不是独立政党票；无可靠席次资料时不推算席次。':
      '政党票按当前地图范围统计；未收录的法定席次分配不从得票数推算。'):
-    legislativeYear===1992?'该届仅有全区候选人得票，县市及乡镇市区分布无法可靠还原。':
+    legislativeYear===1992?HistoryLegislative.note(1992,legislativeBallot):
     '各县市及乡镇市区按本地最高票候选人着色；当选标记表示全区法定当选，并非该乡镇选出。');
    root.append(note);
   }
@@ -556,7 +555,7 @@
   const rows=all.filter(r=>(!partyFilter||r.party===partyFilter)&&(!search||[r.county,r.town,r.district,r.name,r.party].some(v=>String(v||'').includes(search))))
    .sort((a,b)=>HistoryCore.compareResultRows(a,b,legislativeBallot==='regional'?'council':'mayor')||
     legislativeRowArea(a).localeCompare(legislativeRowArea(b),'zh',{numeric:true})||b.votes-a.votes);
-  const national=legislativeYear===1992&&!county&&['plains','mountain'].includes(legislativeBallot);
+  const national=legislativeYear===1992&&!county&&scale==='county'&&['plains','mountain'].includes(legislativeBallot);
   const actualTowns=legislativePartyTownView()?new Set(all.map(r=>r.county+'|'+r.town)).size:0;
   el('historySummary').textContent=(county||'全部地区（含金门、马祖）')+' · '+HistoryLegislative.ballots(legislativeYear).find(x=>x.value===legislativeBallot)?.label+(legislativePartyTownView()?' · '+actualTowns+'个乡镇市区':'')+' · '+rows.length+'条结果'+(national?' · 全区总票':'');
   if(!rows.length){
@@ -777,7 +776,6 @@
      return legislativeAreaGeometry?.counties||data.counties;
     return legislativeGeometry.filter(f=>(!county||f.county===county)&&!(scale==='district'&&legislativeFocus&&HistoryLegislative.districtNumber(f.number??f.name)!==HistoryLegislative.districtNumber(legislativeFocus)));
    }
-   if(legislativeYear===1992&&['plains','mountain'].includes(legislativeBallot))return (legislativeAreaGeometry?.counties||[]).filter(f=>!county||f.county===county); // No county-level figures: neutral national geography.
    return(scale==='town'?(legislativeAreaGeometry?.towns||data.towns):(legislativeAreaGeometry?.counties||data.counties)).filter(f=>(!county||f.county===county)&&!(scale==='town'&&legislativeFocus&&f.name!==legislativeFocus));
   }
   if(localGeometry){
@@ -820,6 +818,10 @@
   const value=legislativeMode?legislativeScopeText(f):kind==='council'?councilScopeText(d):'';
   node.replaceChildren();node.hidden=!value;if(!value)return;
   const label=document.createElement('strong');label.textContent='选区范围：';node.append(label,mainlandTerms(value));
+  if(d?.scopeSource){
+   const link=document.createElement('a');link.href=d.scopeSource;link.target='_blank';link.rel='noopener';
+   link.textContent='当届里别资料';node.append(' · ',link);
+  }
   if(legislativeMode&&legislativeYear===2024&&legislativeBallot==='regional'&&value.includes('部分里')){
    const link=document.createElement('a');link.href='https://2024.cec.gov.tw/data/file/03636e7bc6dc417f8f2293d27b690b25.pdf';link.target='_blank';link.rel='noopener';link.textContent='当届完整里别公告';node.append(' · ',link)
   }
@@ -898,7 +900,7 @@
   if(el('historyWorkspaceTitle'))el('historyWorkspaceTitle').textContent=yearLabel()+' '+officeTitle()+'选举结果';
   if(el('historyBoundaryNote')){
   el('historyBoundaryNote').hidden=!presidentialMode&&!legislativeMode&&localYear===2022;
-  if(legislativeMode)el('historyBoundaryNote').textContent=legislativePartyTownView()?'政党票票数均为当届乡镇市区的实际统计值，完整对账至县市与全区；2008及2012年的行政区名称遵循当届，轮廓采用对应现行乡镇市区图形，并不保证还原每一处历史边界。':legislativeYear===1992?'1992年区域选区缺少当届乡镇级归属资料；本图借用1995年乡镇归属和现行地理轮廓定位，不能据此推断1992年精确历史边界。':legislativeYear<2008?'1995—2004年区域选区按当届选区归属重建，使用现行乡镇市区轮廓近似绘制；县市内部分界或旧村里界线可能不精确，点选选区可查看具体说明。':legislativeYear>=2008&&legislativeYear<2020?
+  if(legislativeMode)el('historyBoundaryNote').textContent=legislativePartyTownView()?'政党票票数均为当届乡镇市区的实际统计值，完整对账至县市与全区；2008及2012年的行政区名称遵循当届，轮廓采用对应现行乡镇市区图形，并不保证还原每一处历史边界。':legislativeYear===1992?(legislativeBallot==='regional'?'1992年区域选区使用1995年乡镇归属辅助定位，按现行轮廓近似展示。':'1992年少数民族民代地方票数来自政大逐乡镇档案。行政区名称沿用资料库，部分名称为后来升格后的用法。'):legislativeYear<2008?'1995—2004年区域选区按当届选区归属重建，使用现行乡镇市区轮廓近似绘制；县市内部分界或旧村里界线可能不精确，点选选区可查看具体说明。':legislativeYear>=2008&&legislativeYear<2020?
    '2008—2016年立法机构区域选区依当届归属显示；2020年调整的台中、台南、高雄、新竹县、屏东按当届乡镇市区选区资料重建。村里内部划分缺少可核历史界线时仅近似展示。':
    '历史选区按当届县市、乡镇市区归属重建；底图几何使用现行行政区近似，无法精确还原的旧里界不作推算。';
   else if(localYear===2026)el('historyBoundaryNote').textContent='2026年正式结果仅在中选会或地方选委会资料逐项核对、选区得票与席次校验通过后发布；预测与官方结果分开保存。未核实的乡镇得票不推算。';
@@ -918,7 +920,7 @@
    const levels=HistoryLegislative.levels(legislativeYear,legislativeBallot),scaleSelect=el('historyScale');scaleSelect.replaceChildren(...levels.map(([value,label])=>new Option(legislativeYear>=2008&&legislativeBallot==='party'&&value==='town'&&!county?'乡镇市区（全台368个）':label,value)));if(!levels.some(([value])=>value===scale))scale=levels[0][0];scaleSelect.value=scale;
    const focusBox=el('historyFocusBox'),focusSelect=el('historyFocus'),focusLabel=el('historyFocusLabel');
    if(focusBox&&focusSelect){
-    const eligible=!!county&&['district','town'].includes(scale)&&!(legislativeYear===1992&&legislativeBallot!=='party');
+    const eligible=!!county&&['district','town'].includes(scale)&&!(legislativeYear===1992&&legislativeBallot==='regional');
     focusBox.hidden=!eligible;
     const candidates=scale==='district'?legislativeGeometry.filter(f=>f.county===county)
      :legislativeAreaGeometry?.towns.filter(f=>f.county===county)||[];
@@ -933,7 +935,6 @@
    if(el('historyLegislativeMapHint')){el('historyLegislativeMapHint').hidden=false;el('historyLegislativeMapHint').textContent=
     legislativePartyTownView()?(county?'各乡镇市区以当届实际政党票分别上色；可切换领先政党或指定政党的得票数、得票率，点击乡镇查看各党完整结果。':'全台368个乡镇市区直接按各地真实政党票上色，点击任一乡镇即可查看当地各党得票。2008年按当年行政区统计，不按现行县市比例推算。'):
     legislativeBallot==='regional'?(!county?(scale==='district'?(legislativeYear<2008?'全部地区的选举区地图按当届选区范围显示逐席当选党徽，点击选区可查看详细结果。':'全部地区的单席选举区按各区当选政党分别填色，点击选区查看详细结果。'):(legislativeYear<2008?'全台按各县市区域民代当选席次最多的政党填色；并列最多使用多党斜纹。点击县市进入后，各多席选区逐席显示党徽。':'全台单席选区按当选政党填色，点击选区进入县市查看完整结果。')):scale==='county'?(legislativeYear<2008?'县市图在各多席选区显示当选党徽，点击选区可查看候选人、得票率与当选结果。':'县市图显示当届选区和选区号；点击选区查看完整候选人、得票率与当选结果。'):'选举区图聚焦本区候选人及法定当选席次。'):
-    legislativeYear===1992&&['plains','mountain'].includes(legislativeBallot)?'1992年没有县市及乡镇得票记录，全区地图仅显示行政区轮廓，不推算地方票数。':
     !county?'按县市着色，点击县市可查看县市及乡镇市区结果。':scale==='county'?'县市得票分布；选择乡镇市区层级可继续下钻。':'点击乡镇市区查看得票分布。';}
 
   }else{if(el('historyFocusBox'))el('historyFocusBox').hidden=true;if(el('historyLegislativeMapHint'))el('historyLegislativeMapHint').hidden=true;el('historyScale').replaceChildren(new Option('县市','district'),new Option('乡镇市区','town'));el('historyScale').value=scale;if(kind==='council'){
@@ -1004,7 +1005,7 @@
   if(rows.length)el('historyDialogMessage').append(' · '+rows.length+(partyBallotDialog?' 个政党':' 位候选人')+' · 按得票数排序');
   if(snapshotData?.cycleYears||partialTownship()){
    if(contest?.election_date)el('historyDialogMessage').append(' · 投票日期 '+contest.election_date);
-   if(archivedCouncil()||partialTownship())appendContestSource(contest);
+   if(contest?.source_url)appendContestSource(contest);
   }
   renderDialogScope(f,district);
   if(district?.womenReservedMethod==='statutory')el('historyDialogMessage').append(' · 妇保按当届规定计算');
@@ -1040,7 +1041,7 @@
   const detailFeature=legislativeMode?legislativeGeometry.find(f=>f.county===norm(contest.county_name)&&String(f.number)===String(HistoryLegislative.districtNumber(contest.district_name)))||{county:norm(contest.county_name),name:norm(contest.district_name)}:null;
   renderDialogScope(detailFeature,detailDistrict);
   if(contest.reserved_seats_method==='statutory')el('historyDialogMessage').append(' · 妇保按当届规定计算');
-  if(archivedCouncil()||partialTownship())appendContestSource(contest);
+  if(contest.source_url)appendContestSource(contest);
   for(const r of [...rows].sort((a,b)=>b.votes-a.votes)){const tr=document.createElement('tr');if(r.elected_official)tr.className='history-elected-row';for(const [i,value] of [r.ballot_number||'—',r.candidate_name,r.gender||'—',r.incumbent_at_election===true?'是':'',r.party_name,r.votes.toLocaleString('zh-CN'),Number(r.vote_share||0).toFixed(2)+'%',''].entries()){const td=document.createElement('td');if(i===7&&r.elected_official){const mark=document.createElement('img');mark.src='assets/elected-mark.png';mark.alt='当选';mark.width=18;mark.height=18;td.append(mark)}else if(i===4){const logo=logoFor(predictionParty(value));if(logo){const img=document.createElement('img');img.src=logo;img.alt='';const party=document.createElement('span');party.className='history-party-cell';party.append(img,value);td.append(party)}else td.textContent=value}else td.textContent=value;if(i===3&&r.incumbent_at_election==null)td.title='现任资料缺失';tr.append(td)}
    appendMobileCandidateDetails(tr,[['号次',r.ballot_number],['性别',r.gender],['选举时现任',tr.cells[3].textContent],['得票率',tr.cells[6].textContent]]);
    body.append(tr)
@@ -1218,7 +1219,6 @@
   if(kind==='council'&&metric==='party')return featurePresentation(feature).tooltip;if(legislativeMultiView())return featurePresentation(feature).tooltip;if(historyOverview()&&kind!=='township'){return '点击查看'+feature.county+yearLabel()+'年结果'}if(noElection(feature))return yearLabel()+'年本区域不举行乡镇市区长选举';const region=currentResult?.regions.get(featureKey(feature));if(voteMetric())return region?.top?region.top.name+' · '+(metric==='votes'?region.top.votes.toLocaleString('zh-CN')+'票 · '+region.share.toFixed(2)+'%':region.share.toFixed(2)+'% · '+region.top.votes.toLocaleString('zh-CN')+'票'):'暂无该候选人得票数据';if(areaLeading())return region?.top?region.top.name+' · 得票领先 · '+region.top.votes.toLocaleString('zh-CN')+'票 · '+region.share.toFixed(2)+'%'+(feature.historicalBoundaryNote?' · '+feature.historicalBoundaryNote:''):'暂无本地区得票资料';return !region?'历史数据未匹配':region.tie?'各党当选席次并列':region.party+' · '+region.seatCount+'席'};
  const defaultPushHistory=pushHistory;pushHistory=function(){if(!active)return defaultPushHistory()};
  const defaultPaint=paint;paint=function(feature){if(!active)return defaultPaint(feature);if(legislativeMode){
-   if(legislativeYear===1992&&['plains','mountain'].includes(legislativeBallot))return toast('1992年没有县市得票分布，仅可查阅全区选举结果');
    if(legislativePartyTownView()&&!county){county=feature.county;legislativeFocus='';el('historyCounty').value=county;switchMode();render();openHistoryRegion(feature);return}
    if(!county){county=feature.county;scale='county';legislativeFocus='';el('historyCounty').value=county;switchMode();render();return}
    if(legislativeBallot==='regional'&&scale==='county'){scale='district';legislativeFocus=feature.name;switchMode();render();openHistoryRegion(feature);return}

@@ -184,7 +184,7 @@ test('Every archived local winner matches the map candidate, ballot, votes and p
  }
 });
 
-test('All council maps include every verified district, with four unresolved 1998 Hsinchu districts',()=>{
+test('All council maps include every verified district, including 1998 Hsinchu',()=>{
  const supplement=require('../assets/history-local-council-supplement.json');
  for(const year of Local.YEARS.council.filter(year=>year!==2022)){
   const snapshot=Local.applyCouncilSupplement(data(year),supplement);
@@ -192,7 +192,7 @@ test('All council maps include every verified district, with four unresolved 199
    Presidential.modernCounty,Presidential.baseTown);
   const districts=Local.councilMap(snapshot,geometry,Core.mergePaths);
   const unavailable=districts.districts.filter(row=>!row.mapAvailable);
-  assert.deepEqual(unavailable.map(row=>row.id),year===1998?[1,2,3,4].map(n=>'1998-council:新竹市:regional:第'+n+'选举区'):[]);
+  assert.deepEqual(unavailable.map(row=>row.id),[]);
   const hsinchu=districts.features.filter(d=>d.county==='新竹市'&&d.electorate==='regional');
   if([2002,2005,2009,2014,2018].includes(year)){
    assert.equal(hsinchu.length,5);
@@ -200,10 +200,20 @@ test('All council maps include every verified district, with four unresolved 199
    assert.equal(villageIds.length,122,String(year));
    assert.equal(new Set(villageIds).size,122,String(year));
   }
+  if(year===1998){
+   assert.equal(hsinchu.length,5);
+   assert.deepEqual(hsinchu.filter(f=>f.number<=4).sort((a,b)=>a.number-b.number).map(f=>f.scopeVillages.length),[36,15,13,28]);
+  }
   if([2009,2010,2014,2018].includes(year)){
    const enriched=districts.districts.filter(row=>row.womenReserved!==null);
    assert.equal(enriched.length,{2009:125,2010:69,2014:185,2018:179}[year]);
    assert.ok(enriched.every(row=>row.womenReserved>=0&&row.womenReserved<=row.seats));
   }
  }
+});
+
+test('2002 Taipei plains district 11 follows the reconciled 29-town NCCU returns',()=>{
+ const contest=data(2002).contests.find(c=>c.contest_id==='2002-council:台北县:plains:第11选举区');
+ assert.deepEqual(['registered_voters','ballots_cast','valid_votes','invalid_votes'].map(k=>contest[k]),[13722,5707,5585,122]);
+ assert.equal(contest.profile_method,'29_township_returns_nccu');
 });

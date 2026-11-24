@@ -18,7 +18,8 @@ test('legislative map level has no countrywide tier; map range controls all-area
  assert.deepEqual(Legislative.levels(2024,'party'),[county,['town','乡镇市区']]);
  assert.deepEqual(Legislative.levels(2024,'mountain'),[county,['town','乡镇市区']]);
  for(const electorate of ['regional','party','plains','mountain']){
-  assert.deepEqual(Legislative.levels(1992,electorate).map(([v])=>v),electorate==='regional'?['county','district']:['county']);
+  assert.deepEqual(Legislative.levels(1992,electorate).map(([v])=>v),
+   electorate==='regional'?['county','district']:electorate==='party'?['county']:['county','town']);
  }
  for(const year of Legislative.YEARS)for(const electorate of ['regional','plains','mountain','party'])
   assert.equal(Legislative.levels(year,electorate).some(([v])=>v==='national'),false);

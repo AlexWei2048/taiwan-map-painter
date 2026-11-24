@@ -32,6 +32,7 @@
     const officialDistrict3=content.ballots.regional;
     officialDistrict3.national=[15550197,10311453,10174005,137448];
     officialDistrict3.county['台北县']=[2511073,1711852,1686473,25379];
+    Object.assign(officialDistrict3.town['台北县']??={}, {新店市:[199342,138431,136770,1661],汐止镇:[118743,77371,76404,967]});
     (officialDistrict3.district['台北县']??={})['3']=[863335,595102,587252,7850];
     for(const item of [{"scope":"town","county":"台北县","area":"三重市","raw_key":"03,001,02,006","profile":[270999,183560,180537,3023]},{"scope":"district","county":"台北县","area":"2","raw_key":"03,001,02,000","profile":[911610,610602,600959,9643]},{"scope":"town","county":"高雄市","area":"旗津区","raw_key":"02,000,01,006","profile":[22740,14466,14267,199]},{"scope":"district","county":"高雄市","area":"1","raw_key":"02,000,01,000","profile":[600021,394065,390190,3875]},{"scope":"county","county":"高雄市","area":"","raw_key":"02,000,00,000","profile":[1061516,701411,694094,7317]}]){
      const regional=content.ballots.regional;

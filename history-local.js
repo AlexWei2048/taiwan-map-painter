@@ -15,7 +15,7 @@
  function yearLabel(year,office,separator='/'){
   return groupedOffice(office)&&CYCLES[year]?CYCLES[year]+separator+year:String(year);
  }
- const pending=new Map(),supplementYears=new Set([2002,2005,2009,2010,2014,2018]);
+ const pending=new Map(),supplementYears=new Set([1998,2002,2005,2009,2010,2014,2018]);
  let supplementRequest;
  let legacyCouncilRequest;
  function enrichLegacyGender(archive,references){
@@ -97,7 +97,7 @@
  async function loadSupplement(fetcher){
   if(!supplementRequest){
    supplementRequest=(async()=>{
-    const response=await fetcher('assets/history-local-council-supplement.json?v=20261124-history-review-v1');
+    const response=await fetcher('assets/history-local-council-supplement.json?v=20261125-nccu-v2');
     if(!response.ok)throw Error('历史议员补充资料 HTTP '+response.status);
     const supplement=await response.json();
     if(supplement.version!==1||!Array.isArray(supplement.paths)||!supplement.years)throw Error('历史议员补充资料不完整');
@@ -123,7 +123,8 @@
   const quotas=addition.quotas||{};
   return {...shard,contests:shard.contests.map(contest=>Object.hasOwn(quotas,contest.contest_id)?
    {...contest,reserved_seats:quotas[contest.contest_id]}:contest),councilDistrictGeometry:Object.fromEntries(
-   Object.entries(addition.districts||{}).map(([id,entry])=>[id,{...supplement.paths[entry.path],villages:entry.villages}]))};
+   Object.entries(addition.districts||{}).map(([id,entry])=>[id,{...supplement.paths[entry.path],villages:entry.villages,
+    boundaryNote:entry.boundaryNote,source:entry.source}]))};
  }
  function years(office,include2026=false){
   const list=groupedOffice(office)?[...Object.keys(CYCLES).map(Number),2014,2018,2022]:YEARS[office]||[2022];
@@ -154,7 +155,7 @@
   if(pending.has(year))return pending.get(year);
   const request=(async()=>{
    const [response,supplement]=await Promise.all([
-    fetcher('assets/history-local-'+year+'.json?v=20261125-local-results-v3'),
+    fetcher('assets/history-local-'+year+'.json?v=20261125-local-results-v4'),
     supplementYears.has(year)?loadSupplement(fetcher):null
    ]);
    if(!response.ok)throw Error('历史数据 HTTP '+response.status);
@@ -262,12 +263,12 @@
    const complete=Boolean(split?.d)||towns.length>0&&(mergedTainan||towns.length===scopeTowns.length&&(!shared||contest.electorate!=='regional'));
    const district={
     id:contest.contest_id,county,name:contest.district_name,number,electorate:contest.electorate,
-    scope:contest.scope_label||scopeTowns.join('、'),scopeTowns,scopeVillages:split?.villages||[],seats:contest.seats,
+    scope:contest.scope_label||scopeTowns.join('、'),scopeTowns,scopeVillages:split?.villages||[],scopeSource:split?.source,seats:contest.seats,
     womenReserved:contest.reserved_seats,womenReservedMethod:contest.reserved_seats_method,mapAvailable:complete
    };
    districts.push(district);
    if(!complete)continue;
-   const shape=split?.d?{d:split.d,box:split.box,center:split.center,historicalBoundaryNote:'按当届里别归属，以现行或沿革对应的里界近似绘制'}:
+   const shape=split?.d?{d:split.d,box:split.box,center:split.center,historicalBoundaryNote:split.boundaryNote||'按当届里别归属，以现行或沿革对应的里界近似绘制'}:
     {...areaShape(towns,mergePaths),...(mergedTainan?{historicalBoundaryNote:'旧中区、西区同属这个选区，以合并后的中西区轮廓近似绘制'}:{})};
    features.push({...shape,...district,id:'history-'+district.id,historyId:district.id});
   }

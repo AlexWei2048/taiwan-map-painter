@@ -9,10 +9,9 @@
   return items;
  }
  // "全部地区" is a map-range choice, not an administrative hierarchy.
- // 1992 indigenous returns have only nationwide tallies; never infer county votes.
  function levels(year,electorate){
   if(electorate==='regional')return [['county','县市'],['district','选举区']];
-  if(Number(year)===1992)return [['county','县市']];
+  if(Number(year)===1992&&electorate==='party')return [['county','县市']];
   return [['county','县市'],['town','乡镇市区']];
  }
  // Source: CEC 2008 (7th) district announcement and 2012 (8th) election record.
@@ -92,9 +91,11 @@
    (!selection.county||row.county===selection.county));
  }
  function note(year,electorate){
-  if(Number(year)===2001&&(electorate==='regional'||electorate==='party'))return '2001年全区、县市和区域选区已与官方结果对账。新店市与汐止镇的逐所明细仍缺1,447票。'+(electorate==='party'?' 2008年前无独立不分区政党票。':'');
+  if(Number(year)===2001&&(electorate==='regional'||electorate==='party'))return '2001年新店与汐止按政大逐候选人明细补齐1,447票，乡镇、选区、县市及全区合计均为10,174,005张区域民代有效票。'+(electorate==='party'?' 2008年前无独立不分区政党票。':'');
   if(electorate==='party'&&Number(year)<2008)return '2008年前无独立不分区政党票；政党席次以政党推荐的区域及少数民族候选人得票按旧制计算，详见下方席次与名单。';
-  if(Number(year)===1992)return '1992年公开机器资料只到选区层，本页不推算乡镇市区票数。';
+  if(Number(year)===1992&&electorate==='regional')return '1992年区域民代地图采用可对应的选区轮廓。';
+  if(Number(year)===1992&&electorate==='mountain')return '政大地方明细合计63,829票；全区名单合计63,831票。差额为华加志2票，原档未注明其地方归属。';
+  if(Number(year)===1992&&electorate==='plains')return '政大县市与乡镇市区逐级核对至全区49,333票。';
   return '';
  }
  function districtNumber(value){
@@ -401,6 +402,30 @@
  function verified2001(shard){
   return shard.year===2001?complete2001Aggregates(apply2001Corrections(shard,VOTE_CORRECTIONS_2001)):shard;
  }
+ function apply2001TownReturns(shard,archive){
+  if(shard.year!==2001||archive.version!==1||archive.year!==2001||archive.towns.length!==2)
+   throw Error('2001年补充乡镇票数格式错误');
+  const {county,district}=archive;
+  const districtRows=shard.rows.filter(r=>r.electorate==='regional'&&r.district===district&&r.county===county);
+  for(const town of archive.towns){
+   const current=districtRows.filter(r=>r.level==='town'&&r.town===town.town);
+   if(current.length!==27||town.candidates.length!==27||new Set(town.candidates.map(r=>r[0])).size!==27||
+    current.reduce((sum,r)=>sum+r.votes,0)!==town.previousValid||
+    town.candidates.reduce((sum,r)=>sum+r[2],0)!==town.profile[2])throw Error('2001年乡镇补充票数未能核对');
+   for(const [number,name,votes] of town.candidates){
+    const row=current.find(r=>r.number===number&&r.name===name);
+    const partyRow=shard.rows.find(r=>r.electorate==='party'&&r.level==='town'&&r.county===county&&r.town===town.town&&r.party===row?.party);
+    if(!row||!partyRow||votes<row.votes)throw Error('2001年乡镇候选人原始票数或身份不符');
+    partyRow.votes+=votes-row.votes;
+    row.votes=votes;
+   }
+  }
+  for(const row of districtRows.filter(r=>r.level==='district')){
+   if(districtRows.filter(r=>r.level==='town'&&r.number===row.number).reduce((sum,r)=>sum+r.votes,0)!==row.votes)
+    throw Error('2001年乡镇票数无法逐候选人对账至选区');
+  }
+  return shard;
+ }
  function enrichCandidates(shard){
   const metadata=(typeof module!=='undefined'&&module.exports?
    require('./assets/history-legislative-candidates.js'):root.HistoryLegislativeCandidates)?.[shard.year];
@@ -427,15 +452,59 @@
   }
   return shard;
  }
+ function apply1992Local(shard,archive){
+  if(shard.year!==1992||archive.version!==1||archive.year!==1992)throw Error('1992年地方票数资料格式错误');
+  const rows=[],profiles={};
+  const validProfile=(profile,valid)=>Array.isArray(profile)&&profile.length===4&&
+   profile.every(n=>Number.isSafeInteger(n)&&n>=0)&&profile[0]>=profile[1]&&profile[1]===profile[2]+profile[3]&&profile[2]===valid;
+  for(const electorate of ['plains','mountain']){
+   const ballot=archive.ballots[electorate];
+   const originals=shard.rows.filter(r=>r.level==='national'&&r.electorate===electorate).sort((a,b)=>Number(a.number)-Number(b.number));
+   if(originals.length!==9||Object.keys(ballot.counties).length!==23)throw Error('1992年地方票数资料不全');
+   const national=originals.map(()=>0);
+   const local=profiles[electorate]={county:{},town:{}};
+   let townCount=0;
+   for(const [county,record] of Object.entries(ballot.counties)){
+    const subtotal=originals.map(()=>0),areas=new Set();
+    local.town[county]={};
+    for(const [town,votes,profile] of record.towns){
+     if(areas.has(town)||votes.length!==originals.length||!votes.every(n=>Number.isSafeInteger(n)&&n>=0)||
+      (profile&&!validProfile(profile,votes.reduce((a,b)=>a+b,0))))throw Error('1992年乡镇得票或统计不一致：'+county+town);
+     areas.add(town);townCount++;
+     if(profile)local.town[county][town]=profile;
+     originals.forEach((row,i)=>{subtotal[i]+=votes[i];rows.push({...row,level:'town',county,town,votes:votes[i],elected:false})});
+    }
+    if(!validProfile(record.profile,subtotal.reduce((a,b)=>a+b,0)))throw Error('1992年县市得票或统计不一致：'+county);
+    local.county[county]=record.profile;
+    originals.forEach((row,i)=>{national[i]+=subtotal[i];rows.push({...row,level:'county',county,votes:subtotal[i],elected:false})});
+   }
+   if(townCount!==359||originals.some((row,i)=>row.votes-national[i]!==((electorate==='mountain'&&Number(row.number)===2)?2:0))){
+    throw Error('1992年地方得票与全区票数的已知差额不符');
+   }
+  }
+  const fields=['registered_voters','ballots_cast','valid_votes','invalid_votes'];
+  const plain=Object.values(profiles.plains.county);
+  const contests=shard.contests.map(c=>c.electorate==='plains'?
+   {...c,...Object.fromEntries(fields.map((field,i)=>[field,plain.reduce((sum,row)=>sum+row[i],0)]))}:c);
+  const originalRows=shard.rows.filter(r=>r.level!=='county'||r.county!=='台闽地区'||!Object.hasOwn(profiles,r.electorate));
+  return {...shard,rows:[...originalRows,...rows],contests,geographicProfiles:profiles};
+ }
  async function load(year,fetcher=root.fetch){
   year=Number(year);if(!YEAR_SET.has(year))throw Error('不支持的立法机构民代选举年份：'+year);
   if(loads.has(year))return loads.get(year);
   const promise=(async()=>{
-   const response=await fetcher('assets/history-legislative-'+year+'.json?v=20261124-vote-reconciliation-v4',{cache:'default'});
+   const [response,local]=await Promise.all([
+    fetcher('assets/history-legislative-'+year+'.json?v=20261124-vote-reconciliation-v4',{cache:'default'}),
+    [1992,2001].includes(year)?fetcher('assets/history-legislative-'+year+'-local.json?v=1').then(response=>{
+     if(!response.ok)throw Error(year+'年地方得票资料 HTTP '+response.status);
+     return response.json();
+    }):null
+   ]);
    if(!response.ok)throw Error(year+'年立法机构民代历史数据 HTTP '+response.status);
    const shard=await response.json();
    if(shard.schemaVersion!==2||shard.year!==year||shard.office!=='legislative'||!Array.isArray(shard.rows)||!shard.rows.length)throw Error(year+'年立法机构民代历史数据校验未通过');
-   return enrichCandidates(verified2001(shard));
+   return enrichCandidates(year===1992?apply1992Local(shard,local):
+    year===2001?apply2001TownReturns(verified2001(shard),local):shard);
   })();
   loads.set(year,promise);
   try{return await promise}catch(error){loads.delete(year);throw error}
@@ -444,7 +513,7 @@
   if(!mapLoad)mapLoad=(async()=>{const response=await fetcher('assets/map-legislative.json?v=20261031-split-v25',{cache:'default'});if(!response.ok)throw Error('立法机构民代选区地图 HTTP '+response.status);const map=await response.json();if(!Array.isArray(map.legislative)||map.legislative.length!==73)throw Error('立法机构民代选区地图校验未通过');return map})().catch(error=>{mapLoad=null;throw error});
   return mapLoad;
  }
- const api={apply2001Corrections:verified2001,YEARS,ballots,levels,multiMember,countyLabelsOnly,seatBadgeComposition,districtKey,winners,composition,renderMode,rows,note,districtNumber,districtGeometry,scopeGeometry,auditPartyTownVotes,singleMemberGeometry,periodSingleMemberGeometry,load,loadMap,loadKaohsiungVillages,kaohsiungSplitFragment};
+ const api={apply1992Local,apply2001Corrections:verified2001,YEARS,ballots,levels,multiMember,countyLabelsOnly,seatBadgeComposition,districtKey,winners,composition,renderMode,rows,note,districtNumber,districtGeometry,scopeGeometry,auditPartyTownVotes,singleMemberGeometry,periodSingleMemberGeometry,load,loadMap,loadKaohsiungVillages,kaohsiungSplitFragment};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;
  else root.HistoryLegislative=api;
 })(typeof window==='undefined'?{}:window);

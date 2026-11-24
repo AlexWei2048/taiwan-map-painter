@@ -62,6 +62,11 @@
    const contest={contest_id,election_id:'legislative:'+year+':'+electorate,
     county_id:'historical:'+year+':'+county,county_name:county,district_name:key,
     electorate,valid_votes,registered_voters:null,ballots_cast:null,invalid_votes:null};
+   const profiles=s.geographicProfiles?.[electorate];
+   const profile=level==='town'?profiles?.town?.[county]?.[key]:profiles?.county?.[county];
+   if(profile?.[2]===valid_votes){
+    [contest.registered_voters,contest.ballots_cast,,contest.invalid_votes]=profile;
+   }
    const rows=part.map((r,i)=>({
     candidacy_id:contest_id+':'+i,contest_id,candidate_name:r.name,party_name:r.party,
     ballot_number:r.number||null,gender:r.gender??null,incumbent_at_election:r.incumbent??null,
@@ -80,7 +85,7 @@
  function exportCsv(snapshot,selection={}){
   if(snapshot?.office!=='legislative')return Core.csv([['无立法机构民代资料']]);
   const year=Number(selection.year||snapshot.year),electorate=selection.electorate||'regional',
-   level=electorate==='regional'?'district':year===1992&&!selection.county&&['plains','mountain'].includes(electorate)?'national':selection.level==='national'?'national':
+   level=electorate==='regional'?'district':year===1992&&!selection.county&&selection.level!=='town'&&['plains','mountain'].includes(electorate)?'national':selection.level==='national'?'national':
     selection.level==='town'?'town':'county',county=selection.county||'';
   const focus=String(selection.focus||'');
   const records=snapshot.rows.filter(r=>r.electorate===electorate&&r.level===level&&(!county||r.county===county)&&

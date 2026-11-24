@@ -2412,8 +2412,10 @@ test('Legislative indigenous and party ballots have geography-appropriate levels
  assert.equal(await page.locator('#historyScale').inputValue(),'county');
  await page.locator('#historyYear').selectOption('1992');
  await page.waitForFunction(()=>History2022View.snapshot()?.year===1992);
- assert.deepEqual(await page.locator('#historyScale option').evaluateAll(a=>a.map(o=>o.value)),['county']);
- assert.match(await page.locator('#historyLegislativeMapHint').innerText(),/不推算地方票数/);
+ assert.deepEqual(await page.locator('#historyScale option').evaluateAll(a=>a.map(o=>o.value)),['county','town']);
+ await page.locator('#historyCounty').selectOption('台东县');
+ await page.locator('#historyScale').selectOption('town');
+ assert.match(await page.locator('#historyLegislativeMapHint').innerText(),/乡镇市区查看得票分布/);
 });
 
 

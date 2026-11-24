@@ -665,6 +665,27 @@ def add_1994_township(snapshot, audit):
     }
 
 
+def reconcile_2002_taipei_plains(snapshot):
+    proof = json.loads((ROOT / 'sources/history-2002-taipei-council-11.json').read_text(encoding='utf-8'))
+    contest = next(c for c in snapshot['contests'] if c['contest_id'] == proof['contestId'])
+    candidates = sorted((c for c in snapshot['candidacies'] if c['contest_id'] == proof['contestId']),
+                        key=lambda c: int(c['ballot_number']))
+    rows = proof['rows']
+    if ({norm(town) for town, _, _ in rows} != set(contest['scope_names']) or len(rows) != 29 or
+            any(not p[0] >= p[1] == p[2] + p[3] or p[2] != sum(votes) for _, p, votes in rows) or
+            [sum(row[2][i] for row in rows) for i in range(6)] != proof['nccuDistrictCandidateVotes'] or
+            [candidate['votes'] for candidate in candidates] != proof['nccuDistrictCandidateVotes']):
+        raise ValueError('2002 Taipei district 11 NCCU township and district returns do not reconcile')
+    totals = [sum(row[1][i] for row in rows) for i in range(4)]
+    if totals[2] != contest['valid_votes'] or [a - b for a, b in zip(totals, proof['nccuDistrictProfile'])] != [0, 1, 1, 0]:
+        raise ValueError('2002 Taipei district 11 turnout differs from the verified source comparison')
+    contest.update(dict(zip(proof['profileColumns'], totals)),
+                   source_url=proof['sources']['nccuCandidateTowns'],
+                   profile_source=proof['sources']['nccuTownProfiles'],
+                   profile_method='29_township_returns_nccu')
+    return {'contest_id': proof['contestId'], 'townships': len(rows), 'totals': totals, 'sources': proof['sources']}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('cec_zip', type=Path)
@@ -708,6 +729,7 @@ def main():
                 raise ValueError(f'2002 {contest_id} existing turnout conflicts with yearbook')
             contest.update(values, profile_source=proof['source'])
         audit[2002]['taichungCouncilYearbookProfiles'] = {'source': proof['source'], 'count': len(proof['rows'])}
+        audit[2002]['taipeiDistrict11Reconciliation'] = reconcile_2002_taipei_plains(snapshot)
     # Source-backed precinct supplements; never replace conflicting votes.
     for district, slug, expected in [('盐埕区', 'yancheng', 23), ('鼓山区', 'gushan', 63), ('旗津区', 'qijin', 18), ('新兴区', 'xinxing', 42), ('前金区', 'qianjin', 22), ('苓雅区', 'lingya', 116), ('前镇区', 'qianzhen', 113), ('左营区', 'zuoying', 94), ('楠梓区', 'nanzi', 82), ('三民区', 'sanmin', 188)]:
         proof_path = ROOT / f'sources/history-2006-kaohsiung-{slug}-profile.json'

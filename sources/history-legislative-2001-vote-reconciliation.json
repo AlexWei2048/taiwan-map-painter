@@ -1,21 +1,22 @@
 {
   "year": 2001,
   "electorate": "regional",
-  "checkedAt": "2026-11-24",
-  "status": "local-detail-partial",
+  "checkedAt": "2026-11-25",
+  "status": "town-totals-reconciled",
   "sources": {
     "repository": "https://github.com/MISNUK/CECDataSet",
     "candidateBlob": "e28f110fbf3807db3ac8792adcd13a535e85430f",
     "profilesBlob": "98648d4dc87d1d94abc3d50b3015ed0a32f62f8c",
     "alternateRepository": "https://github.com/kiang/db.cec.gov.tw/tree/master/voteData/5%E5%B1%86%E7%AB%8B%E5%A7%94/%E5%8D%80%E5%9F%9F",
     "alternateCandidateBlob": "365c0c56173c5de4fb705fd21958252dbddcc209",
-    "alternateProfileBlob": "e7024f81d34918b7c88e5ef6e08f1a680f21444b"
+    "alternateProfileBlob": "e7024f81d34918b7c88e5ef6e08f1a680f21444b",
+    "nccuDistrict3Towns": "https://vote.nccu.edu.tw/cec/vote31.asp?pass1=J%3A889I%3E%3A898%3B888888"
   },
   "official_valid": 10174005,
   "base_valid": 10171900,
   "corrected_valid": 10174005,
   "recovered_votes": 658,
-  "remaining_difference": 1447,
+  "remaining_difference": 0,
   "corrections": [
     {
       "county": "台北县",
@@ -430,30 +431,8 @@
       ]
     }
   ],
-  "unresolved": [
-    {
-      "county": "台北县",
-      "town": "新店市",
-      "district": "台北县第3选区",
-      "raw_key": "03,001,03,020",
-      "missing_poll": 1783,
-      "old_valid": 135927,
-      "official_valid": 136770,
-      "delta": 843
-    },
-    {
-      "county": "台北县",
-      "town": "汐止镇",
-      "district": "台北县第3选区",
-      "raw_key": "03,001,03,025",
-      "missing_poll": 1931,
-      "old_valid": 75800,
-      "official_valid": 76404,
-      "delta": 604
-    }
-  ],
-  "note": "台北县第3选区27位候选人按官方 elctks 选区汇总逐人核对，1,447票补入选区、县市、全区及对应旧制计算票；新店与汐止的两所原始候选人细项仍缺，乡镇票数按原档保留。",
-  "corrected_town_valid": 10172558,
+  "note": "原台北县第3选区与官方全区、县市及选区得票核对。新店及汐止乡镇级使用政大逐候选人明细，合计补回1,447票；投开票所归属由原始档的缺号识别。",
+  "corrected_town_valid": 10174005,
   "district3OfficialTotals": {
     "district": "台北县第3选区",
     "county": "台北县",
@@ -661,5 +640,27 @@
       "elctks": "5f589f10d940892440f03380e58f8a0f97cd249e4191287077a9743379fb7c03",
       "elcand": "88d30abf8a42f264bc9c45fcb68590eb1059e762ca79fe6d8becf2f0fc122ffd"
     }
-  }
+  },
+  "missingPrecinctsInRawArchive": [
+    {
+      "county": "台北县",
+      "town": "新店市",
+      "district": "台北县第3选区",
+      "raw_key": "03,001,03,020",
+      "missing_poll": 1783,
+      "old_valid": 135927,
+      "official_valid": 136770,
+      "delta": 843
+    },
+    {
+      "county": "台北县",
+      "town": "汐止镇",
+      "district": "台北县第3选区",
+      "raw_key": "03,001,03,025",
+      "missing_poll": 1931,
+      "old_valid": 75800,
+      "official_valid": 76404,
+      "delta": 604
+    }
+  ]
 }

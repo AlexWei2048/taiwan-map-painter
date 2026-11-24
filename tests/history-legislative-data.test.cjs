@@ -32,13 +32,20 @@ test('actual party votes have all-area, county and town map levels without fabri
  assert.doesNotMatch(csv,/候选人,号次/);
  assert.match(csv,/金/);
 });
-test('historic 1992 indigenous ballots do not manufacture local tallies',()=>{
- const s=shard(1992),indexed=Core.index(s);
- assert.deepEqual(Legislative.levels(1992,'mountain').map(([value])=>value),['county']);
- assert.equal(Data.localResult(indexed,{year:1992,electorate:'mountain',scope:'county',county:'台北市'}),null);
- assert.equal(Data.localResult(indexed,{year:1992,electorate:'plains',scope:'town',county:'台北市',area:'北投区'}),null);
- const national=Data.localResult(indexed,{year:1992,electorate:'mountain',scope:'all'});
- assert.ok(national.result.candidacies.length>0);
+test('1992 NCCU indigenous ballots resolve local results and retain the recorded two-vote difference',()=>{
+ const s=Legislative.apply1992Local(shard(1992),require('../assets/history-legislative-1992-local.json')),indexed=Core.index(s);
+ assert.deepEqual(Legislative.levels(1992,'mountain').map(([value])=>value),['county','town']);
+ const county=Data.localResult(indexed,{year:1992,electorate:'mountain',scope:'county',county:'台南县'});
+ const town=Data.localResult(indexed,{year:1992,electorate:'plains',scope:'town',county:'台北市',area:'北投区'});
+ assert.deepEqual(['registeredVoters','ballotsCast','validVotes','invalidVotes'].map(k=>county.overview[k]),[303,102,96,6]);
+ assert.equal(town.overview.validVotes,73);
+ assert.equal(Data.localResult(indexed,{year:1992,electorate:'mountain',scope:'all'}).overview.validVotes,63831);
+ for(const [electorate,total] of [['plains',49333],['mountain',63829]])for(const level of ['county','town']){
+  const rows=s.rows.filter(r=>r.electorate===electorate&&r.level===level);
+  assert.equal(rows.length,(level==='county'?23:359)*9);
+  assert.equal(rows.reduce((sum,row)=>sum+row.votes,0),total);
+ }
+ assert.match(Data.exportCsv(s,{year:1992,electorate:'plains',level:'town'}),/北投区/);
 });
 test('old multi-seat district reports actual elected counts and unique candidates',()=>{
  const s=shard(2004),indexed=Core.index(s);
