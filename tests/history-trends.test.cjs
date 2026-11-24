@@ -26,3 +26,20 @@ test('List allocation seats require verified allocation and never imply geograph
  const v=T.aggregate(s,{office:'legislative',electorate:'party',partySeats:{matchesOfficial:true,totalAssigned:3,parties:[{party:'甲',seats:2},{party:'乙',seats:1}]}});
  assert.equal(v.seats,3);assert.equal(T.value(v,'甲','seats'),2);
 });
+test('Real presidential national vote totals agree with the original national profile',()=>{
+ const s=require('../assets/history-president-2024.json');
+ const r=T.aggregate(s,{office:'president'});
+ assert.equal(r.complete,true);
+ assert.equal(r.valid,s.national.valid_votes);
+ assert.equal(r.registered,s.national.registered_voters);
+ assert.equal(r.candidateCount,s.national.candidate_totals.length);
+ for(const p of s.national.candidate_totals)assert.equal(T.value(r,p.party,'votes'),p.votes);
+});
+test('Real 2022 council counts reconcile to the 910 official seats',()=>{
+ const s=require('../assets/history-2022.json'),norm=require('../assets/opencc.js').Converter({from:'t',to:'cn'});
+ const r=T.aggregate(s,{office:'council',electorate:'all',normalize:norm});
+ assert.equal(r.complete,true);assert.equal(r.seats,910);
+ assert.equal(Object.values(r.parties).reduce((n,p)=>n+p.seats,0),910);
+ const regions=T.aggregate(s,{office:'council',electorate:'all',county:'台北市',normalize:norm});
+ assert.equal(regions.seats,61);
+});

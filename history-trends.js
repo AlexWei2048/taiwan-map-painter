@@ -36,9 +36,12 @@ function aggregate(snapshot,{office,electorate='regional',county='',town='',unif
  const localSeat=office==='township'&&!!town,seatAllowed=!isPres&&(!geographicVotes||localSeat)&&(!isList||!county);
  const partial=(office==='council'&&year===1994&&(!county||county==='金门县'))||
   (office==='mayor'&&year===2018&&town&&county==='台北市');
- const complete=records.length>0&&!partial&&records.every(r=>Number.isFinite(r.votes)&&r.votes>=0);
+ const grainTotal=records.reduce((n,r)=>n+(Number(r.votes)||0),0);
+ const expected=isPres&&!county&&!town?s.national?.valid_votes:!geographicVotes?sum(contests,'valid_votes'):null;
+ const reconciled=!Number.isFinite(expected)||expected===grainTotal;
+ const complete=records.length>0&&!partial&&reconciled&&records.every(r=>Number.isFinite(r.votes)&&r.votes>=0);
  const valid=complete?records.reduce((n,r)=>n+r.votes,0):null;
- const parties={};
+ const parties=Object.create(null);
  if(complete)for(const r of records){
   const p=parties[r.party]||(parties[r.party]={votes:0,seats:seatAllowed?0:null});
   p.votes+=r.votes;if(seatAllowed&&r.elected)p.seats++;
@@ -65,8 +68,8 @@ function aggregate(snapshot,{office,electorate='regional',county='',town='',unif
   cast=profile?.ballots_cast??sum(contests,'ballots_cast');
   invalid=profile?.invalid_votes??sum(contests,'invalid_votes');
  }
- if(complete&&isLeg&&turnoutEnrich&&!town&&!(isList&&year<2008)){
-  const p=turnoutEnrich({validVotes:valid,turnoutGroups:[]},{year,electorate,scope:county?'county':'all',county});
+ if(complete&&isLeg&&turnoutEnrich&&!(isList&&year<2008)){
+  const p=turnoutEnrich({validVotes:valid,turnoutGroups:[]},{year,electorate,scope:town?'town':county?'county':'all',county,area:town});
   registered=p.registeredVoters??registered;cast=p.ballotsCast??cast;invalid=p.invalidVotes??invalid;
  }
  if(complete&&town&&!localSeat){
@@ -75,9 +78,10 @@ function aggregate(snapshot,{office,electorate='regional',county='',town='',unif
  }
  if(!Number.isFinite(cast)||!Number.isFinite(registered)||cast>registered||cast<valid){registered=null;cast=null;invalid=null}
  if(!Number.isFinite(invalid)||valid+invalid!==cast)invalid=null;
+ const actualNames=geographicVotes&&!localSeat?[...new Set((s.rows||[]).filter(r=>r.type===office&&r.level===(town?'town':'county')&&accepts(r.electorate)&&sameCounty(r.county)&&(!town||cn(r.town)===town)).map(r=>cn(r.county)).filter(Boolean))]:[...new Set(contests.map(c=>cn(c.county_name)))];
  const dates=[...new Set(contests.map(c=>c.election_date?.slice(0,4)).filter(Boolean))].sort();
  const partyLeader=metric=>{if(!complete)return null;const a=Object.entries(parties).filter(([,p])=>Number.isFinite(p[metric])).sort((a,b)=>b[1][metric]-a[1][metric]);if(!a.length||!a[0][1][metric])return null;return a.length>1&&a[0][1][metric]===a[1][1][metric]?'并列':a[0][0]};
- return {year,label:county&&dates.length?dates.join('/'):String(year),complete,reason:partial?'当届记录缺失，未将部分数据当作完整结果':records.length?'':'本范围没有可核实的当届结果',
+ return {year,label:county&&dates.length?dates.join('/'):String(year),complete,reason:partial?'当届记录缺失，未将部分数据当作完整结果':!reconciled?'候选人票数与已核验有效票不一致':records.length?'':'本范围没有可核实的当届结果',
   valid,seats,parties,registered,cast,invalid,turnout:percent(cast,registered),validRate:percent(valid,cast),
   candidateCount:peopleAllowed?people.length:null,electedCount:peopleAllowed?electedPeople.length:null,
   femaleCandidate:peopleAllowed?percent(people.filter(r=>female(r.gender)).length,sexKnown.length):null,
@@ -88,11 +92,11 @@ function aggregate(snapshot,{office,electorate='regional',county='',town='',unif
   reelectionRate:peopleAllowed?percent(incumbents.filter(r=>r.elected).length,incumbents.length):null,
   incumbentCoverage:peopleAllowed?percent(incKnown.length,people.length):null,
   seatLeader:partyLeader('seats'),voteLeader:partyLeader('votes'),contests:contests.length,
-  actualCounties:[...new Set(contests.map(c=>cn(c.county_name)))],oldPartyVote:isList&&year<2008};
+  actualCounties:actualNames,oldPartyVote:isList&&year<2008};
 }
 function value(row,party,metric){
  if(!row?.complete)return null;
- const p=row.parties[party];
+ const p=row.parties?.[party];
  if(metric==='votes')return p?.votes??0;
  if(metric==='share')return percent(p?.votes??0,row.valid);
  if(metric==='seats')return Number.isFinite(row.seats)?p?.seats??0:null;

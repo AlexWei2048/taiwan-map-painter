@@ -659,7 +659,8 @@
   const panels={map:'historyMapPanel',candidates:'historyCandidatesPanel',overview:'historyOverviewPanel',trends:'historyTrendsPanel'};
   for(const [view,id] of Object.entries(panels)){const node=el(id);if(node)node.hidden=state.view!==view}
   for(const view of VIEWS){const button=el('historyView'+view[0].toUpperCase()+view.slice(1));if(button){const selected=state.view===view;button.classList.toggle('active',selected);button.setAttribute('aria-pressed',String(selected))}}
-  if(state.view==='trends')root.HistoryTrendsUI?.open(state);
+  if(state.view==='trends')root.HistoryTrendsUI?.open(state);else root.HistoryTrendsUI?.close();
+  if(el('historyExportCsv'))el('historyExportCsv').textContent=state.view==='trends'?'导出历史趋势 CSV':'导出当前结果 CSV';
   renderTurnoutCards();if(el('historyCoverage')&&currentResult)el('historyCoverage').textContent=state.office==='legislative'?'当前票种：'+(root.HistoryLegislative?.ballots(state.year).find(x=>x.value===state.electorate)?.label||'立法机构民代')+' · '+currentResult.contests.length+'个统计区域 · '+currentResult.candidacies.length+'条结果。':'当前范围：'+currentResult.contests.length+'个选举区 · '+currentResult.candidacies.length+'条候选人记录。';emit();return{...state};
  }
  function setView(view){state=normalizeSelection({...readSelection(),view});
@@ -679,6 +680,7 @@
   root.History2022View?.openContest?.(contestId,summary);
  }
  function exportCsv(){
+  if(state.view==='trends')return root.HistoryTrendsUI?.exportCsv();
   if(!currentResult)return;
   const content=state.office==='legislative'?root.HistoryLegislativeData?.exportCsv(indexed?.snapshot||{},{...state,focus:el('historyFocus')?.value||''}):state.office==='president'&&state.level==='town'?presidentialTownCsv(indexed?.snapshot||{},state):historyCsv(currentResult,state);
   const blob=new Blob([content],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),link=doc.createElement('a');link.href=url;link.download=exportStem(state)+'.csv';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
