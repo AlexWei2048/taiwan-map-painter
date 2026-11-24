@@ -148,3 +148,5 @@
 .trend-card svg{display:block;width:100%;min-width:560px;height:auto}.trend-card svg [role=button]{cursor:pointer}.trend-card svg [role=button]:focus{outline:none;stroke:#d38b25;stroke-width:3px}
 .trend-point-readout{font-size:13px;color:#315948;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 @media(max-width:650px){.trend-controls{grid-template-columns:repeat(2,minmax(0,1fr))}.trend-card{padding:8px}.trend-control select{font-size:16px}.trend-card svg{min-width:540px}}
+
+.trend-year-controls{margin:12px 0}.trend-year-title{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px}.trend-year-title .button{font-size:12px;padding:4px 10px;min-height:28px}.trend-year-picker{display:flex;flex-wrap:wrap;gap:6px 12px;margin:9px 0}.trend-year{display:inline-flex;align-items:center;gap:5px;font-size:13px}.trend-year input{width:16px;height:16px;margin:0}.trend-parliament-section h4{margin:0;color:#244c3d}.trend-parliament-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:10px}.trend-parliament-card svg{min-width:0;width:100%;height:auto}.trend-parliament-card .data-help:empty{display:none}

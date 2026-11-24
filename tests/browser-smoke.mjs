@@ -3095,7 +3095,9 @@ test('Historical trends follow sidebar election, year, scope and metric with one
  assert.equal(await page.locator('#trendCharts .trend-card svg').count(),1);
  assert.equal(await page.locator('#trendOffice,#trendCounty,#trendMetric,#trendBallot').count(),0);
  await page.locator('#historyCounty').selectOption('台北市');
- await page.locator('#trendStart').selectOption('2018');
+ await page.locator('#trendSelectNone').click();
+ await page.locator('#trendYears input[value="2018"]').check();
+ await page.locator('#trendYears input[value="2022"]').check();
  await page.waitForFunction(()=>document.querySelector('#trendStatus').textContent.includes('2 届'));
  assert.match(await page.locator('#trendScope').textContent(),/台北市/);
  await page.locator('#historyMetric').selectOption('share');
@@ -3107,8 +3109,28 @@ test('Historical trends follow sidebar election, year, scope and metric with one
  const csvDownload=page.waitForEvent('download');await page.locator('#trendCsv').click();assert.match((await csvDownload).suggestedFilename(),/历史趋势.*csv/);
  const svgDownload=page.waitForEvent('download');await page.locator('#trendCharts .trend-card').first().getByRole('button',{name:'SVG',exact:true}).click();assert.match((await svgDownload).suggestedFilename(),/\.svg$/);
  await page.locator('#historyYear').selectOption('2018');
- await page.waitForFunction(()=>document.querySelector('#trendEndLabel').textContent.includes('2018')&&document.querySelector('#trendStatus').textContent.includes('1 届'));
- assert.doesNotMatch(await page.locator('#trendCharts svg').first().textContent(),/2022/);
+ await page.waitForFunction(()=>History2022View.snapshot()?.year===2018&&document.querySelector('#trendStatus').textContent.includes('2 届'));
+ assert.match(await page.locator('#trendCharts svg').first().textContent(),/2022/);
+ assert.equal(await page.locator('#trendStart').count(),0);
  await page.locator('#historyViewTrends').click();assert.equal(await page.locator('#historyTrendsPanel').isVisible(),false);
  await page.locator('#historyViewTrends').click();assert.equal(await page.locator('#historyTrendsPanel').isVisible(),true);
+});
+
+test('Legislative seat trends default to all years and show complete integer parliament seats',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ await page.locator('#categoryHistory').click();
+ await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
+ await page.locator('#historyOffice').selectOption('legislative');
+ await page.waitForFunction(()=>History2022View.office()==='legislative');
+ await page.locator('#historyViewTrends').click();
+ await page.locator('.trend-parliament-card svg').first().waitFor({timeout:60000});
+ assert.equal(await page.locator('#trendYears input:checked').count(),10);
+ const graph=page.locator('#trendCharts > .trend-card svg').first();
+ assert.ok((await graph.locator('[data-trend-axis-tick]').allTextContents()).every(v=>/^\d+$/.test(v)));
+ assert.deepEqual((await graph.locator('[data-trend-total]').allTextContents()).map(Number),[161,164,225,225,225,113,113,113,113,113]);
+ const last=page.locator('.trend-parliament-card').last();
+ assert.equal(await last.locator('[data-seat-dot]').count(),113);
+ await page.locator('#trendSelectNone').click();await page.locator('#trendYears input[value="2024"]').check();
+ await page.waitForFunction(()=>document.querySelectorAll('.trend-parliament-card [data-seat-dot]').length===113);
+ assert.equal(await page.locator('.trend-parliament-card').count(),1);
 });

@@ -57,3 +57,18 @@ test('Map trends follow county and metric; top individual votes are not party to
  assert.equal(T.mapTrend(s,{...conf,metric:'votes',candidateScope:'candidate',candidate:{name:'乙',party:'A',county:'甲县',district:'第1选举区'}}).values.value,20);
  assert.equal(T.mapTrend(s,{...conf,metric:'share',candidateScope:'candidate',candidate:{name:'未参选',party:'A'}}).complete,false);
 });
+
+test('All legislative seats reconcile to official full house totals for every election',()=>{
+ const P=require('../history-legislative-party.js'),norm=require('../assets/opencc.js').Converter({from:'t',to:'cn'});
+ for(const [year,expected] of Object.entries(T.LEGISLATIVE_TOTALS)){
+  const s=require('../assets/history-legislative-'+year+'.json'),r=T.allLegislativeSeats(s,P.build(Number(year),s),norm);
+  assert.equal(r.complete,true,year+' '+r.reason);assert.equal(r.total,expected);
+  assert.equal(Object.values(r.parties).reduce((n,v)=>n+v,0),expected);
+ }
+ const s=require('../assets/history-legislative-2024.json'),r=T.allLegislativeSeats(s,P.build(2024,s),norm);
+ assert.equal(r.parties['中国国民党'],52);assert.equal(r.parties['民主进步党'],51);assert.equal(r.parties['台湾民众党'],8);assert.equal(r.parties['无党籍'],2);
+});
+test('Integer tick marks and parliament dot counts are exact for small and large assemblies',()=>{
+ for(const max of [0,1,2,3,22,113,161,164,225,910]){const ticks=T.integerTicks(max);assert.ok(ticks.every(Number.isInteger));assert.ok(ticks.at(-1)>=max)}
+ for(const total of [1,2,3,6,22,113,161,164,225,910]){const pts=T.parliamentPoints(total);assert.equal(pts.length,total);assert.ok(pts.every(p=>Number.isFinite(p.x)&&Number.isFinite(p.y)&&p.y<=0));assert.equal(new Set(pts.map(p=>p.x+'|'+p.y)).size,total)}
+});

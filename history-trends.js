@@ -179,7 +179,45 @@ function mapTrend(snapshot,selection,anchor){
  if(metric==='seats')return {year,label:displayYear,complete:true,reason:'',parties:selected,values:{value:selected[partyName(party)]||0},valid,areas:groups.size};
  return {year,label:displayYear,complete:true,reason:'',parties:selected,values:{},valid,areas:groups.size};
 }
-const api={aggregate,value,difference,modern,percent,mapTrend};
+// Compare original elected seats, not later replacements or party switches.
+// Full legislative totals: https://www.ly.gov.tw/EngPages/List.aspx?nodeid=338
+const LEGISLATIVE_TOTALS={1992:161,1995:164,1998:225,2001:225,2004:225,2008:113,2012:113,2016:113,2020:113,2024:113};
+function allLegislativeSeats(snapshot,listModel,normalize=String){
+ const year=snapshot.year,expected=LEGISLATIVE_TOTALS[year],ids=electionIds(snapshot,'legislative');
+ const contests=new Set((snapshot.contests||[]).filter(c=>ids.has(c.election_id)&&['regional','plains','mountain','indigenous'].includes(Core.identity(c.electorate))).map(c=>c.contest_id));
+ const parties=Object.create(null),add=(party,n)=>{const k=keyParty(normalize(String(party||'无党籍')));parties[k]=(parties[k]||0)+n};
+ const seen=new Set();
+ for(const c of snapshot.candidacies||[]){if(!contests.has(c.contest_id)||c.elected_official!==true)continue;const k=c.candidacy_id||[c.contest_id,c.ballot_number,c.candidate_name].join('|');if(seen.has(k))continue;seen.add(k);add(c.party_name,1)}
+ if(!listModel?.matchesOfficial||!expected)return{year,label:String(year),complete:false,reason:'不分区及侨选席次尚未通过核对',parties:{},values:{},total:null};
+ for(const p of listModel.parties||[])if(Number.isInteger(p.seats)&&p.seats>0)add(p.party,p.seats);
+ const total=Object.values(parties).reduce((n,v)=>n+v,0);
+ if(total!==expected)return{year,label:String(year),complete:false,reason:'已核验席次 '+total+' / 法定总席次 '+expected+'，暂不绘制不完整构成',parties:{},values:{},total:null};
+ return{year,label:String(year),complete:true,reason:'',parties,values:{},total};
+}
+function integerTicks(max){
+ const target=Math.max(1,Math.ceil(max/4)),magnitude=10**Math.floor(Math.log10(target));
+ const step=Math.max(1,([1,2,5,10].find(n=>n*magnitude>=target)||10)*magnitude);
+ const end=Math.max(step,Math.ceil(max/step)*step);
+ return Array.from({length:end/step+1},(_,i)=>i*step);
+}
+// Evenly spaced concentric semicircular rows; exactly one mark per seat.
+// Positions are sorted left-to-right by polar angle so parties form wedges.
+function parliamentPoints(total){
+ if(!Number.isSafeInteger(total)||total<=0)return [];
+ const rows=Math.max(1,Math.ceil(Math.sqrt(total/5))),inner=rows===1?1:0.36,step=(1-inner)/Math.max(1,rows-1);
+ const radii=Array.from({length:rows},(_,i)=>inner+i*step);
+ const weights=radii.map(r=>Math.PI*r),sum=weights.reduce((a,b)=>a+b,0);
+ const ideal=weights.map(w=>w/sum*total),counts=ideal.map(Math.floor);
+ let remainder=total-counts.reduce((a,b)=>a+b,0);
+ for(const i of ideal.map((v,i)=>i).sort((a,b)=>(ideal[b]-counts[b])-(ideal[a]-counts[a])))if(remainder-->0)counts[i]++;
+ const pts=[];
+ for(let i=0;i<rows;i++)for(let j=0;j<counts[i];j++){
+  const angle=counts[i]===1?Math.PI/2:Math.PI-(j+.5)/counts[i]*Math.PI,r=radii[i];
+  pts.push({x:r*Math.cos(angle),y:-r*Math.sin(angle),angle,r,row:i});
+ }
+ return pts.sort((a,b)=>b.angle-a.angle||a.r-b.r);
+}
+const api={aggregate,value,difference,modern,percent,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,LEGISLATIVE_TOTALS};
 if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
 root.HistoryTrends=api;
 })(typeof window==='undefined'?{}:window);
