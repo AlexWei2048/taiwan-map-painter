@@ -3347,16 +3347,38 @@
         "2006直轄市議員(原住民)",
         "2006直轄市長"
       ],
-      "precinctProfileSupplement": {
-        "county": "高雄市",
-        "town": "盐埕区",
-        "source": "https://web.cec.gov.tw/api/file/265720de-f897-4000-96e1-87ad5d7e8797.pdf",
-        "precincts": 23,
-        "valid_votes": 16534,
-        "registered_voters": 23103,
-        "ballots_cast": 16665,
-        "invalid_votes": 131
-      }
+      "precinctProfileSupplements": [
+        {
+          "county": "高雄市",
+          "town": "盐埕区",
+          "source": "https://web.cec.gov.tw/api/file/265720de-f897-4000-96e1-87ad5d7e8797.pdf",
+          "precincts": 23,
+          "registered_voters": 23205,
+          "ballots_cast": 16665,
+          "valid_votes": 16534,
+          "invalid_votes": 131
+        },
+        {
+          "county": "高雄市",
+          "town": "鼓山区",
+          "source": "https://web.cec.gov.tw/api/file/265720de-f897-4000-96e1-87ad5d7e8797.pdf",
+          "precincts": 63,
+          "registered_voters": 90504,
+          "ballots_cast": 63238,
+          "valid_votes": 62691,
+          "invalid_votes": 547
+        },
+        {
+          "county": "高雄市",
+          "town": "旗津区",
+          "source": "https://web.cec.gov.tw/api/file/265720de-f897-4000-96e1-87ad5d7e8797.pdf",
+          "precincts": 18,
+          "registered_voters": 23453,
+          "ballots_cast": 16535,
+          "valid_votes": 16316,
+          "invalid_votes": 219
+        }
+      ]
     },
     "2009": {
       "counts": {
