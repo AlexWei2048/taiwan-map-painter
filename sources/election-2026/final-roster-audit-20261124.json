@@ -31825,5 +31825,63 @@
       "source": "CYCITYD2",
       "note": "PDF文字与现有姓名不一致；原图不可访问，不作更名或升级"
     }
-  ]
+  ],
+  "officialAggregateReconciliation": {
+    "checkedAt": "2026-11-24",
+    "status": "unresolved",
+    "sourceUrl": "https://info.cec.gov.tw/vote2026/question/",
+    "alternateSourceUrl": "https://info.cec.gov.tw/vote2026/article/content/?target=%2Farticle%2FA0096",
+    "sourceTitle": "中选会2026选举专区常见问答第44题及竞选活动期间答客问第2题",
+    "officialTotal": 2049,
+    "localTotal": 2051,
+    "counts": {
+      "mayor": {
+        "official": 81,
+        "local": 81,
+        "difference": 0
+      },
+      "council": {
+        "official": 1493,
+        "local": 1493,
+        "difference": 0
+      },
+      "ordinaryTownship": {
+        "official": 460,
+        "local": 462,
+        "difference": 2
+      },
+      "mountainDistrictHead": {
+        "official": 15,
+        "local": 15,
+        "difference": 0
+      }
+    },
+    "note": "官方公布的是资格审定人数；本站当前收录数多2人，差异集中于普通乡镇市长。具体名单及统计时点差异尚未厘清，不据总数猜测删人。此前与第三方名录总数一致，不等同于与官方汇总一致。",
+    "sourceDiscovery": [
+      {
+        "county": "苗栗县",
+        "url": "https://web.cec.gov.tw/mlec/article/65840",
+        "kind": "11月17日正式公告入口",
+        "status": "检索到公告及938KB附件标题；页面缓存未命中，未读取候选人名单"
+      },
+      {
+        "county": "嘉义县",
+        "url": "https://web.cec.gov.tw/cycec/article/list/555?beginDate=&endDate=&keyword=&page=1",
+        "kind": "11月17日正式公告索引",
+        "status": "已检索到正式名单公告标题，未取得逐人附件"
+      },
+      {
+        "county": "嘉义县",
+        "url": "https://web.cec.gov.tw/cycec/article/65399",
+        "kind": "官方抽签公告入口",
+        "status": "已检索到附件标题；未取得逐人附件"
+      },
+      {
+        "county": "桃园市",
+        "url": "https://web.cec.gov.tw/tyec/article/65506",
+        "kind": "官方抽签公告入口",
+        "status": "已检索到复兴区长抽签附件标题；未取得逐人附件"
+      }
+    ]
+  }
 }

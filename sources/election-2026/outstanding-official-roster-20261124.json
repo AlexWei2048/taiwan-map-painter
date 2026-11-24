@@ -2104,7 +2104,7 @@
       "source": "MTCF"
     }
   ],
-  "limitations": "部分电子公报超过网页工具PDF读取限制，部分截图缓存缺失；原始附件无法访问时不升级证据。；高雄四区改用官方有声公报名录复核，苗栗部分大PDF仍超限。；南投县部分单独公报可读，仍有5个乡镇公报待复核。；苗栗第1、4、5议员选区已取得官方抽签结果，正式公报仍待核。；嘉义市抽签表6处姓名文字差异尚待原图复核。",
+  "limitations": "部分电子公报超过网页工具PDF读取限制，部分截图缓存缺失；原始附件无法访问时不升级证据。；高雄四区改用官方有声公报名录复核，苗栗部分大PDF仍超限。；南投县部分单独公报可读，仍有5个乡镇公报待复核。；苗栗第1、4、5议员选区已取得官方抽签结果，正式公报仍待核。；嘉义市抽签表6处姓名文字差异尚待原图复核。；本轮官方公告索引可检索，但候选人附件缓存未命中，未提升逐人证据等级。新增官方汇总差异待核。",
   "chiayiCityDrawTextVariants": [
     {
       "districtId": "council:10020:01",
@@ -2154,5 +2154,63 @@
       "source": "CYCITYD2",
       "note": "PDF文字与现有姓名不一致；原图不可访问，不作更名或升级"
     }
-  ]
+  ],
+  "officialAggregateReconciliation": {
+    "checkedAt": "2026-11-24",
+    "status": "unresolved",
+    "sourceUrl": "https://info.cec.gov.tw/vote2026/question/",
+    "alternateSourceUrl": "https://info.cec.gov.tw/vote2026/article/content/?target=%2Farticle%2FA0096",
+    "sourceTitle": "中选会2026选举专区常见问答第44题及竞选活动期间答客问第2题",
+    "officialTotal": 2049,
+    "localTotal": 2051,
+    "counts": {
+      "mayor": {
+        "official": 81,
+        "local": 81,
+        "difference": 0
+      },
+      "council": {
+        "official": 1493,
+        "local": 1493,
+        "difference": 0
+      },
+      "ordinaryTownship": {
+        "official": 460,
+        "local": 462,
+        "difference": 2
+      },
+      "mountainDistrictHead": {
+        "official": 15,
+        "local": 15,
+        "difference": 0
+      }
+    },
+    "note": "官方公布的是资格审定人数；本站当前收录数多2人，差异集中于普通乡镇市长。具体名单及统计时点差异尚未厘清，不据总数猜测删人。此前与第三方名录总数一致，不等同于与官方汇总一致。",
+    "sourceDiscovery": [
+      {
+        "county": "苗栗县",
+        "url": "https://web.cec.gov.tw/mlec/article/65840",
+        "kind": "11月17日正式公告入口",
+        "status": "检索到公告及938KB附件标题；页面缓存未命中，未读取候选人名单"
+      },
+      {
+        "county": "嘉义县",
+        "url": "https://web.cec.gov.tw/cycec/article/list/555?beginDate=&endDate=&keyword=&page=1",
+        "kind": "11月17日正式公告索引",
+        "status": "已检索到正式名单公告标题，未取得逐人附件"
+      },
+      {
+        "county": "嘉义县",
+        "url": "https://web.cec.gov.tw/cycec/article/65399",
+        "kind": "官方抽签公告入口",
+        "status": "已检索到附件标题；未取得逐人附件"
+      },
+      {
+        "county": "桃园市",
+        "url": "https://web.cec.gov.tw/tyec/article/65506",
+        "kind": "官方抽签公告入口",
+        "status": "已检索到复兴区长抽签附件标题；未取得逐人附件"
+      }
+    ]
+  }
 }
