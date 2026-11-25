@@ -21,4 +21,6 @@
 
 ## 本次已核实的改动
 
-1992 年桃园县区域民代 9 号徐鸿进的政大当届资料性别码为异常值 `5`。中选会[1998 年桃园县同名、同出生年（1941）、同政党候选人记录](https://db.cec.gov.tw/ElecTable/Election/ElecTickets?areaCode=00&cityCode=003&dataLevel=A&dataType=tickets&deptCode=000&legisId=L1&liCode=0000&prvCode=03&subjectId=L0&themeId=b09574a77dbe889722955d9fd9f3cb6b&typeId=ELC)记为男性；该人身份按这些字段交叉确认后补入性别。审计缺值事项由 2,398 降至 2,397；其余未取得原始证据的缺值保持原样。当前**没有达到“全部补齐”条件**。
+1992 年桃园县区域民代 9 号徐鸿进的政大当届资料性别码为异常值 `5`。中选会[1998 年桃园县同名、同出生年（1941）、同政党候选人记录](https://db.cec.gov.tw/ElecTable/Election/ElecTickets?areaCode=00&cityCode=003&dataLevel=A&dataType=tickets&deptCode=000&legisId=L1&liCode=0000&prvCode=03&subjectId=L0&themeId=b09574a77dbe889722955d9fd9f3cb6b&typeId=ELC)记为男性；该人身份按这些字段交叉确认后补入性别。
+
+本批还以[中选会资料的高校镜像](https://github.com/MISNUK/CECDataSet)核对 2008、2012、2016 三届区域民代选区投票统计。原整理中的 `DistrictName` 在部分县记录的是县内选区总数，不是具体选区号，导致 150 个选区的统计未导入。现按**当届县市、独立候选人合计有效票、候选人数**唯一匹配每条原件，并验证登记人数≥投票数、投票数＝有效票＋无效票、全县各选区四项合计与原县统计一致，三届各 73 个选区全部对账。原来已验证的数值保持不变；可重复运行 `scripts/reconcile_legacy_legislative_district_profiles.py`。审计缺值事项由 2,397 降至 2,247，尚不包含其他 1994 年增录的县级摘要。当前**没有达到“全部补齐”条件**。
