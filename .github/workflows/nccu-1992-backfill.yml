@@ -1,0 +1,41 @@
+name: NCCU 1992 legislative turnout backfill
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/nccu-1992-backfill.yml'
+      - 'scripts/backfill_nccu_1992_legislative_turnout.py'
+      - 'tests/history-legislative-district-profiles.test.cjs'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install parser dependencies
+        run: python -m pip install -q beautifulsoup4 lxml opencc-python-reimplemented
+      - name: Backfill independently verified 1992 regional turnout
+        run: python scripts/backfill_nccu_1992_legislative_turnout.py --apply
+      - name: Validate turnout, existing historical district data and import structure
+        run: node --test tests/history-legislative-district-profiles.test.cjs tests/history-legislative-data.test.cjs tests/history-legislative-coverage.test.cjs
+      - name: Publish verified constituency profiles
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/history-legislative-turnout-1992.json reports/nccu-1992-legislative-turnout-audit.json
+          git diff --cached --stat
+          if ! git diff --cached --quiet; then
+            git commit -m 'Complete verified 1992 regional legislative turnout profiles from NCCU'
+            git push origin HEAD:main
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nccu-1992-legislative-turnout-audit
+          path: reports/nccu-1992-legislative-turnout-audit.json
