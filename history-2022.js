@@ -937,6 +937,7 @@
     const countywide=record.summary_scope==='county';
     const hasWinners=record.profiles.some(profile=>profile.winner_name);
     const hasCandidateCounts=record.profiles.some(profile=>Number.isFinite(profile.candidate_count));
+    const hasCandidateNames=record.profiles.some(profile=>profile.candidate_names?.length);
     intro.textContent=norm(record.county)+' · '+record.election_date+' 投票 · '+(countywide?'全县投票统计。':'乡镇市投票统计。')+'候选人得票待核。';
     const wrap=document.createElement('div');wrap.className='history-table-wrap';
     const table=document.createElement('table');table.className='history-candidate-table';
@@ -944,15 +945,17 @@
     const labels=[countywide?'统计范围':'乡镇市','选举人数','投票数','有效票','无效票','投票率'];
     if(hasCandidateCounts)labels.push('参选人数');
     if(hasWinners)labels.push('当选人');
+    if(hasCandidateNames)labels.push('候选人名单');
     for(const label of labels){
      const th=document.createElement('th');th.scope='col';th.textContent=label;head.append(th);
     }
     const body=table.createTBody();
-    for(const {town,registered_voters,ballots_cast,valid_votes,invalid_votes,candidate_count,winner_name} of record.profiles){
+    for(const {town,registered_voters,ballots_cast,valid_votes,invalid_votes,candidate_count,winner_name,candidate_names} of record.profiles){
      const row=body.insertRow();
      const values=[norm(town),registered_voters,ballots_cast,valid_votes,invalid_votes,(100*ballots_cast/registered_voters).toFixed(2)+'%'];
      if(hasCandidateCounts)values.push(candidate_count??'');
      if(hasWinners)values.push(winner_name?normCandidate(winner_name):'');
+     if(hasCandidateNames)values.push(candidate_names?.map(normCandidate).join('、')||'');
      for(const value of values){
       row.insertCell().textContent=typeof value==='number'?value.toLocaleString('zh-CN'):value;
      }
@@ -960,7 +963,7 @@
     wrap.append(table);details.append(intro,wrap);
    }
    const citation=document.createElement('p');
-   for(const evidence of [record,record.county_summary].filter(Boolean)){
+   for(const evidence of [record,record.county_summary,record.candidate_roster_source].filter(Boolean)){
     const source=document.createElement('a');
     source.href=evidence.source_url;source.target='_blank';source.rel='noopener';
     source.textContent=norm(evidence.source_locator)+' ↗';
@@ -1161,7 +1164,7 @@
  function exportMetadata(){
   const office=presidentialMode?'president':kind;
   const election=snapshotData?.elections?.find(item=>item.office===office&&(!legislativeMode||item.electorate===legislativeBallot))||snapshotData?.elections?.[0];
-  const source=partialTownship()?'地方选举委员会原始清册、县志及统计年报':
+  const source=partialTownship()?'地方选举委员会原始清册、地方志、统计年报及同期报纸':
    archivedCouncil()?'选举事务主管机构公开资料、地方选务档案转录':
    mainlandTerms(election?.source_name||'台湾地区选举事务主管机构公开资料')+(legislativeMode&&legislativeYear===1992?'（政治大学选举研究数据库）':'（经 taiwanvotes.tw 整理）');
   const metadata=['资料来源：'+source,'行政区边界版本：'+(snapshotData?.cycleYears?yearLabel():election?.boundary_version||yearLabel()),'历史数据架构版本：'+(snapshotData?.schemaVersion||2)];

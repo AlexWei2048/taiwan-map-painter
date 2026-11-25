@@ -266,16 +266,19 @@
           "profile_url": null
         },
         "台东县": {
-          "contest_count": 1,
-          "candidate_count": 1,
+          "contest_count": 2,
+          "candidate_count": 3,
           "profile_totals": [
-            2979,
-            1471,
-            1426,
-            45
+            4775,
+            2716,
+            2609,
+            107
           ],
           "results_url": "https://www.haiduau.gov.tw/home/attachments/article/2192/113%E5%B9%B4%E5%8F%B0%E6%9D%B1%E7%B8%A3%E6%B5%B7%E7%AB%AF%E9%84%89%E7%B5%B1%E8%A8%88%E8%A6%81%E8%A6%BD2024%E5%B9%B4%E7%AC%AC23%E6%9C%9FOK.pdf",
-          "profile_url": "https://www.haiduau.gov.tw/home/attachments/article/2192/113%E5%B9%B4%E5%8F%B0%E6%9D%B1%E7%B8%A3%E6%B5%B7%E7%AB%AF%E9%84%89%E7%B5%B1%E8%A8%88%E8%A6%81%E8%A6%BD2024%E5%B9%B4%E7%AC%AC23%E6%9C%9FOK.pdf"
+          "profile_url": "https://www.haiduau.gov.tw/home/attachments/article/2192/113%E5%B9%B4%E5%8F%B0%E6%9D%B1%E7%B8%A3%E6%B5%B7%E7%AB%AF%E9%84%89%E7%B5%B1%E8%A8%88%E8%A6%81%E8%A6%BD2024%E5%B9%B4%E7%AC%AC23%E6%9C%9FOK.pdf",
+          "district_results_urls": {
+            "蘭嶼鄉": "https://catalog.digitalarchives.tw/item/00/26/11/27.html"
+          }
         },
         "云林县": {
           "contest_count": 1,

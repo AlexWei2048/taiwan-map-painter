@@ -672,6 +672,7 @@ def add_1994_township(snapshot, audit):
         for item in districts:
             registered, cast, valid, invalid = item['profile']
             candidates = item['candidates']
+            results_url = item.get('results_url', county['results_url'])
             numbers = [row[0] for row in candidates]
             if (cast != (valid + invalid if invalid is not None else None)
                     or (registered is not None and registered < (cast if cast is not None else valid))
@@ -682,32 +683,32 @@ def add_1994_township(snapshot, audit):
                 raise ValueError(f'1994 {normalized_county} {item["town"]} original returns do not reconcile')
             profiles[normalized_county, norm(item['town'])] = {
                 'registered_voters': registered, 'ballots_cast': cast, 'invalid_votes': invalid,
+                'source_url': results_url,
                 'profile_source': item.get('profile_url', county['profile_url']),
             }
             roster = [
                 {'number': str(number) if number is not None else '', 'name': name,
                  'party': party if party is not None else '政黨資料缺失', 'gender': gender,
                  'votes': votes, 'mark': '*' if elected else '', 'incumbent': None,
-                 'candidate_mark': '*' if elected else '', 'winner_source': county['results_url']}
+                 'candidate_mark': '*' if elected else '', 'winner_source': results_url}
                 for number, name, party, gender, votes, elected in candidates
             ]
             contests.append({
                 'year': 1994, 'office': 'township', 'electorate': 'regional',
                 'county': county['county'], 'district': item['town'], 'region': 0,
-                'date': archive['date'], 'local': county['results_url'], 'roster': roster,
+                'date': archive['date'], 'local': results_url, 'roster': roster,
                 'profile': [''] * 6 + list(map(str, [valid, invalid, cast, registered])),
                 'scope': [], 'detail': {}, 'town_labels': {}, 'town_profiles': {},
             })
     supplement = build(contests, {}, {})[0][1994]
     supplement['elections'][0].update(
-        source_name='地方选举委员会原始清册、县志及统计年报',
+        source_name='地方选举委员会原始清册、地方志、统计年报及同期报纸',
         source_url=evidence['台北县']['results_url'],
         coverage='partial',
         counties=list(evidence),
     )
     for contest in supplement['contests']:
-        source = evidence[contest['county_name']]
-        contest.update(source_url=source['results_url'], **profiles[contest['county_name'], contest['district_name']])
+        contest.update(profiles[contest['county_name'], contest['district_name']])
     for candidate in supplement['candidacies']:
         if candidate['party_name_official'] == '政黨資料缺失':
             candidate['party_name_official'] = None
@@ -735,6 +736,10 @@ def add_1994_township(snapshot, audit):
                                            'profile_url', 'profile_discrepancy') if key in source}
         for name, source in evidence.items()
     }
+    for name, source in evidence.items():
+        district_sources = {item['town']: item['results_url'] for item in source['districts'] if 'results_url' in item}
+        if district_sources:
+            audit['townshipArchives'][name]['district_results_urls'] = district_sources
 
 
 def reconcile_2002_taipei_plains(snapshot):

@@ -2317,13 +2317,13 @@
       "profile_url": "https://www.haiduau.gov.tw/home/attachments/article/2192/113%E5%B9%B4%E5%8F%B0%E6%9D%B1%E7%B8%A3%E6%B5%B7%E7%AB%AF%E9%84%89%E7%B5%B1%E8%A8%88%E8%A6%81%E8%A6%BD2024%E5%B9%B4%E7%AC%AC23%E6%9C%9FOK.pdf",
       "source_locator": "海端鄉統計要覽（民國113年）表3-5，第12屆",
       "source_sha256": "f5f89c8dbf5a2706f19b7c88db92fc019c650b13f899a4db46938308d9802e08",
-      "contest_count": 1,
-      "candidate_count": 1,
+      "contest_count": 2,
+      "candidate_count": 3,
       "profile_totals": [
-        2979,
-        1471,
-        1426,
-        45
+        4775,
+        2716,
+        2609,
+        107
       ],
       "districts": [
         {
@@ -2342,6 +2342,85 @@
               "男",
               1426,
               true
+            ]
+          ]
+        },
+        {
+          "town": "蘭嶼鄉",
+          "profile": [
+            1796,
+            1245,
+            1183,
+            62
+          ],
+          "candidates": [
+            [
+              1,
+              "謝朱明",
+              null,
+              "男",
+              507,
+              false
+            ],
+            [
+              2,
+              "廖班佳",
+              null,
+              "男",
+              676,
+              true
+            ]
+          ],
+          "results_url": "https://catalog.digitalarchives.tw/item/00/26/11/27.html",
+          "profile_url": "https://catalog.digitalarchives.tw/item/00/26/11/27.html",
+          "source_locator": "《蘭嶼雙週刊》第145期，1994年1月30日，第1版",
+          "source_image_url": "https://image.digitalarchives.tw/ImageCache/00/27/85/f5.jpg",
+          "source_sha256": "7a1e1640d43b4fec5584fff9ce304454152a4436a267bd798592631678e8ff30",
+          "precinct_columns": [
+            "村",
+            "選舉人數",
+            "投票數",
+            "有效票",
+            "無效票",
+            "1號得票",
+            "2號得票"
+          ],
+          "precinct_returns": [
+            [
+              "椰油村",
+              387,
+              297,
+              288,
+              9,
+              46,
+              242
+            ],
+            [
+              "紅頭村",
+              531,
+              339,
+              313,
+              26,
+              154,
+              159
+            ],
+            [
+              "東清村",
+              557,
+              357,
+              338,
+              19,
+              181,
+              157
+            ],
+            [
+              "朗島村",
+              321,
+              252,
+              244,
+              8,
+              126,
+              118
             ]
           ]
         }
@@ -3008,10 +3087,21 @@
           "valid_votes": 18514,
           "invalid_votes": 276,
           "town": "口湖鄉",
-          "winner_name": "蘇青山"
+          "winner_name": "蘇青山",
+          "candidate_count": 4,
+          "candidate_names": [
+            "蘇青山",
+            "王文祥",
+            "王茂三",
+            "李印緞"
+          ]
         }
       ],
-      "source_sha256": "97482a3d333ec95a83a18e5b12aababff7c0e8907d1b9deb4725ee571d1080a4"
+      "source_sha256": "97482a3d333ec95a83a18e5b12aababff7c0e8907d1b9deb4725ee571d1080a4",
+      "candidate_roster_source": {
+        "source_url": "https://ws.yunlin.gov.tw/001/Upload/609/ebook/ebook_366292/pdf/full.pdf",
+        "source_locator": "《口湖鄉志》政事篇表3-9-8，第12屆"
+      }
     },
     {
       "county": "桃園縣",
@@ -3242,6 +3332,18 @@
         {
           "town": "大里市",
           "name": "陳彬銓"
+        }
+      ]
+    },
+    {
+      "county": "臺東縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://www.cs.gov.tw/home/index.php/list-of-townships",
+      "source_locator": "池上鄉公所歷任鄉長名錄，第12屆",
+      "winners": [
+        {
+          "town": "池上鄉",
+          "name": "林慶堂"
         }
       ]
     }

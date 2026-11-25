@@ -94,12 +94,12 @@ test('Historical county mayors and councils use five shared election cycles with
  }
 });
 
-test('The partial 1994 township archive reconciles all 87 contests across seven counties',()=>{
+test('The partial 1994 township archive reconciles all 88 contests across seven counties',()=>{
  const shard=data(1994);
  const election=shard.elections.find(e=>e.office==='township');
  assert.equal(election.coverage,'partial');
  assert.deepEqual(election.counties,['台北县','高雄县','新竹县','连江县','台东县','云林县','宜兰县']);
- assert.equal(shard.contests.filter(c=>c.election_id===election.election_id).length,87);
+ assert.equal(shard.contests.filter(c=>c.election_id===election.election_id).length,88);
  const geometry=Local.geometry(shard,map,reference,String,Core.mergePaths,Presidential.modernCounty,Presidential.baseTown);
  for(const [county,count,candidates,totals] of [
   ['台北县',29,81,[1989086,1239640,1200839,38801]],
@@ -151,6 +151,11 @@ test('The partial 1994 township archive reconciles all 87 contests across seven 
  assert.deepEqual(['registered_voters','ballots_cast','valid_votes','invalid_votes'].map(key=>luodong[key]),
   [41426,27905,27289,616]);
  assert.match(luodong.profile_source,/lotong\.gov\.tw/);
+ const lanyu=shard.contests.find(c=>c.election_id===election.election_id&&c.county_name==='台东县'&&c.district_name==='兰屿乡');
+ assert.deepEqual(['registered_voters','ballots_cast','valid_votes','invalid_votes'].map(key=>lanyu[key]),[1796,1245,1183,62]);
+ assert.deepEqual(contestants(shard,lanyu).map(c=>[c.candidate_name,c.votes,c.elected_official,c.party_name_official]),
+  [['谢朱明',507,false,null],['廖班佳',676,true,null]]);
+ assert.match(lanyu.source_url,/catalog\.digitalarchives\.tw/);
  const [kinmen,hualien]=shard.partialTownshipReturns;
  assert.equal(kinmen.county,'金門縣');
  assert.deepEqual(kinmen.winners.map(w=>w.votes),[5116,3135,2857,2018,1152,25]);
@@ -172,6 +177,10 @@ test('The partial 1994 township archive reconciles all 87 contests across seven 
   ['斗南鎮',30951,24399,23904,495],['西螺鎮',33754,26078,25737,341],
  ]);
  assert.deepEqual(extra.find(r=>r.winners).winners,[{town:'清水鎮',name:'吳金生'}]);
+ const kouhu=extra.flatMap(r=>r.profiles||[]).find(p=>p.town==='口湖鄉');
+ assert.equal(kouhu.candidate_count,4);
+ assert.deepEqual(kouhu.candidate_names,['蘇青山','王文祥','王茂三','李印緞']);
+ assert.ok(extra.some(r=>r.winners?.some(w=>w.town==='池上鄉'&&w.name==='林慶堂')));
  assert.deepEqual(extra.find(r=>r.county==='澎湖縣').county_party_shares.map(([,share])=>share),[64.17,11.06,0,24.77]);
 });
 
