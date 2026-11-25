@@ -748,6 +748,11 @@ def add_1994_township(snapshot, audit):
             if (any(not r['registered_voters'] >= r['ballots_cast'] == r['valid_votes'] + r['invalid_votes'] for r in rows)
                     or [sum(r[key] for r in rows) for key in profile_columns] != county['profile_totals']):
                 raise ValueError(f'1994 {county["county"]} partial turnout does not reconcile')
+        for row in county.get('profiles', []):
+            if 'male_candidates' in row and 'female_candidates' in row:
+                if (not all(isinstance(row[k], int) and row[k] >= 0 for k in ('male_candidates', 'female_candidates'))
+                        or row['male_candidates'] + row['female_candidates'] != row.get('candidate_count')):
+                    raise ValueError(f'1994 {county["county"]} candidate gender totals do not reconcile')
         if candidate_total := county.get('profile_candidate_total'):
             if any(not isinstance(r.get('candidate_count'), int) or r['candidate_count'] < 1 for r in rows):
                 raise ValueError(f'1994 {county["county"]} missing constituency candidate count')

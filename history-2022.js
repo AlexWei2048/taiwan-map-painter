@@ -971,6 +971,8 @@
     const hasWinners=record.profiles.some(profile=>profile.winner_name);
     const hasCandidateCounts=record.profiles.some(profile=>Number.isFinite(profile.candidate_count));
     const hasCandidateNames=record.profiles.some(profile=>profile.candidate_names?.length);
+    const hasGenderCounts=record.profiles.some(p=>Number.isInteger(p.male_candidates)&&Number.isInteger(p.female_candidates));
+    const hasPreviousWinner=record.profiles.some(p=>p.previous_election_winner);
     intro.textContent=norm(record.county)+' · '+record.election_date+' 投票 · '+(countywide?'全县投票统计。':'乡镇市投票统计。')+'部分候选人得票待核。';
     if(record.profile_candidate_total)intro.append(' 全县 '+record.profile_candidate_total+' 人参选。');
     const wrap=document.createElement('div');wrap.className='history-table-wrap';
@@ -978,16 +980,20 @@
     const head=table.createTHead().insertRow();
     const labels=[countywide?'统计范围':'乡镇市','选举人数','投票数','有效票','无效票','投票率'];
     if(hasCandidateCounts)labels.push('参选人数');
+    if(hasGenderCounts)labels.push('男性候选人','女性候选人');
+    if(hasPreviousWinner)labels.push('上届当选人');
     if(hasWinners)labels.push('当选人');
     if(hasCandidateNames)labels.push('候选人名单');
     for(const label of labels){
      const th=document.createElement('th');th.scope='col';th.textContent=label;head.append(th);
     }
     const body=table.createTBody();
-    for(const {town,registered_voters,ballots_cast,valid_votes,invalid_votes,candidate_count,winner_name,candidate_names} of record.profiles){
+    for(const {town,registered_voters,ballots_cast,valid_votes,invalid_votes,candidate_count,winner_name,candidate_names,male_candidates,female_candidates,previous_election_winner} of record.profiles){
      const row=body.insertRow();
      const values=[norm(town),registered_voters,ballots_cast,valid_votes,invalid_votes,(100*ballots_cast/registered_voters).toFixed(2)+'%'];
      if(hasCandidateCounts)values.push(candidate_count??'');
+     if(hasGenderCounts)values.push(male_candidates??'',female_candidates??'');
+     if(hasPreviousWinner)values.push(previous_election_winner?normCandidate(previous_election_winner):'');
      if(hasWinners)values.push(winner_name?normCandidate(winner_name):'');
      if(hasCandidateNames)values.push(candidate_names?.map(normCandidate).join('、')||'');
      for(const value of values){
@@ -997,7 +1003,7 @@
     wrap.append(table);details.append(intro,wrap);
    }
    const citation=document.createElement('p');
-   for(const evidence of [record,record.county_summary,record.candidate_roster_source].filter(Boolean)){
+   for(const evidence of [record,record.county_summary,record.candidate_roster_source,record.profile_detail_source].filter(Boolean)){
     const url=evidence.source_url||evidence.candidate_counts_source_url;
     const locator=evidence.source_locator||evidence.candidate_counts_source_locator;
     if(!url||!locator)continue;
