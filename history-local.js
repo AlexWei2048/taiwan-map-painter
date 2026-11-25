@@ -55,7 +55,7 @@
  }
  function loadLegacyCouncil(fetcher){
   if(!legacyCouncilRequest)legacyCouncilRequest=(async()=>{
-   const response=await fetcher('assets/history-local-1994-council.json?v=7');
+   const response=await fetcher('assets/history-local-1994-council.json?v=8');
    if(!response.ok)throw Error('1994县市议员补充资料 HTTP '+response.status);
    const archive=await response.json();
    if(archive.version!==1||!archive.districts?.length)throw Error('1994县市议员补充资料不完整');
@@ -155,7 +155,7 @@
   if(pending.has(year))return pending.get(year);
   const request=(async()=>{
    const [response,supplement]=await Promise.all([
-    fetcher('assets/history-local-'+year+'.json?v=20261125-local-results-v'+(year===1994?'11':year===2018?'5':'4')),
+    fetcher('assets/history-local-'+year+'.json?v=20261125-local-results-v'+(year===1994?'12':year===2018?'5':'4')),
     supplementYears.has(year)?loadSupplement(fetcher):null
    ]);
    if(!response.ok)throw Error('历史数据 HTTP '+response.status);
