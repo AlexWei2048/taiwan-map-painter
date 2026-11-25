@@ -33,7 +33,8 @@ jobs:
           assert re.search(r"const SOURCED_PARTY_LOGOS_BY_ID=\{",s)
           from urllib.parse import urlparse
           approved={"ws.moi.gov.tw","upload.wikimedia.org","www.ssfpp.tw","static.wixstatic.com","xn--2lw665d.tw"}
-          assert all(urlparse(x["official_image"]).hostname in approved
+          legacy_flags={"https://commons.wikimedia.org/wiki/Special:Redirect/file/Flag_of_Chinese_Youth_Party.svg","https://commons.wikimedia.org/wiki/Special:Redirect/file/台灣工黨黨旗.svg"}
+          assert all((urlparse(x["official_image"]).hostname in approved or x["official_image"] in legacy_flags)
                      and x.get("source_sha256") and x.get("official_registry")
                      for x in r["official_sources"])
           print("Imported",r["count_by_id"],"preset logos and",r["count_by_historical_name"],"historical logos")

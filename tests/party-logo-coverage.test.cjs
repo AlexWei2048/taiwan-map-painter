@@ -47,3 +47,12 @@ test('Historical party icons are clipped in tables and the parliamentary chart',
  const trends=fs.readFileSync(path.join(root,'history-trends-ui.js'),'utf8');
  assert.ok(trends.includes("appendCircularPartyLogo(g,logo,x+12,y-15,17"));
 });
+
+test('Historical incumbency uses the same visible badge as prediction, not a yes flag',()=>{
+ const hist=fs.readFileSync(path.join(root,'history-2022.js'),'utf8');
+ const csv=fs.readFileSync(path.join(root,'history-workspace.js'),'utf8');
+ assert.match(hist,/function incumbentLabel\(r\)\{return r\.incumbent===true\?'现任':''\}/);
+ assert.match(hist,/function appendIncumbentTag\(cell,value\)/);
+ assert.doesNotMatch(hist,/incumbent(?:_at_election)?===true\?'是'/);
+ assert.doesNotMatch(csv,/incumbent(?:_at_election)?===true\?'是'/);
+});

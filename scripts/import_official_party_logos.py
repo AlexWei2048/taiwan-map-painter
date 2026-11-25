@@ -172,6 +172,14 @@ def commons_image(filename):
  digest=hashlib.md5(filename.encode("utf-8")).hexdigest()
  return "https://upload.wikimedia.org/wikipedia/commons/"+digest[0]+"/"+digest[:2]+"/"+quote(filename)
 supplemental += [
+ {"name":"红党","also":[],
+  "urls":["https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Red_party_flag.svg/320px-Red_party_flag.svg.png"],
+  "source_page":"https://commons.wikimedia.org/wiki/File:Red_party_flag.svg",
+  "license":"Party flag; public domain simple geometry; original author Tomchen1989"},
+ {"name":"青年阳光党","also":[],
+  "urls":[commons_image("青年陽光黨.png")],
+  "source_page":"https://commons.wikimedia.org/wiki/File:青年陽光黨.png",
+  "license":"Party emblem from Wikimedia Commons; rights and attribution as documented on source file page"},
  {"name":"基进党","also":[],
   "urls":[commons_image("基進黨｜LOGO.jpg")],
   "source_page":"https://commons.wikimedia.org/wiki/File:基進黨｜LOGO.jpg",
