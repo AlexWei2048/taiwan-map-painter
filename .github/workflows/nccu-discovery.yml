@@ -19,5 +19,11 @@ jobs:
               soup=BeautifulSoup(urlopen(url,timeout=15).read(),'html.parser')
               a=[(x.get('href'),x.get('title'),x.parent.get_text(' ',strip=True)[:40]) for x in soup.select('a[href]')]
               print('YEAR',y,'TYPE',t,'LINKS',a[:9],flush=True)
+              if (y,t) in [(1993,'F'),(1994,'EM'),(1994,'DM'),(1998,'EM')]:
+                from urllib.parse import urljoin
+                for href,_,_ in a[:2]:
+                  dest=urljoin(url,href)
+                  soup2=BeautifulSoup(urlopen(dest,timeout=20).read(),'html.parser')
+                  print('SUB',dest,'ROWS',[[td.get_text(' ',strip=True)[:40] for td in tr.find_all(['td','th'])][:12] for tr in soup2.find_all('tr')[:4]],'LINKS',[z.get('href') for z in soup2.select('a[href]')[:7]],flush=True)
             except Exception as e:print('ERROR',y,t,repr(e),flush=True)
           PY
