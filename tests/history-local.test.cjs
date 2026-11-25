@@ -401,7 +401,7 @@ test('Early indigenous council statutory quotas resolve 137 missing records with
    const group=c.reserved_seats_group;
    if(group){
     const seats=group.contestIds.reduce((n,id)=>n+raw.contests.find(r=>r.contest_id===id).seats,0);
-    assert.equal(group.reserved,year===1998?0:Math.floor(seats/4));
+    assert.equal(group.reserved,Math.floor(seats/4));
     assert.equal(c.reserved_seats,group.reserved===0?0:null);
    }else assert.equal(c.reserved_seats,0);
   }
