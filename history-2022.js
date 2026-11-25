@@ -895,6 +895,51 @@
    }details.append(sources);
   }
  }
+ function renderPartialTownshipReturns(){
+  const note=el('historyBoundaryNote');if(!note)return;
+  let details=el('historyPartialTownshipReturns');
+  const records=partialTownship()?(snapshotData.partialTownshipReturns||[]).filter(r=>!county||norm(r.county)===county):[];
+  if(!records.length){if(details)details.hidden=true;return}
+  if(!details){details=document.createElement('details');details.id='historyPartialTownshipReturns';details.className='data-help';note.after(details)}
+  details.hidden=false;
+  details.replaceChildren();
+  const summary=document.createElement('summary');
+  summary.textContent='1994年乡镇市长补充档案';
+  details.append(summary);
+  for(const record of records){
+   const intro=document.createElement('p');
+   if(record.winners){
+    intro.textContent=norm(record.county)+' · '+record.election_date+' 投票 · 当选人得票及当时党籍。其他候选人和选区总票数待核。';
+    const list=document.createElement('ul');
+    for(const winner of record.winners){
+     const item=document.createElement('li');
+     item.textContent=[norm(winner.town),normCandidate(winner.name),norm(winner.party_membership),winner.votes.toLocaleString('zh-CN')+'票'].join(' · ');
+     list.append(item);
+    }
+    details.append(intro,list);
+   }else{
+    intro.textContent=norm(record.county)+' · '+record.election_date+' 投票 · 各乡镇市投票统计。候选人得票待核。';
+    const wrap=document.createElement('div');wrap.className='history-table-wrap';
+    const table=document.createElement('table');table.className='history-candidate-table';
+    const head=table.createTHead().insertRow();
+    for(const label of ['乡镇市','选举人数','投票数','有效票','无效票','投票率']){
+     const th=document.createElement('th');th.scope='col';th.textContent=label;head.append(th);
+    }
+    const body=table.createTBody();
+    for(const {town,registered_voters,ballots_cast,valid_votes,invalid_votes} of record.profiles){
+     const row=body.insertRow();
+     for(const value of [norm(town),registered_voters,ballots_cast,valid_votes,invalid_votes,(100*ballots_cast/registered_voters).toFixed(2)+'%']){
+      row.insertCell().textContent=typeof value==='number'?value.toLocaleString('zh-CN'):value;
+     }
+    }
+    wrap.append(table);details.append(intro,wrap);
+   }
+   const source=document.createElement('a');
+   source.href=record.source_url;source.target='_blank';source.rel='noopener';
+   source.textContent=norm(record.source_locator)+' ↗';
+   const citation=document.createElement('p');citation.append(source);details.append(citation);
+  }
+ }
  function syncHistoryControls(){
   const titleEyebrow=el('historyResultSection')?.querySelector('.eyebrow');
   if(titleEyebrow)titleEyebrow.textContent=yearLabel()+' 历史数据';
@@ -917,6 +962,7 @@
    (presidentialYear<=2000?'不同“连署”候选人使用不同图示色，不代表政党。':'颜色表示各地区最高票候选人所属政党。');
  }
   renderPartialCouncilReturns();
+  renderPartialTownshipReturns();
   el('historyCounty').value=county;el('historyScaleBox').hidden=kind!=='mayor'&&!legislativeMode;
   if(legislativeMode){
    const ballot=el('historyElectorate');ballot.replaceChildren(...HistoryLegislative.ballots(legislativeYear).map(item=>new Option(item.label,item.value)));ballot.value=legislativeBallot;

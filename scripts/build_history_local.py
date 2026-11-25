@@ -713,6 +713,14 @@ def add_1994_township(snapshot, audit):
             candidate['party_name_official'] = None
     for key in ('elections', 'contests', 'candidacies', 'rows'):
         snapshot[key].extend(supplement[key])
+    partial = archive.get('partial_counties', [])
+    profile_columns = ('registered_voters', 'ballots_cast', 'valid_votes', 'invalid_votes')
+    for county in partial:
+        if rows := county.get('profiles'):
+            if (any(not r['registered_voters'] >= r['ballots_cast'] == r['valid_votes'] + r['invalid_votes'] for r in rows)
+                    or [sum(r[key] for r in rows) for key in profile_columns] != county['profile_totals']):
+                raise ValueError(f'1994 {county["county"]} partial turnout does not reconcile')
+    snapshot['partialTownshipReturns'] = partial
     audit['townshipArchives'] = {
         name: {key: source[key] for key in ('contest_count', 'candidate_count', 'profile_totals', 'results_url', 'profile_url')}
         for name, source in evidence.items()

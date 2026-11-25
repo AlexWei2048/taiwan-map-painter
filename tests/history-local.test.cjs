@@ -134,6 +134,14 @@ test('The partial 1994 township archive reconciles all 73 contests across four c
  assert.equal(candidate.candidate_name,'林日福');
  assert.equal(candidate.ballot_number,'');
  assert.equal(candidate.party_name,'政党资料缺失');
+ const [kinmen,hualien]=shard.partialTownshipReturns;
+ assert.equal(kinmen.county,'金門縣');
+ assert.deepEqual(kinmen.winners.map(w=>w.votes),[5116,3135,2857,2018,1152,25]);
+ assert.ok(!shard.contests.some(c=>c.election_id===election.election_id&&c.county_name==='金门县'));
+ assert.equal(hualien.profiles.length,13);
+ assert.deepEqual(['registered_voters','ballots_cast','valid_votes','invalid_votes']
+  .map(k=>hualien.profiles.reduce((sum,r)=>sum+r[k],0)),[235236,150149,144607,5542]);
+ assert.ok(!shard.contests.some(c=>c.election_id===election.election_id&&c.county_name==='花莲县'));
 });
 
 test('Corrections use the corroborated town tally or certified recount at its actual geographic level',()=>{

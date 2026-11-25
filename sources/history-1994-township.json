@@ -2325,5 +2325,164 @@
     "gender",
     "votes",
     "elected"
+  ],
+  "partial_counties": [
+    {
+      "county": "金門縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://cabkc.kinmen.gov.tw/uploads/files/202304/c035945e-0950-4aa7-aacc-1e2e1d815dc9.pdf#page=64",
+      "source_locator": "續修金門縣志，政事志下卷，頁283–284",
+      "winners": [
+        {
+          "town": "金城鎮",
+          "name": "許金象",
+          "gender": "男",
+          "party_membership": "中國國民黨",
+          "votes": 5116
+        },
+        {
+          "town": "金湖鎮",
+          "name": "蔡福祿",
+          "gender": "男",
+          "party_membership": "中國國民黨",
+          "votes": 3135
+        },
+        {
+          "town": "金沙鎮",
+          "name": "黃清壈",
+          "gender": "男",
+          "party_membership": "中國國民黨",
+          "votes": 2857
+        },
+        {
+          "town": "金寧鄉",
+          "name": "吳怡跑",
+          "gender": "男",
+          "party_membership": "中國國民黨",
+          "votes": 2018
+        },
+        {
+          "town": "烈嶼鄉",
+          "name": "洪國正",
+          "gender": "男",
+          "party_membership": "中國國民黨",
+          "votes": 1152
+        },
+        {
+          "town": "烏坵鄉",
+          "name": "李毅強",
+          "gender": "男",
+          "party_membership": "中國國民黨",
+          "votes": 25
+        }
+      ],
+      "source_sha256": "e98c5c1fff9cfca4352b4a32cb6d1a82ade588efd512b092f564b6a8a0dbe909"
+    },
+    {
+      "county": "花蓮縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://document.hccc.gov.tw/records/files/03/4-%E7%B8%A3%E8%AA%8C%E6%94%BF%E4%BA%8B%E7%AF%87.pdf#page=66",
+      "source_locator": "續修花蓮縣志（民國七一至九○年）政事篇，第52頁表3-1-2",
+      "source_sha256": "b0475148f665214508301b940418d8594486b03bcd980726f415ec87eb4137e2",
+      "profile_totals": [
+        235236,
+        150149,
+        144607,
+        5542
+      ],
+      "profiles": [
+        {
+          "town": "花蓮市",
+          "registered_voters": 68793,
+          "ballots_cast": 46777,
+          "valid_votes": 44729,
+          "invalid_votes": 2048
+        },
+        {
+          "town": "鳳林鎮",
+          "registered_voters": 11179,
+          "ballots_cast": 7629,
+          "valid_votes": 7447,
+          "invalid_votes": 182
+        },
+        {
+          "town": "玉里鎮",
+          "registered_voters": 24988,
+          "ballots_cast": 14410,
+          "valid_votes": 13717,
+          "invalid_votes": 693
+        },
+        {
+          "town": "新城鄉",
+          "registered_voters": 12893,
+          "ballots_cast": 8907,
+          "valid_votes": 8725,
+          "invalid_votes": 182
+        },
+        {
+          "town": "吉安鄉",
+          "registered_voters": 43470,
+          "ballots_cast": 27153,
+          "valid_votes": 26168,
+          "invalid_votes": 985
+        },
+        {
+          "town": "壽豐鄉",
+          "registered_voters": 15110,
+          "ballots_cast": 9767,
+          "valid_votes": 9471,
+          "invalid_votes": 296
+        },
+        {
+          "town": "光復鄉",
+          "registered_voters": 12969,
+          "ballots_cast": 7248,
+          "valid_votes": 6791,
+          "invalid_votes": 457
+        },
+        {
+          "town": "豐濱鄉",
+          "registered_voters": 5105,
+          "ballots_cast": 3067,
+          "valid_votes": 3013,
+          "invalid_votes": 54
+        },
+        {
+          "town": "瑞穗鄉",
+          "registered_voters": 11262,
+          "ballots_cast": 6635,
+          "valid_votes": 6505,
+          "invalid_votes": 130
+        },
+        {
+          "town": "富里鄉",
+          "registered_voters": 11087,
+          "ballots_cast": 6287,
+          "valid_votes": 6158,
+          "invalid_votes": 129
+        },
+        {
+          "town": "秀林鄉",
+          "registered_voters": 9035,
+          "ballots_cast": 6558,
+          "valid_votes": 6371,
+          "invalid_votes": 187
+        },
+        {
+          "town": "萬榮鄉",
+          "registered_voters": 4560,
+          "ballots_cast": 2890,
+          "valid_votes": 2771,
+          "invalid_votes": 119
+        },
+        {
+          "town": "卓溪鄉",
+          "registered_voters": 4785,
+          "ballots_cast": 2821,
+          "valid_votes": 2741,
+          "invalid_votes": 80
+        }
+      ]
+    }
   ]
 }
