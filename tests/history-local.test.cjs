@@ -389,9 +389,9 @@ test('Official shared indigenous reserved seats are represented once per group, 
 });
 
 
-test('Early indigenous council statutory quotas resolve 125 missing records without allocating shared seats twice',()=>{
+test('Early indigenous council statutory quotas resolve 137 missing records without allocating shared seats twice',()=>{
  const supplement=require('../assets/history-local-council-supplement.json');
- for(const [year,expected] of [[1994,2],[1998,26],[2002,48],[2005,47],[2006,2]]){
+ for(const [year,expected] of [[1994,2],[1998,38],[2002,48],[2005,47],[2006,2]]){
   const raw=data(year),snapshot=Local.applyCouncilSupplement(raw,supplement),addition=supplement.years[year];
   const members=snapshot.contests.filter(c=>c.reserved_seats_method==='statutory_shared_group'||(c.reserved_seats_method==='statutory'&&addition.quotaSources?.[c.contest_id]));
   assert.equal(members.length,expected);
