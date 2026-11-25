@@ -1,0 +1,32 @@
+name: Audit NCCU 1992 Kaohsiung legislative candidate discrepancy
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/nccu-1992-discrepancy.yml']
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check 1992 Kaohsiung legislative candidate returns
+        run: |
+          python -m pip install -q beautifulsoup4 opencc-python-reimplemented
+          python - <<'PY'
+          import json,urllib.request,unicodedata
+          from bs4 import BeautifulSoup
+          from opencc import OpenCC
+          u='https://vote.nccu.edu.tw/cec/vote3.asp?pass1=J9AA:I8888888888iii(('
+          d=BeautifulSoup(urllib.request.urlopen(u,timeout=45).read(),'html.parser')
+          x=json.load(open('assets/history-legislative-1992.json'))
+          cc=OpenCC('t2s')
+          cand={t['candidacy_id']:t for t in x['candidacies']}
+          p=[t for t in x['contests'] if t['electorate']=='regional' and t['county_name']=='高雄县'][0]
+          rows=[t for t in x['candidacies'] if t['contest_id']==p['contest_id']]
+          print('SNAPSHOT_CONTEST',p['contest_id'],p['valid_votes'])
+          for t in rows: print('SNAPSHOT_CAND',t.get('candidate_name'),t.get('ballot_number'),t.get('votes'),flush=True)
+          print('NCCU_TITLE',d.title.get_text(' ',strip=True) if d.title else '')
+          for tr in d.find_all('tr'):
+            a=[z.get_text(' ',strip=True) for z in tr.find_all(['td','th'],recursive=False)]
+            if len(a)>=10 and '高雄縣' in a[0]: print('NCCU_CAND',a[:10],flush=True)
+          PY
