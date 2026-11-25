@@ -122,14 +122,15 @@
 }
 .history-result-dialog.history-party-vote-dialog .history-candidate-table thead th:nth-child(2),
 .history-result-dialog.history-party-vote-dialog .history-candidate-table tbody td:first-child{
- min-width:175px;text-align:left;white-space:normal;overflow:visible;overflow-wrap:break-word
+ min-width:175px;text-align:center;white-space:normal;overflow:visible;overflow-wrap:break-word
 }
 .history-result-dialog.history-party-vote-dialog .history-candidate-table .history-party-cell{
- display:inline-flex;min-width:0;justify-content:flex-start;align-items:center;
- gap:7px;white-space:normal;text-align:left
+ display:inline-flex;min-width:0;justify-content:center;align-items:center;
+ gap:7px;white-space:normal;text-align:center
 }
-.history-legislative-table .history-party-cell{
- display:inline-flex;gap:6px;align-items:center;justify-content:flex-start;
+.history-result-dialog.history-party-vote-dialog .history-candidate-table td.history-party-cell{display:table-cell;vertical-align:middle}
+.history-legislative-table td.history-party-cell{
+ display:table-cell;text-align:center;vertical-align:middle;
  white-space:normal;overflow-wrap:anywhere
 }
 .history-list-nominee.withdrawn{opacity:.8;background:#f8f5f3;border-style:dashed}
