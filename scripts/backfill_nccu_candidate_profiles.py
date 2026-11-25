@@ -77,6 +77,57 @@ def safe_extract(url):
     try:return (extract(url),None)
     except Exception as exc:return ([],str(exc))
 
+# NCCU retroactively uses some modern municipality names for older elections.
+# This is a join-only alias: the historically correct names stay in the dataset.
+HISTORICAL_TOWN_ALIASES={
+    '头份市':'头份镇',
+    '员林市':'员林镇',
+    '乌坵乡':'乌丘乡',
+}
+def same_town(source,actual):
+    left,right=norm(source),norm(actual)
+    return left==right or HISTORICAL_TOWN_ALIASES.get(left)==right
+
+def cjk_name(name):
+    return ''.join(ch for ch in norm(name) if '\u3400'<=ch<='\u9fff')
+
+def similar_name(a,b):
+    a,b=cjk_name(a),cjk_name(b)
+    if not a or not b:return False
+    if len(a)>=2 and len(b)>=2 and (a in b or b in a):return True
+    if a[0]!=b[0]:return False
+    previous=list(range(len(b)+1))
+    for i,ch in enumerate(a,1):
+        now=[i]
+        for j,other in enumerate(b,1):
+            now.append(min(now[j-1]+1,previous[j]+1,previous[j-1]+(ch!=other)))
+        previous=now
+    return previous[-1]<=2
+
+def district_number(s):
+    match=re.search(r'第([0-9]+|[一二三四五六七八九十百]+)选(?:举)?区',norm(s))
+    if not match:return None
+    n=match.group(1)
+    if n.isdigit():return int(n)
+    digits={'一':1,'二':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8,'九':9}
+    if n=='十':return 10
+    if '十' in n:
+        a,b=n.split('十',1)
+        return (digits.get(a,1) if a else 1)*10+digits.get(b,0)
+    return digits.get(n)
+
+def safe_fallback(office,source,matches):
+    if source['votes']<=0 or len(matches)!=1:return []
+    candidate,contest=matches[0]
+    if office=='township' and not same_town(source['district'],contest['district_name']):return []
+    if office=='council':
+        a,b=district_number(source['district']),district_number(contest['district_name'])
+        if not similar_name(source['name'],candidate['candidate_name']) and not(a is not None and a==b):
+            return []
+    elif not similar_name(source['name'],candidate['candidate_name']):
+        return []
+    return matches
+
 def main():
     arg=argparse.ArgumentParser()
     arg.add_argument('--years',nargs='+',type=int,default=[1998,2002,2005,2009,2014,2018])
@@ -85,6 +136,7 @@ def main():
     opts=arg.parse_args()
     snapshots={}
     indexes={}
+    vote_indexes={}
     for year in opts.years:
         p=ROOT/f'assets/history-local-{year}.json'
         if not p.exists():continue
@@ -92,13 +144,15 @@ def main():
         em={e['election_id']:e for e in s['elections']}
         dm={d['contest_id']:d for d in s['contests']}
         index=collections.defaultdict(list)
+        vote_index=collections.defaultdict(list)
         for c in s['candidacies']:
             d=dm.get(c['contest_id'])
             if not d:continue
             office=em.get(d['election_id'],{}).get('office')
             if office not in ('mayor','council','township'):continue
             index[key(office,d['county_name'],c['candidate_name'],c.get('votes'),c.get('ballot_number'))].append((c,d))
-        snapshots[year]=s;indexes[year]=index
+            vote_index[(office,norm(d['county_name']),c.get('votes'),int(c.get('ballot_number') or 0))].append((c,d))
+        snapshots[year]=s;indexes[year]=index;vote_indexes[year]=vote_index
     totals=collections.Counter()
     problems=[]
     updates=[]
@@ -123,15 +177,23 @@ def main():
                 for x in records:
                     rec_count+=1;totals['nccu_candidates_checked']+=1
                     found=indexes[year].get(key(OFFICE[cat],x['county'],x['name'],x['votes'],x['ballot_number']),[])
+                    if not found:
+                        sourcekey=(OFFICE[cat],norm(x['county']),x['votes'],x['ballot_number'])
+                        fallback=safe_fallback(OFFICE[cat],x,vote_indexes[year].get(sourcekey,[]))
+                        if fallback:
+                            found=fallback
+                            totals['matched_by_vote_ballot_alias']+=1
                     if len(found)!=1:
                         totals['unmatched']+=1
                         if len(problems)<500: problems.append({'year':year,'category':cat,'issue':'unmatched','candidate':x['name'],'county':x['county'],'votes':x['votes'],'number':x['ballot_number'],'matches':len(found),'url':url})
                         continue
                     candidate,district=found[0]
-                    if OFFICE[cat]=='township' and x['district'] and norm(district['district_name'])!=x['district']:
+                    if OFFICE[cat]=='township' and x['district'] and not same_town(x['district'],district['district_name']):
                         totals['town_mismatch']+=1
                         if len(problems)<500:problems.append({'year':year,'category':cat,'issue':'town_mismatch','name':x['name'],'source':x['district'],'current':district['district_name'],'url':url})
                         continue
+                    if OFFICE[cat]=='township' and x['district'] and norm(district['district_name'])!=x['district']:
+                        totals['historical_town_alias_matches']+=1
                     match_count+=1;totals['matched']+=1
                     fields={}
                     for f,nf in [('incumbent_at_election','incumbent'),('gender','gender')]:
@@ -155,6 +217,8 @@ def main():
                             candidate.update(fields)
                             changed_years.add(year)
             summary.append({'year':year,'category':cat,'pages':len(urls),'source_candidates':rec_count,'matched':match_count})
+    totals['birth_year_present_after']=sum(1 for s in snapshots.values() for c in s['candidacies'] if isinstance(c.get('birth_year'),int) and c['birth_year']>0)
+    totals['candidate_records_in_selected_snapshots']=sum(len(s['candidacies']) for s in snapshots.values())
     if opts.apply:
         for year,s in snapshots.items():
             if year not in changed_years: continue
