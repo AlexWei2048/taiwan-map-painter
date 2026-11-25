@@ -3232,6 +3232,18 @@
           24.77
         ]
       ]
+    },
+    {
+      "county": "臺中縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://www.taichung.gov.tw/media/267665/3351701771.pdf",
+      "source_locator": "《大里市志》大事紀，民國83年1月29日",
+      "winners": [
+        {
+          "town": "大里市",
+          "name": "陳彬銓"
+        }
+      ]
     }
   ]
 }
