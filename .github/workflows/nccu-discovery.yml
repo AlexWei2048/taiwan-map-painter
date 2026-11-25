@@ -7,35 +7,43 @@ on:
 jobs:
   discover:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 10
     steps:
-      - name: Inspect NCCU election summary and candidate pages
-        shell: bash
+      - name: Inspect NCCU subregional summaries and candidate vote tables
         run: |
           python -m pip install -q beautifulsoup4 lxml
           python - <<'PY'
-          import urllib.request,urllib.parse,re
+          import urllib.request, urllib.parse
           from bs4 import BeautifulSoup
           base='https://vote.nccu.edu.tw/cec/'
-          for year,cat in [(1998,'H'),(1998,'G'),(2002,'G'),(1993,'F'),(2022,'H'),(2008,'B')]:
-            print('\\n======= CATEGORY',year,cat,flush=True)
-            url=base+f'ceclist.asp?t={cat}&y={year}'
+          for yr,cat in [(1998,'H'),(1998,'G'),(1994,'EM'),(2002,'G')]:
+            root=base+f'ceclist.asp?y={yr}&t={cat}'
             try:
-              h=urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0'}),timeout=25).read().decode('utf-8','replace')
-              soup=BeautifulSoup(h,'lxml'); print('ROW',soup.select('tr')[-2].get_text(' ',strip=True)[:700])
-              links=[urllib.parse.urljoin(url,a.get('href')) for a in soup.find_all('a',href=True) if 'vote421.asp' in a.get('href','') or 'vote413.asp' in a.get('href','')]
-              print('LINKS',links[:3]); 
-              for p in links[:2]:
-                print('PAGE',p,flush=True)
-                try:
-                  r=urllib.request.urlopen(urllib.request.Request(p,headers={'User-Agent':'Mozilla/5.0'}),timeout=25);body=r.read(250000);txt=body.decode('utf-8','replace')
-                  soup2=BeautifulSoup(txt,'lxml')
-                  print('STATUS',r.status,'LEN',len(body),'TITLE',str(soup2.title)[:250])
-                  print('FORMS',[(x.get('action'),x.get('method')) for x in soup2.find_all('form')][:5])
-                  print('PARAMS',[(x.get('name'),x.get('value')) for x in soup2.find_all('input')[:20]])
-                  print('ROWS',[[td.get_text(' ',strip=True)[:65] for td in tr.find_all(['td','th'])][:13] for tr in soup2.find_all('tr')[:14]])
-                  print('A LINKS',[a.get('href') for a in soup2.find_all('a',href=True)][:10])
-                  print('RAW_HEAD',txt[:750].replace('\\n',' ')[:750])
-                except Exception as e: print('PAGE_ERROR',repr(e))
-            except Exception as e: print('ERROR',repr(e))
+              soup=BeautifulSoup(urllib.request.urlopen(root,timeout=20).read(),'lxml')
+              link=next(a.get('href') for a in soup.find_all('a',href=True) if 'vote421.asp' in a.get('href'))
+              url=urllib.parse.urljoin(root,link)
+              s=BeautifulSoup(urllib.request.urlopen(url,timeout=20).read(),'lxml')
+              detail=next(a.get('href') for a in s.find_all('a',href=True) if 'vote4211.asp' in a.get('href'))
+              durl=urllib.parse.urljoin(url,detail)
+              d=BeautifulSoup(urllib.request.urlopen(durl,timeout=20).read(),'lxml')
+              print('\\nCAT',yr,cat,'URL',durl,'TITLE',d.title.get_text() if d.title else '')
+              print('TEXT',d.get_text(' ',strip=True)[:500])
+              print('ROWS',[[td.get_text(' ',strip=True)[:35] for td in tr.find_all(['td','th'])][:18] for tr in d.find_all('tr')[:10]])
+              print('LINKS',[a.get('href') for a in d.find_all('a',href=True)[:6]])
+            except Exception as e: print('ERROR',yr,cat,repr(e))
+          for yr,cat in [(1998,'H'),(1998,'G')]:
+            root=base+f'ceclist.asp?y={yr}&t={cat}'
+            try:
+              soup=BeautifulSoup(urllib.request.urlopen(root,timeout=20).read(),'lxml')
+              link=next(a.get('href') for a in soup.find_all('a',href=True) if 'vote413.asp' in a.get('href'))
+              url=urllib.parse.urljoin(root,link)
+              s=BeautifulSoup(urllib.request.urlopen(url,timeout=20).read(),'lxml')
+              detail=next(a.get('href') for a in s.find_all('a',href=True) if 'vote3.asp' in a.get('href'))
+              durl=urllib.parse.urljoin(url,detail)
+              d=BeautifulSoup(urllib.request.urlopen(durl,timeout=20).read(),'lxml')
+              print('\\nCANDIDATE',yr,cat,'URL',durl,'TITLE',d.title.get_text() if d.title else '')
+              print('TEXT',d.get_text(' ',strip=True)[:600])
+              print('ROWS',[[td.get_text(' ',strip=True)[:35] for td in tr.find_all(['td','th'])][:18] for tr in d.find_all('tr')[:9]])
+              print('LINKS',[a.get('href') for a in d.find_all('a',href=True)[:6]])
+            except Exception as e:print('ERROR',yr,cat,repr(e))
           PY
