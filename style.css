@@ -923,3 +923,6 @@ body.history-mode #districtReferenceNote,body.history-mode #districtReferenceSou
 
 /* All party badges must remain circular, including historical tables. */
 .history-party-cell img,.history-party-inline img,.party-logo{border-radius:50%;object-fit:cover;object-position:center;aspect-ratio:1;flex-shrink:0;clip-path:circle(50% at 50% 50%)}
+
+/* Consistent compact incumbency badge in historical result tables and mobile details. */
+.history-candidate-table .incumbent-tag{display:inline-block;font-size:10px;line-height:1.4;white-space:nowrap;padding:3px 7px;border-radius:4px;background:#edf4e5;color:#587744;font-weight:500;vertical-align:middle}

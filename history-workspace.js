@@ -283,7 +283,7 @@
    const actualYear=result.index?.snapshot?.cycleYears?contest.election_date?.slice(0,4):null;
    rows.push([actualYear||selection.year||2022,offices[selection.office]||selection.office,county,district===county?'':district,
     ...(council?[identities[contest.electorate]||'区域']:[]),item.candidate_name||item.candidate_name_official||'',
-    ...(presidential?[item.deputy_name||'',item.gender||'',item.deputy_gender||'',item.incumbent_at_election===true?'是':'']:[]),
+    ...(presidential?[item.deputy_name||'',item.gender||'',item.deputy_gender||'',item.incumbent_at_election===true?'现任':'']:[]),
     item.party_name||item.party_name_official||'',item.ballot_number,item.votes,csvPercent(item.vote_share),item.elected_official?'是':'']);
   }
   return '\uFEFF'+rows.map(row=>row.map(csvCell).join(',')).join('\r\n');
@@ -297,7 +297,7 @@
   for(const r of rows){
    const total=totals.get(r.county+'|'+r.town)||0;
    output.push([selection.year,'台湾地区领导人',r.county,r.town,r.name,r.deputy_name||'',r.gender||'',r.deputy_gender||'',
-    r.incumbent===true?'是':'',r.party,r.number,r.votes,total?csvPercent(r.votes/total*100):'',r.elected?'是':'']);
+    r.incumbent===true?'现任':'',r.party,r.number,r.votes,total?csvPercent(r.votes/total*100):'',r.elected?'是':'']);
   }
   return '\uFEFF'+output.map(row=>row.map(csvCell).join(',')).join('\r\n');
  }

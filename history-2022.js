@@ -589,7 +589,7 @@
    const textFields=partyBallot?[area]:[r.level==='national'?'全区':r.county,r.level==='national'?'全区选举':r.level==='town'?r.town:(r.district||r.town||'—'),r.number||'—',displayedCandidateName(r)];
    for(const value of textFields)tr.append(createHistoryElement('td','',value));
    if(!partyBallot){
-    const current=createHistoryElement('td','history-incumbent',incumbentLabel(r));
+    const current=createHistoryElement('td','history-incumbent');appendIncumbentTag(current,incumbentLabel(r));
     if(r.incumbent==null)current.title='现任资料缺失';
     tr.append(current);
    }
@@ -610,7 +610,7 @@
   const list=document.createElement('dl');
   for(const [label,value] of items){
    const key=document.createElement('dt'),text=document.createElement('dd');
-   key.textContent=label;text.textContent=label==='选举时现任'?(value||''):(value||'—');list.append(key,text);
+   key.textContent=label;if(label==='选举时现任')appendIncumbentTag(text,value);else text.textContent=value||'—';list.append(key,text);
   }
   details.append(list);
   const cell=document.createElement('td');cell.className='history-mobile-details';cell.append(details);row.append(cell);
@@ -646,7 +646,7 @@
    }
    const tr=document.createElement('tr');
    const values=[r.county,mayorTownView()?r.town:kind==='council'?r.district:kind==='township'?r.town:(r.district||''),r.number||'—',displayedCandidateName(r),displayedGender(r),incumbentLabel(r)];
-   for(const [i,value] of values.entries()){const td=document.createElement('td');td.textContent=i===5?value:(value||'—');if(i===5&&r.incumbent==null)td.title='现任资料缺失';tr.append(td)}
+   for(const [i,value] of values.entries()){const td=document.createElement('td');if(i===5)appendIncumbentTag(td,value);else td.textContent=value||'—';if(i===5&&r.incumbent==null)td.title='现任资料缺失';tr.append(td)}
    const partyCell=document.createElement('td');partyCell.className='history-party-cell';
    const party=predictionParty(r.party),logo=logoFor(party);
    if(logo){const img=document.createElement('img');img.src=logo;img.alt='';img.loading='lazy';partyCell.append(img)}
@@ -756,7 +756,8 @@
   cell.append(mark);
  }
 
- function incumbentLabel(r){return r.incumbent===true?'是':''}
+ function incumbentLabel(r){return r.incumbent===true?'现任':''}
+ function appendIncumbentTag(cell,value){if(value==='现任')cell.append(createHistoryElement('span','incumbent-tag','现任'));}
  let resultPage=0;
  function candidateKey(r){return presidentialMode?['president',presidentialYear,r.number,r.name].join('|'):legislativeMode?(r.electorate==='party'?['legislative',legislativeYear,'party',r.party].join('|'):['legislative',legislativeYear,r.electorate,r.county,r.district,r.number,r.name].join('|')):[r.county,r.electorate,r.district,kind==='township'?r.town:'',r.number,r.name].join('|')}
  function ensureHistoryGeometry(){
@@ -1089,7 +1090,7 @@
     if(i===3&&r.incumbent==null)td.title='现任资料缺失';
     const logo=i===4||partyBallotDialog&&i===1?logoFor(predictionParty(r.party)):'';
     if(logo){const img=document.createElement('img');img.src=logo;img.alt='';const party=document.createElement('span');party.className='history-party-cell';party.append(img,value);td.append(party)}
-    if(i===7)appendResultMark(td,r);else if(!logo)td.append(value);tr.append(td);
+    if(i===7)appendResultMark(td,r);else if(i===3)appendIncumbentTag(td,value);else if(!logo)td.append(value);tr.append(td);
    }
    if(!partyBallotDialog)appendMobileCandidateDetails(tr,[['号次',r.number],['性别',displayedGender(r)],['选举时现任',incumbentLabel(r)],['得票率',(r._share||0).toFixed(2)+'%']]);
    body.append(tr);
@@ -1138,7 +1139,7 @@
   renderDialogScope(detailFeature,detailDistrict);
   if(contest.reserved_seats_method==='statutory')el('historyDialogMessage').append(' · 妇保按当届规定计算');
   if(contest.source_url)appendContestSource(contest);
-  for(const r of [...rows].sort((a,b)=>b.votes-a.votes)){const tr=document.createElement('tr');if(r.elected_official)tr.className='history-elected-row';for(const [i,value] of [r.ballot_number||'—',r.candidate_name,r.gender||'—',r.incumbent_at_election===true?'是':'',r.party_name,r.votes.toLocaleString('zh-CN'),Number(r.vote_share||0).toFixed(2)+'%',''].entries()){const td=document.createElement('td');if(i===7&&r.elected_official){const mark=document.createElement('img');mark.src='assets/elected-mark.png';mark.alt='当选';mark.width=18;mark.height=18;td.append(mark)}else if(i===4){const logo=logoFor(predictionParty(value));if(logo){const img=document.createElement('img');img.src=logo;img.alt='';const party=document.createElement('span');party.className='history-party-cell';party.append(img,value);td.append(party)}else td.textContent=value}else td.textContent=value;if(i===3&&r.incumbent_at_election==null)td.title='现任资料缺失';tr.append(td)}
+  for(const r of [...rows].sort((a,b)=>b.votes-a.votes)){const tr=document.createElement('tr');if(r.elected_official)tr.className='history-elected-row';for(const [i,value] of [r.ballot_number||'—',r.candidate_name,r.gender||'—',r.incumbent_at_election===true?'现任':'',r.party_name,r.votes.toLocaleString('zh-CN'),Number(r.vote_share||0).toFixed(2)+'%',''].entries()){const td=document.createElement('td');if(i===7&&r.elected_official){const mark=document.createElement('img');mark.src='assets/elected-mark.png';mark.alt='当选';mark.width=18;mark.height=18;td.append(mark)}else if(i===4){const logo=logoFor(predictionParty(value));if(logo){const img=document.createElement('img');img.src=logo;img.alt='';const party=document.createElement('span');party.className='history-party-cell';party.append(img,value);td.append(party)}else td.textContent=value}else if(i===3)appendIncumbentTag(td,value);else td.textContent=value;if(i===3&&r.incumbent_at_election==null)td.title='现任资料缺失';tr.append(td)}
    appendMobileCandidateDetails(tr,[['号次',r.ballot_number],['性别',r.gender],['选举时现任',tr.cells[3].textContent],['得票率',tr.cells[6].textContent]]);
    body.append(tr)
   }
@@ -1166,7 +1167,7 @@
    const scope=[r.county,r.town||r.district].filter(Boolean).filter((name,i,items)=>items.indexOf(name)===i).join(' · ');
    const share=countyWinner?(totals.get(r.county)?r.votes/totals.get(r.county)*100:0):(r._share||0);
    return {historical:true,presidentialTicket:presidentialMode,estimated:false,district:scope,
-    number:r.number,name:displayedCandidateName(r),gender:displayedGender(r),incumbent:r.incumbent===true?'是':'',party:r.party,color:party.color,logo:logoFor(party),
+    number:r.number,name:displayedCandidateName(r),gender:displayedGender(r),incumbent:r.incumbent===true?'现任':'',party:r.party,color:party.color,logo:logoFor(party),
     votes:r.votes.toLocaleString('zh-CN'),share:share.toFixed(2)+'%',elected:isOfficialWinner(r),allCandidates:showAll};
   });
  }
