@@ -3346,6 +3346,45 @@
           "name": "林慶堂"
         }
       ]
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://www.chcg.gov.tw/TSO/Erlin/07other/main.aspx?main_id=1346",
+      "source_locator": "二林鎮公所歷任鎮長一覽表，第12屆，1994年3月1日就職",
+      "winners": [
+        {
+          "town": "二林鎮",
+          "name": "洪仁欽"
+        }
+      ]
+    },
+    {
+      "county": "苗栗縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://webws.miaoli.gov.tw/Download.ashx?n=MjAxODEyMjUwMDQ3MTY4NzA2NDk5Mzg2LnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNDY0L3JlbGZpbGUvOTMyMS8xMDMwLzkzMmFkNWZhLTlkNzEtNDNjOS1hNGY2LWQyNWQxOWVjODRhYi5wZGY%3D",
+      "source_locator": "三義鄉光復後歷任鄉長、副首長表，第11及12屆（公開文字擷取；頁面圖像未能取得）",
+      "winners": [
+        {
+          "town": "三義鄉",
+          "name": "吳振鵬",
+          "incumbent_at_election": true
+        }
+      ]
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://town.chcg.gov.tw/files/62_1060120_%E7%AC%AC%E4%B8%89%E7%AF%87%20%E6%94%BF%E4%BA%8B%E7%AF%87P174-P292.pdf",
+      "source_locator": "秀水鄉志第三篇政事篇，第十一及十二屆鄉長名錄",
+      "corroboration_url": "https://www.chcg.gov.tw/TSO/getFile.aspx?did=16193&dir=xiushui&file=1&file_id=155993&type=3",
+      "winners": [
+        {
+          "town": "秀水鄉",
+          "name": "陳濱樹",
+          "incumbent_at_election": true
+        }
+      ]
     }
   ]
 }
