@@ -3120,11 +3120,19 @@
           "ballots_cast": 646373,
           "valid_votes": 612280,
           "invalid_votes": 34093,
-          "town": "全縣合計"
+          "town": "全縣合計",
+          "candidate_count": 29
         }
       ],
       "source_sha256": "5785754f433cdde73a521bb03a2bed7dd5c4ffcddeaa262fd58b4a01f5de2d52",
-      "summary_scope": "county"
+      "summary_scope": "county",
+      "county_summary": {
+        "candidate_count": 29,
+        "male_candidates": 28,
+        "female_candidates": 1,
+        "candidate_counts_source_url": "https://ws.tycg.gov.tw/Download.ashx?n=MDAzLTk35bm06KGM5pS%2F57WE57mULnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvMTUyL1JlbEZpbGUvMTg1NjAvMTI0MDIyNy8wMDMtOTflubTooYzmlL%2FntYTnuZQucGRm",
+        "candidate_counts_source_locator": "97年桃園縣統計要覽表3-10，第12屆；公開文字表格，頁面影像未能取得"
+      }
     },
     {
       "county": "臺中縣",
@@ -3143,10 +3151,18 @@
           "ballots_cast": 667208,
           "valid_votes": 644150,
           "invalid_votes": 23058,
-          "town": "全縣合計"
+          "town": "全縣合計",
+          "candidate_count": 53
         }
       ],
-      "summary_scope": "county"
+      "summary_scope": "county",
+      "county_summary": {
+        "candidate_count": 53,
+        "male_candidates": 49,
+        "female_candidates": 4,
+        "candidate_counts_source_url": "https://www.dbas.taichung.gov.tw/media/296525/91%E5%B9%B4%E8%87%BA%E4%B8%AD%E7%B8%A3%E7%B5%B1%E8%A8%88%E8%A6%81%E8%A6%BD.pdf",
+        "candidate_counts_source_locator": "91年臺中縣統計要覽表3-11，第12屆；公開文字表格，頁面影像未能取得"
+      }
     },
     {
       "county": "苗栗縣",
@@ -3188,9 +3204,17 @@
           "registered_voters": 804094,
           "ballots_cast": 643674,
           "valid_votes": 614539,
-          "invalid_votes": 29135
+          "invalid_votes": 29135,
+          "candidate_count": 55
         }
-      ]
+      ],
+      "county_summary": {
+        "candidate_count": 55,
+        "male_candidates": 53,
+        "female_candidates": 2,
+        "candidate_counts_source_url": "https://ctrl.chcg.gov.tw/files/101%E5%B9%B4%E5%BD%B0%E5%8C%96%E7%B8%A3%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1_16_1081217_2025.pdf",
+        "candidate_counts_source_locator": "101年彰化縣統計年報表3-11，第12屆；公開文字表格，頁面影像未能取得"
+      }
     },
     {
       "county": "雲林縣",
@@ -3511,6 +3535,45 @@
           "town": "水林鄉",
           "name": "許裕欽",
           "gender": "男",
+          "incumbent_at_election": true
+        }
+      ]
+    },
+    {
+      "county": "澎湖縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://www.huxi.gov.tw/ch/home.jsp?id=20",
+      "source_locator": "湖西鄉公所歷任鄉長，民選第十一、十二屆",
+      "winners": [
+        {
+          "town": "湖西鄉",
+          "name": "吳明浩",
+          "incumbent_at_election": true
+        }
+      ]
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://web.tainan.gov.tw/tnrende/cp.aspx?n=47588",
+      "source_locator": "仁德區公所歷任區長名錄，第十二屆83.03.01–87.03.01；第十一屆宋義祥（公開索引文字）",
+      "winners": [
+        {
+          "town": "仁德鄉",
+          "name": "鍾和邦",
+          "incumbent_at_election": false
+        }
+      ]
+    },
+    {
+      "county": "南投縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://www.nantou.gov.tw/english/introduction-history_magistrate.php",
+      "source_locator": "南投縣政府歷任縣長，林明溱經歷列集集鎮第11、12屆鎮長",
+      "winners": [
+        {
+          "town": "集集鎮",
+          "name": "林明溱",
           "incumbent_at_election": true
         }
       ]
