@@ -72,3 +72,28 @@ for (const [year, expected] of [[1995, 2], [1998, 4], [2001, 3], [2004, 5]]) {
     }
   });
 }
+
+test('1992 source-backed constituency turnout is verified against actual candidate ballots', () => {
+ const election=read('history-legislative-1992.json');
+ const snapshot=read('history-legislative-turnout-1992.json');
+ const audited=snapshot.audit.regional.verified_constituencies;
+ assert.equal(audited.length,6);
+ assert.equal(snapshot.audit.regional.field_count,18);
+ assert.deepEqual(snapshot.ballots.regional.national,{});
+ assert.equal(Object.keys(snapshot.ballots.regional.county).length,5);
+ for(const item of audited) {
+  const {county,district,record,source_url}=item;
+  const contest=election.contests.find(c=>c.electorate==='regional'&&c.county_name===county&&c.district_name===district);
+  assert.ok(contest,county+' '+district);
+  assert.deepEqual([contest.registered_voters,contest.ballots_cast,contest.valid_votes,contest.invalid_votes],record);
+  assert.equal(contest.turnout_source_url,source_url);
+  assert.equal(record[1],record[2]+record[3]);
+  assert.ok(record[0]>=record[1]);
+  assert.equal(election.rows.filter(r=>r.electorate==='regional'&&r.level==='district'&&r.county===county&&r.district===district).reduce((n,r)=>n+r.votes,0),record[2]);
+  if(county==='台北市')assert.deepEqual(snapshot.ballots.regional.district.台北市['1'],record);
+  else assert.deepEqual(snapshot.ballots.regional.county[county],record);
+ }
+ const unknown=election.contests.filter(c=>c.electorate==='regional'&&!audited.some(a=>a.county===c.county_name&&a.district===c.district_name));
+ assert.equal(unknown.length,21);
+ assert.ok(unknown.every(c=>c.registered_voters==null&&c.ballots_cast==null&&c.invalid_votes==null));
+});

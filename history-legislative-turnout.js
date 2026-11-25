@@ -14,7 +14,7 @@
  const COUNTY={"2004":{"regional":{"新竹县":[315470,190319,188287,2032],"云林县":[551467,353313,349862,3451],"花莲县":[197038,96590,95768,822]}}};
  // CEC-sourced geographic profiles for 1995-2016, generated from the original
  // official voter/ballot records and reconciled with independently loaded votes.
- const GEO_YEARS=new Set([1995,1998,2001,2004,2008,2012,2016,2020,2024]);
+ const GEO_YEARS=new Set([1992,1995,1998,2001,2004,2008,2012,2016,2020,2024]);
  const regions=new Map(),loading=new Map();
  async function load(year,fetcher=root.fetch){
   year=Number(year);
@@ -22,7 +22,7 @@
   if(regions.has(year))return regions.get(year);
   if(loading.has(year))return loading.get(year);
   const promise=(async()=>{
-   const response=await fetcher('assets/history-legislative-turnout-'+year+'.json?v=20261125-district-reconciled-v8',{cache:'default'});
+   const response=await fetcher('assets/history-legislative-turnout-'+year+'.json?v=20261125-1992-constituencies-v9',{cache:'default'});
    if(!response.ok)throw Error('历史选举概况资料 HTTP '+response.status);
    const content=await response.json();
    if(content.schemaVersion!==1||content.year!==year||!content.ballots)
