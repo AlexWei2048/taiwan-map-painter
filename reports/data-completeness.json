@@ -4,7 +4,7 @@
   "counts": {
     "unverified": 28,
     "conflict": 13,
-    "missing": 1462,
+    "missing": 1461,
     "not_applicable": 5,
     "partial": 17,
     "not_yet_available": 1
@@ -19,7 +19,7 @@
     "regional_town_returns": 2,
     "candidate_results": 14,
     "turnout": 1,
-    "gender": 200,
+    "gender": 195,
     "district_scope": 4,
     "ballot_number": 7,
     "reserved_seats": 20,
@@ -4326,7 +4326,7 @@
       "1994-council-counties:云林县:regional:第5选举区:9",
       "林树山",
       "missing",
-      "gender;incumbent_at_election",
+      "incumbent_at_election",
       "assets/history-local-1994.json",
       ""
     ],
@@ -5138,7 +5138,7 @@
       "1994-council-counties:南投县:regional:第4选举区:4",
       "张明雄",
       "missing",
-      "gender;incumbent_at_election",
+      "incumbent_at_election",
       "assets/history-local-1994.json",
       ""
     ],
@@ -10570,7 +10570,7 @@
       "1994-council-counties:嘉义县:regional:第1选举区:12",
       "郑陈秋霞",
       "missing",
-      "gender;incumbent_at_election",
+      "incumbent_at_election",
       "assets/history-local-1994.json",
       ""
     ],
@@ -10836,7 +10836,7 @@
       "1994-council-counties:嘉义县:regional:第3选举区:1",
       "陈日通",
       "missing",
-      "gender;incumbent_at_election",
+      "incumbent_at_election",
       "assets/history-local-1994.json",
       ""
     ],
@@ -14629,20 +14629,6 @@
       "第1选举区",
       "1994-council-counties:彰化县:regional:第1选举区:13",
       "顾舜堂",
-      "missing",
-      "gender",
-      "assets/history-local-1994.json",
-      ""
-    ],
-    [
-      1994,
-      "council",
-      "regional",
-      "candidate",
-      "彰化县",
-      "第1选举区",
-      "1994-council-counties:彰化县:regional:第1选举区:21",
-      "白忠信",
       "missing",
       "gender",
       "assets/history-local-1994.json",

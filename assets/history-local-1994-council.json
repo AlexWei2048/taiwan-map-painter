@@ -8945,7 +8945,7 @@
           "白忠信",
           642,
           "無黨籍",
-          "",
+          "男",
           false
         ],
         [
@@ -9291,6 +9291,15 @@
           "roster_term": "1990-03-01/1994-02-28",
           "election_date": "1994-01-29",
           "roster_name": null
+        }
+      },
+      "gender_sources": {
+        "21": {
+          "method": "cross-election exact historical county and unique name, documented gender",
+          "source_url": "https://www.chcc.gov.tw/form/Details.aspx?Parser=2%2C4%2C34%2C%2C%2C%2C35",
+          "source_locator": "彰化縣議會第十一屆名錄列性別男、花壇鄉；1993年同縣縣長候選人資料一致。",
+          "original_name": "白忠信",
+          "value": "男"
         }
       }
     },
@@ -11498,7 +11507,7 @@
           "張明雄",
           4583,
           "中國國民黨",
-          "",
+          "男",
           false
         ],
         [
@@ -11541,7 +11550,17 @@
           "女",
           true
         ]
-      ]
+      ],
+      "gender_sources": {
+        "4": {
+          "method": "cross-election exact historical county and unique name, documented gender",
+          "source_url": "https://votetw.com/data/candidate/%E5%BC%B5%E6%98%8E%E9%9B%84",
+          "source_locator": "2005竹山鎮長候選人性別男；立法機構官方履歷載南投縣議員及竹山鎮長，與本選區地理一致；不匹配彰化同名者。",
+          "original_name": "張明雄",
+          "value": "男",
+          "secondary_source": "https://www.ly.gov.tw/Pages/List.aspx?nodeid=975"
+        }
+      }
     },
     {
       "county": "南投縣",
@@ -12408,7 +12427,7 @@
           "林樹山",
           4781,
           "民主進步黨",
-          "",
+          "男",
           false
         ],
         [
@@ -12455,6 +12474,14 @@
             "1998-council:云林县:regional:第5选举区:7",
             "2018-council:云林县:regional:第5选举区:11"
           ]
+        },
+        "9": {
+          "method": "cross-election exact historical county and unique name, documented gender",
+          "source_url": "https://www.ly.gov.tw/Pages/List.aspx?nodeid=1395",
+          "source_locator": "雲林縣民進黨民代履歷，與2001同縣縣長候選人快照性別男交叉核對；同縣同名同黨。",
+          "original_name": "林樹山",
+          "value": "男",
+          "secondary_source": "assets/history-local-2001.json#2001-mayor:云林县:regional:云林县:2"
         },
         "10": {
           "method": "cross-election exact official name, same county/electorate/district, unique per county, consistent gender",
@@ -12686,7 +12713,7 @@
           "鄭陳秋霞",
           3796,
           "中國國民黨",
-          "",
+          "女",
           false
         ],
         [
@@ -12716,6 +12743,16 @@
           "original_name": "蕭登標",
           "ballot_number": 5,
           "votes": 7081
+        }
+      },
+      "gender_sources": {
+        "12": {
+          "method": "cross-election exact historical county and unique name, documented gender",
+          "source_url": "https://votetw.com/data/candidate/%E6%9E%97%E5%9C%8B%E6%85%B6",
+          "source_locator": "1998嘉義縣第1選區同名同黨候選人，女；READr個人檔案一致。",
+          "original_name": "鄭陳秋霞",
+          "value": "女",
+          "secondary_source": "https://whoareyou.readr.tw/person/42363"
         }
       }
     },
@@ -12833,7 +12870,7 @@
           "陳日通",
           4532,
           "民主進步黨",
-          "",
+          "男",
           false
         ],
         [
@@ -12916,7 +12953,17 @@
           "男",
           true
         ]
-      ]
+      ],
+      "gender_sources": {
+        "1": {
+          "method": "cross-election exact historical county and unique name, documented gender",
+          "source_url": "https://votetw.com/data/candidate/%E7%B0%A1%E6%B3%B0%E6%B2%B3",
+          "source_locator": "1998嘉義縣第3選區同名候選人男；2014大林鎮村里長候選人姓名、出生年與1998資料一致。",
+          "original_name": "陳日通",
+          "value": "男",
+          "secondary_source": "https://votetw.com/data/election/20141101V1E1?%E7%9C%81%E5%B8%82=10&%E7%B8%A3%E5%B8%82=010&%E9%84%89%E9%8E%AE%E5%B8%82%E5%8D%80=040"
+        }
+      }
     },
     {
       "county": "嘉義縣",
