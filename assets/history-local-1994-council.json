@@ -6248,7 +6248,7 @@
           "黃宣乾",
           3059,
           "民主進步黨",
-          "",
+          "男",
           false
         ],
         [
@@ -6379,6 +6379,12 @@
         }
       },
       "gender_sources": {
+        "5": {
+          "method": "official later bulletin explicitly identifies 1994 candidacy",
+          "source_url": "https://eebulletin.cec.gov.tw/115/08%E8%8B%97%E6%A0%97%E7%B8%A3/03%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7/%E8%8B%97%E6%A0%97%E7%B8%A3%E9%A0%AD%E4%BB%BD%E5%B8%82%E5%B8%82%E9%95%B7%E9%81%B8%E8%88%89.pdf",
+          "source_locator": "2026 頭份市民代表候選人2號黃宣乾，性別男，經歷明列第13屆第5選區民進黨提名候選人。",
+          "confidence": "official_biography"
+        },
         "14": {
           "method": "cross-election exact official name, same county/electorate/district, unique per county, consistent gender",
           "years": [
@@ -10326,7 +10332,7 @@
           "王福元",
           7059,
           "中國國民黨",
-          "",
+          "男",
           false
         ],
         [
@@ -10476,6 +10482,55 @@
           "election_date": "1994-01-29",
           "roster_name": null
         }
+      },
+      "gender_sources": {
+        "1": {
+          "method": "cross-election exact official name, county and overlapping historical geographic scope; reviewed district renumbering or township candidacy",
+          "confidence": "cross_election_geography",
+          "references": [
+            {
+              "year": 1998,
+              "gender": "男",
+              "candidacy_id": "1998-council:彰化县:regional:第7选举区:5",
+              "party": "中國國民黨",
+              "scope": [
+                "北斗镇",
+                "埤头乡",
+                "溪州乡",
+                "田尾乡"
+              ],
+              "contest": "第7选举区",
+              "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-1998.json"
+            },
+            {
+              "year": 2002,
+              "gender": "男",
+              "candidacy_id": "2002-township:彰化县:regional:溪州乡:3",
+              "party": "中國國民黨",
+              "scope": [],
+              "contest": "溪州乡",
+              "blob_sha": "17e462c027426f533922f5efe454d4d0b74fcfa0",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-2002.json"
+            },
+            {
+              "year": 2005,
+              "gender": "男",
+              "candidacy_id": "2005-township:彰化县:regional:溪州乡:1",
+              "party": "中國國民黨",
+              "scope": [],
+              "contest": "溪州乡",
+              "blob_sha": "4c86be7e87201f5334503a177874580bc9040bc5",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-2005.json"
+            }
+          ],
+          "scope_1994": [
+            "北斗鎮",
+            "田尾鄉",
+            "埤頭鄉",
+            "溪州鄉"
+          ]
+        }
       }
     },
     {
@@ -10510,7 +10565,7 @@
           "陳聰明",
           6898,
           "中國國民黨",
-          "",
+          "男",
           false
         ],
         [
@@ -10582,7 +10637,7 @@
           "傅黎興",
           6846,
           "中國國民黨",
-          "",
+          "男",
           false
         ],
         [
@@ -10693,6 +10748,72 @@
           "roster_term": "1990-03-01/1994-02-28",
           "election_date": "1994-01-29",
           "roster_name": null
+        }
+      },
+      "gender_sources": {
+        "2": {
+          "method": "cross-election exact official name, county and overlapping historical geographic scope; reviewed district renumbering or township candidacy",
+          "confidence": "cross_election_geography",
+          "references": [
+            {
+              "year": 1998,
+              "gender": "男",
+              "candidacy_id": "1998-township:彰化县:regional:芳苑乡:1",
+              "party": "中國國民黨",
+              "scope": [],
+              "contest": "芳苑乡",
+              "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-1998.json"
+            },
+            {
+              "year": 2002,
+              "gender": "男",
+              "candidacy_id": "2002-township:彰化县:regional:芳苑乡:1",
+              "party": "中國國民黨",
+              "scope": [],
+              "contest": "芳苑乡",
+              "blob_sha": "17e462c027426f533922f5efe454d4d0b74fcfa0",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-2002.json"
+            }
+          ],
+          "scope_1994": [
+            "二林鎮",
+            "大城鄉",
+            "芳苑鄉",
+            "竹塘鄉"
+          ]
+        },
+        "11": {
+          "method": "cross-election exact official name, county and overlapping historical geographic scope; reviewed district renumbering or township candidacy",
+          "confidence": "cross_election_geography",
+          "references": [
+            {
+              "year": 2002,
+              "gender": "男",
+              "candidacy_id": "2002-township:彰化县:regional:二林镇:5",
+              "party": "中國國民黨",
+              "scope": [],
+              "contest": "二林镇",
+              "blob_sha": "17e462c027426f533922f5efe454d4d0b74fcfa0",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-2002.json"
+            },
+            {
+              "year": 2005,
+              "gender": "男",
+              "candidacy_id": "2005-township:彰化县:regional:二林镇:2",
+              "party": "中國國民黨",
+              "scope": [],
+              "contest": "二林镇",
+              "blob_sha": "4c86be7e87201f5334503a177874580bc9040bc5",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-2005.json"
+            }
+          ],
+          "scope_1994": [
+            "二林鎮",
+            "大城鄉",
+            "芳苑鄉",
+            "竹塘鄉"
+          ]
         }
       }
     },
@@ -10937,7 +11058,7 @@
           "張文霙",
           4512,
           "中國國民黨",
-          "",
+          "女",
           false
         ],
         [
@@ -11014,6 +11135,39 @@
         ]
       ],
       "gender_sources": {
+        "5": {
+          "method": "cross-election exact official name, county and overlapping historical geographic scope; reviewed district renumbering or township candidacy",
+          "confidence": "cross_election_geography",
+          "references": [
+            {
+              "year": 1998,
+              "gender": "女",
+              "candidacy_id": "1998-township:南投县:regional:中寮乡:1",
+              "party": "中國國民黨",
+              "scope": [],
+              "contest": "中寮乡",
+              "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-1998.json"
+            },
+            {
+              "year": 2005,
+              "gender": "女",
+              "candidacy_id": "2005-council:南投县:regional:第2选举区:13",
+              "party": "無",
+              "scope": [
+                "中寮乡",
+                "草屯镇"
+              ],
+              "contest": "第2选举区",
+              "blob_sha": "4c86be7e87201f5334503a177874580bc9040bc5",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-2005.json"
+            }
+          ],
+          "scope_1994": [
+            "草屯鎮",
+            "中寮鄉"
+          ]
+        },
         "9": {
           "method": "cross-election exact official name, same county/electorate/district, unique per county, consistent gender",
           "years": [
@@ -11069,7 +11223,7 @@
           "湯火聖",
           2965,
           "民主進步黨",
-          "",
+          "男",
           false
         ],
         [
@@ -11085,7 +11239,7 @@
           "賴衡垚",
           2302,
           "中國國民黨",
-          "",
+          "男",
           false
         ],
         [
@@ -11120,7 +11274,48 @@
           "",
           false
         ]
-      ]
+      ],
+      "gender_sources": {
+        "3": {
+          "method": "later candidate election result and official biography",
+          "source_url": "https://votetw.com/data/candidate/%E6%B9%AF%E7%81%AB%E8%81%96",
+          "secondary_source": "https://www.ly.gov.tw/Pages/List.aspx?nodeid=1238",
+          "source_locator": "2004 南投縣區域民代同名同黨候選人，性別男；官方民代履歷核對。",
+          "confidence": "cross_election_identity"
+        },
+        "5": {
+          "method": "cross-election exact official name, county and overlapping historical geographic scope; reviewed district renumbering or township candidacy",
+          "confidence": "cross_election_geography",
+          "references": [
+            {
+              "year": 1998,
+              "gender": "男",
+              "candidacy_id": "1998-township:南投县:regional:水里乡:2",
+              "party": "無",
+              "scope": [],
+              "contest": "水里乡",
+              "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-1998.json"
+            },
+            {
+              "year": 2002,
+              "gender": "男",
+              "candidacy_id": "2002-township:南投县:regional:水里乡:3",
+              "party": "無",
+              "scope": [],
+              "contest": "水里乡",
+              "blob_sha": "17e462c027426f533922f5efe454d4d0b74fcfa0",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-2002.json"
+            }
+          ],
+          "scope_1994": [
+            "集集鎮",
+            "水里鄉",
+            "魚池鄉",
+            "信義鄉"
+          ]
+        }
+      }
     },
     {
       "county": "南投縣",
@@ -11351,7 +11546,18 @@
           "男",
           true
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "15": {
+          "value": true,
+          "source_url": "https://election.ltn.com.tw/2016/legislator/candidate/696/157",
+          "secondary_source": "https://www.ly.gov.tw/Pages/List.aspx?nodeid=825",
+          "method": "documented consecutive term biography",
+          "evidence": "第12屆南投縣議員1990–1994、第13屆1994–1996；官方履歷證實兩屆縣議員。",
+          "election_date": "1994-01-29",
+          "confidence": "term_biography"
+        }
+      }
     },
     {
       "county": "南投縣",
@@ -20010,7 +20216,7 @@
           "蔡世鈴",
           2021,
           "中國國民黨",
-          "",
+          "男",
           false
         ],
         [
@@ -20040,6 +20246,41 @@
           "original_name": "許財利",
           "ballot_number": 3,
           "votes": 4156
+        }
+      },
+      "gender_sources": {
+        "6": {
+          "method": "cross-election exact official name, county and overlapping historical geographic scope; reviewed district renumbering or township candidacy",
+          "confidence": "cross_election_geography",
+          "references": [
+            {
+              "year": 1998,
+              "gender": "男",
+              "candidacy_id": "1998-council:基隆市:regional:第7选举区:9",
+              "party": "中國國民黨",
+              "scope": [
+                "七堵区"
+              ],
+              "contest": "第7选举区",
+              "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-1998.json"
+            },
+            {
+              "year": 2002,
+              "gender": "男",
+              "candidacy_id": "2002-council:基隆市:regional:第7选举区:1",
+              "party": "中國國民黨",
+              "scope": [
+                "七堵区"
+              ],
+              "contest": "第7选举区",
+              "blob_sha": "17e462c027426f533922f5efe454d4d0b74fcfa0",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-2002.json"
+            }
+          ],
+          "scope_1994": [
+            "七堵區"
+          ]
         }
       }
     },
@@ -20088,7 +20329,7 @@
           "鄭怡信",
           2556,
           "中國國民黨",
-          "",
+          "男",
           false
         ],
         [
@@ -20107,7 +20348,54 @@
           "",
           false
         ]
-      ]
+      ],
+      "gender_sources": {
+        "4": {
+          "method": "cross-election exact official name, county and overlapping historical geographic scope; reviewed district renumbering or township candidacy",
+          "confidence": "cross_election_geography",
+          "references": [
+            {
+              "year": 1998,
+              "gender": "男",
+              "candidacy_id": "1998-council:基隆市:regional:第6选举区:3",
+              "party": "中國國民黨",
+              "scope": [
+                "暖暖区"
+              ],
+              "contest": "第6选举区",
+              "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-1998.json"
+            },
+            {
+              "year": 2002,
+              "gender": "男",
+              "candidacy_id": "2002-council:基隆市:regional:第6选举区:1",
+              "party": "中國國民黨",
+              "scope": [
+                "暖暖区"
+              ],
+              "contest": "第6选举区",
+              "blob_sha": "17e462c027426f533922f5efe454d4d0b74fcfa0",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-2002.json"
+            },
+            {
+              "year": 2005,
+              "gender": "男",
+              "candidacy_id": "2005-council:基隆市:regional:第6选举区:2",
+              "party": "無",
+              "scope": [
+                "暖暖区"
+              ],
+              "contest": "第6选举区",
+              "blob_sha": "4c86be7e87201f5334503a177874580bc9040bc5",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-2005.json"
+            }
+          ],
+          "scope_1994": [
+            "暖暖區"
+          ]
+        }
+      }
     },
     {
       "county": "基隆市",
@@ -20210,7 +20498,7 @@
           "曾水源",
           2436,
           "中國國民黨",
-          "",
+          "男",
           false
         ],
         [
@@ -20229,7 +20517,54 @@
           "男",
           true
         ]
-      ]
+      ],
+      "gender_sources": {
+        "11": {
+          "method": "cross-election exact official name, county and overlapping historical geographic scope; reviewed district renumbering or township candidacy",
+          "confidence": "cross_election_geography",
+          "references": [
+            {
+              "year": 1998,
+              "gender": "男",
+              "candidacy_id": "1998-council:基隆市:regional:第3选举区:2",
+              "party": "無",
+              "scope": [
+                "仁爱区"
+              ],
+              "contest": "第3选举区",
+              "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-1998.json"
+            },
+            {
+              "year": 2002,
+              "gender": "男",
+              "candidacy_id": "2002-council:基隆市:regional:第3选举区:5",
+              "party": "中國國民黨",
+              "scope": [
+                "仁爱区"
+              ],
+              "contest": "第3选举区",
+              "blob_sha": "17e462c027426f533922f5efe454d4d0b74fcfa0",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-2002.json"
+            },
+            {
+              "year": 2005,
+              "gender": "男",
+              "candidacy_id": "2005-council:基隆市:regional:第3选举区:5",
+              "party": "中國國民黨",
+              "scope": [
+                "仁爱区"
+              ],
+              "contest": "第3选举区",
+              "blob_sha": "4c86be7e87201f5334503a177874580bc9040bc5",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-2005.json"
+            }
+          ],
+          "scope_1994": [
+            "仁愛區"
+          ]
+        }
+      }
     },
     {
       "county": "基隆市",
@@ -20276,7 +20611,7 @@
           "施世明",
           2051,
           "民主進步黨",
-          "",
+          "男",
           false
         ],
         [
@@ -20311,7 +20646,54 @@
           "男",
           true
         ]
-      ]
+      ],
+      "gender_sources": {
+        "4": {
+          "method": "cross-election exact official name, county and overlapping historical geographic scope; reviewed district renumbering or township candidacy",
+          "confidence": "cross_election_geography",
+          "references": [
+            {
+              "year": 1998,
+              "gender": "男",
+              "candidacy_id": "1998-council:基隆市:regional:第4选举区:4",
+              "party": "民主進步黨",
+              "scope": [
+                "中山区"
+              ],
+              "contest": "第4选举区",
+              "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-1998.json"
+            },
+            {
+              "year": 2002,
+              "gender": "男",
+              "candidacy_id": "2002-council:基隆市:regional:第4选举区:6",
+              "party": "民主進步黨",
+              "scope": [
+                "中山区"
+              ],
+              "contest": "第4选举区",
+              "blob_sha": "17e462c027426f533922f5efe454d4d0b74fcfa0",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-2002.json"
+            },
+            {
+              "year": 2005,
+              "gender": "男",
+              "candidacy_id": "2005-council:基隆市:regional:第4选举区:4",
+              "party": "民主進步黨",
+              "scope": [
+                "中山区"
+              ],
+              "contest": "第4选举区",
+              "blob_sha": "4c86be7e87201f5334503a177874580bc9040bc5",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-2005.json"
+            }
+          ],
+          "scope_1994": [
+            "中山區"
+          ]
+        }
+      }
     },
     {
       "county": "基隆市",
@@ -20334,7 +20716,7 @@
           "陳建雄",
           1715,
           "民主進步黨",
-          "",
+          "男",
           false
         ],
         [
@@ -20358,7 +20740,7 @@
           "張銘傑",
           1686,
           "中國國民黨",
-          "",
+          "男",
           false
         ],
         [
@@ -20401,7 +20783,87 @@
           "",
           false
         ]
-      ]
+      ],
+      "gender_sources": {
+        "1": {
+          "method": "cross-election exact official name, county and overlapping historical geographic scope; reviewed district renumbering or township candidacy",
+          "confidence": "cross_election_geography",
+          "references": [
+            {
+              "year": 1998,
+              "gender": "男",
+              "candidacy_id": "1998-council:基隆市:regional:第5选举区:4",
+              "party": "民主進步黨",
+              "scope": [
+                "安乐区"
+              ],
+              "contest": "第5选举区",
+              "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-1998.json"
+            },
+            {
+              "year": 2002,
+              "gender": "男",
+              "candidacy_id": "2002-council:基隆市:regional:第5选举区:4",
+              "party": "民主進步黨",
+              "scope": [
+                "安乐区"
+              ],
+              "contest": "第5选举区",
+              "blob_sha": "17e462c027426f533922f5efe454d4d0b74fcfa0",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-2002.json"
+            }
+          ],
+          "scope_1994": [
+            "安樂區"
+          ]
+        },
+        "4": {
+          "method": "cross-election exact official name, county and overlapping historical geographic scope; reviewed district renumbering or township candidacy",
+          "confidence": "cross_election_geography",
+          "references": [
+            {
+              "year": 1998,
+              "gender": "男",
+              "candidacy_id": "1998-council:基隆市:regional:第5选举区:8",
+              "party": "中國國民黨",
+              "scope": [
+                "安乐区"
+              ],
+              "contest": "第5选举区",
+              "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-1998.json"
+            },
+            {
+              "year": 2002,
+              "gender": "男",
+              "candidacy_id": "2002-council:基隆市:regional:第5选举区:5",
+              "party": "中國國民黨",
+              "scope": [
+                "安乐区"
+              ],
+              "contest": "第5选举区",
+              "blob_sha": "17e462c027426f533922f5efe454d4d0b74fcfa0",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-2002.json"
+            },
+            {
+              "year": 2005,
+              "gender": "男",
+              "candidacy_id": "2005-council:基隆市:regional:第5选举区:3",
+              "party": "中國國民黨",
+              "scope": [
+                "安乐区"
+              ],
+              "contest": "第5选举区",
+              "blob_sha": "4c86be7e87201f5334503a177874580bc9040bc5",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-2005.json"
+            }
+          ],
+          "scope_1994": [
+            "安樂區"
+          ]
+        }
+      }
     },
     {
       "county": "基隆市",
@@ -20456,7 +20918,7 @@
           "陳東財",
           1870,
           "民主進步黨",
-          "",
+          "男",
           false
         ],
         [
@@ -20523,7 +20985,54 @@
           "男",
           true
         ]
-      ]
+      ],
+      "gender_sources": {
+        "5": {
+          "method": "cross-election exact official name, county and overlapping historical geographic scope; reviewed district renumbering or township candidacy",
+          "confidence": "cross_election_geography",
+          "references": [
+            {
+              "year": 1998,
+              "gender": "男",
+              "candidacy_id": "1998-council:基隆市:regional:第2选举区:5",
+              "party": "民主進步黨",
+              "scope": [
+                "信义区"
+              ],
+              "contest": "第2选举区",
+              "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-1998.json"
+            },
+            {
+              "year": 2002,
+              "gender": "男",
+              "candidacy_id": "2002-council:基隆市:regional:第2选举区:4",
+              "party": "民主進步黨",
+              "scope": [
+                "信义区"
+              ],
+              "contest": "第2选举区",
+              "blob_sha": "17e462c027426f533922f5efe454d4d0b74fcfa0",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-2002.json"
+            },
+            {
+              "year": 2005,
+              "gender": "男",
+              "candidacy_id": "2005-council:基隆市:regional:第2选举区:4",
+              "party": "民主進步黨",
+              "scope": [
+                "信义区"
+              ],
+              "contest": "第2选举区",
+              "blob_sha": "4c86be7e87201f5334503a177874580bc9040bc5",
+              "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/d8fdb08755a6244e3f45fe9c7b3b835f01ef4089/assets/history-local-2005.json"
+            }
+          ],
+          "scope_1994": [
+            "信義區"
+          ]
+        }
+      }
     },
     {
       "county": "基隆市",
