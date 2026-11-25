@@ -986,7 +986,13 @@
               3579,
               false
             ]
-          ]
+          ],
+          "incumbency_at_election": {
+            "name": "吳清同",
+            "source_url": "https://www.gongliao.ntpc.gov.tw/home.jsp?id=b53646fbee8d8864",
+            "source_locator": "公所任期表：75.03.01–83.02.28吳清同；83.03.01起趙國棟。",
+            "confidence": "official_term_record"
+          }
         },
         {
           "town": "金山鄉",
@@ -2596,7 +2602,14 @@
               1426,
               true
             ]
-          ]
+          ],
+          "incumbency_at_election": {
+            "name": "黃字務",
+            "source_url": "https://www.haiduau.gov.tw/home/attachments/article/1502/%E7%B0%A1%E4%BB%8B.pdf",
+            "source_locator": "海端簡介歷任首長：第11屆黃字務；第12、13屆余夢蝶。2002年選舉公報記載余曾任第12屆。",
+            "secondary_source": "https://web.cec.gov.tw/api/file/9255d5fb-ee03-4533-88b2-9dcce3cbef04.pdf",
+            "confidence": "official_term_record"
+          }
         },
         {
           "town": "蘭嶼鄉",
@@ -2675,7 +2688,14 @@
               126,
               118
             ]
-          ]
+          ],
+          "incumbency_at_election": {
+            "name": "謝朱明",
+            "source_url": "https://www.president.gov.tw/NEWS/22784",
+            "source_locator": "1992年同期官方記錄謝朱明為蘭嶼鄉長、廖班佳為縣議員；歷任首長名錄列謝、廖相繼任職；1994-01-30《蘭嶼雙週刊》確認廖當選。",
+            "secondary_source": "https://zh.wikipedia.org/wiki/%E8%98%AD%E5%B6%BC%E9%84%89",
+            "confidence": "secondary_term_roster_crosscheck"
+          }
         }
       ]
     },
@@ -2872,7 +2892,13 @@
               3139,
               false
             ]
-          ]
+          ],
+          "incumbency_at_election": {
+            "name": "林樂善",
+            "source_url": "https://toucheng.e-land.gov.tw/cp.aspx?n=6835",
+            "source_locator": "1990年3月1日第11屆林樂善就職；1994年3月1日第12屆陳忠茂就職。",
+            "confidence": "official_term_record"
+          }
         },
         {
           "town": "礁溪鄉",
