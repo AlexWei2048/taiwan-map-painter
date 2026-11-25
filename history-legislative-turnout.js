@@ -22,7 +22,7 @@
   if(regions.has(year))return regions.get(year);
   if(loading.has(year))return loading.get(year);
   const promise=(async()=>{
-   const response=await fetcher('assets/history-legislative-turnout-'+year+'.json?v=20261125-legacy-town-v11',{cache:'default'});
+   const response=await fetcher('assets/history-legislative-turnout-'+year+'.json?v=20261125-legacy-town-v12',{cache:'default'});
    if(!response.ok)throw Error('历史选举概况资料 HTTP '+response.status);
    const content=await response.json();
    if(content.schemaVersion!==1||content.year!==year||!content.ballots)
@@ -45,7 +45,7 @@
   loading.set(year,promise);
   try{return await promise}finally{loading.delete(year)}
  }
- const SOURCES={1995:'https://web.cec.gov.tw/english/article/21799',2004:'https://web.cec.gov.tw/english/article/21805',2024:'https://web.cec.gov.tw/english/article/59710'};
+ const SOURCES={1992:'https://vote.nccu.edu.tw/cec/vote421.asp?pass1=J9AA%3AI8888888888',1995:'https://web.cec.gov.tw/english/article/21799',2004:'https://web.cec.gov.tw/english/article/21805',2024:'https://web.cec.gov.tw/english/article/59710'};
  const HISTORICAL_SOURCE='https://www.taiwan-database.net/LL-M11.htm';
  function unpack(row){
   if(!Array.isArray(row)||row.length!==4)return null;
@@ -74,7 +74,7 @@
    record=verified(local?.national,overview)||
     verified(NATIONAL[year]?.[electorate],overview);
    source=record&&verified(local?.national,overview)?
-    (year>=2020?'https://github.com/kiang/db.cec.gov.tw':'https://github.com/MISNUK/CECDataSet'):
+    (SOURCES[year]||(year>=2020?'https://github.com/kiang/db.cec.gov.tw':'https://github.com/MISNUK/CECDataSet')):
     SOURCES[year]||HISTORICAL_SOURCE;
   }else if(scope==='county'){
    record=verified(local?.county?.[county],overview)||
@@ -91,7 +91,7 @@
   const groups=(overview.turnoutGroups||[]).map(group=>
    group.electorate===electorate?{...group,...record}:group);
   return{...overview,...record,turnoutGroups:groups,historicalOverall:null,
-   turnoutSource:source||(year>=2020?'https://github.com/kiang/db.cec.gov.tw':'https://github.com/MISNUK/CECDataSet')};
+   turnoutSource:source||(year===1992?SOURCES[year]:year>=2020?'https://github.com/kiang/db.cec.gov.tw':'https://github.com/MISNUK/CECDataSet')};
  }
  const api={NATIONAL,WHOLE_ELECTION,COUNTY,national,overall,load,enrich};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;

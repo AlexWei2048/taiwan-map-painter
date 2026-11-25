@@ -345,7 +345,7 @@
   const county=state.county||'',scale=el('historyScale')?.value||'',
    focus=el('historyFocus')?.value||'';
   if(!county||scale==='national')return{scope:'all',county:'',area:''};
-  const level=state.office==='legislative'&&state.electorate==='regional'||state.office==='council'?
+  const level=state.office==='council'||state.office==='legislative'&&state.electorate==='regional'&&scale!=='town'?
    'district':'town';
   // A map showing all wards/districts of one county represents the county
   // aggregate. Choose an individual constituency only when the sidebar
@@ -353,7 +353,7 @@
   if(state.office==='legislative'&&focus&&
      (scale==='district'&&level==='district'||scale==='town'&&level==='town')){
    const choices=overviewRegionChoices(indexed,{
-    year:state.year,office:state.office,electorate:state.electorate,county}).areas;
+    year:state.year,office:state.office,electorate:state.electorate,county,scope:level}).areas;
    let chosen=null;
    if(level==='district'){
     const number=Core.districtNumber(focus);
@@ -380,18 +380,20 @@
   overviewArea=target.area;overviewContestId='';
  }
  function syncOverviewControls(){
-  const legislative=state.office==='legislative',level=legislative&&state.electorate==='regional'||state.office==='council'?'district':'town';
+  const legislative=state.office==='legislative';
+  const level=state.office==='council'||legislative&&state.electorate==='regional'&&overviewScope!=='town'?'district':'town';
   const available=legislative?(Number(state.year)===1992&&['plains','mountain'].includes(state.electorate)?
     ['all']:['all',...(root.HistoryLegislative?.levels(state.year,state.electorate)||[]).map(([id])=>id)]):['all','county',level];
-  if(!['all','county',level].includes(overviewScope)||!available.includes(overviewScope))overviewScope='all';
+  if(!available.includes(overviewScope))overviewScope='all';
   const {counties}=overviewRegionChoices(indexed,{year:state.year,office:state.office,electorate:state.electorate});
   if(overviewScope!=='all'&&!counties.includes(overviewCounty))
    overviewCounty=counties.includes(state.county)?state.county:counties[0]||'';
   const towns=root.History2022View?.allTowns?.()||[];
-  const choices=overviewRegionChoices(indexed,{year:state.year,office:state.office,electorate:state.electorate,county:overviewCounty,towns});
+  const choices=overviewRegionChoices(indexed,{year:state.year,office:state.office,electorate:state.electorate,county:overviewCounty,towns,scope:overviewScope});
   const scopeSelect=el('historyOverviewScope');
   if(scopeSelect){
-   const opts=[['all','全部地区（含金门、马祖）'],['county','县市'],[level,level==='district'?(legislative?'选举区':'议员选区'):'乡镇市区']].filter(([value])=>available.includes(value));
+   const opts=[['all','全部地区（含金门、马祖）'],['county','县市'],['district',legislative?'选举区':'议员选区'],['town','乡镇市区']]
+    .filter(([value])=>available.includes(value));
    scopeSelect.replaceChildren(...opts.map(([value,text])=>new Option(text,value)));
    scopeSelect.value=overviewScope;
   }
@@ -486,15 +488,15 @@
  function openFeatureOverview(feature){
   if(!feature||!indexed)return false;
   const county=feature.county||feature.name;
-  const level=state.office==='council'||state.office==='legislative'&&state.electorate==='regional'?'district':'town';
+  const level=state.office==='council'||state.office==='legislative'&&state.electorate==='regional'&&state.level!=='town'?'district':'town';
   const choices=overviewRegionChoices(indexed,{year:state.year,office:state.office,electorate:state.electorate,county,
-   towns:root.History2022View?.allTowns?.()||[]});
+   towns:root.History2022View?.allTowns?.()||[],scope:level});
   if(!choices.counties.includes(county))return false;
   overviewInitialized=true;overviewContext=overviewContextKey();
   overviewCounty=county;overviewMapCounty=state.county;
   overviewScope='county';overviewArea='';overviewContestId='';
   if(feature.name!==county){
-   const wanted=state.office==='council'||state.office==='legislative'&&state.electorate==='regional'?
+   const wanted=level==='district'?
     choices.areas.find(area=>area.value===contestForFeature(feature)):
     state.office==='township'?
      choices.areas.find(area=>area.value===contestForFeature(feature)):

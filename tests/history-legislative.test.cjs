@@ -13,13 +13,13 @@ test('uses the renamed party-list mode while preserving era-correct explanatory 
 
 test('legislative map level has no countrywide tier; map range controls all-area coverage',()=>{
  const county=['county','县市'];
- assert.deepEqual(Legislative.levels(1992,'regional'),[county,['district','选举区']]);
+ assert.deepEqual(Legislative.levels(1992,'regional'),[county,['district','选举区'],['town','乡镇市区']]);
  assert.deepEqual(Legislative.levels(2024,'regional'),[county,['district','选举区']]);
  assert.deepEqual(Legislative.levels(2024,'party'),[county,['town','乡镇市区']]);
  assert.deepEqual(Legislative.levels(2024,'mountain'),[county,['town','乡镇市区']]);
  for(const electorate of ['regional','party','plains','mountain']){
   assert.deepEqual(Legislative.levels(1992,electorate).map(([v])=>v),
-   electorate==='regional'?['county','district']:electorate==='party'?['county']:['county','town']);
+   electorate==='regional'?['county','district','town']:electorate==='party'?['county']:['county','town']);
  }
  for(const year of Legislative.YEARS)for(const electorate of ['regional','plains','mountain','party'])
   assert.equal(Legislative.levels(year,electorate).some(([v])=>v==='national'),false);

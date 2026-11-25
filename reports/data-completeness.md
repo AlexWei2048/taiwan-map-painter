@@ -1,23 +1,23 @@
 # 数据完整性审计
 
-数据基准：`ade2eb3345a1f2c5058ac05a7659b8dd98ec7a7f`。行数为任务记录数，非缺失候选人总数。
+数据基准：`ab18f9a76770fb211adf7d9228750fc01482fb94`。行数为任务记录数，非缺失候选人总数。
 
 ## 状态
 
 - unverified: 28
 - conflict: 13
-- missing: 1693
+- missing: 1699
 - not_applicable: 5
-- partial: 15
+- partial: 17
 - not_yet_available: 1
 
 ## 字段
 
-- incumbent_at_election: 1549
+- incumbent_at_election: 1548
 - gender: 222
-- ballots_cast: 96
-- invalid_votes: 96
-- registered_voters: 85
+- ballots_cast: 104
+- invalid_votes: 104
+- registered_voters: 82
 - reserved_seats: 20
 - candidate_results: 14
 - valid_votes: 12
@@ -25,8 +25,8 @@
 - nomination_rank: 5
 - district_scope: 4
 - historical_boundary: 3
+- regional_town_returns: 2
 - national_vs_local_votes: 1
-- regional_town_returns: 1
 - turnout: 1
 - name: 1
 - recount_town_candidate_votes: 1
@@ -103,7 +103,7 @@
 | 1992 | legislative | plains | 1 | 9 | {} |
 | 1992 | legislative | regional | 27 | 330 | {} |
 | 1992 | legislative | party | 1 | 15 | {} |
-| 1992 | legislative | regional | — | — | {"national":1,"county":25,"district":27} |
+| 1992 | legislative | regional | — | — | {"national":1,"county":25,"district":27,"town":359} |
 | 1992 | legislative | plains | — | — | {"national":1,"county":23,"district":1,"town":359} |
 | 1992 | legislative | mountain | — | — | {"national":1,"county":23,"district":1,"town":359} |
 | 1995 | legislative | mountain | 1 | 9 | {} |
@@ -289,3 +289,10 @@
 - 1992、2004、2008年7位民代候选人新增7项性别、7项选举时现任。1992年王建煊依据政大号次、票数和财政部履历查核；2004年2笔异体字和2008年4笔空名的候选人来源记录以当届县、选区、号次和票数同开票表精确核对，2008年姓名与号次另由行政院公报核实。
 - 金门首届议员妇保1席明确对应第2选举区杨淑媛，引用《金门县志》卷二第336页。首届选举其余38名参选人的完整名单和票数仍缺。
 - 全量资料扫描0扫描错误；未补缺口以本页最新统计为准。1994年乡镇市长仍有13县缺至少一部分逐候选人结果，1994年议员投票统计、1998年少数民族议员妇保、1992年区域民代乡镇票和2018年台北市长分区重计的原件缺口仍在。
+
+## 政大 1992 年区域民代乡镇明细续补（2026-11-25）
+
+- 政大选区页提供 25 个选区、359 个乡镇市区的 5,097 条候选人得票记录，已逐候选人与选区总票对账。金门县、连江县可核对选区汇总，政大的乡镇明细页无数据。
+- 其中 348 个乡镇市区具完整投票统计。原高雄市 11 个行政区可核对选举人数和有效票数，政大明细未列出无效票数，投票数和投票率因此留空。
+- 中选会原始清册第 268 页、政大逐乡镇记录及选区有效票共同确认原高雄县 8 号陈锡璞得 265 票。以此复核 27 个选区与区域民代票全国汇总。彰化县的投票数及无效票数沿用县统计年报，与政大各乡镇的加总一致。
+- Taiwan Votes 区域民代资料从 1995 年起，无法独立复核本次新增的 1992 年乡镇票。

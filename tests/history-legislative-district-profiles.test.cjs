@@ -74,18 +74,18 @@ for (const [year, expected] of [[1995, 2], [1998, 4], [2001, 3], [2004, 5]]) {
 }
 
 
-test('1992 NCCU turnout covers 26 reconciled regional constituencies without overriding official sources',async()=>{
- const election=read('history-legislative-1992.json');
+test('1992 NCCU turnout covers 27 reconciled regional constituencies without overriding official sources',async()=>{
+ const election=require('../history-legislative.js').apply1992Local(read('history-legislative-1992.json'),read('history-legislative-1992-local.json'));
  const snapshot=read('history-legislative-turnout-1992.json');
  const items=snapshot.audit.regional.verified_constituencies;
- assert.equal(items.length,26);
- assert.equal(snapshot.audit.regional.field_count,78);
- assert.deepEqual(snapshot.ballots.regional.national,{});
- assert.equal(Object.keys(snapshot.ballots.regional.county).length,24);
+ assert.equal(items.length,27);
+ assert.equal(snapshot.audit.regional.field_count,81);
+ assert.deepEqual(snapshot.ballots.regional.national,[13206973,9549818,9375608,174210]);
+ assert.equal(Object.keys(snapshot.ballots.regional.county).length,25);
  assert.equal(Object.keys(snapshot.ballots.regional.district.台北市).length,2);
  assert.equal(Object.keys(snapshot.ballots.regional.district.高雄市).length,2);
- assert.equal(snapshot.ballots.regional.county.高雄县,undefined,'disputed 1992 county result must not be inferred');
- assert.equal(snapshot.audit.regional.nccu_reconciliation.matched,26);
+ assert.deepEqual(snapshot.ballots.regional.county.高雄县,[736309,543240,534430,8810]);
+ assert.equal(snapshot.audit.regional.nccu_reconciliation.matched,27);
  for(const {county,district,record,source_url} of items){
   const contest=election.contests.find(c=>c.electorate==='regional'&&c.county_name===county&&c.district_name===district);
   assert.ok(contest,county+' '+district);

@@ -13,7 +13,7 @@
   const counties=[...new Set(s.rows.filter(r=>r.electorate===electorate&&r.level==='county'&&valid.has(r.county)).map(r=>r.county))]
    .sort((a,b)=>compare({county_name:a},{county_name:b}));
   const county=selection.county||'';
-  const areas=electorate==='regional'?s.contests.filter(c=>c.electorate==='regional'&&c.county_name===county)
+  const areas=electorate==='regional'&&selection.scope!=='town'?s.contests.filter(c=>c.electorate==='regional'&&c.county_name===county)
    .map(c=>({value:c.contest_id,label:c.district_name})):
    [...new Set(s.rows.filter(r=>r.electorate===electorate&&r.level==='town'&&r.county===county).map(r=>r.town))]
     .map(town=>({value:town,label:town}));
@@ -30,7 +30,7 @@
    return{result,overview,scope:'all',county:'',area:''};
   }
   if(!county)return null;
-  if(electorate==='regional'){
+  if(electorate==='regional'&&scope!=='town'){
    const selected=s.contests.filter(c=>c.electorate==='regional'&&c.county_name===county);
    if(!selected.length)return null;
    const query={year,office:'legislative',electorate,countyId:selected[0].county_id};
@@ -85,14 +85,14 @@
  function exportCsv(snapshot,selection={}){
   if(snapshot?.office!=='legislative')return Core.csv([['无立法机构民代资料']]);
   const year=Number(selection.year||snapshot.year),electorate=selection.electorate||'regional',
-   level=electorate==='regional'?'district':year===1992&&!selection.county&&selection.level!=='town'&&['plains','mountain'].includes(electorate)?'national':selection.level==='national'?'national':
+   level=electorate==='regional'&&selection.level!=='town'?'district':year===1992&&!selection.county&&selection.level!=='town'&&['plains','mountain'].includes(electorate)?'national':selection.level==='national'?'national':
     selection.level==='town'?'town':'county',county=selection.county||'';
   const focus=String(selection.focus||'');
   const records=snapshot.rows.filter(r=>r.electorate===electorate&&r.level===level&&(!county||r.county===county)&&
    (!focus||level==='district'&&root.HistoryLegislative?.districtNumber(r.district)===root.HistoryLegislative?.districtNumber(focus)||
     level==='town'&&r.town===focus));
-  const area=r=>level==='national'?'全区':electorate==='regional'?r.county+'|'+r.district:
-   level==='town'?r.county+'|'+r.town:r.county;
+  const area=r=>level==='national'?'全区':level==='town'?r.county+'|'+r.town:
+   electorate==='regional'?r.county+'|'+r.district:r.county;
   const totals=new Map();
   for(const r of records)totals.set(area(r),(totals.get(area(r))||0)+Number(r.votes||0));
   records.sort((a,b)=>compare(a,b)||area(a).localeCompare(area(b),'zh',{numeric:true})||b.votes-a.votes);

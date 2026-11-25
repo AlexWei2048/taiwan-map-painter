@@ -150,3 +150,20 @@ test('party township audit rejects fabricated totals or a dropped historic polyg
  assert.equal(missing.valid,false);
  assert.ok(missing.errors.some(e=>e.includes('缺少乡镇图形')));
 });
+
+test('1992 regional township votes reconcile with corrected official returns and retain partial turnout',()=>{
+ const archive=require('../assets/history-legislative-1992-local.json');
+ const s=Legislative.apply1992Local(shard(1992),archive),indexed=Core.index(s);
+ const townRows=s.rows.filter(row=>row.electorate==='regional'&&row.level==='town');
+ assert.equal(townRows.length,5097);
+ assert.equal(new Set(townRows.map(r=>r.county+'|'+r.town)).size,359);
+ assert.equal(townRows.filter(r=>r.name==='陈锡璞').reduce((sum,r)=>sum+r.votes,0),265);
+ assert.equal(Data.localResult(indexed,{year:1992,electorate:'regional',scope:'all'}).overview.validVotes,9375608);
+ const taipei=Data.localResult(indexed,{year:1992,electorate:'regional',scope:'town',county:'台北市',area:'松山区'});
+ assert.deepEqual(['registeredVoters','ballotsCast','validVotes','invalidVotes'].map(k=>taipei.overview[k]),[142560,94320,93150,1170]);
+ assert.equal(taipei.overview.electedCount,null);
+ const kaohsiung=Data.localResult(indexed,{year:1992,electorate:'regional',scope:'town',county:'高雄市',area:'前镇区'});
+ assert.deepEqual(['registeredVoters','ballotsCast','validVotes','invalidVotes'].map(k=>kaohsiung.overview[k]),[128591,null,95389,null]);
+ assert.deepEqual(Data.regionChoices(indexed,{year:1992,electorate:'regional',scope:'town',county:'金门县'}).areas,[]);
+ assert.match(Data.exportCsv(s,{year:1992,electorate:'regional',level:'town',county:'台北市'}),/松山区/);
+});

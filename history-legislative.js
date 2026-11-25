@@ -10,7 +10,7 @@
  }
  // "全部地区" is a map-range choice, not an administrative hierarchy.
  function levels(year,electorate){
-  if(electorate==='regional')return [['county','县市'],['district','选举区']];
+  if(electorate==='regional')return [['county','县市'],['district','选举区'],...(Number(year)===1992?[['town','乡镇市区']]:[])];
   if(Number(year)===1992&&electorate==='party')return [['county','县市']];
   return [['county','县市'],['town','乡镇市区']];
  }
@@ -93,7 +93,7 @@
  function note(year,electorate){
   if(Number(year)===2001&&(electorate==='regional'||electorate==='party'))return '2001年新店与汐止按政大逐候选人明细补齐1,447票，乡镇、选区、县市及全区合计均为10,174,005张区域民代有效票。'+(electorate==='party'?' 2008年前无独立不分区政党票。':'');
   if(electorate==='party'&&Number(year)<2008)return '2008年前无独立不分区政党票；政党席次以政党推荐的区域及少数民族候选人得票按旧制计算，详见下方席次与名单。';
-  if(Number(year)===1992&&electorate==='regional')return '1992年区域民代地图采用可对应的选区轮廓。';
+  if(Number(year)===1992&&electorate==='regional')return '1992年区域民代乡镇票数与选区归属来自政大选举研究中心；少数地名采用档案所列后期称谓。金门、马祖可查县级结果。';
   if(Number(year)===1992&&electorate==='mountain')return '政大地方明细合计63,829票；全区名单合计63,831票。差额为华加志2票，原档未注明其地方归属。';
   if(Number(year)===1992&&electorate==='plains')return '政大县市与乡镇市区逐级核对至全区49,333票。';
   return '';
@@ -139,6 +139,15 @@
    const key=norm(row.county)+'|'+districtNumber(row.district),town=norm(baseTown(row.town));
    if(!membership.has(key))membership.set(key,new Set());membership.get(key).add(town);
   }
+  const actualMembership=new Set();
+  if(target.year!==reference?.year){
+   for(const row of target.rows||[]){
+    if(row.electorate!=='regional'||row.level!=='town')continue;
+    const key=norm(row.county)+'|'+districtNumber(row.district);
+    if(!actualMembership.has(key)){membership.set(key,new Set());actualMembership.add(key)}
+    membership.get(key).add(norm(baseTown(row.town)));
+   }
+  }
   const seen=new Set(),features=[];
   for(const row of target?.rows||[]){
    if(row.electorate!=='regional'||row.level!=='district')continue;
@@ -166,7 +175,7 @@
    // All other areas are kept as separate non-overlapping polygon rings.
    const fillRule=splits.some(s=>s.fillRule==='evenodd')?'evenodd':'nonzero';
    const sourceTownIds=[...sources,...splits.map(s=>s.source)].map(f=>f.sourceId||f.id).filter(Boolean);
-   const referenceYear=Number(reference?.year)||Number(target.year);
+   const referenceYear=actualMembership.has(key)?target.year:Number(reference?.year)||Number(target.year);
    const notes=['选区归属依据'+referenceYear+'年统计资料，轮廓使用现行行政区图形近似展示，并非当届原始测绘界线'];
    if(referenceYear!==Number(target.year))notes.push('当届缺少乡镇归属明细，借用'+referenceYear+'年选区归属，可能与'+target.year+'年实际划分不同');
    if(approximate)notes.push('同一乡镇市区跨越多个选区，缺少当年村里界线，存在边界重叠风险');
@@ -452,6 +461,58 @@
   }
   return shard;
  }
+ function apply1992Regional(shard,archive){
+  const {candidateCorrection:fix,districts,withoutTownReturns}=archive;
+  const corrected=(row,name,number)=>name===fix.name&&Number(number)===fix.ballot&&(row.level==='national'||row.county===fix.county)&&row.district===fix.district;
+  const regionalRows=shard.rows.filter(r=>r.electorate==='regional'&&r.level==='district');
+  const original=regionalRows.find(r=>corrected(r,r.name,r.number));
+  if(!original||original.votes!==fix.previousVotes||!fix.officialSource)throw Error('1992年高雄县原始候选人票数不符');
+  const delta=fix.certifiedVotes-fix.previousVotes;
+  const countyParty=r=>r.electorate==='party'&&r.party===original.party&&
+   (r.level==='national'||r.level==='county'&&r.county===fix.county);
+  const rows=shard.rows.map(r=>r.electorate==='regional'&&corrected(r,r.name,r.number)||countyParty(r)?
+   {...r,votes:r.votes+delta}:r);
+  const regionalId='legislative:1992:regional:'+fix.county+':'+fix.district;
+  const partyId='legislative:1992:party:national';
+  const contests=shard.contests.map(c=>[regionalId,partyId].includes(c.contest_id)?
+   {...c,valid_votes:c.valid_votes+delta}:c);
+  const totals=new Map(contests.filter(c=>[regionalId,partyId].includes(c.contest_id)).map(c=>[c.contest_id,c.valid_votes]));
+  const candidacies=shard.candidacies.map(c=>{
+   const total=totals.get(c.contest_id);
+   if(!total)return c;
+   const match=c.contest_id===regionalId?c.candidate_name===fix.name&&Number(c.ballot_number)===fix.ballot:c.party_name===original.party;
+   const votes=c.votes+(match?delta:0);
+   return {...c,votes,vote_share:Math.round(votes/total*1e10)/1e8};
+  });
+  const profile={town:{}},seen=new Set();
+  for(const batch of districts){
+   const {county,district,towns,source}=batch;
+   const candidates=rows.filter(r=>r.electorate==='regional'&&r.level==='district'&&r.county===county&&r.district===district)
+    .sort((a,b)=>Number(a.number)-Number(b.number));
+   if(!candidates.length||!source||!towns.length)throw Error('1992年区域选区资料不全：'+district);
+   const subtotal=candidates.map(()=>0);
+   const countyProfile=profile.town[county]??={};
+   for(const [town,votes,p] of towns){
+    const key=county+'|'+town;
+    const valid=votes.reduce((sum,n)=>sum+n,0);
+    if(!town||seen.has(key)||votes.length!==candidates.length||votes.some(n=>!Number.isSafeInteger(n)||n<0)||
+     !Array.isArray(p)||p.length!==4||p[2]!==valid||!Number.isSafeInteger(p[0])||p[0]<valid||
+     (p[1]===null?p[3]!==null:!Number.isSafeInteger(p[1])||!Number.isSafeInteger(p[3])||p[3]<0||p[0]<p[1]||p[1]!==valid+p[3]))
+     throw Error('1992年区域乡镇票数与统计不符：'+key);
+    seen.add(key);
+    countyProfile[town]=p;
+    candidates.forEach((r,i)=>{
+     subtotal[i]+=votes[i];
+     rows.push({...r,level:'town',town,votes:votes[i],elected:false});
+    });
+   }
+   if(candidates.some((r,i)=>r.votes!==subtotal[i]))throw Error('1992年区域乡镇票未能逐候选人对账：'+district);
+  }
+  const coverage={districtCount:districts.length,townCount:seen.size,withoutTownReturns};
+  if(coverage.districtCount!==25||coverage.townCount!==359)throw Error('1992年区域乡镇资料覆盖不符');
+  return {...shard,contests,candidacies,rows,regionalTownCoverage:coverage,
+   geographicProfiles:{...shard.geographicProfiles,regional:profile}};
+ }
  function apply1992Local(shard,archive){
   if(shard.year!==1992||archive.version!==1||archive.year!==1992)throw Error('1992年地方票数资料格式错误');
   const rows=[],profiles={};
@@ -487,7 +548,8 @@
   const contests=shard.contests.map(c=>c.electorate==='plains'?
    {...c,...Object.fromEntries(fields.map((field,i)=>[field,plain.reduce((sum,row)=>sum+row[i],0)]))}:c);
   const originalRows=shard.rows.filter(r=>r.level!=='county'||r.county!=='台闽地区'||!Object.hasOwn(profiles,r.electorate));
-  return {...shard,rows:[...originalRows,...rows],contests,geographicProfiles:profiles};
+  const local={...shard,rows:[...originalRows,...rows],contests,geographicProfiles:profiles};
+  return archive.ballots.regional?apply1992Regional(local,archive.ballots.regional):local;
  }
  async function load(year,fetcher=root.fetch){
   year=Number(year);if(!YEAR_SET.has(year))throw Error('不支持的立法机构民代选举年份：'+year);
@@ -495,7 +557,7 @@
   const promise=(async()=>{
    const [response,local]=await Promise.all([
     fetcher('assets/history-legislative-'+year+'.json?v=20261124-vote-reconciliation-v4',{cache:'default'}),
-    [1992,2001].includes(year)?fetcher('assets/history-legislative-'+year+'-local.json?v=1').then(response=>{
+    [1992,2001].includes(year)?fetcher('assets/history-legislative-'+year+'-local.json?v='+(year===1992?'2':'1')).then(response=>{
      if(!response.ok)throw Error(year+'年地方得票资料 HTTP '+response.status);
      return response.json();
     }):null

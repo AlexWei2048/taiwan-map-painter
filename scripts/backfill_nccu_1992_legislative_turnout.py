@@ -41,6 +41,8 @@ def run(apply):
     turnout = json.loads(PROFILES.read_text("utf8"))
     regional = turnout["ballots"]["regional"]
     contests = election["contests"]
+    local = json.loads((ROOT / "assets/history-legislative-1992-local.json").read_text("utf8"))
+    correction = local["ballots"].get("regional", {}).get("candidateCorrection")
     candidates = [x for x in contests if x.get("electorate")=="regional"]
     audit = turnout["audit"]["regional"]
     existing = audit["verified_constituencies"]
@@ -60,9 +62,12 @@ def run(apply):
         if not (values[0]>=values[1] and values[1]==values[2]+values[3]):
             report["errors"].append({"issue":"invalid_arithmetic","district":district,"record":values})
             continue
-        if values[2]!=contest["valid_votes"]:
+        valid = contest["valid_votes"]
+        if correction and (county, district) == (correction["county"], correction["district"]):
+            valid += correction["certifiedVotes"] - correction["previousVotes"]
+        if values[2]!=valid:
             report["source_conflicts"].append({"issue":"NCCU_candidate_total_mismatch","county":county,
-                 "district":district,"nccu_valid_votes":values[2],"candidate_votes":contest["valid_votes"]})
+                 "district":district,"nccu_valid_votes":values[2],"candidate_votes":valid})
             continue
         preexisting=next((x for x in existing if x["county"]==county and x["district"]==district),None)
         if preexisting:
@@ -107,18 +112,27 @@ def run(apply):
                 "registered_voters":combined[0],"ballots_cast":combined[1],
                 "valid_votes":combined[2],"invalid_votes":combined[3],
                 "method":"sum of two separately verified NCCU constituencies"})
-    # The archived candidate sum differs from NCCU national by 2000 in
-    # Kaohsiung County. Never substitute unverified NCCU national turnout.
-    report["candidate_regional_valid_votes"]=sum(c["valid_votes"] for c in candidates)
-    report["reconstructed_constituencies"]=registered_count
-    report["national_status"]="not_filled_due_to_candidate_total_discrepancy"
-    audit["field_count"]=registered_count*3
-    audit["limitations"]="National regional turnout not inferred when NCCU and archived candidate totals differ; unverified 1992 Kaohsiung County and township records remain unfilled."
+    report["candidate_regional_valid_votes"] = sum(c["valid_votes"] for c in candidates)
+    if correction:
+        report["candidate_regional_valid_votes"] += correction["certifiedVotes"] - correction["previousVotes"]
+        report["candidate_correction"] = correction
+    report["reconstructed_constituencies"] = registered_count
+    county_profiles = regional["county"]
+    national = [sum(profile[i] for profile in county_profiles.values()) for i in range(4)]
+    if registered_count == len(candidates) and national[2] == report["candidate_regional_valid_votes"]:
+        regional["national"] = national
+        report["national_status"] = "reconciled_from_all_constituencies"
+        report["national_profile"] = national
+    else:
+        report["national_status"] = "not_filled_due_to_candidate_total_discrepancy"
+    audit["field_count"] = registered_count * 3
     audit["nccu_1992_source"]=SOURCE
     audit["nccu_reconciliation"]={"constituencies_checked":len(source),"matched":registered_count,
          "new_constituencies":len([x for x in report["inserted_constituencies"] if x.get("district")!="municipal_aggregate"]),
          "conflicts":report["source_conflicts"]}
-    turnout["source"]+="; National Chengchi University Election Study Center 1992 regional constituency summaries"
+    label = "National Chengchi University Election Study Center 1992 regional constituency summaries"
+    if label not in turnout["source"]:
+        turnout["source"] += "; " + label
     REPORT.write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n","utf8")
     print("NCCU_1992_RESULT",json.dumps({k:report[k] for k in
         ("source_rows","candidate_contests","reconstructed_constituencies","national_status")},ensure_ascii=False),flush=True)

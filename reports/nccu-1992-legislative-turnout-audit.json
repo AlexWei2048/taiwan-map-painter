@@ -18,6 +18,7 @@
     "云林县",
     "嘉义县",
     "台南县",
+    "高雄县",
     "屏东县",
     "台东县",
     "花莲县",
@@ -50,16 +51,26 @@
         13271
       ],
       "official_source": "https://files.chcg.gov.tw/files/101%E5%B9%B4%E5%BD%B0%E5%8C%96%E7%B8%A3%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1_16_1081217_2025.pdf"
-    },
-    {
-      "issue": "NCCU_candidate_total_mismatch",
-      "county": "高雄县",
-      "district": "高雄县",
-      "nccu_valid_votes": 534430,
-      "candidate_votes": 536430
     }
   ],
-  "candidate_regional_valid_votes": 9377608,
-  "reconstructed_constituencies": 26,
-  "national_status": "not_filled_due_to_candidate_total_discrepancy"
+  "candidate_regional_valid_votes": 9375608,
+  "candidate_correction": {
+    "county": "高雄县",
+    "district": "高雄县",
+    "ballot": 8,
+    "name": "陈锡璞",
+    "previousVotes": 2265,
+    "certifiedVotes": 265,
+    "officialSource": "https://web.cec.gov.tw/api/file/fe5b4aa2-5a85-44d1-9a1e-f3382ab85388.pdf",
+    "officialPage": 268,
+    "officialSha256": "56ed42641c2a5432cf092526b37d02d463b0a39a0b6b7a792d5bde151fb7a6c8"
+  },
+  "reconstructed_constituencies": 27,
+  "national_status": "reconciled_from_all_constituencies",
+  "national_profile": [
+    13206973,
+    9549818,
+    9375608,
+    174210
+  ]
 }

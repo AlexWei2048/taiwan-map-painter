@@ -29,6 +29,11 @@ function scan(s,year,kind,source,ctx={}){
  if(!p&&ctx.turnout){const b=ctx.turnout.enrich({validVotes:v},{year,electorate:el,scope:level==="national"?"all":level,county,area:town,districtNumber:ctx.districtNumber(district),contests:s.contests.filter(d=>d.electorate===el&&d.county_name===county).length});p={registered_voters:b.registeredVoters,ballots_cast:b.ballotsCast,valid_votes:v,invalid_votes:b.invalidVotes}}
  profile(c,p,v);
  }}coverage.push({year,office:kind,electorate:el,geographyGroups:geo,source})}
+ if(year===1992){
+  const coverage=s.regionalTownCoverage;
+  if(!coverage)add({electorate:"regional",level:"year"},"missing","regional_town_returns","区域民代乡镇明细待查");
+  else for(const county of coverage.withoutTownReturns)add({electorate:"regional",level:"county",county},"partial","regional_town_returns","政大有县级结果，乡镇票表未公开");
+ }
  if(year<2008)add({electorate:"party",level:"year"},"not_applicable","independent_party_turnout","旧制没有独立政党票");
  if(ctx.party){const p=ctx.party.build(year,s);if(!p.matchesOfficial)add({electorate:"party",level:"national"},"conflict","party_seats");for(const q of p.parties)for(const n of q.winners||[])if(n.rank==null&&!n.disqualified)add({electorate:"party",level:"nominee",district:q.party,name:n.name},"unverified","nomination_rank")}
  }
@@ -48,9 +53,8 @@ function extra(archive,kinmen,availability){
  add(1994,"council","金門縣","","partial",["candidate_results","turnout",...(Number.isInteger(kinmen.reserved_seats)?[]:["reserved_seats"])].join(";"),"sources/history-1994-kinmen-partial.json",`${kinmen.candidate_count}参选；${kinmen.elected_count}当选；其他候选人部分资料${kinmen.other_candidates.length}人`);
  add(2018,"mayor","台北市","","partial","recount_town_candidate_votes","sources/history-2018-taipei-mayor-original.json","全市重计结果已收录，分区候选人得票为投票日版本");
  add(1992,"legislative","","","conflict","national_vs_local_votes","assets/history-legislative-1992-local.json","山地少数民族票差2票；华加志","national");
- add(1992,"legislative","","","missing","regional_town_returns","assets/history-legislative-1992.json","区域民代乡镇明细待查","year");
  for(const y of [1996,2000])add(y,"president","台南市","中区、西区","unverified","historical_boundary","history-presidential.js","采用合并后轮廓","town");
- add(1992,"legislative","","","unverified","historical_boundary","history-legislative.js","采用参考年份归属","map");
+ add(1992,"legislative","","","unverified","historical_boundary","history-legislative.js","金门和马祖仍采用参考年份归属，其他选区采用政大当届乡镇归属及现行近似轮廓","map");
  add(2026,"local","","",availability.status==="awaiting_results"?"not_yet_available":"unscanned","official_results","assets/history-2026-availability.json","选举结果未发布或须另行扫描","year");
  return {issues,coverage:[]};
 }
