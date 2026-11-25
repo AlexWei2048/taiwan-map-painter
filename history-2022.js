@@ -889,7 +889,7 @@
    }
    table.append(body);wrap.append(table);details.append(wrap);
    const sources=document.createElement('p');
-   for(const [label,url] of [['当选名单：金门县志',archive.source_url],['投票统计：金门县统计年报表3-9',archive.statistics_source_url],['当选人得票与党籍：续修金门县志第281页',archive.winner_detail_source_url],['其他参选人：金门日报',archive.other_candidate_sources?.reported_returns],['陈沧江党籍：人物专访',archive.other_candidate_sources?.chen_membership],['翁明志选区：本人回忆',archive.other_candidate_sources?.weng_district]]){
+   for(const [label,url] of [['当选名单：金门县志',archive.source_url],['投票统计：金门县统计年报表3-9',archive.statistics_source_url],['当选人得票与党籍：续修金门县志第281页',archive.winner_detail_source_url],['其他参选人：金门日报',archive.other_candidate_sources?.reported_returns],['陈沧江党籍：人物专访',archive.other_candidate_sources?.chen_membership],['翁明志选区：本人回忆',archive.other_candidate_sources?.weng_district],['黄积军得票：金门日报',archive.other_candidate_sources?.huang_returns]]){
     if(!url)continue;
     const link=document.createElement('a');link.href=url;link.target='_blank';link.rel='noopener';link.textContent=label;sources.append(link,'　')
    }details.append(sources);
@@ -918,17 +918,23 @@
     }
     details.append(intro,list);
    }else{
-    intro.textContent=norm(record.county)+' · '+record.election_date+' 投票 · 各乡镇市投票统计。候选人得票待核。';
+    const countywide=record.summary_scope==='county';
+    const hasWinners=record.profiles.some(profile=>profile.winner_name);
+    intro.textContent=norm(record.county)+' · '+record.election_date+' 投票 · '+(countywide?'全县投票统计。':'乡镇市投票统计。')+'候选人得票待核。';
     const wrap=document.createElement('div');wrap.className='history-table-wrap';
     const table=document.createElement('table');table.className='history-candidate-table';
     const head=table.createTHead().insertRow();
-    for(const label of ['乡镇市','选举人数','投票数','有效票','无效票','投票率']){
+    const labels=[countywide?'统计范围':'乡镇市','选举人数','投票数','有效票','无效票','投票率'];
+    if(hasWinners)labels.push('当选人');
+    for(const label of labels){
      const th=document.createElement('th');th.scope='col';th.textContent=label;head.append(th);
     }
     const body=table.createTBody();
-    for(const {town,registered_voters,ballots_cast,valid_votes,invalid_votes} of record.profiles){
+    for(const {town,registered_voters,ballots_cast,valid_votes,invalid_votes,winner_name} of record.profiles){
      const row=body.insertRow();
-     for(const value of [norm(town),registered_voters,ballots_cast,valid_votes,invalid_votes,(100*ballots_cast/registered_voters).toFixed(2)+'%']){
+     const values=[norm(town),registered_voters,ballots_cast,valid_votes,invalid_votes,(100*ballots_cast/registered_voters).toFixed(2)+'%'];
+     if(hasWinners)values.push(winner_name?normCandidate(winner_name):'');
+     for(const value of values){
       row.insertCell().textContent=typeof value==='number'?value.toLocaleString('zh-CN'):value;
      }
     }
@@ -1132,7 +1138,7 @@
  function exportMetadata(){
   const office=presidentialMode?'president':kind;
   const election=snapshotData?.elections?.find(item=>item.office===office&&(!legislativeMode||item.electorate===legislativeBallot))||snapshotData?.elections?.[0];
-  const source=partialTownship()?'地方选举委员会原始清册及县志':
+  const source=partialTownship()?'地方选举委员会原始清册、县志及统计年报':
    archivedCouncil()?'选举事务主管机构公开资料、地方选务档案转录':
    mainlandTerms(election?.source_name||'台湾地区选举事务主管机构公开资料')+(legislativeMode&&legislativeYear===1992?'（政治大学选举研究数据库）':'（经 taiwanvotes.tw 整理）');
   const metadata=['资料来源：'+source,'行政区边界版本：'+(snapshotData?.cycleYears?yearLabel():election?.boundary_version||yearLabel()),'历史数据架构版本：'+(snapshotData?.schemaVersion||2)];

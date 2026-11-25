@@ -22,7 +22,8 @@ test('Kinmen partial results preserve reported non-winner facts separately from 
  assert.equal(new Set(nonWinners.map(c=>c.name)).size,8);
  assert.ok(nonWinners.every(c=>kinmen.districts.every(d=>!d.winners.some(w=>w[0]===c.name))));
  assert.deepEqual(nonWinners.find(c=>c.name==='陳滄江'),{name:'陳滄江',district_number:4,votes:371,membership:'中國國民黨'});
- assert.equal(nonWinners.filter(c=>Object.hasOwn(c,'votes')).length,1);
+ assert.deepEqual(nonWinners.find(c=>c.name==='黃積軍'),{name:'黃積軍',district_number:1,votes:93});
+ assert.equal(nonWinners.filter(c=>Object.hasOwn(c,'votes')).length,2);
  assert.equal(nonWinners.find(c=>c.name==='李增城').ballot_number,1);
  assert.match(kinmen.other_candidate_sources.reported_returns,/^https:/);
 });

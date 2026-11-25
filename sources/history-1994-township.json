@@ -2310,6 +2310,433 @@
           "profile_url": "https://www.dongyin.gov.tw/chhtml/Detail/2537?mcid=97267"
         }
       ]
+    },
+    {
+      "county": "臺東縣",
+      "results_url": "https://www.haiduau.gov.tw/home/attachments/article/2192/113%E5%B9%B4%E5%8F%B0%E6%9D%B1%E7%B8%A3%E6%B5%B7%E7%AB%AF%E9%84%89%E7%B5%B1%E8%A8%88%E8%A6%81%E8%A6%BD2024%E5%B9%B4%E7%AC%AC23%E6%9C%9FOK.pdf",
+      "profile_url": "https://www.haiduau.gov.tw/home/attachments/article/2192/113%E5%B9%B4%E5%8F%B0%E6%9D%B1%E7%B8%A3%E6%B5%B7%E7%AB%AF%E9%84%89%E7%B5%B1%E8%A8%88%E8%A6%81%E8%A6%BD2024%E5%B9%B4%E7%AC%AC23%E6%9C%9FOK.pdf",
+      "source_locator": "海端鄉統計要覽（民國113年）表3-5，第12屆",
+      "source_sha256": "f5f89c8dbf5a2706f19b7c88db92fc019c650b13f899a4db46938308d9802e08",
+      "contest_count": 1,
+      "candidate_count": 1,
+      "profile_totals": [
+        2979,
+        1471,
+        1426,
+        45
+      ],
+      "districts": [
+        {
+          "town": "海端鄉",
+          "profile": [
+            2979,
+            1471,
+            1426,
+            45
+          ],
+          "candidates": [
+            [
+              null,
+              "余夢蝶",
+              null,
+              "男",
+              1426,
+              true
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "county": "雲林縣",
+      "results_url": "https://www.baojhong.gov.tw/df_ufiles/115/113%E5%B9%B4%E5%BA%A6%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1.pdf",
+      "profile_url": "https://www.baojhong.gov.tw/df_ufiles/115/113%E5%B9%B4%E5%BA%A6%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1.pdf",
+      "source_locator": "褒忠鄉統計年報（民國113年）表3-6，第12屆，頁44–45",
+      "corroboration_url": "https://www.baojhong.gov.tw/df_ufiles/115/112%E5%B9%B4%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1.pdf",
+      "profile_discrepancy": {
+        "printed_registered_voters": 11627,
+        "printed_turnout_pct": 69.26,
+        "turnout_pct_using_printed_voters": 63.3,
+        "decision": "兩版年報記載相同，選舉人數與據此計算的投票率均暫缺。"
+      },
+      "contest_count": 1,
+      "candidate_count": 1,
+      "profile_totals": [
+        null,
+        7360,
+        6719,
+        641
+      ],
+      "districts": [
+        {
+          "town": "褒忠鄉",
+          "profile": [
+            null,
+            7360,
+            6719,
+            641
+          ],
+          "candidates": [
+            [
+              null,
+              "柯清雄",
+              null,
+              "男",
+              6719,
+              true
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "county": "宜蘭縣",
+      "results_url": "https://web.cec.gov.tw/api/file/c652eb55-4a8c-4be7-bf96-ec7a2b33648a.pdf",
+      "profile_url": "https://web.cec.gov.tw/api/file/c652eb55-4a8c-4be7-bf96-ec7a2b33648a.pdf",
+      "source_locator": "宜蘭縣選舉委員會《宜蘭縣第12屆鄉鎮市長選舉結果清冊》，民國83年1月29日",
+      "contest_count": 12,
+      "candidate_count": 25,
+      "profile_totals": [
+        null,
+        null,
+        210947,
+        null
+      ],
+      "districts": [
+        {
+          "town": "宜蘭市",
+          "profile": [
+            null,
+            null,
+            40382,
+            null
+          ],
+          "candidates": [
+            [
+              1,
+              "林建榮",
+              "中國國民黨",
+              "男",
+              21128,
+              true
+            ],
+            [
+              2,
+              "郭時南",
+              "民主進步黨",
+              "男",
+              19254,
+              false
+            ]
+          ]
+        },
+        {
+          "town": "羅東鎮",
+          "profile": [
+            null,
+            null,
+            27289,
+            null
+          ],
+          "candidates": [
+            [
+              1,
+              "游榮華",
+              null,
+              "男",
+              14071,
+              true
+            ],
+            [
+              2,
+              "陳國賢",
+              "中國國民黨",
+              "男",
+              13218,
+              false
+            ]
+          ]
+        },
+        {
+          "town": "蘇澳鎮",
+          "profile": [
+            null,
+            null,
+            23900,
+            null
+          ],
+          "candidates": [
+            [
+              1,
+              "李德發",
+              "中國國民黨",
+              "男",
+              8563,
+              false
+            ],
+            [
+              2,
+              "林棋山",
+              "中國國民黨",
+              "男",
+              15337,
+              true
+            ]
+          ]
+        },
+        {
+          "town": "頭城鎮",
+          "profile": [
+            null,
+            null,
+            18069,
+            null
+          ],
+          "candidates": [
+            [
+              1,
+              "陳忠茂",
+              null,
+              "男",
+              8339,
+              true
+            ],
+            [
+              2,
+              "賴義村",
+              "中國國民黨",
+              "男",
+              6591,
+              false
+            ],
+            [
+              3,
+              "林正泰",
+              null,
+              "男",
+              3139,
+              false
+            ]
+          ]
+        },
+        {
+          "town": "礁溪鄉",
+          "profile": [
+            null,
+            null,
+            19673,
+            null
+          ],
+          "candidates": [
+            [
+              1,
+              "吳正連",
+              "民主進步黨",
+              "男",
+              10560,
+              true
+            ],
+            [
+              2,
+              "黃太平",
+              "中國國民黨",
+              "男",
+              9113,
+              false
+            ]
+          ]
+        },
+        {
+          "town": "員山鄉",
+          "profile": [
+            null,
+            null,
+            15250,
+            null
+          ],
+          "candidates": [
+            [
+              1,
+              "黃松壽",
+              "民主進步黨",
+              "男",
+              7143,
+              false
+            ],
+            [
+              2,
+              "廖明灶",
+              "中國國民黨",
+              "男",
+              8107,
+              true
+            ]
+          ]
+        },
+        {
+          "town": "壯圍鄉",
+          "profile": [
+            null,
+            null,
+            12861,
+            null
+          ],
+          "candidates": [
+            [
+              1,
+              "張樟琳",
+              "中國國民黨",
+              "男",
+              12861,
+              true
+            ]
+          ]
+        },
+        {
+          "town": "五結鄉",
+          "profile": [
+            null,
+            null,
+            17237,
+            null
+          ],
+          "candidates": [
+            [
+              1,
+              "林慶郎",
+              "中國國民黨",
+              "男",
+              7122,
+              false
+            ],
+            [
+              2,
+              "沈德茂",
+              "民主進步黨",
+              "男",
+              10115,
+              true
+            ]
+          ]
+        },
+        {
+          "town": "冬山鄉",
+          "profile": [
+            null,
+            null,
+            19784,
+            null
+          ],
+          "candidates": [
+            [
+              1,
+              "林定國",
+              null,
+              "男",
+              19784,
+              true
+            ]
+          ]
+        },
+        {
+          "town": "三星鄉",
+          "profile": [
+            null,
+            null,
+            11199,
+            null
+          ],
+          "candidates": [
+            [
+              1,
+              "林永爍",
+              "中國國民黨",
+              "男",
+              5963,
+              true
+            ],
+            [
+              2,
+              "魏榮勝",
+              "民主進步黨",
+              "男",
+              5236,
+              false
+            ]
+          ]
+        },
+        {
+          "town": "大同鄉",
+          "profile": [
+            null,
+            null,
+            2577,
+            null
+          ],
+          "candidates": [
+            [
+              1,
+              "李文達",
+              null,
+              "男",
+              1084,
+              false
+            ],
+            [
+              2,
+              "陳政聰",
+              "中國國民黨",
+              "男",
+              1493,
+              true
+            ]
+          ]
+        },
+        {
+          "town": "南澳鄉",
+          "profile": [
+            null,
+            null,
+            2726,
+            null
+          ],
+          "candidates": [
+            [
+              1,
+              "李聰明",
+              "中國國民黨",
+              "男",
+              457,
+              false
+            ],
+            [
+              2,
+              "游成義",
+              null,
+              "男",
+              303,
+              false
+            ],
+            [
+              3,
+              "平朝福",
+              "中國國民黨",
+              "男",
+              912,
+              false
+            ],
+            [
+              4,
+              "白天斌",
+              "中國國民黨",
+              "男",
+              1054,
+              true
+            ]
+          ]
+        }
+      ],
+      "source_sha256": "fa311560a6bbbe7dbc57de5b5f8cd8d1edacdf3d59d21fc9d14dda47b19dd94a"
     }
   ],
   "profile_columns": [
@@ -2481,6 +2908,185 @@
           "ballots_cast": 2821,
           "valid_votes": 2741,
           "invalid_votes": 80
+        }
+      ]
+    },
+    {
+      "county": "臺東縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://www.donghe.gov.tw/home/attachments/article/592/103%E5%B9%B4%E6%9D%B1%E6%B2%B3%E9%84%89%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1.pdf",
+      "source_locator": "東河鄉統計年報（民國103年）表3-6，第12屆",
+      "profile_totals": [
+        9978,
+        5273,
+        5176,
+        97
+      ],
+      "profiles": [
+        {
+          "registered_voters": 9978,
+          "ballots_cast": 5273,
+          "valid_votes": 5176,
+          "invalid_votes": 97,
+          "town": "東河鄉",
+          "winner_name": "邱一郎"
+        }
+      ],
+      "source_sha256": "d5ead9de40fef3aa3ef603c7793c58f33727d685119a16de3d4913910ae2b277"
+    },
+    {
+      "county": "臺東縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://www.lyee.gov.tw/attachments/article/3350/%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B113%E5%B9%B4%E8%87%BA%E6%9D%B1%E7%B8%A3%E9%B9%BF%E9%87%8E%E9%84%89%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B12024%E7%AC%AC23%E6%9C%9F.pdf",
+      "source_locator": "鹿野鄉統計年報（民國113年）表3-6，第12屆",
+      "profile_totals": [
+        7532,
+        4605,
+        4503,
+        102
+      ],
+      "profiles": [
+        {
+          "registered_voters": 7532,
+          "ballots_cast": 4605,
+          "valid_votes": 4503,
+          "invalid_votes": 102,
+          "town": "鹿野鄉",
+          "winner_name": "李仁生"
+        }
+      ]
+    },
+    {
+      "county": "臺東縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://dwuu.gov.tw/wp-content/uploads/2022/03/%E8%87%BA%E6%9D%B1%E7%B8%A3%E5%A4%A7%E6%AD%A6%E9%84%89109%E5%B9%B4%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1%E9%9B%BB%E5%AD%90%E6%9B%B8.pdf",
+      "source_locator": "大武鄉統計年報（民國109年）表3-6，第12屆",
+      "profile_totals": [
+        4750,
+        3526,
+        3431,
+        95
+      ],
+      "profiles": [
+        {
+          "registered_voters": 4750,
+          "ballots_cast": 3526,
+          "valid_votes": 3431,
+          "invalid_votes": 95,
+          "town": "大武鄉",
+          "winner_name": "鍾明祥"
+        }
+      ]
+    },
+    {
+      "county": "雲林縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://ws.yunlin.gov.tw/Download.ashx?n=MTEz5bm057Wx6KiI5bm05aCxKOS4jeWQq%2BWwgeiDjCkxMTQxMjA1MDEucGRm&u=LzAwMS9VcGxvYWQvNjA5L3JlbGZpbGUvMC8zNDI4Mi9jYWEzZDBjYi0xMmU4LTQ3NmMtYTNmZC1mNWY4ZjA2ZTNjY2MucGRm",
+      "source_locator": "口湖鄉統計年報（民國113年）表3-6，第12屆",
+      "profile_totals": [
+        23796,
+        18790,
+        18514,
+        276
+      ],
+      "profiles": [
+        {
+          "registered_voters": 23796,
+          "ballots_cast": 18790,
+          "valid_votes": 18514,
+          "invalid_votes": 276,
+          "town": "口湖鄉",
+          "winner_name": "蘇青山"
+        }
+      ],
+      "source_sha256": "97482a3d333ec95a83a18e5b12aababff7c0e8907d1b9deb4725ee571d1080a4"
+    },
+    {
+      "county": "桃園縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://ws.tycg.gov.tw/Download.ashx?n=MDAzLTk35bm06KGM5pS%2F57WE57mULnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvMTUyL1JlbEZpbGUvMTg1NjAvMTI0MDIyNy8wMDMtOTflubTooYzmlL%2FntYTnuZQucGRm",
+      "source_locator": "桃園縣統計要覽（民國97年）表3-10，第12屆",
+      "profile_totals": [
+        891365,
+        646373,
+        612280,
+        34093
+      ],
+      "profiles": [
+        {
+          "registered_voters": 891365,
+          "ballots_cast": 646373,
+          "valid_votes": 612280,
+          "invalid_votes": 34093,
+          "town": "全縣合計"
+        }
+      ],
+      "source_sha256": "5785754f433cdde73a521bb03a2bed7dd5c4ffcddeaa262fd58b4a01f5de2d52",
+      "summary_scope": "county"
+    },
+    {
+      "county": "臺中縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://www.dbas.taichung.gov.tw/media/296526/92%E5%B9%B4%E8%87%BA%E4%B8%AD%E7%B8%A3%E7%B5%B1%E8%A8%88%E8%A6%81%E8%A6%BD.pdf",
+      "source_locator": "臺中縣統計要覽（民國92年）表3-11，第12屆",
+      "profile_totals": [
+        827426,
+        667208,
+        644150,
+        23058
+      ],
+      "profiles": [
+        {
+          "registered_voters": 827426,
+          "ballots_cast": 667208,
+          "valid_votes": 644150,
+          "invalid_votes": 23058,
+          "town": "全縣合計"
+        }
+      ],
+      "summary_scope": "county"
+    },
+    {
+      "county": "苗栗縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://webws.miaoli.gov.tw/Download.ashx?icon=.pdf&n=MTEy5bm057Wx6KiI5bm05aCxICg3MykucGRm&u=LzAwMS9VcGxvYWQvNDE1L3JlbGZpbGUvOTczMi83ODg4NjUvMWUwOGIxN2ItZGI1My00ZDJkLWE5MDAtODA4YjlhMWNjYzRlLnBkZg%3D%3D",
+      "source_locator": "苗栗縣統計年報（民國112年）表3-11，第12屆",
+      "profile_totals": [
+        363697,
+        295196,
+        284990,
+        10206
+      ],
+      "profiles": [
+        {
+          "registered_voters": 363697,
+          "ballots_cast": 295196,
+          "valid_votes": 284990,
+          "invalid_votes": 10206,
+          "town": "全縣合計"
+        }
+      ],
+      "summary_scope": "county"
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://ctrl.chcg.gov.tw/files/101%E5%B9%B4%E5%BD%B0%E5%8C%96%E7%B8%A3%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1_16_1081217_2025.pdf",
+      "source_locator": "彰化縣統計年報（民國101年）表3-11，第12屆，頁124–125",
+      "summary_scope": "county",
+      "profile_totals": [
+        804094,
+        643674,
+        614539,
+        29135
+      ],
+      "profiles": [
+        {
+          "town": "全縣合計",
+          "registered_voters": 804094,
+          "ballots_cast": 643674,
+          "valid_votes": 614539,
+          "invalid_votes": 29135
         }
       ]
     }

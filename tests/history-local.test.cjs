@@ -94,12 +94,12 @@ test('Historical county mayors and councils use five shared election cycles with
  }
 });
 
-test('The partial 1994 township archive reconciles all 73 contests across four counties',()=>{
+test('The partial 1994 township archive reconciles all 87 contests across seven counties',()=>{
  const shard=data(1994);
  const election=shard.elections.find(e=>e.office==='township');
  assert.equal(election.coverage,'partial');
- assert.deepEqual(election.counties,['台北县','高雄县','新竹县','连江县']);
- assert.equal(shard.contests.filter(c=>c.election_id===election.election_id).length,73);
+ assert.deepEqual(election.counties,['台北县','高雄县','新竹县','连江县','台东县','云林县','宜兰县']);
+ assert.equal(shard.contests.filter(c=>c.election_id===election.election_id).length,87);
  const geometry=Local.geometry(shard,map,reference,String,Core.mergePaths,Presidential.modernCounty,Presidential.baseTown);
  for(const [county,count,candidates,totals] of [
   ['台北县',29,81,[1989086,1239640,1200839,38801]],
@@ -134,6 +134,19 @@ test('The partial 1994 township archive reconciles all 73 contests across four c
  assert.equal(candidate.candidate_name,'林日福');
  assert.equal(candidate.ballot_number,'');
  assert.equal(candidate.party_name,'政党资料缺失');
+ for(const [county,town,name,profile] of [
+  ['台东县','海端乡','余梦蝶',[2979,1471,1426,45]],
+  ['云林县','褒忠乡','柯清雄',[null,7360,6719,641]],
+ ]){
+  const contest=shard.contests.find(c=>c.election_id===election.election_id&&c.county_name===county&&c.district_name===town);
+  assert.deepEqual(['registered_voters','ballots_cast','valid_votes','invalid_votes'].map(key=>contest[key]),profile);
+  const [only]=contestants(shard,contest);
+  assert.deepEqual([only.candidate_name,only.votes,only.elected_official,only.party_name_official],[name,profile[2],true,null]);
+ }
+ const yilan=shard.contests.filter(c=>c.election_id===election.election_id&&c.county_name==='宜兰县');
+ assert.equal(yilan.length,12);
+ assert.equal(yilan.reduce((sum,c)=>sum+c.valid_votes,0),210947);
+ assert.equal(yilan.flatMap(c=>contestants(shard,c)).length,25);
  const [kinmen,hualien]=shard.partialTownshipReturns;
  assert.equal(kinmen.county,'金門縣');
  assert.deepEqual(kinmen.winners.map(w=>w.votes),[5116,3135,2857,2018,1152,25]);
@@ -142,6 +155,9 @@ test('The partial 1994 township archive reconciles all 73 contests across four c
  assert.deepEqual(['registered_voters','ballots_cast','valid_votes','invalid_votes']
   .map(k=>hualien.profiles.reduce((sum,r)=>sum+r[k],0)),[235236,150149,144607,5542]);
  assert.ok(!shard.contests.some(c=>c.election_id===election.election_id&&c.county_name==='花莲县'));
+ const extra=shard.partialTownshipReturns.slice(2);
+ assert.deepEqual(extra.filter(r=>r.summary_scope==='county').map(r=>r.county),['桃園縣','臺中縣','苗栗縣','彰化縣']);
+ assert.deepEqual(extra.flatMap(r=>r.profiles.map(p=>p.winner_name).filter(Boolean)),['邱一郎','李仁生','鍾明祥','蘇青山']);
 });
 
 test('Corrections use the corroborated town tally or certified recount at its actual geographic level',()=>{

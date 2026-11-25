@@ -264,6 +264,48 @@
           ],
           "results_url": "https://board.matsu.idv.tw/board_view.php?board=142&link=69962&pid=69962&start=28",
           "profile_url": null
+        },
+        "台东县": {
+          "contest_count": 1,
+          "candidate_count": 1,
+          "profile_totals": [
+            2979,
+            1471,
+            1426,
+            45
+          ],
+          "results_url": "https://www.haiduau.gov.tw/home/attachments/article/2192/113%E5%B9%B4%E5%8F%B0%E6%9D%B1%E7%B8%A3%E6%B5%B7%E7%AB%AF%E9%84%89%E7%B5%B1%E8%A8%88%E8%A6%81%E8%A6%BD2024%E5%B9%B4%E7%AC%AC23%E6%9C%9FOK.pdf",
+          "profile_url": "https://www.haiduau.gov.tw/home/attachments/article/2192/113%E5%B9%B4%E5%8F%B0%E6%9D%B1%E7%B8%A3%E6%B5%B7%E7%AB%AF%E9%84%89%E7%B5%B1%E8%A8%88%E8%A6%81%E8%A6%BD2024%E5%B9%B4%E7%AC%AC23%E6%9C%9FOK.pdf"
+        },
+        "云林县": {
+          "contest_count": 1,
+          "candidate_count": 1,
+          "profile_totals": [
+            null,
+            7360,
+            6719,
+            641
+          ],
+          "results_url": "https://www.baojhong.gov.tw/df_ufiles/115/113%E5%B9%B4%E5%BA%A6%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1.pdf",
+          "profile_url": "https://www.baojhong.gov.tw/df_ufiles/115/113%E5%B9%B4%E5%BA%A6%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1.pdf",
+          "profile_discrepancy": {
+            "printed_registered_voters": 11627,
+            "printed_turnout_pct": 69.26,
+            "turnout_pct_using_printed_voters": 63.3,
+            "decision": "兩版年報記載相同，選舉人數與據此計算的投票率均暫缺。"
+          }
+        },
+        "宜兰县": {
+          "contest_count": 12,
+          "candidate_count": 25,
+          "profile_totals": [
+            null,
+            null,
+            210947,
+            null
+          ],
+          "results_url": "https://web.cec.gov.tw/api/file/c652eb55-4a8c-4be7-bf96-ec7a2b33648a.pdf",
+          "profile_url": "https://web.cec.gov.tw/api/file/c652eb55-4a8c-4be7-bf96-ec7a2b33648a.pdf"
         }
       }
     },

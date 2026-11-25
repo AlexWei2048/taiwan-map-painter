@@ -700,7 +700,7 @@ def add_1994_township(snapshot, audit):
             })
     supplement = build(contests, {}, {})[0][1994]
     supplement['elections'][0].update(
-        source_name='地方选举委员会原始清册及县志',
+        source_name='地方选举委员会原始清册、县志及统计年报',
         source_url=evidence['台北县']['results_url'],
         coverage='partial',
         counties=list(evidence),
@@ -722,7 +722,8 @@ def add_1994_township(snapshot, audit):
                 raise ValueError(f'1994 {county["county"]} partial turnout does not reconcile')
     snapshot['partialTownshipReturns'] = partial
     audit['townshipArchives'] = {
-        name: {key: source[key] for key in ('contest_count', 'candidate_count', 'profile_totals', 'results_url', 'profile_url')}
+        name: {key: source[key] for key in ('contest_count', 'candidate_count', 'profile_totals', 'results_url',
+                                           'profile_url', 'profile_discrepancy') if key in source}
         for name, source in evidence.items()
     }
 

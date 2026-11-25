@@ -148,7 +148,8 @@
   "other_candidate_sources": {
     "reported_returns": "https://www.kmdn.gov.tw/1117/1271/4189/49195/",
     "chen_membership": "https://hk.on.cc/tw/bkn/cnt/news/20140921/bkntw-20140921000517666-0921_04011_001.html",
-    "weng_district": "https://www.kmdn.gov.tw/1117/1271/1272/124938/?cprint=pt"
+    "weng_district": "https://www.kmdn.gov.tw/1117/1271/1272/124938/?cprint=pt",
+    "huang_returns": "https://www.kmdn.gov.tw/1117/1271/1272/304384/h?cprint=pt"
   },
   "other_candidates": [
     {
@@ -167,7 +168,9 @@
       "district_number": 1
     },
     {
-      "name": "黃積軍"
+      "name": "黃積軍",
+      "district_number": 1,
+      "votes": 93
     },
     {
       "name": "曾貴爵"
