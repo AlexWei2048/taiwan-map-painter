@@ -7838,13 +7838,21 @@
       "candidate_name": "林国荣",
       "candidate_name_official": "林國榮",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "无党籍",
       "party_name_official": "無黨籍",
       "votes": 8596,
       "vote_share": 40.591207,
       "elected_official": false,
-      "elected_mark": ""
+      "elected_mark": "",
+      "incumbent_source": {
+        "name": "蔡郁男",
+        "source_url": "https://www-ws.cy.gov.tw/Download.ashx?icon=..pdf&n=MDkxMDAwMDQxMjM4MCjlhagpLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvQ3lPbGRGaWxlL09wX1VwbG9hZC9lRG9jL%2BWFrOWgsS85MS8wOTEwMDAwNDEyMzgwKOWFqCkucGRm",
+        "source_locator": "監察院公報2380期23頁，記蔡郁男繼林大坤任鄉長，1993年發包、1995年完工，下一任1998-03-01就職；歷任表列第11、12屆。",
+        "confidence": "official_record_crosscheck",
+        "secondary_source": "https://zh.wikipedia.org/wiki/五股區",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:台北县:regional:五股乡:2",
@@ -7853,13 +7861,21 @@
       "candidate_name": "蔡郁男",
       "candidate_name_official": "蔡郁男",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": true,
       "party_name": "中国国民党",
       "party_name_official": "中國國民黨",
       "votes": 12581,
       "vote_share": 59.408793,
       "elected_official": true,
-      "elected_mark": "*"
+      "elected_mark": "*",
+      "incumbent_source": {
+        "name": "蔡郁男",
+        "source_url": "https://www-ws.cy.gov.tw/Download.ashx?icon=..pdf&n=MDkxMDAwMDQxMjM4MCjlhagpLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvQ3lPbGRGaWxlL09wX1VwbG9hZC9lRG9jL%2BWFrOWgsS85MS8wOTEwMDAwNDEyMzgwKOWFqCkucGRm",
+        "source_locator": "監察院公報2380期23頁，記蔡郁男繼林大坤任鄉長，1993年發包、1995年完工，下一任1998-03-01就職；歷任表列第11、12屆。",
+        "confidence": "official_record_crosscheck",
+        "secondary_source": "https://zh.wikipedia.org/wiki/五股區",
+        "value": true
+      }
     },
     {
       "candidacy_id": "1994-township:台北县:regional:泰山乡:1",
@@ -8498,13 +8514,21 @@
       "candidate_name": "张娱乐",
       "candidate_name_official": "張娛樂",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "中国国民党",
       "party_name_official": "中國國民黨",
       "votes": 1129,
       "vote_share": 59.73545,
       "elected_official": true,
-      "elected_mark": "*"
+      "elected_mark": "*",
+      "incumbent_source": {
+        "name": "林義長",
+        "source_url": "https://www.wulai.ntpc.gov.tw/userfiles/3291100/files/9_%E7%83%8F%E4%BE%86%E5%A4%A7%E4%BA%8B%E8%A8%98%281%29.pdf",
+        "source_locator": "《烏來鄉志》大事記301頁：第11屆1990-03-01林義長就職；第12屆1994-03-01繼任者就職。",
+        "confidence": "official_gazetteer",
+        "secondary_source": "https://www.wulai.ntpc.gov.tw/userfiles/3291100/files/%E7%83%8F%E4%BE%86%E5%A4%A7%E4%BA%8B%E8%A8%98.pdf",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:台北县:regional:乌来乡:2",
@@ -8513,13 +8537,21 @@
       "candidate_name": "简福源",
       "candidate_name_official": "簡福源",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "民主进步党",
       "party_name_official": "民主進步黨",
       "votes": 761,
       "vote_share": 40.26455,
       "elected_official": false,
-      "elected_mark": ""
+      "elected_mark": "",
+      "incumbent_source": {
+        "name": "林義長",
+        "source_url": "https://www.wulai.ntpc.gov.tw/userfiles/3291100/files/9_%E7%83%8F%E4%BE%86%E5%A4%A7%E4%BA%8B%E8%A8%98%281%29.pdf",
+        "source_locator": "《烏來鄉志》大事記301頁：第11屆1990-03-01林義長就職；第12屆1994-03-01繼任者就職。",
+        "confidence": "official_gazetteer",
+        "secondary_source": "https://www.wulai.ntpc.gov.tw/userfiles/3291100/files/%E7%83%8F%E4%BE%86%E5%A4%A7%E4%BA%8B%E8%A8%98.pdf",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:高雄县:regional:凤山市:1",
@@ -8780,13 +8812,21 @@
       "candidate_name": "陈福财",
       "candidate_name_official": "陳福財",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "民主进步党",
       "party_name_official": "民主進步黨",
       "votes": 7465,
       "vote_share": 50.090586,
       "elected_official": true,
-      "elected_mark": "*"
+      "elected_mark": "*",
+      "incumbent_source": {
+        "name": "許正雄",
+        "source_url": "https://cissearch.kcc.gov.tw/Upload/Attachment/BulletinDraft/1297/ae1f55c6-9cfa-4080-a08f-e08758d359c9.pdf",
+        "source_locator": "高雄市議會議事錄30–31頁，1993年許正雄任鄉長，1994年後陳福財任鄉長；地球公民基金會記錄1993-04-19許正雄任職，與1994年當選清冊一致。",
+        "confidence": "official_minutes_crosscheck",
+        "secondary_source": "https://www.cet-taiwan.org/story/201203/1459",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:高雄县:regional:大社乡:2",
@@ -8795,13 +8835,21 @@
       "candidate_name": "许正雄",
       "candidate_name_official": "許正雄",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": true,
       "party_name": "中国国民党",
       "party_name_official": "中國國民黨",
       "votes": 7438,
       "vote_share": 49.909414,
       "elected_official": false,
-      "elected_mark": ""
+      "elected_mark": "",
+      "incumbent_source": {
+        "name": "許正雄",
+        "source_url": "https://cissearch.kcc.gov.tw/Upload/Attachment/BulletinDraft/1297/ae1f55c6-9cfa-4080-a08f-e08758d359c9.pdf",
+        "source_locator": "高雄市議會議事錄30–31頁，1993年許正雄任鄉長，1994年後陳福財任鄉長；地球公民基金會記錄1993-04-19許正雄任職，與1994年當選清冊一致。",
+        "confidence": "official_minutes_crosscheck",
+        "secondary_source": "https://www.cet-taiwan.org/story/201203/1459",
+        "value": true
+      }
     },
     {
       "candidacy_id": "1994-township:高雄县:regional:鸟松乡:1",
@@ -10310,13 +10358,20 @@
       "candidate_name": "柯清雄",
       "candidate_name_official": "柯清雄",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": true,
       "party_name": "政党资料缺失",
       "party_name_official": null,
       "votes": 6719,
       "vote_share": 100,
       "elected_official": true,
-      "elected_mark": "*"
+      "elected_mark": "*",
+      "incumbent_source": {
+        "name": "柯清雄",
+        "source_url": "https://www.baojhong.gov.tw/df_ufiles/115/112%E5%B9%B4%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1.pdf",
+        "source_locator": "112年褒忠鄉統計年報表3-6，44–45頁，第11、12屆當選人均柯清雄，1994年單一候選人6719有效票；按連續任期認定，非逐日任職證明。",
+        "confidence": "official_consecutive_elections",
+        "value": true
+      }
     },
     {
       "candidacy_id": "1994-township:宜兰县:regional:宜兰市:1",
@@ -17703,7 +17758,7 @@
       "number": "1",
       "party": "无党籍",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 8596,
       "elected": false,
       "electedMark": "",
@@ -17719,7 +17774,7 @@
       "number": "2",
       "party": "中国国民党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": true,
       "votes": 12581,
       "elected": true,
       "electedMark": "*",
@@ -18247,7 +18302,7 @@
       "number": "1",
       "party": "中国国民党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 1129,
       "elected": true,
       "electedMark": "*",
@@ -18263,7 +18318,7 @@
       "number": "2",
       "party": "民主进步党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 761,
       "elected": false,
       "electedMark": "",
@@ -18503,7 +18558,7 @@
       "number": "1",
       "party": "民主进步党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 7465,
       "elected": true,
       "electedMark": "*",
@@ -18519,7 +18574,7 @@
       "number": "2",
       "party": "中国国民党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": true,
       "votes": 7438,
       "elected": false,
       "electedMark": "",
@@ -19879,7 +19934,7 @@
       "number": "",
       "party": "政党资料缺失",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": true,
       "votes": 6719,
       "elected": true,
       "electedMark": "*",
