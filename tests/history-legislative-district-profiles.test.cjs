@@ -78,10 +78,10 @@ test('1992 supplementary turnout covers eight districts without changing source 
  const election=read('history-legislative-1992.json');
  const snapshot=read('history-legislative-turnout-1992.json');
  const items=snapshot.audit.regional.verified_constituencies;
- assert.equal(items.length,8);
- assert.equal(snapshot.audit.regional.field_count,24);
+ assert.equal(items.length,9);
+ assert.equal(snapshot.audit.regional.field_count,27);
  assert.deepEqual(snapshot.ballots.regional.national,{});
- assert.equal(Object.keys(snapshot.ballots.regional.county).length,7);
+ assert.equal(Object.keys(snapshot.ballots.regional.county).length,8);
  assert.equal(Object.keys(snapshot.ballots.regional.district.台北市).length,2);
  for(const {county,district,record,source_url} of items){
   const contest=election.contests.find(c=>c.electorate==='regional'&&c.county_name===county&&c.district_name===district);
