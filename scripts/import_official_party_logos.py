@@ -14,11 +14,11 @@ import json
 import re
 import time
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import urlparse,quote
 from collections import Counter
 import requests
 from bs4 import BeautifulSoup
-from PIL import Image,ImageOps,ImageFile,UnidentifiedImageError
+from PIL import Image,ImageOps,ImageFile,UnidentifiedImageError,ImageDraw,ImageChops
 from opencc import OpenCC
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -84,10 +84,18 @@ def decode_image(raw):
   raise ValueError("unexpected image dimensions")
  if getattr(im,"is_animated",False):im.seek(0)
  im=im.convert("RGBA")
- # Do not crop away text from the officially registered emblem.
- im.thumbnail((116,116),Image.Resampling.LANCZOS)
- canvas=Image.new("RGBA",(128,128),(255,255,255,0))
- canvas.alpha_composite(im,((128-im.width)//2,(128-im.height)//2))
+ # Center crop the actual artwork, not the original rectangular file's margins.
+ bounds=im.getchannel("A").getbbox()
+ if not bounds:raise ValueError("empty image")
+ im=im.crop(bounds)
+ side=min(im.size)
+ left=(im.width-side)//2;top=(im.height-side)//2
+ canvas=im.crop((left,top,left+side,top+side)).resize((128,128),Image.Resampling.LANCZOS)
+ mask=Image.new("L",(512,512),0)
+ ImageDraw.Draw(mask).ellipse((0,0,511,511),fill=255)
+ mask=mask.resize((128,128),Image.Resampling.LANCZOS)
+ canvas.putalpha(ImageChops.multiply(canvas.getchannel("A"),mask))
+ im=canvas
  colors=len(set(canvas.resize((32,32)).convert("RGB").getdata()))
  if colors<3:raise ValueError("likely blank / empty placeholder graphic")
  out=io.BytesIO();canvas.save(out,format="PNG",optimize=True)
@@ -157,6 +165,25 @@ supplemental=[
   "urls":["https://static.wixstatic.com/media/f4b9b6_1d0a1482ceb24a8f85c64410c119f092~mv2.jpg/v1/fit/w_2500%2Ch_1330%2Cal_c/f4b9b6_1d0a1482ceb24a8f85c64410c119f092~mv2.jpg"],
   "source_page":"https://www.tapp.org.tw/",
   "license":"Official party image; rights retained by party; identification only"}
+]
+# Additional documented sources. Historical marks stay keyed to the
+# historical ballot name when the organization later redesigned its logo.
+def commons_image(filename):
+ digest=hashlib.md5(filename.encode("utf-8")).hexdigest()
+ return "https://upload.wikimedia.org/wikipedia/commons/"+digest[0]+"/"+digest[:2]+"/"+quote(filename)
+supplemental += [
+ {"name":"基进党","also":[],
+  "urls":[commons_image("基進黨｜LOGO.jpg")],
+  "source_page":"https://commons.wikimedia.org/wiki/File:基進黨｜LOGO.jpg",
+  "license":"Historical party mark, Wikimedia Commons attribution and license on source file page"},
+ {"name":"台湾双语无法党","also":[],
+  "urls":[commons_image("臺灣雙語無法黨黨徽.png")],
+  "source_page":"https://zh.wikipedia.org/wiki/臺灣SoR無法黨",
+  "license":"Historic 2020–2026 party emblem; rights retained by original party, identification only"},
+ {"name":"台湾SoR无法党","also":[],
+  "urls":["https://xn--2lw665d.tw/party/moi-425.png"],
+  "source_page":"https://xn--2lw665d.tw/party/366",
+  "license":"Current party emblem identified by the named party profile; rights retained by owner, identification only"}
 ]
 for item in supplemental:
  name=norm(item["name"]);pid=lookup.get(name)

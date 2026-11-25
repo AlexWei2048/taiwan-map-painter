@@ -32,7 +32,7 @@ jobs:
           s=Path("assets/party-logos-sourced.js").read_text()
           assert re.search(r"const SOURCED_PARTY_LOGOS_BY_ID=\{",s)
           from urllib.parse import urlparse
-          approved={"ws.moi.gov.tw","upload.wikimedia.org","www.ssfpp.tw","static.wixstatic.com"}
+          approved={"ws.moi.gov.tw","upload.wikimedia.org","www.ssfpp.tw","static.wixstatic.com","xn--2lw665d.tw"}
           assert all(urlparse(x["official_image"]).hostname in approved
                      and x.get("source_sha256") and x.get("official_registry")
                      for x in r["official_sources"])
