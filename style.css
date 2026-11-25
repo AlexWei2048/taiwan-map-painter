@@ -884,3 +884,25 @@ body.history-mode #districtReferenceNote,body.history-mode #districtReferenceSou
 .sidebar-about .sidebar-footer time{color:#526d60}
 .sidebar-about:not([open])>.sidebar-footer{display:none}
 @media(max-width:700px){.sidebar-about>summary{min-height:44px}.sidebar-about .sidebar-footer{display:flex}.sidebar-about .about-hint{font-size:11px}.sidebar-about .sidebar-footer .site-about-description{display:block}.sidebar .workspace-categories{margin-top:0}}
+
+
+/* Always-visible about card and independent local-save note. */
+.sidebar .site-about-card{margin:0 0 14px;padding:13px 14px;border:1px solid #d9e5da;border-radius:10px;background:#fff;color:#40594e}
+.site-about-card .about-heading{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:0 0 9px}
+.site-about-card .about-heading h2{margin:0;color:#254b3c;font-size:14px;line-height:1.4;font-weight:700}
+.site-about-card .about-heading span{color:#52675e;font-size:11px;line-height:1.5}
+.site-about-card .site-about-description{margin:0;font-size:12px;line-height:1.75;color:#40594e;overflow-wrap:anywhere}
+.site-about-card .about-sources{margin:10px 0 0;padding-top:9px;border-top:1px solid #e3ebe4}
+.site-about-card .about-sources h3{margin:0 0 5px;font-size:11.5px;line-height:1.5;color:#315a49;font-weight:700}
+.site-about-card .about-sources ul{list-style:none;margin:0;padding:0;display:grid;gap:4px;font-size:11.5px;line-height:1.55}
+.site-about-card .about-sources li{position:relative;padding-left:11px;overflow-wrap:anywhere}
+.site-about-card .about-sources li::before{content:"";position:absolute;left:0;top:.67em;width:4px;height:4px;border-radius:50%;background:#638d78}
+.site-about-card .about-credits{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:4px 12px;margin:10px 0 0;padding-top:9px;border-top:1px solid #e3ebe4;font-size:11.5px;line-height:1.55}
+.site-about-card .about-credits dt{color:#52675e}
+.site-about-card .about-credits dd{margin:0;color:#254b3c;font-weight:650;overflow-wrap:anywhere}
+.site-about-card #siteUpdatedAt{display:block;margin-top:9px;color:#52675e;font-size:11px;line-height:1.5;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.sidebar .sidebar-save-note{display:flex;align-items:flex-start;gap:8px;margin:18px 0 0;padding:12px 2px 2px;border-top:1px solid #d9e5da;color:#52675e;font-size:11.5px;line-height:1.65}
+.sidebar-save-note svg{width:15px;height:15px;flex:none;margin-top:2px;color:#36745e}
+.sidebar-save-note p{margin:0;min-width:0}
+.sidebar-save-note p span{display:block}
+@media(max-width:700px){.sidebar .site-about-card{padding:12px 13px}.site-about-card .site-about-description{font-size:12px}.sidebar .sidebar-save-note{margin-top:14px}}
