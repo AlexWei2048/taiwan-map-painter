@@ -2,7 +2,7 @@ name: Refresh historical data completeness after verified backfills
 on:
   push:
     branches: [main]
-    paths: ['.github/workflows/nccu-data-completeness-refresh.yml']
+    paths: ['.github/workflows/nccu-data-completeness-refresh.yml', 'assets/history-local-2018.json', 'history-legislative-party.js']
   workflow_dispatch:
 permissions:
   contents: write
@@ -41,15 +41,22 @@ jobs:
           lines='\n'.join(x.lstrip(' ') if x.startswith('          ') else x for x in latest.splitlines())
           if lines.splitlines()[0] not in history:
               history=history.rstrip()+'\n\n'+lines.strip()
+          priority='''## 优先冲突及待核事项修正（2026-11-25）
+          - 2018年台北市长12区共60条重计后候选人得票取自中选会原始CSV的GitHub镜像，并与1563个投开票所逐候选人加总、四项分区统计、VoteTW重计票表及法院核定全市总票一致。原投票日记录保留在源档，55条票数修正，地图、表格、导出和审计统一采用重计版本。
+          - 2004年无党团结联盟5人不分区提名排序依据中选会第339次会议及当年报道核实，未改变当选或票数。'''
+          if priority.splitlines()[0] not in history:
+              history=history.rstrip()+'\n\n'+priority+'\n'
           path.write_text(updated.rstrip()+'\n\n'+history.rstrip()+'\n','utf8')
           report=json.loads(pathlib.Path('reports/data-completeness.json').read_text('utf8'))
           print('REGENERATED_COUNTS',json.dumps(report['counts'],ensure_ascii=False))
           print('REGENERATED_ERRORS',json.dumps(report['errors'],ensure_ascii=False))
           assert not report['errors']
           assert '共享妇保' in lines
+          assert not any(r[0] == 2018 and r[1] == 'mayor' and r[8] in ('conflict','partial') and '台北市' in r[4] for r in report['issues'])
+          assert not any(r[0] == 2004 and r[9] == 'nomination_rank' and r[5] == '无党团结联盟' for r in report['issues'])
           PY
       - name: Validate candidate and turnout records
-        run: node --test tests/history-legislative-district-profiles.test.cjs tests/history-legislative-data.test.cjs tests/history-local.test.cjs
+        run: node --test test-history-legislative-party.cjs tests/history-legislative-district-profiles.test.cjs tests/history-legislative-data.test.cjs tests/history-local.test.cjs
       - name: Commit updated audit without losing historical research
         run: |
           git config user.name 'github-actions[bot]'

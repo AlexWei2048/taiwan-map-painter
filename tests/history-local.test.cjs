@@ -260,9 +260,12 @@ test('Corrections use the corroborated town tally or certified recount at its ac
  assert.equal(contestants(recounted,city).find(c=>c.candidate_name==='柯文哲').votes,580663);
  const opening=recounted.rows.filter(r=>r.type==='mayor'&&r.county==='台北市'&&r.level==='town');
  assert.equal(opening.length,60);
- assert.ok(opening.every(r=>r.tally_basis==='original_opening'));
+ assert.ok(opening.every(r=>r.tally_basis==='certified_recount'));
  assert.deepEqual([1,2,3,4,5].map(n=>opening.filter(r=>r.number===String(n))
-  .reduce((sum,r)=>sum+r.votes,0)),[5617,577566,244641,580820,6172]);
+  .reduce((sum,r)=>sum+r.votes,0)),[5611,577096,244342,580663,6158]);
+ const evidence=require('../sources/history-2018-taipei-mayor-original.json');
+ assert.deepEqual([0,1,2,3,4].map(i=>Object.values(evidence.districts).reduce((sum,r)=>sum+r.votes[i],0)),[5617,577566,244641,580820,6172]);
+ assert.equal(evidence.recount_profiles.candidate_source.verification.precincts,1563);
  const profiles=recounted.townProfiles.filter(r=>r.office==='mayor'&&r.county==='台北市');
  assert.equal(profiles.length,12);
  assert.ok(profiles.every(r=>r.tally_basis==='certified_recount'));
@@ -272,10 +275,11 @@ test('Corrections use the corroborated town tally or certified recount at its ac
  assert.equal(ward.tallyBasis,'certified_recount');
  assert.equal(ward.overview.validVotes,106795);
  assert.equal(ward.overview.ballotsCast,107752);
- assert.equal(opening.filter(r=>r.town==='松山区').reduce((sum,r)=>sum+r.votes,0),106972);
+ assert.equal(opening.filter(r=>r.town==='松山区').reduce((sum,r)=>sum+r.votes,0),106795);
+ for(const p of profiles){const rows=opening.filter(r=>r.town===p.town);assert.equal(rows.length,5);assert.equal(rows.reduce((sum,r)=>sum+r.votes,0),p.valid_votes);}
  const csv=Workspace.mayorTownCsv(recounted,area);
  assert.equal(csv.trim().split('\r\n').length,6);
- assert.match(csv,/46381.*投票日原始开票/);
+ assert.match(csv,/46353.*重计票结果/);
  const earliest=data(1993);
  assert.equal(earliest.contests.length,23);
  assert.equal(earliest.candidacies.length,77);

@@ -150,15 +150,15 @@
     present.size===expected.size&&[...expected].every(key=>present.has(key))&&
     rows.every(row=>Number.isSafeInteger(row.votes)&&row.votes>=0);
    const candidateVotes=townVotesVerified?rows.reduce((sum,row)=>sum+row.votes,0):null;
-   // Match same-version ballot profiles to candidate sums. The 2018 Taipei
-   // overview instead has a separately certified recount profile for each district.
+   // Match same-version ballot profiles to candidate sums, including the
+   // independently verified 2018 Taipei district recount totals.
    const profile=['mayor','president'].includes(office)&&townVotesVerified?
     (indexed.snapshot.townProfiles||[]).find(p=>p.office===office&&p.county===county&&p.town===area):null;
    const recountProfile=year===2018&&office==='mayor'&&county==='台北市'&&
-    profile?.tally_basis==='certified_recount'&&rows.every(row=>row.tally_basis==='original_opening');
+    profile?.tally_basis==='certified_recount'&&rows.every(row=>row.tally_basis==='certified_recount');
    const verifiedProfile=profile&&Number.isSafeInteger(profile.registered_voters)&&
     Number.isSafeInteger(profile.ballots_cast)&&Number.isSafeInteger(profile.invalid_votes)&&
-    Number.isSafeInteger(profile.valid_votes)&&(recountProfile||profile.valid_votes===candidateVotes)&&
+    Number.isSafeInteger(profile.valid_votes)&&profile.valid_votes===candidateVotes&&
     profile.valid_votes+profile.invalid_votes===profile.ballots_cast&&
     profile.ballots_cast<=profile.registered_voters?profile:null;
    const registeredVoters=verifiedProfile?.registered_voters??null;
@@ -314,7 +314,7 @@
   for(const row of rows){
    const total=totals.get(row.county+'|'+row.town);
    output.push([selection.year,'县市长',row.county,row.town,row.name,row.party,row.number,row.votes,
-    total?csvPercent(row.votes/total*100):'',row.elected?'是':'',row.tally_basis==='original_opening'?'投票日原始开票':'选委会公布']);
+    total?csvPercent(row.votes/total*100):'',row.elected?'是':'',row.tally_basis==='original_opening'?'投票日原始开票':row.tally_basis==='certified_recount'?'重计票结果':'选委会公布']);
   }
   return '\uFEFF'+output.map(row=>row.map(csvCell).join(',')).join('\r\n');
  }
@@ -464,7 +464,7 @@
     (scoped?.noElection?' · 该县市没有举行此类乡镇市区长选举':'')+
     (groups.length>1?' · 关键指标为各选举类别合计，图表保留分类统计':'')+
     (scoped?.overview?.turnoutSource?' · 投票统计来自已核验的选举概况':'')+
-    (scoped?.tallyBasis==='certified_recount'?' · 本区投票统计采用台北市主计处公布的重计后数据。候选人分区得票见地图上的投票日原始开票结果。':
+    (scoped?.tallyBasis==='certified_recount'?' · 本区投票统计和候选人分区得票均采用重计后数据。':
     overviewScope==='town'&&['president','mayor'].includes(state.office)?
      (Number.isInteger(scoped?.overview?.registeredVoters)?
       ' · 本区投票人数与选举人数来自中选会原始选举统计':

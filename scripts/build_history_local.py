@@ -607,6 +607,10 @@ def add_taipei_mayor_tallies(snapshot, audit=None):
     if (len(districts) != 12 or districts.keys() != recount['districts'].keys()
             or tuple(map(sum, zip(*(p['votes'] for p in districts.values())))) != (5617, 577566, 244641, 580820, 6172)):
         raise ValueError('2018 Taipei original district candidate returns do not reconcile')
+    if not recount.get('candidate_source') or any(len(p.get('candidate_votes', [])) != 5 for p in recount['districts'].values()):
+        raise ValueError('2018 Taipei certified district candidate archive unavailable')
+    if tuple(map(sum, zip(*(p['candidate_votes'] for p in recount['districts'].values())))) != tuple(TAIPEI_RECOUNT[str(n)] for n in range(1, 6)):
+        raise ValueError('2018 Taipei certified district candidate totals do not reconcile')
     for name, original in districts.items():
         certified = recount['districts'][name]
         for profile in (original, certified):
@@ -615,11 +619,13 @@ def add_taipei_mayor_tallies(snapshot, audit=None):
                 raise ValueError(f'2018 Taipei ballot profile does not reconcile: {name}')
         if sum(original['votes']) != original['valid_votes'] or original['registered_voters'] != certified['registered_voters']:
             raise ValueError(f'2018 Taipei district votes do not reconcile: {name}')
+        if any(not isinstance(v, int) or v < 0 for v in certified['candidate_votes']) or sum(certified['candidate_votes']) != certified['valid_votes']:
+            raise ValueError(f'2018 Taipei certified candidate votes do not reconcile: {name}')
         town = norm(name)
         snapshot['rows'].extend({**row, 'level': 'town', 'town': town, 'votes': votes,
-                                 'tally_basis': 'original_opening'} for row, votes in zip(rows, original['votes']))
+                                 'tally_basis': 'certified_recount'} for row, votes in zip(rows, certified['candidate_votes']))
         snapshot['townProfiles'].append({
-            'office': 'mayor', 'county': county, 'town': town, **certified,
+            'office': 'mayor', 'county': county, 'town': town, **{k: certified[k] for k in fields},
             'tally_basis': 'certified_recount', 'profile_source': recount['source_url'],
         })
     if audit is not None:
@@ -627,7 +633,8 @@ def add_taipei_mayor_tallies(snapshot, audit=None):
             'original_opening': {'source': evidence['source_url'], 'crosscheck': evidence['crosscheck_url'],
                                  'districts': len(districts), 'valid_votes': sum(p['valid_votes'] for p in districts.values())},
             'certified_recount': {'profile_source': recount['source_url'], 'districts': len(districts),
-                                  'valid_votes': city['valid_votes'], 'candidate_breakdown_available': False},
+                                  'valid_votes': city['valid_votes'], 'candidate_breakdown_available': True,
+                                  'candidate_source': recount['candidate_source']},
         }
 
 

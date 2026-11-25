@@ -176,73 +176,189 @@
         "registered_voters": 164413,
         "ballots_cast": 107752,
         "valid_votes": 106795,
-        "invalid_votes": 957
+        "invalid_votes": 957,
+        "candidate_votes": [
+          425,
+          46353,
+          17285,
+          42315,
+          417
+        ]
       },
       "信義區": {
         "registered_voters": 185510,
         "ballots_cast": 123462,
         "valid_votes": 122290,
-        "invalid_votes": 1172
+        "invalid_votes": 1172,
+        "candidate_votes": [
+          500,
+          53812,
+          19849,
+          47620,
+          509
+        ]
       },
       "大安區": {
         "registered_voters": 245341,
         "ballots_cast": 159529,
         "valid_votes": 158137,
-        "invalid_votes": 1392
+        "invalid_votes": 1392,
+        "candidate_votes": [
+          582,
+          72311,
+          23646,
+          60940,
+          658
+        ]
       },
       "中山區": {
         "registered_voters": 189977,
         "ballots_cast": 122927,
         "valid_votes": 121756,
-        "invalid_votes": 1171
+        "invalid_votes": 1171,
+        "candidate_votes": [
+          476,
+          46732,
+          23476,
+          50582,
+          490
+        ]
       },
       "中正區": {
         "registered_voters": 124493,
         "ballots_cast": 81739,
         "valid_votes": 81024,
-        "invalid_votes": 715
+        "invalid_votes": 715,
+        "candidate_votes": [
+          372,
+          33896,
+          12631,
+          33748,
+          377
+        ]
       },
       "大同區": {
         "registered_voters": 104629,
         "ballots_cast": 70698,
         "valid_votes": 69905,
-        "invalid_votes": 793
+        "invalid_votes": 793,
+        "candidate_votes": [
+          266,
+          20745,
+          16895,
+          31660,
+          339
+        ]
       },
       "萬華區": {
         "registered_voters": 159707,
         "ballots_cast": 105411,
         "valid_votes": 104187,
-        "invalid_votes": 1224
+        "invalid_votes": 1224,
+        "candidate_votes": [
+          426,
+          38520,
+          21397,
+          43379,
+          465
+        ]
       },
       "文山區": {
         "registered_voters": 219782,
         "ballots_cast": 146819,
         "valid_votes": 145421,
-        "invalid_votes": 1398
+        "invalid_votes": 1398,
+        "candidate_votes": [
+          710,
+          68549,
+          18989,
+          56463,
+          710
+        ]
       },
       "南港區": {
         "registered_voters": 98837,
         "ballots_cast": 67453,
         "valid_votes": 66782,
-        "invalid_votes": 671
+        "invalid_votes": 671,
+        "candidate_votes": [
+          287,
+          26271,
+          10829,
+          29071,
+          324
+        ]
       },
       "內湖區": {
         "registered_voters": 229197,
         "ballots_cast": 151328,
         "valid_votes": 150070,
-        "invalid_votes": 1258
+        "invalid_votes": 1258,
+        "candidate_votes": [
+          549,
+          61546,
+          21747,
+          65589,
+          639
+        ]
       },
       "士林區": {
         "registered_voters": 235226,
         "ballots_cast": 154909,
         "valid_votes": 153436,
-        "invalid_votes": 1473
+        "invalid_votes": 1473,
+        "candidate_votes": [
+          521,
+          55938,
+          33108,
+          63216,
+          653
+        ]
       },
       "北投區": {
         "registered_voters": 207043,
         "ballots_cast": 135198,
         "valid_votes": 134067,
-        "invalid_votes": 1131
+        "invalid_votes": 1131,
+        "candidate_votes": [
+          497,
+          52423,
+          24490,
+          56080,
+          577
+        ]
+      }
+    },
+    "candidate_source": {
+      "repository": "https://github.com/kiang/db.cec.gov.tw",
+      "directory": "https://github.com/kiang/db.cec.gov.tw/tree/master/voteData/2018-107%E5%B9%B4%E5%9C%B0%E6%96%B9%E5%85%AC%E8%81%B7%E4%BA%BA%E5%93%A1%E9%81%B8%E8%88%89/%E7%9B%B4%E8%BD%84%E5%B8%82%E5%B8%82%E9%95%B7",
+      "blobs": {
+        "elctks": "7b03e2e10009779edea4ad8c5cf8930fe94531fe",
+        "elprof": "ba7384195284b145b7b96a4e2e77d4eaffb90942",
+        "elbase": "5e74d31b1246f14095582e4c5ce5a5bd513bf4e5"
+      },
+      "crosscheck_url": "https://votetw.com/data/election/20181101A1B1?%E7%9C%81%E5%B8%82=63",
+      "city_certification": "https://web.cec.gov.tw/api/file/7bdd5702-140d-4b72-8a50-77239de96794.pdf",
+      "candidate_number_order": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "verification": {
+        "districts": 12,
+        "precincts": 1563,
+        "rows": 60,
+        "changed_votes": 55,
+        "totals": [
+          5611,
+          577096,
+          244342,
+          580663,
+          6158
+        ],
+        "method": "Exact district subtotal, independent precinct sum, VoteTW table, four profile fields and official citywide totals all agree."
       }
     }
   }

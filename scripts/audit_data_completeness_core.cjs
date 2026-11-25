@@ -21,6 +21,12 @@ function scan(s,year,kind,source,ctx={}){
  if(kind!=="legislative"){
  const towns=rows.filter(r=>r.level==="town"&&(r.type==="mayor"||kind==="president")),key=r=>[r.type||r.office||kind,norm(r.county),norm(r.town)].join("|"),pm=new Map((s.townProfiles||[]).map(p=>[key(p),p]));
  for(const [k,rs] of group(towns,key)){const [office,county,district]=k.split("|");profile({office,electorate:"regional",level:"town",county,district,id:k},pm.get(k),sum(rs.map(r=>r.votes)))}
+ if(year===2018&&kind==='local'){
+  const local=towns.filter(r=>r.type==='mayor'&&norm(r.county)==='台北市'), city=rows.filter(r=>r.type==='mayor'&&r.level==='county'&&norm(r.county)==='台北市');
+  const byWard=group(local,r=>norm(r.town)), expected=city.map(r=>String(r.number));
+  const verified=local.length===60&&byWard.size===12&&city.length===5&&local.every(r=>r.tally_basis==='certified_recount')&&[...byWard.values()].every(rs=>rs.length===5&&new Set(rs.map(r=>String(r.number))).size===5&&expected.every(n=>rs.some(r=>String(r.number)===n)))&&city.every(r=>sum(local.filter(t=>String(t.number)===String(r.number)).map(t=>t.votes))===r.votes);
+  if(!verified)add({office:'mayor',county:'台北市',level:'county'},'partial','recount_town_candidate_votes','全市重计结果与12区逐候选人明细尚未完整对账');
+ }
  } else {
  for(const el of ["regional","plains","mountain",...(year>=2008?["party"]:[])]){
  const rr=rows.filter(r=>r.electorate===el),geo={};
@@ -51,7 +57,6 @@ function extra(archive,kinmen,availability){
  const full=new Set(["臺北縣","高雄縣","新竹縣","連江縣","宜蘭縣"]);
  for(const county of ["臺北縣","宜蘭縣","桃園縣","新竹縣","苗栗縣","臺中縣","彰化縣","南投縣","雲林縣","嘉義縣","臺南縣","高雄縣","屏東縣","臺東縣","花蓮縣","澎湖縣","金門縣","連江縣"])if(!full.has(county))add(1994,"township",county,"","partial","candidate_results","sources/history-1994-township.json",`${archive.counties.filter(c=>c.county===county).reduce((a,c)=>a+c.contest_count,0)}区已有结果；待查当届完整行政区名录`);
  add(1994,"council","金門縣","","partial",["candidate_results","turnout",...(Number.isInteger(kinmen.reserved_seats)?[]:["reserved_seats"])].join(";"),"sources/history-1994-kinmen-partial.json",`${kinmen.candidate_count}参选；${kinmen.elected_count}当选；其他候选人部分资料${kinmen.other_candidates.length}人`);
- add(2018,"mayor","台北市","","partial","recount_town_candidate_votes","sources/history-2018-taipei-mayor-original.json","全市重计结果已收录，分区候选人得票为投票日版本");
  add(1992,"legislative","","","conflict","national_vs_local_votes","assets/history-legislative-1992-local.json","山地少数民族票差2票；华加志","national");
  for(const y of [1996,2000])add(y,"president","台南市","中区、西区","unverified","historical_boundary","history-presidential.js","采用合并后轮廓","town");
  add(1992,"legislative","","","unverified","historical_boundary","history-legislative.js","金门和马祖仍采用参考年份归属，其他选区采用政大当届乡镇归属及现行近似轮廓","map");
