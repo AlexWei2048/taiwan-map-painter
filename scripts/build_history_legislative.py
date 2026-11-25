@@ -50,6 +50,14 @@ VERIFIED_NAME_RULES = {
 }
 PROTECTED_CANONICAL_NAMES = {"魏耀乾", "李乾龙", "陈民乾", "米甘幹．理佛克"}
 
+# The 1992 NCCU archive has an invalid gender code ("5") for this candidate.
+# The CEC's 1998 record identifies the same person by name, birth year (1941),
+# county and party. Keep the original archive untouched; record the correction
+# separately so rebuilding the 1992 snapshot preserves the verified value.
+VERIFIED_1992_GENDER = {
+    ("桃园县", "徐鸿进", "09", "1941", "中国国民党"): "男",
+}
+
 
 def simplify_person_name(value: object) -> str:
     raw = str(value or "").strip()
@@ -160,6 +168,9 @@ def fetch_1992(session: requests.Session, electorate: str) -> list[dict]:
             continue
         district, name, number, gender, birth, party, votes, share, won, incumbent = cells
         county = re.sub(r"第.+選區$", "", district)
+        identity = (simplify(county), simplify_person_name(name), number, birth, normalize_party(party))
+        if code == "I" and gender not in {"M", "F"}:
+            gender = {"男": "M", "女": "F"}.get(VERIFIED_1992_GENDER.get(identity), gender)
         output.append({
             "縣市": county, "鄉鎮市區": "", "村里": "", "選區": district,
             "號次": number, "候選人": name, "政黨": party, "得票數": votes,
