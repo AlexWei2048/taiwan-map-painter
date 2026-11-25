@@ -658,26 +658,35 @@ def add_chiayi_rerun(contests):
 
 def add_1994_township(snapshot, audit):
     archive = json.loads((ROOT / 'sources/history-1994-township.json').read_text(encoding='utf-8'))
-    contests, evidence = [], {}
+    contests, evidence, profiles = [], {}, {}
     for county in archive['counties']:
         districts = county['districts']
         normalized_county = norm(county['county'])
+        totals = [sum(column) if None not in column else None for column in zip(*(d['profile'] for d in districts))]
         if (len({item['town'] for item in districts}) != county['contest_count']
                 or len(districts) != county['contest_count']
                 or sum(len(item['candidates']) for item in districts) != county['candidate_count']
-                or [sum(item['profile'][i] for item in districts) for i in range(4)] != county['profile_totals']):
+                or totals != county['profile_totals']):
             raise ValueError(f'1994 {normalized_county} archive coverage or county totals do not reconcile')
         evidence[normalized_county] = county
         for item in districts:
             registered, cast, valid, invalid = item['profile']
             candidates = item['candidates']
-            if (not registered >= cast == valid + invalid or sum(row[4] for row in candidates) != valid
-                    or [row[0] for row in candidates] != list(range(1, len(candidates) + 1))
+            numbers = [row[0] for row in candidates]
+            if (cast != (valid + invalid if invalid is not None else None)
+                    or (registered is not None and registered < (cast if cast is not None else valid))
+                    or sum(row[4] for row in candidates) != valid
+                    or numbers not in (list(range(1, len(candidates) + 1)), [None])
                     or sum(row[5] for row in candidates) != 1
                     or next(row[4] for row in candidates if row[5]) != max(row[4] for row in candidates)):
                 raise ValueError(f'1994 {normalized_county} {item["town"]} original returns do not reconcile')
+            profiles[normalized_county, norm(item['town'])] = {
+                'registered_voters': registered, 'ballots_cast': cast, 'invalid_votes': invalid,
+                'profile_source': item.get('profile_url', county['profile_url']),
+            }
             roster = [
-                {'number': str(number), 'name': name, 'party': party, 'gender': gender,
+                {'number': str(number) if number is not None else '', 'name': name,
+                 'party': party if party is not None else '政黨資料缺失', 'gender': gender,
                  'votes': votes, 'mark': '*' if elected else '', 'incumbent': None,
                  'candidate_mark': '*' if elected else '', 'winner_source': county['results_url']}
                 for number, name, party, gender, votes, elected in candidates
@@ -691,14 +700,17 @@ def add_1994_township(snapshot, audit):
             })
     supplement = build(contests, {}, {})[0][1994]
     supplement['elections'][0].update(
-        source_name='台北县及高雄县选举委员会原始清册',
+        source_name='地方选举委员会原始清册及县志',
         source_url=evidence['台北县']['results_url'],
         coverage='partial',
         counties=list(evidence),
     )
     for contest in supplement['contests']:
         source = evidence[contest['county_name']]
-        contest.update(source_url=source['results_url'], profile_source=source['profile_url'])
+        contest.update(source_url=source['results_url'], **profiles[contest['county_name'], contest['district_name']])
+    for candidate in supplement['candidacies']:
+        if candidate['party_name_official'] == '政黨資料缺失':
+            candidate['party_name_official'] = None
     for key in ('elections', 'contests', 'candidacies', 'rows'):
         snapshot[key].extend(supplement[key])
     audit['townshipArchives'] = {

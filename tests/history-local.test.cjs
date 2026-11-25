@@ -94,10 +94,12 @@ test('Historical county mayors and councils use five shared election cycles with
  }
 });
 
-test('The partial 1994 township archive reconciles both counties and maps all 56 contests',()=>{
+test('The partial 1994 township archive reconciles all 73 contests across four counties',()=>{
  const shard=data(1994);
  const election=shard.elections.find(e=>e.office==='township');
  assert.equal(election.coverage,'partial');
+ assert.deepEqual(election.counties,['台北县','高雄县','新竹县','连江县']);
+ assert.equal(shard.contests.filter(c=>c.election_id===election.election_id).length,73);
  const geometry=Local.geometry(shard,map,reference,String,Core.mergePaths,Presidential.modernCounty,Presidential.baseTown);
  for(const [county,count,candidates,totals] of [
   ['台北县',29,81,[1989086,1239640,1200839,38801]],
@@ -113,6 +115,25 @@ test('The partial 1994 township archive reconciles both counties and maps all 56
    assert.ok(geometry.towns.some(t=>t.county===county&&t.name===contest.district_name),contest.district_name);
   }
  }
+ for(const [county,count,candidates,votes] of [['新竹县',13,27,187454],['连江县',4,4,2513]]){
+  const contests=shard.contests.filter(c=>c.election_id===election.election_id&&c.county_name===county);
+  assert.equal(contests.length,count);
+  assert.equal(contests.flatMap(c=>contestants(shard,c)).length,candidates);
+  assert.equal(contests.reduce((sum,c)=>sum+c.valid_votes,0),votes);
+  for(const contest of contests){
+   const entries=contestants(shard,contest);
+   assert.equal(entries.reduce((sum,c)=>sum+c.votes,0),contest.valid_votes);
+   assert.equal(entries.filter(c=>c.elected_official).length,1);
+   assert.equal(contest.registered_voters,null);
+   assert.ok(contest.source_url&&geometry.towns.some(t=>t.county===county&&t.name===contest.district_name),contest.district_name);
+  }
+ }
+ const east=shard.contests.find(c=>c.election_id===election.election_id&&c.district_name==='东引乡');
+ assert.deepEqual([east.ballots_cast,east.valid_votes,east.invalid_votes],[311,281,30]);
+ const [candidate]=contestants(shard,east);
+ assert.equal(candidate.candidate_name,'林日福');
+ assert.equal(candidate.ballot_number,'');
+ assert.equal(candidate.party_name,'政党资料缺失');
 });
 
 test('Corrections use the corroborated town tally or certified recount at its actual geographic level',()=>{

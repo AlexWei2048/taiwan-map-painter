@@ -907,8 +907,9 @@
   else if(localYear===2026)el('historyBoundaryNote').textContent='2026年正式结果仅在中选会或地方选委会资料逐项核对、选区得票与席次校验通过后发布；预测与官方结果分开保存。未核实的乡镇得票不推算。';
   else if(!presidentialMode&&localGeometry){
    const cycle=snapshotData?.cycleYears?'按选举批次合并显示，各地实际投票日期见选区结果。':'按实际投票年显示。';
+   const scope=partialTownship()?snapshotData.elections.find(e=>e.office==='township'):null;
    const coverage=archivedCouncil()?' 1994年1月的县市议员资料采用地方选务档案转录，经选区有效票和当选席次对账。金门县可查已核实的部分候选人资料，合计采用已收录的完整结果。':
-    partialTownship()?' 目前收录原台北县和原高雄县的官方清册，合计采用已收录的56个选区。':'';
+    scope?' 已收录'+scope.counties.join('、')+'共'+snapshotData.contests.filter(c=>c.election_id===scope.election_id).length+'个选区的候选人结果。部分选区的政党或投票统计仍缺资料。':'';
    el('historyBoundaryNote').textContent=cycle+coverage+' 历史边界采用可对应的现行轮廓，缺少可靠边界的选区仍可查看候选人结果。'+
     (localYear===2018&&kind==='mayor'&&(!county||county==='台北市')?' 台北市全市采用法院重计结果。分区地图的候选人票数采用投票日原始开票，分区投票统计见选举概况。':'');
   }
@@ -1085,7 +1086,8 @@
  function exportMetadata(){
   const office=presidentialMode?'president':kind;
   const election=snapshotData?.elections?.find(item=>item.office===office&&(!legislativeMode||item.electorate===legislativeBallot))||snapshotData?.elections?.[0];
-  const source=archivedCouncil()?'选举事务主管机构公开资料、地方选务档案转录':
+  const source=partialTownship()?'地方选举委员会原始清册及县志':
+   archivedCouncil()?'选举事务主管机构公开资料、地方选务档案转录':
    mainlandTerms(election?.source_name||'台湾地区选举事务主管机构公开资料')+(legislativeMode&&legislativeYear===1992?'（政治大学选举研究数据库）':'（经 taiwanvotes.tw 整理）');
   const metadata=['资料来源：'+source,'行政区边界版本：'+(snapshotData?.cycleYears?yearLabel():election?.boundary_version||yearLabel()),'历史数据架构版本：'+(snapshotData?.schemaVersion||2)];
   if(!presidentialMode&&!legislativeMode&&localYear===2018&&kind==='mayor'&&(!county||county==='台北市')){

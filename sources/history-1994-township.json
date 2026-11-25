@@ -1822,6 +1822,494 @@
           ]
         }
       ]
+    },
+    {
+      "county": "新竹縣",
+      "results_url": "https://www.hchcc.gov.tw/Tw/common/Downloader?id=60d323ae-0baa-40b7-b020-2a25c29f69b8",
+      "profile_url": null,
+      "contest_count": 13,
+      "candidate_count": 27,
+      "profile_totals": [
+        null,
+        null,
+        187454,
+        null
+      ],
+      "provenance": {
+        "title": "續修新竹縣志（民國81至104年），卷四政事志",
+        "locator": "頁258–259，表3-3-24",
+        "sha256": "3d9e9d18d1eed043b659cc211281afdedd9539e59c7f1eaca1ccae6ce1e6e6a3"
+      },
+      "districts": [
+        {
+          "town": "竹北市",
+          "candidates": [
+            [
+              1,
+              "陳煙標",
+              "中國國民黨",
+              "男",
+              30281,
+              true
+            ]
+          ],
+          "profile": [
+            null,
+            null,
+            30281,
+            null
+          ]
+        },
+        {
+          "town": "竹東鎮",
+          "candidates": [
+            [
+              1,
+              "羅善光",
+              "中國國民黨",
+              "男",
+              32726,
+              true
+            ]
+          ],
+          "profile": [
+            null,
+            null,
+            32726,
+            null
+          ]
+        },
+        {
+          "town": "新埔鎮",
+          "candidates": [
+            [
+              1,
+              "蔡文正",
+              "中國國民黨",
+              "男",
+              16407,
+              true
+            ]
+          ],
+          "profile": [
+            null,
+            null,
+            16407,
+            null
+          ]
+        },
+        {
+          "town": "關西鎮",
+          "candidates": [
+            [
+              1,
+              "李勝隆",
+              "中國國民黨",
+              "男",
+              6608,
+              false
+            ],
+            [
+              2,
+              "黃國憲",
+              "中國國民黨",
+              "男",
+              11316,
+              true
+            ]
+          ],
+          "profile": [
+            null,
+            null,
+            17924,
+            null
+          ]
+        },
+        {
+          "town": "湖口鄉",
+          "candidates": [
+            [
+              1,
+              "范錦標",
+              "無黨籍",
+              "男",
+              15702,
+              true
+            ],
+            [
+              2,
+              "黃德共",
+              "中國國民黨",
+              "男",
+              13890,
+              false
+            ]
+          ],
+          "profile": [
+            null,
+            null,
+            29592,
+            null
+          ]
+        },
+        {
+          "town": "新豐鄉",
+          "candidates": [
+            [
+              1,
+              "李錦復",
+              "中國國民黨",
+              "男",
+              8767,
+              true
+            ],
+            [
+              2,
+              "盧朝杭",
+              "無黨籍",
+              "男",
+              4578,
+              false
+            ],
+            [
+              3,
+              "徐進財",
+              "無黨籍",
+              "男",
+              6539,
+              false
+            ]
+          ],
+          "profile": [
+            null,
+            null,
+            19884,
+            null
+          ]
+        },
+        {
+          "town": "芎林鄉",
+          "candidates": [
+            [
+              1,
+              "鄭安治",
+              "中國國民黨",
+              "男",
+              5131,
+              true
+            ],
+            [
+              2,
+              "陳達村",
+              "中國國民黨",
+              "男",
+              4633,
+              false
+            ]
+          ],
+          "profile": [
+            null,
+            null,
+            9764,
+            null
+          ]
+        },
+        {
+          "town": "橫山鄉",
+          "candidates": [
+            [
+              1,
+              "古榮耀",
+              "無黨籍",
+              "男",
+              7904,
+              true
+            ]
+          ],
+          "profile": [
+            null,
+            null,
+            7904,
+            null
+          ]
+        },
+        {
+          "town": "北埔鄉",
+          "candidates": [
+            [
+              1,
+              "溫振瑩",
+              "中國國民黨",
+              "男",
+              2803,
+              false
+            ],
+            [
+              2,
+              "陳正順",
+              "中國國民黨",
+              "男",
+              3720,
+              true
+            ]
+          ],
+          "profile": [
+            null,
+            null,
+            6523,
+            null
+          ]
+        },
+        {
+          "town": "寶山鄉",
+          "candidates": [
+            [
+              1,
+              "李文榜",
+              "中國國民黨",
+              "男",
+              3134,
+              true
+            ],
+            [
+              2,
+              "呂豐孝",
+              "中國國民黨",
+              "男",
+              3030,
+              false
+            ]
+          ],
+          "profile": [
+            null,
+            null,
+            6164,
+            null
+          ]
+        },
+        {
+          "town": "峨眉鄉",
+          "candidates": [
+            [
+              1,
+              "溫宏隆",
+              "中國國民黨",
+              "男",
+              2166,
+              true
+            ],
+            [
+              2,
+              "莊秀堂",
+              "無黨籍",
+              "男",
+              1540,
+              false
+            ]
+          ],
+          "profile": [
+            null,
+            null,
+            3706,
+            null
+          ]
+        },
+        {
+          "town": "尖石鄉",
+          "candidates": [
+            [
+              1,
+              "田錦福",
+              "中國國民黨",
+              "男",
+              238,
+              false
+            ],
+            [
+              2,
+              "陳添水",
+              "中國國民黨",
+              "男",
+              299,
+              false
+            ],
+            [
+              3,
+              "黃照發",
+              "中國國民黨",
+              "男",
+              732,
+              false
+            ],
+            [
+              4,
+              "葉家春",
+              "中國國民黨",
+              "男",
+              817,
+              false
+            ],
+            [
+              5,
+              "邱德臣",
+              "中國國民黨",
+              "男",
+              727,
+              false
+            ],
+            [
+              6,
+              "江瑞乾",
+              "無黨籍",
+              "男",
+              1074,
+              true
+            ]
+          ],
+          "profile": [
+            null,
+            null,
+            3887,
+            null
+          ]
+        },
+        {
+          "town": "五峰鄉",
+          "candidates": [
+            [
+              1,
+              "秋振昌",
+              "中國國民黨",
+              "男",
+              1282,
+              false
+            ],
+            [
+              2,
+              "楊世傑",
+              "中國國民黨",
+              "男",
+              1410,
+              true
+            ]
+          ],
+          "profile": [
+            null,
+            null,
+            2692,
+            null
+          ]
+        }
+      ]
+    },
+    {
+      "county": "連江縣",
+      "results_url": "https://board.matsu.idv.tw/board_view.php?board=142&link=69962&pid=69962&start=28",
+      "profile_url": null,
+      "contest_count": 4,
+      "candidate_count": 4,
+      "profile_totals": [
+        null,
+        null,
+        2513,
+        null
+      ],
+      "provenance": {
+        "title": "連江縣志 政事志",
+        "locator": "第五屆鄉長選舉",
+        "county_registered_voters": 3514
+      },
+      "districts": [
+        {
+          "town": "南竿鄉",
+          "profile": [
+            null,
+            null,
+            1430,
+            null
+          ],
+          "candidates": [
+            [
+              null,
+              "陳書禮",
+              null,
+              null,
+              1430,
+              true
+            ]
+          ],
+          "corroboration": [
+            "https://www.nankan.gov.tw/chhtml/Detail/2417?mcid=33000"
+          ]
+        },
+        {
+          "town": "北竿鄉",
+          "profile": [
+            null,
+            null,
+            478,
+            null
+          ],
+          "candidates": [
+            [
+              null,
+              "王詩乾",
+              null,
+              null,
+              478,
+              true
+            ]
+          ],
+          "corroboration": [
+            "https://www.beigan.gov.tw/Chhtml/content/2199"
+          ]
+        },
+        {
+          "town": "莒光鄉",
+          "profile": [
+            null,
+            null,
+            324,
+            null
+          ],
+          "candidates": [
+            [
+              null,
+              "王大捷",
+              null,
+              null,
+              324,
+              true
+            ]
+          ],
+          "corroboration": [
+            "https://www.chukuang.gov.tw/chhtml/Detail/2579?mcid=52317"
+          ]
+        },
+        {
+          "town": "東引鄉",
+          "profile": [
+            null,
+            311,
+            281,
+            30
+          ],
+          "candidates": [
+            [
+              null,
+              "林日福",
+              null,
+              null,
+              281,
+              true
+            ]
+          ],
+          "corroboration": [
+            "https://www.dongyin.gov.tw/chhtml/Detail/2537?mcid=97267"
+          ],
+          "profile_url": "https://www.dongyin.gov.tw/chhtml/Detail/2537?mcid=97267"
+        }
+      ]
     }
   ],
   "profile_columns": [

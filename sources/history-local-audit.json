@@ -215,7 +215,57 @@
         "1994直轄市議員/區域",
         "1994直轄市議員/原住民",
         "1994直轄市長"
-      ]
+      ],
+      "townshipArchives": {
+        "台北县": {
+          "contest_count": 29,
+          "candidate_count": 81,
+          "profile_totals": [
+            1989086,
+            1239640,
+            1200839,
+            38801
+          ],
+          "results_url": "https://web.cec.gov.tw/api/file/c6b0eabd-761c-474d-960a-a24f5caafa25.pdf",
+          "profile_url": "https://web.cec.gov.tw/api/file/d8960222-d16b-4655-9d2d-4ed493bd3e27.pdf"
+        },
+        "高雄县": {
+          "contest_count": 27,
+          "candidate_count": 66,
+          "profile_totals": [
+            753209,
+            596289,
+            582302,
+            13987
+          ],
+          "results_url": "https://web.cec.gov.tw/api/file/76759c27-9c79-446a-9cd1-f8f50e658e06.pdf",
+          "profile_url": "https://web.cec.gov.tw/api/file/d8d09103-4f24-44d2-997e-a35939ccd3d7.pdf"
+        },
+        "新竹县": {
+          "contest_count": 13,
+          "candidate_count": 27,
+          "profile_totals": [
+            null,
+            null,
+            187454,
+            null
+          ],
+          "results_url": "https://www.hchcc.gov.tw/Tw/common/Downloader?id=60d323ae-0baa-40b7-b020-2a25c29f69b8",
+          "profile_url": null
+        },
+        "连江县": {
+          "contest_count": 4,
+          "candidate_count": 4,
+          "profile_totals": [
+            null,
+            null,
+            2513,
+            null
+          ],
+          "results_url": "https://board.matsu.idv.tw/board_view.php?board=142&link=69962&pid=69962&start=28",
+          "profile_url": null
+        }
+      }
     },
     "1997": {
       "counts": {
