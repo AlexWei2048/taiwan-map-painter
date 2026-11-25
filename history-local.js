@@ -110,12 +110,14 @@
  // constituency has one reserved women's seat per four allocated seats.
  // Do not infer earlier-era quotas or indigenous identity-wide allocations.
  const QUOTA_RULE_SOURCE='https://web.cec.gov.tw/api/file/e516071d-517a-4dcf-bbac-9a1e4137fd3f.pdf';
+ const PRE1999_QUOTA_SOURCE='https://scups.ppo.scu.edu.tw/upload/f20220531154448sytdj1.pdf';
  function fillRegionalCouncilQuotas(shard){
-  if(shard.year<1999)return shard;
   const councilIds=new Set(shard.elections.filter(e=>e.office==='council').map(e=>e.election_id));
+  const pre1999=shard.year<1999;
   return {...shard,contests:shard.contests.map(c=>councilIds.has(c.election_id)&&c.electorate==='regional'&&
    c.reserved_seats==null&&Number.isInteger(c.seats)&&c.seats>0?
-   {...c,reserved_seats:Math.floor(c.seats/4),reserved_seats_source:QUOTA_RULE_SOURCE,reserved_seats_method:'statutory'}:c)};
+   {...c,reserved_seats:pre1999?Math.floor((c.seats+5)/10):Math.floor(c.seats/4),
+    reserved_seats_source:pre1999?PRE1999_QUOTA_SOURCE:QUOTA_RULE_SOURCE,reserved_seats_method:'statutory'}:c)};
  }
  function applyCouncilSupplement(shard,supplement){
   const addition=supplement?.years[shard.year];

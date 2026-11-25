@@ -105,6 +105,27 @@ test('1994 council women-reserved seats follow the verified pre-1999 thresholds'
  }
 });
 
+test('1998 council legal women quotas use the pre-1999 five-seat threshold, without overwriting published quotas',()=>{
+ const contests=[1,2,3,4,5,9,14,15,19,24].map((seats,i)=>({
+  contest_id:'r'+i,election_id:'c',electorate:'regional',seats,reserved_seats:null
+ }));
+ contests.push({contest_id:'already',election_id:'c',electorate:'regional',seats:5,reserved_seats:2});
+ contests.push({contest_id:'indigenous',election_id:'c',electorate:'mountain',seats:3,reserved_seats:null});
+ contests.push({contest_id:'mayor',election_id:'m',electorate:'regional',seats:1,reserved_seats:null});
+ const result=Local.fillRegionalCouncilQuotas({
+  year:1998,elections:[{election_id:'c',office:'council'},{election_id:'m',office:'mayor'}],contests
+ });
+ for(const contest of result.contests.slice(0,10)){
+  assert.equal(contest.reserved_seats,Math.floor((contest.seats+5)/10));
+  assert.equal(contest.reserved_seats_method,'statutory');
+  assert.match(contest.reserved_seats_source,/^https:\/\//);
+ }
+ assert.equal(result.contests[10].reserved_seats,2);
+ assert.equal(result.contests[11].reserved_seats,null);
+ assert.equal(result.contests[12].reserved_seats,null);
+ assert.equal(contests[0].reserved_seats,null,'original snapshots remain immutable');
+});
+
 test('The partial 1994 township archive reconciles all 88 contests across seven counties',()=>{
  const shard=data(1994);
  const election=shard.elections.find(e=>e.office==='township');
