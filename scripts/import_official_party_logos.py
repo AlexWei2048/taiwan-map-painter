@@ -17,6 +17,7 @@ from pathlib import Path
 from urllib.parse import urlparse,quote
 from collections import Counter
 import requests
+import cairosvg
 from bs4 import BeautifulSoup
 from PIL import Image,ImageOps,ImageFile,UnidentifiedImageError,ImageDraw,ImageChops
 from opencc import OpenCC
@@ -66,6 +67,11 @@ for name,url in extra.items():
  except requests.RequestException as err:print("MANUAL_LOOKUP_FAIL",name,str(err),flush=True)
 
 def decode_image(raw):
+ original=raw
+ if b'<svg' in raw[:2048].lower():
+  if len(raw)>200000 or re.search(rb'<script|<foreignObject|<!ENTITY|onload\s*=|(?:href|src)\s*=\s*["\x27](?!#|data:)',raw,re.I):
+   raise ValueError('unsafe SVG')
+  raw=cairosvg.svg2png(bytestring=raw,output_width=512,output_height=512)
  known_large_jpeg=len(raw)<=6_000_000 and hashlib.sha256(raw).hexdigest()==large_jpeg_sha256
  if len(raw)>5_000_000 and not known_large_jpeg:raise ValueError("unusually large official image")
  if known_large_jpeg:
@@ -168,20 +174,41 @@ supplemental=[
 ]
 # Additional documented sources. Historical marks stay keyed to the
 # historical ballot name when the organization later redesigned its logo.
-def commons_image(filename):
+def wiki_image(filename,project="commons"):
+ filename=filename.replace(" ","_")
  digest=hashlib.md5(filename.encode("utf-8")).hexdigest()
- return "https://upload.wikimedia.org/wikipedia/commons/"+digest[0]+"/"+digest[:2]+"/"+quote(filename)
+ return "https://upload.wikimedia.org/wikipedia/"+project+"/"+digest[0]+"/"+digest[:2]+"/"+quote(filename)
+def commons_image(filename):return wiki_image(filename)
+def wiki_variants(filename,project="commons"):
+ url=wiki_image(filename,project)
+ return [url,url.replace("/"+project+"/","/"+project+"/thumb/")+"/250px-"+quote(filename.replace(" ","_"))]
 supplemental += [
+ {"name":"人民民主党","also":[],
+  "urls":wiki_variants("Emblem of people boss.png","zh"),
+  "source_page":"https://zh.wikipedia.org/wiki/人民民主黨_(台灣)",
+  "license":"Party identification emblem shown on source article; original rights retained, not a general free license"},
+ {"name":"台湾第一民族党","also":[],
+  "urls":wiki_variants("TFN Seal.png","zh")+wiki_variants("T F N P logoCircle.png","zh"),
+  "source_page":"https://votetw.com/wiki/2016年立法委員選舉",
+  "license":"Historical ballot party identification image; original rights retained"},
+ {"name":"中国生产党","also":[],
+  "urls":wiki_variants("Redstarbluebg.png"),
+  "source_page":"https://votetw.com/wiki/2016年立法委員選舉",
+  "license":"Historical party identification mark; source article names the exact image file; original rights retained"},
+ {"name":"中华民国机车党","also":[],
+  "urls":wiki_variants("中華民國機車黨黨徽.png","zh"),
+  "source_page":"https://votetw.com/wiki/2016年立法委員選舉",
+  "license":"Historical party identification emblem; original rights retained"},
  {"name":"红党","also":[],
-  "urls":["https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Red_party_flag.svg/320px-Red_party_flag.svg.png"],
+  "urls":["https://upload.wikimedia.org/wikipedia/commons/c/ce/Red_party_flag.svg","https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Red_party_flag.svg/250px-Red_party_flag.svg.png"],
   "source_page":"https://commons.wikimedia.org/wiki/File:Red_party_flag.svg",
   "license":"Party flag; public domain simple geometry; original author Tomchen1989"},
  {"name":"青年阳光党","also":[],
-  "urls":[commons_image("青年陽光黨.png")],
+  "urls":wiki_variants("青年陽光黨.png"),
   "source_page":"https://commons.wikimedia.org/wiki/File:青年陽光黨.png",
   "license":"Party emblem from Wikimedia Commons; rights and attribution as documented on source file page"},
  {"name":"基进党","also":[],
-  "urls":[commons_image("基進黨｜LOGO.jpg")],
+  "urls":wiki_variants("基進黨｜LOGO.jpg"),
   "source_page":"https://commons.wikimedia.org/wiki/File:基進黨｜LOGO.jpg",
   "license":"Historical party mark, Wikimedia Commons attribution and license on source file page"},
  {"name":"台湾双语无法党","also":[],
@@ -220,6 +247,7 @@ for item in supplemental:
   "image_bytes":len(binary),"size_after_fit":size,"license":item["license"],
   "source_alternative":item["urls"]})
  print("IMPORTED_SUPPLEMENT",name,pid or "historical",len(binary),chosen,flush=True)
+ time.sleep(1)
 # Only add images with a party match backed by the registrar or a party-owned
 # source / precisely identified Commons file; no speculative reuse.
 render="/* Official party-logo images, with sources in reports/official-party-logos-import.json.\n"
@@ -229,7 +257,7 @@ render+="const SOURCED_PARTY_LOGOS_BY_NAME="+json.dumps(byname,ensure_ascii=Fals
 (ASSETS/"party-logos-sourced.js").write_text(render)
 # No duplicate documentation or stale missing-status for now-imported parties.
 documentation=list({(x["name"],x.get("party_id")):x for x in documentation}.values())
-available_names={norm(x["name"]) for x in documentation}
+available_names={norm(x["name"]) for x in documentation}|set(byname)|{name for name,pid in lookup.items() if pid in byid or pid in existing}|{"中华社会民主党"}
 skips=list({norm(x["name"]):x for x in skips
  if norm(x["name"]) not in available_names}.values())
 output={"schemaVersion":1,"count_by_id":len(byid),"count_by_historical_name":len(byname),
@@ -241,4 +269,4 @@ for x in documentation:
  license_note.append(f"{x['name']} [{x['party_id'] or '历史名称'}]\n登记：{x['official_registry']}\n原图：{x['official_image']}\n来源SHA256：{x['source_sha256']}\n")
 (ASSETS/"LICENSE-party-logos-sourced.txt").write_text("\n".join(license_note))
 print("IMPORT_SUMMARY",json.dumps({"byId":len(byid),"byHistoricalName":len(byname),"skipped":len(skips),
- "missingPresetsAfter":[p["name"] for p in presets if p["id"] not in existing and p["id"] not in byid and p["id"] not in ("red","gray")]},ensure_ascii=False),flush=True)
+ "missingPresetsAfter":[p["name"] for p in presets if p["id"] not in existing and p["id"] not in byid and p["id"] not in ("red","gray","csdp")]},ensure_ascii=False),flush=True)
