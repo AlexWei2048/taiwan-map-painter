@@ -2540,7 +2540,86 @@
           "男",
           false
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "1": {
+          "value": false,
+          "source_url": "https://nccur.lib.nccu.edu.tw/retrieve/79437/100801.pdf",
+          "evidence": "第13屆縣議員選舉段落、表5-10：參選時任礁溪鄉民代表會主席（1990–1994），非同職連任。",
+          "election_date": "1994-01-29",
+          "method": "documented_contemporary_role",
+          "confidence": "historical_research",
+          "original_name": "林政盛",
+          "ballot_number": 1,
+          "votes": 4838
+        },
+        "2": {
+          "value": false,
+          "source_url": "https://toucheng.e-land.gov.tw/cp.aspx?n=6835",
+          "evidence": "頭城公所大事記：1990-03-01就任第11屆鎮長，1994-03-01繼任者就職。",
+          "election_date": "1994-01-29",
+          "method": "official_term_record",
+          "confidence": "official_term_record",
+          "original_name": "林樂善",
+          "ballot_number": 2,
+          "votes": 4494
+        },
+        "3": {
+          "value": false,
+          "source_url": "https://nccur.lib.nccu.edu.tw/retrieve/79437/100801.pdf",
+          "evidence": "第13屆選舉段落：政壇新人。",
+          "election_date": "1994-01-29",
+          "method": "documented_contemporary_role",
+          "confidence": "historical_research",
+          "original_name": "林懋倉",
+          "ballot_number": 3,
+          "votes": 5527
+        },
+        "5": {
+          "value": false,
+          "source_url": "https://nccur.lib.nccu.edu.tw/retrieve/79437/100801.pdf",
+          "evidence": "第13屆選舉段落：時任礁溪鄉民代表及協天廟主委。",
+          "election_date": "1994-01-29",
+          "method": "documented_contemporary_role",
+          "confidence": "historical_research",
+          "original_name": "吳朝煌",
+          "ballot_number": 5,
+          "votes": 3165
+        },
+        "6": {
+          "value": true,
+          "source_url": "https://nccur.lib.nccu.edu.tw/retrieve/79437/100801.pdf",
+          "evidence": "第13屆選舉段落：尋求縣議員連任。",
+          "election_date": "1994-01-29",
+          "method": "documented_contemporary_role",
+          "confidence": "historical_research",
+          "original_name": "游旺欉",
+          "ballot_number": 6,
+          "votes": 4103
+        },
+        "7": {
+          "value": false,
+          "source_url": "https://nccur.lib.nccu.edu.tw/retrieve/79437/100801.pdf",
+          "evidence": "第13屆選舉段落：時任鄉民代表會副主席。",
+          "election_date": "1994-01-29",
+          "method": "documented_contemporary_role",
+          "confidence": "historical_research",
+          "original_name": "李清林",
+          "ballot_number": 7,
+          "votes": 2416
+        },
+        "9": {
+          "value": true,
+          "source_url": "https://nccur.lib.nccu.edu.tw/retrieve/79437/100801.pdf",
+          "evidence": "研究記載其任第10–12屆縣議員（1982–1994），1994年第13屆再次參選。",
+          "election_date": "1994-01-29",
+          "method": "documented_contemporary_role",
+          "confidence": "historical_research",
+          "original_name": "吳坤鐘",
+          "ballot_number": 9,
+          "votes": 4037
+        }
+      }
     },
     {
       "county": "宜蘭縣",
@@ -2722,7 +2801,33 @@
           "男",
           false
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "1": {
+          "value": true,
+          "source_url": "https://www.lotong.gov.tw/TW/%E7%BE%85%E6%9D%B1%E9%8E%AE%E5%BF%97/04_%E7%AC%AC%E5%9B%9B%E7%AF%87%E6%94%BF%E4%BA%8B%E7%AF%87.pdf",
+          "evidence": "《羅東鎮志》政事篇第193頁表4.3.24，宜蘭縣議會提供第12屆任期名錄；同1990年選委會清冊精確匹配。",
+          "election_date": "1994-01-29",
+          "method": "official_roster_exact_match",
+          "confidence": "official_term_roster",
+          "original_name": "賴翰霆",
+          "ballot_number": 1,
+          "votes": 3990,
+          "secondary_source": "https://web.cec.gov.tw/api/file/0965a18d-e101-4921-bee3-e56b5e0dd062.pdf"
+        },
+        "5": {
+          "value": true,
+          "source_url": "https://www.lotong.gov.tw/TW/%E7%BE%85%E6%9D%B1%E9%8E%AE%E5%BF%97/04_%E7%AC%AC%E5%9B%9B%E7%AF%87%E6%94%BF%E4%BA%8B%E7%AF%87.pdf",
+          "evidence": "《羅東鎮志》政事篇第193頁表4.3.24，宜蘭縣議會提供第12屆任期名錄；同1990年選委會清冊精確匹配。",
+          "election_date": "1994-01-29",
+          "method": "official_roster_exact_match",
+          "confidence": "official_term_roster",
+          "original_name": "陳淑暖",
+          "ballot_number": 5,
+          "votes": 2677,
+          "secondary_source": "https://web.cec.gov.tw/api/file/0965a18d-e101-4921-bee3-e56b5e0dd062.pdf"
+        }
+      }
     },
     {
       "county": "宜蘭縣",

@@ -1308,7 +1308,14 @@
               450,
               false
             ]
-          ]
+          ],
+          "incumbency_at_election": {
+            "name": "吳進村",
+            "source_url": "https://zh.wikipedia.org/wiki/%E4%BB%81%E6%AD%A6%E5%8D%80",
+            "secondary_source": "https://rew.kcg.gov.tw/cp.aspx?n=60E744904BC43885",
+            "source_locator": "歷任首長表列第11屆吳進村（1990年3月–1994年2月），劉龍泉1994年3月起任；仁武地政事務所官方沿革佐證吳曾任鄉長，但不獨立證明投票日任職。",
+            "confidence": "secondary_term_roster_crosscheck"
+          }
         },
         {
           "town": "大社鄉",
