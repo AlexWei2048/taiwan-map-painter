@@ -81,7 +81,8 @@
     electorate,seats,reserved_seats,registered_voters,ballots_cast,valid_votes,invalid_votes
    });
    for(const [ballot,originalName,votes,originalParty,gender,elected] of item.candidates){
-    const number=String(ballot),name=normalize(originalName),party=normalize(originalParty)||'政党资料缺失';
+    const number=String(ballot),name=originalName.split('乾').map(normalize).join('乾');
+    const party=normalize(originalParty)||'政党资料缺失';
     const incumbentSource=item.incumbent_sources?.[number],incumbent=typeof incumbentSource?.value==='boolean'?incumbentSource.value:null;
     candidacies.push({
      candidacy_id:id+':'+number,contest_id:id,ballot_number:number,candidate_name:name,candidate_name_official:originalName,

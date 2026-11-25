@@ -83,6 +83,7 @@ test('Historical county mayors and councils use five shared election cycles with
    assert.equal(lienchiang.filter(c=>c.incumbent_at_election===true).length,9);
    assert.equal(lienchiang.find(c=>c.candidate_name==='陈书建').incumbent_at_election,null);
    assert.equal(lienchiang.find(c=>c.candidate_name==='刘美官').incumbent_at_election,true);
+   assert.ok(council.candidacies.some(c=>c.candidate_name==='黄宣乾'));
    const taipei=councilRows.filter(c=>c.county_name==='台北县');
    assert.equal(taipei.length,12);
    assert.equal(taipei.reduce((sum,c)=>sum+c.valid_votes,0),1217977);
