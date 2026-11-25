@@ -5,29 +5,37 @@ on:
     paths:
       - scripts/build_history_2022.py
       - scripts/enrich_history_2022_cec.py
+      - scripts/sync_history_2022_council.cjs
+      - assets/history-council-districts-2022.json
+      - history-local.js
       - .github/workflows/history-2022.yml
   workflow_dispatch:
 permissions:
   contents: write
+concurrency:
+  group: history-2022-main
+  cancel-in-progress: false
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - run: python -m pip install requests beautifulsoup4 opencc-python-reimplemented
-      - run: python scripts/build_history_2022.py
-      - name: Enrich candidates and turnout from official CEC archive
-        run: python scripts/enrich_history_2022_cec.py --write
-      - name: Commit completed snapshot
+      # Never regenerate an enriched snapshot from raw returns on a routine code push.
+      # Full source rebuilds must be staged separately and reviewed for coverage loss.
+      - run: node scripts/sync_history_2022_council.cjs --write
+      - run: python scripts/build_history_2022.py --verify-existing
+      - run: node --test tests/history-model.test.cjs tests/history-overview-scopes.test.cjs tests/history-2022-council-sync.test.cjs
+      - name: Commit only validated council metadata
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add assets/history-2022.json
           if ! git diff --cached --quiet; then
-            git commit -m "Add official-source 2022 historical election results snapshot"
-            git push
+            git commit -m "Synchronize 2022 council metadata while preserving verified ward returns"
+            git push origin HEAD:main
           fi
