@@ -4,24 +4,24 @@
   "total_current_logo_ids": 44,
   "original_logo_ids": 30,
   "sourced_preset_logo_ids": 14,
-  "sourced_historical_logo_names": 37,
+  "sourced_historical_logo_names": 39,
   "total_party_names_in_archives": 147,
   "top_archive_parties": [
     {
       "name": "中国国民党",
-      "rows": 48474,
+      "rows": 48561,
       "id": "blue",
       "has_logo": true
     },
     {
       "name": "无党籍",
-      "rows": 41224,
+      "rows": 41308,
       "id": "gray",
       "has_logo": true
     },
     {
       "name": "民主进步党",
-      "rows": 29797,
+      "rows": 29833,
       "id": "green",
       "has_logo": true
     },
@@ -527,7 +527,7 @@
       "name": "司法正义党",
       "rows": 13,
       "id": null,
-      "has_logo": false
+      "has_logo": true
     },
     {
       "name": "社会民主党",
@@ -1305,19 +1305,6 @@
       ]
     },
     {
-      "name": "司法正义党",
-      "rows": 13,
-      "total_votes_across_grains": 38668,
-      "known_preset": null,
-      "sources": [
-        "history-legislative-2020.json",
-        "history-legislative-2024.json"
-      ],
-      "spellings": [
-        "司法正义党"
-      ]
-    },
-    {
       "name": "三等国民公义人权自救党",
       "rows": 13,
       "total_votes_across_grains": 3248,
@@ -1743,10 +1730,16 @@
     }
   ],
   "placeholder_code_locations": {
+    "site-updated.js": [
+      {
+        "phrase": "不可用",
+        "count": 1
+      }
+    ],
     "history-2022.js": [
       {
         "phrase": "暂无资料",
-        "count": 2
+        "count": 3
       },
       {
         "phrase": "暂无该",
@@ -1765,12 +1758,6 @@
         "count": 1
       }
     ],
-    "site-updated.js": [
-      {
-        "phrase": "不可用",
-        "count": 1
-      }
-    ],
     "history-workspace.js": [
       {
         "phrase": "暂无资料",
@@ -1779,6 +1766,12 @@
       {
         "phrase": "暂无该",
         "count": 2
+      }
+    ],
+    "history-trends.js": [
+      {
+        "phrase": "无可核实",
+        "count": 1
       }
     ],
     "tests/history-workspace.test.cjs": [
@@ -1859,7 +1852,7 @@
       "plains": {
         "national": true,
         "county": 25,
-        "town": 358,
+        "town": 359,
         "district": 0
       },
       "mountain": {
@@ -1887,6 +1880,12 @@
         "county": 25,
         "town": 367,
         "district": 0
+      },
+      "party": {
+        "national": true,
+        "county": 25,
+        "town": 368,
+        "district": 0
       }
     },
     "2012": {
@@ -1903,6 +1902,12 @@
         "district": 0
       },
       "mountain": {
+        "national": true,
+        "county": 22,
+        "town": 368,
+        "district": 0
+      },
+      "party": {
         "national": true,
         "county": 22,
         "town": 368,
@@ -1927,6 +1932,12 @@
         "county": 22,
         "town": 368,
         "district": 0
+      },
+      "party": {
+        "national": true,
+        "county": 22,
+        "town": 368,
+        "district": 0
       }
     },
     "2020": {
@@ -1939,7 +1950,7 @@
       "plains": {
         "national": true,
         "county": 22,
-        "town": 366,
+        "town": 368,
         "district": 0
       },
       "mountain": {
@@ -1965,7 +1976,7 @@
       "plains": {
         "national": true,
         "county": 22,
-        "town": 366,
+        "town": 368,
         "district": 0
       },
       "mountain": {
