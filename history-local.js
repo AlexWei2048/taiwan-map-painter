@@ -15,7 +15,7 @@
  function yearLabel(year,office,separator='/'){
   return groupedOffice(office)&&CYCLES[year]?CYCLES[year]+separator+year:String(year);
  }
- const pending=new Map(),supplementYears=new Set([1998,2002,2005,2009,2010,2014,2018]);
+ const pending=new Map(),supplementYears=new Set([1994,1998,2002,2005,2006,2009,2010,2014,2018]);
  let supplementRequest;
  let legacyCouncilRequest;
  function enrichLegacyGender(archive,references){
