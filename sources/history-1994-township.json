@@ -3424,6 +3424,35 @@
           "gender": "男"
         }
       ]
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://w3fs.tainan.gov.tw/001/Upload/2/attachment/9370/107/1010718stat001.pdf",
+      "source_locator": "《99年臺南縣統計要覽》第62期，表3-11，頁3-28至3-29；第2、5、8、12屆，83/1/29（公開文字表格核對）",
+      "summary_scope": "county",
+      "profile_totals": [
+        703292,
+        564270,
+        552266,
+        12004
+      ],
+      "profiles": [
+        {
+          "town": "全縣合計",
+          "registered_voters": 703292,
+          "ballots_cast": 564270,
+          "valid_votes": 552266,
+          "invalid_votes": 12004,
+          "candidate_count": 86
+        }
+      ],
+      "county_summary": {
+        "candidate_count": 86,
+        "male_candidates": 84,
+        "female_candidates": 2,
+        "turnout_pct": 80.23
+      }
     }
   ]
 }
