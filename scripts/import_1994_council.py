@@ -61,6 +61,10 @@ def extract(path, overrides):
         stats = text(items) if items is not None and items.tag == 'ul' else ''
         seats = extract_num(r'應選出名額[：:]\s*(\d+)', stats)
         women = extract_num(r'婦女保障名額[：:]\s*(\d+)', stats)
+        # The pre-1999 county-council quota had no reserved seat for 1-4 seats.
+        # A missing quota label on these archived returns means zero, not unknown.
+        if women is None and seats is not None and 1 <= seats <= 4:
+            women = 0
         registered = extract_num(r'選舉人數[：:]\s*([\d,]+)', stats)
         cast = extract_num(r'投票數(?:[（(]投票率[）)])?[：:]\s*([\d,]+)', stats)
         valid = extract_num(r'(?<!無)有效票(?:[（(]比率[）)])?[：:]\s*([\d,]+)', stats)

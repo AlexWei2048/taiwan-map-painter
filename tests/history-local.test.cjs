@@ -94,7 +94,7 @@ test('Historical county mayors and councils use five shared election cycles with
  }
 });
 
-test('The partial 1994 township archive reconciles all 88 contests across seven counties',()=>{
+test('1994 council women-reserved seats follow the verified pre-1999 thresholds',()=>{\n const archive=require('../assets/history-local-1994-council.json');\n assert.equal(archive.districts.length,183);\n assert.equal(archive.districts.filter(d=>d.seats<=4).length,94);\n for(const d of archive.districts){\n  assert.ok(Number.isInteger(d.reserved_seats),d.county+' 第'+d.number+'选区缺保障名额');\n  assert.equal(d.reserved_seats,Math.floor((d.seats+5)/10),d.county+' 第'+d.number+'选区');\n  assert.equal(d.candidates.reduce((s,c)=>s+c[2],0),d.valid_votes);\n }\n});\n\ntest('The partial 1994 township archive reconciles all 88 contests across seven counties',()=>{
  const shard=data(1994);
  const election=shard.elections.find(e=>e.office==='township');
  assert.equal(election.coverage,'partial');
