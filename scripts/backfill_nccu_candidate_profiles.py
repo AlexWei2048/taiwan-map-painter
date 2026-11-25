@@ -41,6 +41,16 @@ def page_urls(year,cat):
     if cat in ('F','DM'):
         prefix='vote3_d.asp' if cat=='DM' else 'vote3.asp'
         return list(dict.fromkeys(urljoin(top,a.get('href')) for a in d.select('a[href]') if prefix in a.get('href','').lower()))
+    if cat=='EM':
+        indexes=[urljoin(top,a.get('href')) for a in d.select('a[href]') if 'vote413_e.asp' in a.get('href','').lower()]
+        pages=[]
+        for index in indexes:
+            index_doc=fetch(index)
+            cities=[urljoin(index,a.get('href')) for a in index_doc.select('a[href]') if 'vote413.asp' in a.get('href','').lower()]
+            for city in cities:
+                city_doc=fetch(city)
+                pages.extend(urljoin(city,a.get('href')) for a in city_doc.select('a[href]') if 'vote3.asp' in a.get('href','').lower())
+        return list(dict.fromkeys(pages))
     links=[urljoin(top,a.get('href')) for a in d.select('a[href]') if 'vote413.asp' in a.get('href','').lower()]
     if not links: return []
     d=fetch(links[0])
