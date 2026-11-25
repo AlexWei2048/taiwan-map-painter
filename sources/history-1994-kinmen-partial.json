@@ -47,7 +47,9 @@
           532,
           "中國國民黨"
         ]
-      ]
+      ],
+      "seats": 5,
+      "reserved_seats": 1
     },
     {
       "number": 2,
@@ -77,7 +79,9 @@
           451,
           "中國國民黨"
         ]
-      ]
+      ],
+      "seats": 4,
+      "reserved_seats": 1
     },
     {
       "number": 3,
@@ -101,7 +105,9 @@
           552,
           "中國國民黨"
         ]
-      ]
+      ],
+      "seats": 3,
+      "reserved_seats": 0
     },
     {
       "number": 4,
@@ -125,7 +131,9 @@
           397,
           "中國國民黨"
         ]
-      ]
+      ],
+      "seats": 3,
+      "reserved_seats": 0
     },
     {
       "number": 5,
@@ -137,7 +145,9 @@
           1182,
           "中國國民黨"
         ]
-      ]
+      ],
+      "seats": 1,
+      "reserved_seats": 0
     }
   ],
   "winner_detail_source_url": "https://cabkc.kinmen.gov.tw/uploads/files/202304/c035945e-0950-4aa7-aacc-1e2e1d815dc9.pdf",
@@ -185,13 +195,20 @@
       "name": "李錫添"
     }
   ],
-  "reserved_seats": 1,
-  "reserved_seats_source": "https://www.kmcc.gov.tw/8844/8847/8850/11665/?cprint=true",
-  "reserved_seats_note": "金门县议会历史说明明确载明第一届应选16名、妇女保障当选名额1人；仅记录县级合计，未直接取得各选区原始公告。",
+  "reserved_seats": 2,
+  "reserved_seats_source": "https://cabkc.kinmen.gov.tw/uploads/files/202304/ddcac480-e969-4887-89bb-91898049b65e.pdf",
+  "reserved_seats_note": "县志记载福建省选委会于1993年11月8日确定第一、第二选区各设妇女保障名额1席；县议会所载妇女保障当选名额1人是实际保障当选人数，非预设席次。县志当选名单明确标记第2选区杨淑媛为保障当选。",
   "reserved_district": {
     "number": 2,
     "elected_name": "楊淑媛",
     "source_url": "https://cabkc.kinmen.gov.tw/uploads/files/202304/ddcac480-e969-4887-89bb-91898049b65e.pdf",
     "source_page": "卷二 大事志，第336页"
+  },
+  "reserved_elected_count_reported": 1,
+  "reserved_elected_source": "https://www.kmcc.gov.tw/8844/8847/8850/11665/?cprint=true",
+  "reserved_seats_source_page": "卷二 大事志，1993-11-08条",
+  "elected_gender_counts": {
+    "male": 13,
+    "female": 3
   }
 }

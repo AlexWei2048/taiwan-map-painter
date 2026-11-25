@@ -70,7 +70,10 @@ test('Historical county mayors and councils use five shared election cycles with
    assert.equal(partial.registered_voters,27458);
    assert.equal(partial.ballots_cast,22227);
    assert.equal(partial.valid_votes,null);
-   assert.deepEqual([partial.reserved_seats,partial.reserved_district.number,partial.reserved_district.elected_name],[1,2,'楊淑媛']);
+   assert.deepEqual([partial.reserved_seats,partial.reserved_district.number,partial.reserved_district.elected_name],[2,2,'楊淑媛']);
+   assert.equal(partial.reserved_elected_count_reported,1);
+   assert.deepEqual(partial.districts.map(d=>[d.seats,d.reserved_seats]),[[5,1],[4,1],[3,0],[3,0],[1,0]]);
+   assert.deepEqual(partial.elected_gender_counts,{male:13,female:3});
    assert.equal(archive.some(c=>c.county_name==='金门县'),false);
    assert.equal(archive.reduce((sum,c)=>sum+contestants(council,c).length,0),1807);
    assert.equal(archive.reduce((sum,c)=>sum+c.seats,0),867);
