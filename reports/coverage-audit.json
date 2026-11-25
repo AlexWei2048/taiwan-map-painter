@@ -1,39 +1,39 @@
 {
   "schemaVersion": 1,
   "total_preset_parties": 49,
-  "total_current_logo_ids": 44,
+  "total_current_logo_ids": 48,
   "original_logo_ids": 30,
-  "sourced_preset_logo_ids": 14,
-  "sourced_historical_logo_names": 39,
-  "total_party_names_in_archives": 147,
+  "sourced_preset_logo_ids": 17,
+  "sourced_historical_logo_names": 54,
+  "total_party_names_in_archives": 156,
   "top_archive_parties": [
     {
       "name": "中国国民党",
-      "rows": 48561,
+      "rows": 49186,
       "id": "blue",
       "has_logo": true
     },
     {
       "name": "无党籍",
-      "rows": 41308,
+      "rows": 42178,
       "id": "gray",
       "has_logo": true
     },
     {
       "name": "民主进步党",
-      "rows": 29833,
+      "rows": 30289,
       "id": "green",
       "has_logo": true
     },
     {
       "name": "亲民党",
-      "rows": 10470,
+      "rows": 10481,
       "id": "pfp",
       "has_logo": true
     },
     {
       "name": "新党",
-      "rows": 6481,
+      "rows": 6484,
       "id": "np",
       "has_logo": true
     },
@@ -57,7 +57,7 @@
     },
     {
       "name": "台湾民众党",
-      "rows": 2242,
+      "rows": 2310,
       "id": "aqua",
       "has_logo": true
     },
@@ -75,7 +75,7 @@
     },
     {
       "name": "时代力量",
-      "rows": 1588,
+      "rows": 1599,
       "id": "npp",
       "has_logo": true
     },
@@ -135,7 +135,7 @@
     },
     {
       "name": "台湾基进",
-      "rows": 975,
+      "rows": 980,
       "id": "tsp",
       "has_logo": true
     },
@@ -188,15 +188,15 @@
       "has_logo": false
     },
     {
-      "name": "台湾独立党",
-      "rows": 836,
-      "id": "tip",
+      "name": "司法改革党",
+      "rows": 841,
+      "id": "jrp",
       "has_logo": true
     },
     {
-      "name": "司法改革党",
+      "name": "台湾独立党",
       "rows": 836,
-      "id": "jrp",
+      "id": "tip",
       "has_logo": true
     },
     {
@@ -213,13 +213,13 @@
     },
     {
       "name": "劳动党",
-      "rows": 542,
+      "rows": 552,
       "id": "lpt",
       "has_logo": true
     },
     {
       "name": "小民参政欧巴桑联盟",
-      "rows": 522,
+      "rows": 529,
       "id": "topep",
       "has_logo": true
     },
@@ -251,7 +251,7 @@
       "name": "制度救世岛",
       "rows": 485,
       "id": "iisw",
-      "has_logo": false
+      "has_logo": true
     },
     {
       "name": "宗教联盟",
@@ -269,7 +269,7 @@
       "name": "红党",
       "rows": 467,
       "id": null,
-      "has_logo": false
+      "has_logo": true
     },
     {
       "name": "第三社会党",
@@ -305,7 +305,7 @@
       "name": "台湾双语无法党",
       "rows": 452,
       "id": null,
-      "has_logo": false
+      "has_logo": true
     },
     {
       "name": "台湾国民会议",
@@ -314,38 +314,38 @@
       "has_logo": false
     },
     {
+      "name": "台湾绿党",
+      "rows": 404,
+      "id": "gpt",
+      "has_logo": true
+    },
+    {
       "name": "中国生产党",
       "rows": 401,
       "id": null,
-      "has_logo": false
-    },
-    {
-      "name": "台湾绿党",
-      "rows": 401,
-      "id": "gpt",
       "has_logo": true
     },
     {
       "name": "台湾第一民族党",
       "rows": 397,
       "id": "tfnp",
-      "has_logo": false
+      "has_logo": true
     },
     {
       "name": "新国家连线",
       "rows": 371,
       "id": null,
-      "has_logo": false
+      "has_logo": true
     },
     {
       "name": "中华社会民主党",
       "rows": 85,
       "id": "csdp",
-      "has_logo": false
+      "has_logo": true
     },
     {
       "name": "台湾工党",
-      "rows": 83,
+      "rows": 84,
       "id": null,
       "has_logo": true
     },
@@ -506,6 +506,24 @@
       "has_logo": true
     },
     {
+      "name": "司法正义党",
+      "rows": 14,
+      "id": null,
+      "has_logo": true
+    },
+    {
+      "name": "社会民主党",
+      "rows": 14,
+      "id": "sdp",
+      "has_logo": true
+    },
+    {
+      "name": "政党资料缺失",
+      "rows": 14,
+      "id": null,
+      "has_logo": false
+    },
+    {
       "name": "教科文预算保障e联盟",
       "rows": 14,
       "id": null,
@@ -524,18 +542,6 @@
       "has_logo": false
     },
     {
-      "name": "司法正义党",
-      "rows": 13,
-      "id": null,
-      "has_logo": true
-    },
-    {
-      "name": "社会民主党",
-      "rows": 13,
-      "id": "sdp",
-      "has_logo": true
-    },
-    {
       "name": "三等国民公义人权自救党",
       "rows": 13,
       "id": null,
@@ -551,13 +557,19 @@
       "name": "基进党",
       "rows": 12,
       "id": null,
-      "has_logo": false
+      "has_logo": true
     },
     {
       "name": "人民民主党",
       "rows": 11,
       "id": "tpdp",
-      "has_logo": false
+      "has_logo": true
+    },
+    {
+      "name": "台湾麻将最大党",
+      "rows": 11,
+      "id": null,
+      "has_logo": true
     },
     {
       "name": "中华爱国同心党",
@@ -579,12 +591,6 @@
     },
     {
       "name": "中华文化共和党",
-      "rows": 10,
-      "id": null,
-      "has_logo": false
-    },
-    {
-      "name": "台湾麻将最大党",
       "rows": 10,
       "id": null,
       "has_logo": false
@@ -626,6 +632,12 @@
       "has_logo": true
     },
     {
+      "name": "左翼联盟",
+      "rows": 7,
+      "id": null,
+      "has_logo": true
+    },
+    {
       "name": "中国忠义党",
       "rows": 6,
       "id": null,
@@ -644,15 +656,15 @@
       "has_logo": false
     },
     {
-      "name": "左翼联盟",
+      "name": "台湾君民党",
       "rows": 6,
       "id": null,
       "has_logo": true
     },
     {
-      "name": "台湾君民党",
+      "name": "台联党",
       "rows": 6,
-      "id": null,
+      "id": "tsu",
       "has_logo": true
     },
     {
@@ -701,7 +713,13 @@
       "name": "中华民国机车党",
       "rows": 5,
       "id": null,
-      "has_logo": false
+      "has_logo": true
+    },
+    {
+      "name": "天宙和平统一家庭党",
+      "rows": 5,
+      "id": null,
+      "has_logo": true
     },
     {
       "name": "言论自由联盟",
@@ -740,12 +758,6 @@
       "has_logo": true
     },
     {
-      "name": "天宙和平统一家庭党",
-      "rows": 4,
-      "id": null,
-      "has_logo": false
-    },
-    {
       "name": "中华文化复兴在理党",
       "rows": 4,
       "id": null,
@@ -770,6 +782,12 @@
       "has_logo": true
     },
     {
+      "name": "正神名党",
+      "rows": 4,
+      "id": "zsmp",
+      "has_logo": true
+    },
+    {
       "name": "中华民族致公党",
       "rows": 3,
       "id": null,
@@ -782,22 +800,22 @@
       "has_logo": true
     },
     {
-      "name": "正神名党",
-      "rows": 3,
-      "id": "zsmp",
-      "has_logo": true
-    },
-    {
       "name": "台湾建国联盟",
       "rows": 2,
       "id": null,
-      "has_logo": false
+      "has_logo": true
     },
     {
       "name": "青年阳光党",
       "rows": 2,
       "id": null,
-      "has_logo": false
+      "has_logo": true
+    },
+    {
+      "name": "台湾SoR无法党",
+      "rows": 2,
+      "id": null,
+      "has_logo": true
     },
     {
       "name": "中国妇女党",
@@ -888,38 +906,45 @@
       "rows": 1,
       "id": null,
       "has_logo": false
+    },
+    {
+      "name": "三势团结促进联盟",
+      "rows": 1,
+      "id": null,
+      "has_logo": true
+    },
+    {
+      "name": "永久和平自然法",
+      "rows": 1,
+      "id": null,
+      "has_logo": true
+    },
+    {
+      "name": "爱民党",
+      "rows": 1,
+      "id": null,
+      "has_logo": true
+    },
+    {
+      "name": "台湾进步党",
+      "rows": 1,
+      "id": null,
+      "has_logo": true
+    },
+    {
+      "name": "更生党",
+      "rows": 1,
+      "id": null,
+      "has_logo": true
+    },
+    {
+      "name": "嘉意公益党",
+      "rows": 1,
+      "id": null,
+      "has_logo": false
     }
   ],
-  "missing_preset_logos": [
-    {
-      "id": "tpdp",
-      "name": "人民民主党",
-      "aliases": [
-        "TPDP"
-      ]
-    },
-    {
-      "id": "csdp",
-      "name": "中华社会民主党",
-      "aliases": [
-        "CSDP"
-      ]
-    },
-    {
-      "id": "tfnp",
-      "name": "台湾第一民族党",
-      "aliases": [
-        "TFNP"
-      ]
-    },
-    {
-      "id": "iisw",
-      "name": "制度救世岛",
-      "aliases": [
-        "IISW"
-      ]
-    }
-  ],
+  "missing_preset_logos": [],
   "missing_archive_logos": [
     {
       "name": "中国台湾原住民党",
@@ -1000,42 +1025,6 @@
       ]
     },
     {
-      "name": "制度救世岛",
-      "rows": 485,
-      "total_votes_across_grains": 104035,
-      "known_preset": "iisw",
-      "sources": [
-        "history-legislative-2024.json"
-      ],
-      "spellings": [
-        "制度救世岛"
-      ]
-    },
-    {
-      "name": "红党",
-      "rows": 467,
-      "total_votes_across_grains": 259030,
-      "known_preset": null,
-      "sources": [
-        "history-legislative-2008.json"
-      ],
-      "spellings": [
-        "红党"
-      ]
-    },
-    {
-      "name": "台湾双语无法党",
-      "rows": 452,
-      "total_votes_across_grains": 358304,
-      "known_preset": null,
-      "sources": [
-        "history-legislative-2024.json"
-      ],
-      "spellings": [
-        "台湾双语无法党"
-      ]
-    },
-    {
       "name": "台湾国民会议",
       "rows": 439,
       "total_votes_across_grains": 435844,
@@ -1045,57 +1034,6 @@
       ],
       "spellings": [
         "台湾国民会议"
-      ]
-    },
-    {
-      "name": "中国生产党",
-      "rows": 401,
-      "total_votes_across_grains": 2720,
-      "known_preset": null,
-      "sources": [
-        "history-legislative-2016.json",
-        "history-legislative-2020.json"
-      ],
-      "spellings": [
-        "中国生产党"
-      ]
-    },
-    {
-      "name": "台湾第一民族党",
-      "rows": 397,
-      "total_votes_across_grains": 5473,
-      "known_preset": "tfnp",
-      "sources": [
-        "history-legislative-2016.json",
-        "history-local-2014.json"
-      ],
-      "spellings": [
-        "台湾第一民族党"
-      ]
-    },
-    {
-      "name": "新国家连线",
-      "rows": 371,
-      "total_votes_across_grains": 1132064,
-      "known_preset": null,
-      "sources": [
-        "history-legislative-1998.json",
-        "history-local-1998.json"
-      ],
-      "spellings": [
-        "新国家连线"
-      ]
-    },
-    {
-      "name": "中华社会民主党",
-      "rows": 85,
-      "total_votes_across_grains": 631065,
-      "known_preset": "csdp",
-      "sources": [
-        "history-legislative-1992.json"
-      ],
-      "spellings": [
-        "中华社会民主党"
       ]
     },
     {
@@ -1277,6 +1215,18 @@
       ]
     },
     {
+      "name": "政党资料缺失",
+      "rows": 14,
+      "total_votes_across_grains": 58561,
+      "known_preset": null,
+      "sources": [
+        "history-local-1994.json"
+      ],
+      "spellings": [
+        "政党资料缺失"
+      ]
+    },
+    {
       "name": "教科文预算保障e联盟",
       "rows": 14,
       "total_votes_across_grains": 1612,
@@ -1317,32 +1267,6 @@
       ]
     },
     {
-      "name": "基进党",
-      "rows": 12,
-      "total_votes_across_grains": 69440,
-      "known_preset": null,
-      "sources": [
-        "history-local-2018.json"
-      ],
-      "spellings": [
-        "基进党"
-      ]
-    },
-    {
-      "name": "人民民主党",
-      "rows": 11,
-      "total_votes_across_grains": 12186,
-      "known_preset": "tpdp",
-      "sources": [
-        "history-legislative-2020.json",
-        "history-legislative-2024.json",
-        "history-local-2018.json"
-      ],
-      "spellings": [
-        "人民民主党"
-      ]
-    },
-    {
       "name": "兴中同盟会",
       "rows": 10,
       "total_votes_across_grains": 1164,
@@ -1365,18 +1289,6 @@
       ],
       "spellings": [
         "中华文化共和党"
-      ]
-    },
-    {
-      "name": "台湾麻将最大党",
-      "rows": 10,
-      "total_votes_across_grains": 31356,
-      "known_preset": null,
-      "sources": [
-        "history-legislative-2024.json"
-      ],
-      "spellings": [
-        "台湾麻将最大党"
       ]
     },
     {
@@ -1465,18 +1377,6 @@
       ]
     },
     {
-      "name": "中华民国机车党",
-      "rows": 5,
-      "total_votes_across_grains": 12160,
-      "known_preset": null,
-      "sources": [
-        "history-legislative-2016.json"
-      ],
-      "spellings": [
-        "中华民国机车党"
-      ]
-    },
-    {
       "name": "言论自由联盟",
       "rows": 5,
       "total_votes_across_grains": 1160,
@@ -1486,18 +1386,6 @@
       ],
       "spellings": [
         "言论自由联盟"
-      ]
-    },
-    {
-      "name": "天宙和平统一家庭党",
-      "rows": 4,
-      "total_votes_across_grains": 2296,
-      "known_preset": null,
-      "sources": [
-        "history-legislative-2020.json"
-      ],
-      "spellings": [
-        "天宙和平统一家庭党"
       ]
     },
     {
@@ -1522,30 +1410,6 @@
       ],
       "spellings": [
         "中华民族致公党"
-      ]
-    },
-    {
-      "name": "台湾建国联盟",
-      "rows": 2,
-      "total_votes_across_grains": 6915,
-      "known_preset": null,
-      "sources": [
-        "history-local-2006.json"
-      ],
-      "spellings": [
-        "台湾建国联盟"
-      ]
-    },
-    {
-      "name": "青年阳光党",
-      "rows": 2,
-      "total_votes_across_grains": 4308,
-      "known_preset": null,
-      "sources": [
-        "history-local-2018.json"
-      ],
-      "spellings": [
-        "青年阳光党"
       ]
     },
     {
@@ -1726,6 +1590,18 @@
       ],
       "spellings": [
         "新华劳动党"
+      ]
+    },
+    {
+      "name": "嘉意公益党",
+      "rows": 1,
+      "total_votes_across_grains": 0,
+      "known_preset": null,
+      "sources": [
+        "election-2026-candidates"
+      ],
+      "spellings": [
+        "嘉意公益党"
       ]
     }
   ],
@@ -1944,7 +1820,7 @@
       "regional": {
         "national": true,
         "county": 22,
-        "town": 0,
+        "town": 368,
         "district": 73
       },
       "plains": {
@@ -1970,7 +1846,7 @@
       "regional": {
         "national": true,
         "county": 22,
-        "town": 0,
+        "town": 368,
         "district": 73
       },
       "plains": {
@@ -2025,6 +1901,7 @@
     "history-local-2014.json",
     "history-local-2018.json",
     "history-2022.json",
-    "history-2022-candidacies"
+    "history-2022-candidacies",
+    "election-2026-candidates"
   ]
 }
