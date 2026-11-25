@@ -807,6 +807,41 @@ def reconcile_2002_taipei_plains(snapshot):
     return {'contest_id': proof['contestId'], 'townships': len(rows), 'totals': totals, 'sources': proof['sources']}
 
 
+def reconcile_1994_municipal_council_incumbents(snapshot, audit):
+    """Apply verified roster-based prior-term positives without modifying votes or winners."""
+    proof = json.loads((ROOT / 'sources/history-1994-municipal-incumbency.json').read_text(encoding='utf-8'))
+    if proof['year'] != 1994 or len(proof['updates']) != 34:
+        raise ValueError('1994 municipal incumbency source has changed')
+    members = {c['candidacy_id']: c for c in snapshot['candidacies']}
+    sources = {row['county']: row for row in proof['sources']}
+    seen = set()
+    for item in proof['updates']:
+        key = item['candidacy_id']
+        if key in seen or key not in members:
+            raise ValueError(f'Unknown or duplicated 1994 municipal candidate {key}')
+        seen.add(key)
+        c = members[key]
+        source = sources[item['county']]
+        if (c['candidate_name_official'] != item['name_official'] or c['votes'] != item['votes']
+                or c['ballot_number'] != item['ballot_number'] or c['contest_id'].split(':')[1] != item['county']
+                or item['name_official'] not in source['roster_names'] or item['source_url'] != source['url']):
+            raise ValueError(f'1994 council previous-term source mismatch: {key}')
+        if c.get('incumbent_at_election') not in (False, True):
+            raise ValueError(f'Unknown incumbent state for {key}')
+        c['incumbent_at_election'] = True
+        c['incumbent_source'] = item['source_url']
+        c['incumbent_source_method'] = item['method']
+        c['incumbent_source_confidence'] = 'prior_term_membership_inferred'
+        district = c['contest_id'].split(':')[3]
+        rows = [r for r in snapshot['rows'] if r['type'] == 'council' and r['county'] == item['county']
+                and r['district'] == district and r['number'] == c['ballot_number'] and r['name'] == c['candidate_name']]
+        if len(rows) != 1 or rows[0]['votes'] != c['votes']:
+            raise ValueError(f'1994 municipal council row mismatch: {key}')
+        rows[0]['incumbent'] = True
+    audit['municipalCouncilPriorTermBackfill'] = {'records': len(seen), 'method': 'affirmative_prior_term_roster_match',
+        'sources': [x['url'] for x in proof['sources']]}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('cec_zip', type=Path)
@@ -834,6 +869,7 @@ def main():
     snapshots, audit = build(contests, tv_index(args.taiwan_votes_csv), nccu)
     if 1994 in snapshots:
         add_1994_township(snapshots[1994], audit[1994])
+        reconcile_1994_municipal_council_incumbents(snapshots[1994], audit[1994])
     if 2018 in snapshots:
         add_taipei_mayor_tallies(snapshots[2018], audit[2018])
     if 2002 in snapshots:
