@@ -1,0 +1,38 @@
+name: NCCU archive link discovery
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/nccu-discovery.yml']
+  workflow_dispatch:
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Inspect National Chengchi University public election archive
+        shell: bash
+        run: |
+          python - <<'PY'
+          import urllib.request, re, html
+          from html.parser import HTMLParser
+          urls = [
+            'https://vote.nccu.edu.tw/cec/ceclist.asp?t=H',
+            'https://vote.nccu.edu.tw/cec/ceclist.asp?t=G',
+            'https://vote.nccu.edu.tw/cec/ceclist.asp',
+            'https://vote.nccu.edu.tw/cec/cechead.asp',
+          ]
+          for url in urls:
+            print('\n===', url, flush=True)
+            try:
+              req = urllib.request.Request(url, headers={'User-Agent':'Mozilla/5.0 (data verification; public archival research)'})
+              with urllib.request.urlopen(req, timeout=25) as f:
+                content=f.read(120000)
+                print('STATUS',f.status,'TYPE',f.headers.get('content-type'),'BYTES',len(content))
+              try: body=content.decode('big5')
+              except UnicodeDecodeError: body=content.decode('utf-8',errors='replace')
+              print('HTML_HEAD',body[:3500].replace('\n',' ')[:3500])
+              print('PDF_HREFS',re.findall(r'(?:href|src)\\s*=\\s*[\"\']([^\"\']+)',body,re.I)[:90])
+              print('PDF_REFERENCES',re.findall(r'[A-Za-z]20\\d{2}0\\d{2}\\.pdf|[A-Za-z]19\\d{2}0\\d{2}\\.pdf',body,re.I)[:40])
+              print('ONCLICK',re.findall(r'onclick\\s*=\\s*[\"\']([^\"\']+)',body,re.I)[:30])
+            except Exception as e: print('ERROR',repr(e),flush=True)
+          PY
