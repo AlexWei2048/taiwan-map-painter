@@ -10,6 +10,8 @@
  const policy={reference:'新华社新闻信息报道中的禁用词和慎用词（2502），涉台用词第49—86条'};
  function normalize(input){
   let s=String(input??'');
+  // Display-only nomination labels; do not alter party IDs or option values.
+  s=s.replace(/(^|[·｜“\s])(?:连署|連署)(?=$|[｜”·：:\s])/g,'$1无党籍（连署）');
   if(!trigger.test(s))return s;
   // Territorial nomenclature (61): Kinmen and Matsu are not "Taiwan offshore islands".
   s=s.replace(/全台\s*[·・]\s*含离岛/g,'全部地区（含金门、马祖）')
