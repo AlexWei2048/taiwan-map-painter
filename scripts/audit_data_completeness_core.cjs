@@ -45,7 +45,7 @@ function extra(archive,kinmen,availability){
  const issues=[],add=(year,office,county,district,status,fields,source,note="",level="county")=>issues.push({year,office,electorate:"",level,county,district,id:"",name:"",status,fields,source,note});
  const full=new Set(["臺北縣","高雄縣","新竹縣","連江縣","宜蘭縣"]);
  for(const county of ["臺北縣","宜蘭縣","桃園縣","新竹縣","苗栗縣","臺中縣","彰化縣","南投縣","雲林縣","嘉義縣","臺南縣","高雄縣","屏東縣","臺東縣","花蓮縣","澎湖縣","金門縣","連江縣"])if(!full.has(county))add(1994,"township",county,"","partial","candidate_results","sources/history-1994-township.json",`${archive.counties.filter(c=>c.county===county).reduce((a,c)=>a+c.contest_count,0)}区已有结果；待查当届完整行政区名录`);
- add(1994,"council","金門縣","","partial","candidate_results;turnout;reserved_seats","sources/history-1994-kinmen-partial.json",`${kinmen.candidate_count}参选；${kinmen.elected_count}当选；其他候选人部分资料${kinmen.other_candidates.length}人`);
+ add(1994,"council","金門縣","","partial",["candidate_results","turnout",...(Number.isInteger(kinmen.reserved_seats)?[]:["reserved_seats"])].join(";"),"sources/history-1994-kinmen-partial.json",`${kinmen.candidate_count}参选；${kinmen.elected_count}当选；其他候选人部分资料${kinmen.other_candidates.length}人`);
  add(2018,"mayor","台北市","","partial","recount_town_candidate_votes","sources/history-2018-taipei-mayor-original.json","全市重计结果已收录，分区候选人得票为投票日版本");
  add(1992,"legislative","","","conflict","national_vs_local_votes","assets/history-legislative-1992-local.json","山地少数民族票差2票；华加志","national");
  add(1992,"legislative","","","missing","regional_town_returns","assets/history-legislative-1992.json","区域民代乡镇明细待查","year");
