@@ -2433,10 +2433,10 @@
         {
           "town": "羅東鎮",
           "profile": [
-            null,
-            null,
+            41426,
+            27905,
             27289,
-            null
+            616
           ],
           "candidates": [
             [
@@ -2455,7 +2455,9 @@
               13218,
               false
             ]
-          ]
+          ],
+          "profile_url": "https://www.lotong.gov.tw/TW/%E7%BE%85%E6%9D%B1%E9%8E%AE%E5%BF%97/04_%E7%AC%AC%E5%9B%9B%E7%AF%87%E6%94%BF%E4%BA%8B%E7%AF%87.pdf",
+          "profile_locator": "《羅東鎮志》政事篇，頁179，第12屆"
         },
         {
           "town": "蘇澳鎮",
@@ -2803,7 +2805,14 @@
           "votes": 25
         }
       ],
-      "source_sha256": "e98c5c1fff9cfca4352b4a32cb6d1a82ade588efd512b092f564b6a8a0dbe909"
+      "source_sha256": "e98c5c1fff9cfca4352b4a32cb6d1a82ade588efd512b092f564b6a8a0dbe909",
+      "county_summary": {
+        "candidate_count": 12,
+        "elected_count": 6,
+        "turnout_pct": 80.97,
+        "source_url": "https://ws.kinmen.gov.tw/Download.ashx?icon=..pdf&n=6YeR6ZaA57ij56S%2B5pyD5oyH5qiZ57Wx6KiIKDEwMSkucGRm&u=LzAwMS9VcGxvYWQvMzExL3JlbGZpbGUvMTAwMTAvMzI3NzA4LzFmYmFmZTVmLWVjZjAtNDZiYy04ZTJmLWVhYWYxOWNkY2YxOC5wZGY%3D",
+        "source_locator": "金門縣社會指標統計（民國101年）表34，頁102–103"
+      }
     },
     {
       "county": "花蓮縣",
@@ -3088,6 +3097,137 @@
           "valid_votes": 614539,
           "invalid_votes": 29135
         }
+      ]
+    },
+    {
+      "county": "雲林縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://ws.yunlin.gov.tw/Download.ashx?n=6I6%2F5qGQ6YSJMTA05bm057Wx6KiI5bm05aCxLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNTE0L3JlbGZpbGUvMTY0MzQvMzQyMTM0LzI5ZmQ3MGJiLWY5MzItNDg4Yi1iMDEyLTNjY2FhMTcwOTkxZS5wZGY%3D",
+      "source_locator": "莿桐鄉統計年報（民國104年）表3-6，頁42–43，第12屆",
+      "profile_totals": [
+        20793,
+        16257,
+        15947,
+        310
+      ],
+      "profiles": [
+        {
+          "registered_voters": 20793,
+          "ballots_cast": 16257,
+          "valid_votes": 15947,
+          "invalid_votes": 310,
+          "town": "莿桐鄉",
+          "candidate_count": 3,
+          "winner_name": "陳振恭"
+        }
+      ],
+      "source_sha256": "9dc9c5e8d283f723450f19af0c9836c75b5d5f614793ebd1f597be03aa24af60"
+    },
+    {
+      "county": "雲林縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://ws.yunlin.gov.tw/Download.ashx?icon=..pdf&n=MTA55bm057Wx6KiI5bm05aCxLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNTAzL3JlbGZpbGUvMTM5NTQvMzg3ODkxLzYwOTg0M2Y0LWI3OWMtNDNjMS04MjI3LTMwNGJkZDExZjcwOS5wZGY%3D",
+      "source_locator": "四湖鄉統計年報（民國109年）表3-6，頁42–43，第12屆",
+      "profile_totals": [
+        23307,
+        14907,
+        14467,
+        440
+      ],
+      "profiles": [
+        {
+          "registered_voters": 23307,
+          "ballots_cast": 14907,
+          "valid_votes": 14467,
+          "invalid_votes": 440,
+          "town": "四湖鄉",
+          "candidate_count": 2,
+          "winner_name": "蘇金煌"
+        }
+      ],
+      "source_sha256": "066e33a9eaad9b02da2e7aad98336d19c0c3147bc99cec8885ccb65dac6b6e99"
+    },
+    {
+      "county": "雲林縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://ws.yunlin.gov.tw/Download.ashx?icon=.pdf&n=MTA05bm057Wx6KiI5bm05aCxLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNTA0L3JlbGZpbGUvMTQzNjIvMjk2OTEwLzc2ZDVjODM2LTQ5MmMtNDE2Yy04MWFmLTk2OTI5MDQyYThkMC5wZGY%3D",
+      "source_locator": "斗南鎮統計年報（民國104年）表3-6，頁42–43，第12屆",
+      "profile_totals": [
+        30951,
+        24399,
+        23904,
+        495
+      ],
+      "profiles": [
+        {
+          "registered_voters": 30951,
+          "ballots_cast": 24399,
+          "valid_votes": 23904,
+          "invalid_votes": 495,
+          "town": "斗南鎮",
+          "candidate_count": 3,
+          "winner_name": "簡錦全"
+        }
+      ]
+    },
+    {
+      "county": "雲林縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://www.hsilo.gov.tw/class1/%E7%B5%B1%E8%A8%88%E5%B0%88%E5%8D%80/02_%E9%9B%B2%E6%9E%97%E7%B8%A3%E8%A5%BF%E8%9E%BA%E9%8E%AE%E5%85%AC%E6%89%80%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1/%E9%9B%B2%E6%9E%97%E7%B8%A3%E8%A5%BF%E8%9E%BA%E9%8E%AE111%E5%B9%B4%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1%20%281130918%E4%BF%AE%E6%AD%A3%29.pdf",
+      "source_locator": "西螺鎮統計年報（民國111年）表3-6，頁42–43，第12屆",
+      "profile_totals": [
+        33754,
+        26078,
+        25737,
+        341
+      ],
+      "profiles": [
+        {
+          "registered_voters": 33754,
+          "ballots_cast": 26078,
+          "valid_votes": 25737,
+          "invalid_votes": 341,
+          "town": "西螺鎮",
+          "candidate_count": 3,
+          "winner_name": "林中禮"
+        }
+      ]
+    },
+    {
+      "county": "臺中縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://www.taichung.gov.tw/media/270401/551110255171.pdf",
+      "source_locator": "《清水鎮志》政治篇，頁302",
+      "winners": [
+        {
+          "town": "清水鎮",
+          "name": "吳金生"
+        }
+      ],
+      "source_sha256": "920ce0ae324eecba0f71f457da5f6a4a455e7960edf217c3122b8a0c93855e69"
+    },
+    {
+      "county": "澎湖縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://jestw.nccu.edu.tw/uploads/paper/tw/11-2%E8%94%A1%E6%98%8E%E6%83%A0.pdf",
+      "source_locator": "蔡明惠，《選舉研究》11卷2期（政大選舉研究中心），頁148，表6",
+      "county_party_shares": [
+        [
+          "中國國民黨",
+          64.17
+        ],
+        [
+          "民主進步黨",
+          11.06
+        ],
+        [
+          "新黨／親民黨",
+          0
+        ],
+        [
+          "無黨籍／其他",
+          24.77
+        ]
       ]
     }
   ]

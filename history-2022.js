@@ -909,30 +909,49 @@
   for(const record of records){
    const intro=document.createElement('p');
    if(record.winners){
-    intro.textContent=norm(record.county)+' · '+record.election_date+' 投票 · 当选人得票及当时党籍。其他候选人和选区总票数待核。';
+    intro.textContent=norm(record.county)+' · '+record.election_date+' 投票 · 当选人资料。其他候选人和选区总票数待核。';
+    if(record.county_summary){
+     const stats=record.county_summary;
+     intro.append(' 全县 '+stats.candidate_count+' 人参选、'+stats.elected_count+' 人当选，投票率 '+stats.turnout_pct.toFixed(2)+'%。');
+    }
     const list=document.createElement('ul');
     for(const winner of record.winners){
      const item=document.createElement('li');
-     item.textContent=[norm(winner.town),normCandidate(winner.name),norm(winner.party_membership),winner.votes.toLocaleString('zh-CN')+'票'].join(' · ');
+     const facts=[norm(winner.town),normCandidate(winner.name)];
+     if(winner.party_membership)facts.push(norm(winner.party_membership));
+     if(Number.isFinite(winner.votes))facts.push(winner.votes.toLocaleString('zh-CN')+'票');
+     item.textContent=facts.join(' · ');
+     list.append(item);
+    }
+    details.append(intro,list);
+   }else if(record.county_party_shares){
+    intro.textContent=norm(record.county)+' · '+record.election_date+' 投票 · 全县乡市长选举政党得票率。逐候选人票数待核。';
+    const list=document.createElement('ul');
+    for(const [party,share] of record.county_party_shares){
+     const item=document.createElement('li');
+     item.textContent=norm(party)+' · '+share.toFixed(2)+'%';
      list.append(item);
     }
     details.append(intro,list);
    }else{
     const countywide=record.summary_scope==='county';
     const hasWinners=record.profiles.some(profile=>profile.winner_name);
+    const hasCandidateCounts=record.profiles.some(profile=>Number.isFinite(profile.candidate_count));
     intro.textContent=norm(record.county)+' · '+record.election_date+' 投票 · '+(countywide?'全县投票统计。':'乡镇市投票统计。')+'候选人得票待核。';
     const wrap=document.createElement('div');wrap.className='history-table-wrap';
     const table=document.createElement('table');table.className='history-candidate-table';
     const head=table.createTHead().insertRow();
     const labels=[countywide?'统计范围':'乡镇市','选举人数','投票数','有效票','无效票','投票率'];
+    if(hasCandidateCounts)labels.push('参选人数');
     if(hasWinners)labels.push('当选人');
     for(const label of labels){
      const th=document.createElement('th');th.scope='col';th.textContent=label;head.append(th);
     }
     const body=table.createTBody();
-    for(const {town,registered_voters,ballots_cast,valid_votes,invalid_votes,winner_name} of record.profiles){
+    for(const {town,registered_voters,ballots_cast,valid_votes,invalid_votes,candidate_count,winner_name} of record.profiles){
      const row=body.insertRow();
      const values=[norm(town),registered_voters,ballots_cast,valid_votes,invalid_votes,(100*ballots_cast/registered_voters).toFixed(2)+'%'];
+     if(hasCandidateCounts)values.push(candidate_count??'');
      if(hasWinners)values.push(winner_name?normCandidate(winner_name):'');
      for(const value of values){
       row.insertCell().textContent=typeof value==='number'?value.toLocaleString('zh-CN'):value;
@@ -940,10 +959,14 @@
     }
     wrap.append(table);details.append(intro,wrap);
    }
-   const source=document.createElement('a');
-   source.href=record.source_url;source.target='_blank';source.rel='noopener';
-   source.textContent=norm(record.source_locator)+' ↗';
-   const citation=document.createElement('p');citation.append(source);details.append(citation);
+   const citation=document.createElement('p');
+   for(const evidence of [record,record.county_summary].filter(Boolean)){
+    const source=document.createElement('a');
+    source.href=evidence.source_url;source.target='_blank';source.rel='noopener';
+    source.textContent=norm(evidence.source_locator)+' ↗';
+    citation.append(source,'　');
+   }
+   details.append(citation);
   }
  }
  function syncHistoryControls(){

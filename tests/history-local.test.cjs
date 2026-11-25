@@ -147,9 +147,15 @@ test('The partial 1994 township archive reconciles all 87 contests across seven 
  assert.equal(yilan.length,12);
  assert.equal(yilan.reduce((sum,c)=>sum+c.valid_votes,0),210947);
  assert.equal(yilan.flatMap(c=>contestants(shard,c)).length,25);
+ const luodong=yilan.find(c=>c.district_name==='罗东镇');
+ assert.deepEqual(['registered_voters','ballots_cast','valid_votes','invalid_votes'].map(key=>luodong[key]),
+  [41426,27905,27289,616]);
+ assert.match(luodong.profile_source,/lotong\.gov\.tw/);
  const [kinmen,hualien]=shard.partialTownshipReturns;
  assert.equal(kinmen.county,'金門縣');
  assert.deepEqual(kinmen.winners.map(w=>w.votes),[5116,3135,2857,2018,1152,25]);
+ assert.deepEqual([kinmen.county_summary.candidate_count,kinmen.county_summary.elected_count,
+  kinmen.county_summary.turnout_pct],[12,6,80.97]);
  assert.ok(!shard.contests.some(c=>c.election_id===election.election_id&&c.county_name==='金门县'));
  assert.equal(hualien.profiles.length,13);
  assert.deepEqual(['registered_voters','ballots_cast','valid_votes','invalid_votes']
@@ -157,7 +163,15 @@ test('The partial 1994 township archive reconciles all 87 contests across seven 
  assert.ok(!shard.contests.some(c=>c.election_id===election.election_id&&c.county_name==='花莲县'));
  const extra=shard.partialTownshipReturns.slice(2);
  assert.deepEqual(extra.filter(r=>r.summary_scope==='county').map(r=>r.county),['桃園縣','臺中縣','苗栗縣','彰化縣']);
- assert.deepEqual(extra.flatMap(r=>r.profiles.map(p=>p.winner_name).filter(Boolean)),['邱一郎','李仁生','鍾明祥','蘇青山']);
+ assert.deepEqual(extra.flatMap(r=>(r.profiles||[]).map(p=>p.winner_name).filter(Boolean)),
+  ['邱一郎','李仁生','鍾明祥','蘇青山','陳振恭','蘇金煌','簡錦全','林中禮']);
+ const yunlin=extra.filter(r=>r.county==='雲林縣').slice(1);
+ assert.deepEqual(yunlin.map(r=>[r.profiles[0].town,...r.profile_totals]),[
+  ['莿桐鄉',20793,16257,15947,310],['四湖鄉',23307,14907,14467,440],
+  ['斗南鎮',30951,24399,23904,495],['西螺鎮',33754,26078,25737,341],
+ ]);
+ assert.deepEqual(extra.find(r=>r.winners).winners,[{town:'清水鎮',name:'吳金生'}]);
+ assert.deepEqual(extra.find(r=>r.county==='澎湖縣').county_party_shares.map(([,share])=>share),[64.17,11.06,0,24.77]);
 });
 
 test('Corrections use the corroborated town tally or certified recount at its actual geographic level',()=>{

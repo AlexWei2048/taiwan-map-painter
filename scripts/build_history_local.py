@@ -720,6 +720,14 @@ def add_1994_township(snapshot, audit):
             if (any(not r['registered_voters'] >= r['ballots_cast'] == r['valid_votes'] + r['invalid_votes'] for r in rows)
                     or [sum(r[key] for r in rows) for key in profile_columns] != county['profile_totals']):
                 raise ValueError(f'1994 {county["county"]} partial turnout does not reconcile')
+        if shares := county.get('county_party_shares'):
+            if (any(not 0 <= share <= 100 for _, share in shares)
+                    or round(sum(share for _, share in shares), 2) != 100):
+                raise ValueError(f'1994 {county["county"]} party shares do not reconcile')
+        if summary := county.get('county_summary'):
+            if (not summary['candidate_count'] >= summary['elected_count'] == len(county['winners'])
+                    or not 0 <= summary['turnout_pct'] <= 100):
+                raise ValueError(f'1994 {county["county"]} candidacy or turnout summary does not reconcile')
     snapshot['partialTownshipReturns'] = partial
     audit['townshipArchives'] = {
         name: {key: source[key] for key in ('contest_count', 'candidate_count', 'profile_totals', 'results_url',
