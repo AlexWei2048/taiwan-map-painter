@@ -12301,7 +12301,19 @@
           "",
           false
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "5": {
+          "value": true,
+          "source_url": "https://www.cyscc.gov.tw/CP/19/563/",
+          "source_locator": "嘉義縣議會歷屆正副議長：第十二屆副議長，79年3月至83年2月。",
+          "election_date": "1994-01-29",
+          "method": "official_term_biography_unique_name",
+          "original_name": "蕭登標",
+          "ballot_number": 5,
+          "votes": 7081
+        }
+      }
     },
     {
       "county": "嘉義縣",
@@ -12793,7 +12805,19 @@
           "女",
           true
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "7": {
+          "value": true,
+          "source_url": "https://www.cyscc.gov.tw/Parliamentary_Content/315/14100/",
+          "source_locator": "嘉義縣議會官方履歷：第十二、十三、十六屆縣議員。任期名錄證據。",
+          "election_date": "1994-01-29",
+          "method": "official_term_biography_unique_name",
+          "original_name": "侯清河",
+          "ballot_number": 7,
+          "votes": 8248
+        }
+      }
     },
     {
       "county": "嘉義縣",
@@ -19917,7 +19941,19 @@
           "",
           false
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "3": {
+          "value": true,
+          "source_url": "https://www.kmc.gov.tw/index.php/about-us/psads",
+          "source_locator": "基隆市議會歷屆正副議長：第十二、十三、十四屆議長。",
+          "election_date": "1994-01-29",
+          "method": "official_term_biography_unique_name",
+          "original_name": "許財利",
+          "ballot_number": 3,
+          "votes": 4156
+        }
+      }
     },
     {
       "county": "基隆市",

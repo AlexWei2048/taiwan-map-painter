@@ -47,7 +47,12 @@
               117178,
               true
             ]
-          ]
+          ],
+          "incumbency_at_election": {
+            "name": "吳清池",
+            "source_url": "https://www.ly.gov.tw/Pages/List.aspx?nodeid=1350",
+            "source_locator": "官方民代履歷記載79–87年兩任板橋市長，1994-01-29位於任期內。"
+          }
         },
         {
           "town": "三重市",
@@ -528,7 +533,12 @@
               13966,
               true
             ]
-          ]
+          ],
+          "incumbency_at_election": {
+            "name": "周清龍",
+            "source_url": "https://www.ruifang.ntpc.gov.tw/uploaddowndoc?file=govdata%2F202012301424300.pdf&filedisplay=%E6%94%BF%E4%BA%8B%E7%AF%87.pdf&flag=doc",
+            "source_locator": "《瑞芳鎮誌》政事篇第24頁，十一屆1990-03-01就職，十二屆廖秀雄1994-03-01就職。文字表可讀，截圖未取得。"
+          }
         },
         {
           "town": "蘆洲鄉",
@@ -686,7 +696,12 @@
               8183,
               true
             ]
-          ]
+          ],
+          "incumbency_at_election": {
+            "name": "黃茂松",
+            "source_url": "https://www.linkou.ntpc.gov.tw/home.jsp?id=b7fc60457a0ec35a",
+            "source_locator": "林口區公所歷任首長名冊：1990-03-01至1994-02-28。"
+          }
         },
         {
           "town": "深坑鄉",
