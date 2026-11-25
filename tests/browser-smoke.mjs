@@ -3022,7 +3022,7 @@ test('The earliest local cycle shows dated council returns and preserves actual 
  assert.equal(await page.locator('#historyPartialCouncilReturns tbody tr.history-elected-row').count(),16);
  assert.match(await page.locator('#historyPartialCouncilReturns').textContent(),/22,227/);
  const nonWinners=page.locator('#historyPartialCouncilReturns tbody tr:not(.history-district-divider):not(.history-elected-row)');
- assert.equal(await nonWinners.count(),8);
+ assert.equal(await nonWinners.count(),18);
  assert.deepEqual(await nonWinners.filter({hasText:'陈沧江'}).locator('td').allTextContents(),
   ['第4选举区','','陈沧江','','','中国国民党','371','','']);
  await page.locator('#historyPartialCouncilReturns summary').click();
