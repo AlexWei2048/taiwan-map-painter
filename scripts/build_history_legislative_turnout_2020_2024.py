@@ -225,14 +225,22 @@ def main():
                     "source": "Central Election Commission elbase/elprof via kiang/db.cec.gov.tw",
                     "source_repo": "https://github.com/kiang/db.cec.gov.tw",
                     "ballots": {}, "audit": {}}
+        target = ROOT / f"assets/history-legislative-turnout-{year}.json"
+        existing = json.loads(target.read_text(encoding="utf-8")) if target.is_file() else None
         for ballot in KINDS:
+            # Preserve previously curated non-regional profiles (including
+            # archive corrections and zero-voter entries). This repair only
+            # rebuilds regional legislative turnout on an existing snapshot.
+            if existing is not None and ballot != "regional" and ballot in existing["ballots"]:
+                document["ballots"][ballot] = existing["ballots"][ballot]
+                document["audit"][ballot] = existing.get("audit", {}).get(ballot, {})
+                print(year, ballot, "preserved existing verified profiles", flush=True)
+                continue
             record, audit = verified_profiles(year, ballot)
             document["ballots"][ballot] = record
             document["audit"][ballot] = audit
             print(year, ballot, audit["profile_matches"], flush=True)
-        target = ROOT / f"assets/history-legislative-turnout-{year}.json"
-        if target.is_file():
-            existing = json.loads(target.read_text(encoding="utf-8"))
+        if existing is not None:
             # Do not silently overwrite any previously verified profile.
             for ballot, profiles in existing["ballots"].items():
                 for scope, old_records in profiles.items():
