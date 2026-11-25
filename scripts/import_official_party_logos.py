@@ -262,6 +262,30 @@ for item in supplemental:
   for url in list(item["urls"]):
    if url.startswith("https://upload.wikimedia.org/wikipedia/") and "/thumb/" not in url:
     item["urls"].append(url.replace("https://upload.wikimedia.org/wikipedia/","https://ftpmirror.your.org/pub/wikimedia/images/wikipedia/"))
+# 2020 election archive: party-specific profile and exact linked emblem.
+supplemental.insert(0,{"name":"天宙和平统一家庭党","also":[],
+ "urls":["https://img.ltn.com.tw/Upload/elect/2020/party/39.jpg"],
+ "source_page":"https://election.ltn.com.tw/2020/party/39",
+ "license":"Documented historical party emblem; rights remain with image owner, identification only"})
+# Historical profiles have their own party headings and image links. Validate
+# both before accepting an archive image, rather than guessing image URLs.
+for name,traditional,number in [
+ ("中华文化复兴在理党","中華文化復興在理黨",26),
+ ("言论自由联盟","言論自由聯盟",44),
+ ("圆党","圓黨",38),
+ ("正党","正黨",40),
+ ("兴中同盟会","興中同盟會",43)]:
+ if name in byname:continue
+ page=f"https://election.ltn.com.tw/2020/party/{number}"
+ image=f"https://img.ltn.com.tw/Upload/elect/2020/party/{number}.jpg"
+ try:
+  resp=session.get(page,timeout=18);resp.raise_for_status()
+  soup=BeautifulSoup(resp.text,"html.parser")
+  if not any(traditional in tag.get_text(strip=True) for tag in soup.find_all(["h1","h2","h3","h4","h5","h6"])):continue
+  if not any(image in str(tag) for tag in soup.find_all("img")):continue
+  supplemental.append({"name":name,"also":[],"urls":[image],
+    "source_page":page,"license":"Historical party emblem from matching election profile; rights retained"})
+ except requests.RequestException as err:print("ARCHIVE_PROFILE_UNAVAILABLE",name,str(err),flush=True)
 for item in supplemental:
  name=norm(item["name"]);pid=lookup.get(name)
  if pid in existing or pid in byid or name in byname:continue

@@ -56,3 +56,17 @@ test('Historical incumbency uses the same visible badge as prediction, not a yes
  assert.doesNotMatch(hist,/incumbent(?:_at_election)?===true\?'是'/);
  assert.doesNotMatch(csv,/incumbent(?:_at_election)?===true\?'是'/);
 });
+
+// Audit the current roster against the actual shared logo resolver, not just source URLs.
+test('2026 participating parties including Taiwan Mahjong have installed round-badge sources',()=>{
+ const app=fs.readFileSync(path.join(root,'app.js'),'utf8');
+ const start=app.indexOf('function logoFor(p){'),end=app.indexOf('async function readLogo',start);
+ assert.ok(start>=0&&end>start);
+ const original=vm.runInNewContext(fs.readFileSync(path.join(root,'assets/party-logos.js'),'utf8')+'\nPARTY_LOGOS');
+ const sandbox={PARTY_PRESETS:presets,PARTY_LOGOS:original,SOURCED_PARTY_LOGOS_BY_ID:context.ids,SOURCED_PARTY_LOGOS_BY_NAME:context.names,simplify:s=>s.replaceAll('臺','台').replaceAll('灣','湾').replaceAll('將','将').replaceAll('黨','党'),partyMatch:s=>presets.find(p=>[p.name,...p.aliases].includes(s))};
+ const resolve=vm.runInNewContext(app.slice(start,end)+'\nlogoFor',sandbox);
+ const current=['中国国民党','民主进步党','台湾民众党','时代力量','亲民党','劳动党','小民参政欧巴桑联盟','台联党','司法改革党','台湾基进','新党','台湾绿党','台湾SoR无法党','台湾麻将最大党','司法正义党','台湾工党','社会民主党','左翼联盟','爱民党','正神名党','三势团结促进联盟','永久和平自然法','台湾进步党','更生党'];
+ for(const name of current)assert.match(resolve({id:'prediction-test',name}),/^data:image\//,name);
+ assert.equal(resolve({id:'prediction-mahjong',name:'台灣麻將最大黨'}),context.names['台湾麻将最大党']);
+ assert.match(fs.readFileSync(path.join(root,'style.css'),'utf8'),/\.candidate-party img\{[^}]*border-radius:50%/);
+});
