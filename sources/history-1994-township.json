@@ -3609,7 +3609,14 @@
           "town": "全縣合計"
         }
       ],
-      "summary_scope": "county"
+      "summary_scope": "county",
+      "county_summary": {
+        "candidate_count": 44,
+        "male_candidates": 41,
+        "female_candidates": 3,
+        "candidate_counts_source_url": "https://webws.miaoli.gov.tw/Download.ashx?icon=.pdf&n=MTEy5bm057Wx6KiI5bm05aCxICg3MykucGRm&u=LzAwMS9VcGxvYWQvNDE1L3JlbGZpbGUvOTczMi83ODg4NjUvMWUwOGIxN2ItZGI1My00ZDJkLWE5MDAtODA4YjlhMWNjYzRlLnBkZg%3D%3D",
+        "candidate_counts_source_locator": "112年苗栗縣統計年報表3-11，第12屆，83/1/29：候選44人（男41人、女3人）"
+      }
     },
     {
       "county": "彰化縣",

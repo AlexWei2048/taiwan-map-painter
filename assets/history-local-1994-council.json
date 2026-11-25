@@ -333,15 +333,15 @@
       "complete": false,
       "roster": 43,
       "confirmed_true": 32,
-      "confirmed_false": 0,
+      "confirmed_false": 56,
       "ambiguous": [
         "張惠鵬"
       ],
-      "unverified": 57,
+      "unverified": 1,
       "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
       "secondary_source": null,
       "departure_names": [],
-      "method": "Same county and exact unique official name. Term roster evidence; near names and nonmatches from the Taichung City roster remain unknown."
+      "method": "Official complete 1990–1994 43-person roster with exact same-city name matching; 56 unambiguous nonmatches classified false, 張惠鵬 reserved for review. Does not verify uninterrupted tenure on election day."
     },
     {
       "county": "連江縣",
@@ -22647,6 +22647,18 @@
           "basis": "列入同縣市第十二屆議會官方任期名冊",
           "roster_term": "1990–1994"
         },
+        "2": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "張鈞堡",
+          "ballot_number": 2,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
         "3": {
           "value": true,
           "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
@@ -22659,11 +22671,59 @@
           "basis": "列入同縣市第十二屆議會官方任期名冊",
           "roster_term": "1990–1994"
         },
+        "5": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "江正吉",
+          "ballot_number": 5,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
         "6": {
           "value": true,
           "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
           "basis": "列入同縣市第十二屆議會官方任期名冊",
           "roster_term": "1990–1994"
+        },
+        "7": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "洪飛良",
+          "ballot_number": 7,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "8": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "朱武信",
+          "ballot_number": 8,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "9": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "游文得",
+          "ballot_number": 9,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
         },
         "10": {
           "value": true,
@@ -22677,11 +22737,71 @@
           "basis": "列入同縣市第十二屆議會官方任期名冊",
           "roster_term": "1990–1994"
         },
+        "12": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "陳錫秦",
+          "ballot_number": 12,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
         "13": {
           "value": true,
           "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
           "basis": "列入同縣市第十二屆議會官方任期名冊",
           "roster_term": "1990–1994"
+        },
+        "14": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "賴超明",
+          "ballot_number": 14,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "15": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "劉火生",
+          "ballot_number": 15,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "16": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "蕭杰",
+          "ballot_number": 16,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "17": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "陳福連",
+          "ballot_number": 17,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
         },
         "18": {
           "value": true,
@@ -22694,6 +22814,18 @@
           "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
           "basis": "列入同縣市第十二屆議會官方任期名冊",
           "roster_term": "1990–1994"
+        },
+        "20": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "石志剛",
+          "ballot_number": 20,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
         }
       }
     },
@@ -22819,11 +22951,71 @@
         ]
       ],
       "incumbent_sources": {
+        "1": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "黃媛莉",
+          "ballot_number": 1,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
         "2": {
           "value": true,
           "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
           "basis": "列入同縣市第十二屆議會官方任期名冊",
           "roster_term": "1990–1994"
+        },
+        "3": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "廖佩春",
+          "ballot_number": 3,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "4": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "賴信雄",
+          "ballot_number": 4,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "5": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "范榮欽",
+          "ballot_number": 5,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "6": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "陳進郎",
+          "ballot_number": 6,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
         },
         "7": {
           "value": true,
@@ -22837,6 +23029,18 @@
           "basis": "列入同縣市第十二屆議會官方任期名冊",
           "roster_term": "1990–1994"
         },
+        "9": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "涂明榮",
+          "ballot_number": 9,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
         "10": {
           "value": true,
           "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
@@ -22848,6 +23052,30 @@
           "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
           "basis": "列入同縣市第十二屆議會官方任期名冊",
           "roster_term": "1990–1994"
+        },
+        "12": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "黃坤錫",
+          "ballot_number": 12,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "13": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "范玲玲",
+          "ballot_number": 13,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
         }
       }
     },
@@ -22982,11 +23210,59 @@
         ]
       ],
       "incumbent_sources": {
+        "1": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "林天日",
+          "ballot_number": 1,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "2": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "林文彬",
+          "ballot_number": 2,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
         "3": {
           "value": true,
           "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
           "basis": "列入同縣市第十二屆議會官方任期名冊",
           "roster_term": "1990–1994"
+        },
+        "4": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "李中",
+          "ballot_number": 4,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "5": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "陳福文",
+          "ballot_number": 5,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
         },
         "6": {
           "value": true,
@@ -23000,17 +23276,65 @@
           "basis": "列入同縣市第十二屆議會官方任期名冊",
           "roster_term": "1990–1994"
         },
+        "8": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "張茂己",
+          "ballot_number": 8,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
         "9": {
           "value": true,
           "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
           "basis": "列入同縣市第十二屆議會官方任期名冊",
           "roster_term": "1990–1994"
         },
+        "10": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "江克能",
+          "ballot_number": 10,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "11": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "何敏誠",
+          "ballot_number": 11,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
         "12": {
           "value": true,
           "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
           "basis": "列入同縣市第十二屆議會官方任期名冊",
           "roster_term": "1990–1994"
+        },
+        "14": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "魏信雄",
+          "ballot_number": 14,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
         }
       }
     },
@@ -23237,11 +23561,155 @@
           "basis": "列入同縣市第十二屆議會官方任期名冊",
           "roster_term": "1990–1994"
         },
+        "3": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "劉沂淵",
+          "ballot_number": 3,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "4": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "何錦茂",
+          "ballot_number": 4,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "5": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "何文海",
+          "ballot_number": 5,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "6": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "劉介迪",
+          "ballot_number": 6,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "7": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "許華",
+          "ballot_number": 7,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "8": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "陳瑞德",
+          "ballot_number": 8,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "9": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "黃凱南",
+          "ballot_number": 9,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
         "10": {
           "value": true,
           "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
           "basis": "列入同縣市第十二屆議會官方任期名冊",
           "roster_term": "1990–1994"
+        },
+        "11": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "王百輝",
+          "ballot_number": 11,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "12": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "丁振嘉",
+          "ballot_number": 12,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "13": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "陳仁訓",
+          "ballot_number": 13,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "14": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "黃淑芬",
+          "ballot_number": 14,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "15": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "張經魁",
+          "ballot_number": 15,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
         },
         "16": {
           "value": true,
@@ -23255,11 +23723,83 @@
           "basis": "列入同縣市第十二屆議會官方任期名冊",
           "roster_term": "1990–1994"
         },
+        "18": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "張柏勳",
+          "ballot_number": 18,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "19": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "李撫民",
+          "ballot_number": 19,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "20": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "楊正中",
+          "ballot_number": 20,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
         "21": {
           "value": true,
           "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
           "basis": "列入同縣市第十二屆議會官方任期名冊",
           "roster_term": "1990–1994"
+        },
+        "22": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "王名江",
+          "ballot_number": 22,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "23": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "廖茂勳",
+          "ballot_number": 23,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "24": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "何永銓",
+          "ballot_number": 24,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
         }
       }
     },
@@ -23425,6 +23965,18 @@
         ]
       ],
       "incumbent_sources": {
+        "1": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "林弘昇",
+          "ballot_number": 1,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
         "2": {
           "value": true,
           "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
@@ -23436,6 +23988,30 @@
           "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
           "basis": "列入同縣市第十二屆議會官方任期名冊",
           "roster_term": "1990–1994"
+        },
+        "4": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "陳清景",
+          "ballot_number": 4,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "5": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "葉偉濬",
+          "ballot_number": 5,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
         },
         "6": {
           "value": true,
@@ -23449,11 +24025,71 @@
           "basis": "列入同縣市第十二屆議會官方任期名冊",
           "roster_term": "1990–1994"
         },
+        "8": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "詹朝郎",
+          "ballot_number": 8,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "9": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "謝明源",
+          "ballot_number": 9,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "10": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "賴注醒",
+          "ballot_number": 10,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "11": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "陳薰珠",
+          "ballot_number": 11,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
         "12": {
           "value": true,
           "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
           "basis": "列入同縣市第十二屆議會官方任期名冊",
           "roster_term": "1990–1994"
+        },
+        "13": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "賴滄浪",
+          "ballot_number": 13,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
         },
         "14": {
           "value": true,
@@ -23466,6 +24102,42 @@
           "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
           "basis": "列入同縣市第十二屆議會官方任期名冊",
           "roster_term": "1990–1994"
+        },
+        "16": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "林哲雄",
+          "ballot_number": 16,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "17": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "詹德順",
+          "ballot_number": 17,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
+        },
+        "18": {
+          "value": false,
+          "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&uno=&zno=161",
+          "basis": "原臺中市議會第十二屆官方完整名冊未列此候選人；按同市姓名精確比對確認非前屆議員",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "method": "official_complete_prior_term_roster_nonmatch",
+          "roster_name": null,
+          "original_name": "連素敏",
+          "ballot_number": 18,
+          "evidence_note": "保留近似姓名「張惠鵬」待核；任期名冊不能證明投票日逐人任免"
         }
       }
     },
