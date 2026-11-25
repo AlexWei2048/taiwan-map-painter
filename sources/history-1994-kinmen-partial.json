@@ -187,5 +187,11 @@
   ],
   "reserved_seats": 1,
   "reserved_seats_source": "https://www.kmcc.gov.tw/8844/8847/8850/11665/?cprint=true",
-  "reserved_seats_note": "金门县议会历史说明明确载明第一届应选16名、妇女保障当选名额1人；仅记录县级合计，未直接取得各选区原始公告。"
+  "reserved_seats_note": "金门县议会历史说明明确载明第一届应选16名、妇女保障当选名额1人；仅记录县级合计，未直接取得各选区原始公告。",
+  "reserved_district": {
+    "number": 2,
+    "elected_name": "楊淑媛",
+    "source_url": "https://cabkc.kinmen.gov.tw/uploads/files/202304/ddcac480-e969-4887-89bb-91898049b65e.pdf",
+    "source_page": "卷二 大事志，第336页"
+  }
 }

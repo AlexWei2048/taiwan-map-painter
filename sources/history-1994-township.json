@@ -2818,6 +2818,45 @@
         }
       ],
       "source_sha256": "fa311560a6bbbe7dbc57de5b5f8cd8d1edacdf3d59d21fc9d14dda47b19dd94a"
+    },
+    {
+      "county": "花蓮縣",
+      "results_url": "https://www.guangfu.gov.tw/cp.aspx?n=1220",
+      "profile_url": "https://document.hccc.gov.tw/records/files/03/4-%E7%B8%A3%E8%AA%8C%E6%94%BF%E4%BA%8B%E7%AF%87.pdf#page=66",
+      "contest_count": 1,
+      "candidate_count": 1,
+      "profile_totals": [
+        12969,
+        7248,
+        6791,
+        457
+      ],
+      "profile_discrepancy": "只收錄一人參選的光復鄉；當選率100%與公所歷任鄉長同時印證。候選人性別由2005年花蓮縣議員公報同名、同任職經歷交叉查證。",
+      "districts": [
+        {
+          "town": "光復鄉",
+          "profile": [
+            12969,
+            7248,
+            6791,
+            457
+          ],
+          "candidates": [
+            [
+              null,
+              "陳文光",
+              null,
+              "男",
+              6791,
+              true
+            ]
+          ],
+          "confirmed_incumbents": [
+            "陳文光"
+          ],
+          "gender_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/094%E5%B9%B4/25%E8%8A%B1%E8%93%AE%E7%B8%A3/%E8%8A%B1%E8%93%AE%E7%B8%A3%E7%AC%AC1-10%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf"
+        }
+      ]
     }
   ],
   "profile_columns": [
@@ -2914,93 +2953,109 @@
           "registered_voters": 68793,
           "ballots_cast": 46777,
           "valid_votes": 44729,
-          "invalid_votes": 2048
+          "invalid_votes": 2048,
+          "candidate_count": 4
         },
         {
           "town": "鳳林鎮",
           "registered_voters": 11179,
           "ballots_cast": 7629,
           "valid_votes": 7447,
-          "invalid_votes": 182
+          "invalid_votes": 182,
+          "candidate_count": 2
         },
         {
           "town": "玉里鎮",
           "registered_voters": 24988,
           "ballots_cast": 14410,
           "valid_votes": 13717,
-          "invalid_votes": 693
+          "invalid_votes": 693,
+          "candidate_count": 2
         },
         {
           "town": "新城鄉",
           "registered_voters": 12893,
           "ballots_cast": 8907,
           "valid_votes": 8725,
-          "invalid_votes": 182
+          "invalid_votes": 182,
+          "candidate_count": 2
         },
         {
           "town": "吉安鄉",
           "registered_voters": 43470,
           "ballots_cast": 27153,
           "valid_votes": 26168,
-          "invalid_votes": 985
+          "invalid_votes": 985,
+          "candidate_count": 3
         },
         {
           "town": "壽豐鄉",
           "registered_voters": 15110,
           "ballots_cast": 9767,
           "valid_votes": 9471,
-          "invalid_votes": 296
+          "invalid_votes": 296,
+          "candidate_count": 2
         },
         {
           "town": "光復鄉",
           "registered_voters": 12969,
           "ballots_cast": 7248,
           "valid_votes": 6791,
-          "invalid_votes": 457
+          "invalid_votes": 457,
+          "candidate_count": 1,
+          "winner_name": "陳文光"
         },
         {
           "town": "豐濱鄉",
           "registered_voters": 5105,
           "ballots_cast": 3067,
           "valid_votes": 3013,
-          "invalid_votes": 54
+          "invalid_votes": 54,
+          "candidate_count": 3
         },
         {
           "town": "瑞穗鄉",
           "registered_voters": 11262,
           "ballots_cast": 6635,
           "valid_votes": 6505,
-          "invalid_votes": 130
+          "invalid_votes": 130,
+          "candidate_count": 3
         },
         {
           "town": "富里鄉",
           "registered_voters": 11087,
           "ballots_cast": 6287,
           "valid_votes": 6158,
-          "invalid_votes": 129
+          "invalid_votes": 129,
+          "candidate_count": 3
         },
         {
           "town": "秀林鄉",
           "registered_voters": 9035,
           "ballots_cast": 6558,
           "valid_votes": 6371,
-          "invalid_votes": 187
+          "invalid_votes": 187,
+          "candidate_count": 4
         },
         {
           "town": "萬榮鄉",
           "registered_voters": 4560,
           "ballots_cast": 2890,
           "valid_votes": 2771,
-          "invalid_votes": 119
+          "invalid_votes": 119,
+          "candidate_count": 2
         },
         {
           "town": "卓溪鄉",
           "registered_voters": 4785,
           "ballots_cast": 2821,
           "valid_votes": 2741,
-          "invalid_votes": 80
+          "invalid_votes": 80,
+          "candidate_count": 3
         }
-      ]
+      ],
+      "profile_candidate_total": 34,
+      "candidate_count_method": "表3-1-2公布的當選率以每區一席反算；13席對全縣34人，38.24%。"
     },
     {
       "county": "臺東縣",

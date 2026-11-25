@@ -70,14 +70,15 @@ test('Historical county mayors and councils use five shared election cycles with
    assert.equal(partial.registered_voters,27458);
    assert.equal(partial.ballots_cast,22227);
    assert.equal(partial.valid_votes,null);
+   assert.deepEqual([partial.reserved_seats,partial.reserved_district.number,partial.reserved_district.elected_name],[1,2,'楊淑媛']);
    assert.equal(archive.some(c=>c.county_name==='金门县'),false);
    assert.equal(archive.reduce((sum,c)=>sum+contestants(council,c).length,0),1807);
    assert.equal(archive.reduce((sum,c)=>sum+c.seats,0),867);
    const sourced=council.candidacies.filter(c=>c.contest_id.startsWith('1994-council-counties:')&&typeof c.incumbent_at_election==='boolean');
-   assert.equal(sourced.length,380);
-   assert.equal(sourced.filter(c=>c.incumbent_at_election).length,155);
+   assert.equal(sourced.length,472);
+   assert.equal(sourced.filter(c=>c.incumbent_at_election).length,209);
    assert.ok(sourced.every(c=>c.incumbent_source?.source_url&&c.incumbent_source.value===c.incumbent_at_election));
-   assert.equal(council.rows.filter(r=>r.type==='council'&&typeof r.incumbent==='boolean'&&sourced.some(c=>c.candidate_name===r.name&&c.ballot_number===String(r.number)&&c.votes===r.votes)).length,380);
+   assert.equal(council.rows.filter(r=>r.type==='council'&&typeof r.incumbent==='boolean'&&sourced.some(c=>c.candidate_name===r.name&&c.ballot_number===String(r.number)&&c.votes===r.votes)).length,472);
    const taipei=councilRows.filter(c=>c.county_name==='台北县');
    assert.equal(taipei.length,12);
    assert.equal(taipei.reduce((sum,c)=>sum+c.valid_votes,0),1217977);
@@ -131,12 +132,12 @@ test('1998 council legal women quotas use the pre-1999 five-seat threshold, with
  assert.equal(contests[0].reserved_seats,null,'original snapshots remain immutable');
 });
 
-test('The partial 1994 township archive reconciles all 88 contests across seven counties',()=>{
+test('The partial 1994 township archive reconciles all 89 contests across eight counties',()=>{
  const shard=data(1994);
  const election=shard.elections.find(e=>e.office==='township');
  assert.equal(election.coverage,'partial');
- assert.deepEqual(election.counties,['台北县','高雄县','新竹县','连江县','台东县','云林县','宜兰县']);
- assert.equal(shard.contests.filter(c=>c.election_id===election.election_id).length,88);
+ assert.deepEqual(election.counties,['台北县','高雄县','新竹县','连江县','台东县','云林县','宜兰县','花莲县']);
+ assert.equal(shard.contests.filter(c=>c.election_id===election.election_id).length,89);
  const geometry=Local.geometry(shard,map,reference,String,Core.mergePaths,Presidential.modernCounty,Presidential.baseTown);
  for(const [county,count,candidates,totals] of [
   ['台北县',29,81,[1989086,1239640,1200839,38801]],
@@ -203,15 +204,22 @@ test('The partial 1994 township archive reconciles all 88 contests across seven 
  assert.equal(hualien.profiles.length,13);
  assert.deepEqual(['registered_voters','ballots_cast','valid_votes','invalid_votes']
   .map(k=>hualien.profiles.reduce((sum,r)=>sum+r[k],0)),[235236,150149,144607,5542]);
- assert.ok(!shard.contests.some(c=>c.election_id===election.election_id&&c.county_name==='花莲县'));
+ assert.equal(hualien.profiles.reduce((n,row)=>n+row.candidate_count,0),34);
+ const guangfu=shard.contests.filter(c=>c.election_id===election.election_id&&c.county_name==='花莲县');
+ assert.deepEqual(guangfu.map(c=>c.district_name),['光复乡']);
+ const [chen]=contestants(shard,guangfu[0]);
+ assert.deepEqual([chen.candidate_name,chen.votes,chen.vote_share,chen.incumbent_at_election,chen.party_name_official],
+  ['陈文光',6791,100,true,null]);
+ assert.ok(geometry.towns.some(t=>t.county==='花莲县'&&t.name==='光复乡'));
  const extra=shard.partialTownshipReturns.slice(2);
- assert.deepEqual(extra.filter(r=>r.summary_scope==='county').map(r=>r.county),['桃園縣','臺中縣','苗栗縣','彰化縣']);
+ assert.deepEqual(extra.filter(r=>r.summary_scope==='county').map(r=>r.county),['桃園縣','臺中縣','苗栗縣','彰化縣','臺南縣']);
  assert.deepEqual(extra.flatMap(r=>(r.profiles||[]).map(p=>p.winner_name).filter(Boolean)),
-  ['邱一郎','李仁生','鍾明祥','蘇青山','陳振恭','蘇金煌','簡錦全','林中禮']);
- const yunlin=extra.filter(r=>r.county==='雲林縣').slice(1);
+  ['邱一郎','李仁生','鍾明祥','蘇青山','陳振恭','蘇金煌','簡錦全','林中禮','許裕欽']);
+ const yunlin=extra.filter(r=>r.county==='雲林縣'&&r.profiles?.length).slice(1);
  assert.deepEqual(yunlin.map(r=>[r.profiles[0].town,...r.profile_totals]),[
   ['莿桐鄉',20793,16257,15947,310],['四湖鄉',23307,14907,14467,440],
   ['斗南鎮',30951,24399,23904,495],['西螺鎮',33754,26078,25737,341],
+  ['水林鄉',25077,18426,18180,246],
  ]);
  assert.deepEqual(extra.find(r=>r.winners).winners,[{town:'清水鎮',name:'吳金生'}]);
  const kouhu=extra.flatMap(r=>r.profiles||[]).find(p=>p.town==='口湖鄉');

@@ -870,6 +870,10 @@
    const otherCandidates=archive.other_candidates||[];
    const intro=document.createElement('p');
    intro.textContent=archive.election_date+' 投票 · '+archive.candidate_count+' 人参选 · '+archive.elected_count+' 人当选 · 选举人数 '+archive.registered_voters.toLocaleString('zh-CN')+' · 投票人数 '+archive.ballots_cast.toLocaleString('zh-CN')+' · 投票率 '+archive.turnout_pct.toFixed(2)+'%。已核实 '+archive.elected_count+' 名当选人及 '+otherCandidates.length+' 名未当选人；另有 '+(archive.candidate_count-archive.elected_count-otherCandidates.length)+' 名参选人待核。号次、选区有效票和推荐政党仍待补。';
+   if(archive.reserved_district){
+    const {number,elected_name}=archive.reserved_district;
+    intro.append(' 全县妇保1席，由第'+number+'选举区的'+normCandidate(elected_name)+'获选。');
+   }
    details.append(intro);
    const wrap=document.createElement('div');wrap.className='history-table-wrap';
    const table=document.createElement('table');table.className='history-candidate-table';
@@ -958,7 +962,8 @@
     const hasWinners=record.profiles.some(profile=>profile.winner_name);
     const hasCandidateCounts=record.profiles.some(profile=>Number.isFinite(profile.candidate_count));
     const hasCandidateNames=record.profiles.some(profile=>profile.candidate_names?.length);
-    intro.textContent=norm(record.county)+' · '+record.election_date+' 投票 · '+(countywide?'全县投票统计。':'乡镇市投票统计。')+'候选人得票待核。';
+    intro.textContent=norm(record.county)+' · '+record.election_date+' 投票 · '+(countywide?'全县投票统计。':'乡镇市投票统计。')+'部分候选人得票待核。';
+    if(record.profile_candidate_total)intro.append(' 全县 '+record.profile_candidate_total+' 人参选。');
     const wrap=document.createElement('div');wrap.className='history-table-wrap';
     const table=document.createElement('table');table.className='history-candidate-table';
     const head=table.createTHead().insertRow();
@@ -984,9 +989,12 @@
    }
    const citation=document.createElement('p');
    for(const evidence of [record,record.county_summary,record.candidate_roster_source].filter(Boolean)){
+    const url=evidence.source_url||evidence.candidate_counts_source_url;
+    const locator=evidence.source_locator||evidence.candidate_counts_source_locator;
+    if(!url||!locator)continue;
     const source=document.createElement('a');
-    source.href=evidence.source_url;source.target='_blank';source.rel='noopener';
-    source.textContent=norm(evidence.source_locator)+' ↗';
+    source.href=url;source.target='_blank';source.rel='noopener';
+    source.textContent=norm(locator)+' ↗';
     citation.append(source,'　');
    }
    details.append(citation);

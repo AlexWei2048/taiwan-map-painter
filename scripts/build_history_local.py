@@ -686,10 +686,13 @@ def add_1994_township(snapshot, audit):
                 'source_url': results_url,
                 'profile_source': item.get('profile_url', county['profile_url']),
             }
+            incumbents = set(item.get('confirmed_incumbents', []))
+            if not incumbents <= {row[1] for row in candidates}:
+                raise ValueError(f'1994 {normalized_county} {item["town"]} incumbent name does not match')
             roster = [
                 {'number': str(number) if number is not None else '', 'name': name,
                  'party': party if party is not None else '政黨資料缺失', 'gender': gender,
-                 'votes': votes, 'mark': '*' if elected else '', 'incumbent': None,
+                 'votes': votes, 'mark': '*' if elected else '', 'incumbent': True if name in incumbents else None,
                  'candidate_mark': '*' if elected else '', 'winner_source': results_url}
                 for number, name, party, gender, votes, elected in candidates
             ]
@@ -721,14 +724,26 @@ def add_1994_township(snapshot, audit):
             if (any(not r['registered_voters'] >= r['ballots_cast'] == r['valid_votes'] + r['invalid_votes'] for r in rows)
                     or [sum(r[key] for r in rows) for key in profile_columns] != county['profile_totals']):
                 raise ValueError(f'1994 {county["county"]} partial turnout does not reconcile')
+        if candidate_total := county.get('profile_candidate_total'):
+            if any(not isinstance(r.get('candidate_count'), int) or r['candidate_count'] < 1 for r in rows):
+                raise ValueError(f'1994 {county["county"]} missing constituency candidate count')
+            if sum(r['candidate_count'] for r in rows) != candidate_total:
+                raise ValueError(f'1994 {county["county"]} candidate counts do not reconcile')
         if shares := county.get('county_party_shares'):
             if (any(not 0 <= share <= 100 for _, share in shares)
                     or round(sum(share for _, share in shares), 2) != 100):
                 raise ValueError(f'1994 {county["county"]} party shares do not reconcile')
         if summary := county.get('county_summary'):
-            if (not summary['candidate_count'] >= summary['elected_count'] == len(county['winners'])
-                    or not summary['registered_voters'] >= summary['ballots_cast'] > 0
-                    or round(100 * summary['ballots_cast'] / summary['registered_voters'], 2) != summary['turnout_pct']):
+            if 'winners' in county:
+                valid_summary = (
+                    summary['candidate_count'] >= summary['elected_count'] == len(county['winners'])
+                    and summary['registered_voters'] >= summary['ballots_cast'] > 0
+                    and round(100 * summary['ballots_cast'] / summary['registered_voters'], 2) == summary['turnout_pct']
+                )
+            else:
+                valid_summary = (summary['male_candidates'] + summary['female_candidates']
+                                 == summary['candidate_count'])
+            if not valid_summary:
                 raise ValueError(f'1994 {county["county"]} candidacy or turnout summary does not reconcile')
     snapshot['partialTownshipReturns'] = partial
     audit['townshipArchives'] = {
