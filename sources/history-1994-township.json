@@ -3334,7 +3334,8 @@
           "valid_votes": 6791,
           "invalid_votes": 457,
           "candidate_count": 1,
-          "winner_name": "陳文光"
+          "winner_name": "陳文光",
+          "previous_election_winner": "陳文光"
         },
         {
           "town": "豐濱鄉",
@@ -3386,7 +3387,21 @@
         }
       ],
       "profile_candidate_total": 34,
-      "candidate_count_method": "表3-1-2公布的當選率以每區一席反算；13席對全縣34人，38.24%。"
+      "candidate_count_method": "表3-1-2公布的當選率以每區一席反算；13席對全縣34人，38.24%。",
+      "winners": [
+        {
+          "town": "光復鄉",
+          "name": "陳文光",
+          "gender": "男",
+          "votes": 6791,
+          "incumbent_at_election": true
+        }
+      ],
+      "corroboration_url": "https://www.guangfu.gov.tw/cp.aspx?n=1220",
+      "winner_detail_source": {
+        "source_url": "https://www.guangfu.gov.tw/cp.aspx?n=1220",
+        "source_locator": "光復鄉公所歷任鄉長，第十一、十二屆；候選人僅1人，個人得票等於原表有效票6791。"
+      }
     },
     {
       "county": "臺東縣",
@@ -3997,6 +4012,81 @@
         {
           "town": "集集鎮",
           "name": "林明溱",
+          "incumbent_at_election": true
+        }
+      ]
+    },
+    {
+      "county": "桃園縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://ws.tycg.gov.tw/Download.ashx?n=OTnlubTluqbomIbnq7nphInntbHoqIjopoHopr0tNC5wZGY%3D&u=LzAwMS9VcGxvYWQvODgvUmVsRmlsZS8xMjY4NC8xMTc5Njk0Lzk55bm05bqm6JiG56u56YSJ57Wx6KiI6KaB6Ka9LTQucGRm",
+      "source_locator": "99年蘆竹鄉統計要覽表4-2，第12屆（公開文字表格；原頁截圖未取得）",
+      "corroboration_url": "https://ws.tycg.gov.tw/Download.ashx?n=Q2gwOC01NDAtNTc3Uy5wZGY%3D&u=LzAwMS9VcGxvYWQvODgvUmVsRmlsZS8xMTQ5MS82NjI1NDAvQ2gwOC01NDAtNTc3Uy5wZGY%3D",
+      "profile_totals": [
+        61718,
+        39776,
+        38308,
+        1468
+      ],
+      "profiles": [
+        {
+          "town": "蘆竹鄉",
+          "registered_voters": 61718,
+          "ballots_cast": 39776,
+          "valid_votes": 38308,
+          "invalid_votes": 1468,
+          "candidate_count": 2,
+          "male_candidates": 2,
+          "female_candidates": 0,
+          "winner_name": "曾文敬",
+          "previous_election_winner": "曾文敬",
+          "turnout_pct": 64.45
+        }
+      ],
+      "winners": [
+        {
+          "town": "蘆竹鄉",
+          "name": "曾文敬",
+          "gender": "男",
+          "incumbent_at_election": true
+        }
+      ]
+    },
+    {
+      "county": "桃園縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://ws.tycg.gov.tw/Download.ashx?n=5Y%2BD44CB6KGM5pS%2F57WE57mU6IiH5Zyw5pa56YG46IiJLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvOTIvUmVsRmlsZS8xMjE0My83MDI2NDAv5Y%2BD44CB6KGM5pS%2F57WE57mU6IiH5Zyw5pa56YG46IiJLnBkZg%3D%3D",
+      "source_locator": "龜山區志歷屆鄉長，第十一、十二屆（公開文字；原頁截圖未取得）",
+      "winners": [
+        {
+          "town": "龜山鄉",
+          "name": "曾忠義",
+          "incumbent_at_election": true
+        }
+      ]
+    },
+    {
+      "county": "桃園縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://ws.tycg.gov.tw/Download.ashx?n=MTA15bm057Wx6KiI5bm05aCxLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNzUvUmVsRmlsZS8xMTg0Ny82ODE1MjUvMTA15bm057Wx6KiI5bm05aCxLnBkZg%3D%3D",
+      "source_locator": "平鎮區105年統計年報頁44，第一、二屆市長（公開文字；原頁截圖未取得）",
+      "winners": [
+        {
+          "town": "平鎮市",
+          "name": "莊玉光",
+          "incumbent_at_election": true
+        }
+      ]
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://files.chcg.gov.tw/files/%E5%9F%A4%E9%A0%AD%E9%84%89%E6%AD%B7%E4%BB%BB%E9%84%89%E9%95%B7_109_1080218.pdf",
+      "source_locator": "埤頭鄉公所歷任鄉長，第十一、十二屆（公開文字；原頁截圖未取得）",
+      "winners": [
+        {
+          "town": "埤頭鄉",
+          "name": "蘇來看",
           "incumbent_at_election": true
         }
       ]
