@@ -5,6 +5,7 @@ Matching requires election year, office, county, exact name, ballot number and
 vote count. Never replace a conflicting certified result without review.
 """
 import argparse,collections,json,re,time,unicodedata
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from urllib.parse import urljoin
 from urllib.request import Request,urlopen
@@ -59,6 +60,10 @@ def extract(url):
     return result
 def key(office,county,name,votes,number):
     return (office,norm(county),norm(name),votes,int(number or 0))
+def safe_extract(url):
+    try:return (extract(url),None)
+    except Exception as exc:return ([],str(exc))
+
 def main():
     arg=argparse.ArgumentParser()
     arg.add_argument('--years',nargs='+',type=int,default=[1998,2002,2005,2009,2014,2018])
@@ -94,10 +99,11 @@ def main():
                 continue
             print(f'NCCU {year} {cat}: {len(urls)} pages',flush=True)
             rec_count=0; match_count=0
-            for url in urls[:opts.limit] if opts.limit else urls:
-                try:records=extract(url)
-                except Exception as e:
-                    problems.append({'year':year,'category':cat,'issue':'page_error','url':url,'error':str(e)})
+            chosen=urls[:opts.limit] if opts.limit else urls
+            with ThreadPoolExecutor(max_workers=4) as pool:
+              for url,(records,err) in zip(chosen,pool.map(safe_extract,chosen)):
+                if err:
+                    problems.append({'year':year,'category':cat,'issue':'page_error','url':url,'error':err})
                     continue
                 totals['pages_checked']+=1
                 for x in records:
