@@ -1,19 +1,19 @@
 # 数据完整性审计
 
-数据基准：`baeb6d8552fc4df09c0164d4629c80e49554da6c`。行数为任务记录数，非缺失候选人总数。
+数据基准：`a4e0f9fe98712edc32f596385c331425e71b02e3`。行数为任务记录数，非缺失候选人总数。
 
 ## 状态
 
 - unverified: 11
 - conflict: 1
-- missing: 1382
+- missing: 1364
 - not_applicable: 5
 - partial: 16
 - not_yet_available: 1
 
 ## 字段
 
-- incumbent_at_election: 1236
+- incumbent_at_election: 1217
 - gender: 173
 - ballots_cast: 102
 - invalid_votes: 102
