@@ -111,3 +111,28 @@ test('1992 NCCU turnout covers 26 reconciled regional constituencies without ove
  assert.deepEqual([result.registeredVoters,result.ballotsCast,result.invalidVotes],[869457,642643,14338]);
 });
 
+
+for (const year of [2004,2008,2012,2016]) {
+ test(`${year} recovered town profiles match candidate votes and county totals`,()=>{
+  const election=read(`history-legislative-${year}.json`);
+  const snapshot=read(`history-legislative-turnout-${year}.json`);
+  let total=0;
+  for(const [electorate,audit] of Object.entries(snapshot.audit)){
+   const profiles=snapshot.ballots[electorate];
+   const groups=[audit.shared_town_reconciliation,audit.cec_raw_town_reconciliation].filter(Boolean);
+   for(const group of groups){
+    const counties=new Set();
+    for(const r of group.records){
+     const expected=r.record||[r.eligible,r.cast,r.valid,r.invalid];
+     assert.deepEqual(profiles.town[r.county][r.town],expected);
+     assert.ok(expected[0]>=expected[1]);
+     assert.equal(expected[1],expected[2]+expected[3]);
+     assert.equal(election.rows.filter(v=>v.level==='town'&&v.electorate===electorate&&v.county===r.county&&v.town===r.town).reduce((n,v)=>n+v.votes,0),expected[2]);
+     counties.add(r.county);total++;
+    }
+    for(const c of counties) assert.deepEqual(Object.values(profiles.town[c]).reduce((a,b)=>a.map((v,i)=>v+b[i]),[0,0,0,0]),profiles.county[c],c);
+   }
+  }
+  assert.equal(total,({2004:11,2008:15,2012:12,2016:12})[year]);
+ });
+}
