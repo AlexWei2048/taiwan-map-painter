@@ -142,6 +142,15 @@ if __name__ == '__main__':
             prior=old.get((item['county'],item['number'],item['electorate']),{})
             candidates={str(c[0]):c for c in item['candidates']}
             previous_candidates={str(c[0]):c for c in prior.get('candidates',[])}
+            for ballot,source in prior.get('gender_sources',{}).items():
+                if ballot not in candidates or candidates[ballot][:3]!=previous_candidates.get(ballot,[])[:3]:
+                    raise ValueError(f'Gender identity changed: {item["county"]} {item["number"]} {ballot}')
+                old_gender=previous_candidates[ballot][4]
+                if candidates[ballot][4] and candidates[ballot][4]!=old_gender:
+                    raise ValueError(f'Gender conflict: {item["county"]} {item["number"]} {ballot}')
+                if old_gender in ('男','女'):
+                    candidates[ballot][4]=old_gender
+                    item.setdefault('gender_sources',{})[ballot]=source
             for ballot,source in prior.get('incumbent_sources',{}).items():
                 if ballot not in candidates or candidates[ballot][:3]!=previous_candidates.get(ballot,[])[:3]:
                     raise ValueError(f'Incumbency identity changed: {item["county"]} {item["number"]} {ballot}')
