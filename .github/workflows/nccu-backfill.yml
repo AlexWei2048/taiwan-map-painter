@@ -1,0 +1,27 @@
+name: NCCU candidate backfill validation
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/backfill_nccu_candidate_profiles.py'
+      - '.github/workflows/nccu-backfill.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install parser dependencies
+        run: python -m pip install -q beautifulsoup4 lxml opencc-python-reimplemented
+      - name: Verify NCCU candidate joins on a cross-election sample
+        run: python scripts/backfill_nccu_candidate_profiles.py --years 1994 1998 2002 2005 2009 2014 2018 --limit 2
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nccu-candidate-reconciliation-sample
+          path: reports/nccu-candidate-reconciliation.json
