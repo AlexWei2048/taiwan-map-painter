@@ -3,149 +3,34 @@
   "source_rows": 27,
   "candidate_contests": 27,
   "unchanged_official_records": [
+    "高雄市第一选区",
+    "高雄市第二选区",
     "台北市第一选区",
     "台北市第二选区",
     "台北县",
     "宜兰县",
     "桃园县",
     "新竹县",
+    "苗栗县",
+    "台中县",
     "彰化县",
+    "南投县",
+    "云林县",
+    "嘉义县",
     "台南县",
+    "屏东县",
+    "台东县",
     "花莲县",
+    "澎湖县",
     "基隆市",
-    "新竹市"
+    "新竹市",
+    "台中市",
+    "嘉义市",
+    "台南市",
+    "金门县",
+    "连江县"
   ],
-  "inserted_constituencies": [
-    {
-      "county": "高雄市",
-      "district": "高雄市第一选区",
-      "registered_voters": 474898,
-      "ballots_cast": 356560,
-      "valid_votes": 350102,
-      "invalid_votes": 6458
-    },
-    {
-      "county": "高雄市",
-      "district": "高雄市第二选区",
-      "registered_voters": 414895,
-      "ballots_cast": 312117,
-      "valid_votes": 306175,
-      "invalid_votes": 5942
-    },
-    {
-      "county": "苗栗县",
-      "district": "苗栗县",
-      "registered_voters": 358914,
-      "ballots_cast": 266790,
-      "valid_votes": 261884,
-      "invalid_votes": 4906
-    },
-    {
-      "county": "台中县",
-      "district": "台中县",
-      "registered_voters": 808954,
-      "ballots_cast": 629778,
-      "valid_votes": 616542,
-      "invalid_votes": 13236
-    },
-    {
-      "county": "南投县",
-      "district": "南投县",
-      "registered_voters": 345373,
-      "ballots_cast": 247094,
-      "valid_votes": 243346,
-      "invalid_votes": 3748
-    },
-    {
-      "county": "云林县",
-      "district": "云林县",
-      "registered_voters": 505231,
-      "ballots_cast": 349283,
-      "valid_votes": 344045,
-      "invalid_votes": 5238
-    },
-    {
-      "county": "嘉义县",
-      "district": "嘉义县",
-      "registered_voters": 380583,
-      "ballots_cast": 282707,
-      "valid_votes": 278353,
-      "invalid_votes": 4354
-    },
-    {
-      "county": "屏东县",
-      "district": "屏东县",
-      "registered_voters": 569262,
-      "ballots_cast": 404763,
-      "valid_votes": 398989,
-      "invalid_votes": 5774
-    },
-    {
-      "county": "台东县",
-      "district": "台东县",
-      "registered_voters": 121513,
-      "ballots_cast": 68703,
-      "valid_votes": 67474,
-      "invalid_votes": 1229
-    },
-    {
-      "county": "澎湖县",
-      "district": "澎湖县",
-      "registered_voters": 64492,
-      "ballots_cast": 44916,
-      "valid_votes": 44393,
-      "invalid_votes": 523
-    },
-    {
-      "county": "台中市",
-      "district": "台中市",
-      "registered_voters": 496191,
-      "ballots_cast": 338450,
-      "valid_votes": 332624,
-      "invalid_votes": 5826
-    },
-    {
-      "county": "嘉义市",
-      "district": "嘉义市",
-      "registered_voters": 167972,
-      "ballots_cast": 118368,
-      "valid_votes": 116079,
-      "invalid_votes": 2289
-    },
-    {
-      "county": "台南市",
-      "district": "台南市",
-      "registered_voters": 444577,
-      "ballots_cast": 347964,
-      "valid_votes": 341480,
-      "invalid_votes": 6484
-    },
-    {
-      "county": "金门县",
-      "district": "金门县",
-      "registered_voters": 25563,
-      "ballots_cast": 20801,
-      "valid_votes": 20531,
-      "invalid_votes": 270
-    },
-    {
-      "county": "连江县",
-      "district": "连江县",
-      "registered_voters": 3739,
-      "ballots_cast": 2851,
-      "valid_votes": 2807,
-      "invalid_votes": 44
-    },
-    {
-      "county": "高雄市",
-      "district": "municipal_aggregate",
-      "registered_voters": 889793,
-      "ballots_cast": 668677,
-      "valid_votes": 656277,
-      "invalid_votes": 12400,
-      "method": "sum of two separately verified NCCU constituencies"
-    }
-  ],
+  "inserted_constituencies": [],
   "errors": [],
   "source_conflicts": [
     {
