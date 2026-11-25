@@ -9594,7 +9594,7 @@
           "施王阿勤",
           3651,
           "中國國民黨",
-          "",
+          "女",
           false
         ],
         [
@@ -9709,6 +9709,13 @@
             "1998-council:彰化县:regional:第3选举区:2",
             "2002-council:彰化县:regional:第3选举区:2"
           ]
+        },
+        "9": {
+          "method": "unique official name and same historical county, documented gender",
+          "source_url": "https://www.chcc.gov.tw/form/Details.aspx?Parser=2,4,34,,,,36",
+          "source_locator": "第十二屆議員名錄，性別欄",
+          "original_name": "施王阿勤",
+          "value": "女"
         }
       }
     },
@@ -9791,7 +9798,7 @@
           "余瑞坤",
           5010,
           "中國國民黨",
-          "",
+          "男",
           false
         ],
         [
@@ -9823,7 +9830,7 @@
           "黃有南",
           4507,
           "無黨籍",
-          "",
+          "男",
           false
         ],
         [
@@ -9831,7 +9838,7 @@
           "張黃美哲",
           4418,
           "無黨籍",
-          "",
+          "女",
           false
         ],
         [
@@ -10037,6 +10044,29 @@
           "roster_term": "1990-03-01/1994-02-28",
           "election_date": "1994-01-29",
           "roster_name": null
+        }
+      },
+      "gender_sources": {
+        "8": {
+          "method": "unique official name and same historical county, documented gender",
+          "source_url": "https://www.chcc.gov.tw/form/Details.aspx?Parser=2,4,34,,,,36",
+          "source_locator": "第十二屆議員名錄，性別欄",
+          "original_name": "余瑞坤",
+          "value": "男"
+        },
+        "12": {
+          "method": "unique official name and same historical county, documented gender",
+          "source_url": "https://www.chcc.gov.tw/form/Details.aspx?Parser=2,4,34,,,,36",
+          "source_locator": "第十二屆議員名錄，性別欄",
+          "original_name": "黃有南",
+          "value": "男"
+        },
+        "13": {
+          "method": "unique official name and same historical county, documented gender",
+          "source_url": "https://www.chcc.gov.tw/form/Details.aspx?Parser=2,4,34,,,,36",
+          "source_locator": "第十二屆議員名錄，性別欄",
+          "original_name": "張黃美哲",
+          "value": "女"
         }
       }
     },
@@ -23339,6 +23369,21 @@
             "2005-council:台南市:regional:第1选举区:4"
           ]
         }
+      },
+      "incumbent_sources": {
+        "10": {
+          "value": true,
+          "source_url": "https://tm.ncl.edu.tw/article?u=017_008_0000275667",
+          "secondary_source": "https://tcmb.culture.tw/zh-tw/detail?id=614507&indexCode=Culture_Media",
+          "evidence": "國家圖書館地方大事紀與文化記憶庫訪談列第12屆市議會在野政團八名議員；同縣市唯一姓名匹配。第12屆任期1990至1994；無逐日出缺紀錄，屬任期交叉證據。",
+          "election_date": "1994-01-29",
+          "method": "prior_term_contemporary_roster_crosscheck",
+          "confidence": "historical_term_roster",
+          "original_name": "郭朝武",
+          "ballot_number": 10,
+          "votes": 5155,
+          "additional_source": "https://tncc.digital.th.gov.tw/display.php?code=135251pQHmV"
+        }
       }
     },
     {
@@ -23469,7 +23514,34 @@
           "男",
           true
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "3": {
+          "value": true,
+          "source_url": "https://tm.ncl.edu.tw/article?u=017_008_0000275667",
+          "secondary_source": "https://tcmb.culture.tw/zh-tw/detail?id=614507&indexCode=Culture_Media",
+          "evidence": "國家圖書館地方大事紀與文化記憶庫訪談列第12屆市議會在野政團八名議員；同縣市唯一姓名匹配。第12屆任期1990至1994；無逐日出缺紀錄，屬任期交叉證據。",
+          "election_date": "1994-01-29",
+          "method": "prior_term_contemporary_roster_crosscheck",
+          "confidence": "historical_term_roster",
+          "original_name": "蘇徐瓊枝",
+          "ballot_number": 3,
+          "votes": 2048
+        },
+        "8": {
+          "value": true,
+          "source_url": "https://tm.ncl.edu.tw/article?u=017_008_0000275667",
+          "secondary_source": "https://tcmb.culture.tw/zh-tw/detail?id=614507&indexCode=Culture_Media",
+          "evidence": "國家圖書館地方大事紀與文化記憶庫訪談列第12屆市議會在野政團八名議員；同縣市唯一姓名匹配。第12屆任期1990至1994；無逐日出缺紀錄，屬任期交叉證據。",
+          "election_date": "1994-01-29",
+          "method": "prior_term_contemporary_roster_crosscheck",
+          "confidence": "historical_term_roster",
+          "original_name": "周明德",
+          "ballot_number": 8,
+          "votes": 8391,
+          "additional_source": "https://tncc.digital.th.gov.tw/display.php?code=135251pQHmV"
+        }
+      }
     },
     {
       "county": "臺南市",
@@ -23592,7 +23664,34 @@
           "",
           false
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "6": {
+          "value": true,
+          "source_url": "https://tm.ncl.edu.tw/article?u=017_008_0000275667",
+          "secondary_source": "https://tcmb.culture.tw/zh-tw/detail?id=614507&indexCode=Culture_Media",
+          "evidence": "國家圖書館地方大事紀與文化記憶庫訪談列第12屆市議會在野政團八名議員；同縣市唯一姓名匹配。第12屆任期1990至1994；無逐日出缺紀錄，屬任期交叉證據。",
+          "election_date": "1994-01-29",
+          "method": "prior_term_contemporary_roster_crosscheck",
+          "confidence": "historical_term_roster",
+          "original_name": "李天佑",
+          "ballot_number": 6,
+          "votes": 4505,
+          "additional_source": "https://tncc.digital.th.gov.tw/display.php?code=135251pQHmV"
+        },
+        "9": {
+          "value": true,
+          "source_url": "https://tm.ncl.edu.tw/article?u=017_008_0000275667",
+          "secondary_source": "https://tcmb.culture.tw/zh-tw/detail?id=614507&indexCode=Culture_Media",
+          "evidence": "國家圖書館地方大事紀與文化記憶庫訪談列第12屆市議會在野政團八名議員；同縣市唯一姓名匹配。第12屆任期1990至1994；無逐日出缺紀錄，屬任期交叉證據。",
+          "election_date": "1994-01-29",
+          "method": "prior_term_contemporary_roster_crosscheck",
+          "confidence": "historical_term_roster",
+          "original_name": "邱文明",
+          "ballot_number": 9,
+          "votes": 5047
+        }
+      }
     },
     {
       "county": "臺南市",
@@ -23623,7 +23722,7 @@
           "江秋香",
           4014,
           "",
-          "",
+          "女",
           false
         ],
         [
@@ -23748,6 +23847,13 @@
         ]
       ],
       "gender_sources": {
+        "2": {
+          "method": "unique official name and same historical county, documented gender",
+          "source_url": "https://votetw.com/data/candidate/%E6%9E%97%E6%98%93%E7%85%8C",
+          "source_locator": "1998臺南市第1選區同名候選人性別；與第12屆議員政團成員史料交叉核對。",
+          "original_name": "江秋香",
+          "value": "女"
+        },
         "6": {
           "method": "cross-election exact official name, same county/electorate/district, unique per county, consistent gender",
           "years": [
@@ -23760,6 +23866,20 @@
             "2002-council:台南市:regional:第4选举区:15",
             "2005-council:台南市:regional:第4选举区:16"
           ]
+        }
+      },
+      "incumbent_sources": {
+        "2": {
+          "value": true,
+          "source_url": "https://tm.ncl.edu.tw/article?u=017_008_0000275667",
+          "secondary_source": "https://tcmb.culture.tw/zh-tw/detail?id=614507&indexCode=Culture_Media",
+          "evidence": "國家圖書館地方大事紀與文化記憶庫訪談列第12屆市議會在野政團八名議員；同縣市唯一姓名匹配。第12屆任期1990至1994；無逐日出缺紀錄，屬任期交叉證據。",
+          "election_date": "1994-01-29",
+          "method": "prior_term_contemporary_roster_crosscheck",
+          "confidence": "historical_term_roster",
+          "original_name": "江秋香",
+          "ballot_number": 2,
+          "votes": 4014
         }
       }
     },
@@ -23875,7 +23995,34 @@
           "男",
           true
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "2": {
+          "value": true,
+          "source_url": "https://tm.ncl.edu.tw/article?u=017_008_0000275667",
+          "secondary_source": "https://tcmb.culture.tw/zh-tw/detail?id=614507&indexCode=Culture_Media",
+          "evidence": "國家圖書館地方大事紀與文化記憶庫訪談列第12屆市議會在野政團八名議員；同縣市唯一姓名匹配。第12屆任期1990至1994；無逐日出缺紀錄，屬任期交叉證據。",
+          "election_date": "1994-01-29",
+          "method": "prior_term_contemporary_roster_crosscheck",
+          "confidence": "historical_term_roster",
+          "original_name": "吳振福",
+          "ballot_number": 2,
+          "votes": 6134
+        },
+        "8": {
+          "value": true,
+          "source_url": "https://tm.ncl.edu.tw/article?u=017_008_0000275667",
+          "secondary_source": "https://tcmb.culture.tw/zh-tw/detail?id=614507&indexCode=Culture_Media",
+          "evidence": "國家圖書館地方大事紀與文化記憶庫訪談列第12屆市議會在野政團八名議員；同縣市唯一姓名匹配。第12屆任期1990至1994；無逐日出缺紀錄，屬任期交叉證據。",
+          "election_date": "1994-01-29",
+          "method": "prior_term_contemporary_roster_crosscheck",
+          "confidence": "historical_term_roster",
+          "original_name": "唐瑞明",
+          "ballot_number": 8,
+          "votes": 5695,
+          "additional_source": "https://tncc.digital.th.gov.tw/display.php?code=135251pQHmV"
+        }
+      }
     },
     {
       "county": "臺南市",
