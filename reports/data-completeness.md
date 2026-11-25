@@ -1,12 +1,12 @@
 # 数据完整性审计
 
-数据基准：`bcf2364b5397fd8046394870379623ed3c22f952`。行数为任务记录数，非缺失候选人总数。
+数据基准：`903b766f8bf248aded4fc35b44a528a585131300`。行数为任务记录数，非缺失候选人总数。
 
 ## 状态
 
-- unverified: 239
+- unverified: 153
 - conflict: 13
-- missing: 2181
+- missing: 2131
 - not_applicable: 5
 - partial: 15
 - not_yet_available: 1
@@ -15,10 +15,10 @@
 
 - incumbent_at_election: 2028
 - gender: 235
-- reserved_seats: 232
-- ballots_cast: 146
-- invalid_votes: 146
-- registered_voters: 135
+- reserved_seats: 146
+- ballots_cast: 96
+- invalid_votes: 96
+- registered_voters: 85
 - candidate_results: 14
 - valid_votes: 12
 - ballot_number: 6
@@ -241,3 +241,10 @@
 - 1992年区域民代27个选区的候选人有效票与政大选举概况对照，26区验证一致。新增15个完整选区资料和1项高雄市两区合计；保留县府年报原记录。
 - 1992年高雄县政大候选人明细合计536,430票，而同库概况仅记534,430票；同时彰化县县府年报与政大概况投票/无效票相差54票。两项均有单独冲突证据，不据推算取代官方原始表。
 - 可追溯数据报告：`reports/nccu-candidate-reconciliation.json`、`reports/nccu-1992-legislative-turnout-audit.json`；脚本与自动回归测试见`scripts/backfill_nccu_candidate_profiles.py`和`scripts/backfill_nccu_1992_legislative_turnout.py`。
+
+## 共享妇保与历史民代乡镇投票统计补齐（2026-11-25）
+
+- 依据2009、2014、2018年当届选举公告，校正24组、90个少数民族议员选区的共享妇女保障名额，消除86条待核实项，修正4条此前单区记录。正数共享名额不重复算入各个选区，零席共享组明确标记0。公告原始链接随数据存储。
+- 2008、2012、2016年各补12个跨选区乡镇投票统计，按原始投票所与选区乡镇小计双向汇总、独立候选人得票和县市四字段总数核对。
+- 中选会原始elbase/elprof镜像另恢复2004年11条及2008年3条乡镇统计，均有原始行政代码、候选人票数与县市合计验证。共新增50条乡镇统计。
+- 资料来源及逐项验证结果保存在各年份history-legislative-turnout JSON的audit字段。1994年候选人现任身份、部分缺失候选人名册及早期共享妇保公告仍待原始档案查证，不作推断。
