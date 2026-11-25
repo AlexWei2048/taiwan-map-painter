@@ -89,6 +89,7 @@ def main():
     totals=collections.Counter()
     problems=[]
     updates=[]
+    changed_years=set()
     summary=[]
     for cat,year_list in YEARS.items():
         for year in year_list:
@@ -137,10 +138,13 @@ def main():
                         totals.update(f'field_{k}' for k in fields)
                         updates.append({'year':year,'office':OFFICE[cat],'county':x['county'],'district':x['district'],
                           'name':x['name'],'ballot_number':x['ballot_number'],'votes':x['votes'],'fields':fields,'source':url})
-                        if opts.apply:candidate.update(fields)
+                        if opts.apply:
+                            candidate.update(fields)
+                            changed_years.add(year)
             summary.append({'year':year,'category':cat,'pages':len(urls),'source_candidates':rec_count,'matched':match_count})
     if opts.apply:
         for year,s in snapshots.items():
+            if year not in changed_years: continue
             (ROOT/f'assets/history-local-{year}.json').write_text(json.dumps(s,ensure_ascii=False,separators=(',',':'))+'\n',encoding='utf8')
     report={'source_index':BASE+'ceclist.asp','apply':opts.apply,'summary':dict(totals),
       'elections':summary,'updated_records':updates,'issues':problems}
