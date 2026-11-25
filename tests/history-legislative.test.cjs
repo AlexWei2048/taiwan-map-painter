@@ -191,3 +191,16 @@ test('regional legislative maps expose three navigation levels and historical pa
  const records=[{party:'中国国民党',name:'甲'},{party:'民主进步党',name:'乙'},{party:'中国国民党',name:'丙'}];
  assert.deepEqual(Legislative.seatBadgeComposition(records).map(r=>[r.party,r.seats,r.winners.length]),[['中国国民党',2,2],['民主进步党',1,1]]);
 });
+
+
+test('1992 mountain Beimen profile is a proven zero rather than missing data',()=>{
+ const fs=require('node:fs'),path=require('node:path');
+ const archive=JSON.parse(fs.readFileSync(path.join(__dirname,'../assets/history-legislative-1992-local.json'),'utf8'));
+ const county=archive.ballots.mountain.counties['台南县'];
+ const town=county.towns.find(t=>t[0]==='北门乡');
+ assert.deepEqual(town[2],[0,0,0,0]);
+ assert.equal(town[1].length,9);
+ assert.ok(town[1].every(v=>v===0));
+ assert.ok(county.towns.every(t=>Array.isArray(t[2])&&t[2].length===4));
+ assert.deepEqual([0,1,2,3].map(i=>county.towns.reduce((sum,t)=>sum+t[2][i],0)),county.profile);
+});
