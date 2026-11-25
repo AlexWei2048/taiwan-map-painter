@@ -324,7 +324,7 @@ test('All council maps include every verified district, including 1998 Hsinchu',
   }
   if([2009,2010,2014,2018].includes(year)){
    const enriched=districts.districts.filter(row=>row.womenReserved!==null);
-   assert.equal(enriched.length,{2009:125,2010:69,2014:185,2018:179}[year]);
+   assert.equal(enriched.length,{2009:124,2010:69,2014:197,2018:193}[year]);
    assert.ok(enriched.every(row=>row.womenReserved>=0&&row.womenReserved<=row.seats));
   }
  }
@@ -334,4 +334,21 @@ test('2002 Taipei plains district 11 follows the reconciled 29-town NCCU returns
  const contest=data(2002).contests.find(c=>c.contest_id==='2002-council:台北县:plains:第11选举区');
  assert.deepEqual(['registered_voters','ballots_cast','valid_votes','invalid_votes'].map(k=>contest[k]),[13722,5707,5585,122]);
  assert.equal(contest.profile_method,'29_township_returns_nccu');
+});
+
+test('Official shared indigenous reserved seats are represented once per group, never assigned to every member district',()=>{
+ const supplement=require('../assets/history-local-council-supplement.json');
+ for(const [year,expected] of [[2009,23],[2014,32],[2018,35]]){
+  const snapshot=Local.applyCouncilSupplement(data(year),supplement);
+  const groups=supplement.years[year].sharedQuotaGroups;
+  const members=snapshot.contests.filter(c=>c.reserved_seats_group);
+  assert.equal(members.length,expected);
+  for(const group of groups){
+   const districts=members.filter(c=>c.reserved_seats_group.id===group.id);
+   assert.equal(districts.length,group.contestIds.length);
+   assert.equal(group.reserved<=districts.reduce((n,c)=>n+c.seats,0),true);
+   assert.ok(districts.every(c=>c.reserved_seats===(group.reserved===0?0:null)));
+   assert.match(group.source,/^https:\/\/web\.cec\.gov\.tw\//);
+  }
+ }
 });

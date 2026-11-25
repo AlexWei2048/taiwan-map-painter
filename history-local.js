@@ -97,7 +97,7 @@
  async function loadSupplement(fetcher){
   if(!supplementRequest){
    supplementRequest=(async()=>{
-    const response=await fetcher('assets/history-local-council-supplement.json?v=20261125-nccu-v2');
+    const response=await fetcher('assets/history-local-council-supplement.json?v=20261125-shared-quota-v3');
     if(!response.ok)throw Error('历史议员补充资料 HTTP '+response.status);
     const supplement=await response.json();
     if(supplement.version!==1||!Array.isArray(supplement.paths)||!supplement.years)throw Error('历史议员补充资料不完整');
@@ -122,9 +122,18 @@
  function applyCouncilSupplement(shard,supplement){
   const addition=supplement?.years[shard.year];
   if(!addition)return shard;
-  const quotas=addition.quotas||{};
-  return {...shard,contests:shard.contests.map(contest=>Object.hasOwn(quotas,contest.contest_id)?
-   {...contest,reserved_seats:quotas[contest.contest_id]}:contest),councilDistrictGeometry:Object.fromEntries(
+  const quotas=addition.quotas||{},shared=new Map();
+  for(const group of addition.sharedQuotaGroups||[]){
+   if(!Number.isInteger(group.reserved)||group.reserved<0||!Array.isArray(group.contestIds)||group.contestIds.length<2||!group.source)throw Error('历史共享妇保名额资料错误');
+   const members=group.contestIds.map(id=>shard.contests.find(c=>c.contest_id===id));
+   if(members.some(c=>!c||c.county_name!==group.county||c.electorate!==group.electorate)||group.reserved>members.reduce((n,c)=>n+c.seats,0))throw Error('历史共享妇保选区对应错误：'+group.id);
+   for(const id of group.contestIds){if(shared.has(id))throw Error('重复共享妇保选区：'+id);shared.set(id,group)}
+  }
+  return {...shard,contests:shard.contests.map(contest=>{
+   const group=shared.get(contest.contest_id);
+   if(group)return {...contest,reserved_seats:group.reserved===0?0:null,reserved_seats_group:group,reserved_seats_source:group.source,reserved_seats_method:'official_shared_group'};
+   return Object.hasOwn(quotas,contest.contest_id)?{...contest,reserved_seats:quotas[contest.contest_id]}:contest;
+  }),councilDistrictGeometry:Object.fromEntries(
    Object.entries(addition.districts||{}).map(([id,entry])=>[id,{...supplement.paths[entry.path],villages:entry.villages,
     boundaryNote:entry.boundaryNote,source:entry.source}]))};
  }
@@ -266,7 +275,7 @@
    const district={
     id:contest.contest_id,county,name:contest.district_name,number,electorate:contest.electorate,
     scope:contest.scope_label||scopeTowns.join('、'),scopeTowns,scopeVillages:split?.villages||[],scopeSource:split?.source,seats:contest.seats,
-    womenReserved:contest.reserved_seats,womenReservedMethod:contest.reserved_seats_method,mapAvailable:complete
+    womenReserved:contest.reserved_seats,womenReservedGroup:contest.reserved_seats_group,womenReservedMethod:contest.reserved_seats_method,mapAvailable:complete
    };
    districts.push(district);
    if(!complete)continue;
