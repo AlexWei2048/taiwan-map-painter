@@ -7208,13 +7208,19 @@
       "candidate_name": "赖同荣",
       "candidate_name_official": "賴同榮",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "无党籍",
       "party_name_official": "無黨籍",
       "votes": 6245,
       "vote_share": 7.605744,
       "elected_official": false,
-      "elected_mark": ""
+      "elected_mark": "",
+      "incumbent_source": {
+        "name": "鄭三元",
+        "source_url": "https://www.xindian.ntpc.gov.tw/home.jsp?id=d127e0ce0f4f407b",
+        "source_locator": "公所歷任首長任期表：82.04.01–87.02.28；前任及代理均於82年卸任；核對1994-01-29投票日。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:台北县:regional:新店市:2",
@@ -7223,13 +7229,19 @@
       "candidate_name": "郑三元",
       "candidate_name_official": "鄭三元",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": true,
       "party_name": "中国国民党",
       "party_name_official": "中國國民黨",
       "votes": 54887,
       "vote_share": 66.846509,
       "elected_official": true,
-      "elected_mark": "*"
+      "elected_mark": "*",
+      "incumbent_source": {
+        "name": "鄭三元",
+        "source_url": "https://www.xindian.ntpc.gov.tw/home.jsp?id=d127e0ce0f4f407b",
+        "source_locator": "公所歷任首長任期表：82.04.01–87.02.28；前任及代理均於82年卸任；核對1994-01-29投票日。",
+        "value": true
+      }
     },
     {
       "candidacy_id": "1994-township:台北县:regional:新店市:3",
@@ -7238,13 +7250,19 @@
       "candidate_name": "史英",
       "candidate_name_official": "史英",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "无党籍",
       "party_name_official": "無黨籍",
       "votes": 20977,
       "vote_share": 25.547748,
       "elected_official": false,
-      "elected_mark": ""
+      "elected_mark": "",
+      "incumbent_source": {
+        "name": "鄭三元",
+        "source_url": "https://www.xindian.ntpc.gov.tw/home.jsp?id=d127e0ce0f4f407b",
+        "source_locator": "公所歷任首長任期表：82.04.01–87.02.28；前任及代理均於82年卸任；核對1994-01-29投票日。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:台北县:regional:土城市:1",
@@ -7919,13 +7937,19 @@
       "candidate_name": "黄明和",
       "candidate_name_official": "黃明和",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "无党籍",
       "party_name_official": "無黨籍",
       "votes": 2680,
       "vote_share": 37.196391,
       "elected_official": true,
-      "elected_mark": "*"
+      "elected_mark": "*",
+      "incumbent_source": {
+        "name": "張書銘",
+        "source_url": "https://www.shenkeng.ntpc.gov.tw/home.jsp?id=aa967983e02a861f",
+        "source_locator": "公所歷任首長任期表：75.03.01–83.02.28；核對1994-01-29投票日。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:台北县:regional:深坑乡:2",
@@ -7934,13 +7958,19 @@
       "candidate_name": "苏孝修",
       "candidate_name_official": "蘇孝修",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "中国国民党",
       "party_name_official": "中國國民黨",
       "votes": 1637,
       "vote_share": 22.720333,
       "elected_official": false,
-      "elected_mark": ""
+      "elected_mark": "",
+      "incumbent_source": {
+        "name": "張書銘",
+        "source_url": "https://www.shenkeng.ntpc.gov.tw/home.jsp?id=aa967983e02a861f",
+        "source_locator": "公所歷任首長任期表：75.03.01–83.02.28；核對1994-01-29投票日。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:台北县:regional:深坑乡:3",
@@ -7949,13 +7979,19 @@
       "candidate_name": "陈顺益",
       "candidate_name_official": "陳順益",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "中国国民党",
       "party_name_official": "中國國民黨",
       "votes": 1922,
       "vote_share": 26.67592,
       "elected_official": false,
-      "elected_mark": ""
+      "elected_mark": "",
+      "incumbent_source": {
+        "name": "張書銘",
+        "source_url": "https://www.shenkeng.ntpc.gov.tw/home.jsp?id=aa967983e02a861f",
+        "source_locator": "公所歷任首長任期表：75.03.01–83.02.28；核對1994-01-29投票日。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:台北县:regional:深坑乡:4",
@@ -7964,13 +8000,19 @@
       "candidate_name": "黄文华",
       "candidate_name_official": "黃文華",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "民主进步党",
       "party_name_official": "民主進步黨",
       "votes": 966,
       "vote_share": 13.407356,
       "elected_official": false,
-      "elected_mark": ""
+      "elected_mark": "",
+      "incumbent_source": {
+        "name": "張書銘",
+        "source_url": "https://www.shenkeng.ntpc.gov.tw/home.jsp?id=aa967983e02a861f",
+        "source_locator": "公所歷任首長任期表：75.03.01–83.02.28；核對1994-01-29投票日。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:台北县:regional:石碇乡:1",
@@ -7979,13 +8021,19 @@
       "candidate_name": "黄奕荣",
       "candidate_name_official": "黃奕榮",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "无党籍",
       "party_name_official": "無黨籍",
       "votes": 2115,
       "vote_share": 45.415504,
       "elected_official": false,
-      "elected_mark": ""
+      "elected_mark": "",
+      "incumbent_source": {
+        "name": "王銘忠",
+        "source_url": "https://www.shiding.ntpc.gov.tw/home.jsp?id=63bcf8b00306060a",
+        "source_locator": "公所歷任首長任期表：75.06.01–83.02.28；核對1994-01-29投票日。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:台北县:regional:石碇乡:2",
@@ -7994,13 +8042,19 @@
       "candidate_name": "魏良道",
       "candidate_name_official": "魏良道",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "无党籍",
       "party_name_official": "無黨籍",
       "votes": 2542,
       "vote_share": 54.584496,
       "elected_official": true,
-      "elected_mark": "*"
+      "elected_mark": "*",
+      "incumbent_source": {
+        "name": "王銘忠",
+        "source_url": "https://www.shiding.ntpc.gov.tw/home.jsp?id=63bcf8b00306060a",
+        "source_locator": "公所歷任首長任期表：75.06.01–83.02.28；核對1994-01-29投票日。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:台北县:regional:坪林乡:1",
@@ -8213,13 +8267,19 @@
       "candidate_name": "许春财",
       "candidate_name_official": "許春財",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "无党籍",
       "party_name_official": "無黨籍",
       "votes": 3445,
       "vote_share": 31.836244,
       "elected_official": true,
-      "elected_mark": "*"
+      "elected_mark": "*",
+      "incumbent_source": {
+        "name": "李國芳",
+        "source_url": "https://www.jinshan.ntpc.gov.tw/home.jsp?id=af495e8d465faf30",
+        "source_locator": "公所歷任首長任期表：79.03.01–83.02.28；核對1994-01-29投票日。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:台北县:regional:金山乡:2",
@@ -8228,13 +8288,19 @@
       "candidate_name": "何娇",
       "candidate_name_official": "何嬌",
       "gender": "女",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "中国国民党",
       "party_name_official": "中國國民黨",
       "votes": 2855,
       "vote_share": 26.383883,
       "elected_official": false,
-      "elected_mark": ""
+      "elected_mark": "",
+      "incumbent_source": {
+        "name": "李國芳",
+        "source_url": "https://www.jinshan.ntpc.gov.tw/home.jsp?id=af495e8d465faf30",
+        "source_locator": "公所歷任首長任期表：79.03.01–83.02.28；核對1994-01-29投票日。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:台北县:regional:金山乡:3",
@@ -8243,13 +8309,19 @@
       "candidate_name": "黄良彦",
       "candidate_name_official": "黃良彥",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "中国国民党",
       "party_name_official": "中國國民黨",
       "votes": 224,
       "vote_share": 2.070049,
       "elected_official": false,
-      "elected_mark": ""
+      "elected_mark": "",
+      "incumbent_source": {
+        "name": "李國芳",
+        "source_url": "https://www.jinshan.ntpc.gov.tw/home.jsp?id=af495e8d465faf30",
+        "source_locator": "公所歷任首長任期表：79.03.01–83.02.28；核對1994-01-29投票日。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:台北县:regional:金山乡:4",
@@ -8258,13 +8330,19 @@
       "candidate_name": "张孝勤",
       "candidate_name_official": "張孝勤",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "中国国民党",
       "party_name_official": "中國國民黨",
       "votes": 2143,
       "vote_share": 19.804085,
       "elected_official": false,
-      "elected_mark": ""
+      "elected_mark": "",
+      "incumbent_source": {
+        "name": "李國芳",
+        "source_url": "https://www.jinshan.ntpc.gov.tw/home.jsp?id=af495e8d465faf30",
+        "source_locator": "公所歷任首長任期表：79.03.01–83.02.28；核對1994-01-29投票日。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:台北县:regional:金山乡:5",
@@ -8273,13 +8351,19 @@
       "candidate_name": "萧福助",
       "candidate_name_official": "蕭福助",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "中国国民党",
       "party_name_official": "中國國民黨",
       "votes": 2154,
       "vote_share": 19.905739,
       "elected_official": false,
-      "elected_mark": ""
+      "elected_mark": "",
+      "incumbent_source": {
+        "name": "李國芳",
+        "source_url": "https://www.jinshan.ntpc.gov.tw/home.jsp?id=af495e8d465faf30",
+        "source_locator": "公所歷任首長任期表：79.03.01–83.02.28；核對1994-01-29投票日。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:台北县:regional:万里乡:1",
@@ -8765,13 +8849,19 @@
       "candidate_name": "潘荣参",
       "candidate_name_official": "潘榮參",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "中国国民党",
       "party_name_official": "中國國民黨",
       "votes": 437,
       "vote_share": 6.329664,
       "elected_official": false,
-      "elected_mark": ""
+      "elected_mark": "",
+      "incumbent_source": {
+        "name": "黃萬全",
+        "source_url": "https://tianliao.kcg.gov.tw/cp.aspx?n=66FBF13436D59FCF",
+        "source_locator": "公所歷任首長任期表：79.03.01–83.03.01，第十一屆；核對1994-01-29投票日。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:高雄县:regional:田寮乡:2",
@@ -8780,13 +8870,19 @@
       "candidate_name": "陈文成",
       "candidate_name_official": "陳文成",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "中国国民党",
       "party_name_official": "中國國民黨",
       "votes": 2808,
       "vote_share": 40.672074,
       "elected_official": false,
-      "elected_mark": ""
+      "elected_mark": "",
+      "incumbent_source": {
+        "name": "黃萬全",
+        "source_url": "https://tianliao.kcg.gov.tw/cp.aspx?n=66FBF13436D59FCF",
+        "source_locator": "公所歷任首長任期表：79.03.01–83.03.01，第十一屆；核對1994-01-29投票日。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:高雄县:regional:田寮乡:3",
@@ -8795,13 +8891,19 @@
       "candidate_name": "黄万全",
       "candidate_name_official": "黃萬全",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": true,
       "party_name": "无党籍",
       "party_name_official": "無黨籍",
       "votes": 3659,
       "vote_share": 52.998262,
       "elected_official": true,
-      "elected_mark": "*"
+      "elected_mark": "*",
+      "incumbent_source": {
+        "name": "黃萬全",
+        "source_url": "https://tianliao.kcg.gov.tw/cp.aspx?n=66FBF13436D59FCF",
+        "source_locator": "公所歷任首長任期表：79.03.01–83.03.01，第十一屆；核對1994-01-29投票日。",
+        "value": true
+      }
     },
     {
       "candidacy_id": "1994-township:高雄县:regional:阿莲乡:1",
@@ -16985,7 +17087,7 @@
       "number": "1",
       "party": "无党籍",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 6245,
       "elected": false,
       "electedMark": "",
@@ -17001,7 +17103,7 @@
       "number": "2",
       "party": "中国国民党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": true,
       "votes": 54887,
       "elected": true,
       "electedMark": "*",
@@ -17017,7 +17119,7 @@
       "number": "3",
       "party": "无党籍",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 20977,
       "elected": false,
       "electedMark": "",
@@ -17609,7 +17711,7 @@
       "number": "1",
       "party": "无党籍",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 2680,
       "elected": true,
       "electedMark": "*",
@@ -17625,7 +17727,7 @@
       "number": "2",
       "party": "中国国民党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 1637,
       "elected": false,
       "electedMark": "",
@@ -17641,7 +17743,7 @@
       "number": "3",
       "party": "中国国民党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 1922,
       "elected": false,
       "electedMark": "",
@@ -17657,7 +17759,7 @@
       "number": "4",
       "party": "民主进步党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 966,
       "elected": false,
       "electedMark": "",
@@ -17673,7 +17775,7 @@
       "number": "1",
       "party": "无党籍",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 2115,
       "elected": false,
       "electedMark": "",
@@ -17689,7 +17791,7 @@
       "number": "2",
       "party": "无党籍",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 2542,
       "elected": true,
       "electedMark": "*",
@@ -17897,7 +17999,7 @@
       "number": "1",
       "party": "无党籍",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 3445,
       "elected": true,
       "electedMark": "*",
@@ -17913,7 +18015,7 @@
       "number": "2",
       "party": "中国国民党",
       "gender": "女",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 2855,
       "elected": false,
       "electedMark": "",
@@ -17929,7 +18031,7 @@
       "number": "3",
       "party": "中国国民党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 224,
       "elected": false,
       "electedMark": "",
@@ -17945,7 +18047,7 @@
       "number": "4",
       "party": "中国国民党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 2143,
       "elected": false,
       "electedMark": "",
@@ -17961,7 +18063,7 @@
       "number": "5",
       "party": "中国国民党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 2154,
       "elected": false,
       "electedMark": "",
@@ -18441,7 +18543,7 @@
       "number": "1",
       "party": "中国国民党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 437,
       "elected": false,
       "electedMark": "",
@@ -18457,7 +18559,7 @@
       "number": "2",
       "party": "中国国民党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 2808,
       "elected": false,
       "electedMark": "",
@@ -18473,7 +18575,7 @@
       "number": "3",
       "party": "无党籍",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": true,
       "votes": 3659,
       "elected": true,
       "electedMark": "*",

@@ -242,7 +242,12 @@
               20977,
               false
             ]
-          ]
+          ],
+          "incumbency_at_election": {
+            "name": "鄭三元",
+            "source_url": "https://www.xindian.ntpc.gov.tw/home.jsp?id=d127e0ce0f4f407b",
+            "source_locator": "公所歷任首長任期表：82.04.01–87.02.28；前任及代理均於82年卸任；核對1994-01-29投票日。"
+          }
         },
         {
           "town": "土城市",
@@ -724,7 +729,12 @@
               966,
               false
             ]
-          ]
+          ],
+          "incumbency_at_election": {
+            "name": "張書銘",
+            "source_url": "https://www.shenkeng.ntpc.gov.tw/home.jsp?id=aa967983e02a861f",
+            "source_locator": "公所歷任首長任期表：75.03.01–83.02.28；核對1994-01-29投票日。"
+          }
         },
         {
           "town": "石碇鄉",
@@ -751,7 +761,12 @@
               2542,
               true
             ]
-          ]
+          ],
+          "incumbency_at_election": {
+            "name": "王銘忠",
+            "source_url": "https://www.shiding.ntpc.gov.tw/home.jsp?id=63bcf8b00306060a",
+            "source_locator": "公所歷任首長任期表：75.06.01–83.02.28；核對1994-01-29投票日。"
+          }
         },
         {
           "town": "坪林鄉",
@@ -990,7 +1005,12 @@
               2154,
               false
             ]
-          ]
+          ],
+          "incumbency_at_election": {
+            "name": "李國芳",
+            "source_url": "https://www.jinshan.ntpc.gov.tw/home.jsp?id=af495e8d465faf30",
+            "source_locator": "公所歷任首長任期表：79.03.01–83.02.28；核對1994-01-29投票日。"
+          }
         },
         {
           "town": "萬里鄉",
@@ -1419,7 +1439,12 @@
               3659,
               true
             ]
-          ]
+          ],
+          "incumbency_at_election": {
+            "name": "黃萬全",
+            "source_url": "https://tianliao.kcg.gov.tw/cp.aspx?n=66FBF13436D59FCF",
+            "source_locator": "公所歷任首長任期表：79.03.01–83.03.01，第十一屆；核對1994-01-29投票日。"
+          }
         },
         {
           "town": "阿蓮鄉",
