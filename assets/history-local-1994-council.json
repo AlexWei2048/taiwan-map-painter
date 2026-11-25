@@ -6142,7 +6142,7 @@
           "葉武生",
           4708,
           "中國國民黨",
-          "",
+          "男",
           false
         ],
         [
@@ -6285,6 +6285,21 @@
         }
       },
       "gender_sources": {
+        "5": {
+          "method": "cross-election unique exact official name, same historical county and geographic council district, consistent documented gender",
+          "years": [
+            2002
+          ],
+          "candidacy_ids": [
+            "2002-council:苗栗县:regional:第4选举区:7"
+          ],
+          "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/01a155a3be4b70e25b4c49fef7daf4f62a9a9b6e/assets/history-local-2002.json",
+          "source_blob_sha": "17e462c027426f533922f5efe454d4d0b74fcfa0",
+          "source_locator": "2002年議員候選人資料；1994範圍後龍鎮、竹南鎮、造橋鄉；2002範圍后龙镇、竹南镇、造桥乡；兩屆原文姓名唯一匹配。",
+          "original_name": "葉武生",
+          "value": "男",
+          "confidence": "cross_election_geographic_match"
+        },
         "8": {
           "method": "cross-election exact official name, same county/electorate/district, unique per county, consistent gender",
           "years": [
@@ -6329,7 +6344,7 @@
           "呂雲富",
           2682,
           "中國國民黨",
-          "",
+          "男",
           false
         ],
         [
@@ -6484,6 +6499,21 @@
         }
       },
       "gender_sources": {
+        "2": {
+          "method": "cross-election unique exact official name, same historical county and geographic council district, consistent documented gender",
+          "years": [
+            1998
+          ],
+          "candidacy_ids": [
+            "1998-council:苗栗县:regional:第5选举区:3"
+          ],
+          "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/01a155a3be4b70e25b4c49fef7daf4f62a9a9b6e/assets/history-local-1998.json",
+          "source_blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+          "source_locator": "1998年議員候選人資料；1994範圍南庄鄉、頭份鎮、三灣鄉；1998範圍三湾乡、南庄乡、头份镇；兩屆原文姓名唯一匹配。",
+          "original_name": "呂雲富",
+          "value": "男",
+          "confidence": "cross_election_geographic_match"
+        },
         "5": {
           "method": "official later bulletin explicitly identifies 1994 candidacy",
           "source_url": "https://eebulletin.cec.gov.tw/115/08%E8%8B%97%E6%A0%97%E7%B8%A3/03%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7/%E8%8B%97%E6%A0%97%E7%B8%A3%E9%A0%AD%E4%BB%BD%E5%B8%82%E5%B8%82%E9%95%B7%E9%81%B8%E8%88%89.pdf",
@@ -9759,7 +9789,7 @@
           "黃慶賢",
           2633,
           "無黨籍",
-          "",
+          "男",
           false
         ],
         [
@@ -9831,7 +9861,7 @@
           "王坤盛",
           1113,
           "新黨",
-          "",
+          "男",
           false
         ],
         [
@@ -10056,12 +10086,42 @@
         }
       },
       "gender_sources": {
+        "2": {
+          "method": "cross-election unique exact official name, same historical county and geographic council district, consistent documented gender",
+          "years": [
+            2002
+          ],
+          "candidacy_ids": [
+            "2002-council:彰化县:regional:第4选举区:4"
+          ],
+          "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/01a155a3be4b70e25b4c49fef7daf4f62a9a9b6e/assets/history-local-2002.json",
+          "source_blob_sha": "17e462c027426f533922f5efe454d4d0b74fcfa0",
+          "source_locator": "2002年議員候選人資料；1994範圍員林鎮、大村鄉、永靖鄉；2002範圍员林镇、大村乡、永靖乡；兩屆原文姓名唯一匹配。",
+          "original_name": "黃慶賢",
+          "value": "男",
+          "confidence": "cross_election_geographic_match"
+        },
         "8": {
           "method": "unique official name and same historical county, documented gender",
           "source_url": "https://www.chcc.gov.tw/form/Details.aspx?Parser=2,4,34,,,,36",
           "source_locator": "第十二屆議員名錄，性別欄",
           "original_name": "余瑞坤",
           "value": "男"
+        },
+        "11": {
+          "method": "cross-election unique exact official name, same historical county and geographic council district, consistent documented gender",
+          "years": [
+            1998
+          ],
+          "candidacy_ids": [
+            "1998-council:彰化县:regional:第4选举区:1"
+          ],
+          "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/01a155a3be4b70e25b4c49fef7daf4f62a9a9b6e/assets/history-local-1998.json",
+          "source_blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+          "source_locator": "1998年議員候選人資料；1994範圍員林鎮、大村鄉、永靖鄉；1998範圍员林镇、大村乡、永靖乡；兩屆原文姓名唯一匹配。",
+          "original_name": "王坤盛",
+          "value": "男",
+          "confidence": "cross_election_geographic_match"
         },
         "12": {
           "method": "unique official name and same historical county, documented gender",
@@ -10292,7 +10352,7 @@
           "陳永助",
           557,
           "中國青年黨",
-          "",
+          "男",
           false
         ],
         [
@@ -10449,6 +10509,23 @@
           "roster_term": "1990-03-01/1994-02-28",
           "election_date": "1994-01-29",
           "roster_name": "洪本交"
+        }
+      },
+      "gender_sources": {
+        "1": {
+          "method": "cross-election unique exact official name, same historical county and geographic council district, consistent documented gender",
+          "years": [
+            1998
+          ],
+          "candidacy_ids": [
+            "1998-council:彰化县:regional:第6选举区:8"
+          ],
+          "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/01a155a3be4b70e25b4c49fef7daf4f62a9a9b6e/assets/history-local-1998.json",
+          "source_blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+          "source_locator": "1998年議員候選人資料；1994範圍田中鎮、社頭鄉、二水鄉；1998範圍二水乡、田中镇、社头乡；兩屆原文姓名唯一匹配。",
+          "original_name": "陳永助",
+          "value": "男",
+          "confidence": "cross_election_geographic_match"
         }
       }
     },
@@ -10983,7 +11060,7 @@
           "陳聰鑑",
           1720,
           "民主進步黨",
-          "",
+          "男",
           false
         ],
         [
@@ -11146,7 +11223,24 @@
           "",
           false
         ]
-      ]
+      ],
+      "gender_sources": {
+        "1": {
+          "method": "cross-election unique exact official name, same historical county and geographic council district, consistent documented gender",
+          "years": [
+            1998
+          ],
+          "candidacy_ids": [
+            "1998-council:南投县:regional:第1选举区:6"
+          ],
+          "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/01a155a3be4b70e25b4c49fef7daf4f62a9a9b6e/assets/history-local-1998.json",
+          "source_blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+          "source_locator": "1998年議員候選人資料；1994範圍南投市、名間鄉；1998範圍南投市、名间乡；兩屆原文姓名唯一匹配。",
+          "original_name": "陳聰鑑",
+          "value": "男",
+          "confidence": "cross_election_geographic_match"
+        }
+      }
     },
     {
       "county": "南投縣",
@@ -11178,7 +11272,7 @@
           "廖宜綠",
           636,
           "無黨籍",
-          "",
+          "男",
           false
         ],
         [
@@ -11279,6 +11373,21 @@
         ]
       ],
       "gender_sources": {
+        "2": {
+          "method": "cross-election unique exact official name, same historical county and geographic council district, consistent documented gender",
+          "years": [
+            1998
+          ],
+          "candidacy_ids": [
+            "1998-council:南投县:regional:第2选举区:5"
+          ],
+          "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/01a155a3be4b70e25b4c49fef7daf4f62a9a9b6e/assets/history-local-1998.json",
+          "source_blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+          "source_locator": "1998年議員候選人資料；1994範圍草屯鎮、中寮鄉；1998範圍中寮乡、草屯镇；兩屆原文姓名唯一匹配。",
+          "original_name": "廖宜綠",
+          "value": "男",
+          "confidence": "cross_election_geographic_match"
+        },
         "5": {
           "method": "cross-election exact official name, county and overlapping historical geographic scope; reviewed district renumbering or township candidacy",
           "confidence": "cross_election_geography",
@@ -11823,7 +11932,7 @@
           "陳秀月",
           5098,
           "無黨籍",
-          "",
+          "女",
           false
         ],
         [
@@ -11879,7 +11988,7 @@
           "林振財",
           4290,
           "民主進步黨",
-          "",
+          "男",
           false
         ],
         [
@@ -11930,7 +12039,39 @@
           "男",
           true
         ]
-      ]
+      ],
+      "gender_sources": {
+        "1": {
+          "method": "cross-election unique exact official name, same historical county and geographic council district, consistent documented gender",
+          "years": [
+            1998
+          ],
+          "candidacy_ids": [
+            "1998-council:云林县:regional:第1选举区:2"
+          ],
+          "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/01a155a3be4b70e25b4c49fef7daf4f62a9a9b6e/assets/history-local-1998.json",
+          "source_blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+          "source_locator": "1998年議員候選人資料；1994範圍斗六市、莿桐鄉、林內鄉；1998範圍斗六市、林内乡、莿桐乡；兩屆原文姓名唯一匹配。",
+          "original_name": "陳秀月",
+          "value": "女",
+          "confidence": "cross_election_geographic_match"
+        },
+        "8": {
+          "method": "cross-election unique exact official name, same historical county and geographic council district, consistent documented gender",
+          "years": [
+            2002
+          ],
+          "candidacy_ids": [
+            "2002-council:云林县:regional:第1选举区:2"
+          ],
+          "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/01a155a3be4b70e25b4c49fef7daf4f62a9a9b6e/assets/history-local-2002.json",
+          "source_blob_sha": "17e462c027426f533922f5efe454d4d0b74fcfa0",
+          "source_locator": "2002年議員候選人資料；1994範圍斗六市、莿桐鄉、林內鄉；2002範圍斗六市、林内乡、莿桐乡；兩屆原文姓名唯一匹配。",
+          "original_name": "林振財",
+          "value": "男",
+          "confidence": "cross_election_geographic_match"
+        }
+      }
     },
     {
       "county": "雲林縣",
@@ -11963,7 +12104,7 @@
           "陳文山",
           1486,
           "無黨籍",
-          "",
+          "男",
           false
         ],
         [
@@ -12056,6 +12197,21 @@
         ]
       ],
       "gender_sources": {
+        "2": {
+          "method": "cross-election unique exact official name, same historical county and geographic council district, consistent documented gender",
+          "years": [
+            2009
+          ],
+          "candidacy_ids": [
+            "2009-council:云林县:regional:第2选举区:3"
+          ],
+          "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/01a155a3be4b70e25b4c49fef7daf4f62a9a9b6e/assets/history-local-2009.json",
+          "source_blob_sha": "6a21144cf2028bcea8183e9e75f920e99cc189c3",
+          "source_locator": "2009年議員候選人資料；1994範圍斗南鎮、古坑鄉、大埤鄉；2009範圍古坑乡、大埤乡、斗南镇；兩屆原文姓名唯一匹配。",
+          "original_name": "陳文山",
+          "value": "男",
+          "confidence": "cross_election_geographic_match"
+        },
         "7": {
           "method": "cross-election exact official name, same county/electorate/district, unique per county, consistent gender",
           "years": [
@@ -12141,7 +12297,7 @@
           "蔡桓生",
           394,
           "工黨",
-          "",
+          "男",
           false
         ],
         [
@@ -12181,7 +12337,7 @@
           "吳明選",
           4387,
           "中國國民黨",
-          "",
+          "男",
           false
         ],
         [
@@ -12237,6 +12393,38 @@
           "votes": 9860,
           "secondary_source": "https://www.president.gov.tw/NEWS/21336"
         }
+      },
+      "gender_sources": {
+        "7": {
+          "method": "cross-election unique exact official name, same historical county and geographic council district, consistent documented gender",
+          "years": [
+            2009
+          ],
+          "candidacy_ids": [
+            "2009-council:云林县:regional:第3选举区:12"
+          ],
+          "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/01a155a3be4b70e25b4c49fef7daf4f62a9a9b6e/assets/history-local-2009.json",
+          "source_blob_sha": "6a21144cf2028bcea8183e9e75f920e99cc189c3",
+          "source_locator": "2009年議員候選人資料；1994範圍虎尾鎮、土庫鎮、褒忠鄉、元長鄉；2009範圍元长乡、土库镇、虎尾镇、褒忠乡；兩屆原文姓名唯一匹配。",
+          "original_name": "蔡桓生",
+          "value": "男",
+          "confidence": "cross_election_geographic_match"
+        },
+        "12": {
+          "method": "cross-election unique exact official name, same historical county and geographic council district, consistent documented gender",
+          "years": [
+            1998
+          ],
+          "candidacy_ids": [
+            "1998-council:云林县:regional:第3选举区:8"
+          ],
+          "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/01a155a3be4b70e25b4c49fef7daf4f62a9a9b6e/assets/history-local-1998.json",
+          "source_blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+          "source_locator": "1998年議員候選人資料；1994範圍虎尾鎮、土庫鎮、褒忠鄉、元長鄉；1998範圍元长乡、土库镇、虎尾镇、褒忠乡；兩屆原文姓名唯一匹配。",
+          "original_name": "吳明選",
+          "value": "男",
+          "confidence": "cross_election_geographic_match"
+        }
       }
     },
     {
@@ -12270,7 +12458,7 @@
           "吳順豐",
           3950,
           "民主進步黨",
-          "",
+          "男",
           false
         ],
         [
@@ -12337,7 +12525,24 @@
           "男",
           true
         ]
-      ]
+      ],
+      "gender_sources": {
+        "2": {
+          "method": "cross-election unique exact official name, same historical county and geographic council district, consistent documented gender",
+          "years": [
+            1998
+          ],
+          "candidacy_ids": [
+            "1998-council:云林县:regional:第4选举区:3"
+          ],
+          "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/01a155a3be4b70e25b4c49fef7daf4f62a9a9b6e/assets/history-local-1998.json",
+          "source_blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+          "source_locator": "1998年議員候選人資料；1994範圍西螺鎮、二崙鄉、崙背鄉；1998範圍二仑乡、仑背乡、西螺镇；兩屆原文姓名唯一匹配。",
+          "original_name": "吳順豐",
+          "value": "男",
+          "confidence": "cross_election_geographic_match"
+        }
+      }
     },
     {
       "county": "雲林縣",
@@ -13119,7 +13324,7 @@
           "蔡寶雄",
           4396,
           "中國國民黨",
-          "",
+          "男",
           false
         ],
         [
@@ -13154,7 +13359,24 @@
           "",
           false
         ]
-      ]
+      ],
+      "gender_sources": {
+        "3": {
+          "method": "cross-election unique exact official name, same historical county and geographic council district, consistent documented gender",
+          "years": [
+            2002
+          ],
+          "candidacy_ids": [
+            "2002-council:嘉义县:regional:第5选举区:3"
+          ],
+          "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/01a155a3be4b70e25b4c49fef7daf4f62a9a9b6e/assets/history-local-2002.json",
+          "source_blob_sha": "17e462c027426f533922f5efe454d4d0b74fcfa0",
+          "source_locator": "2002年議員候選人資料；1994範圍布袋鎮、義竹鄉；2002範圍义竹乡、布袋镇；兩屆原文姓名唯一匹配。",
+          "original_name": "蔡寶雄",
+          "value": "男",
+          "confidence": "cross_election_geographic_match"
+        }
+      }
     },
     {
       "county": "嘉義縣",
@@ -20293,7 +20515,7 @@
           "周明賢",
           260,
           "無黨籍",
-          "",
+          "男",
           false
         ],
         [
@@ -20334,6 +20556,21 @@
             "2002-council:基隆市:regional:第1选举区:4",
             "2005-council:基隆市:regional:第1选举区:4"
           ]
+        },
+        "9": {
+          "method": "cross-election unique exact official name, same historical county and geographic council district, consistent documented gender",
+          "years": [
+            1998
+          ],
+          "candidacy_ids": [
+            "1998-council:基隆市:regional:第1选举区:15"
+          ],
+          "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/01a155a3be4b70e25b4c49fef7daf4f62a9a9b6e/assets/history-local-1998.json",
+          "source_blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+          "source_locator": "1998年議員候選人資料；1994範圍中正區；1998範圍中正区；兩屆原文姓名唯一匹配。",
+          "original_name": "周明賢",
+          "value": "男",
+          "confidence": "cross_election_geographic_match"
         }
       }
     },
@@ -20366,7 +20603,7 @@
           "柯金標",
           1096,
           "中國國民黨",
-          "",
+          "男",
           false
         ],
         [
@@ -20406,7 +20643,7 @@
           "張金華",
           2713,
           "中國國民黨",
-          "",
+          "男",
           false
         ],
         [
@@ -20431,6 +20668,21 @@
         }
       },
       "gender_sources": {
+        "2": {
+          "method": "cross-election unique exact official name, same historical county and geographic council district, consistent documented gender",
+          "years": [
+            2005
+          ],
+          "candidacy_ids": [
+            "2005-council:基隆市:regional:第7选举区:6"
+          ],
+          "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/01a155a3be4b70e25b4c49fef7daf4f62a9a9b6e/assets/history-local-2005.json",
+          "source_blob_sha": "4c86be7e87201f5334503a177874580bc9040bc5",
+          "source_locator": "2005年議員候選人資料；1994範圍七堵區；2005範圍七堵区；兩屆原文姓名唯一匹配。",
+          "original_name": "柯金標",
+          "value": "男",
+          "confidence": "cross_election_geographic_match"
+        },
         "6": {
           "method": "cross-election exact official name, county and overlapping historical geographic scope; reviewed district renumbering or township candidacy",
           "confidence": "cross_election_geography",
@@ -20463,6 +20715,21 @@
           "scope_1994": [
             "七堵區"
           ]
+        },
+        "7": {
+          "method": "cross-election unique exact official name, same historical county and geographic council district, consistent documented gender",
+          "years": [
+            2002
+          ],
+          "candidacy_ids": [
+            "2002-council:基隆市:regional:第7选举区:2"
+          ],
+          "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/01a155a3be4b70e25b4c49fef7daf4f62a9a9b6e/assets/history-local-2002.json",
+          "source_blob_sha": "17e462c027426f533922f5efe454d4d0b74fcfa0",
+          "source_locator": "2002年議員候選人資料；1994範圍七堵區；2002範圍七堵区；兩屆原文姓名唯一匹配。",
+          "original_name": "張金華",
+          "value": "男",
+          "confidence": "cross_election_geographic_match"
         }
       }
     },
@@ -20688,7 +20955,7 @@
           "闕美玉",
           2140,
           "中國國民黨",
-          "",
+          "女",
           false
         ],
         [
@@ -20745,6 +21012,21 @@
           "scope_1994": [
             "仁愛區"
           ]
+        },
+        "12": {
+          "method": "cross-election unique exact official name, same historical county and geographic council district, consistent documented gender",
+          "years": [
+            2005
+          ],
+          "candidacy_ids": [
+            "2005-council:基隆市:regional:第3选举区:3"
+          ],
+          "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/01a155a3be4b70e25b4c49fef7daf4f62a9a9b6e/assets/history-local-2005.json",
+          "source_blob_sha": "4c86be7e87201f5334503a177874580bc9040bc5",
+          "source_locator": "2005年議員候選人資料；1994範圍仁愛區；2005範圍仁爱区；兩屆原文姓名唯一匹配。",
+          "original_name": "闕美玉",
+          "value": "女",
+          "confidence": "cross_election_geographic_match"
         }
       }
     },
@@ -20785,7 +21067,7 @@
           "許箸宏",
           1411,
           "無黨籍",
-          "",
+          "男",
           false
         ],
         [
@@ -20830,6 +21112,21 @@
         ]
       ],
       "gender_sources": {
+        "3": {
+          "method": "cross-election unique exact official name, same historical county and geographic council district, consistent documented gender",
+          "years": [
+            1998
+          ],
+          "candidacy_ids": [
+            "1998-council:基隆市:regional:第4选举区:5"
+          ],
+          "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/01a155a3be4b70e25b4c49fef7daf4f62a9a9b6e/assets/history-local-1998.json",
+          "source_blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+          "source_locator": "1998年議員候選人資料；1994範圍中山區；1998範圍中山区；兩屆原文姓名唯一匹配。",
+          "original_name": "許箸宏",
+          "value": "男",
+          "confidence": "cross_election_geographic_match"
+        },
         "4": {
           "method": "cross-election exact official name, county and overlapping historical geographic scope; reviewed district renumbering or township candidacy",
           "confidence": "cross_election_geography",
@@ -23310,7 +23607,7 @@
           "林月香",
           3412,
           "",
-          "",
+          "女",
           false
         ],
         [
@@ -23415,6 +23712,21 @@
             "2002-council:台南市:regional:第1选举区:8",
             "2005-council:台南市:regional:第1选举区:4"
           ]
+        },
+        "9": {
+          "method": "cross-election unique exact official name, same historical county and geographic council district, consistent documented gender",
+          "years": [
+            2002
+          ],
+          "candidacy_ids": [
+            "2002-council:台南市:regional:第1选举区:13"
+          ],
+          "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/01a155a3be4b70e25b4c49fef7daf4f62a9a9b6e/assets/history-local-2002.json",
+          "source_blob_sha": "17e462c027426f533922f5efe454d4d0b74fcfa0",
+          "source_locator": "2002年議員候選人資料；1994範圍東區；2002範圍东区；兩屆原文姓名唯一匹配。",
+          "original_name": "林月香",
+          "value": "女",
+          "confidence": "cross_election_geographic_match"
         }
       },
       "incumbent_sources": {
@@ -23999,7 +24311,7 @@
           "高盈富",
           4710,
           "",
-          "",
+          "男",
           false
         ],
         [
@@ -24069,6 +24381,23 @@
           "votes": 5695,
           "additional_source": "https://tncc.digital.th.gov.tw/display.php?code=135251pQHmV"
         }
+      },
+      "gender_sources": {
+        "7": {
+          "method": "cross-election unique exact official name, same historical county and geographic council district, consistent documented gender",
+          "years": [
+            2002
+          ],
+          "candidacy_ids": [
+            "2002-council:台南市:regional:第5选举区:21"
+          ],
+          "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/01a155a3be4b70e25b4c49fef7daf4f62a9a9b6e/assets/history-local-2002.json",
+          "source_blob_sha": "17e462c027426f533922f5efe454d4d0b74fcfa0",
+          "source_locator": "2002年議員候選人資料；1994範圍安南區；2002範圍安南区；兩屆原文姓名唯一匹配。",
+          "original_name": "高盈富",
+          "value": "男",
+          "confidence": "cross_election_geographic_match"
+        }
       }
     },
     {
@@ -24132,7 +24461,7 @@
           "歐炳長",
           1411,
           "",
-          "",
+          "男",
           false
         ]
       ],
@@ -24149,6 +24478,21 @@
             "2002-council:台南市:regional:第6选举区:7",
             "2005-council:台南市:regional:第6选举区:6"
           ]
+        },
+        "6": {
+          "method": "cross-election unique exact official name, same historical county and geographic council district, consistent documented gender",
+          "years": [
+            1998
+          ],
+          "candidacy_ids": [
+            "1998-council:台南市:regional:第6选举区:6"
+          ],
+          "source_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/01a155a3be4b70e25b4c49fef7daf4f62a9a9b6e/assets/history-local-1998.json",
+          "source_blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+          "source_locator": "1998年議員候選人資料；1994範圍安平區；1998範圍安平区；兩屆原文姓名唯一匹配。",
+          "original_name": "歐炳長",
+          "value": "男",
+          "confidence": "cross_election_geographic_match"
         }
       }
     },

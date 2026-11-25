@@ -4,7 +4,7 @@
   "counts": {
     "unverified": 16,
     "conflict": 13,
-    "missing": 1461,
+    "missing": 1457,
     "not_applicable": 5,
     "partial": 17,
     "not_yet_available": 1
@@ -19,7 +19,7 @@
     "regional_town_returns": 2,
     "candidate_results": 14,
     "turnout": 1,
-    "gender": 195,
+    "gender": 173,
     "district_scope": 4,
     "ballot_number": 7,
     "reserved_seats": 8,
@@ -3416,7 +3416,7 @@
       "1994-council-counties:云林县:regional:第1选举区:1",
       "陈秀月",
       "missing",
-      "gender;incumbent_at_election",
+      "incumbent_at_election",
       "assets/history-local-1994.json",
       ""
     ],
@@ -3584,7 +3584,7 @@
       "1994-council-counties:云林县:regional:第1选举区:8",
       "林振财",
       "missing",
-      "gender;incumbent_at_election",
+      "incumbent_at_election",
       "assets/history-local-1994.json",
       ""
     ],
@@ -3682,7 +3682,7 @@
       "1994-council-counties:云林县:regional:第2选举区:2",
       "陈文山",
       "missing",
-      "gender;incumbent_at_election",
+      "incumbent_at_election",
       "assets/history-local-1994.json",
       ""
     ],
@@ -3822,7 +3822,7 @@
       "1994-council-counties:云林县:regional:第3选举区:12",
       "吴明选",
       "missing",
-      "gender;incumbent_at_election",
+      "incumbent_at_election",
       "assets/history-local-1994.json",
       ""
     ],
@@ -3976,7 +3976,7 @@
       "1994-council-counties:云林县:regional:第3选举区:7",
       "蔡桓生",
       "missing",
-      "gender;incumbent_at_election",
+      "incumbent_at_election",
       "assets/history-local-1994.json",
       ""
     ],
@@ -4046,7 +4046,7 @@
       "1994-council-counties:云林县:regional:第4选举区:2",
       "吴顺丰",
       "missing",
-      "gender;incumbent_at_election",
+      "incumbent_at_election",
       "assets/history-local-1994.json",
       ""
     ],
@@ -4480,7 +4480,7 @@
       "1994-council-counties:南投县:regional:第1选举区:1",
       "陈聪鉴",
       "missing",
-      "gender;incumbent_at_election",
+      "incumbent_at_election",
       "assets/history-local-1994.json",
       ""
     ],
@@ -4858,7 +4858,7 @@
       "1994-council-counties:南投县:regional:第2选举区:2",
       "廖宜绿",
       "missing",
-      "gender;incumbent_at_election",
+      "incumbent_at_election",
       "assets/history-local-1994.json",
       ""
     ],
@@ -9730,7 +9730,7 @@
       "1994-council-counties:台南市:regional:第1选举区:9",
       "林月香",
       "missing",
-      "gender;incumbent_at_election",
+      "incumbent_at_election",
       "assets/history-local-1994.json",
       ""
     ],
@@ -10416,7 +10416,7 @@
       "1994-council-counties:台南市:regional:第5选举区:7",
       "高盈富",
       "missing",
-      "gender;incumbent_at_election",
+      "incumbent_at_election",
       "assets/history-local-1994.json",
       ""
     ],
@@ -10514,7 +10514,7 @@
       "1994-council-counties:台南市:regional:第6选举区:6",
       "欧炳长",
       "missing",
-      "gender;incumbent_at_election",
+      "incumbent_at_election",
       "assets/history-local-1994.json",
       ""
     ],
@@ -11186,7 +11186,7 @@
       "1994-council-counties:嘉义县:regional:第5选举区:3",
       "蔡宝雄",
       "missing",
-      "gender;incumbent_at_election",
+      "incumbent_at_election",
       "assets/history-local-1994.json",
       ""
     ],
@@ -11788,7 +11788,7 @@
       "1994-council-counties:基隆市:regional:第1选举区:9",
       "周明贤",
       "missing",
-      "gender;incumbent_at_election",
+      "incumbent_at_election",
       "assets/history-local-1994.json",
       ""
     ],
@@ -11816,7 +11816,7 @@
       "1994-council-counties:基隆市:regional:第2选举区:2",
       "柯金标",
       "missing",
-      "gender;incumbent_at_election",
+      "incumbent_at_election",
       "assets/history-local-1994.json",
       ""
     ],
@@ -11872,7 +11872,7 @@
       "1994-council-counties:基隆市:regional:第2选举区:7",
       "张金华",
       "missing",
-      "gender;incumbent_at_election",
+      "incumbent_at_election",
       "assets/history-local-1994.json",
       ""
     ],
@@ -12026,7 +12026,7 @@
       "1994-council-counties:基隆市:regional:第4选举区:12",
       "阙美玉",
       "missing",
-      "gender;incumbent_at_election",
+      "incumbent_at_election",
       "assets/history-local-1994.json",
       ""
     ],
@@ -12194,7 +12194,7 @@
       "1994-council-counties:基隆市:regional:第5选举区:3",
       "许箸宏",
       "missing",
-      "gender;incumbent_at_election",
+      "incumbent_at_election",
       "assets/history-local-1994.json",
       ""
     ],
@@ -14767,36 +14767,8 @@
       "candidate",
       "彰化县",
       "第4选举区",
-      "1994-council-counties:彰化县:regional:第4选举区:11",
-      "王坤盛",
-      "missing",
-      "gender",
-      "assets/history-local-1994.json",
-      ""
-    ],
-    [
-      1994,
-      "council",
-      "regional",
-      "candidate",
-      "彰化县",
-      "第4选举区",
       "1994-council-counties:彰化县:regional:第4选举区:18",
       "张俊杰",
-      "missing",
-      "gender",
-      "assets/history-local-1994.json",
-      ""
-    ],
-    [
-      1994,
-      "council",
-      "regional",
-      "candidate",
-      "彰化县",
-      "第4选举区",
-      "1994-council-counties:彰化县:regional:第4选举区:2",
-      "黄庆贤",
       "missing",
       "gender",
       "assets/history-local-1994.json",
@@ -14867,20 +14839,6 @@
       "第5选举区",
       "1994-council-counties:彰化县:regional:第5选举区:6",
       "杨文陀",
-      "missing",
-      "gender",
-      "assets/history-local-1994.json",
-      ""
-    ],
-    [
-      1994,
-      "council",
-      "regional",
-      "candidate",
-      "彰化县",
-      "第6选举区",
-      "1994-council-counties:彰化县:regional:第6选举区:1",
-      "陈永助",
       "missing",
       "gender",
       "assets/history-local-1994.json",
@@ -19163,20 +19121,6 @@
       "candidate",
       "苗栗县",
       "第4选举区",
-      "1994-council-counties:苗栗县:regional:第4选举区:5",
-      "叶武生",
-      "missing",
-      "gender",
-      "assets/history-local-1994.json",
-      ""
-    ],
-    [
-      1994,
-      "council",
-      "regional",
-      "candidate",
-      "苗栗县",
-      "第4选举区",
       "1994-council-counties:苗栗县:regional:第4选举区:6",
       "林昆铭",
       "missing",
@@ -19278,7 +19222,7 @@
       "1994-council-counties:苗栗县:regional:第5选举区:2",
       "吕云富",
       "missing",
-      "gender;incumbent_at_election",
+      "incumbent_at_election",
       "assets/history-local-1994.json",
       ""
     ],
