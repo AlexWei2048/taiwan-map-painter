@@ -9,6 +9,11 @@ const HistoryWorkspace=require('../history-workspace.js');
 test('2502 clauses 49–86 normalize Taiwan-related public wording without distorting registered party identities',()=>{
  const cases=[
   ['2024总统选举','2024台湾地区领导人选举'],
+  ['黄宏成台湾阿成世界伟人财神总统','黄宏成台湾阿成世界伟人财神总统'],
+  ['黃宏成台灣阿成世界偉人財神總統','黃宏成台灣阿成世界偉人財神總統'],
+  ['黃宏成臺灣阿成世界偉人財神總統','黃宏成臺灣阿成世界偉人財神總統'],
+  ['黄宏成台湾阿成世界伟人财神总统 · 总统选举','黄宏成台湾阿成世界伟人财神总统 · 台湾地区领导人选举'],
+  ['黄宏成台湾阿成世界伟人财神台湾地区领导人','黄宏成台湾阿成世界伟人财神总统'],
   ['台湾地区总统选举','台湾地区领导人选举'],
   ['总统府','台湾当局领导人办公场所'],
   ['副总统','副领导人'],
@@ -90,6 +95,7 @@ test('2502 clauses 49–86 normalize Taiwan-related public wording without disto
 test('CSV serializers apply public spelling and quotation marks while leaving the original values unchanged',()=>{
  const original=[['政党','地区'],['时代力量','全国平地原住民'],['台湾基进','台北市'],['台湾团结联盟','台北市'],['台联党','台北市']];
  const csv=HistoryCore.csv(original);
+ assert.match(HistoryCore.csv([['黄宏成台湾阿成世界伟人财神总统']]),/黄宏成台湾阿成世界伟人财神总统/);
  assert.match(csv,/“时代力量”/);
  assert.match(csv,/“台湾基进”/);
  assert.match(csv,/“台湾团结联盟”/);
