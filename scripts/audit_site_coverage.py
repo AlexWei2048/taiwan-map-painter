@@ -73,6 +73,28 @@ def elections():
             samples["election-2026-candidates"]=data["candidates"]
     return samples
 
+def elected_parties():
+    # Use one record per official candidacy, not geographic tally rows:
+    # a winning candidate can be repeated hundreds of times in those rows.
+    wins=collections.Counter()
+    examples=collections.defaultdict(list)
+    seen=set()
+    for path in sorted(ASSETS.glob("history-*.json")):
+        if not re.fullmatch(r"history-(?:(?:legislative|local|president)-)?\d{4}\.json",path.name):continue
+        data=load_json(path)
+        contests={c.get("contest_id"):c for c in data.get("contests",[])}
+        for row in data.get("candidacies",[]):
+            if row.get("elected_official") is not True:continue
+            name=normalized(row.get("party_name") or row.get("party") or row.get("party_name_official"))
+            if name in ("","无党籍","连署","政党资料缺失","无党籍（连署）","其他政党"):continue
+            key=(path.name,row.get("candidacy_id") or (row.get("contest_id"),row.get("ballot_number"),row.get("candidate_name")))
+            if key in seen:continue
+            seen.add(key)
+            wins[name]+=1
+            contest=contests.get(row.get("contest_id"),{})
+            examples[name].append({"archive":path.name,"contest":row.get("contest_id"),"name":row.get("candidate_name"),"election":contest.get("election_id")})
+    return wins,examples
+
 def inventory():
     presets=parties();baseline=set(logo_keys())
     official_ids,official_names=sourced_logos()
@@ -95,15 +117,18 @@ def inventory():
             if not n:continue
             counter[n]+=1;raw[n].add(str(name));years[n].add(source)
             votes[n]+=int(row.get("votes",0) or 0)
+    wins,win_examples=elected_parties()
     missing=[]
     for name,count in counter.most_common():
         pid=indexed.get(name)
         # 连署/连署参选 is an independent nomination mechanism, NOT a
         # legally registered party that could possess an official party logo.
-        if name in ("连署", "連署"):continue
+        if name in ("连署", "連署","无党籍","政党资料缺失","无党籍（连署）","其他政党"):continue
         if pid and pid in keys or name in official_names:continue
         missing.append({"name":name,"rows":count,"total_votes_across_grains":votes[name],
-            "known_preset":pid or None,"sources":sorted(years[name]),"spellings":sorted(raw[name])})
+            "known_preset":pid or None,"sources":sorted(years[name]),"spellings":sorted(raw[name]),
+            "confirmed_elected_count":wins[name],"elected_examples":win_examples[name][:12]})
+    missing.sort(key=lambda x:(-int(x["confirmed_elected_count"]>0),-x["confirmed_elected_count"],-x["rows"],x["name"]))
     unused=[{"id":p["id"],"name":p["name"],"aliases":p.get("aliases",[])}
         for p in presets if p["id"] not in keys and p["id"] not in ("gray","red")]
     text_sources={}
@@ -135,6 +160,7 @@ def inventory():
            "has_logo":bool(indexed.get(name) in keys or name in official_names)} for name,count in counter.most_common(180)],
         "missing_preset_logos":unused,
         "missing_archive_logos":missing,
+        "missing_elected_party_logos":[x for x in missing if x["confirmed_elected_count"]>0],
         "placeholder_code_locations":text_sources,
         "historical_legislative_turnout":turnout,
         "archives_scanned":list(elections().keys())}
@@ -158,9 +184,9 @@ def markdown(result):
       "| 名称 | 内部标识 |",
       "|---|---|"]
     lines += [f"| {x['name']} | `{x['id']}` |" for x in result["missing_preset_logos"]]
-    lines += ["","## 缺党徽的已出现历史党名（按出现记录数排序）","",
-              "| 名称 | 数据行数 | 首个来源 |","|---|---:|---|"]
-    lines += [f"| {x['name']} | {x['rows']} | {x['sources'][0] if x['sources'] else ''} |"
+    lines += ["","## 缺党徽的历史及现行党名（曾当选者优先）","",
+              "| 名称 | 已确认当选次数 | 数据行数 | 首个来源 |","|---|---:|---:|---|"]
+    lines += [f"| {x['name']} | {x['confirmed_elected_count']} | {x['rows']} | {x['sources'][0] if x['sources'] else ''} |"
               for x in result["missing_archive_logos"]]
     lines += ["","## 投票人数、有效票和无效票覆盖范围","","| 年份 | 票种 | 全部地区 | 县市 | 乡镇市区 | 区域选区 |",
               "|---|---|---|---:|---:|---:|"]
@@ -179,6 +205,7 @@ if __name__=="__main__":
     (REPORT/"coverage-audit.md").write_text(markdown(result),encoding="utf-8")
     print(json.dumps({k:result[k] for k in ('total_preset_parties','total_current_logo_ids','total_party_names_in_archives')},ensure_ascii=False))
     print("MISSING_PRESET_LOGOS",json.dumps(result["missing_preset_logos"],ensure_ascii=False))
+    print("MISSING_ELECTED_PARTY_LOGOS",json.dumps(result["missing_elected_party_logos"],ensure_ascii=False))
     print("MISSING_ARCHIVE_LOGOS",json.dumps(result["missing_archive_logos"][:80],ensure_ascii=False))
     print("SOURCE_PHRASES",json.dumps(result["placeholder_code_locations"],ensure_ascii=False))
     print("TURNOUT",json.dumps(result["historical_legislative_turnout"],ensure_ascii=False))

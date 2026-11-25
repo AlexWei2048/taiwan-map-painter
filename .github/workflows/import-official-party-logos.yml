@@ -16,7 +16,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-        with: {persist-credentials: true}
+        with: {persist-credentials: true, ref: main}
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
       - run: python -m pip install pillow requests beautifulsoup4 opencc-python-reimplemented cairosvg pymupdf
@@ -56,5 +56,6 @@ jobs:
           git add assets/party-logos-sourced.js assets/LICENSE-party-logos-sourced.txt reports/official-party-logos-import.json reports/coverage-audit.json reports/coverage-audit.md index.html map-v60.html
           if ! git diff --cached --quiet; then
             git commit -m "Publish verified ministry-registered historical party emblems with source attribution"
+            git pull --rebase origin main
             git push origin HEAD:main
           fi

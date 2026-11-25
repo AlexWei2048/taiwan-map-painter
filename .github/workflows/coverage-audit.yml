@@ -10,12 +10,16 @@ on:
       - .github/workflows/coverage-audit.yml
 permissions:
   contents: write
+concurrency:
+  group: verified-party-logo-import
+  cancel-in-progress: false
 jobs:
   audit:
     runs-on: ubuntu-24.04
     timeout-minutes: 9
     steps:
       - uses: actions/checkout@v4
+        with: {ref: main}
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -28,5 +32,6 @@ jobs:
           git add reports/coverage-audit.json reports/coverage-audit.md
           if ! git diff --cached --quiet; then
             git commit -m "Update audited party emblem and election data coverage report"
+            git pull --rebase origin main
             git push origin HEAD:main
           fi
