@@ -55,7 +55,7 @@
  }
  function loadLegacyCouncil(fetcher){
   if(!legacyCouncilRequest)legacyCouncilRequest=(async()=>{
-   const response=await fetcher('assets/history-local-1994-council.json?v=9');
+   const response=await fetcher('assets/history-local-1994-council.json?v=10');
    if(!response.ok)throw Error('1994县市议员补充资料 HTTP '+response.status);
    const archive=await response.json();
    if(archive.version!==1||!archive.districts?.length)throw Error('1994县市议员补充资料不完整');
@@ -82,12 +82,13 @@
    });
    for(const [ballot,originalName,votes,originalParty,gender,elected] of item.candidates){
     const number=String(ballot),name=normalize(originalName),party=normalize(originalParty)||'政党资料缺失';
+    const incumbentSource=item.incumbent_sources?.[number],incumbent=typeof incumbentSource?.value==='boolean'?incumbentSource.value:null;
     candidacies.push({
      candidacy_id:id+':'+number,contest_id:id,ballot_number:number,candidate_name:name,candidate_name_official:originalName,
-     party_name:party,party_name_official:originalParty,gender,gender_source:item.gender_sources?.[number]||null,incumbent_at_election:null,votes,
+     party_name:party,party_name_official:originalParty,gender,gender_source:item.gender_sources?.[number]||null,incumbent_at_election:incumbent,incumbent_source:incumbentSource||null,votes,
      vote_share:valid_votes?100*votes/valid_votes:0,elected_official:elected
     });
-    rows.push({type:'council',level:'district',county,district,electorate,number,name,party,gender,votes,elected,incumbent:null,town:''});
+    rows.push({type:'council',level:'district',county,district,electorate,number,name,party,gender,votes,elected,incumbent,town:''});
    }
   }
   const election={election_id:electionId,year:1994,office:'council',source_url:archive.source_url,source_name:'地方选务档案转录'};
