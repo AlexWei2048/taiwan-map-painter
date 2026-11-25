@@ -15,7 +15,7 @@
   'history-legislative-turnout.js','history-legislative-data.js','history-local.js',
   'history-workspace.js','history-2022.js','history-trends.js','history-trends-ui.js'
  ];
- const tagged=path=>path+(path.includes('?')?'&':'?')+'v=20261125-local-evidence-v48';
+ const tagged=path=>path+(path.includes('?')?'&':'?')+'v=20261125-local-evidence-v49';
  function domStyleLoader(document){return href=>new Promise((resolve,reject)=>{
   const selector='link[data-history-asset="'+href+'"]',existing=document.querySelector(selector);
   if(existing){if(existing.dataset.loaded==='true')return resolve();existing.addEventListener('load',resolve,{once:true});existing.addEventListener('error',reject,{once:true});return}

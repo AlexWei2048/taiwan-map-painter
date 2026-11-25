@@ -8528,13 +8528,21 @@
       "candidate_name": "杨秋兴",
       "candidate_name_official": "楊秋興",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "民主进步党",
       "party_name_official": "民主進步黨",
       "votes": 44447,
       "vote_share": 33.516575,
       "elected_official": false,
-      "elected_mark": ""
+      "elected_mark": "",
+      "incumbent_source": {
+        "name": "黃八野",
+        "source_url": "https://zh.wikipedia.org/wiki/鳳山區",
+        "secondary_source": "https://ed.arte.gov.tw/ch/content/m_links_oschool_content.aspx?Sid=220",
+        "source_locator": "歷任首長表：1986-03-01至1994-02-28；林龍瑞1994-03-01才就任。教育部藝術教育網亦記載黃八野為1994年4月圖書館成立前任市長。",
+        "confidence": "secondary_term_roster_crosscheck",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:高雄县:regional:凤山市:2",
@@ -8543,13 +8551,21 @@
       "candidate_name": "林龙瑞",
       "candidate_name_official": "林龍瑞",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "中国国民党",
       "party_name_official": "中國國民黨",
       "votes": 49563,
       "vote_share": 37.374446,
       "elected_official": true,
-      "elected_mark": "*"
+      "elected_mark": "*",
+      "incumbent_source": {
+        "name": "黃八野",
+        "source_url": "https://zh.wikipedia.org/wiki/鳳山區",
+        "secondary_source": "https://ed.arte.gov.tw/ch/content/m_links_oschool_content.aspx?Sid=220",
+        "source_locator": "歷任首長表：1986-03-01至1994-02-28；林龍瑞1994-03-01才就任。教育部藝術教育網亦記載黃八野為1994年4月圖書館成立前任市長。",
+        "confidence": "secondary_term_roster_crosscheck",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:高雄县:regional:凤山市:3",
@@ -8558,13 +8574,21 @@
       "candidate_name": "江吉源",
       "candidate_name_official": "江吉源",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "无党籍",
       "party_name_official": "無黨籍",
       "votes": 38602,
       "vote_share": 29.10898,
       "elected_official": false,
-      "elected_mark": ""
+      "elected_mark": "",
+      "incumbent_source": {
+        "name": "黃八野",
+        "source_url": "https://zh.wikipedia.org/wiki/鳳山區",
+        "secondary_source": "https://ed.arte.gov.tw/ch/content/m_links_oschool_content.aspx?Sid=220",
+        "source_locator": "歷任首長表：1986-03-01至1994-02-28；林龍瑞1994-03-01才就任。教育部藝術教育網亦記載黃八野為1994年4月圖書館成立前任市長。",
+        "confidence": "secondary_term_roster_crosscheck",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:高雄县:regional:林园乡:1",
@@ -10616,13 +10640,21 @@
       "candidate_name": "林永烁",
       "candidate_name_official": "林永爍",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": true,
       "party_name": "中国国民党",
       "party_name_official": "中國國民黨",
       "votes": 5963,
       "vote_share": 53.245826,
       "elected_official": true,
-      "elected_mark": "*"
+      "elected_mark": "*",
+      "incumbent_source": {
+        "name": "林永爍",
+        "source_url": "https://zh.wikipedia.org/wiki/三星鄉_(台灣)",
+        "secondary_source": "https://vagim.blogspot.com/2023/05/3068.html",
+        "source_locator": "第11屆任期1990-03-01至1994-02-28；1994年連任後才停職。",
+        "confidence": "secondary_term_roster_crosscheck",
+        "value": true
+      }
     },
     {
       "candidacy_id": "1994-township:宜兰县:regional:三星乡:2",
@@ -10631,13 +10663,21 @@
       "candidate_name": "魏荣胜",
       "candidate_name_official": "魏榮勝",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "民主进步党",
       "party_name_official": "民主進步黨",
       "votes": 5236,
       "vote_share": 46.754174,
       "elected_official": false,
-      "elected_mark": ""
+      "elected_mark": "",
+      "incumbent_source": {
+        "name": "林永爍",
+        "source_url": "https://zh.wikipedia.org/wiki/三星鄉_(台灣)",
+        "secondary_source": "https://vagim.blogspot.com/2023/05/3068.html",
+        "source_locator": "第11屆任期1990-03-01至1994-02-28；1994年連任後才停職。",
+        "confidence": "secondary_term_roster_crosscheck",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:宜兰县:regional:大同乡:1",
@@ -18239,7 +18279,7 @@
       "number": "1",
       "party": "民主进步党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 44447,
       "elected": false,
       "electedMark": "",
@@ -18255,7 +18295,7 @@
       "number": "2",
       "party": "中国国民党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 49563,
       "elected": true,
       "electedMark": "*",
@@ -18271,7 +18311,7 @@
       "number": "3",
       "party": "无党籍",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 38602,
       "elected": false,
       "electedMark": "",
@@ -20127,7 +20167,7 @@
       "number": "1",
       "party": "中国国民党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": true,
       "votes": 5963,
       "elected": true,
       "electedMark": "*",
@@ -20143,7 +20183,7 @@
       "number": "2",
       "party": "民主进步党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 5236,
       "elected": false,
       "electedMark": "",

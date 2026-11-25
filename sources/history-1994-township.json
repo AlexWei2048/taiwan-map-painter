@@ -1144,7 +1144,14 @@
               38602,
               false
             ]
-          ]
+          ],
+          "incumbency_at_election": {
+            "name": "黃八野",
+            "source_url": "https://zh.wikipedia.org/wiki/鳳山區",
+            "secondary_source": "https://ed.arte.gov.tw/ch/content/m_links_oschool_content.aspx?Sid=220",
+            "source_locator": "歷任首長表：1986-03-01至1994-02-28；林龍瑞1994-03-01才就任。教育部藝術教育網亦記載黃八野為1994年4月圖書館成立前任市長。",
+            "confidence": "secondary_term_roster_crosscheck"
+          }
         },
         {
           "town": "林園鄉",
@@ -2996,7 +3003,14 @@
               5236,
               false
             ]
-          ]
+          ],
+          "incumbency_at_election": {
+            "name": "林永爍",
+            "source_url": "https://zh.wikipedia.org/wiki/三星鄉_(台灣)",
+            "secondary_source": "https://vagim.blogspot.com/2023/05/3068.html",
+            "source_locator": "第11屆任期1990-03-01至1994-02-28；1994年連任後才停職。",
+            "confidence": "secondary_term_roster_crosscheck"
+          }
         },
         {
           "town": "大同鄉",

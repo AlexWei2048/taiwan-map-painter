@@ -11864,7 +11864,20 @@
           "男",
           true
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "10": {
+          "value": true,
+          "source_url": "https://zh.wikipedia.org/wiki/張榮味",
+          "source_locator": "第12、13屆議長；1993-02-13同期官方新聞確認任職，並有1994年競選議長記錄。",
+          "election_date": "1994-01-29",
+          "method": "term_history_unique_name",
+          "original_name": "張榮味",
+          "ballot_number": 10,
+          "votes": 9860,
+          "secondary_source": "https://www.president.gov.tw/NEWS/21336"
+        }
+      }
     },
     {
       "county": "雲林縣",
@@ -16446,7 +16459,20 @@
           "男",
           false
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "6": {
+          "value": true,
+          "source_url": "https://www.cna.com.tw/news/asoc/202006180321.aspx",
+          "source_locator": "中央社記載第12、13屆議長，1993-02-13同期官方新聞確認任職。",
+          "election_date": "1994-01-29",
+          "method": "term_history_unique_name",
+          "original_name": "鄭太吉",
+          "ballot_number": 6,
+          "votes": 6874,
+          "secondary_source": "https://www.president.gov.tw/NEWS/21336"
+        }
+      }
     },
     {
       "county": "屏東縣",
@@ -16939,7 +16965,19 @@
           "男",
           true
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "5": {
+          "value": true,
+          "source_url": "https://www.moi.gov.tw/LocalOfficial_Content.aspx?TYP=KND0002&_PARENT_ID=ER11112TB00007&_TYP=REP&n=574",
+          "source_locator": "主管機關官方履歷：屏東縣議會第11至19屆議員。",
+          "election_date": "1994-01-29",
+          "method": "term_history_unique_name",
+          "original_name": "王啟敏",
+          "ballot_number": 5,
+          "votes": 7983
+        }
+      }
     },
     {
       "county": "屏東縣",
@@ -20901,7 +20939,30 @@
           "男",
           true
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "1": {
+          "value": true,
+          "source_url": "https://www.hsinchu-cc.gov.tw/TC/page.aspx?mid=24",
+          "source_locator": "議會沿革第三、四屆議長，1990及1994年3月1日就職；1993-02-13官方新聞確認其在任。",
+          "election_date": "1994-01-29",
+          "method": "term_history_unique_name",
+          "original_name": "楊金木",
+          "ballot_number": 1,
+          "votes": 4285,
+          "secondary_source": "https://www.president.gov.tw/NEWS/21336"
+        },
+        "10": {
+          "value": true,
+          "source_url": "https://www.judicial.gov.tw/tw/dl-88364-b4ea55be59f747f2932aff3b7a0e1714.html",
+          "source_locator": "最高法院2020-01-21公開新聞稿，第2頁，明載1990-03-01至2010-02-28連續擔任第三至第七屆議員；文字可讀，截圖失敗。",
+          "election_date": "1994-01-29",
+          "method": "term_history_unique_name",
+          "original_name": "李黃錦燕",
+          "ballot_number": 10,
+          "votes": 4380
+        }
+      }
     },
     {
       "county": "新竹市",
