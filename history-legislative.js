@@ -557,7 +557,7 @@
   const promise=(async()=>{
    const [response,local]=await Promise.all([
     fetcher('assets/history-legislative-'+year+'.json?v=20261124-vote-reconciliation-v4',{cache:'default'}),
-    [1992,2001].includes(year)?fetcher('assets/history-legislative-'+year+'-local.json?v='+(year===1992?'2':'1')).then(response=>{
+    [1992,2001].includes(year)?fetcher('assets/history-legislative-'+year+'-local.json?v='+(year===1992?'3':'1')).then(response=>{
      if(!response.ok)throw Error(year+'年地方得票资料 HTTP '+response.status);
      return response.json();
     }):null
