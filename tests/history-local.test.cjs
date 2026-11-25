@@ -239,7 +239,15 @@ test('The partial 1994 township archive reconciles all 89 contests across eight 
  const extra=shard.partialTownshipReturns.slice(2);
  assert.deepEqual(extra.filter(r=>r.summary_scope==='county').map(r=>r.county),['桃園縣','臺中縣','苗栗縣','彰化縣','臺南縣']);
  assert.deepEqual(extra.flatMap(r=>(r.profiles||[]).map(p=>p.winner_name).filter(Boolean)),
-  ['邱一郎','李仁生','鍾明祥','蘇青山','陳振恭','蘇金煌','簡錦全','林中禮','許裕欽']);
+  ['邱一郎','李仁生','鍾明祥','蘇青山','陳振恭','蘇金煌','簡錦全','林中禮','許裕欽','曾文敬']);
+ const luzhu=extra.find(r=>r.county==='桃園縣'&&r.profiles?.some(p=>p.town==='蘆竹鄉'));
+ assert.deepEqual(luzhu.profile_totals,[61718,39776,38308,1468]);
+ assert.deepEqual(luzhu.profiles.map(p=>[p.candidate_count,p.male_candidates,p.female_candidates,p.winner_name,p.turnout_pct]),[[2,2,0,'曾文敬',64.45]]);
+ assert.equal(luzhu.profiles[0].valid_votes+luzhu.profiles[0].invalid_votes,luzhu.profiles[0].ballots_cast);
+ for(const [county,town,name] of [['桃園縣','龜山鄉','曾忠義'],['桃園縣','平鎮市','莊玉光'],['彰化縣','埤頭鄉','蘇來看']]){
+  assert.ok(extra.some(r=>r.county===county&&r.winners?.some(w=>w.town===town&&w.name===name&&w.incumbent_at_election===true)),town);
+ }
+ assert.deepEqual(hualien.winners.find(w=>w.town==='光復鄉'),{town:'光復鄉',name:'陳文光',gender:'男',votes:6791,incumbent_at_election:true});
  const yunlin=extra.filter(r=>r.county==='雲林縣'&&r.profiles?.length).slice(1);
  assert.deepEqual(yunlin.map(r=>[r.profiles[0].town,...r.profile_totals]),[
   ['莿桐鄉',20793,16257,15947,310],['四湖鄉',23307,14907,14467,440],
