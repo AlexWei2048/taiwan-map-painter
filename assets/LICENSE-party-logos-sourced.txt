@@ -261,3 +261,8 @@
 登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&s=554&sms=13073
 原图：https://ws.moi.gov.tw/001/Upload/444/relpic/13073/554/9e74dfca-3a59-40e1-900d-e1adb3c51aa1.jpg
 来源SHA256：f00fba76ea51cd402ed07fd51e0279467dc0a523a53339d7d10d9447140e5fe4
+
+台湾SoR无法党 [历史名称]
+登记：https://xn--2lw665d.tw/party/366
+原图：https://xn--2lw665d.tw/party/moi-425.png
+来源SHA256：94909e83d150648950f74a5e755463fb80a08ba806a6a98badad363861dd8f6c

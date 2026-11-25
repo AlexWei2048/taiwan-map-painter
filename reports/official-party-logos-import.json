@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "count_by_id": 14,
-  "count_by_historical_name": 39,
+  "count_by_historical_name": 40,
   "official_sources": [
     {
       "name": "大爱宪改",
@@ -589,6 +589,20 @@
       "image_bytes": 9231,
       "size_after_fit": "116x116",
       "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "台湾SoR无法党",
+      "party_id": null,
+      "official_registry": "https://xn--2lw665d.tw/party/366",
+      "official_image": "https://xn--2lw665d.tw/party/moi-425.png",
+      "source_sha256": "94909e83d150648950f74a5e755463fb80a08ba806a6a98badad363861dd8f6c",
+      "rendered_sha256": "5a6c75ab95901ad119ca9d0323659af2e1c34b647254d6a67282c847482e6ebf",
+      "image_bytes": 20370,
+      "size_after_fit": "128x128",
+      "license": "Current party emblem identified by the named party profile; rights retained by owner, identification only",
+      "source_alternative": [
+        "https://xn--2lw665d.tw/party/moi-425.png"
+      ]
     }
   ],
   "unverified_or_unavailable": [
@@ -708,6 +722,22 @@
     {
       "name": "中华文化复兴在理党",
       "reason": "ministry has no uploaded emblem image"
+    },
+    {
+      "name": "红党",
+      "reason": "official/commons source unavailable: 400 Client Error: Use thumbnail sizes listed on https://w.wiki/GHai for url: https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Red_party_flag.svg/320px-Red_party_flag.svg.png"
+    },
+    {
+      "name": "青年阳光党",
+      "reason": "official/commons source unavailable: 429 Client Error: Too Many Requests (015d12c) for url: https://upload.wikimedia.org/wikipedia/commons/d/da/%E9%9D%92%E5%B9%B4%E9%99%BD%E5%85%89%E9%BB%A8.png"
+    },
+    {
+      "name": "基进党",
+      "reason": "official/commons source unavailable: 429 Client Error: Too Many Requests (015d12c) for url: https://upload.wikimedia.org/wikipedia/commons/f/fe/%E5%9F%BA%E9%80%B2%E9%BB%A8%EF%BD%9CLOGO.jpg"
+    },
+    {
+      "name": "台湾双语无法党",
+      "reason": "official/commons source unavailable: 429 Client Error: Too Many Requests (015d12c) for url: https://upload.wikimedia.org/wikipedia/commons/a/a4/%E8%87%BA%E7%81%A3%E9%9B%99%E8%AA%9E%E7%84%A1%E6%B3%95%E9%BB%A8%E9%BB%A8%E5%BE%BD.png"
     }
   ]
 }
