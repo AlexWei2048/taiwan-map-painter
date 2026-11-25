@@ -1,0 +1,20 @@
+{
+  "county": "基隆市",
+  "election_date": "1994-01-29",
+  "term": "第十三屆",
+  "registered_voters": 240830,
+  "ballots_cast": 150766,
+  "valid_votes": 148355,
+  "invalid_votes": 2411,
+  "candidate_count": 71,
+  "male_candidates": 64,
+  "female_candidates": 7,
+  "elected_count": 28,
+  "male_elected": 25,
+  "female_elected": 3,
+  "source_url": "https://www.klcg.gov.tw/wSite/public/Attachment/022/f1638788728150.pdf",
+  "source_locator": "基隆市統計年報表3-9「基隆市議員選舉概況」，頁3-32至3-33，83/01/29第十三屆",
+  "level": "county",
+  "method": "official_yearbook_county_total_not_district",
+  "limitations": "Countywide only; do not distribute ballots or voter totals to eight council constituencies. Aggregate gender counts do not imply identities of candidates with unknown gender."
+}

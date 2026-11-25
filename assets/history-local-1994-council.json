@@ -394,6 +394,18 @@
       "secondary_source": "https://web.cec.gov.tw/api/file/8c0c7bea-1128-43b9-aec7-47e7f5c1bfd9.pdf",
       "term_source": "https://web.cec.gov.tw/central/article/18789",
       "method": "Official prior-election winner and current candidate exact name, gender, party and compatible district geography. Inferred incumbent within statutory term; departure records incomplete, no negative inference."
+    },
+    {
+      "county": "嘉義縣",
+      "complete": false,
+      "roster": 37,
+      "confirmed_true": 2,
+      "inferred_true": 19,
+      "confirmed_false": 0,
+      "unverified": 44,
+      "ambiguous": [],
+      "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+      "method": "1990–1994 official previous term roster, same county unique traditional-name match; 19 new positives plus 2 prior known. Nonmatches unknown."
     }
   ],
   "districts": [
@@ -13368,6 +13380,50 @@
           "original_name": "蕭登標",
           "ballot_number": 5,
           "votes": 7081
+        },
+        "6": {
+          "value": true,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "method": "official_prior_term_roster_exact_same_county_candidate_match",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "roster_name": "董象",
+          "ballot_number": 6,
+          "votes": 5466,
+          "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
+        },
+        "10": {
+          "value": true,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "method": "official_prior_term_roster_exact_same_county_candidate_match",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "roster_name": "呂潮淞",
+          "ballot_number": 10,
+          "votes": 6589,
+          "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
+        },
+        "12": {
+          "value": true,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "method": "official_prior_term_roster_exact_same_county_candidate_match",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "roster_name": "鄭陳秋霞",
+          "ballot_number": 12,
+          "votes": 3796,
+          "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
+        },
+        "13": {
+          "value": true,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "method": "official_prior_term_roster_exact_same_county_candidate_match",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "roster_name": "王榮聰",
+          "ballot_number": 13,
+          "votes": 4951,
+          "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
         }
       },
       "gender_sources": {
@@ -13470,7 +13526,31 @@
           "",
           false
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "2": {
+          "value": true,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "method": "official_prior_term_roster_exact_same_county_candidate_match",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "roster_name": "賴朝崙",
+          "ballot_number": 2,
+          "votes": 8146,
+          "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
+        },
+        "6": {
+          "value": true,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "method": "official_prior_term_roster_exact_same_county_candidate_match",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "roster_name": "林登乾",
+          "ballot_number": 6,
+          "votes": 5269,
+          "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
+        }
+      }
     },
     {
       "county": "嘉義縣",
@@ -13588,6 +13668,30 @@
           "value": "男",
           "secondary_source": "https://votetw.com/data/election/20141101V1E1?%E7%9C%81%E5%B8%82=10&%E7%B8%A3%E5%B8%82=010&%E9%84%89%E9%8E%AE%E5%B8%82%E5%8D%80=040"
         }
+      },
+      "incumbent_sources": {
+        "9": {
+          "value": true,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "method": "official_prior_term_roster_exact_same_county_candidate_match",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "roster_name": "林金敏",
+          "ballot_number": 9,
+          "votes": 4997,
+          "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
+        },
+        "10": {
+          "value": true,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "method": "official_prior_term_roster_exact_same_county_candidate_match",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "roster_name": "簡芳龍",
+          "ballot_number": 10,
+          "votes": 4309,
+          "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
+        }
       }
     },
     {
@@ -13704,7 +13808,64 @@
           "女",
           true
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "2": {
+          "value": true,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "method": "official_prior_term_roster_exact_same_county_candidate_match",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "roster_name": "李清圳",
+          "ballot_number": 2,
+          "votes": 7795,
+          "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
+        },
+        "3": {
+          "value": true,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "method": "official_prior_term_roster_exact_same_county_candidate_match",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "roster_name": "黃文峯",
+          "ballot_number": 3,
+          "votes": 7364,
+          "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
+        },
+        "5": {
+          "value": true,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "method": "official_prior_term_roster_exact_same_county_candidate_match",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "roster_name": "陳茂卿",
+          "ballot_number": 5,
+          "votes": 8449,
+          "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
+        },
+        "10": {
+          "value": true,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "method": "official_prior_term_roster_exact_same_county_candidate_match",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "roster_name": "姚福瑞",
+          "ballot_number": 10,
+          "votes": 7927,
+          "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
+        },
+        "12": {
+          "value": true,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "method": "official_prior_term_roster_exact_same_county_candidate_match",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "roster_name": "姜梅紅",
+          "ballot_number": 12,
+          "votes": 5529,
+          "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
+        }
+      }
     },
     {
       "county": "嘉義縣",
@@ -13795,6 +13956,30 @@
           "original_name": "蔡寶雄",
           "value": "男",
           "confidence": "cross_election_geographic_match"
+        }
+      },
+      "incumbent_sources": {
+        "2": {
+          "value": true,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "method": "official_prior_term_roster_exact_same_county_candidate_match",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "roster_name": "顏連復",
+          "ballot_number": 2,
+          "votes": 6872,
+          "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
+        },
+        "4": {
+          "value": true,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "method": "official_prior_term_roster_exact_same_county_candidate_match",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "roster_name": "邱再留",
+          "ballot_number": 4,
+          "votes": 7946,
+          "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
         }
       }
     },
@@ -13900,6 +14085,28 @@
         ]
       ],
       "incumbent_sources": {
+        "1": {
+          "value": true,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "method": "official_prior_term_roster_exact_same_county_candidate_match",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "roster_name": "林嘉泰",
+          "ballot_number": 1,
+          "votes": 6624,
+          "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
+        },
+        "2": {
+          "value": true,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "method": "official_prior_term_roster_exact_same_county_candidate_match",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "roster_name": "李文堂",
+          "ballot_number": 2,
+          "votes": 6818,
+          "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
+        },
         "7": {
           "value": true,
           "source_url": "https://www.cyscc.gov.tw/Parliamentary_Content/315/14100/",
@@ -13909,6 +14116,17 @@
           "original_name": "侯清河",
           "ballot_number": 7,
           "votes": 8248
+        },
+        "8": {
+          "value": true,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "method": "official_prior_term_roster_exact_same_county_candidate_match",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "roster_name": "李文來",
+          "ballot_number": 8,
+          "votes": 6306,
+          "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
         }
       }
     },
@@ -13942,7 +14160,20 @@
           "",
           false
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "1": {
+          "value": true,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "method": "official_prior_term_roster_exact_same_county_candidate_match",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "roster_name": "汪念星",
+          "ballot_number": 1,
+          "votes": 968,
+          "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
+        }
+      }
     },
     {
       "county": "臺南縣",
@@ -25857,6 +26088,28 @@
           true
         ]
       ]
+    }
+  ],
+  "verified_county_profiles": [
+    {
+      "county": "基隆市",
+      "election_date": "1994-01-29",
+      "term": "第十三屆",
+      "registered_voters": 240830,
+      "ballots_cast": 150766,
+      "valid_votes": 148355,
+      "invalid_votes": 2411,
+      "candidate_count": 71,
+      "male_candidates": 64,
+      "female_candidates": 7,
+      "elected_count": 28,
+      "male_elected": 25,
+      "female_elected": 3,
+      "source_url": "https://www.klcg.gov.tw/wSite/public/Attachment/022/f1638788728150.pdf",
+      "source_locator": "基隆市統計年報表3-9「基隆市議員選舉概況」，頁3-32至3-33，83/01/29第十三屆",
+      "level": "county",
+      "method": "official_yearbook_county_total_not_district",
+      "limitations": "Countywide only; do not distribute ballots or voter totals to eight council constituencies. Aggregate gender counts do not imply identities of candidates with unknown gender."
     }
   ]
 }

@@ -928,6 +928,21 @@
    }details.append(sources);
   }
  }
+ function renderLegacyCouncilCountyProfile(){
+  const note=el('historyBoundaryNote');if(!note)return;
+  let details=el('historyLegacyCouncilCountyProfile');
+  const profiles=archivedCouncil()?(snapshotData?.verifiedCouncilCountyProfiles||[]).filter(x=>!county||norm(x.county)===county):[];
+  if(!profiles.length){if(details)details.hidden=true;return}
+  if(!details){details=document.createElement('details');details.id='historyLegacyCouncilCountyProfile';details.className='data-help';note.after(details)}
+  details.hidden=false;details.replaceChildren();
+  const summary=document.createElement('summary');summary.textContent='1994年县市议员官方县市级投票统计（选区分项待补）';details.append(summary);
+  for(const p of profiles){
+   const paragraph=document.createElement('p');
+   paragraph.textContent=norm(p.county)+' · '+p.election_date+'：选举人数 '+p.registered_voters.toLocaleString('zh-CN')+'，投票数 '+p.ballots_cast.toLocaleString('zh-CN')+'，有效票 '+p.valid_votes.toLocaleString('zh-CN')+'，无效票 '+p.invalid_votes.toLocaleString('zh-CN')+'；'+p.candidate_count+' 人参选（男'+p.male_candidates+'、女'+p.female_candidates+'），'+p.elected_count+' 人当选（男'+p.male_elected+'、女'+p.female_elected+'）。仅为全县市合计，不用于推算各选区投票人数，也不推定缺失候选人的性别。';
+   details.append(paragraph);
+   const source=document.createElement('a');source.href=p.source_url;source.target='_blank';source.rel='noopener';source.textContent='查看官方统计年报：'+p.source_locator;details.append(source);
+  }
+ }
  function renderPartialTownshipReturns(){
   const note=el('historyBoundaryNote');if(!note)return;
   let details=el('historyPartialTownshipReturns');
@@ -1037,6 +1052,7 @@
    (presidentialYear<=2000?'不同“连署”候选人使用不同图示色，不代表政党。':'颜色表示各地区最高票候选人所属政党。');
  }
   renderPartialCouncilReturns();
+  renderLegacyCouncilCountyProfile();
   renderPartialTownshipReturns();
   el('historyCounty').value=county;el('historyScaleBox').hidden=kind!=='mayor'&&!legislativeMode;
   if(legislativeMode){

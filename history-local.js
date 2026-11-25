@@ -55,7 +55,7 @@
  }
  function loadLegacyCouncil(fetcher){
   if(!legacyCouncilRequest)legacyCouncilRequest=(async()=>{
-   const response=await fetcher('assets/history-local-1994-council.json?v=24');
+   const response=await fetcher('assets/history-local-1994-council.json?v=25');
    if(!response.ok)throw Error('1994县市议员补充资料 HTTP '+response.status);
    const archive=await response.json();
    if(archive.version!==1||!archive.districts?.length)throw Error('1994县市议员补充资料不完整');
@@ -158,6 +158,7 @@
   return {
    schemaVersion:2,year,cycleYears:[earlier,year],elections,contests,
    partialCouncilReturns:legacy?.partial_returns||[],
+   verifiedCouncilCountyProfiles:legacy?.verified_county_profiles||[],
    candidacies:shards.flatMap(shard=>shard.candidacies.filter(item=>contestIds.has(item.contest_id))),
    rows:shards.flatMap(shard=>shard.rows.filter(item=>groupedOffice(item.type))),
    townProfiles:shards.flatMap(shard=>(shard.townProfiles||[]).filter(item=>groupedOffice(item.office))),

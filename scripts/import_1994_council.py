@@ -161,6 +161,8 @@ if __name__ == '__main__':
             if actual!=expected:
                 raise ValueError(f'Incumbency supplement incomplete: {actual}/{expected}')
             data['incumbency_roster_audit']=previous['incumbency_roster_audit']
+        if previous.get('verified_county_profiles'):
+            data['verified_county_profiles']=previous['verified_county_profiles']
     if args.audit:
         counts=Counter()
         for item in data['districts']:
