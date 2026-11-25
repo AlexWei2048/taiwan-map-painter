@@ -44,6 +44,11 @@ audit=json.loads((REPORT/"coverage-audit.json").read_text())
 extra={"中华统一促进党":"https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&s=172&sms=13073"}
 # These emblem files are explicitly identified on the registry detail pages.
 registry_emblems={
+ # 2026 roster: exact current registry image links, not historical aliases.
+ "永久和平自然法":(254,"https://ws.moi.gov.tw/001/Upload/444/relpic/13073/254/d6b78573-76e4-4ebc-b884-3981fd66c577.png"),
+ "三势团结促进联盟":(262,"https://ws.moi.gov.tw/001/Upload/444/relpic/13073/262/015ae6b6-6928-4ed6-9458-33aa4cdf2077.png"),
+ "台湾进步党":(278,"https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/ff8080816e68e248016e7dc102cc0079.jpg"),
+ "更生党":(435,"https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2022/8a428aff7e6c30d2017e9a0f6a2500e0.jpg"),
  "爱民党":(554,"https://ws.moi.gov.tw/001/Upload/444/relpic/13073/554/9e74dfca-3a59-40e1-900d-e1adb3c51aa1.jpg"),
  "司法正义党":(299,"https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/ff8080816ecfec30016f5a9ed2fc034e.jpg"),
 }
@@ -123,7 +128,8 @@ if prior_js.exists() and prior_json.exists():
  documentation.extend(prior.get("official_sources",[]))
  skips.extend(prior.get("unverified_or_unavailable",[]))
  print("REUSED_VERIFIED",len(byid),len(byname),len(documentation),flush=True)
-for name,item in candidates.items():
+priority_2026={"永久和平自然法","三势团结促进联盟","台湾进步党","更生党"}
+for name,item in sorted(candidates.items(),key=lambda pair: (norm(pair[0]) not in priority_2026, norm(pair[0]))):
  name=norm(name)
  party_id=lookup.get(name)
  if party_id in existing or party_id in byid or name in byname:
