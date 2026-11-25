@@ -75,10 +75,14 @@ test('Historical county mayors and councils use five shared election cycles with
    assert.equal(archive.reduce((sum,c)=>sum+contestants(council,c).length,0),1807);
    assert.equal(archive.reduce((sum,c)=>sum+c.seats,0),867);
    const sourced=council.candidacies.filter(c=>c.contest_id.startsWith('1994-council-counties:')&&typeof c.incumbent_at_election==='boolean');
-   assert.equal(sourced.length,472);
-   assert.equal(sourced.filter(c=>c.incumbent_at_election).length,209);
+   assert.equal(sourced.length,481);
+   assert.equal(sourced.filter(c=>c.incumbent_at_election).length,218);
    assert.ok(sourced.every(c=>c.incumbent_source?.source_url&&c.incumbent_source.value===c.incumbent_at_election));
-   assert.equal(council.rows.filter(r=>r.type==='council'&&typeof r.incumbent==='boolean'&&sourced.some(c=>c.candidate_name===r.name&&c.ballot_number===String(r.number)&&c.votes===r.votes)).length,472);
+   assert.equal(council.rows.filter(r=>r.type==='council'&&typeof r.incumbent==='boolean'&&sourced.some(c=>c.candidate_name===r.name&&c.ballot_number===String(r.number)&&c.votes===r.votes)).length,481);
+   const lienchiang=council.candidacies.filter(c=>c.contest_id.startsWith('1994-council-counties:连江县:'));
+   assert.equal(lienchiang.filter(c=>c.incumbent_at_election===true).length,9);
+   assert.equal(lienchiang.find(c=>c.candidate_name==='陈书建').incumbent_at_election,null);
+   assert.equal(lienchiang.find(c=>c.candidate_name==='刘美官').incumbent_at_election,true);
    const taipei=councilRows.filter(c=>c.county_name==='台北县');
    assert.equal(taipei.length,12);
    assert.equal(taipei.reduce((sum,c)=>sum+c.valid_votes,0),1217977);
@@ -189,6 +193,19 @@ test('The partial 1994 township archive reconciles all 89 contests across eight 
  assert.deepEqual(['registered_voters','ballots_cast','valid_votes','invalid_votes'].map(key=>luodong[key]),
   [41426,27905,27289,616]);
  assert.match(luodong.profile_source,/lotong\.gov\.tw/);
+ const jiaoxi=yilan.find(c=>c.district_name==='礁溪乡');
+ assert.deepEqual(['registered_voters','ballots_cast','valid_votes','invalid_votes'].map(key=>jiaoxi[key]),
+  [25184,19931,19673,258]);
+ assert.match(jiaoxi.profile_source,/nccur\.lib\.nccu\.edu\.tw/);
+ assert.ok(contestants(shard,jiaoxi).every(c=>c.incumbent_at_election===false&&c.incumbent_source.name==='陳德治'));
+ const north=shard.contests.find(c=>c.election_id===election.election_id&&c.district_name==='北竿乡');
+ assert.deepEqual([north.registered_voters,north.ballots_cast,north.valid_votes,north.invalid_votes],[null,584,478,106]);
+ const [northCandidate]=contestants(shard,north);
+ assert.deepEqual([northCandidate.candidate_name,northCandidate.gender,northCandidate.incumbent_at_election],['王诗乾','男',true]);
+ assert.equal(candidate.incumbent_at_election,false);
+ assert.equal(candidate.incumbent_source.name,'陳端才');
+ const xinFeng=shard.contests.find(c=>c.election_id===election.election_id&&c.district_name==='新丰乡');
+ assert.ok(contestants(shard,xinFeng).every(c=>c.incumbent_at_election===false&&c.incumbent_source.name==='林保明'));
  const lanyu=shard.contests.find(c=>c.election_id===election.election_id&&c.county_name==='台东县'&&c.district_name==='兰屿乡');
  assert.deepEqual(['registered_voters','ballots_cast','valid_votes','invalid_votes'].map(key=>lanyu[key]),[1796,1245,1183,62]);
  assert.deepEqual(contestants(shard,lanyu).map(c=>[c.candidate_name,c.votes,c.elected_official,c.party_name_official]),

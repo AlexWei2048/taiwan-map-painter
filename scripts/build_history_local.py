@@ -658,7 +658,7 @@ def add_chiayi_rerun(contests):
 
 def add_1994_township(snapshot, audit):
     archive = json.loads((ROOT / 'sources/history-1994-township.json').read_text(encoding='utf-8'))
-    contests, evidence, profiles = [], {}, {}
+    contests, evidence, profiles, incumbent_evidence = [], {}, {}, {}
     for county in archive['counties']:
         districts = county['districts']
         normalized_county = norm(county['county'])
@@ -689,10 +689,22 @@ def add_1994_township(snapshot, audit):
             incumbents = set(item.get('confirmed_incumbents', []))
             if not incumbents <= {row[1] for row in candidates}:
                 raise ValueError(f'1994 {normalized_county} {item["town"]} incumbent name does not match')
+            at_election = item.get('incumbency_at_election')
+            if at_election:
+                if not at_election.get('name') or not at_election.get('source_url', '').startswith('https://'):
+                    raise ValueError(f'1994 {normalized_county} {item["town"]} missing incumbency evidence')
+                for number, name, *_ in candidates:
+                    value = name == at_election['name']
+                    if name in incumbents and not value:
+                        raise ValueError(f'1994 {normalized_county} {item["town"]} conflicting incumbent name')
+                    incumbent_evidence[normalized_county, norm(item['town']), str(number or '')] = {
+                        **at_election, 'value': value,
+                    }
             roster = [
                 {'number': str(number) if number is not None else '', 'name': name,
                  'party': party if party is not None else '政黨資料缺失', 'gender': gender,
-                 'votes': votes, 'mark': '*' if elected else '', 'incumbent': True if name in incumbents else None,
+                 'votes': votes, 'mark': '*' if elected else '',
+                 'incumbent': name == at_election['name'] if at_election else True if name in incumbents else None,
                  'candidate_mark': '*' if elected else '', 'winner_source': results_url}
                 for number, name, party, gender, votes, elected in candidates
             ]
@@ -712,7 +724,12 @@ def add_1994_township(snapshot, audit):
     )
     for contest in supplement['contests']:
         contest.update(profiles[contest['county_name'], contest['district_name']])
+    districts_by_id = {c['contest_id']: c for c in supplement['contests']}
     for candidate in supplement['candidacies']:
+        contest = districts_by_id[candidate['contest_id']]
+        key = contest['county_name'], contest['district_name'], candidate['ballot_number']
+        if source := incumbent_evidence.get(key):
+            candidate['incumbent_source'] = source
         if candidate['party_name_official'] == '政黨資料缺失':
             candidate['party_name_official'] = None
     for key in ('elections', 'contests', 'candidacies', 'rows'):
