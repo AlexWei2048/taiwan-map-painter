@@ -84,6 +84,7 @@ def candidate_votes(year, ballot):
 def read_names(base_rows):
     counties = {}
     towns = {}
+    district_towns = {}
     district_labels = {}
     for row in base_rows:
         if len(row) < 6:
@@ -93,11 +94,14 @@ def read_names(base_rows):
             continue
         if town == "000" and village == "0000" and district == "00":
             counties[(p, c)] = norm(label).split(" ")[0]
-        if town != "000" and village == "0000" and district == "00":
-            towns[(p, c, town)] = norm(label).split(" ")[-1]
+        if town != "000" and village == "0000":
+            if district == "00":
+                towns[(p, c, town)] = norm(label).split(" ")[-1]
+            else:
+                district_towns[(p, c, district, town)] = norm(label).split(" ")[-1]
         if district != "00" and town == "000" and village == "0000":
             district_labels[(p, c, district)] = norm(label)
-    return counties, towns, district_labels
+    return counties, towns, district_labels, district_towns
 
 
 def verified_profiles(year, ballot):
@@ -106,10 +110,11 @@ def verified_profiles(year, ballot):
     urls = {name: source(year, ballot, filename)
             for name, filename in (("elbase", base_file), ("elprof", "elprof.csv"))}
     raw = {name: download(url) for name, url in urls.items()}
-    counties, towns, district_labels = read_names(parse_csv(raw["elbase"]))
+    counties, towns, district_labels, district_towns = read_names(parse_csv(raw["elbase"]))
     totals = candidate_votes(year, ballot)
     seen = defaultdict(list)
     audit = Counter()
+    town_portions = {}
 
     for row in parse_csv(raw["elprof"]):
         if len(row) < 10:
@@ -136,6 +141,18 @@ def verified_profiles(year, ballot):
                 audit["unknown_county"] += 1
                 continue
             if town not in ("000", ""):
+                if ballot == "regional" and district not in ("00", ""):
+                    # The modern regional files partition administrative towns
+                    # by electoral constituency. Sum only disjoint subtotal
+                    # records (village=0000, poll=0000) before verification.
+                    code = (p, c, district, town)
+                    name = district_towns.get(code)
+                    if village != "0000" or poll != "0000" or not name:
+                        raise ValueError(f"{year}: unexpected regional town subtotal {row}")
+                    if code in town_portions:
+                        raise ValueError(f"{year}: duplicate regional town subtotal {code}")
+                    town_portions[code] = ((county, name), (registered, cast, valid, invalid))
+                    continue
                 name = towns.get((p, c, town))
                 if name:
                     candidates = [("town", county, name)]
@@ -155,6 +172,25 @@ def verified_profiles(year, ballot):
             else:
                 audit["mismatch_or_missing_vote_total"] += 1
 
+    if ballot == "regional":
+        if set(town_portions) != set(district_towns) or len(town_portions) != 380:
+            raise ValueError(f"{year}: incomplete regional district-town subtotals")
+        combined = defaultdict(lambda: [0, 0, 0, 0])
+        for (county, name), record in town_portions.values():
+            key = ("town", county, name)
+            combined[key] = [a + b for a, b in zip(combined[key], record)]
+        expected = {k for k in totals if k[0] == "town"}
+        if set(combined) != expected or len(combined) != 368:
+            raise ValueError(f"{year}: incomplete regional town coverage")
+        for key, record in combined.items():
+            if record[2] != totals[key]:
+                raise ValueError(f"{year}: regional town candidate vote mismatch {key}")
+            if key in seen:
+                raise ValueError(f"{year}: overlapping regional town subtotal {key}")
+            seen[key].append(tuple(record))
+            audit["reconciled"] += 1
+        audit["district_town_portions"] = len(town_portions)
+
     data = {"national": {}, "county": {}, "town": {}, "district": {}}
     for (scope, county, area), records in seen.items():
         unique = set(records)
@@ -169,6 +205,15 @@ def verified_profiles(year, ballot):
         else:
             data[scope].setdefault(county, {})[area] = record
         audit["saved_" + scope] += 1
+    if ballot == "regional":
+        if set(data["town"]) != set(data["county"]) or len(data["county"]) != 22:
+            raise ValueError(f"{year}: incomplete regional county coverage")
+        for county, rows in data["town"].items():
+            subtotal = [sum(record[i] for record in rows.values()) for i in range(4)]
+            if subtotal != data["county"][county]:
+                raise ValueError(f"{year}: regional county reconciliation failed {county}")
+        if sum(len(v) for v in data["town"].values()) != 368:
+            raise ValueError(f"{year}: incomplete regional town output")
     return data, {"source_url": urls, "source_sha256": {k: hashlib.sha256(v).hexdigest()
       for k, v in raw.items()}, "profile_matches": dict(audit),
       "note": "Valid ballots must exactly match independent site candidates for this geographic grain."}
@@ -186,6 +231,25 @@ def main():
             document["audit"][ballot] = audit
             print(year, ballot, audit["profile_matches"], flush=True)
         target = ROOT / f"assets/history-legislative-turnout-{year}.json"
+        if target.is_file():
+            existing = json.loads(target.read_text(encoding="utf-8"))
+            # Do not silently overwrite any previously verified profile.
+            for ballot, profiles in existing["ballots"].items():
+                for scope, old_records in profiles.items():
+                    new_records = document["ballots"][ballot][scope]
+                    if scope == "national":
+                        if old_records and old_records != new_records:
+                            raise ValueError(f"{year} {ballot}: national profile changed")
+                    elif scope == "county":
+                        if any(new_records.get(k) != v for k, v in old_records.items()):
+                            raise ValueError(f"{year} {ballot}: existing county profile changed")
+                    else:
+                        for county, rows in old_records.items():
+                            if any(new_records.get(county, {}).get(k) != v for k, v in rows.items()):
+                                raise ValueError(f"{year} {ballot}: existing {scope} profile changed")
+            for ballot, audit in existing.get("audit", {}).items():
+                if "townReconciliation" in audit:
+                    document["audit"][ballot]["townReconciliation"] = audit["townReconciliation"]
         target.write_text(json.dumps(document, ensure_ascii=False, separators=(",", ":")) + "\n")
         print("Wrote", target.name, "bytes", target.stat().st_size, flush=True)
 
