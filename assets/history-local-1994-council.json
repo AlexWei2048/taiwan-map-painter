@@ -4246,7 +4246,20 @@
           "男",
           true
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "3": {
+          "value": true,
+          "source_url": "https://ntupoli.s3.amazonaws.com/wp-content/uploads/2015/07/finalP02322009.pdf",
+          "source_locator": "張肇良（2015）《台灣桃園議會與民主進步黨（1945-2015）》頁62–63，表9引桃園市議會2015資料，第12、13屆均列名。",
+          "election_date": "1994-01-29",
+          "method": "previous_and_next_term_rosters_unique_name",
+          "original_name": "許林翠粉",
+          "ballot_number": 3,
+          "votes": 8099,
+          "limitation": "研究文献按届列名，不等同选举日逐日任免档案；政党以当届选举原始记录为准。"
+        }
+      }
     },
     {
       "county": "桃園縣",
@@ -4304,7 +4317,20 @@
           "男",
           true
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "5": {
+          "value": true,
+          "source_url": "https://ntupoli.s3.amazonaws.com/wp-content/uploads/2015/07/finalP02322009.pdf",
+          "source_locator": "張肇良（2015）《台灣桃園議會與民主進步黨（1945-2015）》頁62–63，表9引桃園市議會2015資料，第12、13屆均列名。",
+          "election_date": "1994-01-29",
+          "method": "previous_and_next_term_rosters_unique_name",
+          "original_name": "藍勝民",
+          "ballot_number": 5,
+          "votes": 7687,
+          "limitation": "研究文献按届列名，不等同选举日逐日任免档案；政党以当届选举原始记录为准。"
+        }
+      }
     },
     {
       "county": "桃園縣",
@@ -4540,6 +4566,28 @@
         ]
       ],
       "incumbent_sources": {
+        "10": {
+          "value": true,
+          "source_url": "https://ntupoli.s3.amazonaws.com/wp-content/uploads/2015/07/finalP02322009.pdf",
+          "source_locator": "張肇良（2015）《台灣桃園議會與民主進步黨（1945-2015）》頁62–63，表9引桃園市議會2015資料，第12、13屆均列名。",
+          "election_date": "1994-01-29",
+          "method": "previous_and_next_term_rosters_unique_name",
+          "original_name": "張兆路",
+          "ballot_number": 10,
+          "votes": 7046,
+          "limitation": "研究文献按届列名，不等同选举日逐日任免档案；政党以当届选举原始记录为准。"
+        },
+        "14": {
+          "value": true,
+          "source_url": "https://ntupoli.s3.amazonaws.com/wp-content/uploads/2015/07/finalP02322009.pdf",
+          "source_locator": "張肇良（2015）《台灣桃園議會與民主進步黨（1945-2015）》頁62–63，表9引桃園市議會2015資料，第12、13屆均列名。",
+          "election_date": "1994-01-29",
+          "method": "previous_and_next_term_rosters_unique_name",
+          "original_name": "吳俊標",
+          "ballot_number": 14,
+          "votes": 5490,
+          "limitation": "研究文献按届列名，不等同选举日逐日任免档案；政党以当届选举原始记录为准。"
+        },
         "21": {
           "value": true,
           "source_url": "https://journal.th.gov.tw/intro.php?council=tycc",
