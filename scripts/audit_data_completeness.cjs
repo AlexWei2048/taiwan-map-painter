@@ -1,0 +1,15 @@
+'use strict';
+const fs=require('node:fs/promises'),path=require('node:path'),root=path.resolve(__dirname,'..');
+const {scan,scanRoster,extra,render}=require('./audit_data_completeness_core.cjs');
+const L=require('../history-local.js'),P=require('../history-presidential.js'),G=require('../history-legislative.js'),T=require('../history-legislative-turnout.js'),party=require('../history-legislative-party.js'),norm=require('../assets/opencc.js').Converter({from:'t',to:'cn'});
+const read=p=>fs.readFile(path.join(root,p),'utf8'),json=async p=>JSON.parse(await read(p)),fetcher=async p=>({ok:true,json:()=>json(p.split('?')[0])});
+(async()=>{const reports=[],run=async(y,kind,source,f)=>{try{reports.push(await f())}catch(e){reports.push({issues:[{year:y,office:kind,level:'file',status:'unscanned',fields:'read_or_runtime',source,note:String(e)}],coverage:[],errors:[y+' '+kind+': '+e]})}};
+for(const y of [1993,1994,1997,1998,2001,2002,2005,2006,2009,2010,2014,2018,2022]){const source=y===2022?'assets/history-2022.json':'assets/history-local-'+y+'.json';await run(y,'local',source,async()=>{let s=y===2022?await json(source):await L.load(y,fetcher);if(y===1994){const m=await L.loadCycle(y,'council',fetcher),eid='1994-council-counties',ds=m.contests.filter(d=>d.election_id===eid),ids=new Set(ds.map(d=>d.contest_id));s={...s,elections:[...s.elections,...m.elections.filter(e=>e.election_id===eid)],contests:[...s.contests,...ds],candidacies:[...s.candidacies,...m.candidacies.filter(c=>ids.has(c.contest_id))]}}return scan(s,y,'local',source,{norm})})}
+for(const y of [1996,2000,2004,2008,2012,2016,2020,2024]){const source='assets/history-president-'+y+'.json';await run(y,'president',source,async()=>scan(await P.load(y,fetcher),y,'president',source,{norm}))}
+for(const y of [1992,1995,1998,2001,2004,2008,2012,2016,2020,2024]){const source='assets/history-legislative-'+y+'.json';await run(y,'legislative',source,async()=>{const s=await G.load(y,fetcher);await T.load(y,fetcher);return scan(s,y,'legislative',source,{turnout:T,districtNumber:G.districtNumber,party})})}
+await run(2026,'roster','assets/election-2026.js',async()=>{const s=await read('assets/election-2026.js');return scanRoster(JSON.parse(s.slice(s.indexOf('=')+1,s.lastIndexOf(';'))),'assets/election-2026.js')});
+reports.push(extra(await json('sources/history-1994-township.json'),await json('sources/history-1994-kinmen-partial.json'),await json('assets/history-2026-availability.json')));
+const revision=require('node:child_process').execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),out=render(reports,revision);
+await fs.mkdir(path.join(root,'reports'),{recursive:true});for(const [ext,data] of Object.entries(out))await fs.writeFile(path.join(root,'reports/data-completeness.'+ext),data);
+const result=JSON.parse(out.json);console.log(JSON.stringify({counts:result.counts,errors:result.errors},null,2));if(result.errors.length)process.exitCode=2;
+})().catch(e=>{console.error(e);process.exitCode=1});
