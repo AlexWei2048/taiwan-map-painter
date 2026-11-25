@@ -38,6 +38,9 @@ def fetch(url):
 def page_urls(year,cat):
     top=BASE+f'ceclist.asp?y={year}&t={cat}'
     d=fetch(top)
+    if cat in ('F','DM'):
+        prefix='vote3_d.asp' if cat=='DM' else 'vote3.asp'
+        return list(dict.fromkeys(urljoin(top,a.get('href')) for a in d.select('a[href]') if prefix in a.get('href','').lower()))
     links=[urljoin(top,a.get('href')) for a in d.select('a[href]') if 'vote413.asp' in a.get('href','').lower()]
     if not links: return []
     d=fetch(links[0])
