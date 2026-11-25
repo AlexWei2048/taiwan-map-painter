@@ -1,14 +1,14 @@
 # 数据完整性审计
 
-数据基准：`d1e3dee0387a4ef4b8b7ddb54dedb1db06bee1f0`。行数为任务记录数，非缺失候选人总数。
+数据基准：`67a307b31b27c509e67c3adbbae5546c66a9107d`。行数为任务记录数，非缺失候选人总数。
 
 ## 状态
 
-- unverified: 16
-- conflict: 13
+- unverified: 11
+- conflict: 1
 - missing: 1457
 - not_applicable: 5
-- partial: 17
+- partial: 16
 - not_yet_available: 1
 
 ## 字段
@@ -19,17 +19,14 @@
 - invalid_votes: 102
 - registered_voters: 81
 - candidate_results: 14
-- valid_votes: 12
 - reserved_seats: 8
 - ballot_number: 7
-- nomination_rank: 5
 - district_scope: 4
 - historical_boundary: 3
 - regional_town_returns: 2
 - national_vs_local_votes: 1
 - turnout: 1
 - name: 1
-- recount_town_candidate_votes: 1
 
 ## 年度覆盖
 
@@ -406,3 +403,7 @@
 - 2008、2012、2016年各补12个跨选区乡镇投票统计，按原始投票所与选区乡镇小计双向汇总、独立候选人得票和县市四字段总数核对。
 - 中选会原始elbase/elprof镜像另恢复2004年11条及2008年3条乡镇统计，均有原始行政代码、候选人票数与县市合计验证。共新增50条乡镇统计。
 - 2020、2024年区域民代各368个乡镇市区投票概况已存于对应turnout JSON，按中选会原始elbase/elprof、乡镇候选人有效票与县市四字段总数逐项对账；本轮重新生成完整性报告，避免把已存在的乡镇统计继续列为缺失。
+
+## 优先冲突及待核事项修正（2026-11-25）
+- 2018年台北市长12区共60条重计后候选人得票取自中选会原始CSV的GitHub镜像，并与1563个投开票所逐候选人加总、四项分区统计、VoteTW重计票表及法院核定全市总票一致。原投票日记录保留在源档，55条票数修正，地图、表格、导出和审计统一采用重计版本。
+- 2004年无党团结联盟5人不分区提名排序依据中选会第339次会议及当年报道核实，未改变当选或票数。
