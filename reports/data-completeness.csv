@@ -2,7 +2,6 @@
 "1992","legislative","","map","","","","","unverified","historical_boundary","history-legislative.js","金门和马祖仍采用参考年份归属，其他选区采用政大当届乡镇归属及现行近似轮廓"
 "1992","legislative","","national","","","","","conflict","national_vs_local_votes","assets/history-legislative-1992-local.json","山地少数民族票差2票；华加志"
 "1992","legislative","mountain","national","","","||","","missing","registered_voters;ballots_cast;invalid_votes","assets/history-legislative-1992.json",""
-"1992","legislative","mountain","town","台南县","北门乡","台南县||北门乡","","missing","registered_voters;ballots_cast;invalid_votes","assets/history-legislative-1992.json",""
 "1992","legislative","party","year","","","","","not_applicable","independent_party_turnout","assets/history-legislative-1992.json","旧制没有独立政党票"
 "1992","legislative","regional","candidate","台北县","台北县","legislative:1992:regional:台北县:台北县:07:高文良","高文良","missing","incumbent_at_election","assets/history-legislative-1992.json",""
 "1992","legislative","regional","county","连江县","","","","partial","regional_town_returns","assets/history-legislative-1992.json","政大有县级结果，乡镇票表未公开"
