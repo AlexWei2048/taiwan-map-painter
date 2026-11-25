@@ -4,7 +4,7 @@
 
 ## 状态
 
-- unverified: 11
+- unverified: 4
 - conflict: 1
 - missing: 1360
 - not_applicable: 5
@@ -19,7 +19,7 @@
 - invalid_votes: 102
 - registered_voters: 81
 - candidate_results: 14
-- reserved_seats: 8
+- reserved_seats: 1
 - ballot_number: 7
 - district_scope: 4
 - historical_boundary: 3
@@ -422,3 +422,9 @@
 - 翁自然：非现任。2002年3月卸任乡长为吴怡跑，李文俊接任，翁自然不是同职现任。 来源：https://www.kmdn.gov.tw/1117/1271/1272/107680/?cprint=pt；交叉核对：https://zh.wikipedia.org/wiki/2002%E5%B9%B4%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7%E9%81%B8%E8%88%89
 - 罗恩敏：非现任。第4届官方委员名录及离职名单无此人；VoteTW 2001台北县第2区1号1238票明确非现任。 来源：https://www.ly.gov.tw/Pages/List.aspx?nodeid=143；https://votetw.com/data/candidate/%E8%94%A1%E5%AE%B6%E7%A6%8F
 - 仅修改4个原为空的现任字段及兼容行；数据原始票数、当选、候选人ID不变。2002年杨振基政大字段为M（未知），不把第三方默认否值当作确定证据。审计按ID精确核减4项；非全量重扫。
+
+
+## 1992年票数冲突与1998年屏东共享妇保复核（2026-11-26）
+
+- 政大选研中心中选会来源表 https://vote.nccu.edu.tw/cec/B1992005.PDF 确认1992年山地少数民族民代全国有效票63831、国民党47128、民进党3769、其他12934；地方候选人合计63829，华加志少2票仍无法定位。来源及限制已写入独立审计，不更改任何票数。
+- 1998年屏东县山地少数民族第9—16区各1席，共8席。依据当届旧制和2014年东吴政治学报表一 https://scups.ppo.scu.edu.tw/upload/f20220531154448sytdj1.pdf 推算共享妇保1席；现有二手资料称2席，未取得原公告，保留组级待核任务。仅补录1组8成员的暂定法定值，不把各区分别计1席，不改变候选人和当选结果。8条分散未知合并为1条原件核查任务，净减7项，并非7项已获原件证实。

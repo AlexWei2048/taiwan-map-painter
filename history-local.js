@@ -99,7 +99,7 @@
  async function loadSupplement(fetcher){
   if(!supplementRequest){
    supplementRequest=(async()=>{
-    const response=await fetcher('assets/history-local-council-supplement.json?v=20261125-statutory-quota-v5');
+    const response=await fetcher('assets/history-local-council-supplement.json?v=20261126-statutory-quota-v6');
     if(!response.ok)throw Error('历史议员补充资料 HTTP '+response.status);
     const supplement=await response.json();
     if(supplement.version!==1||!Array.isArray(supplement.paths)||!supplement.years)throw Error('历史议员补充资料不完整');

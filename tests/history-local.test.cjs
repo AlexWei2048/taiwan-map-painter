@@ -408,9 +408,9 @@ test('Official shared indigenous reserved seats are represented once per group, 
 });
 
 
-test('Early indigenous council statutory quotas resolve 137 missing records without allocating shared seats twice',()=>{
+test('Early indigenous council statutory quotas cover 145 records with statutory estimates without allocating shared seats twice',()=>{
  const supplement=require('../assets/history-local-council-supplement.json');
- for(const [year,expected] of [[1994,2],[1998,38],[2002,48],[2005,47],[2006,2]]){
+ for(const [year,expected] of [[1994,2],[1998,46],[2002,48],[2005,47],[2006,2]]){
   const raw=data(year),snapshot=Local.applyCouncilSupplement(raw,supplement),addition=supplement.years[year];
   const members=snapshot.contests.filter(c=>c.reserved_seats_method==='statutory_shared_group'||(c.reserved_seats_method==='statutory'&&addition.quotaSources?.[c.contest_id]));
   assert.equal(members.length,expected);
@@ -425,4 +425,15 @@ test('Early indigenous council statutory quotas resolve 137 missing records with
    }else assert.equal(c.reserved_seats,0);
   }
  }
+});
+
+
+test('1998 Pingtung mountain quota remains provisional and counted once',()=>{
+ const supplement=require('../assets/history-local-council-supplement.json');
+ const snapshot=Local.applyCouncilSupplement(data(1998),supplement);
+ const g=supplement.years[1998].sharedQuotaGroups.find(g=>g.id==='1998:屏东县:mountain');
+ assert.equal(g.reserved,1);assert.equal(g.conflicting_reported_reserved,2);assert.equal(g.verification_status,'pending_original_notice');
+ const members=snapshot.contests.filter(c=>c.reserved_seats_group?.id===g.id);assert.equal(members.length,8);assert.ok(members.every(c=>c.reserved_seats===null));
+ const audit=require('../scripts/audit_data_completeness_core.cjs').scan(snapshot,1998,'local','assets/history-local-1998.json');
+ const issues=audit.issues.filter(x=>x.county==='屏东县'&&x.electorate==='mountain'&&x.fields==='reserved_seats');assert.equal(issues.length,1);assert.equal(issues[0].level,'shared_group');assert.equal(issues[0].status,'unverified');
 });

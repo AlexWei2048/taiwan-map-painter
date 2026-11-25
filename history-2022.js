@@ -669,7 +669,7 @@
  function sharedWomenText(group){
   if(!group||!Array.isArray(group.districts)||!Number.isInteger(group.reserved))return '';
   if(group.reserved===0)return '0席';
-  return '第'+group.districts[0]+'—'+group.districts[group.districts.length-1]+'选区共享'+group.reserved+'席';
+  return '第'+group.districts[0]+'—'+group.districts[group.districts.length-1]+'选区共享'+group.reserved+'席'+(group.verification_status==='pending_original_notice'?'（按旧制推算，待核）':'');
  }
  function renderHistoryDistrictReference(){
   const section=el('districtReference');if(!section)return;
@@ -695,7 +695,7 @@
     const cat=document.createElement('td');cat.textContent=DistrictCore.identityName(d);tr.append(cat);
     const scope=document.createElement('td');scope.className='reference-scope';scope.textContent=mainlandTerms(councilScopeText(d))||'当届乡镇市区范围尚待核实';tr.append(scope);
     const seat=document.createElement('td');seat.className='reference-number';seat.textContent=d.seats+'席';tr.append(seat);
-    const women=document.createElement('td');women.className='reference-number';women.textContent=sharedWomenText(d.womenReservedGroup)||(d.womenReserved==null?'—':d.womenReserved+'席');if(d.womenReservedGroup)women.title=(d.womenReservedGroup.method==='statutory'?'依据当届适用规定及应选席次计算：':'当届官方公告：')+'保障名额按同类选区合计，不是各选区分别享有';if(d.womenReservedMethod==='statutory')women.title='依据当届适用规定及应选席次计算';tr.append(women);
+    const women=document.createElement('td');women.className='reference-number';women.textContent=sharedWomenText(d.womenReservedGroup)||(d.womenReserved==null?'—':d.womenReserved+'席');if(d.womenReservedGroup)women.title=(d.womenReservedGroup.method==='statutory'?'依据当届适用规定及应选席次计算：':'当届官方公告：')+'保障名额按同类选区合计，不是各选区分别享有'+(d.womenReservedGroup.verification_note?'；'+d.womenReservedGroup.verification_note:'');if(d.womenReservedMethod==='statutory')women.title='依据当届适用规定及应选席次计算';tr.append(women);
     const map=document.createElement('td');const matchKey=HistoryCore.key(d.county,d.electorate,d.number,norm);map.textContent=d.mapAvailable===false?'查看候选人结果':yearLabel()+'年选区范围';map.className=d.mapAvailable===false||unmatchedDistricts.has(matchKey)?'history-map-mismatch':'history-map-match';tr.append(map);
     tbody.append(tr)
    }
