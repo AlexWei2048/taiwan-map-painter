@@ -136,7 +136,7 @@ test('The partial 1994 township archive reconciles all 88 contests across seven 
  assert.equal(candidate.party_name,'政党资料缺失');
  for(const [county,town,name,profile] of [
   ['台东县','海端乡','余梦蝶',[2979,1471,1426,45]],
-  ['云林县','褒忠乡','柯清雄',[null,7360,6719,641]],
+  ['云林县','褒忠乡','柯清雄',[11627,7360,6719,641]],
  ]){
   const contest=shard.contests.find(c=>c.election_id===election.election_id&&c.county_name===county&&c.district_name===town);
   assert.deepEqual(['registered_voters','ballots_cast','valid_votes','invalid_votes'].map(key=>contest[key]),profile);

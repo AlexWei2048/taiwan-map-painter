@@ -2436,12 +2436,12 @@
         "printed_registered_voters": 11627,
         "printed_turnout_pct": 69.26,
         "turnout_pct_using_printed_voters": 63.3,
-        "decision": "兩版年報記載相同，選舉人數與據此計算的投票率均暫缺。"
+        "decision": "兩版年報記載相同；保留原表選舉人數11,627及票數7,360／6,719／641，依票數計算投票率63.30%，原表印列69.26%與四項統計不一致，保留差異供查核，不採用印列比率。"
       },
       "contest_count": 1,
       "candidate_count": 1,
       "profile_totals": [
-        null,
+        11627,
         7360,
         6719,
         641
@@ -2450,7 +2450,7 @@
         {
           "town": "褒忠鄉",
           "profile": [
-            null,
+            11627,
             7360,
             6719,
             641
