@@ -1382,7 +1382,7 @@
 "1998","council","mountain","shared_group","屏东县","9、10、11、12、13、14、15、16","1998:屏东县:mountain","","unverified","reserved_seats","assets/history-local-1998.json","旧制推算1席，二手选举结果表列2席；原始公告待核，先按旧制显示。"
 "2000","president","","town","台南市","中区、西区","","","unverified","historical_boundary","history-presidential.js","采用合并后轮廓"
 "2001","legislative","party","year","","","","","not_applicable","independent_party_turnout","assets/history-legislative-2001.json","旧制没有独立政党票"
-"2002","council","regional","candidate","云林县","第6选举区","2002-council:云林县:regional:第6选举区:1","","missing","name","assets/history-local-2002.json",""
+"2002","council","regional","candidate","云林县","第6选举区","2002-council:云林县:regional:第6选举区:1","","not_applicable","name","assets/history-local-2002.json","中选会2014年10月2日答复（院台专字第1030057555号）：候选人登记已撤销，原号次保留；姓名留空非缺漏。https://query.ey.gov.tw/legisweb/html/8_6_22_31.htm"
 "2002","council","regional","candidate","台南县","第1选举区","2002-council:台南县:regional:第1选举区:6","杨振基","missing","incumbent_at_election","assets/history-local-2002.json",""
 "2004","legislative","party","year","","","","","not_applicable","independent_party_turnout","assets/history-legislative-2004.json","旧制没有独立政党票"
 "2026","local","","year","","","","","not_yet_available","official_results","assets/history-2026-availability.json","选举结果未发布或须另行扫描"
