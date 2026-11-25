@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "count_by_id": 16,
-  "count_by_historical_name": 42,
+  "count_by_id": 17,
+  "count_by_historical_name": 48,
   "official_sources": [
     {
       "name": "大爱宪改",
@@ -665,6 +665,110 @@
         "https://upload.wikimedia.org/wikipedia/zh/0/06/%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E6%A9%9F%E8%BB%8A%E9%BB%A8%E9%BB%A8%E5%BE%BD.png",
         "https://upload.wikimedia.org/wikipedia/zh/thumb/0/06/%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E6%A9%9F%E8%BB%8A%E9%BB%A8%E9%BB%A8%E5%BE%BD.png/250px-%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E6%A9%9F%E8%BB%8A%E9%BB%A8%E9%BB%A8%E5%BE%BD.png"
       ]
+    },
+    {
+      "name": "青年阳光党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&s=369&sms=13073",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2018/ff80808165840d1b0165c623566e019e.jpg",
+      "source_sha256": "60a9a716e97d53ef9c3f63d5a32fe3a71c5660b6a2e5e22901c89c0605314dc8",
+      "rendered_sha256": "04ecaee0d5022ffd36700b1bd02737f21e55782d0f370ebed3dfe1031bdab2a1",
+      "image_bytes": 15070,
+      "size_after_fit": "128x128",
+      "license": "Registered party mark; original rights retained",
+      "source_alternative": [
+        "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2018/ff80808165840d1b0165c623566e019e.jpg"
+      ]
+    },
+    {
+      "name": "台湾麻将最大党",
+      "party_id": null,
+      "official_registry": "https://election.ltn.com.tw/2026/candidate",
+      "official_image": "https://election.ltn.com.tw/2026/assets/images/politicalParty/logo_11.png",
+      "source_sha256": "6cd6fc8abe8e06d079f3389b271541567fbe9f724dfaa3af72d9f10049052cc6",
+      "rendered_sha256": "8f072369e537f841ab3205552924bf4e455aabf8c708b8f333905797f9fba79e",
+      "image_bytes": 21339,
+      "size_after_fit": "128x128",
+      "license": "Party emblem shown in the contemporary candidate directory; original rights retained",
+      "source_alternative": [
+        "https://election.ltn.com.tw/2026/assets/images/politicalParty/logo_11.png"
+      ]
+    },
+    {
+      "name": "制度救世岛",
+      "party_id": "iisw",
+      "official_registry": "https://feature.nextapple.com/election2024/vote/legislator/All",
+      "official_image": "https://feature.nextapple.com/election2024/public/static/image/pp/7.jpg",
+      "source_sha256": "a865e3f6e6ad17b9c89cb073286699760168a8d30b049221f3af1fb13f0c79ae",
+      "rendered_sha256": "b7929c3abe651f638f64ddc538bdd0e531f6237d4aee2a69da3a8daa23b312c8",
+      "image_bytes": 27352,
+      "size_after_fit": "128x128",
+      "license": "2024 ballot-name party identification image; original rights retained",
+      "source_alternative": [
+        "https://feature.nextapple.com/election2024/public/static/image/pp/7.jpg"
+      ]
+    },
+    {
+      "name": "台湾双语无法党",
+      "party_id": null,
+      "official_registry": "https://feature.nextapple.com/election2024/vote/legislator/All",
+      "official_image": "https://feature.nextapple.com/election2024/public/static/image/pp/3.jpg",
+      "source_sha256": "e188796af4a7c573dd3c5f4ff2c8c6f969bdef0188e2293f0e414399dd127c45",
+      "rendered_sha256": "2ea2ac15ef7ab8fd60478fb0b427bac5a7f8db51f0a8616928f62fa491fd2d73",
+      "image_bytes": 11480,
+      "size_after_fit": "128x128",
+      "license": "2024 historical party mark, distinct from current SoR emblem; original rights retained",
+      "source_alternative": [
+        "https://feature.nextapple.com/election2024/public/static/image/pp/3.jpg"
+      ]
+    },
+    {
+      "name": "新国家连线",
+      "party_id": null,
+      "official_registry": "https://zh.wikipedia.org/wiki/新國家連線",
+      "official_image": "https://upload.wikimedia.org/wikipedia/zh/f/f6/%E6%96%B0%E5%9C%8B%E5%AE%B6%E9%80%A3%E7%B7%9A%E9%BB%A8%E5%BE%BD.gif",
+      "source_sha256": "9e06d10a56d74ef85ffc2da7adbe12a422c3e6246870b0a79b0e8fe1d1003ea7",
+      "rendered_sha256": "9ec95084f5ef816701fb54f8426cf3d3aecda9a409c87dd724bd43b7a8348bdb",
+      "image_bytes": 24174,
+      "size_after_fit": "128x128",
+      "license": "Historic party emblem from the named article; original rights retained",
+      "source_alternative": [
+        "https://upload.wikimedia.org/wikipedia/zh/f/f6/%E6%96%B0%E5%9C%8B%E5%AE%B6%E9%80%A3%E7%B7%9A%E9%BB%A8%E5%BE%BD.gif",
+        "https://upload.wikimedia.org/wikipedia/zh/thumb/f/f6/%E6%96%B0%E5%9C%8B%E5%AE%B6%E9%80%A3%E7%B7%9A%E9%BB%A8%E5%BE%BD.gif/250px-%E6%96%B0%E5%9C%8B%E5%AE%B6%E9%80%A3%E7%B7%9A%E9%BB%A8%E5%BE%BD.gif",
+        "https://ftpmirror.your.org/pub/wikimedia/images/wikipedia/zh/f/f6/%E6%96%B0%E5%9C%8B%E5%AE%B6%E9%80%A3%E7%B7%9A%E9%BB%A8%E5%BE%BD.gif"
+      ]
+    },
+    {
+      "name": "台湾建国联盟",
+      "party_id": null,
+      "official_registry": "https://zh.wikipedia.org/wiki/台灣建國聯盟",
+      "official_image": "https://upload.wikimedia.org/wikipedia/zh/1/14/%E5%8F%B0%E7%81%A3%E5%BB%BA%E5%9C%8B%E8%81%AF%E7%9B%9F_%E9%BB%A8%E5%BE%BD.png",
+      "source_sha256": "41f7cd43aecb049fbf9d563871bddc6f81c3aabf5db67b329ee7e2836518b762",
+      "rendered_sha256": "5b205eb807992e9ef7691046f566f15cf98aa44023dbb6c0b12cd3b7779cfd67",
+      "image_bytes": 22644,
+      "size_after_fit": "128x128",
+      "license": "Historic party emblem from the named article; original rights retained",
+      "source_alternative": [
+        "https://upload.wikimedia.org/wikipedia/zh/1/14/%E5%8F%B0%E7%81%A3%E5%BB%BA%E5%9C%8B%E8%81%AF%E7%9B%9F_%E9%BB%A8%E5%BE%BD.png",
+        "https://upload.wikimedia.org/wikipedia/zh/thumb/1/14/%E5%8F%B0%E7%81%A3%E5%BB%BA%E5%9C%8B%E8%81%AF%E7%9B%9F_%E9%BB%A8%E5%BE%BD.png/250px-%E5%8F%B0%E7%81%A3%E5%BB%BA%E5%9C%8B%E8%81%AF%E7%9B%9F_%E9%BB%A8%E5%BE%BD.png",
+        "https://ftpmirror.your.org/pub/wikimedia/images/wikipedia/zh/1/14/%E5%8F%B0%E7%81%A3%E5%BB%BA%E5%9C%8B%E8%81%AF%E7%9B%9F_%E9%BB%A8%E5%BE%BD.png"
+      ]
+    },
+    {
+      "name": "红党",
+      "party_id": null,
+      "official_registry": "https://commons.wikimedia.org/wiki/File:Red_party_flag.svg",
+      "official_image": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Red_party_flag.svg",
+      "source_sha256": "bbad8f7af115d1b5be3a44edb234a18eca44f243666e63a36c32bf5767606afa",
+      "rendered_sha256": "5115ec81d3d34d624609844c93991c99ecbf049920af20c086ec22beeec99d2b",
+      "image_bytes": 5841,
+      "size_after_fit": "128x128",
+      "license": "Party flag; public domain simple geometry; original author Tomchen1989",
+      "source_alternative": [
+        "https://upload.wikimedia.org/wikipedia/commons/c/ce/Red_party_flag.svg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Red_party_flag.svg/250px-Red_party_flag.svg.png",
+        "https://ftpmirror.your.org/pub/wikimedia/images/wikipedia/commons/c/ce/Red_party_flag.svg"
+      ]
     }
   ],
   "unverified_or_unavailable": [
@@ -678,10 +782,6 @@
     },
     {
       "name": "台湾吾党",
-      "reason": "ministry has no uploaded emblem image"
-    },
-    {
-      "name": "新国家连线",
       "reason": "ministry has no uploaded emblem image"
     },
     {
@@ -721,10 +821,6 @@
       "reason": "ministry has no uploaded emblem image"
     },
     {
-      "name": "台湾麻将最大党",
-      "reason": "ministry has no uploaded emblem image"
-    },
-    {
       "name": "圆党",
       "reason": "ministry has no uploaded emblem image"
     },
@@ -761,20 +857,8 @@
       "reason": "ministry has no uploaded emblem image"
     },
     {
-      "name": "红党",
-      "reason": "official/commons source unavailable: 429 Client Error: Too many requests (f061ab2) for url: https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Red_party_flag.svg/250px-Red_party_flag.svg.png"
-    },
-    {
-      "name": "青年阳光党",
-      "reason": "official/commons source unavailable: 429 Client Error: Too many requests (f061ab2) for url: https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/%E9%9D%92%E5%B9%B4%E9%99%BD%E5%85%89%E9%BB%A8.png/250px-%E9%9D%92%E5%B9%B4%E9%99%BD%E5%85%89%E9%BB%A8.png"
-    },
-    {
       "name": "基进党",
-      "reason": "official/commons source unavailable: 429 Client Error: Too many requests (f061ab2) for url: https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/%E5%9F%BA%E9%80%B2%E9%BB%A8%EF%BD%9CLOGO.jpg/250px-%E5%9F%BA%E9%80%B2%E9%BB%A8%EF%BD%9CLOGO.jpg"
-    },
-    {
-      "name": "台湾双语无法党",
-      "reason": "official/commons source unavailable: 429 Client Error: Too many requests (f061ab2) for url: https://upload.wikimedia.org/wikipedia/commons/a/a4/%E8%87%BA%E7%81%A3%E9%9B%99%E8%AA%9E%E7%84%A1%E6%B3%95%E9%BB%A8%E9%BB%A8%E5%BE%BD.png"
+      "reason": "official/commons source unavailable: 404 Client Error: Not Found for url: https://ftpmirror.your.org/pub/wikimedia/images/wikipedia/commons/f/fe/%E5%9F%BA%E9%80%B2%E9%BB%A8%EF%BD%9CLOGO.jpg"
     }
   ]
 }
