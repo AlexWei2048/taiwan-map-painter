@@ -64,12 +64,21 @@ def elections():
     o=load_json(ASSETS/"history-2022.json")
     if "rows" in o:samples["history-2022.json"]=o["rows"]
     if "candidacies" in o:samples["history-2022-candidacies"]=o["candidacies"]
+    roster=ASSETS/"election-2026.js"
+    if roster.exists():
+        content=roster.read_text(encoding="utf-8")
+        prefix="window.ELECTION_2026_DATA="
+        if content.startswith(prefix):
+            data=json.loads(content[len(prefix):].strip().rstrip(";"))
+            samples["election-2026-candidates"]=data["candidates"]
     return samples
 
 def inventory():
     presets=parties();baseline=set(logo_keys())
     official_ids,official_names=sourced_logos()
     keys=baseline|official_ids
+    archive=ASSETS/"party-logos-archive.js"
+    if archive.exists():keys.update(re.findall(r"SOURCED_PARTY_LOGOS_BY_ID\.([\w-]+)\s*=",archive.read_text(encoding="utf-8")))
     indexed={}
     for p in presets:
         for key in [p["name"]]+p.get("aliases",[]):

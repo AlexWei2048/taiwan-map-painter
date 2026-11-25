@@ -314,6 +314,49 @@ for item in supplemental:
   "source_alternative":item["urls"]})
  print("IMPORTED_SUPPLEMENT",name,pid or "historical",len(binary),chosen,flush=True)
  time.sleep(1)
+# Official 2012 election bulletin: visually reviewed page 1 and 2 artwork.
+# The original is printed in grayscale. Preserve it, never invent color.
+# Crop coordinates refer to the inspected 1024x1481 page rendering.
+bulletin="https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/02%E7%AB%8B%E6%B3%95%E5%A7%94%E5%93%A1/101%E5%B9%B4%E7%AC%AC8%E5%B1%86/02%E5%85%A8%E5%9C%8B%E4%B8%8D%E5%88%86%E5%8D%80%E5%8F%8A%E5%83%91%E5%B1%85%E5%9C%8B%E5%A4%96%E5%9C%8B%E6%B0%91/101%E5%B9%B4%E5%85%A8%E5%9C%8B%E4%B8%8D%E5%88%86%E5%8D%80%E5%8F%8A%E5%83%91%E5%B1%85%E5%9C%8B%E5%A4%96%E5%9C%8B%E6%B0%91%E7%AB%8B%E5%A7%94%E9%81%B8%E8%88%89.pdf"
+bulletin_marks=[
+ ("台湾国民会议",0,(55,287,108,312)),
+ ("中华民国台湾基本法连线",1,(676,300,725,344)),
+ ("台湾主义党",1,(675,707,725,745)),
+]
+if any(name not in byname for name,_,_ in bulletin_marks):
+ try:
+  import fitz
+  response=session.get(bulletin,timeout=60);response.raise_for_status()
+  raw=response.content
+  if not raw.startswith(b"%PDF-") or len(raw)>50_000_000:raise ValueError("unexpected bulletin PDF")
+  with fitz.open(stream=raw,filetype="pdf") as doc:
+   if len(doc)!=2:raise ValueError("unexpected bulletin pagination")
+   for name,pageno,box in bulletin_marks:
+    if name in byname:continue
+    page=doc[pageno]
+    if abs(page.rect.width/page.rect.height-1024/1481)>.015:raise ValueError("unexpected page aspect")
+    x0,y0,x1,y1=box
+    clip=fitz.Rect(x0*page.rect.width/1024,y0*page.rect.height/1481,x1*page.rect.width/1024,y1*page.rect.height/1481)
+    px=page.get_pixmap(matrix=fitz.Matrix(3,3),clip=clip,alpha=False)
+    picture=Image.open(io.BytesIO(px.tobytes("png"))).convert("RGBA")
+    # Fit rectangular logotypes entirely within a circular white badge.
+    # No stretching or clipping the letters from original marks.
+    picture.thumbnail((102,84),Image.Resampling.LANCZOS)
+    canvas=Image.new("RGBA",(128,128),"white")
+    canvas.alpha_composite(picture,((128-picture.width)//2,(128-picture.height)//2))
+    mask=Image.new("L",(512,512),0)
+    ImageDraw.Draw(mask).ellipse((0,0,511,511),fill=255)
+    canvas.putalpha(mask.resize((128,128),Image.Resampling.LANCZOS))
+    if len(set(picture.convert("L").getdata()))<5:raise ValueError("empty bulletin crop")
+    out=io.BytesIO();canvas.save(out,format="PNG",optimize=True);binary=out.getvalue()
+    byname[name]="data:image/png;base64,"+base64.b64encode(binary).decode("ascii")
+    documentation.append({"name":name,"party_id":None,"official_registry":bulletin,
+     "official_image":bulletin,"asset_type":"2012 official election bulletin emblem crop (grayscale)",
+     "source_page_number":pageno+1,"source_crop_1024x1481":list(box),
+     "source_sha256":hashlib.sha256(raw).hexdigest(),"rendered_sha256":hashlib.sha256(binary).hexdigest(),
+     "image_bytes":len(binary),"license":"Historical election bulletin reproduction, party identification only; original mark rights retained"})
+    print("IMPORTED_BULLETIN",name,pageno+1,len(binary),flush=True)
+ except Exception as err:print("BULLETIN_IMPORT_FAILED",str(err),flush=True)
 # Only add images with a party match backed by the registrar or a party-owned
 # source / precisely identified Commons file; no speculative reuse.
 render="/* Official party-logo images, with sources in reports/official-party-logos-import.json.\n"
