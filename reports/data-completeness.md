@@ -1,30 +1,29 @@
 # 数据完整性审计
 
-数据基准：`2beecc3a1f6d09063537ce4221e45b1e01104eb8`。行数为任务记录数，非缺失候选人总数。
+数据基准：`bcf2364b5397fd8046394870379623ed3c22f952`。行数为任务记录数，非缺失候选人总数。
 
 ## 状态
 
-- unverified: 506
-- conflict: 68
-- missing: 3294
+- unverified: 239
+- conflict: 13
+- missing: 2181
 - not_applicable: 5
 - partial: 15
 - not_yet_available: 1
 
 ## 字段
 
-- incumbent_at_election: 2029
-- ballots_cast: 1096
-- invalid_votes: 1096
-- registered_voters: 1086
-- reserved_seats: 499
-- gender: 236
-- district_scope: 164
-- elected_count_vs_seats: 55
+- incumbent_at_election: 2028
+- gender: 235
+- reserved_seats: 232
+- ballots_cast: 146
+- invalid_votes: 146
+- registered_voters: 135
 - candidate_results: 14
 - valid_votes: 12
 - ballot_number: 6
 - nomination_rank: 5
+- district_scope: 4
 - historical_boundary: 3
 - national_vs_local_votes: 1
 - regional_town_returns: 1
@@ -234,3 +233,11 @@
 - 以行政区及选区代码唯一识别小计行，只纳入村里代码 0000、投票所代码 0000 的记录，按乡镇合计；逐一与现有候选人得票合计相符，并对 22 县市的四项数据（选举人数、投票人数、有效票、无效票）逐项核对。2020、2024 各 368 乡镇通过，错误数均为 0。原有县市、选区及其他票种数据未改变。
 - 2020 数据提交 00720812c05ec48766f525fa8e847c3bb1e0eb57；2024 数据提交 3e309c133e273a3c80cbdb2d0b4032efc2f704e5。生成脚本已改为先合并选区内乡镇小计并检查完整性，同时禁止覆盖既有已验证统计（ab0611053a0f7fad5f333f11678c7f76553595be）。
 - 736 条原审计缺项已解决；不把原始 JSON/CSV 审计快照冒充最新全量扫描。区域民代当前界面仍维持县市及选区层级，乡镇资料已存入正式网站数据资产，以供后续功能及审计使用。
+
+## 政大候选人资料与1992年民代投票统计批量补齐（2026-11-25）
+
+- 政大历届公职选举资料总计核查293个历史页面、16,095条地方候选人资料；经两轮核验，16,082条有唯一候选记录对应，补入已有资料缺失的出生年次合计16,079条，以及1条现任状态。候选人原有得票、当选、姓名不因来源冲突而覆盖。
+- 旧县市名、头份镇/市、员林镇/市、乌丘/乌坵等差异及少数民族候选人附加拼写按当年身份和唯一票数合并核查。仍有13条无法严格匹配；当选、性别、是否现任的冲突列入核验报告，不自动替代历史官方更正。
+- 1992年区域民代27个选区的候选人有效票与政大选举概况对照，26区验证一致。新增15个完整选区资料和1项高雄市两区合计；保留县府年报原记录。
+- 1992年高雄县政大候选人明细合计536,430票，而同库概况仅记534,430票；同时彰化县县府年报与政大概况投票/无效票相差54票。两项均有单独冲突证据，不据推算取代官方原始表。
+- 可追溯数据报告：`reports/nccu-candidate-reconciliation.json`、`reports/nccu-1992-legislative-turnout-audit.json`；脚本与自动回归测试见`scripts/backfill_nccu_candidate_profiles.py`和`scripts/backfill_nccu_1992_legislative_turnout.py`。
