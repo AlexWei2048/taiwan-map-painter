@@ -55,7 +55,7 @@
  }
  function loadLegacyCouncil(fetcher){
   if(!legacyCouncilRequest)legacyCouncilRequest=(async()=>{
-   const response=await fetcher('assets/history-local-1994-council.json?v=25');
+   const response=await fetcher('assets/history-local-1994-council.json?v=26');
    if(!response.ok)throw Error('1994县市议员补充资料 HTTP '+response.status);
    const archive=await response.json();
    if(archive.version!==1||!archive.districts?.length)throw Error('1994县市议员补充资料不完整');

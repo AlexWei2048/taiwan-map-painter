@@ -95,7 +95,9 @@
             ]
           ],
           "seats": 4,
-          "reserved_seats": 1
+          "reserved_seats": 1,
+          "candidate_count": 14,
+          "candidate_roster_source": "https://kinhu.kinmen.gov.tw/cp.aspx?Create=1&n=C4535D8A265F96AD"
         },
         {
           "number": 3,
@@ -173,7 +175,8 @@
         "reported_returns": "https://www.kmdn.gov.tw/1117/1271/4189/49195/",
         "chen_membership": "https://hk.on.cc/tw/bkn/cnt/news/20140921/bkntw-20140921000517666-0921_04011_001.html",
         "weng_district": "https://www.kmdn.gov.tw/1117/1271/1272/124938/?cprint=pt",
-        "huang_returns": "https://www.kmdn.gov.tw/1117/1271/1272/304384/h?cprint=pt"
+        "huang_returns": "https://www.kmdn.gov.tw/1117/1271/1272/304384/h?cprint=pt",
+        "jinhu_1994_roster": "https://kinhu.kinmen.gov.tw/cp.aspx?Create=1&n=C4535D8A265F96AD"
       },
       "other_candidates": [
         {
@@ -207,6 +210,66 @@
         },
         {
           "name": "李錫添"
+        },
+        {
+          "name": "陳森照",
+          "district_number": 2,
+          "source_url": "https://kinhu.kinmen.gov.tw/cp.aspx?Create=1&n=C4535D8A265F96AD",
+          "source_locator": "民國八十三年一月二十四日及三十日，金湖鎮公所大事記"
+        },
+        {
+          "name": "陳汶河",
+          "district_number": 2,
+          "source_url": "https://kinhu.kinmen.gov.tw/cp.aspx?Create=1&n=C4535D8A265F96AD",
+          "source_locator": "民國八十三年一月二十四日及三十日，金湖鎮公所大事記"
+        },
+        {
+          "name": "蔡顯清",
+          "district_number": 2,
+          "source_url": "https://kinhu.kinmen.gov.tw/cp.aspx?Create=1&n=C4535D8A265F96AD",
+          "source_locator": "民國八十三年一月二十四日及三十日，金湖鎮公所大事記"
+        },
+        {
+          "name": "李和平",
+          "district_number": 2,
+          "source_url": "https://kinhu.kinmen.gov.tw/cp.aspx?Create=1&n=C4535D8A265F96AD",
+          "source_locator": "民國八十三年一月二十四日及三十日，金湖鎮公所大事記"
+        },
+        {
+          "name": "蔡水游",
+          "district_number": 2,
+          "source_url": "https://kinhu.kinmen.gov.tw/cp.aspx?Create=1&n=C4535D8A265F96AD",
+          "source_locator": "民國八十三年一月二十四日及三十日，金湖鎮公所大事記"
+        },
+        {
+          "name": "莊其副",
+          "district_number": 2,
+          "source_url": "https://kinhu.kinmen.gov.tw/cp.aspx?Create=1&n=C4535D8A265F96AD",
+          "source_locator": "民國八十三年一月二十四日及三十日，金湖鎮公所大事記"
+        },
+        {
+          "name": "陳應龍",
+          "district_number": 2,
+          "source_url": "https://kinhu.kinmen.gov.tw/cp.aspx?Create=1&n=C4535D8A265F96AD",
+          "source_locator": "民國八十三年一月二十四日及三十日，金湖鎮公所大事記"
+        },
+        {
+          "name": "呂炳丁",
+          "district_number": 2,
+          "source_url": "https://kinhu.kinmen.gov.tw/cp.aspx?Create=1&n=C4535D8A265F96AD",
+          "source_locator": "民國八十三年一月二十四日及三十日，金湖鎮公所大事記"
+        },
+        {
+          "name": "翁伸金",
+          "district_number": 2,
+          "source_url": "https://kinhu.kinmen.gov.tw/cp.aspx?Create=1&n=C4535D8A265F96AD",
+          "source_locator": "民國八十三年一月二十四日及三十日，金湖鎮公所大事記"
+        },
+        {
+          "name": "陳河彬",
+          "district_number": 2,
+          "source_url": "https://kinhu.kinmen.gov.tw/cp.aspx?Create=1&n=C4535D8A265F96AD",
+          "source_locator": "民國八十三年一月二十四日及三十日，金湖鎮公所大事記"
         }
       ],
       "reserved_seats": 2,
