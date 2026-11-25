@@ -97,7 +97,7 @@
  async function loadSupplement(fetcher){
   if(!supplementRequest){
    supplementRequest=(async()=>{
-    const response=await fetcher('assets/history-local-council-supplement.json?v=20261125-shared-quota-v3');
+    const response=await fetcher('assets/history-local-council-supplement.json?v=20261125-statutory-quota-v4');
     if(!response.ok)throw Error('历史议员补充资料 HTTP '+response.status);
     const supplement=await response.json();
     if(supplement.version!==1||!Array.isArray(supplement.paths)||!supplement.years)throw Error('历史议员补充资料不完整');
@@ -131,8 +131,9 @@
   }
   return {...shard,contests:shard.contests.map(contest=>{
    const group=shared.get(contest.contest_id);
-   if(group)return {...contest,reserved_seats:group.reserved===0?0:null,reserved_seats_group:group,reserved_seats_source:group.source,reserved_seats_method:'official_shared_group'};
-   return Object.hasOwn(quotas,contest.contest_id)?{...contest,reserved_seats:quotas[contest.contest_id]}:contest;
+   if(group)return {...contest,reserved_seats:group.reserved===0?0:null,reserved_seats_group:group,reserved_seats_source:group.source,reserved_seats_method:group.method==='statutory'?'statutory_shared_group':'official_shared_group'};
+   const source=addition.quotaSources?.[contest.contest_id];
+   return Object.hasOwn(quotas,contest.contest_id)?{...contest,reserved_seats:quotas[contest.contest_id],...(source?{reserved_seats_source:source,reserved_seats_method:'statutory'}:{})}:contest;
   }),councilDistrictGeometry:Object.fromEntries(
    Object.entries(addition.districts||{}).map(([id,entry])=>[id,{...supplement.paths[entry.path],villages:entry.villages,
     boundaryNote:entry.boundaryNote,source:entry.source}]))};
