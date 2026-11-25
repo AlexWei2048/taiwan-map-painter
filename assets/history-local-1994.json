@@ -7523,13 +7523,19 @@
       "candidate_name": "刘弘",
       "candidate_name_official": "劉弘",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "中国国民党",
       "party_name_official": "中國國民黨",
       "votes": 6926,
       "vote_share": 25.816311,
       "elected_official": false,
-      "elected_mark": ""
+      "elected_mark": "",
+      "incumbent_source": {
+        "name": "劉文秀",
+        "source_url": "https://www.sanxia.ntpc.gov.tw/userfiles/3110400/files/2023-%E9%B3%B6%E5%B1%B1%E5%9B%9B%E5%AD%A3%E9%81%8A%E8%B3%9E.pdf",
+        "source_locator": "公所2023《鳶山四季遊賞》引民國82年《三峽鎮志》，劉文秀為第十、十一屆鎮長；歷任首長列表亦記1985–1994，下一任洪見文為第十二屆。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:台北县:regional:三峡镇:2",
@@ -7538,13 +7544,19 @@
       "candidate_name": "邱郎",
       "candidate_name_official": "邱郎",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "无党籍",
       "party_name_official": "無黨籍",
       "votes": 7746,
       "vote_share": 28.872819,
       "elected_official": false,
-      "elected_mark": ""
+      "elected_mark": "",
+      "incumbent_source": {
+        "name": "劉文秀",
+        "source_url": "https://www.sanxia.ntpc.gov.tw/userfiles/3110400/files/2023-%E9%B3%B6%E5%B1%B1%E5%9B%9B%E5%AD%A3%E9%81%8A%E8%B3%9E.pdf",
+        "source_locator": "公所2023《鳶山四季遊賞》引民國82年《三峽鎮志》，劉文秀為第十、十一屆鎮長；歷任首長列表亦記1985–1994，下一任洪見文為第十二屆。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:台北县:regional:三峡镇:3",
@@ -7553,13 +7565,19 @@
       "candidate_name": "张子云",
       "candidate_name_official": "張子雲",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "中国国民党",
       "party_name_official": "中國國民黨",
       "votes": 1229,
       "vote_share": 4.581035,
       "elected_official": false,
-      "elected_mark": ""
+      "elected_mark": "",
+      "incumbent_source": {
+        "name": "劉文秀",
+        "source_url": "https://www.sanxia.ntpc.gov.tw/userfiles/3110400/files/2023-%E9%B3%B6%E5%B1%B1%E5%9B%9B%E5%AD%A3%E9%81%8A%E8%B3%9E.pdf",
+        "source_locator": "公所2023《鳶山四季遊賞》引民國82年《三峽鎮志》，劉文秀為第十、十一屆鎮長；歷任首長列表亦記1985–1994，下一任洪見文為第十二屆。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:台北县:regional:三峡镇:4",
@@ -7568,13 +7586,19 @@
       "candidate_name": "吕坤廷",
       "candidate_name_official": "呂坤廷",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "无党籍",
       "party_name_official": "無黨籍",
       "votes": 2069,
       "vote_share": 7.712092,
       "elected_official": false,
-      "elected_mark": ""
+      "elected_mark": "",
+      "incumbent_source": {
+        "name": "劉文秀",
+        "source_url": "https://www.sanxia.ntpc.gov.tw/userfiles/3110400/files/2023-%E9%B3%B6%E5%B1%B1%E5%9B%9B%E5%AD%A3%E9%81%8A%E8%B3%9E.pdf",
+        "source_locator": "公所2023《鳶山四季遊賞》引民國82年《三峽鎮志》，劉文秀為第十、十一屆鎮長；歷任首長列表亦記1985–1994，下一任洪見文為第十二屆。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:台北县:regional:三峡镇:5",
@@ -7583,13 +7607,19 @@
       "candidate_name": "洪见文",
       "candidate_name_official": "洪見文",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "中国国民党",
       "party_name_official": "中國國民黨",
       "votes": 8858,
       "vote_share": 33.017743,
       "elected_official": true,
-      "elected_mark": "*"
+      "elected_mark": "*",
+      "incumbent_source": {
+        "name": "劉文秀",
+        "source_url": "https://www.sanxia.ntpc.gov.tw/userfiles/3110400/files/2023-%E9%B3%B6%E5%B1%B1%E5%9B%9B%E5%AD%A3%E9%81%8A%E8%B3%9E.pdf",
+        "source_locator": "公所2023《鳶山四季遊賞》引民國82年《三峽鎮志》，劉文秀為第十、十一屆鎮長；歷任首長列表亦記1985–1994，下一任洪見文為第十二屆。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:台北县:regional:淡水镇:1",
@@ -8225,13 +8255,19 @@
       "candidate_name": "王瑞琦",
       "candidate_name_official": "王瑞琦",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": true,
       "party_name": "无党籍",
       "party_name_official": "無黨籍",
       "votes": 3383,
       "vote_share": 100,
       "elected_official": true,
-      "elected_mark": "*"
+      "elected_mark": "*",
+      "incumbent_source": {
+        "name": "王瑞琦",
+        "source_url": "https://www.pingxi.ntpc.gov.tw/home.jsp?id=72d11405ac902ac4",
+        "source_locator": "公所歷屆首長及其任期：79.03.01–87.02.28。",
+        "value": true
+      }
     },
     {
       "candidacy_id": "1994-township:台北县:regional:双溪乡:1",
@@ -8837,13 +8873,19 @@
       "candidate_name": "李清福",
       "candidate_name_official": "李清福",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "民主进步党",
       "party_name_official": "民主進步黨",
       "votes": 10818,
       "vote_share": 52.489083,
       "elected_official": true,
-      "elected_mark": "*"
+      "elected_mark": "*",
+      "incumbent_source": {
+        "name": "許辰源",
+        "source_url": "https://ctc.kcg.gov.tw/cp.aspx?n=06D287CFE5B0F4E5",
+        "source_locator": "公所歷屆鄉長：第十、十一屆，75.03.01–83.02.28；李清福83.03.01才就任。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:高雄县:regional:桥头乡:2",
@@ -8852,13 +8894,19 @@
       "candidate_name": "高宏霖",
       "candidate_name_official": "高宏霖",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "中国国民党",
       "party_name_official": "中國國民黨",
       "votes": 9792,
       "vote_share": 47.510917,
       "elected_official": false,
-      "elected_mark": ""
+      "elected_mark": "",
+      "incumbent_source": {
+        "name": "許辰源",
+        "source_url": "https://ctc.kcg.gov.tw/cp.aspx?n=06D287CFE5B0F4E5",
+        "source_locator": "公所歷屆鄉長：第十、十一屆，75.03.01–83.02.28；李清福83.03.01才就任。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:高雄县:regional:燕巢乡:1",
@@ -17375,7 +17423,7 @@
       "number": "1",
       "party": "中国国民党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 6926,
       "elected": false,
       "electedMark": "",
@@ -17391,7 +17439,7 @@
       "number": "2",
       "party": "无党籍",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 7746,
       "elected": false,
       "electedMark": "",
@@ -17407,7 +17455,7 @@
       "number": "3",
       "party": "中国国民党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 1229,
       "elected": false,
       "electedMark": "",
@@ -17423,7 +17471,7 @@
       "number": "4",
       "party": "无党籍",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 2069,
       "elected": false,
       "electedMark": "",
@@ -17439,7 +17487,7 @@
       "number": "5",
       "party": "中国国民党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 8858,
       "elected": true,
       "electedMark": "*",
@@ -17951,7 +17999,7 @@
       "number": "1",
       "party": "无党籍",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": true,
       "votes": 3383,
       "elected": true,
       "electedMark": "*",
@@ -18527,7 +18575,7 @@
       "number": "1",
       "party": "民主进步党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 10818,
       "elected": true,
       "electedMark": "*",
@@ -18543,7 +18591,7 @@
       "number": "2",
       "party": "中国国民党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 9792,
       "elected": false,
       "electedMark": "",

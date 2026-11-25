@@ -442,7 +442,12 @@
               8858,
               true
             ]
-          ]
+          ],
+          "incumbency_at_election": {
+            "name": "劉文秀",
+            "source_url": "https://www.sanxia.ntpc.gov.tw/userfiles/3110400/files/2023-%E9%B3%B6%E5%B1%B1%E5%9B%9B%E5%AD%A3%E9%81%8A%E8%B3%9E.pdf",
+            "source_locator": "公所2023《鳶山四季遊賞》引民國82年《三峽鎮志》，劉文秀為第十、十一屆鎮長；歷任首長列表亦記1985–1994，下一任洪見文為第十二屆。"
+          }
         },
         {
           "town": "淡水鎮",
@@ -907,7 +912,12 @@
               3383,
               true
             ]
-          ]
+          ],
+          "incumbency_at_election": {
+            "name": "王瑞琦",
+            "source_url": "https://www.pingxi.ntpc.gov.tw/home.jsp?id=72d11405ac902ac4",
+            "source_locator": "公所歷屆首長及其任期：79.03.01–87.02.28。"
+          }
         },
         {
           "town": "雙溪鄉",
@@ -1392,7 +1402,12 @@
               9792,
               false
             ]
-          ]
+          ],
+          "incumbency_at_election": {
+            "name": "許辰源",
+            "source_url": "https://ctc.kcg.gov.tw/cp.aspx?n=06D287CFE5B0F4E5",
+            "source_locator": "公所歷屆鄉長：第十、十一屆，75.03.01–83.02.28；李清福83.03.01才就任。"
+          }
         },
         {
           "town": "燕巢鄉",
