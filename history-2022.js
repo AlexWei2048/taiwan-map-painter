@@ -488,8 +488,12 @@
  }
  function appendHistoryParty(cell,party){
   const p=predictionParty(party),logo=logoFor(p);
-  if(logo){const img=document.createElement('img');img.src=logo;img.alt='';img.loading='lazy';cell.append(img)}
-  cell.append(createHistoryElement('span','',party));cell.classList.add('history-party-cell');
+  const isTableCell=cell.tagName==='TD'||cell.tagName==='TH';
+  const content=isTableCell?createHistoryElement('span','history-party-cell history-party-inline'):cell;
+  if(isTableCell){cell.classList.add('history-party-td');cell.append(content)}
+  else content.classList.add('history-party-cell');
+  if(logo){const img=document.createElement('img');img.src=logo;img.alt='';img.loading='lazy';content.append(img)}
+  content.append(createHistoryElement('span','',party));
  }
  function renderLegislativeSummary(){
   const root=el('historyLegislativeSummary');if(!root)return;
@@ -566,7 +570,11 @@
   const wrap=createHistoryElement('div','history-table-wrap'),table=createHistoryElement('table','history-candidate-table history-legislative-table');
   table.dataset.ballot=legislativeBallot;
   const partyBallot=legislativeBallot==='party';
-  const headers=partyBallot?['地区','政党','得票数','得票率']:['县市','选区 / 地区','号次','候选人','政党','得票数','得票率','当选'];
+  const headers=partyBallot?['地区','政党','得票数','得票率']:['县市','选区 / 地区','号次','候选人','选举时现任','政党','得票数','得票率','当选'];
+  const columns=partyBallot?['area','party','votes','share']:['county','area','number','name','incumbent','party','votes','share','elected'];
+  const colgroup=document.createElement('colgroup');
+  for(const key of columns){const col=document.createElement('col');col.className='legislative-col-'+key;colgroup.append(col)}
+  table.append(colgroup);
   const thead=document.createElement('thead'),heading=document.createElement('tr');
   for(const name of headers){const th=document.createElement('th');th.textContent=name;heading.append(th)}thead.append(heading);table.append(thead);
   const body=document.createElement('tbody');let previousArea='';
@@ -580,6 +588,11 @@
    if(r.elected&&!partyBallot)tr.className='history-elected-row';
    const textFields=partyBallot?[area]:[r.level==='national'?'全区':r.county,r.level==='national'?'全区选举':r.level==='town'?r.town:(r.district||r.town||'—'),r.number||'—',displayedCandidateName(r)];
    for(const value of textFields)tr.append(createHistoryElement('td','',value));
+   if(!partyBallot){
+    const current=createHistoryElement('td','history-incumbent',incumbentLabel(r));
+    if(r.incumbent==null)current.title='现任资料缺失';
+    tr.append(current);
+   }
    const party=document.createElement('td');appendHistoryParty(party,r.party);tr.append(party);
    tr.append(createHistoryElement('td','history-number',r.votes.toLocaleString('zh-CN')));
    tr.append(createHistoryElement('td','history-number',r._share.toFixed(2)+'%'));
