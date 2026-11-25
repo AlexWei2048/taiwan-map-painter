@@ -1,0 +1,21 @@
+const assert=require('node:assert/strict');
+const {test}=require('node:test');
+const Local=require('../history-local.js');
+const norm=require('../assets/opencc.js').Converter({from:'t',to:'cn'});
+const snapshot=require('../assets/history-2022.json');
+const meta=require('../assets/history-council-districts-2022.json');
+test('2022 council metadata reconciliation preserves ballots and IDs',()=>{
+ const before=JSON.stringify(snapshot);
+ const result=Local.reconcile2022Council(snapshot,meta,norm);
+ const contests=result.contests.filter(c=>c.election_id==='2022-council');
+ assert.equal(contests.length,215);
+ assert.equal(contests.reduce((n,c)=>n+c.seats,0),910);
+ assert.ok(contests.every(c=>c.scope_names.length&&c.seats>0));
+ assert.equal(result.candidacies,snapshot.candidacies);
+ assert.equal(result.rows,snapshot.rows);
+ assert.deepEqual(result.contests.map(c=>c.contest_id),snapshot.contests.map(c=>c.contest_id));
+ assert.equal(JSON.stringify(snapshot),before);
+ for(const c of contests)assert.equal(c.seats,result.candidacies.filter(x=>x.contest_id===c.contest_id&&x.elected_official).length);
+ assert.deepEqual(Local.reconcile2022Council(result,meta,norm),result);
+ assert.throws(()=>Local.reconcile2022Council(snapshot,{...meta,rows:meta.rows.slice(1)},norm));
+});

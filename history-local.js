@@ -286,7 +286,31 @@
    return {...c,election_date:office==='mayor'?'2022-12-18':'2022-11-26'};
   })};
  }
- const api={YEARS,years,yearLabel,cycleYear,load,loadCycle,geometry,councilMap,applyCouncilSupplement,fillRegionalCouncilQuotas,correctElectionDates,enrichLegacyGender};
+ // Synchronize the legacy 2022 entity snapshot with its existing official district index.
+ // Keep every candidate/contest ID and vote unchanged; the scope is the source's town-level coverage,
+ // not a claim that split-town legal boundaries equal the whole town.
+ function reconcile2022Council(shard,metadata,normalize){
+  if(shard.year!==2022)return shard;
+  const identity=e=>({plainsIndigenous:'plains',mountainIndigenous:'mountain'}[e]||e);
+  const number=v=>Number(String(v).match(/第\s*0*(\d+)/)?.[1]);
+  const key=(c,e,n)=>[normalize(c).replaceAll('臺','台'),identity(e),n].join('|');
+  const index=new Map(metadata.rows.map(d=>[key(d.county,d.electorate,d.number),d]));
+  const councilIds=new Set(shard.elections.filter(e=>e.office==='council').map(e=>e.election_id));
+  const counts=new Map();
+  for(const c of shard.candidacies)if(c.elected_official===true)counts.set(c.contest_id,(counts.get(c.contest_id)||0)+1);
+  if(metadata.year!==2022||index.size!==215||metadata.rows.length!==215)throw Error('2022议员选区索引异常');
+  const matched=new Set();let seats=0;
+  const contests=shard.contests.map(d=>{
+   if(!councilIds.has(d.election_id))return d;
+   const k=key(d.county_name,d.electorate,d.district_number||number(d.district_name)),m=index.get(k);
+   if(!m||matched.has(k)||!Number.isInteger(m.seats)||m.seats<1||!Number.isInteger(m.womenReserved)||!Array.isArray(m.scopeTowns)||!m.scopeTowns.length||counts.get(d.contest_id)!==m.seats)throw Error('2022议员选区核验失败：'+k);
+   matched.add(k);seats+=m.seats;
+   return {...d,seats:m.seats,reserved_seats:m.womenReserved,scope_names:m.scopeTowns.map(normalize)};
+  });
+  if(matched.size!==215||seats!==910)throw Error('2022议员名额总数核验失败');
+  return {...shard,contests};
+ }
+ const api={reconcile2022Council,YEARS,years,yearLabel,cycleYear,load,loadCycle,geometry,councilMap,applyCouncilSupplement,fillRegionalCouncilQuotas,correctElectionDates,enrichLegacyGender};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;
  else root.HistoryLocal=api;
 })(typeof window==='undefined'?{}:window);
