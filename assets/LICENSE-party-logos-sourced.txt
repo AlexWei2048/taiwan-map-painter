@@ -242,14 +242,22 @@
 原图：https://static.wixstatic.com/media/f4b9b6_1d0a1482ceb24a8f85c64410c119f092~mv2.jpg/v1/fit/w_2500%2Ch_1330%2Cal_c/f4b9b6_1d0a1482ceb24a8f85c64410c119f092~mv2.jpg
 来源SHA256：59c1af32596ecd1df0db5aa4fc803cf450a1edeaca66f507887b03d90556a59a
 
-中国青年党 [ycp]（党旗作身份标记，不称官方党徽）
+中国青年党 [ycp]
 登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&sms=13073&s=3
-党旗：https://commons.wikimedia.org/wiki/File:Flag_of_Chinese_Youth_Party.svg
-授权：公共领域（几何图案）；作者 Ericmetro；来源 Commons
-原图SHA256：67fd51cf3bd393eeb9ba96e6fb3d795da878f6a525f937e6e4c39b12ef5e2a82
+原图：https://commons.wikimedia.org/wiki/Special:Redirect/file/Flag_of_Chinese_Youth_Party.svg
+来源SHA256：67fd51cf3bd393eeb9ba96e6fb3d795da878f6a525f937e6e4c39b12ef5e2a82
 
-台湾工党 [历史名称，党旗替代标识]（切勿混为劳动党）
-来源：https://commons.wikimedia.org/wiki/File:台灣工黨黨旗.svg
-作者：AAAAA143222
-授权：CC BY-SA 4.0 https://creativecommons.org/licenses/by-sa/4.0/
-来源 SHA256：2723ce4fa7bce57fdaa5aa672e55dd6f36d700fef67e497478b66b82eed22ebd
+台湾工党 [历史名称]
+登记：https://commons.wikimedia.org/wiki/File:台灣工黨黨旗.svg
+原图：https://commons.wikimedia.org/wiki/Special:Redirect/file/台灣工黨黨旗.svg
+来源SHA256：2723ce4fa7bce57fdaa5aa672e55dd6f36d700fef67e497478b66b82eed22ebd
+
+司法正义党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&s=299&sms=13073
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/ff8080816ecfec30016f5a9ed2fc034e.jpg
+来源SHA256：6364255e1f43836222cef5a78fad634fd1ab3fd7edc0320507bde349bc0fc629
+
+爱民党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&s=554&sms=13073
+原图：https://ws.moi.gov.tw/001/Upload/444/relpic/13073/554/9e74dfca-3a59-40e1-900d-e1adb3c51aa1.jpg
+来源SHA256：f00fba76ea51cd402ed07fd51e0279467dc0a523a53339d7d10d9447140e5fe4

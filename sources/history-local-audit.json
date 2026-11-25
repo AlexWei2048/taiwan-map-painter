@@ -4655,7 +4655,21 @@
         "2018-107年地方公職人員選舉/縣市市長",
         "2018-107年地方公職人員選舉/縣市平原議員",
         "2018-107年地方公職人員選舉/縣市鄉鎮市長"
-      ]
+      ],
+      "taipeiMayorDistrictTallies": {
+        "original_opening": {
+          "source": "https://web.cec.gov.tw/api/file/3625584b-7d95-443d-8549-95f8d48fe921.pdf",
+          "crosscheck": "https://vote.nccu.edu.tw/cec/D2018635.PDF",
+          "districts": 12,
+          "valid_votes": 1414816
+        },
+        "certified_recount": {
+          "profile_source": "https://data.taipei/dataset/detail?id=a8ef3b5d-a598-477c-be64-52e56816d58f",
+          "districts": 12,
+          "valid_votes": 1413870,
+          "candidate_breakdown_available": false
+        }
+      }
     },
     "2022": {
       "counts": {

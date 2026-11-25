@@ -626,6 +626,7 @@
    if(area!==previousArea){
     const divider=document.createElement('tr'),heading=document.createElement('th');divider.className='history-district-divider';heading.scope='rowgroup';heading.colSpan=11;
     heading.textContent=kind==='mayor'?(presidentialMode?(scale==='town'?r.county+' · '+r.town:r.county+' · '+yearLabel()+'年领导人选举'):(mayorTownView()?r.county+' · '+r.town:r.county+' · 县市长选举')):kind==='council'?r.county+' · '+r.district+' · '+(r.electorate==='plains'?'平地少数民族议员':r.electorate==='mountain'?'山地少数民族议员':'区域议员'):r.county+' · '+r.town;
+    if(r.tally_basis==='original_opening')heading.append(' · 投票日原始开票');
     if(snapshotData?.cycleYears){const y=localResultYear({county:r.county,name:kind==='council'?r.district:r.town||r.county,electorate:r.electorate});heading.append(' · '+y+'年')}
     divider.append(heading);body.append(divider);previousArea=area;
    }
@@ -908,7 +909,8 @@
    const cycle=snapshotData?.cycleYears?'按选举批次合并显示，各地实际投票日期见选区结果。':'按实际投票年显示。';
    const coverage=archivedCouncil()?' 1994年1月的县市议员资料采用地方选务档案转录，经选区有效票和当选席次对账。金门县可查已核实的部分候选人资料，合计采用已收录的完整结果。':
     partialTownship()?' 目前收录原台北县和原高雄县的官方清册，合计采用已收录的56个选区。':'';
-   el('historyBoundaryNote').textContent=cycle+coverage+' 历史边界采用可对应的现行轮廓，缺少可靠边界的选区仍可查看候选人结果。'+(localYear===2018&&kind==='mayor'?' 台北市采用法院重计结果，区级重计明细缺失。':'');
+   el('historyBoundaryNote').textContent=cycle+coverage+' 历史边界采用可对应的现行轮廓，缺少可靠边界的选区仍可查看候选人结果。'+
+    (localYear===2018&&kind==='mayor'&&(!county||county==='台北市')?' 台北市全市采用法院重计结果。分区地图的候选人票数采用投票日原始开票，分区投票统计见选举概况。':'');
   }
   else if(presidentialMode)el('historyBoundaryNote').textContent='县市和乡镇市区按当届归属显示，边界采用现行底图近似；'+
    (presidentialYear<=2000?'不同“连署”候选人使用不同图示色，不代表政党。':'颜色表示各地区最高票候选人所属政党。');
@@ -1010,6 +1012,7 @@
   renderDialogScope(f,district);
   if(district?.womenReservedMethod==='statutory')el('historyDialogMessage').append(' · 妇保按当届规定计算');
   if(f.historicalBoundaryNote)el('historyDialogMessage').append(' · '+f.historicalBoundaryNote);
+  if(rows.some(r=>r.tally_basis==='original_opening'))el('historyDialogMessage').append(' · 投票日原始开票；当选标记依据全市正式结果');
   if(kind==='mayor'&&localYear===2022&&f.county==='嘉义市')el('historyDialogMessage').append(' · 2022年12月18日重行投票');
   const dialog=el('historyResultDialog'),hint=el('historyDialogScroll');
   const overviewButton=el('historyDialogOverview');
@@ -1084,7 +1087,12 @@
   const election=snapshotData?.elections?.find(item=>item.office===office&&(!legislativeMode||item.electorate===legislativeBallot))||snapshotData?.elections?.[0];
   const source=archivedCouncil()?'选举事务主管机构公开资料、地方选务档案转录':
    mainlandTerms(election?.source_name||'台湾地区选举事务主管机构公开资料')+(legislativeMode&&legislativeYear===1992?'（政治大学选举研究数据库）':'（经 taiwanvotes.tw 整理）');
-  return['资料来源：'+source,'行政区边界版本：'+(snapshotData?.cycleYears?yearLabel():election?.boundary_version||yearLabel()),'历史数据架构版本：'+(snapshotData?.schemaVersion||2)];
+  const metadata=['资料来源：'+source,'行政区边界版本：'+(snapshotData?.cycleYears?yearLabel():election?.boundary_version||yearLabel()),'历史数据架构版本：'+(snapshotData?.schemaVersion||2)];
+  if(!presidentialMode&&!legislativeMode&&localYear===2018&&kind==='mayor'&&(!county||county==='台北市')){
+   metadata[0]='资料来源：中央选举委员会、政大选举研究中心';
+   metadata.push(mayorTownView()?'台北市分区票数为投票日原始开票；全市及当选者汇总为法院重计结果。':'台北市全市计票版本：法院重计结果。');
+  }
+  return metadata;
  }
  function syncOverviewMap({scope='all',county:selectedCounty='',area='',districtName=''}={}){
   if(!active||!loaded)return false;

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "count_by_id": 14,
-  "count_by_historical_name": 37,
+  "count_by_historical_name": 39,
   "official_sources": [
     {
       "name": "大爱宪改",
@@ -567,6 +567,28 @@
       "license": "Wikimedia Commons CC BY-SA 4.0; attribution and share-alike requirements apply",
       "author": "AAAAA143222",
       "source_note": "Specific historical Taiwan Workers Party; not Labour Party"
+    },
+    {
+      "name": "司法正义党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&s=299&sms=13073",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/ff8080816ecfec30016f5a9ed2fc034e.jpg",
+      "source_sha256": "6364255e1f43836222cef5a78fad634fd1ab3fd7edc0320507bde349bc0fc629",
+      "rendered_sha256": "2c637e0e6c83b478ede7cb366b0fd27acf3a08e340687f39444242d629c47e28",
+      "image_bytes": 19732,
+      "size_after_fit": "110x116",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "爱民党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&s=554&sms=13073",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/444/relpic/13073/554/9e74dfca-3a59-40e1-900d-e1adb3c51aa1.jpg",
+      "source_sha256": "f00fba76ea51cd402ed07fd51e0279467dc0a523a53339d7d10d9447140e5fe4",
+      "rendered_sha256": "edb7a97cfa1aac5bd106335652535030456de974c22a87785ae7742ed60919b6",
+      "image_bytes": 9231,
+      "size_after_fit": "116x116",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
     }
   ],
   "unverified_or_unavailable": [
@@ -576,10 +598,6 @@
     },
     {
       "name": "中华社会民主党",
-      "reason": "ministry has no uploaded emblem image"
-    },
-    {
-      "name": "中国青年党",
       "reason": "ministry has no uploaded emblem image"
     },
     {
@@ -612,10 +630,6 @@
       "reason": "ministry has no uploaded emblem image"
     },
     {
-      "name": "台湾工党",
-      "reason": "ministry has no uploaded emblem image"
-    },
-    {
       "name": "大道慈悲济世党",
       "reason": "ministry has no uploaded emblem image"
     },
@@ -638,11 +652,6 @@
     {
       "name": "中国团结党",
       "reason": "ministry has no uploaded emblem image"
-    },
-    {
-      "name": "司法正义党",
-      "reason": "unusually large official image",
-      "source": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/ff8080816ecfec30016f5a9ed2fc034e.jpg"
     },
     {
       "name": "正党",

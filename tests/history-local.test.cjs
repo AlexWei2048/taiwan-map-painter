@@ -122,7 +122,24 @@ test('Corrections use the corroborated town tally or certified recount at its ac
  assert.equal(byName.get('黄进一'),8676);
  const recounted=data(2018),city=exactDistrict(recounted,'台北市','台北市');
  assert.equal(contestants(recounted,city).find(c=>c.candidate_name==='柯文哲').votes,580663);
- assert.equal(recounted.rows.some(r=>r.type==='mayor'&&r.county==='台北市'&&r.level==='town'),false);
+ const opening=recounted.rows.filter(r=>r.type==='mayor'&&r.county==='台北市'&&r.level==='town');
+ assert.equal(opening.length,60);
+ assert.ok(opening.every(r=>r.tally_basis==='original_opening'));
+ assert.deepEqual([1,2,3,4,5].map(n=>opening.filter(r=>r.number===String(n))
+  .reduce((sum,r)=>sum+r.votes,0)),[5617,577566,244641,580820,6172]);
+ const profiles=recounted.townProfiles.filter(r=>r.office==='mayor'&&r.county==='台北市');
+ assert.equal(profiles.length,12);
+ assert.ok(profiles.every(r=>r.tally_basis==='certified_recount'));
+ assert.equal(profiles.reduce((sum,r)=>sum+r.valid_votes,0),1413870);
+ const area={year:2018,office:'mayor',scope:'town',county:'台北市',area:'松山区'};
+ const ward=Workspace.overviewRegionData(Core.index(recounted),area);
+ assert.equal(ward.tallyBasis,'certified_recount');
+ assert.equal(ward.overview.validVotes,106795);
+ assert.equal(ward.overview.ballotsCast,107752);
+ assert.equal(opening.filter(r=>r.town==='松山区').reduce((sum,r)=>sum+r.votes,0),106972);
+ const csv=Workspace.mayorTownCsv(recounted,area);
+ assert.equal(csv.trim().split('\r\n').length,6);
+ assert.match(csv,/46381.*投票日原始开票/);
  const earliest=data(1993);
  assert.equal(earliest.contests.length,23);
  assert.equal(earliest.candidacies.length,77);

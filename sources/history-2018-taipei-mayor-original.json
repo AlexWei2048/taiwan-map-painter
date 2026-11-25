@@ -1,0 +1,249 @@
+{
+  "election_date": "2018-11-24",
+  "source_url": "https://web.cec.gov.tw/api/file/3625584b-7d95-443d-8549-95f8d48fe921.pdf",
+  "source_sha256": "22692f98970e6e872dceb77cf7dd237ae44177e079d4d4e543c312f7a30f28df",
+  "crosscheck_url": "https://vote.nccu.edu.tw/cec/D2018635.PDF",
+  "table": "縣表3-1",
+  "districts": {
+    "北投區": {
+      "votes": [
+        499,
+        52445,
+        24586,
+        56096,
+        578
+      ],
+      "valid_votes": 134204,
+      "invalid_votes": 1104,
+      "ballots_cast": 135308,
+      "registered_voters": 207043
+    },
+    "士林區": {
+      "votes": [
+        522,
+        55954,
+        33110,
+        63247,
+        651
+      ],
+      "valid_votes": 153484,
+      "invalid_votes": 1430,
+      "ballots_cast": 154914,
+      "registered_voters": 235226
+    },
+    "內湖區": {
+      "votes": [
+        548,
+        61566,
+        21746,
+        65599,
+        639
+      ],
+      "valid_votes": 150098,
+      "invalid_votes": 1225,
+      "ballots_cast": 151323,
+      "registered_voters": 229197
+    },
+    "南港區": {
+      "votes": [
+        287,
+        26282,
+        10830,
+        28896,
+        325
+      ],
+      "valid_votes": 66620,
+      "invalid_votes": 647,
+      "ballots_cast": 67267,
+      "registered_voters": 98837
+    },
+    "松山區": {
+      "votes": [
+        428,
+        46381,
+        17387,
+        42356,
+        420
+      ],
+      "valid_votes": 106972,
+      "invalid_votes": 901,
+      "ballots_cast": 107873,
+      "registered_voters": 164413
+    },
+    "信義區": {
+      "votes": [
+        502,
+        53955,
+        19934,
+        47762,
+        512
+      ],
+      "valid_votes": 122665,
+      "invalid_votes": 1105,
+      "ballots_cast": 123770,
+      "registered_voters": 185510
+    },
+    "中山區": {
+      "votes": [
+        476,
+        46746,
+        23483,
+        50604,
+        491
+      ],
+      "valid_votes": 121800,
+      "invalid_votes": 1121,
+      "ballots_cast": 122921,
+      "registered_voters": 189977
+    },
+    "大同區": {
+      "votes": [
+        266,
+        20763,
+        16896,
+        31679,
+        339
+      ],
+      "valid_votes": 69943,
+      "invalid_votes": 762,
+      "ballots_cast": 70705,
+      "registered_voters": 104629
+    },
+    "中正區": {
+      "votes": [
+        370,
+        33897,
+        12633,
+        33752,
+        378
+      ],
+      "valid_votes": 81030,
+      "invalid_votes": 706,
+      "ballots_cast": 81736,
+      "registered_voters": 124493
+    },
+    "萬華區": {
+      "votes": [
+        427,
+        38666,
+        21400,
+        43411,
+        464
+      ],
+      "valid_votes": 104368,
+      "invalid_votes": 1141,
+      "ballots_cast": 105509,
+      "registered_voters": 159707
+    },
+    "大安區": {
+      "votes": [
+        585,
+        72325,
+        23651,
+        60939,
+        662
+      ],
+      "valid_votes": 158162,
+      "invalid_votes": 1348,
+      "ballots_cast": 159510,
+      "registered_voters": 245341
+    },
+    "文山區": {
+      "votes": [
+        707,
+        68586,
+        18985,
+        56479,
+        713
+      ],
+      "valid_votes": 145470,
+      "invalid_votes": 1337,
+      "ballots_cast": 146807,
+      "registered_voters": 219782
+    }
+  },
+  "recount_profiles": {
+    "source_url": "https://data.taipei/dataset/detail?id=a8ef3b5d-a598-477c-be64-52e56816d58f",
+    "source_sha256": "8155fd7d8224ad0a7a7bb9e7d5d844e04b2ae019f4ad41988ee456e61eef06c4",
+    "city": {
+      "registered_voters": 2164155,
+      "ballots_cast": 1427225,
+      "valid_votes": 1413870,
+      "invalid_votes": 13355
+    },
+    "districts": {
+      "松山區": {
+        "registered_voters": 164413,
+        "ballots_cast": 107752,
+        "valid_votes": 106795,
+        "invalid_votes": 957
+      },
+      "信義區": {
+        "registered_voters": 185510,
+        "ballots_cast": 123462,
+        "valid_votes": 122290,
+        "invalid_votes": 1172
+      },
+      "大安區": {
+        "registered_voters": 245341,
+        "ballots_cast": 159529,
+        "valid_votes": 158137,
+        "invalid_votes": 1392
+      },
+      "中山區": {
+        "registered_voters": 189977,
+        "ballots_cast": 122927,
+        "valid_votes": 121756,
+        "invalid_votes": 1171
+      },
+      "中正區": {
+        "registered_voters": 124493,
+        "ballots_cast": 81739,
+        "valid_votes": 81024,
+        "invalid_votes": 715
+      },
+      "大同區": {
+        "registered_voters": 104629,
+        "ballots_cast": 70698,
+        "valid_votes": 69905,
+        "invalid_votes": 793
+      },
+      "萬華區": {
+        "registered_voters": 159707,
+        "ballots_cast": 105411,
+        "valid_votes": 104187,
+        "invalid_votes": 1224
+      },
+      "文山區": {
+        "registered_voters": 219782,
+        "ballots_cast": 146819,
+        "valid_votes": 145421,
+        "invalid_votes": 1398
+      },
+      "南港區": {
+        "registered_voters": 98837,
+        "ballots_cast": 67453,
+        "valid_votes": 66782,
+        "invalid_votes": 671
+      },
+      "內湖區": {
+        "registered_voters": 229197,
+        "ballots_cast": 151328,
+        "valid_votes": 150070,
+        "invalid_votes": 1258
+      },
+      "士林區": {
+        "registered_voters": 235226,
+        "ballots_cast": 154909,
+        "valid_votes": 153436,
+        "invalid_votes": 1473
+      },
+      "北投區": {
+        "registered_voters": 207043,
+        "ballots_cast": 135198,
+        "valid_votes": 134067,
+        "invalid_votes": 1131
+      }
+    }
+  }
+}

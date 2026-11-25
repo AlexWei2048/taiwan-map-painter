@@ -589,6 +589,48 @@ def build(contests, tv, nccu):
     return snapshots, audit
 
 
+def add_taipei_mayor_tallies(snapshot, audit=None):
+    evidence = json.loads((ROOT / 'sources/history-2018-taipei-mayor-original.json').read_text(encoding='utf-8'))
+    county = '台北市'
+    fields = ('registered_voters', 'ballots_cast', 'valid_votes', 'invalid_votes')
+    contest = next(c for c in snapshot['contests'] if c['contest_id'] == '2018-mayor:台北市:regional:台北市')
+    recount = evidence['recount_profiles']
+    city = recount['city']
+    rows = sorted((r for r in snapshot['rows'] if r['county'] == county and r['type'] == 'mayor'
+                   and r['level'] == 'county'), key=lambda row: int(row['number']))
+    if (len(rows) != 5 or sum(r['votes'] for r in rows) != city['valid_votes']
+            or any(sum(r[k] for r in recount['districts'].values()) != city[k] for k in fields)):
+        raise ValueError('2018 Taipei certified recount figures do not reconcile')
+    contest.update(city)
+    contest['source_url'] = 'https://web.cec.gov.tw/api/file/7bdd5702-140d-4b72-8a50-77239de96794.pdf'
+    districts = evidence['districts']
+    if (len(districts) != 12 or districts.keys() != recount['districts'].keys()
+            or tuple(map(sum, zip(*(p['votes'] for p in districts.values())))) != (5617, 577566, 244641, 580820, 6172)):
+        raise ValueError('2018 Taipei original district candidate returns do not reconcile')
+    for name, original in districts.items():
+        certified = recount['districts'][name]
+        for profile in (original, certified):
+            if (profile['valid_votes'] + profile['invalid_votes'] != profile['ballots_cast']
+                    or profile['ballots_cast'] > profile['registered_voters']):
+                raise ValueError(f'2018 Taipei ballot profile does not reconcile: {name}')
+        if sum(original['votes']) != original['valid_votes'] or original['registered_voters'] != certified['registered_voters']:
+            raise ValueError(f'2018 Taipei district votes do not reconcile: {name}')
+        town = norm(name)
+        snapshot['rows'].extend({**row, 'level': 'town', 'town': town, 'votes': votes,
+                                 'tally_basis': 'original_opening'} for row, votes in zip(rows, original['votes']))
+        snapshot['townProfiles'].append({
+            'office': 'mayor', 'county': county, 'town': town, **certified,
+            'tally_basis': 'certified_recount', 'profile_source': recount['source_url'],
+        })
+    if audit is not None:
+        audit['taipeiMayorDistrictTallies'] = {
+            'original_opening': {'source': evidence['source_url'], 'crosscheck': evidence['crosscheck_url'],
+                                 'districts': len(districts), 'valid_votes': sum(p['valid_votes'] for p in districts.values())},
+            'certified_recount': {'profile_source': recount['source_url'], 'districts': len(districts),
+                                  'valid_votes': city['valid_votes'], 'candidate_breakdown_available': False},
+        }
+
+
 def add_chiayi_rerun(contests):
     # The CEC bulk ZIP dates to November 26; use the separately verified
     # December 18 returns already preserved in the site's official 2022 snapshot.
@@ -713,6 +755,8 @@ def main():
     snapshots, audit = build(contests, tv_index(args.taiwan_votes_csv), nccu)
     if 1994 in snapshots:
         add_1994_township(snapshots[1994], audit[1994])
+    if 2018 in snapshots:
+        add_taipei_mayor_tallies(snapshots[2018], audit[2018])
     if 2002 in snapshots:
         proof = json.loads((ROOT / 'sources/history-2002-taichung-council-profiles.json').read_text(encoding='utf-8'))
         snapshot = snapshots[2002]

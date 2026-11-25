@@ -41,6 +41,15 @@ audit=json.loads((REPORT/"coverage-audit.json").read_text())
 # The registry currently shows a longer name with legal-status parenthetical,
 # hence this party was not an exact-string match in the archived index.
 extra={"中华统一促进党":"https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&s=172&sms=13073"}
+# These emblem files are explicitly identified on the registry detail pages.
+registry_emblems={
+ "爱民党":(554,"https://ws.moi.gov.tw/001/Upload/444/relpic/13073/554/9e74dfca-3a59-40e1-900d-e1adb3c51aa1.jpg"),
+ "司法正义党":(299,"https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/ff8080816ecfec30016f5a9ed2fc034e.jpg"),
+}
+for name,(registry_id,url) in registry_emblems.items():
+ candidates[name]={"detail_page":f"https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&s={registry_id}&sms=13073",
+                   "image_candidates":[{"url":url}]}
+large_jpeg_sha256="6364255e1f43836222cef5a78fad634fd1ab3fd7edc0320507bde349bc0fc629"
 session=requests.Session()
 session.headers["User-Agent"]="Mozilla/5.0 (compatible; IslandPalette/1.0; historical educational election archive)"
 for name,url in extra.items():
@@ -57,8 +66,20 @@ for name,url in extra.items():
  except requests.RequestException as err:print("MANUAL_LOOKUP_FAIL",name,str(err),flush=True)
 
 def decode_image(raw):
- if len(raw)>5_000_000:raise ValueError("unusually large official image")
- im=Image.open(io.BytesIO(raw));im=ImageOps.exif_transpose(im)
+ known_large_jpeg=len(raw)<=6_000_000 and hashlib.sha256(raw).hexdigest()==large_jpeg_sha256
+ if len(raw)>5_000_000 and not known_large_jpeg:raise ValueError("unusually large official image")
+ if known_large_jpeg:
+  # Decode this exact archived JPEG at 1/8 scale before normalizing.
+  limit=Image.MAX_IMAGE_PIXELS
+  try:
+   Image.MAX_IMAGE_PIXELS=180_000_000
+   im=Image.open(io.BytesIO(raw),formats=["JPEG"])
+   im.draft("RGB",(1500,1500))
+  finally:
+   Image.MAX_IMAGE_PIXELS=limit
+ else:
+  im=Image.open(io.BytesIO(raw))
+ im=ImageOps.exif_transpose(im)
  if im.width<32 or im.height<32 or im.width*im.height>16000000:
   raise ValueError("unexpected image dimensions")
  if getattr(im,"is_animated",False):im.seek(0)

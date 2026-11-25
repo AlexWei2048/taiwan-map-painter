@@ -132,7 +132,7 @@
    }else query.contestId=area;
   }
   const result=Core.filter(indexed,query);
-  let overview=Core.overview(result),townVotesVerified=false;
+  let overview=Core.overview(result),townVotesVerified=false,tallyBasis='';
   if(scope==='town'&&(office==='mayor'||office==='president')){
    // TaiwanVotes preserves traditional source names in rows, but the map
    // uses simplified locality labels. Join through the source-verified
@@ -149,21 +149,23 @@
    townVotesVerified=expected.size>0&&rows.length===expected.size&&
     present.size===expected.size&&[...expected].every(key=>present.has(key))&&
     rows.every(row=>Number.isSafeInteger(row.votes)&&row.votes>=0);
-   const validVotes=townVotesVerified?rows.reduce((sum,row)=>sum+row.votes,0):null;
-   // Township ballot profiles are used ONLY when the office/year has official
-   // CEC records cross-checked against the independent candidate-vote sum.
-   // Never substitute county-wide figures or 2022-11-26 data for Chiayi's
-   // separately held 2022-12-18 mayoral rerun.
+   const candidateVotes=townVotesVerified?rows.reduce((sum,row)=>sum+row.votes,0):null;
+   // Match same-version ballot profiles to candidate sums. The 2018 Taipei
+   // overview instead has a separately certified recount profile for each district.
    const profile=['mayor','president'].includes(office)&&townVotesVerified?
     (indexed.snapshot.townProfiles||[]).find(p=>p.office===office&&p.county===county&&p.town===area):null;
+   const recountProfile=year===2018&&office==='mayor'&&county==='台北市'&&
+    profile?.tally_basis==='certified_recount'&&rows.every(row=>row.tally_basis==='original_opening');
    const verifiedProfile=profile&&Number.isSafeInteger(profile.registered_voters)&&
     Number.isSafeInteger(profile.ballots_cast)&&Number.isSafeInteger(profile.invalid_votes)&&
-    Number.isSafeInteger(profile.valid_votes)&&profile.valid_votes===validVotes&&
+    Number.isSafeInteger(profile.valid_votes)&&(recountProfile||profile.valid_votes===candidateVotes)&&
     profile.valid_votes+profile.invalid_votes===profile.ballots_cast&&
     profile.ballots_cast<=profile.registered_voters?profile:null;
    const registeredVoters=verifiedProfile?.registered_voters??null;
    const ballotsCast=verifiedProfile?.ballots_cast??null;
    const invalidVotes=verifiedProfile?.invalid_votes??null;
+   const validVotes=verifiedProfile?.valid_votes??candidateVotes;
+   if(recountProfile&&verifiedProfile)tallyBasis='certified_recount';
    const turnout=registeredVoters&&ballotsCast!==null?ballotsCast/registeredVoters*100:null;
    // Countywide winner status is unaffected by local vote totals or turnout.
    const group={electorate:'regional',registeredVoters,ballotsCast,
@@ -171,7 +173,7 @@
    overview={...overview,registeredVoters,ballotsCast,validVotes,
     invalidVotes,turnout,turnoutGroups:[group]};
   }
-  return{result,overview,scope,county,area,townVotesVerified,noElection};
+  return{result,overview,scope,county,area,townVotesVerified,noElection,tallyBasis};
  }
  function featurePresentation({office='mayor',level='county',metric='party',region=null,partyColor=()=> '#edf1e9'}={}){
   if(office==='council'){
@@ -299,7 +301,24 @@
   }
   return '\uFEFF'+output.map(row=>row.map(csvCell).join(',')).join('\r\n');
  }
- const api={normalizeSelection,yearsForOffice,levelOptions,electorateOptions,legislativeBallotLabel,readableElectionName,turnoutCards,overviewRegionChoices,overviewRegionData,featurePresentation,badgeFallback,candidateRows,overviewCards,overviewCharts,drilldownSelection,exportStem,historyCsv,presidentialTownCsv};
+ function mayorTownCsv(snapshot,selection={}){
+  const rows=snapshot.rows.filter(row=>row.type==='mayor'&&row.level==='town'&&
+   (!selection.county||row.county===selection.county)&&(!selection.area||row.town===selection.area));
+  const totals=new Map();
+  for(const row of rows){
+   const key=row.county+'|'+row.town;
+   totals.set(key,(totals.get(key)||0)+row.votes);
+  }
+  rows.sort((a,b)=>Core.compareResultRows(a,b,'mayor'));
+  const output=[['年份','选举类别','县市','乡镇市区','候选人','政党','号次','得票数','得票率','县市当选','计票版本']];
+  for(const row of rows){
+   const total=totals.get(row.county+'|'+row.town);
+   output.push([selection.year,'县市长',row.county,row.town,row.name,row.party,row.number,row.votes,
+    total?csvPercent(row.votes/total*100):'',row.elected?'是':'',row.tally_basis==='original_opening'?'投票日原始开票':'选委会公布']);
+  }
+  return '\uFEFF'+output.map(row=>row.map(csvCell).join(',')).join('\r\n');
+ }
+ const api={normalizeSelection,yearsForOffice,levelOptions,electorateOptions,legislativeBallotLabel,readableElectionName,turnoutCards,overviewRegionChoices,overviewRegionData,featurePresentation,badgeFallback,candidateRows,overviewCards,overviewCharts,drilldownSelection,exportStem,historyCsv,presidentialTownCsv,mayorTownCsv};
  if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
 
  const doc=root.document;
@@ -443,7 +462,8 @@
     (scoped?.noElection?' · 该县市没有举行此类乡镇市区长选举':'')+
     (groups.length>1?' · 关键指标为各选举类别合计，图表保留分类统计':'')+
     (scoped?.overview?.turnoutSource?' · 投票统计来自已核验的选举概况':'')+
-    (overviewScope==='town'&&['president','mayor'].includes(state.office)?
+    (scoped?.tallyBasis==='certified_recount'?' · 本区投票统计采用台北市主计处公布的重计后数据。候选人分区得票见地图上的投票日原始开票结果。':
+    overviewScope==='town'&&['president','mayor'].includes(state.office)?
      (Number.isInteger(scoped?.overview?.registeredVoters)?
       ' · 本区投票人数与选举人数来自中选会原始选举统计':
       ' · 该层级没有完整且可核实的投票统计时保留缺值，不推算选举人数和投票人数'):'');
@@ -682,8 +702,14 @@
  function exportCsv(){
   if(state.view==='trends')return root.HistoryTrendsUI?.exportCsv();
   if(!currentResult)return;
-  const content=state.office==='legislative'?root.HistoryLegislativeData?.exportCsv(indexed?.snapshot||{},{...state,focus:el('historyFocus')?.value||''}):state.office==='president'&&state.level==='town'?presidentialTownCsv(indexed?.snapshot||{},state):historyCsv(currentResult,state);
-  const blob=new Blob([content],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),link=doc.createElement('a');link.href=url;link.download=exportStem(state)+'.csv';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  const mayorDistricts=state.office==='mayor'&&state.year===2018&&
+   (state.view==='overview'?overviewScope==='town':state.view==='map'&&state.level==='town');
+  const content=mayorDistricts?mayorTownCsv(indexed.snapshot,state.view==='overview'?
+   {...state,county:overviewCounty,area:overviewArea}:state):
+   state.office==='legislative'?root.HistoryLegislativeData?.exportCsv(indexed?.snapshot||{},{...state,focus:el('historyFocus')?.value||''}):
+   state.office==='president'&&state.level==='town'?presidentialTownCsv(indexed?.snapshot||{},state):historyCsv(currentResult,state);
+  const stem=mayorDistricts?exportStem({...state,county:state.view==='overview'?overviewCounty:state.county})+'-乡镇市区':exportStem(state);
+  const blob=new Blob([content],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),link=doc.createElement('a');link.href=url;link.download=stem+'.csv';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
  }
  for(const id of ['historyYear','historyOffice','historyElectorate','historyScale','historyMetric'])el(id)?.addEventListener('change',render);
  el('historyCounty')?.addEventListener('change',render);
