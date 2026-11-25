@@ -3453,6 +3453,67 @@
         "female_candidates": 2,
         "turnout_pct": 80.23
       }
+    },
+    {
+      "county": "桃園縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://ws.tycg.gov.tw/Download.ashx?n=MTEy5bm05bqm57Wx6KiI5bm05aCxLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNzgvcmVsZmlsZS8xMTY4NC83MDcxMjUvODgzNTY5ZmYtYTQ1My00NmViLTkwNTgtN2Q1ZGNmNDEzMDkxLnBkZg%3D%3D",
+      "source_locator": "觀音區112年統計年報，頁42，歷屆區（鄉）長名錄；第十二、十三屆郭榮宗，第十、十一屆李文貴（公開文字表格核對，頁面圖像未取得）",
+      "winners": [
+        {
+          "town": "觀音鄉",
+          "name": "郭榮宗",
+          "incumbent_at_election": false
+        }
+      ]
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://www.puyan.gov.tw/form/Details.aspx?Parser=2%2C5%2C83%2C39%2C%2C%2C38",
+      "source_locator": "埔鹽鄉公所歷屆鄉長，民選第十一、十二屆鄉長，83年3月1日就任",
+      "winners": [
+        {
+          "town": "埔鹽鄉",
+          "name": "許金虎",
+          "gender": "男",
+          "incumbent_at_election": true
+        }
+      ]
+    },
+    {
+      "county": "雲林縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://ws.yunlin.gov.tw/Download.ashx?n=MTA05rC05p6X6YSJ57Wx6KiI5bm05aCxKOS4iikucGRm&u=LzAwMS9VcGxvYWQvNTMzL3JlbGZpbGUvMTg5MjMvNDA5OTM3LzQ2OWMxNTAwLWE1NjYtNGVjZC1hNjJkLThmMDI3ODlhZmJmZC5wZGY%3D",
+      "source_locator": "104年水林鄉統計年報，表3-6，頁46–47，第十二屆（公開文字表格核對，頁面圖像未取得）",
+      "profile_totals": [
+        25077,
+        18426,
+        18180,
+        246
+      ],
+      "profiles": [
+        {
+          "town": "水林鄉",
+          "registered_voters": 25077,
+          "ballots_cast": 18426,
+          "valid_votes": 18180,
+          "invalid_votes": 246,
+          "candidate_count": 3,
+          "male_candidates": 3,
+          "female_candidates": 0,
+          "winner_name": "許裕欽",
+          "turnout_pct": 73.48
+        }
+      ],
+      "winners": [
+        {
+          "town": "水林鄉",
+          "name": "許裕欽",
+          "gender": "男",
+          "incumbent_at_election": true
+        }
+      ]
     }
   ]
 }
