@@ -1146,9 +1146,18 @@ test('Historical data tools are removed and footer credits use separate lines',(
  for(const name of ['index.html','map-v60.html']){
   const html=read(name);
   assert.doesNotMatch(html,/id="history(?:Browse|Load|Import|CsvExport|Files|Status)"/);
-  assert.match(html,/数据来源：台湾地区选举事务主管机构公开选举资料、政治大学历届公职人员选举资料、Taiwan Votes（张进逸先生开发制作）。/);
-  assert.ok(html.indexOf('class="footer-data-source"')<html.indexOf('class="footer-credits"'),'Data source precedes author credits');
-  assert.match(html,/class="footer-credits">网页开发：Alex Wei<br>测试和推广：星夜长街/);
+  if(name==='index.html'){
+   assert.match(html,/<section class="site-about-card" id="siteAbout"/);
+   assert.doesNotMatch(html,/<details[^>]*id="siteAbout"/);
+   assert.match(html,/<h3>数据来源<\/h3><ul><li>台湾地区选举事务主管机构公开选举资料<\/li><li>政治大学历届公职人员选举资料<\/li><li>Taiwan Votes（张进逸先生开发制作）<\/li><\/ul>/);
+   assert.ok(html.indexOf('class="about-sources"')<html.indexOf('class="about-credits"'),'Data source precedes author credits');
+   assert.match(html,/<dt>网页开发<\/dt><dd>Alex Wei<\/dd><dt>测试和推广<\/dt><dd>星夜长街<\/dd>/);
+   assert.match(html,/class="sidebar-save-note"[\s\S]*?自动保存于当前浏览器；<\/span><span>下载方案可跨设备继续。<\/span>[\s\S]*?<\/aside>/);
+  }else{
+   assert.match(html,/数据来源：台湾地区选举事务主管机构公开选举资料、政治大学历届公职人员选举资料、Taiwan Votes（张进逸先生开发制作）。/);
+   assert.ok(html.indexOf('class="footer-data-source"')<html.indexOf('class="footer-credits"'),'Data source precedes author credits');
+   assert.match(html,/class="footer-credits">网页开发：Alex Wei<br>测试和推广：星夜长街/);
+  }
  }
 });
 
