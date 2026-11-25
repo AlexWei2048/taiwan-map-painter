@@ -266,3 +266,23 @@
 登记：https://xn--2lw665d.tw/party/366
 原图：https://xn--2lw665d.tw/party/moi-425.png
 来源SHA256：94909e83d150648950f74a5e755463fb80a08ba806a6a98badad363861dd8f6c
+
+人民民主党 [tpdp]
+登记：https://zh.wikipedia.org/wiki/人民民主黨_(台灣)
+原图：https://upload.wikimedia.org/wikipedia/zh/d/da/Emblem_of_people_boss.png
+来源SHA256：0a26d269a6c64c0a4bf8b81e89d58d55615073e0372d030b6e1fbf7d5e58a9a7
+
+台湾第一民族党 [tfnp]
+登记：https://votetw.com/wiki/2016年立法委員選舉
+原图：https://upload.wikimedia.org/wikipedia/zh/4/45/TFN_Seal.png
+来源SHA256：f9c89d42ceb029e0e0a18bf49a6dba91f4d908fc310f317c7519ccf7ce244bba
+
+中国生产党 [历史名称]
+登记：https://votetw.com/wiki/2016年立法委員選舉
+原图：https://upload.wikimedia.org/wikipedia/commons/6/6c/Redstarbluebg.png
+来源SHA256：8218922d6bca345875bd68b9186ba0f342705cf917ffd8cd9705994bd6723a04
+
+中华民国机车党 [历史名称]
+登记：https://votetw.com/wiki/2016年立法委員選舉
+原图：https://upload.wikimedia.org/wikipedia/zh/0/06/%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E6%A9%9F%E8%BB%8A%E9%BB%A8%E9%BB%A8%E5%BE%BD.png
+来源SHA256：1415df022fad9587bac72f19671bd84564805aed5157778b68ac9ef64cfc3c84

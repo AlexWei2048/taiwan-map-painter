@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "count_by_id": 14,
-  "count_by_historical_name": 40,
+  "count_by_id": 16,
+  "count_by_historical_name": 42,
   "official_sources": [
     {
       "name": "大爱宪改",
@@ -603,21 +603,71 @@
       "source_alternative": [
         "https://xn--2lw665d.tw/party/moi-425.png"
       ]
-    }
-  ],
-  "unverified_or_unavailable": [
-    {
-      "name": "人民民主党",
-      "reason": "ministry has no uploaded emblem image"
     },
     {
-      "name": "中华社会民主党",
-      "reason": "ministry has no uploaded emblem image"
+      "name": "人民民主党",
+      "party_id": "tpdp",
+      "official_registry": "https://zh.wikipedia.org/wiki/人民民主黨_(台灣)",
+      "official_image": "https://upload.wikimedia.org/wikipedia/zh/d/da/Emblem_of_people_boss.png",
+      "source_sha256": "0a26d269a6c64c0a4bf8b81e89d58d55615073e0372d030b6e1fbf7d5e58a9a7",
+      "rendered_sha256": "7bb26f43305a7617eb4dc364adea3a09a5f74a879d49bee10e9fd5d4b3f23704",
+      "image_bytes": 8811,
+      "size_after_fit": "128x128",
+      "license": "Party identification emblem shown on source article; original rights retained, not a general free license",
+      "source_alternative": [
+        "https://upload.wikimedia.org/wikipedia/zh/d/da/Emblem_of_people_boss.png",
+        "https://upload.wikimedia.org/wikipedia/zh/thumb/d/da/Emblem_of_people_boss.png/250px-Emblem_of_people_boss.png"
+      ]
     },
     {
       "name": "台湾第一民族党",
-      "reason": "ministry has no uploaded emblem image"
+      "party_id": "tfnp",
+      "official_registry": "https://votetw.com/wiki/2016年立法委員選舉",
+      "official_image": "https://upload.wikimedia.org/wikipedia/zh/4/45/TFN_Seal.png",
+      "source_sha256": "f9c89d42ceb029e0e0a18bf49a6dba91f4d908fc310f317c7519ccf7ce244bba",
+      "rendered_sha256": "0d051062c9647b73d419dcb50389c960c409e636fae3967fba05ac708119b70e",
+      "image_bytes": 27681,
+      "size_after_fit": "128x128",
+      "license": "Historical ballot party identification image; original rights retained",
+      "source_alternative": [
+        "https://upload.wikimedia.org/wikipedia/zh/4/45/TFN_Seal.png",
+        "https://upload.wikimedia.org/wikipedia/zh/thumb/4/45/TFN_Seal.png/250px-TFN_Seal.png",
+        "https://upload.wikimedia.org/wikipedia/zh/4/45/T_F_N_P_logoCircle.png",
+        "https://upload.wikimedia.org/wikipedia/zh/thumb/4/45/T_F_N_P_logoCircle.png/250px-T_F_N_P_logoCircle.png"
+      ]
     },
+    {
+      "name": "中国生产党",
+      "party_id": null,
+      "official_registry": "https://votetw.com/wiki/2016年立法委員選舉",
+      "official_image": "https://upload.wikimedia.org/wikipedia/commons/6/6c/Redstarbluebg.png",
+      "source_sha256": "8218922d6bca345875bd68b9186ba0f342705cf917ffd8cd9705994bd6723a04",
+      "rendered_sha256": "74ed97680d66faf00c4e7ac4b63a027cbaa0b07ec6a146944c5c5f7bfc9d5696",
+      "image_bytes": 10793,
+      "size_after_fit": "128x128",
+      "license": "Historical party identification mark; source article names the exact image file; original rights retained",
+      "source_alternative": [
+        "https://upload.wikimedia.org/wikipedia/commons/6/6c/Redstarbluebg.png",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Redstarbluebg.png/250px-Redstarbluebg.png"
+      ]
+    },
+    {
+      "name": "中华民国机车党",
+      "party_id": null,
+      "official_registry": "https://votetw.com/wiki/2016年立法委員選舉",
+      "official_image": "https://upload.wikimedia.org/wikipedia/zh/0/06/%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E6%A9%9F%E8%BB%8A%E9%BB%A8%E9%BB%A8%E5%BE%BD.png",
+      "source_sha256": "1415df022fad9587bac72f19671bd84564805aed5157778b68ac9ef64cfc3c84",
+      "rendered_sha256": "5a243422f26502e22ef5a5f8de2d80deefbe1f4a3965caac6afd1195b798e2a1",
+      "image_bytes": 23749,
+      "size_after_fit": "128x128",
+      "license": "Historical party identification emblem; original rights retained",
+      "source_alternative": [
+        "https://upload.wikimedia.org/wikipedia/zh/0/06/%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E6%A9%9F%E8%BB%8A%E9%BB%A8%E9%BB%A8%E5%BE%BD.png",
+        "https://upload.wikimedia.org/wikipedia/zh/thumb/0/06/%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E6%A9%9F%E8%BB%8A%E9%BB%A8%E9%BB%A8%E5%BE%BD.png/250px-%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E6%A9%9F%E8%BB%8A%E9%BB%A8%E9%BB%A8%E5%BE%BD.png"
+      ]
+    }
+  ],
+  "unverified_or_unavailable": [
     {
       "name": "全国民主非政党联盟",
       "reason": "ministry has no uploaded emblem image"
@@ -627,16 +677,7 @@
       "reason": "ministry has no uploaded emblem image"
     },
     {
-      "name": "台澎党",
-      "reason": "Image size (64000000 pixels) exceeds limit of 40000000 pixels, could be decompression bomb DOS attack.",
-      "source": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2022/ff8080816d570355016d86193d410141.jpg"
-    },
-    {
       "name": "台湾吾党",
-      "reason": "ministry has no uploaded emblem image"
-    },
-    {
-      "name": "中国生产党",
       "reason": "ministry has no uploaded emblem image"
     },
     {
@@ -708,10 +749,6 @@
       "reason": "ministry has no uploaded emblem image"
     },
     {
-      "name": "中华民国机车党",
-      "reason": "ministry has no uploaded emblem image"
-    },
-    {
       "name": "言论自由联盟",
       "reason": "ministry has no uploaded emblem image"
     },
@@ -725,19 +762,19 @@
     },
     {
       "name": "红党",
-      "reason": "official/commons source unavailable: 400 Client Error: Use thumbnail sizes listed on https://w.wiki/GHai for url: https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Red_party_flag.svg/320px-Red_party_flag.svg.png"
+      "reason": "official/commons source unavailable: 429 Client Error: Too many requests (f061ab2) for url: https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Red_party_flag.svg/250px-Red_party_flag.svg.png"
     },
     {
       "name": "青年阳光党",
-      "reason": "official/commons source unavailable: 429 Client Error: Too Many Requests (015d12c) for url: https://upload.wikimedia.org/wikipedia/commons/d/da/%E9%9D%92%E5%B9%B4%E9%99%BD%E5%85%89%E9%BB%A8.png"
+      "reason": "official/commons source unavailable: 429 Client Error: Too many requests (f061ab2) for url: https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/%E9%9D%92%E5%B9%B4%E9%99%BD%E5%85%89%E9%BB%A8.png/250px-%E9%9D%92%E5%B9%B4%E9%99%BD%E5%85%89%E9%BB%A8.png"
     },
     {
       "name": "基进党",
-      "reason": "official/commons source unavailable: 429 Client Error: Too Many Requests (015d12c) for url: https://upload.wikimedia.org/wikipedia/commons/f/fe/%E5%9F%BA%E9%80%B2%E9%BB%A8%EF%BD%9CLOGO.jpg"
+      "reason": "official/commons source unavailable: 429 Client Error: Too many requests (f061ab2) for url: https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/%E5%9F%BA%E9%80%B2%E9%BB%A8%EF%BD%9CLOGO.jpg/250px-%E5%9F%BA%E9%80%B2%E9%BB%A8%EF%BD%9CLOGO.jpg"
     },
     {
       "name": "台湾双语无法党",
-      "reason": "official/commons source unavailable: 429 Client Error: Too Many Requests (015d12c) for url: https://upload.wikimedia.org/wikipedia/commons/a/a4/%E8%87%BA%E7%81%A3%E9%9B%99%E8%AA%9E%E7%84%A1%E6%B3%95%E9%BB%A8%E9%BB%A8%E5%BE%BD.png"
+      "reason": "official/commons source unavailable: 429 Client Error: Too many requests (f061ab2) for url: https://upload.wikimedia.org/wikipedia/commons/a/a4/%E8%87%BA%E7%81%A3%E9%9B%99%E8%AA%9E%E7%84%A1%E6%B3%95%E9%BB%A8%E9%BB%A8%E5%BE%BD.png"
     }
   ]
 }
