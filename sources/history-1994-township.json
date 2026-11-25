@@ -2966,7 +2966,16 @@
               8107,
               true
             ]
-          ]
+          ],
+          "incumbency_at_election": {
+            "name": "林萬春",
+            "source_url": "https://web.cec.gov.tw/api/file/a3109aef-d5d1-493b-b60a-38853d8d5808.pdf",
+            "source_locator": "宜蘭縣第11屆鄉鎮市長選舉結果清冊（1990-01-20），員山鄉當選人林萬春（12024票）；歷任首長名錄交叉核對第11屆任期。",
+            "corroboration_url": "https://zh.wikipedia.org/wiki/員山鄉",
+            "method": "previous_election_and_term_history",
+            "election_date": "1994-01-29",
+            "limitation": "官方清册文字可读取，扫描页未取得；结合历任首长名录推定选举时任职，非逐日任免档案。"
+          }
         },
         {
           "town": "壯圍鄉",
@@ -2985,7 +2994,16 @@
               12861,
               true
             ]
-          ]
+          ],
+          "incumbency_at_election": {
+            "name": "張樟琳",
+            "source_url": "https://web.cec.gov.tw/api/file/a3109aef-d5d1-493b-b60a-38853d8d5808.pdf",
+            "source_locator": "宜蘭縣第11屆鄉鎮市長選舉結果清冊（1990-01-20），壯圍鄉當選人張樟琳（5551票）；歷任首長名錄交叉核對第11屆任期。",
+            "corroboration_url": "https://zh.wikipedia.org/wiki/壯圍鄉",
+            "method": "previous_election_and_term_history",
+            "election_date": "1994-01-29",
+            "limitation": "官方清册文字可读取，扫描页未取得；结合历任首长名录推定选举时任职，非逐日任免档案。"
+          }
         },
         {
           "town": "五結鄉",
@@ -3036,7 +3054,16 @@
               19784,
               true
             ]
-          ]
+          ],
+          "incumbency_at_election": {
+            "name": "林長育",
+            "source_url": "https://web.cec.gov.tw/api/file/a3109aef-d5d1-493b-b60a-38853d8d5808.pdf",
+            "source_locator": "宜蘭縣第11屆鄉鎮市長選舉結果清冊（1990-01-20），冬山鄉當選人林長育（17682票）；歷任首長名錄交叉核對第11屆任期。",
+            "corroboration_url": "https://zh.wikipedia.org/wiki/冬山鄉",
+            "method": "previous_election_and_term_history",
+            "election_date": "1994-01-29",
+            "limitation": "官方清册文字可读取，扫描页未取得；结合历任首长名录推定选举时任职，非逐日任免档案。"
+          }
         },
         {
           "town": "三星鄉",
@@ -3145,7 +3172,16 @@
               1054,
               true
             ]
-          ]
+          ],
+          "incumbency_at_election": {
+            "name": "白天斌",
+            "source_url": "https://web.cec.gov.tw/api/file/a3109aef-d5d1-493b-b60a-38853d8d5808.pdf",
+            "source_locator": "宜蘭縣第11屆鄉鎮市長選舉結果清冊（1990-01-20），南澳鄉當選人白天斌（560票）；歷任首長名錄交叉核對第11屆任期。",
+            "corroboration_url": "https://zh.wikipedia.org/wiki/南澳鄉",
+            "method": "previous_election_and_term_history",
+            "election_date": "1994-01-29",
+            "limitation": "官方清册文字可读取，扫描页未取得；结合历任首长名录推定选举时任职，非逐日任免档案。"
+          }
         }
       ],
       "source_sha256": "fa311560a6bbbe7dbc57de5b5f8cd8d1edacdf3d59d21fc9d14dda47b19dd94a"
