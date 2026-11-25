@@ -19,7 +19,7 @@ test('Legislative geographic scope uses each election-year town record and marks
  assert.match(scope,/北投区/);assert.match(scope,/士林区（部分里）/);
  assert.doesNotMatch(scope,/北投区（部分里）/);
 });
-test('Only missing post-1999 regional council quotas are derived from statutory seats',()=>{
+test('Missing regional council quotas use their historically applicable statutory thresholds',()=>{
  const shard={year:2002,elections:[{election_id:'c',office:'council'}],contests:[
  {election_id:'c',electorate:'regional',seats:10,reserved_seats:null},
  {election_id:'c',electorate:'regional',seats:3,reserved_seats:null},
@@ -29,5 +29,5 @@ test('Only missing post-1999 regional council quotas are derived from statutory 
  assert.deepEqual(result.contests.map(c=>c.reserved_seats),[2,0,1,null]);
  assert.equal(result.contests[0].reserved_seats_method,'statutory');
  assert.equal(shard.contests[0].reserved_seats,null);
- assert.equal(Local.fillRegionalCouncilQuotas({...shard,year:1998}).contests[0].reserved_seats,null);
+ assert.deepEqual(Local.fillRegionalCouncilQuotas({...shard,year:1998}).contests.map(c=>c.reserved_seats),[1,0,1,null]);
 });
