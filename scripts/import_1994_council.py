@@ -131,9 +131,27 @@ if __name__ == '__main__':
     parser.add_argument('html',type=Path)
     parser.add_argument('--corrections',type=Path)
     parser.add_argument('--partial-returns',type=Path,default=Path(__file__).resolve().parents[1]/'sources/history-1994-kinmen-partial.json')
+    parser.add_argument('--incumbency-supplement',type=Path,default=Path(__file__).resolve().parents[1]/'assets/history-local-1994-council.json')
     parser.add_argument('--audit',action='store_true')
     args=parser.parse_args()
     data=extract(args.html,json.loads(args.corrections.read_text()) if args.corrections else {})
+    if args.incumbency_supplement.is_file():
+        previous=json.loads(args.incumbency_supplement.read_text(encoding='utf-8'))
+        old={(d['county'],d['number'],d['electorate']):d for d in previous.get('districts',[])}
+        for item in data['districts']:
+            prior=old.get((item['county'],item['number'],item['electorate']),{})
+            candidates={str(c[0]):c for c in item['candidates']}
+            previous_candidates={str(c[0]):c for c in prior.get('candidates',[])}
+            for ballot,source in prior.get('incumbent_sources',{}).items():
+                if ballot not in candidates or candidates[ballot][:3]!=previous_candidates.get(ballot,[])[:3]:
+                    raise ValueError(f'Incumbency identity changed: {item["county"]} {item["number"]} {ballot}')
+                item.setdefault('incumbent_sources',{})[ballot]=source
+        if previous.get('incumbency_roster_audit'):
+            expected=sum(len(d.get('incumbent_sources',{})) for d in previous['districts'])
+            actual=sum(len(d.get('incumbent_sources',{})) for d in data['districts'])
+            if actual!=expected:
+                raise ValueError(f'Incumbency supplement incomplete: {actual}/{expected}')
+            data['incumbency_roster_audit']=previous['incumbency_roster_audit']
     if args.audit:
         counts=Counter()
         for item in data['districts']:
