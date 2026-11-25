@@ -4588,6 +4588,17 @@
           "votes": 5490,
           "limitation": "研究文献按届列名，不等同选举日逐日任免档案；政党以当届选举原始记录为准。"
         },
+        "16": {
+          "value": true,
+          "source_url": "https://www.ly.gov.tw/Pages/List.aspx?nodeid=1682",
+          "source_locator": "黃仁杼官方履歷：桃園縣第12、13、15、16屆縣議會議員",
+          "corroboration_url": "https://www.ly.gov.tw/EngPages/Detail.aspx?nodeid=5255&pid=40722",
+          "election_date": "1994-01-29",
+          "method": "official_biography_consecutive_terms",
+          "original_name": "黃仁杼",
+          "ballot_number": 16,
+          "votes": 6014
+        },
         "21": {
           "value": true,
           "source_url": "https://journal.th.gov.tw/intro.php?council=tycc",
