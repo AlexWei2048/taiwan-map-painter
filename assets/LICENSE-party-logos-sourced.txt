@@ -321,3 +321,28 @@
 登记：https://commons.wikimedia.org/wiki/File:Red_party_flag.svg
 原图：https://upload.wikimedia.org/wikipedia/commons/c/ce/Red_party_flag.svg
 来源SHA256：bbad8f7af115d1b5be3a44edb234a18eca44f243666e63a36c32bf5767606afa
+
+三势团结促进联盟 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&s=262&sms=13073
+原图：https://ws.moi.gov.tw/001/Upload/444/relpic/13073/262/015ae6b6-6928-4ed6-9458-33aa4cdf2077.png
+来源SHA256：240b3f2c95386ae923fa36eeade4a1945813fdb93a142ff9892dbac9c846df4d
+
+台湾进步党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&s=278&sms=13073
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/ff8080816e68e248016e7dc102cc0079.jpg
+来源SHA256：c353a50bec2460278a1006306a6aed149d9e48a00dc4bd074bfb0761cd167617
+
+更生党 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&s=435&sms=13073
+原图：https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2022/8a428aff7e6c30d2017e9a0f6a2500e0.jpg
+来源SHA256：fe6b793a57ed9ac26761c5d6febf45ae7876cf33cabb8d0ba514e2d8d17c6e2f
+
+永久和平自然法 [历史名称]
+登记：https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&s=254&sms=13073
+原图：https://ws.moi.gov.tw/001/Upload/444/relpic/13073/254/d6b78573-76e4-4ebc-b884-3981fd66c577.png
+来源SHA256：0256b3fb5d88d1f0d0d2f4a2bfe0b295e22650d7aaabde1dd10998ff52ded6fe
+
+基进党 [历史名称]
+登记：https://commons.wikimedia.org/wiki/File:基進黨｜LOGO.jpg
+原图：https://upload.wikimedia.org/wikipedia/commons/f/fe/%E5%9F%BA%E9%80%B2%E9%BB%A8%EF%BD%9CLOGO.jpg
+来源SHA256：9efb53d623d5e6512c3417bdb1504007e8a2b1445f300d0d934716ad5644123b

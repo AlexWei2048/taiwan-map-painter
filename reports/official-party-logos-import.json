@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "count_by_id": 17,
-  "count_by_historical_name": 48,
+  "count_by_historical_name": 53,
   "official_sources": [
     {
       "name": "大爱宪改",
@@ -769,6 +769,66 @@
         "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Red_party_flag.svg/250px-Red_party_flag.svg.png",
         "https://ftpmirror.your.org/pub/wikimedia/images/wikipedia/commons/c/ce/Red_party_flag.svg"
       ]
+    },
+    {
+      "name": "三势团结促进联盟",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&s=262&sms=13073",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/444/relpic/13073/262/015ae6b6-6928-4ed6-9458-33aa4cdf2077.png",
+      "source_sha256": "240b3f2c95386ae923fa36eeade4a1945813fdb93a142ff9892dbac9c846df4d",
+      "rendered_sha256": "2d816234342ae8101a73ca952c2117678d305b3fd04b249998a6d38b0f4638ab",
+      "image_bytes": 20760,
+      "size_after_fit": "128x128",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "台湾进步党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&s=278&sms=13073",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/ff8080816e68e248016e7dc102cc0079.jpg",
+      "source_sha256": "c353a50bec2460278a1006306a6aed149d9e48a00dc4bd074bfb0761cd167617",
+      "rendered_sha256": "10eaf01090052f4e757294087694b3c1c1a6ff20ea63c60546d94b2da83db722",
+      "image_bytes": 24803,
+      "size_after_fit": "128x128",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "更生党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&s=435&sms=13073",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2022/8a428aff7e6c30d2017e9a0f6a2500e0.jpg",
+      "source_sha256": "fe6b793a57ed9ac26761c5d6febf45ae7876cf33cabb8d0ba514e2d8d17c6e2f",
+      "rendered_sha256": "995f1995b4b15b43979037287ffffe87958d4d72ee240732c03f4adcf5eeca18",
+      "image_bytes": 11019,
+      "size_after_fit": "128x128",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "永久和平自然法",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&s=254&sms=13073",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/444/relpic/13073/254/d6b78573-76e4-4ebc-b884-3981fd66c577.png",
+      "source_sha256": "0256b3fb5d88d1f0d0d2f4a2bfe0b295e22650d7aaabde1dd10998ff52ded6fe",
+      "rendered_sha256": "f0727dcc95e6c2f23ce555444eca206bb70f8f1fd35691550cb55693c2e9193d",
+      "image_bytes": 17677,
+      "size_after_fit": "128x128",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "基进党",
+      "party_id": null,
+      "official_registry": "https://commons.wikimedia.org/wiki/File:基進黨｜LOGO.jpg",
+      "official_image": "https://upload.wikimedia.org/wikipedia/commons/f/fe/%E5%9F%BA%E9%80%B2%E9%BB%A8%EF%BD%9CLOGO.jpg",
+      "source_sha256": "9efb53d623d5e6512c3417bdb1504007e8a2b1445f300d0d934716ad5644123b",
+      "rendered_sha256": "f6686094f169594cb5fb7c4c9cda7b634dc07bd351a423d0c2b414fdca9d3f2f",
+      "image_bytes": 12167,
+      "size_after_fit": "128x128",
+      "license": "Historical party mark, Wikimedia Commons attribution and license on source file page",
+      "source_alternative": [
+        "https://upload.wikimedia.org/wikipedia/commons/f/fe/%E5%9F%BA%E9%80%B2%E9%BB%A8%EF%BD%9CLOGO.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/%E5%9F%BA%E9%80%B2%E9%BB%A8%EF%BD%9CLOGO.jpg/250px-%E5%9F%BA%E9%80%B2%E9%BB%A8%EF%BD%9CLOGO.jpg",
+        "https://ftpmirror.your.org/pub/wikimedia/images/wikipedia/commons/f/fe/%E5%9F%BA%E9%80%B2%E9%BB%A8%EF%BD%9CLOGO.jpg"
+      ]
     }
   ],
   "unverified_or_unavailable": [
@@ -855,10 +915,6 @@
     {
       "name": "中华文化复兴在理党",
       "reason": "ministry has no uploaded emblem image"
-    },
-    {
-      "name": "基进党",
-      "reason": "official/commons source unavailable: 404 Client Error: Not Found for url: https://ftpmirror.your.org/pub/wikimedia/images/wikipedia/commons/f/fe/%E5%9F%BA%E9%80%B2%E9%BB%A8%EF%BD%9CLOGO.jpg"
     }
   ]
 }
