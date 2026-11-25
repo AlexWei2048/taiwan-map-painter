@@ -24,3 +24,7 @@
 1992 年桃园县区域民代 9 号徐鸿进的政大当届资料性别码为异常值 `5`。中选会[1998 年桃园县同名、同出生年（1941）、同政党候选人记录](https://db.cec.gov.tw/ElecTable/Election/ElecTickets?areaCode=00&cityCode=003&dataLevel=A&dataType=tickets&deptCode=000&legisId=L1&liCode=0000&prvCode=03&subjectId=L0&themeId=b09574a77dbe889722955d9fd9f3cb6b&typeId=ELC)记为男性；该人身份按这些字段交叉确认后补入性别。
 
 本批还以[中选会资料的高校镜像](https://github.com/MISNUK/CECDataSet)核对 2008、2012、2016 三届区域民代选区投票统计。原整理中的 `DistrictName` 在部分县记录的是县内选区总数，不是具体选区号，导致 150 个选区的统计未导入。现按**当届县市、独立候选人合计有效票、候选人数**唯一匹配每条原件，并验证登记人数≥投票数、投票数＝有效票＋无效票、全县各选区四项合计与原县统计一致，三届各 73 个选区全部对账。原来已验证的数值保持不变；可重复运行 `scripts/reconcile_legacy_legislative_district_profiles.py`。审计缺值事项由 2,397 降至 2,247，尚不包含其他 1994 年增录的县级摘要。当前**没有达到“全部补齐”条件**。
+
+### 1995—2004 多席次区域民代选区投票统计补充
+
+在原有 2008—2016 年对账基础上，本批新增 14 个旧制多席次选区的选举人数、投票数、有效票和无效票（1995 年 2 区、1998 年 4 区、2001 年 3 区、2004 年 5 区）。以当届乡镇候选人得票记录的选区归属汇总中选会来源乡镇统计；逐乡镇核对候选票合计，逐区核对候选票合计、逐县核对四项统计。2001 年台北县第 1 区与已核实修正的第 2、3 区及全县统计交叉对账。原有资料不覆盖。每份 turnout JSON 的 `audit.regional.legacyMultiSeatDistrictReconciliation` 保存原快照、原统计 Git blob、乡镇清单和新增值。1995 年新增两区还与 CECDataSet 原始 VoteRegionProfile.csv 完全吻合。更新概况数据缓存版本。未取得其余三届镜像原始 CSV 全部重新验证的条件，所用乡镇统计来自仓库既有 CEC 来源数据。未重新执行全量浏览器测试或确认 Pages 部署。
