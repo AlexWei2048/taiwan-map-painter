@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "revision": "7e686f3c1e188f1d742a3fe43afc65e337dd04cf",
   "counts": {
-    "unverified": 28,
+    "unverified": 16,
     "conflict": 13,
     "missing": 1461,
     "not_applicable": 5,
@@ -22,7 +22,7 @@
     "gender": 195,
     "district_scope": 4,
     "ballot_number": 7,
-    "reserved_seats": 20,
+    "reserved_seats": 8,
     "name": 1,
     "nomination_rank": 5,
     "recount_town_candidate_votes": 1,
@@ -22087,76 +22087,6 @@
       "council",
       "mountain",
       "contest",
-      "台东县",
-      "第10选举区",
-      "1998-council:台东县:mountain:第10选举区",
-      "",
-      "unverified",
-      "reserved_seats",
-      "assets/history-local-1998.json",
-      "须区分未知与不适用"
-    ],
-    [
-      1998,
-      "council",
-      "mountain",
-      "contest",
-      "台东县",
-      "第11选举区",
-      "1998-council:台东县:mountain:第11选举区",
-      "",
-      "unverified",
-      "reserved_seats",
-      "assets/history-local-1998.json",
-      "须区分未知与不适用"
-    ],
-    [
-      1998,
-      "council",
-      "mountain",
-      "contest",
-      "台东县",
-      "第12选举区",
-      "1998-council:台东县:mountain:第12选举区",
-      "",
-      "unverified",
-      "reserved_seats",
-      "assets/history-local-1998.json",
-      "须区分未知与不适用"
-    ],
-    [
-      1998,
-      "council",
-      "mountain",
-      "contest",
-      "台东县",
-      "第13选举区",
-      "1998-council:台东县:mountain:第13选举区",
-      "",
-      "unverified",
-      "reserved_seats",
-      "assets/history-local-1998.json",
-      "须区分未知与不适用"
-    ],
-    [
-      1998,
-      "council",
-      "mountain",
-      "contest",
-      "台东县",
-      "第14选举区",
-      "1998-council:台东县:mountain:第14选举区",
-      "",
-      "unverified",
-      "reserved_seats",
-      "assets/history-local-1998.json",
-      "须区分未知与不适用"
-    ],
-    [
-      1998,
-      "council",
-      "mountain",
-      "contest",
       "屏东县",
       "第10选举区",
       "1998-council:屏东县:mountain:第10选举区",
@@ -22164,7 +22094,7 @@
       "unverified",
       "reserved_seats",
       "assets/history-local-1998.json",
-      "须区分未知与不适用"
+      "历史列表注释称8区共享2席；与当届旧制5席门槛及既有计算口径存在疑点，暂保留待核，待原始公告确认。"
     ],
     [
       1998,
@@ -22178,7 +22108,7 @@
       "unverified",
       "reserved_seats",
       "assets/history-local-1998.json",
-      "须区分未知与不适用"
+      "历史列表注释称8区共享2席；与当届旧制5席门槛及既有计算口径存在疑点，暂保留待核，待原始公告确认。"
     ],
     [
       1998,
@@ -22192,7 +22122,7 @@
       "unverified",
       "reserved_seats",
       "assets/history-local-1998.json",
-      "须区分未知与不适用"
+      "历史列表注释称8区共享2席；与当届旧制5席门槛及既有计算口径存在疑点，暂保留待核，待原始公告确认。"
     ],
     [
       1998,
@@ -22206,7 +22136,7 @@
       "unverified",
       "reserved_seats",
       "assets/history-local-1998.json",
-      "须区分未知与不适用"
+      "历史列表注释称8区共享2席；与当届旧制5席门槛及既有计算口径存在疑点，暂保留待核，待原始公告确认。"
     ],
     [
       1998,
@@ -22220,7 +22150,7 @@
       "unverified",
       "reserved_seats",
       "assets/history-local-1998.json",
-      "须区分未知与不适用"
+      "历史列表注释称8区共享2席；与当届旧制5席门槛及既有计算口径存在疑点，暂保留待核，待原始公告确认。"
     ],
     [
       1998,
@@ -22234,7 +22164,7 @@
       "unverified",
       "reserved_seats",
       "assets/history-local-1998.json",
-      "须区分未知与不适用"
+      "历史列表注释称8区共享2席；与当届旧制5席门槛及既有计算口径存在疑点，暂保留待核，待原始公告确认。"
     ],
     [
       1998,
@@ -22248,7 +22178,7 @@
       "unverified",
       "reserved_seats",
       "assets/history-local-1998.json",
-      "须区分未知与不适用"
+      "历史列表注释称8区共享2席；与当届旧制5席门槛及既有计算口径存在疑点，暂保留待核，待原始公告确认。"
     ],
     [
       1998,
@@ -22262,105 +22192,7 @@
       "unverified",
       "reserved_seats",
       "assets/history-local-1998.json",
-      "须区分未知与不适用"
-    ],
-    [
-      1998,
-      "council",
-      "plains",
-      "contest",
-      "台东县",
-      "第6选举区",
-      "1998-council:台东县:plains:第6选举区",
-      "",
-      "unverified",
-      "reserved_seats",
-      "assets/history-local-1998.json",
-      "须区分未知与不适用"
-    ],
-    [
-      1998,
-      "council",
-      "plains",
-      "contest",
-      "台东县",
-      "第7选举区",
-      "1998-council:台东县:plains:第7选举区",
-      "",
-      "unverified",
-      "reserved_seats",
-      "assets/history-local-1998.json",
-      "须区分未知与不适用"
-    ],
-    [
-      1998,
-      "council",
-      "plains",
-      "contest",
-      "台东县",
-      "第8选举区",
-      "1998-council:台东县:plains:第8选举区",
-      "",
-      "unverified",
-      "reserved_seats",
-      "assets/history-local-1998.json",
-      "须区分未知与不适用"
-    ],
-    [
-      1998,
-      "council",
-      "plains",
-      "contest",
-      "台东县",
-      "第9选举区",
-      "1998-council:台东县:plains:第9选举区",
-      "",
-      "unverified",
-      "reserved_seats",
-      "assets/history-local-1998.json",
-      "须区分未知与不适用"
-    ],
-    [
-      1998,
-      "council",
-      "plains",
-      "contest",
-      "花莲县",
-      "第5选举区",
-      "1998-council:花莲县:plains:第5选举区",
-      "",
-      "unverified",
-      "reserved_seats",
-      "assets/history-local-1998.json",
-      "须区分未知与不适用"
-    ],
-    [
-      1998,
-      "council",
-      "plains",
-      "contest",
-      "花莲县",
-      "第6选举区",
-      "1998-council:花莲县:plains:第6选举区",
-      "",
-      "unverified",
-      "reserved_seats",
-      "assets/history-local-1998.json",
-      "须区分未知与不适用"
-    ],
-    [
-      1998,
-      "council",
-      "plains",
-      "contest",
-      "花莲县",
-      "第7选举区",
-      "1998-council:花莲县:plains:第7选举区",
-      "",
-      "unverified",
-      "reserved_seats",
-      "assets/history-local-1998.json",
-      "须区分未知与不适用"
+      "历史列表注释称8区共享2席；与当届旧制5席门槛及既有计算口径存在疑点，暂保留待核，待原始公告确认。"
     ],
     [
       1998,

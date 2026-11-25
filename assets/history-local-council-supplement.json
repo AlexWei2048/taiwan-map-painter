@@ -463,6 +463,75 @@
           "reserved": 0,
           "source": "https://www.president.gov.tw/Page/294/36622",
           "method": "statutory"
+        },
+        {
+          "id": "1998:花莲县:plains",
+          "county": "花莲县",
+          "electorate": "plains",
+          "districts": [
+            5,
+            6,
+            7
+          ],
+          "contestIds": [
+            "1998-council:花莲县:plains:第5选举区",
+            "1998-council:花莲县:plains:第6选举区",
+            "1998-council:花莲县:plains:第7选举区"
+          ],
+          "reserved": 1,
+          "source": "https://www.president.gov.tw/Page/294/36622",
+          "method": "statutory",
+          "secondary_source": "https://zh.wikipedia.org/w/index.php?title=1998年中華民國縣市議員選舉選舉區投票結果列表&oldid=89474847",
+          "source_locator": "当届适用省县自治法第17条，县内各身份合计达到5席；历史选举结果列表注释2—4明确记载共享1席。未取得当届公告原件。",
+          "seats_total": 7
+        },
+        {
+          "id": "1998:台东县:plains",
+          "county": "台东县",
+          "electorate": "plains",
+          "districts": [
+            6,
+            7,
+            8,
+            9
+          ],
+          "contestIds": [
+            "1998-council:台东县:plains:第6选举区",
+            "1998-council:台东县:plains:第7选举区",
+            "1998-council:台东县:plains:第8选举区",
+            "1998-council:台东县:plains:第9选举区"
+          ],
+          "reserved": 1,
+          "source": "https://www.president.gov.tw/Page/294/36622",
+          "method": "statutory",
+          "secondary_source": "https://zh.wikipedia.org/w/index.php?title=1998年中華民國縣市議員選舉選舉區投票結果列表&oldid=89474847",
+          "source_locator": "当届适用省县自治法第17条，县内各身份合计达到5席；历史选举结果列表注释2—4明确记载共享1席。未取得当届公告原件。",
+          "seats_total": 8
+        },
+        {
+          "id": "1998:台东县:mountain",
+          "county": "台东县",
+          "electorate": "mountain",
+          "districts": [
+            10,
+            11,
+            12,
+            13,
+            14
+          ],
+          "contestIds": [
+            "1998-council:台东县:mountain:第10选举区",
+            "1998-council:台东县:mountain:第11选举区",
+            "1998-council:台东县:mountain:第12选举区",
+            "1998-council:台东县:mountain:第13选举区",
+            "1998-council:台东县:mountain:第14选举区"
+          ],
+          "reserved": 1,
+          "source": "https://www.president.gov.tw/Page/294/36622",
+          "method": "statutory",
+          "secondary_source": "https://zh.wikipedia.org/w/index.php?title=1998年中華民國縣市議員選舉選舉區投票結果列表&oldid=89474847",
+          "source_locator": "当届适用省县自治法第17条，县内各身份合计达到5席；历史选举结果列表注释2—4明确记载共享1席。未取得当届公告原件。",
+          "seats_total": 5
         }
       ]
     },
