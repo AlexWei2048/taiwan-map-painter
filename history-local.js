@@ -157,7 +157,7 @@
   if(pending.has(year))return pending.get(year);
   const request=(async()=>{
    const [response,supplement]=await Promise.all([
-    fetcher('assets/history-local-'+year+'.json?v=20261125-local-results-v'+(year===1994?'12':year===2018?'5':'4')),
+    fetcher('assets/history-local-'+year+'.json?v=20261125-nccu-history-v'+(year===1994?'13':year===2018?'6':'5')),
     supplementYears.has(year)?loadSupplement(fetcher):null
    ]);
    if(!response.ok)throw Error('历史数据 HTTP '+response.status);
