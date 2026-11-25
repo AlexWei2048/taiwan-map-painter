@@ -112,7 +112,7 @@ body.history-mode #workspaceFree,body.history-mode #workspacePrediction{opacity:
 
 
 /* 2022 historical tables share the 2026 reference-table visual language. */
-.history-table-wrap{max-height:430px;overflow:auto;border:1px solid #dce6dd;border-radius:9px;background:#fff}.history-candidate-table{width:100%;border-collapse:separate;border-spacing:0;font-size:11px;white-space:nowrap}.history-candidate-table th{position:sticky;top:0;z-index:1;background:#f1f6f1;color:#496355;font-weight:650;text-align:center;padding:9px 8px;border-bottom:1px solid #dce6dd}.history-candidate-table td{padding:8px;border-bottom:1px solid #edf1ed;text-align:center;color:#425c4e}.history-candidate-table tbody tr:hover{background:#f7faf7}.history-candidate-table td:nth-child(4){font-weight:650;text-align:left}.history-party-cell{display:flex;align-items:center;justify-content:center;gap:6px}.history-party-cell img{width:17px;height:17px;object-fit:contain}.history-number{font-variant-numeric:tabular-nums}.history-winner{color:#147b60!important;font-weight:700}.history-loser{color:#829087}.history-map-match{color:#16805f;font-weight:650}.history-map-mismatch{color:#a36b27;font-weight:650}
+.history-table-wrap{max-height:430px;overflow:auto;border:1px solid #dce6dd;border-radius:9px;background:#fff}.history-candidate-table{width:100%;border-collapse:separate;border-spacing:0;font-size:11px;white-space:nowrap}.history-candidate-table th{position:sticky;top:0;z-index:1;background:#f1f6f1;color:#496355;font-weight:650;text-align:center;padding:9px 8px;border-bottom:1px solid #dce6dd}.history-candidate-table td{padding:8px;border-bottom:1px solid #edf1ed;text-align:center;color:#425c4e}.history-candidate-table tbody tr:hover{background:#f7faf7}.history-mobile-list td:nth-child(4),.history-legislative-table:not([data-ballot="party"]) td:nth-child(4){font-weight:650;text-align:center}.history-party-cell{display:flex;align-items:center;justify-content:center;gap:6px}.history-party-cell img{width:17px;height:17px;object-fit:contain}.history-number{font-variant-numeric:tabular-nums}.history-winner{color:#147b60!important;font-weight:700}.history-loser{color:#829087}.history-map-match{color:#16805f;font-weight:650}.history-map-mismatch{color:#a36b27;font-weight:650}
 
 /* Map presentation belongs to election and range selection, not data entry. */
 #scopeDisplayTools{border-top:1px solid #dce6db;margin-top:18px;padding-top:14px}
@@ -518,7 +518,7 @@ body.history-mode .intro > h1,body.history-mode .intro > p{display:none!importan
 .history-result-dialog .history-table-wrap{width:100%;text-align:start}
 .history-result-dialog .history-candidate-table{width:max-content;min-width:100%}
 .history-result-dialog .history-candidate-table :is(th,td):first-child{position:sticky;left:0;width:48px;min-width:48px;max-width:48px}
-.history-result-dialog .history-candidate-table :is(th,td):nth-child(2){position:sticky;left:48px;text-align:left;box-shadow:1px 0 #dce6dd}
+.history-result-dialog .history-candidate-table :is(th,td):nth-child(2){position:sticky;left:48px;text-align:center;box-shadow:1px 0 #dce6dd}
 .history-result-dialog .history-candidate-table th:nth-child(-n+2){z-index:3}
 .history-result-dialog .history-candidate-table td:nth-child(-n+2){z-index:2;background:#fff}
 .history-result-dialog .history-candidate-table td:nth-child(4){font-weight:inherit;text-align:center}
@@ -906,3 +906,17 @@ body.history-mode #districtReferenceNote,body.history-mode #districtReferenceSou
 .sidebar-save-note p{margin:0;min-width:0}
 .sidebar-save-note p span{display:block}
 @media(max-width:700px){.sidebar .site-about-card{padding:12px 13px}.site-about-card .site-about-description{font-size:12px}.sidebar .sidebar-save-note{margin-top:14px}}
+
+/* Keep actual table cells in the table layout; center historical result values. */
+.history-candidate-table :is(th,td){vertical-align:middle}
+.history-candidate-table td{font-variant-numeric:tabular-nums}
+.history-candidate-table td.history-party-cell{display:table-cell;text-align:center;vertical-align:middle}
+.history-candidate-table td.history-party-cell img{display:inline-block;vertical-align:middle;margin:0 6px 0 0}
+.history-candidate-table td.history-party-cell span{vertical-align:middle}
+.history-candidate-table td>.history-party-cell{display:inline-flex;justify-content:center;vertical-align:middle}
+.history-result-dialog:not(.history-party-vote-dialog) .history-candidate-table td:nth-child(2){font-weight:650}
+.history-candidate-table .history-district-divider th{text-align:left}
+.history-candidate-table .history-mobile-details dl{text-align:left}
+#historyTrendsPanel .history-candidate-table td{text-align:center;font-weight:400}
+#historyTrendsPanel .history-candidate-table th{text-align:center}
+@media(max-width:600px){.history-candidate-table td.history-party-cell img{margin-right:3px}}
