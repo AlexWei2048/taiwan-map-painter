@@ -214,6 +214,16 @@
     }
   ],
   "years": {
+    "1994": {
+      "quotas": {
+        "1994-council:台北市:indigenous:原住民选区": 0,
+        "1994-council:高雄市:indigenous:原住民选区": 0
+      },
+      "quotaSources": {
+        "1994-council:台北市:indigenous:原住民选区": "https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=A0040002",
+        "1994-council:高雄市:indigenous:原住民选区": "https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=A0040002"
+      }
+    },
     "1998": {
       "districts": {
         "1998-council:新竹市:regional:第1选举区": {
@@ -349,7 +359,9 @@
         "1998-council:台中县:plains:第8选举区": 0,
         "1998-council:高雄县:plains:第9选举区": 0,
         "1998-council:屏东县:plains:第8选举区": 0,
-        "1998-council:基隆市:plains:第8选举区": 0
+        "1998-council:基隆市:plains:第8选举区": 0,
+        "1998-council:台北市:indigenous:原住民选区": 0,
+        "1998-council:高雄市:indigenous:原住民选区": 0
       },
       "quotaSources": {
         "1998-council:台北县:mountain:第12选举区": "https://www.president.gov.tw/Page/294/36622",
@@ -363,7 +375,9 @@
         "1998-council:台中县:plains:第8选举区": "https://www.president.gov.tw/Page/294/36622",
         "1998-council:高雄县:plains:第9选举区": "https://www.president.gov.tw/Page/294/36622",
         "1998-council:屏东县:plains:第8选举区": "https://www.president.gov.tw/Page/294/36622",
-        "1998-council:基隆市:plains:第8选举区": "https://www.president.gov.tw/Page/294/36622"
+        "1998-council:基隆市:plains:第8选举区": "https://www.president.gov.tw/Page/294/36622",
+        "1998-council:台北市:indigenous:原住民选区": "https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=A0040002",
+        "1998-council:高雄市:indigenous:原住民选区": "https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=A0040002"
       },
       "sharedQuotaGroups": [
         {
