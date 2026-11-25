@@ -6,14 +6,14 @@
 
 - unverified: 11
 - conflict: 1
-- missing: 1364
+- missing: 1360
 - not_applicable: 5
 - partial: 16
 - not_yet_available: 1
 
 ## 字段
 
-- incumbent_at_election: 1217
+- incumbent_at_election: 1213
 - gender: 173
 - ballots_cast: 102
 - invalid_votes: 102
@@ -413,3 +413,12 @@
 
 - 金湖镇公所民国83年1月24日及30日大事记：https://kinhu.kinmen.gov.tw/cp.aspx?Create=1&n=C4535D8A265F96AD，列当届金湖选区14名参选人与4位当选人，四位当选人与既有县志数据一致。新增10名未当选候选人姓名、选区及来源；不推测号次、票数、推荐政党或性别。金门全县62人中已知34人姓名（16当选、18未当选），余28人待查；金湖选区名册齐全但票数不全。该县的 partial 任务保留，未全量重扫。
 - 1992年华加志2票差仍未定位；政大明细直连不可读，原始清册截图失败。1998年屏东妇保仅找到旧法须有保障的原则，未取得当届具体名额；保持原值。未改变任何已知票数、当选或名额。
+
+
+## 2001–2002年候选人现任身份续补（2026-11-26）
+
+- 王加佳：非现任。2007年TVBS报道明确记载2002年首次参选台中县议员并当选。 来源：https://news.tvbs.com.tw/politics/332172；交叉核对：https://votetw.com/data/candidate/%E7%8E%8B%E5%8A%A0%E4%BD%B3
+- 黄仁杼：非现任。民代官方履历明确曾任桃园县第12、13、15、16届议员；VoteTW当届及1998年乡镇市长参选记录交叉核对，第14届并非现任。 来源：https://www.ly.gov.tw/EngPages/Detail.aspx?nodeid=5255&pid=40722；交叉核对：https://votetw.com/data/candidate/%E9%BB%83%E4%BB%81%E6%9D%BC
+- 翁自然：非现任。2002年3月卸任乡长为吴怡跑，李文俊接任，翁自然不是同职现任。 来源：https://www.kmdn.gov.tw/1117/1271/1272/107680/?cprint=pt；交叉核对：https://zh.wikipedia.org/wiki/2002%E5%B9%B4%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7%E9%81%B8%E8%88%89
+- 罗恩敏：非现任。第4届官方委员名录及离职名单无此人；VoteTW 2001台北县第2区1号1238票明确非现任。 来源：https://www.ly.gov.tw/Pages/List.aspx?nodeid=143；https://votetw.com/data/candidate/%E8%94%A1%E5%AE%B6%E7%A6%8F
+- 仅修改4个原为空的现任字段及兼容行；数据原始票数、当选、候选人ID不变。2002年杨振基政大字段为M（未知），不把第三方默认否值当作确定证据。审计按ID精确核减4项；非全量重扫。
