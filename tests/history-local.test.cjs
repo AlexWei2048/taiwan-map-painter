@@ -86,6 +86,10 @@ test('Historical county mayors and councils use five shared election cycles with
    assert.equal(sourced.filter(c=>c.incumbent_at_election).length,sourceEntries.filter(s=>s.value).length);
    assert.ok(sourced.every(c=>c.incumbent_source?.source_url&&c.incumbent_source.value===c.incumbent_at_election));
    assert.equal(council.rows.filter(r=>r.type==='council'&&typeof r.incumbent==='boolean'&&sourced.some(c=>c.candidate_name===r.name&&c.ballot_number===String(r.number)&&c.votes===r.votes)).length,sourceEntries.length);
+   const yilanInferred=sourceArchive.districts.filter(d=>d.county==='宜蘭縣').flatMap(d=>Object.values(d.incumbent_sources||{})).filter(s=>s.method==='prior_election_winner_exact_identity_compatible_district');
+   assert.equal(yilanInferred.length,19);
+   assert.ok(yilanInferred.every(s=>s.value===true&&s.prior_election.elected&&s.confidence==='inferred_from_official_election_records'&&s.secondary_source&&s.term_source));
+   assert.equal(council.candidacies.filter(c=>c.incumbent_source?.method==='prior_election_winner_exact_identity_compatible_district'&&c.incumbent_at_election===true).length,19);
    const lienchiang=council.candidacies.filter(c=>c.contest_id.startsWith('1994-council-counties:连江县:'));
    assert.equal(lienchiang.filter(c=>c.incumbent_at_election===true).length,9);
    assert.equal(lienchiang.find(c=>c.candidate_name==='陈书建').incumbent_at_election,null);

@@ -381,6 +381,19 @@
       "source_url": "https://zh.wikipedia.org/wiki/澎湖縣議會第十二屆議員列表",
       "secondary_source": "https://penghu.info/OBA9521A3A59796F1BC7",
       "method": "Secondary term roster exact unique name, positive matches only. Official aggregate corroborates roster size, not each name; no complete individual departure records. No negative inference."
+    },
+    {
+      "county": "宜蘭縣",
+      "complete": false,
+      "roster": 33,
+      "confirmed_true": 0,
+      "inferred_true": 19,
+      "confirmed_false": 0,
+      "ambiguous": [],
+      "source_url": "https://web.cec.gov.tw/api/file/0965a18d-e101-4921-bee3-e56b5e0dd062.pdf",
+      "secondary_source": "https://web.cec.gov.tw/api/file/8c0c7bea-1128-43b9-aec7-47e7f5c1bfd9.pdf",
+      "term_source": "https://web.cec.gov.tw/central/article/18789",
+      "method": "Official prior-election winner and current candidate exact name, gender, party and compatible district geography. Inferred incumbent within statutory term; departure records incomplete, no negative inference."
     }
   ],
   "districts": [
@@ -2466,7 +2479,109 @@
           "男",
           false
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "1": {
+          "value": true,
+          "source_url": "https://web.cec.gov.tw/api/file/0965a18d-e101-4921-bee3-e56b5e0dd062.pdf",
+          "secondary_source": "https://web.cec.gov.tw/api/file/8c0c7bea-1128-43b9-aec7-47e7f5c1bfd9.pdf",
+          "term_source": "https://web.cec.gov.tw/central/article/18789",
+          "evidence": "1990年宜蘭縣第12屆當選清冊及1994年第13屆候選清冊，姓名、性別、推薦政黨和相容選區範圍一致；第12屆法定任期涵蓋1994-01-29。以前屆當選推定連任參選，未取得逐人任期中離職或遞補名冊。",
+          "election_date": "1994-01-29",
+          "method": "prior_election_winner_exact_identity_compatible_district",
+          "confidence": "inferred_from_official_election_records",
+          "original_name": "張建榮",
+          "ballot_number": 1,
+          "votes": 3221,
+          "prior_election": {
+            "date": "1990-01-20",
+            "district": 1,
+            "ballot_number": 2,
+            "votes": 3833,
+            "elected": true
+          }
+        },
+        "6": {
+          "value": true,
+          "source_url": "https://web.cec.gov.tw/api/file/0965a18d-e101-4921-bee3-e56b5e0dd062.pdf",
+          "secondary_source": "https://web.cec.gov.tw/api/file/8c0c7bea-1128-43b9-aec7-47e7f5c1bfd9.pdf",
+          "term_source": "https://web.cec.gov.tw/central/article/18789",
+          "evidence": "1990年宜蘭縣第12屆當選清冊及1994年第13屆候選清冊，姓名、性別、推薦政黨和相容選區範圍一致；第12屆法定任期涵蓋1994-01-29。以前屆當選推定連任參選，未取得逐人任期中離職或遞補名冊。",
+          "election_date": "1994-01-29",
+          "method": "prior_election_winner_exact_identity_compatible_district",
+          "confidence": "inferred_from_official_election_records",
+          "original_name": "林海進",
+          "ballot_number": 6,
+          "votes": 4109,
+          "prior_election": {
+            "date": "1990-01-20",
+            "district": 1,
+            "ballot_number": 10,
+            "votes": 4260,
+            "elected": true
+          }
+        },
+        "8": {
+          "value": true,
+          "source_url": "https://web.cec.gov.tw/api/file/0965a18d-e101-4921-bee3-e56b5e0dd062.pdf",
+          "secondary_source": "https://web.cec.gov.tw/api/file/8c0c7bea-1128-43b9-aec7-47e7f5c1bfd9.pdf",
+          "term_source": "https://web.cec.gov.tw/central/article/18789",
+          "evidence": "1990年宜蘭縣第12屆當選清冊及1994年第13屆候選清冊，姓名、性別、推薦政黨和相容選區範圍一致；第12屆法定任期涵蓋1994-01-29。以前屆當選推定連任參選，未取得逐人任期中離職或遞補名冊。",
+          "election_date": "1994-01-29",
+          "method": "prior_election_winner_exact_identity_compatible_district",
+          "confidence": "inferred_from_official_election_records",
+          "original_name": "林于月",
+          "ballot_number": 8,
+          "votes": 2151,
+          "prior_election": {
+            "date": "1990-01-20",
+            "district": 1,
+            "ballot_number": 12,
+            "votes": 2919,
+            "elected": true
+          }
+        },
+        "11": {
+          "value": true,
+          "source_url": "https://web.cec.gov.tw/api/file/0965a18d-e101-4921-bee3-e56b5e0dd062.pdf",
+          "secondary_source": "https://web.cec.gov.tw/api/file/8c0c7bea-1128-43b9-aec7-47e7f5c1bfd9.pdf",
+          "term_source": "https://web.cec.gov.tw/central/article/18789",
+          "evidence": "1990年宜蘭縣第12屆當選清冊及1994年第13屆候選清冊，姓名、性別、推薦政黨和相容選區範圍一致；第12屆法定任期涵蓋1994-01-29。以前屆當選推定連任參選，未取得逐人任期中離職或遞補名冊。",
+          "election_date": "1994-01-29",
+          "method": "prior_election_winner_exact_identity_compatible_district",
+          "confidence": "inferred_from_official_election_records",
+          "original_name": "游萬年",
+          "ballot_number": 11,
+          "votes": 1532,
+          "prior_election": {
+            "date": "1990-01-20",
+            "district": 1,
+            "ballot_number": 8,
+            "votes": 3253,
+            "elected": true
+          }
+        },
+        "12": {
+          "value": true,
+          "source_url": "https://web.cec.gov.tw/api/file/0965a18d-e101-4921-bee3-e56b5e0dd062.pdf",
+          "secondary_source": "https://web.cec.gov.tw/api/file/8c0c7bea-1128-43b9-aec7-47e7f5c1bfd9.pdf",
+          "term_source": "https://web.cec.gov.tw/central/article/18789",
+          "evidence": "1990年宜蘭縣第12屆當選清冊及1994年第13屆候選清冊，姓名、性別、推薦政黨和相容選區範圍一致；第12屆法定任期涵蓋1994-01-29。以前屆當選推定連任參選，未取得逐人任期中離職或遞補名冊。",
+          "election_date": "1994-01-29",
+          "method": "prior_election_winner_exact_identity_compatible_district",
+          "confidence": "inferred_from_official_election_records",
+          "original_name": "林榮星",
+          "ballot_number": 12,
+          "votes": 3821,
+          "prior_election": {
+            "date": "1990-01-20",
+            "district": 1,
+            "ballot_number": 1,
+            "votes": 5154,
+            "elected": true
+          }
+        }
+      }
     },
     {
       "county": "宜蘭縣",
@@ -2591,6 +2706,26 @@
           "original_name": "林懋倉",
           "ballot_number": 3,
           "votes": 5527
+        },
+        "4": {
+          "value": true,
+          "source_url": "https://web.cec.gov.tw/api/file/0965a18d-e101-4921-bee3-e56b5e0dd062.pdf",
+          "secondary_source": "https://web.cec.gov.tw/api/file/8c0c7bea-1128-43b9-aec7-47e7f5c1bfd9.pdf",
+          "term_source": "https://web.cec.gov.tw/central/article/18789",
+          "evidence": "1990年宜蘭縣第12屆當選清冊及1994年第13屆候選清冊，姓名、性別、推薦政黨和相容選區範圍一致；第12屆法定任期涵蓋1994-01-29。以前屆當選推定連任參選，未取得逐人任期中離職或遞補名冊。",
+          "election_date": "1994-01-29",
+          "method": "prior_election_winner_exact_identity_compatible_district",
+          "confidence": "inferred_from_official_election_records",
+          "original_name": "林月霞",
+          "ballot_number": 4,
+          "votes": 3823,
+          "prior_election": {
+            "date": "1990-01-20",
+            "district": 2,
+            "ballot_number": 2,
+            "votes": 4404,
+            "elected": true
+          }
         },
         "5": {
           "value": false,
@@ -2728,7 +2863,49 @@
           "男",
           false
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "1": {
+          "value": true,
+          "source_url": "https://web.cec.gov.tw/api/file/0965a18d-e101-4921-bee3-e56b5e0dd062.pdf",
+          "secondary_source": "https://web.cec.gov.tw/api/file/8c0c7bea-1128-43b9-aec7-47e7f5c1bfd9.pdf",
+          "term_source": "https://web.cec.gov.tw/central/article/18789",
+          "evidence": "1990年宜蘭縣第12屆當選清冊及1994年第13屆候選清冊，姓名、性別、推薦政黨和相容選區範圍一致；第12屆法定任期涵蓋1994-01-29。以前屆當選推定連任參選，未取得逐人任期中離職或遞補名冊。",
+          "election_date": "1994-01-29",
+          "method": "prior_election_winner_exact_identity_compatible_district",
+          "confidence": "inferred_from_official_election_records",
+          "original_name": "歐耀北",
+          "ballot_number": 1,
+          "votes": 3618,
+          "prior_election": {
+            "date": "1990-01-20",
+            "district": 3,
+            "ballot_number": 3,
+            "votes": 5170,
+            "elected": true
+          }
+        },
+        "3": {
+          "value": true,
+          "source_url": "https://web.cec.gov.tw/api/file/0965a18d-e101-4921-bee3-e56b5e0dd062.pdf",
+          "secondary_source": "https://web.cec.gov.tw/api/file/8c0c7bea-1128-43b9-aec7-47e7f5c1bfd9.pdf",
+          "term_source": "https://web.cec.gov.tw/central/article/18789",
+          "evidence": "1990年宜蘭縣第12屆當選清冊及1994年第13屆候選清冊，姓名、性別、推薦政黨和相容選區範圍一致；第12屆法定任期涵蓋1994-01-29。以前屆當選推定連任參選，未取得逐人任期中離職或遞補名冊。",
+          "election_date": "1994-01-29",
+          "method": "prior_election_winner_exact_identity_compatible_district",
+          "confidence": "inferred_from_official_election_records",
+          "original_name": "陳榮宗",
+          "ballot_number": 3,
+          "votes": 3657,
+          "prior_election": {
+            "date": "1990-01-20",
+            "district": 3,
+            "ballot_number": 2,
+            "votes": 4045,
+            "elected": true
+          }
+        }
+      }
     },
     {
       "county": "宜蘭縣",
@@ -2967,7 +3144,109 @@
           "男",
           true
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "1": {
+          "value": true,
+          "source_url": "https://web.cec.gov.tw/api/file/0965a18d-e101-4921-bee3-e56b5e0dd062.pdf",
+          "secondary_source": "https://web.cec.gov.tw/api/file/8c0c7bea-1128-43b9-aec7-47e7f5c1bfd9.pdf",
+          "term_source": "https://web.cec.gov.tw/central/article/18789",
+          "evidence": "1990年宜蘭縣第12屆當選清冊及1994年第13屆候選清冊，姓名、性別、推薦政黨和相容選區範圍一致；第12屆法定任期涵蓋1994-01-29。以前屆當選推定連任參選，未取得逐人任期中離職或遞補名冊。",
+          "election_date": "1994-01-29",
+          "method": "prior_election_winner_exact_identity_compatible_district",
+          "confidence": "inferred_from_official_election_records",
+          "original_name": "楊政誠",
+          "ballot_number": 1,
+          "votes": 6139,
+          "prior_election": {
+            "date": "1990-01-20",
+            "district": 5,
+            "ballot_number": 4,
+            "votes": 4380,
+            "elected": true
+          }
+        },
+        "4": {
+          "value": true,
+          "source_url": "https://web.cec.gov.tw/api/file/0965a18d-e101-4921-bee3-e56b5e0dd062.pdf",
+          "secondary_source": "https://web.cec.gov.tw/api/file/8c0c7bea-1128-43b9-aec7-47e7f5c1bfd9.pdf",
+          "term_source": "https://web.cec.gov.tw/central/article/18789",
+          "evidence": "1990年宜蘭縣第12屆當選清冊及1994年第13屆候選清冊，姓名、性別、推薦政黨和相容選區範圍一致；第12屆法定任期涵蓋1994-01-29。以前屆當選推定連任參選，未取得逐人任期中離職或遞補名冊。",
+          "election_date": "1994-01-29",
+          "method": "prior_election_winner_exact_identity_compatible_district",
+          "confidence": "inferred_from_official_election_records",
+          "original_name": "張春煌",
+          "ballot_number": 4,
+          "votes": 5412,
+          "prior_election": {
+            "date": "1990-01-20",
+            "district": 5,
+            "ballot_number": 7,
+            "votes": 5147,
+            "elected": true
+          }
+        },
+        "5": {
+          "value": true,
+          "source_url": "https://web.cec.gov.tw/api/file/0965a18d-e101-4921-bee3-e56b5e0dd062.pdf",
+          "secondary_source": "https://web.cec.gov.tw/api/file/8c0c7bea-1128-43b9-aec7-47e7f5c1bfd9.pdf",
+          "term_source": "https://web.cec.gov.tw/central/article/18789",
+          "evidence": "1990年宜蘭縣第12屆當選清冊及1994年第13屆候選清冊，姓名、性別、推薦政黨和相容選區範圍一致；第12屆法定任期涵蓋1994-01-29。以前屆當選推定連任參選，未取得逐人任期中離職或遞補名冊。",
+          "election_date": "1994-01-29",
+          "method": "prior_election_winner_exact_identity_compatible_district",
+          "confidence": "inferred_from_official_election_records",
+          "original_name": "李阿紅",
+          "ballot_number": 5,
+          "votes": 4152,
+          "prior_election": {
+            "date": "1990-01-20",
+            "district": 5,
+            "ballot_number": 8,
+            "votes": 4641,
+            "elected": true
+          }
+        },
+        "7": {
+          "value": true,
+          "source_url": "https://web.cec.gov.tw/api/file/0965a18d-e101-4921-bee3-e56b5e0dd062.pdf",
+          "secondary_source": "https://web.cec.gov.tw/api/file/8c0c7bea-1128-43b9-aec7-47e7f5c1bfd9.pdf",
+          "term_source": "https://web.cec.gov.tw/central/article/18789",
+          "evidence": "1990年宜蘭縣第12屆當選清冊及1994年第13屆候選清冊，姓名、性別、推薦政黨和相容選區範圍一致；第12屆法定任期涵蓋1994-01-29。以前屆當選推定連任參選，未取得逐人任期中離職或遞補名冊。",
+          "election_date": "1994-01-29",
+          "method": "prior_election_winner_exact_identity_compatible_district",
+          "confidence": "inferred_from_official_election_records",
+          "original_name": "游振亮",
+          "ballot_number": 7,
+          "votes": 5688,
+          "prior_election": {
+            "date": "1990-01-20",
+            "district": 5,
+            "ballot_number": 3,
+            "votes": 4283,
+            "elected": true
+          }
+        },
+        "10": {
+          "value": true,
+          "source_url": "https://web.cec.gov.tw/api/file/0965a18d-e101-4921-bee3-e56b5e0dd062.pdf",
+          "secondary_source": "https://web.cec.gov.tw/api/file/8c0c7bea-1128-43b9-aec7-47e7f5c1bfd9.pdf",
+          "term_source": "https://web.cec.gov.tw/central/article/18789",
+          "evidence": "1990年宜蘭縣第12屆當選清冊及1994年第13屆候選清冊，姓名、性別、推薦政黨和相容選區範圍一致；第12屆法定任期涵蓋1994-01-29。以前屆當選推定連任參選，未取得逐人任期中離職或遞補名冊。",
+          "election_date": "1994-01-29",
+          "method": "prior_election_winner_exact_identity_compatible_district",
+          "confidence": "inferred_from_official_election_records",
+          "original_name": "羅素貞",
+          "ballot_number": 10,
+          "votes": 475,
+          "prior_election": {
+            "date": "1990-01-20",
+            "district": 5,
+            "ballot_number": 1,
+            "votes": 4511,
+            "elected": true
+          }
+        }
+      }
     },
     {
       "county": "宜蘭縣",
@@ -3019,6 +3298,26 @@
         ]
       ],
       "incumbent_sources": {
+        "1": {
+          "value": true,
+          "source_url": "https://web.cec.gov.tw/api/file/0965a18d-e101-4921-bee3-e56b5e0dd062.pdf",
+          "secondary_source": "https://web.cec.gov.tw/api/file/8c0c7bea-1128-43b9-aec7-47e7f5c1bfd9.pdf",
+          "term_source": "https://web.cec.gov.tw/central/article/18789",
+          "evidence": "1990年宜蘭縣第12屆當選清冊及1994年第13屆候選清冊，姓名、性別、推薦政黨和相容選區範圍一致；第12屆法定任期涵蓋1994-01-29。以前屆當選推定連任參選，未取得逐人任期中離職或遞補名冊。",
+          "election_date": "1994-01-29",
+          "method": "prior_election_winner_exact_identity_compatible_district",
+          "confidence": "inferred_from_official_election_records",
+          "original_name": "李正廷",
+          "ballot_number": 1,
+          "votes": 2527,
+          "prior_election": {
+            "date": "1990-01-20",
+            "district": 6,
+            "ballot_number": 3,
+            "votes": 3019,
+            "elected": true
+          }
+        },
         "2": {
           "value": true,
           "source_url": "https://atanews.net/?news=1267",
@@ -3124,6 +3423,66 @@
           "ballot_number": 3,
           "votes": 3942,
           "secondary_source": "https://web.cec.gov.tw/api/file/0965a18d-e101-4921-bee3-e56b5e0dd062.pdf"
+        },
+        "4": {
+          "value": true,
+          "source_url": "https://web.cec.gov.tw/api/file/0965a18d-e101-4921-bee3-e56b5e0dd062.pdf",
+          "secondary_source": "https://web.cec.gov.tw/api/file/8c0c7bea-1128-43b9-aec7-47e7f5c1bfd9.pdf",
+          "term_source": "https://web.cec.gov.tw/central/article/18789",
+          "evidence": "1990年宜蘭縣第12屆當選清冊及1994年第13屆候選清冊，姓名、性別、推薦政黨和相容選區範圍一致；第12屆法定任期涵蓋1994-01-29。以前屆當選推定連任參選，未取得逐人任期中離職或遞補名冊。",
+          "election_date": "1994-01-29",
+          "method": "prior_election_winner_exact_identity_compatible_district",
+          "confidence": "inferred_from_official_election_records",
+          "original_name": "吳文發",
+          "ballot_number": 4,
+          "votes": 4581,
+          "prior_election": {
+            "date": "1990-01-20",
+            "district": 7,
+            "ballot_number": 7,
+            "votes": 3784,
+            "elected": true
+          }
+        },
+        "5": {
+          "value": true,
+          "source_url": "https://web.cec.gov.tw/api/file/0965a18d-e101-4921-bee3-e56b5e0dd062.pdf",
+          "secondary_source": "https://web.cec.gov.tw/api/file/8c0c7bea-1128-43b9-aec7-47e7f5c1bfd9.pdf",
+          "term_source": "https://web.cec.gov.tw/central/article/18789",
+          "evidence": "1990年宜蘭縣第12屆當選清冊及1994年第13屆候選清冊，姓名、性別、推薦政黨和相容選區範圍一致；第12屆法定任期涵蓋1994-01-29。以前屆當選推定連任參選，未取得逐人任期中離職或遞補名冊。",
+          "election_date": "1994-01-29",
+          "method": "prior_election_winner_exact_identity_compatible_district",
+          "confidence": "inferred_from_official_election_records",
+          "original_name": "李坤山",
+          "ballot_number": 5,
+          "votes": 4110,
+          "prior_election": {
+            "date": "1990-01-20",
+            "district": 7,
+            "ballot_number": 8,
+            "votes": 3112,
+            "elected": true
+          }
+        },
+        "8": {
+          "value": true,
+          "source_url": "https://web.cec.gov.tw/api/file/0965a18d-e101-4921-bee3-e56b5e0dd062.pdf",
+          "secondary_source": "https://web.cec.gov.tw/api/file/8c0c7bea-1128-43b9-aec7-47e7f5c1bfd9.pdf",
+          "term_source": "https://web.cec.gov.tw/central/article/18789",
+          "evidence": "1990年宜蘭縣第12屆當選清冊及1994年第13屆候選清冊，姓名、性別、推薦政黨和相容選區範圍一致；第12屆法定任期涵蓋1994-01-29。以前屆當選推定連任參選，未取得逐人任期中離職或遞補名冊。",
+          "election_date": "1994-01-29",
+          "method": "prior_election_winner_exact_identity_compatible_district",
+          "confidence": "inferred_from_official_election_records",
+          "original_name": "林正標",
+          "ballot_number": 8,
+          "votes": 3673,
+          "prior_election": {
+            "date": "1990-01-20",
+            "district": 7,
+            "ballot_number": 9,
+            "votes": 3302,
+            "elected": true
+          }
         }
       }
     },
@@ -3173,7 +3532,29 @@
           "男",
           false
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "1": {
+          "value": true,
+          "source_url": "https://web.cec.gov.tw/api/file/0965a18d-e101-4921-bee3-e56b5e0dd062.pdf",
+          "secondary_source": "https://web.cec.gov.tw/api/file/8c0c7bea-1128-43b9-aec7-47e7f5c1bfd9.pdf",
+          "term_source": "https://web.cec.gov.tw/central/article/18789",
+          "evidence": "1990年宜蘭縣第12屆當選清冊及1994年第13屆候選清冊，姓名、性別、推薦政黨和相容選區範圍一致；第12屆法定任期涵蓋1994-01-29。以前屆當選推定連任參選，未取得逐人任期中離職或遞補名冊。",
+          "election_date": "1994-01-29",
+          "method": "prior_election_winner_exact_identity_compatible_district",
+          "confidence": "inferred_from_official_election_records",
+          "original_name": "許金虎",
+          "ballot_number": 1,
+          "votes": 614,
+          "prior_election": {
+            "date": "1990-01-20",
+            "district": 8,
+            "ballot_number": 1,
+            "votes": 1380,
+            "elected": true
+          }
+        }
+      }
     },
     {
       "county": "宜蘭縣",
@@ -3211,7 +3592,29 @@
           "男",
           false
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "1": {
+          "value": true,
+          "source_url": "https://web.cec.gov.tw/api/file/0965a18d-e101-4921-bee3-e56b5e0dd062.pdf",
+          "secondary_source": "https://web.cec.gov.tw/api/file/8c0c7bea-1128-43b9-aec7-47e7f5c1bfd9.pdf",
+          "term_source": "https://web.cec.gov.tw/central/article/18789",
+          "evidence": "1990年宜蘭縣第12屆當選清冊及1994年第13屆候選清冊，姓名、性別、推薦政黨和相容選區範圍一致；第12屆法定任期涵蓋1994-01-29。以前屆當選推定連任參選，未取得逐人任期中離職或遞補名冊。",
+          "election_date": "1994-01-29",
+          "method": "prior_election_winner_exact_identity_compatible_district",
+          "confidence": "inferred_from_official_election_records",
+          "original_name": "江新財",
+          "ballot_number": 1,
+          "votes": 1227,
+          "prior_election": {
+            "date": "1990-01-20",
+            "district": 9,
+            "ballot_number": 1,
+            "votes": 1196,
+            "elected": true
+          }
+        }
+      }
     },
     {
       "county": "桃園縣",
