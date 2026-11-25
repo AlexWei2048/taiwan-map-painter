@@ -1,0 +1,57 @@
+name: Refresh historical data completeness after NCCU imports
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/nccu-data-completeness-refresh.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Preserve prior manual research and refresh generated completeness audit
+        shell: bash
+        run: |
+          cp reports/data-completeness.md /tmp/old-data-completeness.md
+          node scripts/audit_data_completeness.cjs
+          python - <<'PY'
+          import pathlib,json
+          path=pathlib.Path('reports/data-completeness.md')
+          previous=pathlib.Path('/tmp/old-data-completeness.md').read_text('utf8')
+          updated=path.read_text('utf8')
+          marker='## 人工复核与下一阶段优先级'
+          history=previous[previous.index(marker):] if marker in previous else ''
+          latest='''## 政大候选人资料与1992年民代投票统计批量补齐（2026-11-25）
+
+          - 政大历届公职选举资料总计核查293个历史页面、16,095条地方候选人资料；经两轮核验，16,082条有唯一候选记录对应，补入已有资料缺失的出生年次合计16,079条，以及1条现任状态。候选人原有得票、当选、姓名不因来源冲突而覆盖。
+          - 旧县市名、头份镇/市、员林镇/市、乌丘/乌坵等差异及少数民族候选人附加拼写按当年身份和唯一票数合并核查。仍有13条无法严格匹配；当选、性别、是否现任的冲突列入核验报告，不自动替代历史官方更正。
+          - 1992年区域民代27个选区的候选人有效票与政大选举概况对照，26区验证一致。新增15个完整选区资料和1项高雄市两区合计；保留县府年报原记录。
+          - 1992年高雄县政大候选人明细合计536,430票，而同库概况仅记534,430票；同时彰化县县府年报与政大概况投票/无效票相差54票。两项均有单独冲突证据，不据推算取代官方原始表。
+          - 可追溯数据报告：`reports/nccu-candidate-reconciliation.json`、`reports/nccu-1992-legislative-turnout-audit.json`；脚本与自动回归测试见`scripts/backfill_nccu_candidate_profiles.py`和`scripts/backfill_nccu_1992_legislative_turnout.py`。
+          '''
+          lines='\n'.join(x.lstrip(' ') if x.startswith('          ') else x for x in latest.splitlines())
+          path.write_text(updated.rstrip()+'\n\n'+history.rstrip()+'\n\n'+lines.strip()+'\n','utf8')
+          report=json.loads(pathlib.Path('reports/data-completeness.json').read_text('utf8'))
+          print('REGENERATED_COUNTS',json.dumps(report['counts'],ensure_ascii=False))
+          print('REGENERATED_ERRORS',json.dumps(report['errors'],ensure_ascii=False))
+          assert not report['errors']
+          assert '第六阶段' not in lines
+          PY
+      - name: Validate candidate and turnout records
+        run: node --test tests/history-legislative-district-profiles.test.cjs tests/history-legislative-data.test.cjs tests/history-local.test.cjs
+      - name: Commit updated audit without losing historical research
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/data-completeness.json reports/data-completeness.csv reports/data-completeness.md
+          git diff --cached --stat
+          if ! git diff --cached --quiet; then
+            git commit -m 'Refresh source-backed election completeness audit after NCCU backfill'
+            git push origin HEAD:main
+          fi
