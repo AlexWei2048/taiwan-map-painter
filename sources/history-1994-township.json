@@ -3385,6 +3385,45 @@
           "incumbent_at_election": true
         }
       ]
+    },
+    {
+      "county": "雲林縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://linnei.yunlin.gov.tw/02012.htm",
+      "source_locator": "林內鄉公所歷任鄉長，第十一及十二屆（第十二屆任期83.03.01–87.02.28）",
+      "winners": [
+        {
+          "town": "林內鄉",
+          "name": "鄭文煌",
+          "incumbent_at_election": true
+        }
+      ]
+    },
+    {
+      "county": "苗栗縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://www.tongluo.gov.tw/cp.aspx?n=3343",
+      "source_locator": "銅鑼鄉公所歷任鄉長，第十二屆（83.03.01–87.03.01），第十一屆葉東維",
+      "winners": [
+        {
+          "town": "銅鑼鄉",
+          "name": "黃芳椿"
+        }
+      ]
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://lioujia.tainan.gov.tw/cp.aspx?n=26909",
+      "source_locator": "六甲區公所臺南縣六甲鄉歷屆鄉長名單，第十一及十二屆（83.03.01–87.02.28）",
+      "winners": [
+        {
+          "town": "六甲鄉",
+          "name": "黃茂良",
+          "incumbent_at_election": true,
+          "gender": "男"
+        }
+      ]
     }
   ]
 }
