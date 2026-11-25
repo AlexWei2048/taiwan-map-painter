@@ -177,7 +177,7 @@ function parliamentSvg(row,conf,totalLeg){
    const x=16+(i%2)*202,y=263+Math.floor(i/2)*23,fill=conf.metric==='seats'&&p!==norm(conf.party)?'#cbd4ce':color(p);
    g.append(svg('rect',{x,y:y-12,width:8,height:12,rx:2,fill}));
    const logo=logoFor(predictionParty(p));
-   if(logo){const image=svg('image',{x:x+12,y:y-15,width:17,height:17,href:logo,preserveAspectRatio:'xMidYMid meet','data-seat-logo':p});g.append(image)}
+   if(logo)appendCircularPartyLogo(g,logo,x+12,y-15,17,{'data-seat-logo':p});
    g.append(svg('text',{x:x+34,y,'font-size':11},p+' '+n+'席'));
   });
 

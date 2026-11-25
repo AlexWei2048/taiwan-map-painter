@@ -40,3 +40,10 @@ test('Registry-sourced emblems are authentic auditable PNG files, not remote pla
  assert.equal(context.names['台澎党'],context.ids.ssfpp,
   'official historic abbreviation shares the same verified party logo');
 });
+
+test('Historical party icons are clipped in tables and the parliamentary chart',()=>{
+ const css=fs.readFileSync(path.join(root,'style.css'),'utf8');
+ assert.match(css,/\.history-party-cell img,\.history-party-inline img,\.party-logo\{border-radius:50%/);
+ const trends=fs.readFileSync(path.join(root,'history-trends-ui.js'),'utf8');
+ assert.ok(trends.includes("appendCircularPartyLogo(g,logo,x+12,y-15,17"));
+});

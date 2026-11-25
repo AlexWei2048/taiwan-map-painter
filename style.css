@@ -920,3 +920,6 @@ body.history-mode #districtReferenceNote,body.history-mode #districtReferenceSou
 #historyTrendsPanel .history-candidate-table td{text-align:center;font-weight:400}
 #historyTrendsPanel .history-candidate-table th{text-align:center}
 @media(max-width:600px){.history-candidate-table td.history-party-cell img{margin-right:3px}}
+
+/* All party badges must remain circular, including historical tables. */
+.history-party-cell img,.history-party-inline img,.party-logo{border-radius:50%;object-fit:cover;object-position:center;aspect-ratio:1;flex-shrink:0;clip-path:circle(50% at 50% 50%)}
