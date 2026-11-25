@@ -1,13 +1,13 @@
 # 数据完整性审计
 
-数据基准：`f220aec6c44768bd6e8e816b58752acde2d6df86`。行数为任务记录数，非缺失候选人总数。
+数据基准：`11204339ce34411fe24df18e3d5dc87271e0ba24`。行数为任务记录数，非缺失候选人总数。
 
 ## 状态
 
 - unverified: 4
 - conflict: 1
-- missing: 1360
-- not_applicable: 5
+- missing: 1359
+- not_applicable: 6
 - partial: 16
 - not_yet_available: 1
 
@@ -26,7 +26,6 @@
 - regional_town_returns: 2
 - national_vs_local_votes: 1
 - turnout: 1
-- name: 1
 
 ## 年度覆盖
 
