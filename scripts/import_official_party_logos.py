@@ -220,6 +220,42 @@ supplemental += [
   "source_page":"https://xn--2lw665d.tw/party/366",
   "license":"Current party emblem identified by the named party profile; rights retained by owner, identification only"}
 ]
+# Exact images linked by the registry and contemporary election reporting.
+# Preserve the 2024 ballot-name artwork even when a party subsequently renamed.
+supplemental += [
+ {"name":"青年阳光党","also":[],
+  "urls":["https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2018/ff80808165840d1b0165c623566e019e.jpg"],
+  "source_page":"https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&s=369&sms=13073",
+  "license":"Registered party mark; original rights retained"},
+ {"name":"台湾麻将最大党","also":[],
+  "urls":["https://election.ltn.com.tw/2026/assets/images/politicalParty/logo_11.png"],
+  "source_page":"https://election.ltn.com.tw/2026/candidate",
+  "license":"Party emblem shown in the contemporary candidate directory; original rights retained"},
+ {"name":"制度救世岛","also":[],
+  "urls":["https://feature.nextapple.com/election2024/public/static/image/pp/7.jpg"],
+  "source_page":"https://feature.nextapple.com/election2024/vote/legislator/All",
+  "license":"2024 ballot-name party identification image; original rights retained"},
+ {"name":"台湾双语无法党","also":[],
+  "urls":["https://feature.nextapple.com/election2024/public/static/image/pp/3.jpg"],
+  "source_page":"https://feature.nextapple.com/election2024/vote/legislator/All",
+  "license":"2024 historical party mark, distinct from current SoR emblem; original rights retained"},
+ {"name":"新国家连线","also":[],
+  "urls":wiki_variants("新國家連線黨徽.gif","zh")+["https://ftpmirror.your.org/pub/wikimedia/images/wikipedia/zh/f/f6/"+quote("新國家連線黨徽.gif")],
+  "source_page":"https://zh.wikipedia.org/wiki/新國家連線",
+  "license":"Historic party emblem from the named article; original rights retained"},
+ {"name":"台湾建国联盟","also":[],
+  "urls":wiki_variants("台灣建國聯盟 黨徽.png","zh")+["https://ftpmirror.your.org/pub/wikimedia/images/wikipedia/zh/1/14/"+quote("台灣建國聯盟_黨徽.png")],
+  "source_page":"https://zh.wikipedia.org/wiki/台灣建國聯盟",
+  "license":"Historic party emblem from the named article; original rights retained"}
+]
+# Prefer these independently matched images ahead of prior unavailable URLs.
+supplemental=supplemental[-6:]+supplemental[:-6]
+# Mirror the exact same Wikimedia file path, not a search-result thumbnail.
+for item in supplemental:
+ if item["name"] in {"红党","基进党"}:
+  for url in list(item["urls"]):
+   if url.startswith("https://upload.wikimedia.org/wikipedia/") and "/thumb/" not in url:
+    item["urls"].append(url.replace("https://upload.wikimedia.org/wikipedia/","https://ftpmirror.your.org/pub/wikimedia/images/wikipedia/"))
 for item in supplemental:
  name=norm(item["name"]);pid=lookup.get(name)
  if pid in existing or pid in byid or name in byname:continue
