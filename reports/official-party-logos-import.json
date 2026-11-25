@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "count_by_id": 17,
-  "count_by_historical_name": 53,
+  "count_by_historical_name": 54,
   "official_sources": [
     {
       "name": "大爱宪改",
@@ -829,6 +829,20 @@
         "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/%E5%9F%BA%E9%80%B2%E9%BB%A8%EF%BD%9CLOGO.jpg/250px-%E5%9F%BA%E9%80%B2%E9%BB%A8%EF%BD%9CLOGO.jpg",
         "https://ftpmirror.your.org/pub/wikimedia/images/wikipedia/commons/f/fe/%E5%9F%BA%E9%80%B2%E9%BB%A8%EF%BD%9CLOGO.jpg"
       ]
+    },
+    {
+      "name": "天宙和平统一家庭党",
+      "party_id": null,
+      "official_registry": "https://election.ltn.com.tw/2020/party/39",
+      "official_image": "https://img.ltn.com.tw/Upload/elect/2020/party/39.jpg",
+      "source_sha256": "7722d3f0cd9aed029b7cab780b3f41c6e54f4ae68c0bcbc7c96f8adf9042903d",
+      "rendered_sha256": "972378aeba351b7c63c215e920a95253c25a8d8fb469e5cec49a49805ae9ecdf",
+      "image_bytes": 13151,
+      "size_after_fit": "128x128",
+      "license": "Documented historical party emblem; rights remain with image owner, identification only",
+      "source_alternative": [
+        "https://img.ltn.com.tw/Upload/elect/2020/party/39.jpg"
+      ]
     }
   ],
   "unverified_or_unavailable": [
@@ -906,10 +920,6 @@
     },
     {
       "name": "言论自由联盟",
-      "reason": "ministry has no uploaded emblem image"
-    },
-    {
-      "name": "天宙和平统一家庭党",
       "reason": "ministry has no uploaded emblem image"
     },
     {

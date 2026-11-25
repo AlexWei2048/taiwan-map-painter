@@ -346,3 +346,8 @@
 登记：https://commons.wikimedia.org/wiki/File:基進黨｜LOGO.jpg
 原图：https://upload.wikimedia.org/wikipedia/commons/f/fe/%E5%9F%BA%E9%80%B2%E9%BB%A8%EF%BD%9CLOGO.jpg
 来源SHA256：9efb53d623d5e6512c3417bdb1504007e8a2b1445f300d0d934716ad5644123b
+
+天宙和平统一家庭党 [历史名称]
+登记：https://election.ltn.com.tw/2020/party/39
+原图：https://img.ltn.com.tw/Upload/elect/2020/party/39.jpg
+来源SHA256：7722d3f0cd9aed029b7cab780b3f41c6e54f4ae68c0bcbc7c96f8adf9042903d
