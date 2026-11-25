@@ -75,10 +75,14 @@ test('Historical county mayors and councils use five shared election cycles with
    assert.equal(archive.reduce((sum,c)=>sum+contestants(council,c).length,0),1807);
    assert.equal(archive.reduce((sum,c)=>sum+c.seats,0),867);
    const sourced=council.candidacies.filter(c=>c.contest_id.startsWith('1994-council-counties:')&&typeof c.incumbent_at_election==='boolean');
-   assert.equal(sourced.length,481);
-   assert.equal(sourced.filter(c=>c.incumbent_at_election).length,218);
+   const sourceArchive=require('../assets/history-local-1994-council.json');
+   const sourceEntries=sourceArchive.districts.flatMap(d=>d.candidates.map(c=>d.incumbent_sources?.[String(c[0])])).filter(s=>typeof s?.value==='boolean');
+   assert.ok(sourceEntries.length>=546,'verified incumbency coverage must not regress');
+   assert.ok(sourceEntries.filter(s=>s.value).length>=283,'verified incumbents must not regress');
+   assert.equal(sourced.length,sourceEntries.length);
+   assert.equal(sourced.filter(c=>c.incumbent_at_election).length,sourceEntries.filter(s=>s.value).length);
    assert.ok(sourced.every(c=>c.incumbent_source?.source_url&&c.incumbent_source.value===c.incumbent_at_election));
-   assert.equal(council.rows.filter(r=>r.type==='council'&&typeof r.incumbent==='boolean'&&sourced.some(c=>c.candidate_name===r.name&&c.ballot_number===String(r.number)&&c.votes===r.votes)).length,481);
+   assert.equal(council.rows.filter(r=>r.type==='council'&&typeof r.incumbent==='boolean'&&sourced.some(c=>c.candidate_name===r.name&&c.ballot_number===String(r.number)&&c.votes===r.votes)).length,sourceEntries.length);
    const lienchiang=council.candidacies.filter(c=>c.contest_id.startsWith('1994-council-counties:连江县:'));
    assert.equal(lienchiang.filter(c=>c.incumbent_at_election===true).length,9);
    assert.equal(lienchiang.find(c=>c.candidate_name==='陈书建').incumbent_at_election,null);
