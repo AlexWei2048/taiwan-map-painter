@@ -220,7 +220,9 @@
   '中国国民党':'王金平 江丙坤 黄志雄 李纪珠 曾永权 白添枝 黄昭顺 黄德福 郭素春 刘盛良 章仁香 曹寿民 苏起 侯彩凤 帅化民 黄良华 柴云清 张立宇 陈美子 赵连出 华真 王敏星 董清池 陈瑞昌',
   '民主进步党':'蔡煌瑯 陈秀惠 洪奇昌 张俊雄 高志鹏 蔡英文 薛凌 王荣璋 尤清 张庆惠 林浊水 卢天麟 田秋堇 黄淑英 邱永仁 王涂发 许荣淑 吴明敏 林文郎 许德祥 黄诚 杨芳婉 陈宗仁 周平德 李若华 陈时中 夷将·拔路儿 曾智勇 卢孳艳 许永面 徐进荣',
   '亲民党':'刘忆如 刘文雄 蔡胜佳 顾崇廉 钟荣吉 林惠官 李复甸 李文来 陈进兴 罗淑蕾 董贞吟 张志铭 林正国 李锦泉 黄旐涛 葛建埔 兰梁筱娟 吴攀龙 王蔡幸',
-  '台湾团结联盟':'赖幸媛 黄政哲 郭林勇 陈银河 林志嘉 陈鸿基 黄金郎 李妍慧 李旭煌'
+  '台湾团结联盟':'赖幸媛 黄政哲 郭林勇 陈银河 林志嘉 陈鸿基 黄金郎 李妍慧 李旭煌',
+  // CEC meeting 339 (2004-11-12), corroborated by contemporaneous rank reporting.
+  '无党团结联盟':'吴庆堂 萧苑瑜 宋丽华 张博雅 陈杰儒'
  };
  // Official election bulletins in ballot order. The 1998 edition reflects the
  // exclusions and subsequent renumbering documented in CEC meeting 249.
@@ -521,7 +523,7 @@
     }
     body.append(element('p','history-list-caveat',model.old?
      (model.year===2001||EARLY_ORDERED_OVERSEAS[model.year])?'已核对本届不分区及侨选的提名顺序与原始当选人。':
-     model.year===2004?'中选会公报已核对主要政党正式提名次序；个别小党及侨选名单如未核实顺序则不显示名次。台联原第1名陈永兴于投票前被撤销登记，保留原提名记录但不计入有效当选。':
+     model.year===2004?'中选会公报及第339次会议纪录已核对不分区正式提名次序；侨选名单如未核实顺序则不显示名次。台联原第1名陈永兴于投票前被撤销登记，保留原提名记录但不计入有效当选。':
      '仅已核实原始当选人；未取得完整提名名册时不推断落选名单或其排序。':
      hasOfficialSlate(model.year,p.party)?'本届已收录该党原始提名顺序及选举当时的当选名单；任期内递补不计入原始当选。':'仅收录已核实的原始当选名单；未取得完整提名顺序时不推断名次。'));
    }else{
@@ -530,7 +532,7 @@
      '本届未取得席次；当前史料尚未确认该党是否提交不分区提名名单，因此不展示未经核实的姓名。'));
    }
    const ref=element('a','history-list-detail-link','核对本届原始选举资料');
-   ref.href=SLATE_SOURCES[model.year]||SOURCES[model.year]||LAW_NEW;ref.target='_blank';ref.rel='noopener noreferrer';body.append(ref);
+   ref.href=model.year===2004&&p.party==='无党团结联盟'?'https://web.cec.gov.tw/api/file/e95f3d3b-3098-4f4a-bea7-a76a2a14f2d4.pdf':SLATE_SOURCES[model.year]||SOURCES[model.year]||LAW_NEW;ref.target='_blank';ref.rel='noopener noreferrer';body.append(ref);
    details.append(body);table.append(details);
   }
   if(!model.parties.length)table.append(element('p','history-list-caveat','本届的政党得票数据尚未加载。'));

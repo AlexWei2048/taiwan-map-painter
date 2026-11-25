@@ -58,7 +58,7 @@ test('2004 CEC published full ranked major-party rosters, and annulment is expli
  assert.deepEqual(tsu.slice(0,4).map(n=>[n.rank,n.name,n.elected]),[[1,'赖幸媛',true],[2,'黄政哲',true],[3,'郭林勇',true],[4,'陈银河',true]]);
  assert.equal(tsu.at(-1).disqualified,true);
  assert.equal(tsu.at(-1).elected,false);
- assert.equal(Party.nominees(2004,'无党团结联盟').every(n=>n.rank===null),true);
+ assert.deepEqual(Party.nominees(2004,'无党团结联盟').map(n=>[n.rank,n.name,n.elected]),[[1,'吴庆堂',false],[2,'萧苑瑜',false],[3,'宋丽华',false],[4,'张博雅',false],[5,'陈杰儒',false]]);
 });
 test('2024 approved CEC full slate names and 34 original winners remain intact',()=>{
  assert.equal(Party.nominees(2024,'台湾绿党')[4]?.name,'希婻·玛飞洑');
