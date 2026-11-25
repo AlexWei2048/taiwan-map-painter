@@ -4,7 +4,7 @@
   "total_current_logo_ids": 48,
   "original_logo_ids": 30,
   "sourced_preset_logo_ids": 17,
-  "sourced_historical_logo_names": 54,
+  "sourced_historical_logo_names": 57,
   "total_party_names_in_archives": 156,
   "top_archive_parties": [
     {
@@ -161,7 +161,7 @@
       "name": "台湾主义党",
       "rows": 873,
       "id": null,
-      "has_logo": false
+      "has_logo": true
     },
     {
       "name": "军公教联盟党",
@@ -185,7 +185,7 @@
       "name": "中华民国台湾基本法连线",
       "rows": 848,
       "id": null,
-      "has_logo": false
+      "has_logo": true
     },
     {
       "name": "司法改革党",
@@ -311,7 +311,7 @@
       "name": "台湾国民会议",
       "rows": 439,
       "id": null,
-      "has_logo": false
+      "has_logo": true
     },
     {
       "name": "台湾绿党",
@@ -947,18 +947,42 @@
   "missing_preset_logos": [],
   "missing_archive_logos": [
     {
-      "name": "中国台湾原住民党",
-      "rows": 2375,
-      "total_votes_across_grains": 55288,
+      "name": "民主联盟",
+      "rows": 1175,
+      "total_votes_across_grains": 2625826,
       "known_preset": null,
       "sources": [
-        "history-legislative-1995.json",
-        "history-legislative-1998.json",
-        "history-legislative-2001.json",
-        "history-local-1998.json"
+        "history-legislative-1998.json"
       ],
       "spellings": [
-        "中国台湾原住民党"
+        "民主联盟"
+      ],
+      "confirmed_elected_count": 4,
+      "elected_examples": [
+        {
+          "archive": "history-legislative-1998.json",
+          "contest": "legislative:1998:regional:台东县:台东县选举区",
+          "name": "徐庆元",
+          "election": "legislative:1998:regional"
+        },
+        {
+          "archive": "history-legislative-1998.json",
+          "contest": "legislative:1998:regional:台北县:台北县第2选区",
+          "name": "林志嘉",
+          "election": "legislative:1998:regional"
+        },
+        {
+          "archive": "history-legislative-1998.json",
+          "contest": "legislative:1998:regional:彰化县:彰化县选举区",
+          "name": "陈进丁",
+          "election": "legislative:1998:regional"
+        },
+        {
+          "archive": "history-legislative-1998.json",
+          "contest": "legislative:1998:regional:苗栗县:苗栗县选举区",
+          "name": "徐成焜",
+          "election": "legislative:1998:regional"
+        }
       ]
     },
     {
@@ -973,43 +997,51 @@
       ],
       "spellings": [
         "全国民主非政党联盟"
+      ],
+      "confirmed_elected_count": 3,
+      "elected_examples": [
+        {
+          "archive": "history-legislative-1998.json",
+          "contest": "legislative:1998:mountain:全部地区（含金门、马祖）:1998年第4届山地原住民立委选举",
+          "name": "瓦历斯‧贝林",
+          "election": "legislative:1998:mountain"
+        },
+        {
+          "archive": "history-legislative-1998.json",
+          "contest": "legislative:1998:plains:全部地区（含金门、马祖）:1998年第4届平地原住民立委选举",
+          "name": "蔡中涵",
+          "election": "legislative:1998:plains"
+        },
+        {
+          "archive": "history-legislative-1998.json",
+          "contest": "legislative:1998:regional:台北县:台北县第1选区",
+          "name": "叶宪修",
+          "election": "legislative:1998:regional"
+        }
       ]
     },
     {
-      "name": "民主联盟",
-      "rows": 1175,
-      "total_votes_across_grains": 2625826,
+      "name": "中国台湾原住民党",
+      "rows": 2375,
+      "total_votes_across_grains": 55288,
       "known_preset": null,
       "sources": [
-        "history-legislative-1998.json"
+        "history-legislative-1995.json",
+        "history-legislative-1998.json",
+        "history-legislative-2001.json",
+        "history-local-1998.json"
       ],
       "spellings": [
-        "民主联盟"
-      ]
-    },
-    {
-      "name": "台湾主义党",
-      "rows": 873,
-      "total_votes_across_grains": 155384,
-      "known_preset": null,
-      "sources": [
-        "history-legislative-2012.json",
-        "history-local-2014.json"
+        "中国台湾原住民党"
       ],
-      "spellings": [
-        "台湾主义党"
-      ]
-    },
-    {
-      "name": "中华民国台湾基本法连线",
-      "rows": 848,
-      "total_votes_across_grains": 96486,
-      "known_preset": null,
-      "sources": [
-        "history-legislative-2012.json"
-      ],
-      "spellings": [
-        "中华民国台湾基本法连线"
+      "confirmed_elected_count": 1,
+      "elected_examples": [
+        {
+          "archive": "history-local-1998.json",
+          "contest": "1998-council:台东县:mountain:第12选举区",
+          "name": "陈建台",
+          "election": "1998-council"
+        }
       ]
     },
     {
@@ -1022,18 +1054,36 @@
       ],
       "spellings": [
         "台湾吾党"
+      ],
+      "confirmed_elected_count": 1,
+      "elected_examples": [
+        {
+          "archive": "history-legislative-2001.json",
+          "contest": "legislative:2001:mountain:全部地区（含金门、马祖）:2001年第5届山地原住民立委选举",
+          "name": "瓦历斯‧贝林",
+          "election": "legislative:2001:mountain"
+        }
       ]
     },
     {
-      "name": "台湾国民会议",
-      "rows": 439,
-      "total_votes_across_grains": 435844,
+      "name": "中华民族致公党",
+      "rows": 3,
+      "total_votes_across_grains": 2729,
       "known_preset": null,
       "sources": [
-        "history-legislative-2012.json"
+        "history-local-2018.json"
       ],
       "spellings": [
-        "台湾国民会议"
+        "中华民族致公党"
+      ],
+      "confirmed_elected_count": 1,
+      "elected_examples": [
+        {
+          "archive": "history-local-2018.json",
+          "contest": "2018-council:金门县:regional:第2选举区",
+          "name": "蔡春生",
+          "election": "2018-council"
+        }
       ]
     },
     {
@@ -1047,7 +1097,9 @@
       ],
       "spellings": [
         "大道慈悲济世党"
-      ]
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
     },
     {
       "name": "人民民主阵线",
@@ -1061,7 +1113,9 @@
       ],
       "spellings": [
         "人民民主阵线"
-      ]
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
     },
     {
       "name": "工教联盟",
@@ -1074,7 +1128,9 @@
       ],
       "spellings": [
         "工教联盟"
-      ]
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
     },
     {
       "name": "泛盟党",
@@ -1086,7 +1142,9 @@
       ],
       "spellings": [
         "泛盟党"
-      ]
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
     },
     {
       "name": "大中华统一阵线",
@@ -1098,7 +1156,9 @@
       ],
       "spellings": [
         "大中华统一阵线"
-      ]
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
     },
     {
       "name": "台湾革命党",
@@ -1111,7 +1171,9 @@
       ],
       "spellings": [
         "台湾革命党"
-      ]
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
     },
     {
       "name": "绿色本土清新党",
@@ -1124,7 +1186,9 @@
       ],
       "spellings": [
         "绿色本土清新党"
-      ]
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
     },
     {
       "name": "真理党",
@@ -1136,7 +1200,9 @@
       ],
       "spellings": [
         "真理党"
-      ]
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
     },
     {
       "name": "保护台湾大联盟",
@@ -1149,7 +1215,9 @@
       ],
       "spellings": [
         "保护台湾大联盟"
-      ]
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
     },
     {
       "name": "共和党",
@@ -1163,19 +1231,9 @@
       "spellings": [
         "共和党",
         "共和黨"
-      ]
-    },
-    {
-      "name": "国家民主党",
-      "rows": 17,
-      "total_votes_across_grains": 2394,
-      "known_preset": null,
-      "sources": [
-        "history-legislative-1998.json"
       ],
-      "spellings": [
-        "国家民主党"
-      ]
+      "confirmed_elected_count": 0,
+      "elected_examples": []
     },
     {
       "name": "中华台商爱国党",
@@ -1187,7 +1245,23 @@
       ],
       "spellings": [
         "中华台商爱国党"
-      ]
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
+    },
+    {
+      "name": "国家民主党",
+      "rows": 17,
+      "total_votes_across_grains": 2394,
+      "known_preset": null,
+      "sources": [
+        "history-legislative-1998.json"
+      ],
+      "spellings": [
+        "国家民主党"
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
     },
     {
       "name": "中国团结党",
@@ -1199,7 +1273,9 @@
       ],
       "spellings": [
         "中国团结党"
-      ]
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
     },
     {
       "name": "社会改革党",
@@ -1212,19 +1288,9 @@
       ],
       "spellings": [
         "社会改革党"
-      ]
-    },
-    {
-      "name": "政党资料缺失",
-      "rows": 14,
-      "total_votes_across_grains": 58561,
-      "known_preset": null,
-      "sources": [
-        "history-local-1994.json"
       ],
-      "spellings": [
-        "政党资料缺失"
-      ]
+      "confirmed_elected_count": 0,
+      "elected_examples": []
     },
     {
       "name": "教科文预算保障e联盟",
@@ -1237,7 +1303,23 @@
       ],
       "spellings": [
         "教科文预算保障e联盟"
-      ]
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
+    },
+    {
+      "name": "三等国民公义人权自救党",
+      "rows": 13,
+      "total_votes_across_grains": 3248,
+      "known_preset": null,
+      "sources": [
+        "history-local-2014.json"
+      ],
+      "spellings": [
+        "三等国民公义人权自救党"
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
     },
     {
       "name": "正党",
@@ -1252,19 +1334,23 @@
       ],
       "spellings": [
         "正党"
-      ]
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
     },
     {
-      "name": "三等国民公义人权自救党",
-      "rows": 13,
-      "total_votes_across_grains": 3248,
+      "name": "中华文化共和党",
+      "rows": 10,
+      "total_votes_across_grains": 10332,
       "known_preset": null,
       "sources": [
-        "history-local-2014.json"
+        "history-legislative-2024.json"
       ],
       "spellings": [
-        "三等国民公义人权自救党"
-      ]
+        "中华文化共和党"
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
     },
     {
       "name": "兴中同盟会",
@@ -1277,19 +1363,9 @@
       ],
       "spellings": [
         "兴中同盟会"
-      ]
-    },
-    {
-      "name": "中华文化共和党",
-      "rows": 10,
-      "total_votes_across_grains": 10332,
-      "known_preset": null,
-      "sources": [
-        "history-legislative-2024.json"
       ],
-      "spellings": [
-        "中华文化共和党"
-      ]
+      "confirmed_elected_count": 0,
+      "elected_examples": []
     },
     {
       "name": "中国忠义党",
@@ -1302,7 +1378,9 @@
       ],
       "spellings": [
         "中国忠义党"
-      ]
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
     },
     {
       "name": "圆党",
@@ -1314,43 +1392,9 @@
       ],
       "spellings": [
         "圆党"
-      ]
-    },
-    {
-      "name": "工党",
-      "rows": 5,
-      "total_votes_across_grains": 161745,
-      "known_preset": null,
-      "sources": [
-        "history-legislative-1992.json"
       ],
-      "spellings": [
-        "工党"
-      ]
-    },
-    {
-      "name": "中国大同民主党",
-      "rows": 5,
-      "total_votes_across_grains": 1005,
-      "known_preset": null,
-      "sources": [
-        "history-legislative-1992.json"
-      ],
-      "spellings": [
-        "中国大同民主党"
-      ]
-    },
-    {
-      "name": "中国全民福利党",
-      "rows": 5,
-      "total_votes_across_grains": 3385,
-      "known_preset": null,
-      "sources": [
-        "history-legislative-1992.json"
-      ],
-      "spellings": [
-        "中国全民福利党"
-      ]
+      "confirmed_elected_count": 0,
+      "elected_examples": []
     },
     {
       "name": "中国中青党",
@@ -1362,7 +1406,51 @@
       ],
       "spellings": [
         "中国中青党"
-      ]
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
+    },
+    {
+      "name": "中国全民福利党",
+      "rows": 5,
+      "total_votes_across_grains": 3385,
+      "known_preset": null,
+      "sources": [
+        "history-legislative-1992.json"
+      ],
+      "spellings": [
+        "中国全民福利党"
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
+    },
+    {
+      "name": "中国大同民主党",
+      "rows": 5,
+      "total_votes_across_grains": 1005,
+      "known_preset": null,
+      "sources": [
+        "history-legislative-1992.json"
+      ],
+      "spellings": [
+        "中国大同民主党"
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
+    },
+    {
+      "name": "工党",
+      "rows": 5,
+      "total_votes_across_grains": 161745,
+      "known_preset": null,
+      "sources": [
+        "history-legislative-1992.json"
+      ],
+      "spellings": [
+        "工党"
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
     },
     {
       "name": "洪运忠义党",
@@ -1374,7 +1462,9 @@
       ],
       "spellings": [
         "洪运忠义党"
-      ]
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
     },
     {
       "name": "言论自由联盟",
@@ -1386,7 +1476,9 @@
       ],
       "spellings": [
         "言论自由联盟"
-      ]
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
     },
     {
       "name": "中华文化复兴在理党",
@@ -1398,6 +1490,353 @@
       ],
       "spellings": [
         "中华文化复兴在理党"
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
+    },
+    {
+      "name": "中华民主向日葵宪政改革联盟",
+      "rows": 1,
+      "total_votes_across_grains": 389,
+      "known_preset": null,
+      "sources": [
+        "history-local-2014.json"
+      ],
+      "spellings": [
+        "中华民主向日葵宪政改革联盟"
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
+    },
+    {
+      "name": "中华民国国政监督联盟",
+      "rows": 1,
+      "total_votes_across_grains": 1195,
+      "known_preset": null,
+      "sources": [
+        "history-local-2018.json"
+      ],
+      "spellings": [
+        "中华民国国政监督联盟"
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
+    },
+    {
+      "name": "中国妇女党",
+      "rows": 1,
+      "total_votes_across_grains": 923,
+      "known_preset": null,
+      "sources": [
+        "history-local-1998.json"
+      ],
+      "spellings": [
+        "中国妇女党"
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
+    },
+    {
+      "name": "中国民主进步党",
+      "rows": 1,
+      "total_votes_across_grains": 286,
+      "known_preset": null,
+      "sources": [
+        "history-local-2018.json"
+      ],
+      "spellings": [
+        "中国民主进步党"
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
+    },
+    {
+      "name": "中国民众党",
+      "rows": 1,
+      "total_votes_across_grains": 416,
+      "known_preset": null,
+      "sources": [
+        "history-local-2006.json"
+      ],
+      "spellings": [
+        "中国民众党"
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
+    },
+    {
+      "name": "全民生活政策党",
+      "rows": 1,
+      "total_votes_across_grains": 75,
+      "known_preset": null,
+      "sources": [
+        "history-local-2018.json"
+      ],
+      "spellings": [
+        "全民生活政策党"
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
+    },
+    {
+      "name": "华声党",
+      "rows": 1,
+      "total_votes_across_grains": 207,
+      "known_preset": null,
+      "sources": [
+        "history-local-2014.json"
+      ],
+      "spellings": [
+        "华声党"
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
+    },
+    {
+      "name": "台湾建国党",
+      "rows": 1,
+      "total_votes_across_grains": 81,
+      "known_preset": null,
+      "sources": [
+        "history-local-2014.json"
+      ],
+      "spellings": [
+        "台湾建国党"
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
+    },
+    {
+      "name": "台湾民族党",
+      "rows": 1,
+      "total_votes_across_grains": 741,
+      "known_preset": null,
+      "sources": [
+        "history-local-2014.json"
+      ],
+      "spellings": [
+        "台湾民族党"
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
+    },
+    {
+      "name": "嘉意公益党",
+      "rows": 1,
+      "total_votes_across_grains": 0,
+      "known_preset": null,
+      "sources": [
+        "election-2026-candidates"
+      ],
+      "spellings": [
+        "嘉意公益党"
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
+    },
+    {
+      "name": "大道人民党",
+      "rows": 1,
+      "total_votes_across_grains": 167,
+      "known_preset": null,
+      "sources": [
+        "history-local-2014.json"
+      ],
+      "spellings": [
+        "大道人民党"
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
+    },
+    {
+      "name": "新华劳动党",
+      "rows": 1,
+      "total_votes_across_grains": 1415,
+      "known_preset": null,
+      "sources": [
+        "history-local-2018.json"
+      ],
+      "spellings": [
+        "新华劳动党"
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
+    },
+    {
+      "name": "新政世纪党",
+      "rows": 1,
+      "total_votes_across_grains": 152,
+      "known_preset": null,
+      "sources": [
+        "history-local-2018.json"
+      ],
+      "spellings": [
+        "新政世纪党"
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
+    },
+    {
+      "name": "爱心党",
+      "rows": 1,
+      "total_votes_across_grains": 115,
+      "known_preset": null,
+      "sources": [
+        "history-local-2018.json"
+      ],
+      "spellings": [
+        "爱心党"
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
+    },
+    {
+      "name": "皇君人民政党",
+      "rows": 1,
+      "total_votes_across_grains": 673,
+      "known_preset": null,
+      "sources": [
+        "history-local-2018.json"
+      ],
+      "spellings": [
+        "皇君人民政党"
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
+    },
+    {
+      "name": "联合党",
+      "rows": 1,
+      "total_votes_across_grains": 477,
+      "known_preset": null,
+      "sources": [
+        "history-local-2014.json"
+      ],
+      "spellings": [
+        "联合党"
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": []
+    }
+  ],
+  "missing_elected_party_logos": [
+    {
+      "name": "民主联盟",
+      "rows": 1175,
+      "total_votes_across_grains": 2625826,
+      "known_preset": null,
+      "sources": [
+        "history-legislative-1998.json"
+      ],
+      "spellings": [
+        "民主联盟"
+      ],
+      "confirmed_elected_count": 4,
+      "elected_examples": [
+        {
+          "archive": "history-legislative-1998.json",
+          "contest": "legislative:1998:regional:台东县:台东县选举区",
+          "name": "徐庆元",
+          "election": "legislative:1998:regional"
+        },
+        {
+          "archive": "history-legislative-1998.json",
+          "contest": "legislative:1998:regional:台北县:台北县第2选区",
+          "name": "林志嘉",
+          "election": "legislative:1998:regional"
+        },
+        {
+          "archive": "history-legislative-1998.json",
+          "contest": "legislative:1998:regional:彰化县:彰化县选举区",
+          "name": "陈进丁",
+          "election": "legislative:1998:regional"
+        },
+        {
+          "archive": "history-legislative-1998.json",
+          "contest": "legislative:1998:regional:苗栗县:苗栗县选举区",
+          "name": "徐成焜",
+          "election": "legislative:1998:regional"
+        }
+      ]
+    },
+    {
+      "name": "全国民主非政党联盟",
+      "rows": 1261,
+      "total_votes_across_grains": 625338,
+      "known_preset": null,
+      "sources": [
+        "history-legislative-1995.json",
+        "history-legislative-1998.json",
+        "history-legislative-2001.json"
+      ],
+      "spellings": [
+        "全国民主非政党联盟"
+      ],
+      "confirmed_elected_count": 3,
+      "elected_examples": [
+        {
+          "archive": "history-legislative-1998.json",
+          "contest": "legislative:1998:mountain:全部地区（含金门、马祖）:1998年第4届山地原住民立委选举",
+          "name": "瓦历斯‧贝林",
+          "election": "legislative:1998:mountain"
+        },
+        {
+          "archive": "history-legislative-1998.json",
+          "contest": "legislative:1998:plains:全部地区（含金门、马祖）:1998年第4届平地原住民立委选举",
+          "name": "蔡中涵",
+          "election": "legislative:1998:plains"
+        },
+        {
+          "archive": "history-legislative-1998.json",
+          "contest": "legislative:1998:regional:台北县:台北县第1选区",
+          "name": "叶宪修",
+          "election": "legislative:1998:regional"
+        }
+      ]
+    },
+    {
+      "name": "中国台湾原住民党",
+      "rows": 2375,
+      "total_votes_across_grains": 55288,
+      "known_preset": null,
+      "sources": [
+        "history-legislative-1995.json",
+        "history-legislative-1998.json",
+        "history-legislative-2001.json",
+        "history-local-1998.json"
+      ],
+      "spellings": [
+        "中国台湾原住民党"
+      ],
+      "confirmed_elected_count": 1,
+      "elected_examples": [
+        {
+          "archive": "history-local-1998.json",
+          "contest": "1998-council:台东县:mountain:第12选举区",
+          "name": "陈建台",
+          "election": "1998-council"
+        }
+      ]
+    },
+    {
+      "name": "台湾吾党",
+      "rows": 812,
+      "total_votes_across_grains": 90419,
+      "known_preset": null,
+      "sources": [
+        "history-legislative-2001.json"
+      ],
+      "spellings": [
+        "台湾吾党"
+      ],
+      "confirmed_elected_count": 1,
+      "elected_examples": [
+        {
+          "archive": "history-legislative-2001.json",
+          "contest": "legislative:2001:mountain:全部地区（含金门、马祖）:2001年第5届山地原住民立委选举",
+          "name": "瓦历斯‧贝林",
+          "election": "legislative:2001:mountain"
+        }
       ]
     },
     {
@@ -1410,205 +1849,22 @@
       ],
       "spellings": [
         "中华民族致公党"
-      ]
-    },
-    {
-      "name": "中国妇女党",
-      "rows": 1,
-      "total_votes_across_grains": 923,
-      "known_preset": null,
-      "sources": [
-        "history-local-1998.json"
       ],
-      "spellings": [
-        "中国妇女党"
-      ]
-    },
-    {
-      "name": "中国民众党",
-      "rows": 1,
-      "total_votes_across_grains": 416,
-      "known_preset": null,
-      "sources": [
-        "history-local-2006.json"
-      ],
-      "spellings": [
-        "中国民众党"
-      ]
-    },
-    {
-      "name": "华声党",
-      "rows": 1,
-      "total_votes_across_grains": 207,
-      "known_preset": null,
-      "sources": [
-        "history-local-2014.json"
-      ],
-      "spellings": [
-        "华声党"
-      ]
-    },
-    {
-      "name": "中华民主向日葵宪政改革联盟",
-      "rows": 1,
-      "total_votes_across_grains": 389,
-      "known_preset": null,
-      "sources": [
-        "history-local-2014.json"
-      ],
-      "spellings": [
-        "中华民主向日葵宪政改革联盟"
-      ]
-    },
-    {
-      "name": "台湾建国党",
-      "rows": 1,
-      "total_votes_across_grains": 81,
-      "known_preset": null,
-      "sources": [
-        "history-local-2014.json"
-      ],
-      "spellings": [
-        "台湾建国党"
-      ]
-    },
-    {
-      "name": "联合党",
-      "rows": 1,
-      "total_votes_across_grains": 477,
-      "known_preset": null,
-      "sources": [
-        "history-local-2014.json"
-      ],
-      "spellings": [
-        "联合党"
-      ]
-    },
-    {
-      "name": "台湾民族党",
-      "rows": 1,
-      "total_votes_across_grains": 741,
-      "known_preset": null,
-      "sources": [
-        "history-local-2014.json"
-      ],
-      "spellings": [
-        "台湾民族党"
-      ]
-    },
-    {
-      "name": "大道人民党",
-      "rows": 1,
-      "total_votes_across_grains": 167,
-      "known_preset": null,
-      "sources": [
-        "history-local-2014.json"
-      ],
-      "spellings": [
-        "大道人民党"
-      ]
-    },
-    {
-      "name": "新政世纪党",
-      "rows": 1,
-      "total_votes_across_grains": 152,
-      "known_preset": null,
-      "sources": [
-        "history-local-2018.json"
-      ],
-      "spellings": [
-        "新政世纪党"
-      ]
-    },
-    {
-      "name": "中国民主进步党",
-      "rows": 1,
-      "total_votes_across_grains": 286,
-      "known_preset": null,
-      "sources": [
-        "history-local-2018.json"
-      ],
-      "spellings": [
-        "中国民主进步党"
-      ]
-    },
-    {
-      "name": "爱心党",
-      "rows": 1,
-      "total_votes_across_grains": 115,
-      "known_preset": null,
-      "sources": [
-        "history-local-2018.json"
-      ],
-      "spellings": [
-        "爱心党"
-      ]
-    },
-    {
-      "name": "中华民国国政监督联盟",
-      "rows": 1,
-      "total_votes_across_grains": 1195,
-      "known_preset": null,
-      "sources": [
-        "history-local-2018.json"
-      ],
-      "spellings": [
-        "中华民国国政监督联盟"
-      ]
-    },
-    {
-      "name": "皇君人民政党",
-      "rows": 1,
-      "total_votes_across_grains": 673,
-      "known_preset": null,
-      "sources": [
-        "history-local-2018.json"
-      ],
-      "spellings": [
-        "皇君人民政党"
-      ]
-    },
-    {
-      "name": "全民生活政策党",
-      "rows": 1,
-      "total_votes_across_grains": 75,
-      "known_preset": null,
-      "sources": [
-        "history-local-2018.json"
-      ],
-      "spellings": [
-        "全民生活政策党"
-      ]
-    },
-    {
-      "name": "新华劳动党",
-      "rows": 1,
-      "total_votes_across_grains": 1415,
-      "known_preset": null,
-      "sources": [
-        "history-local-2018.json"
-      ],
-      "spellings": [
-        "新华劳动党"
-      ]
-    },
-    {
-      "name": "嘉意公益党",
-      "rows": 1,
-      "total_votes_across_grains": 0,
-      "known_preset": null,
-      "sources": [
-        "election-2026-candidates"
-      ],
-      "spellings": [
-        "嘉意公益党"
+      "confirmed_elected_count": 1,
+      "elected_examples": [
+        {
+          "archive": "history-local-2018.json",
+          "contest": "2018-council:金门县:regional:第2选举区",
+          "name": "蔡春生",
+          "election": "2018-council"
+        }
       ]
     }
   ],
   "placeholder_code_locations": {
-    "site-updated.js": [
+    "history-trends.js": [
       {
-        "phrase": "不可用",
+        "phrase": "无可核实",
         "count": 1
       }
     ],
@@ -1634,6 +1890,12 @@
         "count": 1
       }
     ],
+    "site-updated.js": [
+      {
+        "phrase": "不可用",
+        "count": 1
+      }
+    ],
     "history-workspace.js": [
       {
         "phrase": "暂无资料",
@@ -1642,12 +1904,6 @@
       {
         "phrase": "暂无该",
         "count": 2
-      }
-    ],
-    "history-trends.js": [
-      {
-        "phrase": "无可核实",
-        "count": 1
       }
     ],
     "tests/history-workspace.test.cjs": [

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "count_by_id": 17,
-  "count_by_historical_name": 54,
+  "count_by_historical_name": 57,
   "official_sources": [
     {
       "name": "大爱宪改",
@@ -843,6 +843,60 @@
       "source_alternative": [
         "https://img.ltn.com.tw/Upload/elect/2020/party/39.jpg"
       ]
+    },
+    {
+      "name": "台湾国民会议",
+      "party_id": null,
+      "official_registry": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/02%E7%AB%8B%E6%B3%95%E5%A7%94%E5%93%A1/101%E5%B9%B4%E7%AC%AC8%E5%B1%86/02%E5%85%A8%E5%9C%8B%E4%B8%8D%E5%88%86%E5%8D%80%E5%8F%8A%E5%83%91%E5%B1%85%E5%9C%8B%E5%A4%96%E5%9C%8B%E6%B0%91/101%E5%B9%B4%E5%85%A8%E5%9C%8B%E4%B8%8D%E5%88%86%E5%8D%80%E5%8F%8A%E5%83%91%E5%B1%85%E5%9C%8B%E5%A4%96%E5%9C%8B%E6%B0%91%E7%AB%8B%E5%A7%94%E9%81%B8%E8%88%89.pdf",
+      "official_image": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/02%E7%AB%8B%E6%B3%95%E5%A7%94%E5%93%A1/101%E5%B9%B4%E7%AC%AC8%E5%B1%86/02%E5%85%A8%E5%9C%8B%E4%B8%8D%E5%88%86%E5%8D%80%E5%8F%8A%E5%83%91%E5%B1%85%E5%9C%8B%E5%A4%96%E5%9C%8B%E6%B0%91/101%E5%B9%B4%E5%85%A8%E5%9C%8B%E4%B8%8D%E5%88%86%E5%8D%80%E5%8F%8A%E5%83%91%E5%B1%85%E5%9C%8B%E5%A4%96%E5%9C%8B%E6%B0%91%E7%AB%8B%E5%A7%94%E9%81%B8%E8%88%89.pdf",
+      "asset_type": "2012 official election bulletin emblem crop (grayscale)",
+      "source_page_number": 1,
+      "source_crop_1024x1481": [
+        55,
+        287,
+        108,
+        312
+      ],
+      "source_sha256": "44ea97b830746012b5b0df07992a4de9b5706e3b2e74e12d6fb9b96ba20bdc60",
+      "rendered_sha256": "a4cbb8bfe31377df1a412906c2738b95c6af265494b4375acf5baf526d99f52c",
+      "image_bytes": 6278,
+      "license": "Historical election bulletin reproduction, party identification only; original mark rights retained"
+    },
+    {
+      "name": "中华民国台湾基本法连线",
+      "party_id": null,
+      "official_registry": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/02%E7%AB%8B%E6%B3%95%E5%A7%94%E5%93%A1/101%E5%B9%B4%E7%AC%AC8%E5%B1%86/02%E5%85%A8%E5%9C%8B%E4%B8%8D%E5%88%86%E5%8D%80%E5%8F%8A%E5%83%91%E5%B1%85%E5%9C%8B%E5%A4%96%E5%9C%8B%E6%B0%91/101%E5%B9%B4%E5%85%A8%E5%9C%8B%E4%B8%8D%E5%88%86%E5%8D%80%E5%8F%8A%E5%83%91%E5%B1%85%E5%9C%8B%E5%A4%96%E5%9C%8B%E6%B0%91%E7%AB%8B%E5%A7%94%E9%81%B8%E8%88%89.pdf",
+      "official_image": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/02%E7%AB%8B%E6%B3%95%E5%A7%94%E5%93%A1/101%E5%B9%B4%E7%AC%AC8%E5%B1%86/02%E5%85%A8%E5%9C%8B%E4%B8%8D%E5%88%86%E5%8D%80%E5%8F%8A%E5%83%91%E5%B1%85%E5%9C%8B%E5%A4%96%E5%9C%8B%E6%B0%91/101%E5%B9%B4%E5%85%A8%E5%9C%8B%E4%B8%8D%E5%88%86%E5%8D%80%E5%8F%8A%E5%83%91%E5%B1%85%E5%9C%8B%E5%A4%96%E5%9C%8B%E6%B0%91%E7%AB%8B%E5%A7%94%E9%81%B8%E8%88%89.pdf",
+      "asset_type": "2012 official election bulletin emblem crop (grayscale)",
+      "source_page_number": 2,
+      "source_crop_1024x1481": [
+        676,
+        300,
+        725,
+        344
+      ],
+      "source_sha256": "44ea97b830746012b5b0df07992a4de9b5706e3b2e74e12d6fb9b96ba20bdc60",
+      "rendered_sha256": "111979862f3c330656d40ae69026c85ae3c10b9eb53818e6581d49c766c1668e",
+      "image_bytes": 14472,
+      "license": "Historical election bulletin reproduction, party identification only; original mark rights retained"
+    },
+    {
+      "name": "台湾主义党",
+      "party_id": null,
+      "official_registry": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/02%E7%AB%8B%E6%B3%95%E5%A7%94%E5%93%A1/101%E5%B9%B4%E7%AC%AC8%E5%B1%86/02%E5%85%A8%E5%9C%8B%E4%B8%8D%E5%88%86%E5%8D%80%E5%8F%8A%E5%83%91%E5%B1%85%E5%9C%8B%E5%A4%96%E5%9C%8B%E6%B0%91/101%E5%B9%B4%E5%85%A8%E5%9C%8B%E4%B8%8D%E5%88%86%E5%8D%80%E5%8F%8A%E5%83%91%E5%B1%85%E5%9C%8B%E5%A4%96%E5%9C%8B%E6%B0%91%E7%AB%8B%E5%A7%94%E9%81%B8%E8%88%89.pdf",
+      "official_image": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/02%E7%AB%8B%E6%B3%95%E5%A7%94%E5%93%A1/101%E5%B9%B4%E7%AC%AC8%E5%B1%86/02%E5%85%A8%E5%9C%8B%E4%B8%8D%E5%88%86%E5%8D%80%E5%8F%8A%E5%83%91%E5%B1%85%E5%9C%8B%E5%A4%96%E5%9C%8B%E6%B0%91/101%E5%B9%B4%E5%85%A8%E5%9C%8B%E4%B8%8D%E5%88%86%E5%8D%80%E5%8F%8A%E5%83%91%E5%B1%85%E5%9C%8B%E5%A4%96%E5%9C%8B%E6%B0%91%E7%AB%8B%E5%A7%94%E9%81%B8%E8%88%89.pdf",
+      "asset_type": "2012 official election bulletin emblem crop (grayscale)",
+      "source_page_number": 2,
+      "source_crop_1024x1481": [
+        675,
+        707,
+        725,
+        745
+      ],
+      "source_sha256": "44ea97b830746012b5b0df07992a4de9b5706e3b2e74e12d6fb9b96ba20bdc60",
+      "rendered_sha256": "61d645779fa3537703f691a4d8cca6d1a0602dc5bf4ca31fa4276e6a1f117eb8",
+      "image_bytes": 9581,
+      "license": "Historical election bulletin reproduction, party identification only; original mark rights retained"
     }
   ],
   "unverified_or_unavailable": [
