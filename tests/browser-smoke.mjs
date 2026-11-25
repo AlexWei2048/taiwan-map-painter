@@ -1014,7 +1014,7 @@ test('All 2026 township candidates have complete, source-traced ballot numbers w
   const township=db.candidates.filter(c=>c.type==='township');
   const failures=db.districts.filter(d=>d.type==='township').flatMap(d=>{
    const numbers=d.candidateIds.map(id=>byId.get(id)?.number).sort((a,b)=>a-b);
-   return numbers.length!==d.candidateIds.length||numbers.some((x,i)=>x!==i+1)?[d.name]:[];
+   return numbers.length!==d.candidateIds.length||numbers.some((x,i)=>!Number.isInteger(x)||x<1||(i>0&&x===numbers[i-1]))?[d.name]:[];
   });
   const sample=Object.fromEntries([
    'township:64000:64000370:001',
@@ -1041,7 +1041,7 @@ test('All 2026 township candidates have complete, source-traced ballot numbers w
  assert.equal(status.unresolved,0);
  assert.equal(status.updates,64);
  assert.ok(status.recentSourceCount<=64,'Later official checks may replace original number evidence dates');
- assert.deepEqual(status.failures,[],'Every township district has a complete unique 1..N ballot sequence');
+ assert.deepEqual(status.failures,[],'Every included township candidate has a positive, unique ballot number; excluded candidates can leave gaps');
  assert.deepEqual([
   status.sample['township:64000:64000370:001'].number,
   status.sample['township:64000:64000370:002'].number,
@@ -1406,13 +1406,10 @@ test('A fresh visitor can open history and loads its resources only when needed'
  for(const asset of ['history-2022.js','history-legislative.css'])assert.equal(await page.locator('[data-history-asset="'+asset+'"][data-loaded="true"]').count(),1);
  await page.locator('#categoryFuture').click();
  assert.equal(await page.locator('#historyControls').isVisible(),false);
- assert.equal(await page.locator('#siteAbout summary').isVisible(),true);
- assert.equal(await page.locator('#siteAbout').getAttribute('open'),null);
- await page.locator('#siteAbout summary').click();
- assert.match(await page.locator('.sidebar-footer').innerText(),/网页开发：Alex Wei\n测试和推广：星夜长街/);
- assert.match(await page.locator('.sidebar-footer').innerText(),/数据来源/);
+ assert.equal(await page.locator('#siteAbout').isVisible(),true);
+ assert.match(await page.locator('#siteAbout .about-credits').innerText(),/网页开发\s+Alex Wei\s+测试和推广\s+星夜长街/);
+ assert.match(await page.locator('#siteAbout .about-sources').innerText(),/数据来源/);
  assert.equal(await page.locator('#siteUpdatedAt').count(),1);
- await page.locator('#siteAbout summary').click();
 });
 test('Nationwide council prediction uses a county picker and filters multi-seat candidates',async t=>{
  const page=await pageFor(t,{width:1440,height:920});
@@ -1983,7 +1980,7 @@ test('County, township and constituency boundaries maintain visual hierarchy acr
 
 test('2502 wording policy covers live UI, SVG image export and 2026/2022 CSV downloads',async t=>{
  const page=await pageFor(t,{width:1440,height:920});
- const source=await page.locator('.footer-data-source').textContent();
+ const source=await page.locator('#siteAbout .about-sources').textContent();
  assert.match(source,/台湾地区选举事务主管机构/);
  assert.doesNotMatch(source,/中选会/);
  await page.locator('#workspaceFree').click();
@@ -3014,7 +3011,7 @@ test('The earliest local cycle shows dated council returns and preserves actual 
   await page.evaluate(name=>History2022View.openRegion(History2022View.items().find(f=>f.name===name)),name);
   assert.match(await page.locator('#historyDialogTitle').textContent(),new RegExp(actualYear+'年'));
   assert.doesNotMatch(await page.locator('#historyDialogTitle').textContent(),/1993\/1994/);
-  assert.ok((await page.locator('#historyDialogRows tr td:nth-child(4)').allTextContents()).every(value=>value===''||value==='是'));
+  assert.ok((await page.locator('#historyDialogRows tr td:nth-child(4)').allTextContents()).every(value=>value===''||value==='现任'));
   await page.locator('#closeHistoryResult').click();
  }
 
@@ -3037,7 +3034,7 @@ test('The earliest local cycle shows dated council returns and preserves actual 
  assert.match(await page.locator('#historyDialogTitle').textContent(),/1994年 县市议员选举结果/);
  assert.doesNotMatch(await page.locator('#historyDialogTitle').textContent(),/1993\/1994/);
  assert.match(await page.locator('#historyDialogMessage').textContent(),/1994-01-29/);
- assert.ok((await page.locator('#historyDialogRows tr td:nth-child(4)').allTextContents()).every(value=>value===''||value==='是'));
+ assert.ok((await page.locator('#historyDialogRows tr td:nth-child(4)').allTextContents()).every(value=>value===''||value==='现任'));
  assert.equal(await page.locator('#historyDialogMessage a').getAttribute('href'),'https://web.cec.gov.tw/tpcec/article/list/1271');
  assert.match(await page.locator('#historyDialogRows').textContent(),/周雅淑/);
  await page.locator('#closeHistoryResult').click();
@@ -3168,15 +3165,13 @@ test('Sidebar uses clear headings and keeps site information directly below the 
  assert.equal(await page.locator('.brand small').count(),0);
  assert.equal(await page.locator('.intro > .eyebrow').count(),0);
  assert.equal(await page.locator('.workspace-categories + #siteAbout').count(),1);
- assert.equal(await page.locator('#siteAbout summary').isVisible(),true);
+ assert.equal(await page.locator('#siteAbout').isVisible(),true);
  assert.equal(await page.locator('.sidebar .section-label > span:first-child').count(),0);
  await page.locator('#categoryHistory').click();
  await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
  assert.equal(await page.locator('#historyControls .section-label').innerText(),'历史选举数据');
  assert.equal(await page.locator('.settings-panel .section-label').innerText(),'外观与工具');
- assert.equal(await page.locator('#siteAbout summary').isVisible(),true);
- await page.locator('#siteAbout summary').click();
- assert.equal(await page.locator('#siteAbout .sidebar-footer').isVisible(),true);
- await page.locator('#siteAbout summary').click();
- assert.equal(await page.locator('#siteAbout .sidebar-footer').isVisible(),false);
+ assert.equal(await page.locator('#siteAbout').isVisible(),true);
+ assert.equal(await page.locator('#siteAbout .about-sources').isVisible(),true);
+ assert.equal(await page.locator('#siteAbout .about-credits').isVisible(),true);
 });
