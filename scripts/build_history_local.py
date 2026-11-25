@@ -726,7 +726,8 @@ def add_1994_township(snapshot, audit):
                 raise ValueError(f'1994 {county["county"]} party shares do not reconcile')
         if summary := county.get('county_summary'):
             if (not summary['candidate_count'] >= summary['elected_count'] == len(county['winners'])
-                    or not 0 <= summary['turnout_pct'] <= 100):
+                    or not summary['registered_voters'] >= summary['ballots_cast'] > 0
+                    or round(100 * summary['ballots_cast'] / summary['registered_voters'], 2) != summary['turnout_pct']):
                 raise ValueError(f'1994 {county["county"]} candidacy or turnout summary does not reconcile')
     snapshot['partialTownshipReturns'] = partial
     audit['townshipArchives'] = {

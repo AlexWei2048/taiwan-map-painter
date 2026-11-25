@@ -912,7 +912,7 @@
     intro.textContent=norm(record.county)+' · '+record.election_date+' 投票 · 当选人资料。其他候选人和选区总票数待核。';
     if(record.county_summary){
      const stats=record.county_summary;
-     intro.append(' 全县 '+stats.candidate_count+' 人参选、'+stats.elected_count+' 人当选，投票率 '+stats.turnout_pct.toFixed(2)+'%。');
+     intro.append(' 全县 '+stats.candidate_count+' 人参选、'+stats.elected_count+' 人当选，选举人数 '+stats.registered_voters.toLocaleString('zh-CN')+'，投票人数 '+stats.ballots_cast.toLocaleString('zh-CN')+'，投票率 '+stats.turnout_pct.toFixed(2)+'%。');
     }
     const list=document.createElement('ul');
     for(const winner of record.winners){

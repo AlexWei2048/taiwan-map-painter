@@ -155,7 +155,8 @@ test('The partial 1994 township archive reconciles all 87 contests across seven 
  assert.equal(kinmen.county,'金門縣');
  assert.deepEqual(kinmen.winners.map(w=>w.votes),[5116,3135,2857,2018,1152,25]);
  assert.deepEqual([kinmen.county_summary.candidate_count,kinmen.county_summary.elected_count,
-  kinmen.county_summary.turnout_pct],[12,6,80.97]);
+  kinmen.county_summary.registered_voters,kinmen.county_summary.ballots_cast,kinmen.county_summary.turnout_pct],
+  [12,6,27385,22174,80.97]);
  assert.ok(!shard.contests.some(c=>c.election_id===election.election_id&&c.county_name==='金门县'));
  assert.equal(hualien.profiles.length,13);
  assert.deepEqual(['registered_voters','ballots_cast','valid_votes','invalid_votes']

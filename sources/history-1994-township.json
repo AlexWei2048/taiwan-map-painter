@@ -2810,8 +2810,11 @@
         "candidate_count": 12,
         "elected_count": 6,
         "turnout_pct": 80.97,
-        "source_url": "https://ws.kinmen.gov.tw/Download.ashx?icon=..pdf&n=6YeR6ZaA57ij56S%2B5pyD5oyH5qiZ57Wx6KiIKDEwMSkucGRm&u=LzAwMS9VcGxvYWQvMzExL3JlbGZpbGUvMTAwMTAvMzI3NzA4LzFmYmFmZTVmLWVjZjAtNDZiYy04ZTJmLWVhYWYxOWNkY2YxOC5wZGY%3D",
-        "source_locator": "金門縣社會指標統計（民國101年）表34，頁102–103"
+        "source_url": "https://ws.kinmen.gov.tw/Download.ashx?n=6KGM5pS/57WE57mU5ZCI5L21LnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvMzExL3JlbGZpbGUvODA0Ni8xNDY2NS9hODE0ZTRhZi04MWVmLTRjYjItYjMzNy0zYmE1ZTA1NDZlOWYucGRm",
+        "source_locator": "金門縣統計年報表3-11，第6屆，頁111–112",
+        "registered_voters": 27385,
+        "ballots_cast": 22174,
+        "corroboration_url": "https://ws.kinmen.gov.tw/Download.ashx?icon=..pdf&n=6YeR6ZaA57ij56S%2B5pyD5oyH5qiZ57Wx6KiIKDEwMSkucGRm&u=LzAwMS9VcGxvYWQvMzExL3JlbGZpbGUvMTAwMTAvMzI3NzA4LzFmYmFmZTVmLWVjZjAtNDZiYy04ZTJmLWVhYWYxOWNkY2YxOC5wZGY%3D"
       }
     },
     {
