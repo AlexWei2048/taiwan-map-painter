@@ -157,3 +157,29 @@
 .trend-parliament-pair{grid-column:span 2}.trend-parliament-pair svg{min-width:560px}@media(max-width:680px){.trend-parliament-pair{grid-column:1/-1}.trend-parliament-pair svg{min-width:520px}}
 
 .trend-parliament-paired-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.trend-parliament-paired-grid .trend-parliament-pair{grid-column:1/-1}@media(max-width:680px){.trend-parliament-paired-grid{grid-template-columns:1fr}}
+
+/* Legislative result tables: preserve the native cell box for party badges
+   and balance widths across the actual columns (including incumbency). */
+#historyResults .history-legislative-table{table-layout:fixed;width:100%;min-width:760px;border-collapse:separate;border-spacing:0}
+#historyResults .history-legislative-table[data-ballot="party"]{min-width:480px}
+#historyResults .history-legislative-table :is(th,td){box-sizing:border-box;vertical-align:middle;text-align:center}
+#historyResults .history-legislative-table .history-district-divider th{text-align:left;min-width:0}
+#historyResults .history-legislative-table tbody td{white-space:normal;overflow-wrap:anywhere}
+#historyResults .history-legislative-table .history-number{white-space:nowrap}
+#historyResults .history-legislative-table td.history-party-td{display:table-cell;text-align:center;vertical-align:middle}
+#historyResults .history-legislative-table td>.history-party-inline{display:inline-flex;justify-content:center;align-items:center;gap:6px;max-width:100%;vertical-align:middle;white-space:normal;text-align:center}
+#historyResults .history-legislative-table .history-party-inline img{flex:none;width:20px;height:20px;margin:0}
+#historyResults .history-legislative-table .history-party-inline span{min-width:0;overflow-wrap:anywhere}
+#historyResults .history-legislative-table:not([data-ballot="party"]) .legislative-col-county{width:9%}
+#historyResults .history-legislative-table:not([data-ballot="party"]) .legislative-col-area{width:18%}
+#historyResults .history-legislative-table .legislative-col-number{width:6%}
+#historyResults .history-legislative-table .legislative-col-name{width:12%}
+#historyResults .history-legislative-table .legislative-col-incumbent{width:10%}
+#historyResults .history-legislative-table:not([data-ballot="party"]) .legislative-col-party{width:23%}
+#historyResults .history-legislative-table:not([data-ballot="party"]) .legislative-col-votes{width:9%}
+#historyResults .history-legislative-table:not([data-ballot="party"]) .legislative-col-share{width:8%}
+#historyResults .history-legislative-table .legislative-col-elected{width:5%}
+#historyResults .history-legislative-table[data-ballot="party"] .legislative-col-area{width:26%}
+#historyResults .history-legislative-table[data-ballot="party"] .legislative-col-party{width:38%}
+#historyResults .history-legislative-table[data-ballot="party"] .legislative-col-votes{width:19%}
+#historyResults .history-legislative-table[data-ballot="party"] .legislative-col-share{width:17%}
