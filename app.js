@@ -45,10 +45,40 @@ function cleanProject(s){
  for(const identity of ['party','plains','mountain'])for(const [k,v]of Object.entries(s.legislativeTownFills?.[identity]||{}))if(/^\d{8}$/.test(k)&&ids.has(v))out.legislativeTownFills[identity][k]=v;
  out.title=simplify(String(s.title||'')).slice(0,80);out.legendTitle=simplify(String(s.legendTitle||'图例')).slice(0,40);out.county=simplify(String(s.county||''));out.level=LEVELS.includes(s.level)?s.level:'towns';out.labels=s.labels!==false;out.selected=ids.has(s.selected)?s.selected:out.palette[0].id;if(s.settingsRevision!==2){for(const p of out.palette){const preset=partyMatch(p.name)||PARTY_PRESETS.find(x=>x.id===p.id&&['blue','green','aqua','gray','red'].includes(x.id));if(preset){p.name=preset.name;p.color=preset.color}}for(const p of presetPalette())if(!out.palette.some(x=>partyMatch(x.name)?.id===p.id))out.palette.push(p);out.labels=true;}out.settingsRevision=2;if(![2,3].includes(Number(s.paletteRevision)))out.palette=upgradeDefaultPalette(out.palette);out.paletteRevision=Number(s.paletteRevision)===3?3:2;migrateBoundaryStyle(out,s);out.showTownBoundaries=s.showTownBoundaries!==false;out.villageTown=String(s.villageTown||'').slice(0,11);out.districtLeaders=s.districtLeaders===true;const cleaned=sanitizeElectionState(out,s);if(cleaned.paletteRevision!==3){pruneUnusedAutoPredictionPalette(cleaned);cleaned.paletteRevision=3}return cleaned;
 }
-try{const s=localStorage.getItem(KEY);if(s)state=cleanProject(JSON.parse(s))}catch(e){console.warn('浏览器保存的方案未载入',e.message)}
+let planBundle=null,planRaw=null,planStorageBlocked=false;
+try{const saved=localStorage.getItem(KEY);if(saved)state=cleanProject(JSON.parse(saved))}catch(e){console.warn('浏览器保存的方案未载入',e.message)}
+try{
+ planRaw=localStorage.getItem(MapPlanStore.KEY);
+ if(planRaw!==null){const bundle=MapPlanStore.validate(JSON.parse(planRaw));const project=cleanProject(bundle.plans.find(p=>p.id===bundle.activeId).project);planBundle=bundle;state=project}
+}catch(e){planStorageBlocked=true;console.warn('多方案未载入，保留原始存储',e.message)}
 function projectStateForSave(){return state}
-function persist(){clearTimeout(persistTimer);persistTimer=setTimeout(()=>{try{localStorage.setItem(KEY,JSON.stringify(projectStateForSave()));const when=new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});$('saved').textContent='● 已保存 '+when;$('saved').title='只保存在本机（'+when+'），请定期下载备份';}catch(e){$('saved').textContent='自动保存失败，请下载方案';$('saved').title='浏览器存储可能不足';}},140)}
-window.addEventListener('pagehide',()=>{clearTimeout(persistTimer);try{localStorage.setItem(KEY,JSON.stringify(projectStateForSave()))}catch(e){/* browser storage unavailable */}});
+function writeProject(){
+ if(planStorageBlocked)throw Error('多方案存储无法读取，请先下载备份');
+ if(planBundle){
+  const next=MapPlanStore.capture(planBundle,projectStateForSave());
+  planRaw=MapPlanStore.commit(localStorage,planRaw,next);planBundle=next;
+ }else{
+  if(localStorage.getItem(MapPlanStore.KEY)!==null)throw Error('另一标签页已启用多方案，请刷新');
+  localStorage.setItem(KEY,JSON.stringify(projectStateForSave()));
+ }
+}
+function persist(){clearTimeout(persistTimer);persistTimer=setTimeout(()=>{try{writeProject();const when=new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});$('saved').textContent='● 已保存 '+when;$('saved').title='只保存在本机（'+when+'），请定期下载备份';}catch(e){$('saved').textContent='自动保存失败，请下载方案';$('saved').title=e.message;}},140)}
+window.addEventListener('pagehide',()=>{clearTimeout(persistTimer);try{writeProject()}catch(e){/* leave existing storage intact */}});
+function currentPlanName(){return planBundle?.plans.find(p=>p.id===planBundle.activeId)?.name||'原有方案'}
+function applyPlanAction(action){
+ if(planStorageBlocked)throw Error('多方案存储无法读取，请先下载当前备份');
+ if(!data||window.History2022View?.active())throw Error('请先返回岛屿画布');
+ clearTimeout(persistTimer);
+ const base=planBundle||MapPlanStore.initial(state),next=MapPlanStore.change(base,state,action);
+ const switched=next.activeId!==base.activeId;
+ const project=switched?cleanProject(next.plans.find(p=>p.id===next.activeId).project):state;
+ // Validate before writing; a failed storage write leaves the current project untouched.
+ if(switched)next.plans.find(p=>p.id===next.activeId).project=project;
+ const raw=MapPlanStore.commit(localStorage,planRaw,next);
+ planBundle=next;planRaw=raw;
+ if(switched){state=project;undo=[];redo=[];erase=false;view=null;baseView=null;electionResultCache.clear();syncInputs();render()}
+ updateHistory();refreshPlanManager();toast('已保存：'+currentPlanName());
+}
 function toast(s){$('toast').textContent=s;$('toast').classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('visible'),2600)}
 function pushHistory(){undo.push(clone(state));if(undo.length>100)undo.shift();redo=[];updateHistory()}
 function updateHistory(){$('undo').disabled=!undo.length;$('redo').disabled=!redo.length}
@@ -1830,7 +1860,7 @@ function requestResetConfirmation(scope){
  const all=scope==='all';
  $('confirmResetTitle').textContent=all?'恢复地图初始状态？':'清空当前界面地图数据？';
  $('confirmResetMessage').textContent=all
-  ?'将清除本机保存的全部预测、乡镇预测、手动填色、投票记录、自定义政党与党徽、图例调整及地图显示设置，并恢复默认视图。此操作不可撤销。网站内置候选人名单、历史选举结果和地图底图不会被删除。'
+  ?'将清除当前方案保存的全部预测、乡镇预测、手动填色、投票记录、自定义政党与党徽、图例调整及地图显示设置，并恢复默认视图。其他方案不受影响。此操作不可撤销。网站内置候选人名单、历史选举结果和地图底图不会被删除。'
   :'将清除「'+currentResetScopeLabel()+'」当前可见范围内的预测记录，或当前图层的填色与投票数据。其他县市、选举类别、选区类型及未显示图层的数据会保留；此操作可通过撤销恢复。';
  $('confirmReset').textContent=all?'确认恢复初始状态':'确认清空当前范围';
  $('resetChoiceDialog').close();
@@ -1855,6 +1885,31 @@ $('confirmReset').onclick=()=>{
 };
 function download(blob,name){const a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download=name;a.style.display='none';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),10000)}
 const filename=()=>((state.title||((state.county||'全台')+'地图填色')).replace(/[\\/:*?"<>|]/g,'_').slice(0,80));
+function refreshPlanManager(){
+ const list=$('planList');if(!list)return;
+ const bundle=planBundle||MapPlanStore.initial(state);
+ const select=$('activePlanSelect');select.replaceChildren(...bundle.plans.map(p=>new Option(p.name,p.id)));select.value=bundle.activeId;
+ $('planNameInput').value=currentPlanName();$('planDelete').disabled=bundle.plans.length===1;
+ $('planCreate').disabled=$('planCopy').disabled=bundle.plans.length>=MapPlanStore.MAX;
+ $('planCurrentName').textContent=currentPlanName();
+ list.replaceChildren();
+ for(const p of bundle.plans){
+  const row=document.createElement('div');row.className='plan-list-row';
+  const title=document.createElement('strong');title.textContent=p.name+(p.id===bundle.activeId?'（当前）':'');row.append(title);
+  const project=p.id===bundle.activeId?state:p.project;
+  const counts=document.createElement('span');counts.textContent=Object.keys(project.predictions||{}).length+' 个选区已录入';row.append(counts);
+  const save=document.createElement('button');save.type='button';save.className='button quiet';save.textContent='下载 JSON';save.onclick=()=>download(new Blob([JSON.stringify(project,null,2)],{type:'application/json'}),p.name.replace(/[\\/:*?"<>|]/g,'_')+'.json');row.append(save);list.append(row);
+ }
+ if(typeof renderPlanComparison==='function')renderPlanComparison(bundle);
+}
+function handlePlan(action){try{applyPlanAction(action);$('planError').textContent=''}catch(e){$('planError').textContent=e.message||'方案操作失败';$('activePlanSelect').value=planBundle?.activeId||'original'}}
+$('managePlans').onclick=()=>{if(window.History2022View?.active()){toast('请先返回岛屿画布');return}$('planError').textContent='';refreshPlanManager();$('planDialog').showModal()};
+$('activePlanSelect').onchange=()=>handlePlan({type:'switch',id:$('activePlanSelect').value});
+$('planRename').onclick=()=>handlePlan({type:'rename',name:$('planNameInput').value});
+$('planCreate').onclick=()=>handlePlan({type:'create',id:'plan-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),name:$('planNameInput').value,project:defaults()});
+$('planCopy').onclick=()=>handlePlan({type:'copy',id:'plan-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),name:$('planNameInput').value+'（副本）'});
+$('planDelete').onclick=()=>{if(confirm('删除当前方案「'+currentPlanName()+'」？其他方案不会被删除。'))handlePlan({type:'delete',id:planBundle?.activeId||'original'})};
+$('planCurrentName').textContent=currentPlanName();
 $('saveProject').onclick=()=>{download(new Blob([JSON.stringify(projectStateForSave(),null,2)],{type:'application/json'}),filename()+'.json');toast('方案已保存，可在其他设备打开')};$('loadProject').onclick=()=>$('projectFile').click();$('projectFile').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{if(file.size>10000000)throw Error('方案文件过大');const next=cleanProject(JSON.parse(await file.text()));if(next.county&&!data.counties.some(f=>f.name===next.county))throw Error('方案中的县市未找到');pushHistory();state=next;erase=false;syncInputs();render();persist();toast('已打开地图方案')}catch(err){toast(err.message||'无法读取方案')}finally{e.target.value=''}};
 function exportPredictionWinnerRows(){
  if(typeof History2022View!=='undefined'&&History2022View.active())return History2022View.exportRows();
