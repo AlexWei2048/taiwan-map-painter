@@ -3137,10 +3137,25 @@ test('Legislative seat trends default to all years and show complete integer par
  await page.locator('.trend-parliament-card svg').first().waitFor({timeout:60000});
  assert.equal(await page.locator('#trendYears input:checked').count(),10);
  assert.match(await page.locator('#trendScope').textContent(),/全部类型（总席次；不分区票得票率）/);
- assert.equal(await page.locator('#trendCharts table thead th').last().textContent(),'合计');
+ assert.equal(await page.locator('#trendCharts table').first().locator('thead th').last().textContent(),'合计');
+ assert.equal(await page.locator('#trendCharts table').last().locator('thead th').last().textContent(),'显示合计');
  const graph=page.locator('#trendCharts > .trend-card svg').first();
  assert.ok((await graph.locator('[data-trend-axis-tick]').allTextContents()).every(v=>/^\d+$/.test(v)));
  assert.deepEqual((await graph.locator('[data-trend-total]').allTextContents()).map(Number),[161,164,225,225,225,113,113,113,113,113]);
+ const expected=await page.evaluate(async()=>{const rows=await Promise.all(HistoryLegislative.YEARS.map(async y=>{const s=await HistoryLegislative.load(y);return HistoryTrends.allLegislativeSeats(s,HistoryLegislativeParty.build(y,s),simplify)}));return {parties:HistoryTrends.legislativeSeatTrendParties(rows),rows:rows.map(r=>({year:r.year,parties:r.parties}))}});
+ const plain=p=>p.replace(/[“”]/g,'');
+ const legends=(await graph.locator('[data-trend-legend]').evaluateAll(ns=>ns.map(n=>n.getAttribute('data-trend-legend')))).map(plain);
+ assert.deepEqual(legends,expected.parties.map(plain));assert.ok(!legends.includes('其他政党'));
+ const labels=await graph.locator('[data-trend-seat-label]').evaluateAll(ns=>ns.map(n=>({year:Number(n.getAttribute('data-trend-seat-year')),party:n.getAttribute('data-trend-seat-label'),value:Number(n.firstChild.textContent),title:n.querySelector('title')?.textContent,aria:n.getAttribute('aria-label')})));
+ const expectedLabels=expected.rows.flatMap(r=>Object.entries(r.parties).filter(([,v])=>v>0).map(([p,v])=>r.year+'|'+plain(p)+'|'+v)).sort();
+ assert.deepEqual(labels.map(l=>l.year+'|'+plain(l.party)+'|'+l.value).sort(),expectedLabels);
+ assert.ok(labels.every(l=>l.title?.includes(l.value+'席')&&l.aria?.includes(plain(l.party))||l.title?.includes(l.party)&&l.aria?.includes(l.value+'席')));
+ for(const position of ['inside','outside']){
+  const number=graph.locator('[data-trend-seat-position="'+position+'"]').first();
+  const party=await number.getAttribute('data-trend-seat-label'),count=await number.evaluate(n=>n.firstChild.textContent);
+  await number.hover();assert.ok(plain(await page.locator('#trendPointReadout strong').textContent()).includes(plain(party)));assert.ok((await page.locator('#trendPointReadout strong').textContent()).includes(count+'席'));
+ }
+
  const last=page.locator('.trend-parliament-card').last();
  assert.equal(await last.locator('[data-seat-dot]').count(),113);
  assert.equal(await last.locator('[data-majority-seats]').getAttribute('data-majority-seats'),'57');

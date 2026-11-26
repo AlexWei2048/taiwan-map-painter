@@ -26,6 +26,12 @@ function partyListTrendGroups(rows){
  for(const r of rows||[])if(r.complete)for(const [p,v] of Object.entries(r.parties||{}))if(Number.isFinite(v)&&!partyListTrendExcluded(p))present.add(p);
  return {individual:PARTY_LIST_TREND_ORDER.filter(p=>present.has(p)),other:[...present].filter(p=>!PARTY_LIST_TREND_ORDER.includes(p)).sort((a,b)=>a.localeCompare(b,'zh'))};
 }
+// Legislative seat charts retain every party with a positive official seat count.
+function legislativeSeatTrendParties(rows){
+ const totals=new Map();
+ for(const r of rows||[])if(r.complete)for(const [p,n] of Object.entries(r.parties||{}))if(Number.isSafeInteger(n)&&n>0)totals.set(p,(totals.get(p)||0)+n);
+ return [...totals].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],'zh')).map(([p])=>p);
+}
 function candidateTrendTooltip(row,key){
  if(!row?.complete||!Object.hasOwn(row.parties,key))return'';
  const entries=row.candidateDetails?.[key]||[],label=row.partyMeta?.[key]?.label||key;
@@ -446,7 +452,7 @@ function createLegislativeTrendCache({normalize=String,buildList,maxScopes=64}={
  }
  return{read,clear(){cache=new WeakMap();lists=new WeakMap()}};
 }
-const api={partyListTrendKey,partyListTrendGroups,partyListTrendExcluded,PARTY_LIST_TREND_ORDER,createLegislativeTrendCache,summaryAlgorithmVersion:1,aggregate,value,difference,modern,percent,partyTrendValue,candidateTrendTooltip,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,trendChartScopes,historicalScopeRows,legislativeVoteShares,councilBallotRows,localPartyVoteShares,electionDates,trendEffectiveSelection,LEGISLATIVE_TOTALS};
+const api={legislativeSeatTrendParties,partyListTrendKey,partyListTrendGroups,partyListTrendExcluded,PARTY_LIST_TREND_ORDER,createLegislativeTrendCache,summaryAlgorithmVersion:1,aggregate,value,difference,modern,percent,partyTrendValue,candidateTrendTooltip,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,trendChartScopes,historicalScopeRows,legislativeVoteShares,councilBallotRows,localPartyVoteShares,electionDates,trendEffectiveSelection,LEGISLATIVE_TOTALS};
 if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
 root.HistoryTrends=api;
 })(typeof window==='undefined'?{}:window);

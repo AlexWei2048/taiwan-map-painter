@@ -15,6 +15,8 @@ const color=p=>p==='并列'?'#9ba69f':p==='其他政党'?'#aebbb2':predictionPar
 // Distinct chart-only fallback colors, not historical official party colors.
 const listFallbackColors={'民主联盟':'#5366B7'};
 const listColor=p=>{const original=color(p);return original.toLowerCase()==='#738772'?(listFallbackColors[p.replace(/[“”]/g,'')]||original):original};
+// Preserve configured party colors; assign repeatable chart-only colors to unconfigured historical parties.
+const seatColor=p=>{const original=listColor(p);if(original.toLowerCase()!=='#738772')return original;let hash=0;for(const c of p.replace(/[“”]/g,''))hash=(Math.imul(hash,31)+c.codePointAt(0))>>>0;const h=hash%360,s=.57,l=.43,c=(1-Math.abs(2*l-1))*s,x=c*(1-Math.abs(h/60%2-1)),m=l-c/2,rgb=h<60?[c,x,0]:h<120?[x,c,0]:h<180?[0,c,x]:h<240?[0,x,c]:h<300?[x,0,c]:[c,0,x];return '#'+rgb.map(v=>Math.round((v+m)*255).toString(16).padStart(2,'0')).join('')};
 const yearsFor=o=>o==='president'?HistoryPresidential.YEARS:o==='legislative'?HistoryLegislative.YEARS:HistoryLocal.years(o,window.HISTORY_2026_RESULTS_AVAILABLE===true);
 const label=(y,o)=>o==='council'&&[1994,1998,2002].includes(Number(y))?String(y):HistoryLocal.yearLabel(y,o);
 const optionText=id=>$(id)?.selectedOptions?.[0]?.textContent||'';
@@ -189,12 +191,13 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
   if(!row.complete)g.append(svg('text',{x:x(i),y:bottom+(showScope&&row.scopeLabel?51:37),'text-anchor':'middle',fill:'#956e51','font-size':10},'缺档'));
  });
  const addPoint=(p,row,s,v)=>{
-  const summary=(row.label||row.year)+' '+(row.scopeLabel?row.scopeLabel+' ':'')+s.name+'：'+fmt(v,pct)+(row.dates?.length?' · '+row.dates.join(' / '):'');
+  const summary=(row.label||row.year)+' '+(row.scopeLabel?row.scopeLabel+' ':'')+s.name+'：'+fmt(v,pct)+(stack&&integer?'席':'')+(row.dates?.length?' · '+row.dates.join(' / '):'');
   const detail=s.tooltip?.(row)||'';
   const tooltip=detail?(row.label||row.year)+(row.scopeLabel?' · '+row.scopeLabel:'')+(row.dates?.length?' · '+row.dates.join(' / '):'')+'\n'+detail:summary;
   p.append(svg('title',{},tooltip));
   p.setAttribute('tabindex','0');p.setAttribute('role','button');p.setAttribute('aria-label',tooltip.replaceAll('\n','；'));
-  const click=()=>showYear(row.year,row.county,row.label,summary,detail);p.addEventListener('click',click);p.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();click()}})
+  const click=()=>showYear(row.year,row.county,row.label,summary,detail);p.addEventListener('click',click);p.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();click()}});
+  if(p.hasAttribute('data-trend-seat-label')){p.addEventListener('pointerenter',click);p.addEventListener('focus',click)}
  };
  if(stack){
   const labelColor=fill=>{const m=/^#([0-9a-f]{6})$/i.exec(fill||'');if(!m)return'#fff';const c=m[1].match(/../g).map(v=>parseInt(v,16));return(c[0]*.299+c[1]*.587+c[2]*.114)>150?'#17352b':'#fff'};
@@ -206,16 +209,17 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
     addPoint(p,row,s,v);g.append(p);
     if(integer){
      const textValue=fmt(v),inside=h>=13&&barWidth>=textValue.length*6+8;
-     annotations.push({value:textValue,middle,inside,color:s.color,name:s.name});
+     annotations.push({value:textValue,middle,inside,color:s.color,name:s.name,series:s,seats:v});
     }
     acc+=v;
    }
-   for(const a of annotations.filter(a=>a.inside))g.append(svg('text',{x:x(i),y:a.middle+3,'text-anchor':'middle','font-size':10,'font-weight':700,fill:labelColor(a.color),'pointer-events':'none','data-trend-seat-label':a.name},a.value));
+   const seatLabel=(a,attrs)=>{const text=svg('text',{...attrs,'pointer-events':'all',cursor:'pointer','data-trend-seat-label':a.name,'data-trend-seat-year':row.year,'data-trend-seat-position':a.inside?'inside':'outside'},a.value);addPoint(text,row,a.series,a.seats);g.append(text)};
+   for(const a of annotations.filter(a=>a.inside))seatLabel(a,{x:x(i),y:a.middle+3,'text-anchor':'middle','font-size':10,'font-weight':700,fill:labelColor(a.color)});
    let last=top-4;
    for(const a of annotations.filter(a=>!a.inside).sort((a,b)=>a.middle-b.middle)){
     const baseline=Math.max(a.middle+3,last+11,top+7);last=baseline;
     const edge=x(i)+barWidth/2;
-    g.append(svg('line',{x1:edge,x2:edge+6,y1:a.middle,y2:baseline-3,stroke:a.color,'stroke-width':1,'pointer-events':'none'}),svg('text',{x:edge+7,y:baseline,'font-size':9,'font-weight':700,fill:'#213b31','pointer-events':'none','data-trend-seat-label':a.name},a.value));
+    g.append(svg('line',{x1:edge,x2:edge+6,y1:a.middle,y2:baseline-3,stroke:a.color,'stroke-width':1,'pointer-events':'none'}));seatLabel(a,{x:edge+7,y:baseline,'font-size':9,'font-weight':700,fill:'#213b31'});
    }
    if(row.complete)g.append(svg('text',{x:x(i),y:y(acc)-6,'text-anchor':'middle','font-size':11,'font-weight':700,'data-trend-total':String(acc)},fmt(acc)));
   })
@@ -295,14 +299,14 @@ function parliamentSvg(row,conf,totalLeg){
   let index=0;
   for(const [party,count] of parties){
    const group=svg('g',{'data-seat-party':party,'aria-label':party+' '+count+'席'});group.append(svg('title',{},party+' '+count+'席'));
-   const fill=conf.metric==='seats'&&party!==norm(conf.party)?'#cbd4ce':color(party);
+   const fill=conf.metric==='seats'&&party!==norm(conf.party)?'#cbd4ce':(conf.office==='legislative'?seatColor:color)(party);
    for(let i=0;i<count;i++){const p=points[index++];group.append(svg('circle',{cx:cx+p.x*r,cy:cy+p.y*r,r:dot,fill,'data-seat-dot':'1'}))}
    g.append(group);
   }
   g.append(svg('text',{x:cx,y:cy-12,'text-anchor':'middle','font-size':25,'font-weight':700,'data-seat-total':total},total+'席'));
   if(conf.metric==='seats')g.append(svg('text',{x:cx,y:cy+5,'text-anchor':'middle','font-size':11},conf.party+' '+(row.parties?.[norm(conf.party)]||0)+'席'));
   parties.forEach(([p,n],i)=>{
-   const x=16+(i%2)*202,y=263+Math.floor(i/2)*23,fill=conf.metric==='seats'&&p!==norm(conf.party)?'#cbd4ce':color(p);
+   const x=16+(i%2)*202,y=263+Math.floor(i/2)*23,fill=conf.metric==='seats'&&p!==norm(conf.party)?'#cbd4ce':(conf.office==='legislative'?seatColor:color)(p);
    g.append(svg('rect',{x,y:y-12,width:8,height:12,rx:2,fill}));
    const logo=logoFor(predictionParty(p));
    if(logo)appendCircularPartyLogo(g,logo,x+12,y-15,17,{'data-seat-logo':p});
@@ -326,11 +330,11 @@ function renderParliaments(out,rows,conf,totalLeg){
  }
  out.append(section);
 }
-function partySeries(rows,listMode=false){
+function partySeries(rows,listMode=false,allLegislativeParties=false){
  const totals=new Map();for(const r of rows)for(const [p,v] of Object.entries(r.parties||{}))totals.set(p,(totals.get(p)||0)+v);
  const meta=new Map();for(const r of rows)for(const [p,m] of Object.entries(r.partyMeta||{}))meta.set(p,m);
- const sorted=[...totals].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],'zh')).map(x=>x[0]),groups=listMode?T.partyListTrendGroups(rows):null,top=groups?groups.individual:sorted.slice(0,7),rest=groups?groups.other:sorted.slice(7);
- const series=top.map(p=>({name:meta.get(p)?.label||displayParty(p),color:(listMode?listColor:color)(meta.get(p)?.party||p),get:r=>T.partyTrendValue(r,p),tooltip:r=>r.candidateDetails?T.candidateTrendTooltip(r,p):'',party:p}));
+ const sorted=[...totals].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],'zh')).map(x=>x[0]),groups=listMode?T.partyListTrendGroups(rows):null,top=allLegislativeParties?T.legislativeSeatTrendParties(rows):groups?groups.individual:sorted.slice(0,7),rest=allLegislativeParties?[]:groups?groups.other:sorted.slice(7);
+ const series=top.map(p=>({name:meta.get(p)?.label||displayParty(p),color:(allLegislativeParties?seatColor:listMode?listColor:color)(meta.get(p)?.party||p),get:r=>T.partyTrendValue(r,p),tooltip:r=>r.candidateDetails?T.candidateTrendTooltip(r,p):'',party:p}));
  if(rest.length)series.push({name:'其他政党',color:color('其他政党'),get:r=>T.partyTrendValue(r,'',rest),tooltip:r=>r.candidateDetails?rest.map(p=>T.candidateTrendTooltip(r,p)).filter(Boolean).join('\n'):'',parties:rest});
  return series;
 }
@@ -351,7 +355,7 @@ function renderLegislative(conf,anchor,out){
  if(T.historicalCountyFamily(conf.county).length>1)out.append(node('p','data-help','升格前的原县、原市分别统计；合并后显示新的直辖市，跨边界不连线。'));
  let seatSeries=[];
  if(seatBallot){
-  seatSeries=partySeries(seatRows);
+  seatSeries=partySeries(seatRows,false,isLeg);
   const seatType=allSeats?'全部民代':ballot==='all'?(national?'全部议员':isLeg?'区域民代':'区域议员'):({regional:isLeg?'区域民代':'区域议员',plains:'平地少数民族',mountain:'山地少数民族',party:'不分区',indigenous:'原住民'}[ballot]||ballot);
   const title=(isLeg?'立法机构':'县市议员')+' · '+seatType+' · 政党当选席次趋势';
   const note=allSeats?'区域、平地与山地少数民族、不分区及旧制侨选的正式当选席次合计。':national?'仅计所选民代类别在全部地区正式当选的席次。':isLeg?'仅计该范围区域民代的正式当选席次；其余类型不分摊到县市。':'仅计该范围可归属的议员席次。';

@@ -353,3 +353,15 @@ test('All ten archived party-list elections preserve original rates and omit ind
  assert.equal(T.partyTrendValue(rows[0],'时代力量'),null);
  assert.ok(rows[0].parties['无党籍']>0,'source record remains intact');
 });
+
+test('Legislative seat series includes all seat-winning parties, not an aggregate other category',()=>{
+ const P=require('../history-legislative-party.js'),norm=require('../assets/opencc.js').Converter({from:'t',to:'cn'});
+ const rows=Object.keys(T.LEGISLATIVE_TOTALS).map(y=>{const s=require('../assets/history-legislative-'+y+'.json');return T.allLegislativeSeats(s,P.build(Number(y),s),norm)});
+ assert.ok(rows.every(r=>r.complete));
+ const names=T.legislativeSeatTrendParties(rows);
+ assert.ok(names.length>7);assert.ok(names.includes('时代力量'));assert.ok(names.includes('无党籍'));assert.ok(!names.includes('其他政党'));
+ for(const r of rows){assert.equal(names.reduce((n,p)=>n+(T.partyTrendValue(r,p)??0),0),r.total);for(const [p,v] of Object.entries(r.parties))if(v>0)assert.ok(names.includes(p),p)}
+ const fake=[{complete:true,parties:{甲:2,乙:0,丙:1}},{complete:false,parties:{丁:100}}];
+ assert.deepEqual(T.legislativeSeatTrendParties(fake),['甲','丙']);
+ console.log('All legislative seat-winning party series:',JSON.stringify(names));
+});
