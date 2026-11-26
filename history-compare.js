@@ -143,6 +143,7 @@ function setBox(){
 }
 function color(p){if(!p)return '#edf1e9';return (typeof partyMatch==='function'?partyMatch(p)?.color:null)||'#87988e'}
 const rate=v=>Number.isFinite(v)?v.toFixed(2)+'%':'—',signed=(v,d=2)=>Number.isFinite(v)?(v>0?'+':'')+v.toFixed(d):'—';
+function seatBaseMax(){return Math.max(1,...(models?[...models[0].summary.counties.values()].map(r=>r.seats??0):[]))}
 function drawMap(model,id,index){
  const graph=$(id);graph.replaceChildren();const defs=svg('defs');graph.append(defs);
  for(const f of model.shapes){
@@ -151,6 +152,9 @@ function drawMap(model,id,index){
   if(selected&&Number.isFinite(share))fill=typeof ElectionCore!=='undefined'?ElectionCore.shade(color(selected),share,0,100):color(selected);
   else if(!selected&&leaders.length===1)fill=color(leaders[0]);
   else if(!selected&&leaders.length>1){const pid='compare-tie-'+index+'-'+defs.childElementCount,g=svg('linearGradient',{id:pid,x1:'0%',y1:'0%',x2:'100%',y2:'100%'});leaders.forEach((p,i)=>{g.append(svg('stop',{offset:(i/leaders.length*100)+'%','stop-color':color(p)}),svg('stop',{offset:((i+1)/leaders.length*100)+'%','stop-color':color(p)}))});defs.append(g);fill='url(#'+pid+')'}
+  const baseSeats=index===0&&mode.value==='seats'&&selected;
+  const seats=baseSeats&&entry?.complete&&entry.seats!==null?(entry.parties[selected]?.seats||0):null;
+  if(baseSeats)fill=Number.isFinite(seats)?ElectionCore.shade(color(selected),seats,0,seatBaseMax()):'#d9dfdc';
   const changeMode=index===1&&mode.value!=='results'&&(mode.value==='turnover'||selected);
   let change=null,changeLabel='';
   if(changeMode){
@@ -164,7 +168,7 @@ function drawMap(model,id,index){
     changeLabel=Number.isFinite(change)?signed(change,mode.value==='seats'?0:2)+(mode.value==='seats'?' 席':' 个百分点'):'不可比较';
    }
   }
-  const path=svg('path',{d:f.d,fill,stroke:name===chosen?'#182d26':'#546f62','stroke-width':name===chosen?2.5:.8,'vector-effect':'non-scaling-stroke','fill-rule':f.fillRule||'evenodd',tabindex:'0',role:'button','aria-label':name+' '+(changeMode?changeLabel:entry?.complete?(selected?rate(share):leaders.join('、')||'席次待核'):'缺档或不适用')});
+  const path=svg('path',{d:f.d,fill,stroke:name===chosen?'#182d26':'#546f62','stroke-width':name===chosen?2.5:.8,'vector-effect':'non-scaling-stroke','fill-rule':f.fillRule||'evenodd',tabindex:'0',role:'button','aria-label':name+' '+(changeMode?changeLabel:baseSeats?(Number.isFinite(seats)?seats+' 席':'席次待核'):entry?.complete?(selected?rate(share):leaders.join('、')||'席次待核'):'缺档或不适用')});
   const title=svg('title');title.textContent=path.getAttribute('aria-label');path.append(title);path.onclick=()=>{chosen=name;county.value=name;render()};path.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();chosen=name;county.value=name;render()}};graph.append(path);
  }
 }
@@ -196,7 +200,7 @@ function render(){
  const body=node('tbody'),parties=[...new Set([...Object.keys(x?.parties||{}),...Object.keys(y?.parties||{})])].sort((p,q)=>(y?.parties[q]?.votes||0)-(y?.parties[p]?.votes||0)||p.localeCompare(q,'zh-CN'));
  for(const p of parties){const tr=node('tr'),l=x?.parties[p],r=y?.parties[p],d=available?delta(x,y,p):{};for(const v of [p,rate(l?.share),rate(r?.share),signed(d.share),x?.complete&&x.seats!==null?(l?.seats||0):'—',y?.complete&&y.seats!==null?(r?.seats||0):'—',signed(d.seats,0)])tr.append(node('td',v));body.append(tr)}
  table.append(body);host.append(table);
- $('compareLegend').textContent=mode.value==='turnover'?'左图为左届当选政党；右图橙色为党籍易手、浅绿色为党籍未变、灰色不可比。无党籍归为同一类别，不代表同一候选人。':mode.value==='seats'?'左图为所选政党左届得票率；右图为右届减左届席次（绿增、红减，最大绝对变化 '+seatChangeMax()+' 席；灰色不可比）。':mode.value==='share'?'左图为原届得票率；右图为右届减左届的百分点变化（绿增、红减，绝对值≥30百分点同为最深色，灰色不可比）。':party.value?'同一政党得票率：0%—100%；未参选或缺档为灰色。':as.office==='president'||as.ballot==='party'?'颜色表示最高票政党；并列使用多色。':'颜色表示当选席次最多政党；并列使用多色。';
+ $('compareLegend').textContent=mode.value==='turnover'?'左图为左届当选政党；右图橙色为党籍易手、浅绿色为党籍未变、灰色不可比。无党籍归为同一类别，不代表同一候选人。':mode.value==='seats'?'左图为所选政党左届席次（0—'+seatBaseMax()+' 席）；右图为右届减左届席次（绿增、红减，最大绝对变化 '+seatChangeMax()+' 席；灰色不可比）。':mode.value==='share'?'左图为原届得票率；右图为右届减左届的百分点变化（绿增、红减，绝对值≥30百分点同为最深色，灰色不可比）。':party.value?'同一政党得票率：0%—100%；未参选或缺档为灰色。':as.office==='president'||as.ballot==='party'?'颜色表示最高票政党；并列使用多色。':'颜色表示当选席次最多政党；并列使用多色。';
  for(const id of ['compareExportSvg','compareExportCsv','compareExportPng'])$(id).disabled=false;
 }
 async function refresh(){
@@ -233,5 +237,66 @@ for(const id of ['compareMapA','compareMapB']){
  graph.addEventListener('pointerup',end);graph.addEventListener('pointercancel',end);
  graph.addEventListener('click',e=>{if(suppress){e.preventDefault();e.stopImmediatePropagation();suppress=false}},true);
 }
+// Export is independent of the page stylesheet and does not change the live maps.
+function comparisonFilename(){
+ const [a,b]=models.map(x=>x.summary);
+ return ('历届选举对比-'+office.selectedOptions[0].textContent+'-'+label(a.year,a.office)+'-'+label(b.year,b.office)+'-'+mode.selectedOptions[0].textContent+(party.value?'-'+party.value:'')).replace(/[\\/:*?"<>|]/g,'_');
+}
+function exportGraph(){
+ const W=1440,H=940,pad=36,gap=24,panel=(W-pad*2-gap)/2,mapY=160,mapH=640;
+ const root=svg('svg',{xmlns:'http://www.w3.org/2000/svg',width:W,height:H,viewBox:'0 0 '+W+' '+H,'font-family':'Microsoft YaHei, PingFang SC, sans-serif'});
+ root.append(svg('rect',{width:W,height:H,fill:'#fff'}));
+ const text=(str,x,y,size=22,attrs={})=>{const t=svg('text',{x,y,'font-size':size,fill:'#233d39',...attrs});t.textContent=str;root.append(t)};
+ const [a,b]=models.map(x=>x.summary);
+ text('历届选举对比 · '+office.selectedOptions[0].textContent,W/2,50,32,{'font-weight':700,'text-anchor':'middle'});
+ text([label(a.year,a.office)+' → '+label(b.year,b.office),ballot.options.length>1?ballot.selectedOptions[0].textContent:'',mode.selectedOptions[0].textContent,party.value].filter(Boolean).join('  |  '),W/2,88,20,{'text-anchor':'middle'});
+ for(const [index,id] of ['compareMapA','compareMapB'].entries()){
+  const x=pad+index*(panel+gap);
+  root.append(svg('rect',{x,y:110,width:panel,height:mapH+50,rx:12,fill:'#f9fbfa',stroke:'#dce5df'}));
+  text($(index?'compareMapTitleB':'compareMapTitleA').textContent,x+panel/2,142,24,{'text-anchor':'middle','font-weight':650});
+  const graph=$(id).cloneNode(true);graph.removeAttribute('id');graph.removeAttribute('class');graph.removeAttribute('role');graph.removeAttribute('aria-label');
+  for(const p of graph.querySelectorAll('[tabindex]')){p.removeAttribute('tabindex');p.removeAttribute('role')}
+  graph.setAttribute('x',x+8);graph.setAttribute('y',mapY);graph.setAttribute('width',panel-16);graph.setAttribute('height',mapH-8);graph.setAttribute('viewBox',baseBox.join(' '));root.append(graph);
+ }
+ let entries=[];
+ if(mode.value==='turnover')entries=[['#b56c30','党籍易手'],['#dcebe1','党籍未变'],['#d9dfdc','不可比']];
+ else if(mode.value==='share'||mode.value==='seats')entries=[['#26744e','增加'],['#f1f0ec','无变化'],['#a94b35','减少'],['#d9dfdc','不可比']];
+ else if(party.value)entries=[[color(party.value),party.value],['#d9dfdc','未参选或缺档']];
+ else entries=[...new Set(models.flatMap(m=>[...m.summary.counties.values()].flatMap(r=>r.leader||[])))].map(p=>[color(p),p]).concat([['#edf1e9','无适用或可核实结果']]);
+ // Include both the left-map party colors and the right-map change legend in turnover mode.
+ if(mode.value==='turnover')entries=[...new Set([...a.counties.values()].flatMap(r=>r.leader||[]))].map(p=>[color(p),p]).concat(entries);
+ let lx=pad,ly=826;
+ for(const [c,name] of entries){
+  const width=40+[...name].length*17;
+  if(lx+width>W-pad){lx=pad;ly+=27}
+  root.append(svg('rect',{x:lx,y:ly-16,width:18,height:18,rx:3,fill:c,stroke:'#c8d5cd'}));text(name,lx+25,ly,16);lx+=width;
+ }
+ const note=$('compareLegend').textContent,lines=[];let line='';
+ for(const c of note){line+=c;if([...line].length>=65){lines.push(line);line=''}}
+ if(line)lines.push(line);
+ let fy=ly+34;for(const l of lines){text(l,pad,fy,17);fy+=24}
+ text('资料来源：岛屿调色盘历史档案（来源详见网站）｜历史边界近似展示，离岛为移位示意。',pad,fy+10,16);
+ text('岛屿调色盘',W-pad,fy+38,18,{'text-anchor':'end','font-weight':650});
+ const height=Math.max(H,fy+60);root.setAttribute('height',height);root.setAttribute('viewBox','0 0 '+W+' '+height);root.firstChild.setAttribute('height',height);
+ return {source:new XMLSerializer().serializeToString(root),width:W,height};
+}
+function saveFile(blob,name){const a=node('a'),url=URL.createObjectURL(blob);a.href=url;a.download=name;doc.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),10000)}
+let exporting=false;
+async function exportComparison(format){
+ if(!models||exporting)return;
+ const name=comparisonFilename(),buttons=['compareExportSvg','compareExportCsv','compareExportPng'];exporting=true;buttons.forEach(id=>$(id).disabled=true);
+ let url;
+ try{
+  if(format==='csv'){saveFile(new Blob([comparisonCSV(...models.map(m=>m.summary))],{type:'text/csv;charset=utf-8'}),name+'.csv');return}
+  const graph=exportGraph(),blob=new Blob([graph.source],{type:'image/svg+xml;charset=utf-8'});
+  if(format==='svg'){saveFile(blob,name+'.svg');return}
+  url=URL.createObjectURL(blob);const img=new Image();
+  await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=()=>reject(Error('图片生成失败，请改用SVG'));img.src=url});
+  const canvas=node('canvas');canvas.width=graph.width*2;canvas.height=graph.height*2;const ctx=canvas.getContext('2d');
+  if(!ctx)throw Error('当前设备无法创建画布，请改用SVG');ctx.drawImage(img,0,0,canvas.width,canvas.height);
+  const png=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));if(!png)throw Error('PNG生成失败，请改用SVG');saveFile(png,name+'.png');
+ }catch(e){status.textContent=e.message||'导出失败'}finally{if(url)URL.revokeObjectURL(url);exporting=false;buttons.forEach(id=>$(id).disabled=!models)}
+}
+$('compareExportSvg').onclick=()=>exportComparison('svg');$('compareExportCsv').onclick=()=>exportComparison('csv');$('compareExportPng').onclick=()=>exportComparison('png');
 dialog.addEventListener('close',()=>{token++;models=null});
 })(typeof window==='undefined'?globalThis:window);
