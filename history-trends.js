@@ -18,8 +18,8 @@ function partyListTrendKey(name){
  if(['台联党','台聯党','台湾团结联盟','台湾團結聯盟','“台湾团结联盟”'].includes(key))return '台湾团结联盟';
  return key;
 }
-// Fixed presentation list for party-list votes only; no change to source denominators.
-const PARTY_LIST_TREND_ORDER=['中国国民党','民主进步党','亲民党','新党','台湾团结联盟','台湾民众党','时代力量','台湾基进','无党团结联盟','民主联盟'];
+// Fixed presentation list for party-list votes only; older calculation votes exclude independents.
+const PARTY_LIST_TREND_ORDER=['中国国民党','民主进步党','亲民党','新党','台湾团结联盟','台湾民众党','时代力量','台湾基进','无党团结联盟'];
 const partyListTrendExcluded=name=>/^(?:无党籍|無黨籍|无党派|無黨派|连署|連署|未[经經]政党推荐|未[经經]政黨推薦)/.test(String(name||'').trim().replace(/^[“”「」『』]/,''));
 function partyListTrendGroups(rows){
  const present=new Set();
@@ -37,6 +37,12 @@ function percentZoomRange(range,scale,anchor=.5){
  const [lo,hi]=range;if(!Number.isFinite(lo)||!Number.isFinite(hi)||hi<=lo||!Number.isFinite(scale)||scale<=0)return [0,60];
  const ratio=Math.max(0,Math.min(1,Number.isFinite(anchor)?anchor:.5)),span=Math.max(2,Math.min(100,(hi-lo)*scale));
  const point=lo+(hi-lo)*ratio,min=Math.max(0,Math.min(100-span,point-span*ratio));
+ return [min,min+span];
+}
+// Pan by percentage points without changing the current zoom span.
+function percentPanRange(range,delta){
+ const [lo,hi]=range;if(!Number.isFinite(lo)||!Number.isFinite(hi)||hi<=lo||hi-lo>100||!Number.isFinite(delta))return [0,60];
+ const span=hi-lo,min=Math.max(0,Math.min(100-span,lo+delta));
  return [min,min+span];
 }
 function percentZoomTicks(range){
@@ -235,12 +241,18 @@ function legislativeVoteShares(snapshot,selection,anchor){
    (!actualCounty||norm(r.county)===actualCounty)&&(!focus||Core.districtNumber(r.district)===Core.districtNumber(focus)));
   if(!rows.length)return empty('该票种当前范围没有可核实的得票记录');
   if(rows.some(r=>!Number.isFinite(r.votes)||r.votes<0))return empty('该票种得票资料不完整');
-  const valid=rows.reduce((n,r)=>n+r.votes,0);
-  if(!valid)return empty('该票种有效票为零');
-  const votes=Object.create(null);
-  for(const r of rows){const raw=keyParty(norm(r.party)),party=ballot==='party'?partyListTrendKey(raw):raw;votes[party]=(votes[party]||0)+r.votes}
+  const rawValid=rows.reduce((n,r)=>n+r.votes,0);
+  if(!rawValid)return empty('该票种有效票为零');
+  const votes=Object.create(null);let excludedVotes=0;
+  for(const r of rows){
+   const raw=keyParty(norm(r.party)),party=ballot==='party'?partyListTrendKey(raw):raw;
+   if(base.oldPartyVote&&partyListTrendExcluded(party)){excludedVotes+=r.votes;continue}
+   votes[party]=(votes[party]||0)+r.votes;
+  }
+  const valid=rawValid-excludedVotes;
+  if(!valid)return {...empty('扣除无党籍后政党得票总数为零'),rawValid,excludedVotes};
   const parties=Object.fromEntries(Object.entries(votes).map(([p,v])=>[p,v/valid*100]));
-  return {...base,complete:true,reason:'',parties,votes,valid};
+  return {...base,complete:true,reason:'',parties,votes,valid,rawValid,excludedVotes};
  });
 }
 function councilBallotRows(snapshot,selection){
@@ -476,7 +488,7 @@ function createLegislativeTrendCache({normalize=String,buildList,maxScopes=64}={
  }
  return{read,clear(){cache=new WeakMap();lists=new WeakMap()}};
 }
-const api={mergePresidentialIndependents,percentZoomRange,percentZoomTicks,legislativeSeatTrendParties,partyListTrendKey,partyListTrendGroups,partyListTrendExcluded,PARTY_LIST_TREND_ORDER,createLegislativeTrendCache,summaryAlgorithmVersion:1,aggregate,value,difference,modern,percent,partyTrendValue,candidateTrendTooltip,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,trendChartScopes,historicalScopeRows,legislativeVoteShares,councilBallotRows,localPartyVoteShares,electionDates,trendEffectiveSelection,LEGISLATIVE_TOTALS};
+const api={mergePresidentialIndependents,percentPanRange,percentZoomRange,percentZoomTicks,legislativeSeatTrendParties,partyListTrendKey,partyListTrendGroups,partyListTrendExcluded,PARTY_LIST_TREND_ORDER,createLegislativeTrendCache,summaryAlgorithmVersion:1,aggregate,value,difference,modern,percent,partyTrendValue,candidateTrendTooltip,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,trendChartScopes,historicalScopeRows,legislativeVoteShares,councilBallotRows,localPartyVoteShares,electionDates,trendEffectiveSelection,LEGISLATIVE_TOTALS};
 if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
 root.HistoryTrends=api;
 })(typeof window==='undefined'?{}:window);

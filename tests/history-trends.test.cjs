@@ -317,7 +317,7 @@ test('focused legislative trend rechecks boundaries against its active anchor',(
  assert.deepEqual(b.votes,T.legislativeVoteShares(s,conf,other));
 });
 
-test('Party-list trends use the specified ten parties and exclude independents from other',()=>{
+test('Party-list trends use the specified nine parties and exclude independents from other',()=>{
  const row={complete:true,parties:{'中国国民党':40,'民主进步党':30,'无党籍':10,'时代力量':.3,'台湾基进':.4,'绿党':4,'其他甲党':15.3}};
  const g=T.partyListTrendGroups([row]);
  assert.deepEqual(g.individual,['中国国民党','民主进步党','时代力量','台湾基进']);
@@ -335,23 +335,25 @@ test('Party-list trends use the specified ten parties and exclude independents f
  const r=T.legislativeVoteShares(snapshot,{office:'legislative',electorate:'party'})[0];
  assert.equal(r.votes['台湾基进'],10);assert.equal(r.valid,100);assert.equal(r.parties['台湾基进'],10);
 });
-test('All ten archived party-list elections preserve original rates and omit independents only from presentation',()=>{
+test('All ten archived party-list elections normalize pre-2008 eligible party votes and preserve later party votes',()=>{
  const norm=require('../assets/opencc.js').Converter({from:'t',to:'cn'});
  const years=[1992,1995,1998,2001,2004,2008,2012,2016,2020,2024];
  const rows=years.map(year=>T.legislativeVoteShares(require('../assets/history-legislative-'+year+'.json'),{office:'legislative',electorate:'party',normalize:norm})[0]);
  assert.ok(rows.every(r=>r.complete));
  const groups=T.partyListTrendGroups(rows);
- assert.deepEqual(groups.individual,['中国国民党','民主进步党','亲民党','新党','台湾团结联盟','台湾民众党','时代力量','台湾基进','无党团结联盟','民主联盟']);
- assert.ok(groups.other.includes('中华社会民主党'));
+ assert.deepEqual(groups.individual,['中国国民党','民主进步党','亲民党','新党','台湾团结联盟','台湾民众党','时代力量','台湾基进','无党团结联盟']);
+ assert.ok(groups.other.includes('中华社会民主党'));assert.ok(groups.other.includes('民主联盟'));
  assert.ok(groups.other.includes('绿党'));
  assert.ok(!groups.other.some(T.partyListTrendExcluded));
  for(const r of rows){
   const total=[...groups.individual.map(p=>T.partyTrendValue(r,p)),T.partyTrendValue(r,'',groups.other)].reduce((s,v)=>s+(v??0),0);
   const excluded=Object.entries(r.parties).filter(([p])=>T.partyListTrendExcluded(p)).reduce((s,[,v])=>s+v,0);
   assert.ok(Math.abs(total+excluded-100)<1e-8,r.year);
+  assert.equal(r.rawValid,r.valid+r.excludedVotes);
+  if(r.year<2008){assert.equal(excluded,0);assert.ok(Math.abs(total-100)<1e-8);const original=require('../assets/history-legislative-'+r.year+'.json').rows.filter(x=>x.type==='legislative'&&x.electorate==='party'&&x.level==='national');assert.equal(r.rawValid,original.reduce((s,x)=>s+x.votes,0));for(const [p,v] of Object.entries(r.votes))assert.ok(Math.abs(r.parties[p]-100*v/r.valid)<1e-8)}else assert.equal(r.excludedVotes,0);
  }
  assert.equal(T.partyTrendValue(rows[0],'时代力量'),null);
- assert.ok(rows[0].parties['无党籍']>0,'source record remains intact');
+ assert.ok(rows[0].excludedVotes>0);assert.ok(!Object.hasOwn(rows[0].parties,'无党籍'));
 });
 
 test('Legislative seat series includes all seat-winning parties, not an aggregate other category',()=>{
@@ -381,4 +383,21 @@ test('Presidential independent aliases merge cached and raw vote rows without al
  const fake={complete:true,valid:100,parties:{'连署':20,'无党籍':10,'无党籍（连署）':5,'甲':65},votes:{'连署':20,'无党籍':10,'无党籍（连署）':5,'甲':65},partyMeta:{},candidateDetails:{'连署':[{name:'甲',party:'无党籍（连署）',votes:20}],'无党籍':[{name:'乙',party:'无党籍',votes:10}]}};
  const r=T.mergePresidentialIndependents(fake);assert.equal(r.parties['无党籍'],35);assert.equal(r.votes['无党籍'],35);assert.equal(r.valid,100);assert.equal(r.candidateDetails['无党籍'].length,2);assert.equal(r.partyMeta['无党籍'].label,'无党籍');assert.ok(!Object.hasOwn(r.parties,'连署'));assert.equal(fake.parties['连署'],20);assert.deepEqual(T.mergePresidentialIndependents(r),r);
  for(const year of [1996,2000,2004,2008,2012,2016,2020,2024]){const row=T.mergePresidentialIndependents(T.localPartyVoteShares(require('../assets/history-president-'+year+'.json'),{office:'president',level:'county',normalize:norm})[0]);assert.ok(row.complete);assert.ok(Math.abs(Object.values(row.parties).reduce((n,v)=>n+v,0)-100)<1e-8);assert.ok(!Object.hasOwn(row.parties,'连署'));assert.equal(Object.values(row.votes).reduce((n,v)=>n+v,0),row.valid);if([1996,2000,2012].includes(year))assert.ok(row.votes['无党籍']>0);}
+});
+
+test('Old list vote normalization excludes independents, not the nonpartisan alliance; other ballot types stay unchanged',()=>{
+ const rows=[{party:'中国国民党',votes:40},{party:'民主联盟',votes:10},{party:'无党团结联盟',votes:5},{party:'无党籍',votes:20},{party:'连署',votes:5},{party:'甲党',votes:20}].map(r=>({...r,type:'legislative',electorate:'party',level:'national'}));
+ const conf={office:'legislative',electorate:'party'};
+ const r=T.legislativeVoteShares({year:2004,rows},conf)[0];
+ assert.equal(r.rawValid,100);assert.equal(r.excludedVotes,25);assert.equal(r.valid,75);
+ assert.equal(r.parties['中国国民党'],40/75*100);assert.equal(r.parties['无党团结联盟'],5/75*100);
+ assert.ok(!Object.hasOwn(r.parties,'无党籍'));assert.ok(T.partyListTrendGroups([r]).other.includes('民主联盟'));
+ const later=T.legislativeVoteShares({year:2008,rows},conf)[0];assert.equal(later.valid,100);assert.equal(later.parties['中国国民党'],40);
+ const empty=T.legislativeVoteShares({year:2004,rows:rows.filter(x=>x.party==='无党籍')},conf)[0];assert.equal(empty.complete,false);assert.equal(empty.valid,null);
+});
+test('Percentage drag preserves zoom span and bounds the range to 0–100',()=>{
+ assert.deepEqual(T.percentPanRange([10,40],12),[22,52]);
+ assert.deepEqual(T.percentPanRange([10,40],-99),[0,30]);
+ assert.deepEqual(T.percentPanRange([10,40],99),[70,100]);
+ assert.deepEqual(T.percentPanRange([0,100],30),[0,100]);
 });

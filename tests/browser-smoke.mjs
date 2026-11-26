@@ -3606,7 +3606,7 @@ test('Observation topics and historical batch download remain isolated from the 
  const [file]=await Promise.all([page.waitForEvent('download',{timeout:90000}),page.locator('#historyBatchDownload').click()]);assert.match(file.suggestedFilename(),/历届历史数据\.json$/);
 });
 
-test('Party-list trend displays only the ten specified parties plus others and excludes independents',async t=>{
+test('Party-list trend displays only the nine specified parties plus others and excludes independents',async t=>{
  const page=await pageFor(t,{width:1440,height:950});
  await page.locator('#categoryHistory').click();
  await page.locator('#historyOffice').selectOption('legislative');
@@ -3617,7 +3617,7 @@ test('Party-list trend displays only the ten specified parties plus others and e
  await chart.waitFor({timeout:120000});
  const plain=p=>p.replace(/[“”]/g,'');
  const names=(await chart.locator('[data-trend-legend]').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('data-trend-legend')))).map(plain);
- assert.deepEqual(names,['中国国民党','民主进步党','亲民党','新党','台湾团结联盟','台湾民众党','时代力量','台湾基进','无党团结联盟','民主联盟','其他政党']);
+ assert.deepEqual(names,['中国国民党','民主进步党','亲民党','新党','台湾团结联盟','台湾民众党','时代力量','台湾基进','无党团结联盟','其他政党']);
  assert.equal(await chart.getAttribute('data-trend-y-max'),'60');
  assert.deepEqual((await chart.locator('[data-trend-axis-tick]').allTextContents()),['0%','10%','20%','30%','40%','50%','60%']);
  assert.equal(await chart.locator('[data-trend-series] path').first().getAttribute('stroke-width'),'1.4');
@@ -3628,12 +3628,18 @@ test('Party-list trend displays only the ten specified parties plus others and e
  await page.mouse.move(pos.x,pos.y);await page.mouse.wheel(0,-300);
  await page.waitForFunction(()=>{const g=document.querySelector('#trendCharts svg[data-trend-zoom]');return Number(g?.getAttribute('data-trend-y-max'))-Number(g?.getAttribute('data-trend-y-min'))<59});
  assert.notEqual(await first.getAttribute('cy'),original);
+ const before=await chart.evaluate(g=>[Number(g.getAttribute('data-trend-y-min')),Number(g.getAttribute('data-trend-y-max'))]);
+ await page.mouse.move(pos.x,pos.y);await page.mouse.down();await page.mouse.move(pos.x,pos.y+45,{steps:8});await page.mouse.up();
+ const after=await chart.evaluate(g=>[Number(g.getAttribute('data-trend-y-min')),Number(g.getAttribute('data-trend-y-max'))]);
+ assert.ok(after[0]>before[0]);assert.ok(Math.abs((after[1]-after[0])-(before[1]-before[0]))<1e-7);
  const card=chart.locator('..');await card.locator('[data-trend-zoom-action="reset"]').click();
  assert.equal(await chart.getAttribute('data-trend-y-min'),'0');assert.equal(await chart.getAttribute('data-trend-y-max'),'60');assert.equal(await first.getAttribute('cy'),original);
  await card.locator('[data-trend-zoom-action="out"]').click();assert.ok(Number(await chart.getAttribute('data-trend-y-max'))>60);
  await card.locator('[data-trend-zoom-action="reset"]').click();
  const table=page.locator('#trendCharts .history-table-wrap').filter({hasText:'对应票种得票率逐届明细'});
- assert.match(await table.textContent(),/显示合计/);assert.doesNotMatch(await table.locator('thead').textContent(),/无党籍|基进党|绿党/);
+ assert.match(await table.textContent(),/显示合计/);assert.doesNotMatch(await table.locator('thead').textContent(),/无党籍|基进党|绿党|民主联盟/);
+ const early=await table.locator('tbody tr').evaluateAll(ns=>ns.filter(n=>Number(n.cells[0].textContent)<2008).map(n=>n.cells[n.cells.length-1].textContent));assert.equal(early.length,5);assert.ok(early.every(v=>v==='100.00%'));
+ const download=page.waitForEvent('download');await page.locator('#trendCsv').click();const file=await download;const csv=await readFile(await file.path(),'utf8');assert.doesNotMatch(csv,/"民主联盟"/);assert.match(csv,/"其他政党"/);
  await page.evaluate(()=>HistoryTrendsUI.restoreRouteYears('2024'));
  await page.waitForFunction(()=>document.querySelector('#trendStatus')?.textContent.includes('1 届')&&!!document.querySelector('#trendCharts svg[aria-label*="旧制席次计算票得票率趋势"]'));
  const filtered=(await chart.locator('[data-trend-legend]').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('data-trend-legend')))).map(plain);
