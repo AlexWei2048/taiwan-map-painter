@@ -3417,3 +3417,28 @@ test('Historical coverage matrix opens on demand and reveals known partial archi
  await page.locator('#historyCoverageDialog').getByRole('button',{name:'关闭',exact:true}).click();
  assert.equal(await page.locator('#historyCoverageDialog').isVisible(),false);
 });
+
+
+test('Named local plans migrate the original, copy independently and survive reload',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ await page.locator('#workspacePrediction').click();
+ await selectMayor(page);
+ const original=await page.evaluate(()=>JSON.stringify(state.predictions));
+ assert.notEqual(original,'{}');
+ await page.locator('.header-menu:not(.export-menu) summary').click();
+ await page.locator('#managePlans').click();
+ await page.locator('#planNameInput').fill('测试方案');
+ await page.locator('#planCopy').click();
+ assert.equal(await page.locator('#planError').textContent(),'');
+ assert.equal(await page.evaluate(()=>JSON.stringify(state.predictions)),original);
+ await page.locator('#planNameInput').fill('空白方案');
+ await page.locator('#planCreate').click();
+ assert.equal(await page.evaluate(()=>JSON.stringify(state.predictions)),'{}');
+ assert.equal(await page.locator('#activePlanSelect option').count(),3);
+ await page.locator('#activePlanSelect').selectOption('original');
+ assert.equal(await page.evaluate(()=>JSON.stringify(state.predictions)),original);
+ await page.locator('#planDialog').getByRole('button',{name:'关闭',exact:true}).click();
+ await page.reload();await page.locator('#regions path[data-region]').first().waitFor();
+ assert.equal(await page.evaluate(()=>JSON.stringify(state.predictions)),original);
+ assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('island-palette-plans-v1')).plans.length),3);
+});
