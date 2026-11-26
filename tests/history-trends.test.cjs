@@ -87,7 +87,7 @@ test('Parliament layout groups major parties at opposite ends and preserves neut
 test('Historic county trends retain actual county names and separate pre-merger municipalities',async()=>{
  const L=require('../history-local.js');
  const norm=require('../assets/opencc.js').Converter({from:'t',to:'cn'});
- const fetcher=async url=>({ok:true,json:async()=>url.includes('supplement')?require('../assets/history-local-council-supplement.json'):url.includes('1994-council')?require('../assets/history-local-1994-council.json'):require('../assets/history-local-'+url.match(/local-(\d{4})/)[1]+'.json')});
+ const fetcher=async url=>({ok:true,json:async()=>url.includes('history-1994-changhua-council-profile')?require('../sources/history-1994-changhua-council-profile.json'):url.includes('supplement')?require('../assets/history-local-council-supplement.json'):url.includes('1994-council')?require('../assets/history-local-1994-council.json'):require('../assets/history-local-'+url.match(/local-(\d{4})/)[1]+'.json')});
  const conf={office:'council',electorate:'all',metric:'party',normalize:norm};
  for(const year of [1994,1998,2002,2006,2010,2014,2018,2022]){
   const s=year===2022?require('../assets/history-2022.json'):await L.loadCycle(year,'council',fetcher);
@@ -115,7 +115,7 @@ test('Historic county trends retain actual county names and separate pre-merger 
 
 test('Council and mayor dates use their own original contests in every old election cycle',async()=>{
  const L=require('../history-local.js'),norm=require('../assets/opencc.js').Converter({from:'t',to:'cn'});
- const fetcher=async url=>({ok:true,json:async()=>url.includes('supplement')?require('../assets/history-local-council-supplement.json'):url.includes('1994-council')?require('../assets/history-local-1994-council.json'):require('../assets/history-local-'+url.match(/local-(\d{4})/)[1]+'.json')});
+ const fetcher=async url=>({ok:true,json:async()=>url.includes('history-1994-changhua-council-profile')?require('../sources/history-1994-changhua-council-profile.json'):url.includes('supplement')?require('../assets/history-local-council-supplement.json'):url.includes('1994-council')?require('../assets/history-local-1994-council.json'):require('../assets/history-local-'+url.match(/local-(\d{4})/)[1]+'.json')});
  const checks={1994:['1994-01-29','1994-12-03'],1998:['1998-01-24','1998-12-05'],2002:['2002-01-26','2002-12-07'],2006:['2005-12-03','2006-12-09']};
  for(const [year,dates] of Object.entries(checks)){
   const s=await L.loadCycle(Number(year),'council',fetcher);
