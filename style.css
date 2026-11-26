@@ -925,3 +925,8 @@ body.history-mode #districtReferenceNote,body.history-mode #districtReferenceSou
 
 /* Consistent compact incumbency badge in historical result tables and mobile details. */
 .history-candidate-table .incumbent-tag{display:inline-block;font-size:10px;line-height:1.4;white-space:nowrap;padding:3px 7px;border-radius:4px;background:#edf4e5;color:#587744;font-weight:500;vertical-align:middle}
+
+/* Historical multi-ballot maps: preserve the full main panel and the stacked submaps. */
+.canvas.history-combined-mode:not(.atlas-mode),#mapWithKey.has-number-key>.canvas.history-combined-mode:not(.atlas-mode){height:clamp(850px,calc(100vw - 250px),1500px);min-height:800px}
+.canvas.history-combined-mode.nationwide-mode:not(.atlas-mode),#mapWithKey.has-number-key>.canvas.history-combined-mode.nationwide-mode:not(.atlas-mode){height:clamp(950px,calc(115vw - 350px),1650px);min-height:900px}
+@media(max-width:700px){.canvas.history-combined-mode:not(.atlas-mode),#mapWithKey.has-number-key>.canvas.history-combined-mode:not(.atlas-mode){height:75dvh;min-height:580px}.canvas.history-combined-mode.nationwide-mode:not(.atlas-mode),#mapWithKey.has-number-key>.canvas.history-combined-mode.nationwide-mode:not(.atlas-mode){height:82dvh;min-height:650px}}
