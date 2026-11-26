@@ -250,18 +250,23 @@ function showYear(year,county,actualLabel,summary='',detail=''){
  const readout=$('trendPointReadout');if(!readout)return;
  readout.replaceChildren(node('strong','',summary||((actualLabel||label(year,settings().office))+' · '+(county||settings().county||'全部地区'))));
  const b=node('button','button quiet','查看该届结果');b.type='button';
- b.onclick=()=>{
-  const y=$('historyYear'),office=settings().office;
-  if(![...y.options].some(o=>Number(o.value)===year))return;
-  const apply=event=>{
-   if(event.detail.snapshot?.year!==year||History2022View.office()!==office)return;
-   window.removeEventListener('historysnapshotready',apply);
-   const c=$('historyCounty');if(county&&[...c.options].some(o=>o.value===county)){c.value=county;c.dispatchEvent(new Event('change',{bubbles:true}))}
-  };
-  window.addEventListener('historysnapshotready',apply);setTimeout(()=>window.removeEventListener('historysnapshotready',apply),15000);
-  if(y.value===String(year))apply({detail:{snapshot:History2022View.snapshot()}});
-  else{y.value=String(year);y.dispatchEvent(new Event('change',{bubbles:true}))}
-  if($('historyViewTrends').getAttribute('aria-pressed')==='true')$('historyViewTrends').click()
+ b.onclick=async()=>{
+  const view=window.History2022View,office=settings().office;
+  const target=HistoryLocal.cycleYear(Number(year),office);
+  if(!view?.active()||![...$('historyYear').options].some(o=>Number(o.value)===target)){toast('该届历史结果暂不可用');return}
+  const current=view.routeSelection();
+  // Reuse the same validated path as shared links and browser navigation.
+  // An aggregate point explicitly opens all areas; it must not inherit a county.
+  const route={...current,office,year:target,county:county||'',view:'map',
+   focus:county&&county===current.county?current.focus:'',contest:undefined,area:undefined,detailCounty:undefined,identity:undefined,
+   scope:undefined,overviewCounty:undefined,overviewArea:undefined,years:undefined};
+  b.disabled=true;
+  try{
+   const ok=await view.restoreRoute(route,()=>view.active()&&$('historyOffice').value===office);
+   if(!ok){if(view.active()&&$('historyOffice').value===office)toast('该届结果暂未能载入，请重试');return}
+   if(county&&view.routeSelection().county!==county)toast('当届地区未能匹配，已显示全部地区');
+   window.dispatchEvent(new Event('site-route-change'));
+  }catch(error){toast(error.message||'无法打开该届结果')}finally{b.disabled=false}
  };
  readout.append(b);
  if(detail){const disclosure=node('details','trend-point-details');disclosure.append(node('summary','','候选人明细'),node('p','',detail));readout.append(disclosure)}
