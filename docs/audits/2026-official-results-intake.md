@@ -39,7 +39,7 @@ python scripts/audit_2026_official.py --template 2026-official-review.csv
 
 The 2049-row template retains stable candidate IDs and local reference values. Official number, eligibility, party, gender, source URL and publication date are deliberately blank. The official audit is non-mutating.
 
-In the 2026 prediction workspace, users can manually archive their current forecast, export/import single or multiple JSON snapshots, and restore a snapshot to the editable forecast only after confirmation. Archived records are stored separately from editable map state. After actual 2026 results are officially released and pass source checksum/completeness checks, users can compare exact district winner sets, seat hit rate, party seat errors and vote-share/vote-count error, then export a JSON or PNG review. Missing districts are excluded from denominators. The archive timestamp comes from the user's device, not an independently trusted time authority.
+个人预测保留在本地方案，现已不提供原有预测封存和选后复盘入口。官方历史结果与个人预测完全分开。
 
 ## 11月26日发布前复核
 
@@ -48,3 +48,11 @@ In the 2026 prediction workspace, users can manually archive their current forec
 发布时必须将结果文件与对应发布清单一并提交。清单的 file、resultStatus、数量和完整 SHA-256 必须匹配实际文件；不得手动伪造或只修改清单。网站历史地图和趋势共同执行校验，核对候选人稳定ID、号次、选区、得票、当选标记、应选席次及已有乡镇明细，校验失败则不载入该结果。使用 HTTPS 或本地 localhost 测试，普通 HTTP 可能无法使用浏览器 Web Crypto。哈希用于检查文件一致性，不代表官方数字真实性或数字签名，原始官方来源仍须人工核对。
 
 选前先执行 node --test tests/official-2026-gate.test.cjs，再执行既有导入器测试和浏览器回归测试。模拟夹具只在测试环境使用，绝不写入 assets/history-2026.json。当前保持 awaiting_results，直到投票后收齐、核对真实官方数据并按上述发布流程操作。此前已移除预测封存与选后复盘入口，个人预测与历史结果继续独立保存。
+
+## v120 最终接入复核
+
+- 发布日期按台湾当地日期（UTC+8）判定；来源日期不得晚于发布当日；正式公告版不得退回临时开票版。--status certified 仍需人工核对正式公告，不以日期自动认定认证状态。
+- 导入器核对稳定ID、选区成员归属、已核实号次及投票统计；即使仅提供投票人数或选举人数，也检查其与候选人票数是否相符。有效票未提供时采用已齐全的候选人得票合计；未知的其他统计仍留空。
+- 前端同时检查县市、选区、票种、候选人姓名、政党、乡镇投票统计；失败不载入，重试回到原目标2026年。明确区分官方开票结果与正式公告结果。
+- 预演输出不能覆盖网站资产、来源档案或输入CSV；每个JSON文件采用原子替换。正式发布的两个文件仍须同一提交发布，SHA-256用于保证文件匹配。
+- 自动回归命令：python3 tests/test_official_2026_contract.py。使用完整现行名册构造仅供测试的票数及当选标记，在临时目录内执行Python生成、Node Web Crypto及前端校验；绝不执行 --publish。此项已接入CI，尚待实际运行报告。
