@@ -3458,7 +3458,7 @@ test('Historical two-year comparison synchronizes maps, county selection and par
  assert.equal(await page.locator('#compareMapA').getAttribute('viewBox'),await page.locator('#compareMapB').getAttribute('viewBox'));
  await page.locator('#compareCounty').selectOption('台北市');
  await page.locator('#compareParty').selectOption('中国国民党');
- await page.locator('#compareDifference').check();
+ await page.locator('#compareMode').selectOption('share');
  assert.match(await page.locator('#compareMapTitleB').textContent(),/得票率变化/);
  assert.match(await page.locator('#compareTable').textContent(),/台北市/);
  assert.match(await page.locator('#compareLegend').textContent(),/百分点变化/);
@@ -3502,4 +3502,26 @@ test('Management dialogs use available desktop width and stay within mobile view
  await page.setViewportSize({width:390,height:844});
  const b=await page.locator('#historyCompareDialog').boundingBox();assert.ok(b.width<=390&&b.x>=0);
  assert.equal(await page.locator('#historyCompareDialog').getByRole('button',{name:'关闭',exact:true}).isVisible(),true);
+});
+
+
+test('Historical comparison seat changes, mayor turnover and downloadable SVG/CSV',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ await page.locator('#categoryHistory').click();
+ await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
+ await page.locator('#historyCompareOpen').click();
+ await page.locator('#compareOffice').selectOption('mayor');
+ await page.locator('#compareExportSvg').waitFor({state:'visible'});
+ await page.waitForFunction(()=>!document.getElementById('compareExportSvg').disabled,{},{timeout:90000});
+ await page.locator('#compareParty').selectOption('中国国民党');
+ await page.locator('#compareMode').selectOption('seats');
+ assert.match(await page.locator('#compareMapTitleB').textContent(),/席次变化/);
+ await page.locator('#compareMode').selectOption('turnover');
+ assert.match(await page.locator('#compareMapTitleB').textContent(),/执政权变化/);
+ assert.match(await page.locator('#compareTable').textContent(),/可比县市/);
+ for(const [button,ext] of [['#compareExportSvg','.svg'],['#compareExportCsv','.csv']]){
+  const [file]=await Promise.all([page.waitForEvent('download'),page.locator(button).click()]);
+  assert.ok(file.suggestedFilename().endsWith(ext));
+  assert.equal(await file.failure(),null);
+ }
 });
