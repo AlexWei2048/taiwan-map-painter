@@ -36,7 +36,7 @@
  // Completion is calculated from the current roster, not the number of saved objects.
  function progress(directory,project,office,core){
   const candidates=new Map(directory.candidates.map(c=>[c.id,c])),counties=new Map();
-  const empty=()=>({total:0,winners:0,votes:0,entered:0,invalid:0,seats:0,parties:Object.create(null),incomplete:[]});
+  const empty=()=>({total:0,winners:0,votes:0,entered:0,invalid:0,seats:0,parties:Object.create(null),incomplete:[],incompleteVotes:[]});
   const all=empty();
   for(const d of directory.districts){if(d.type!==office)continue;
    const cs=d.candidateIds.map(id=>candidates.get(id)).filter(Boolean),record=project.predictions?.[d.id],summary=core.summary(d,cs,record);
@@ -48,7 +48,7 @@
    for(const x of [all,counties.get(d.county)]){
     x.total++;if(record&&(summary.winners.length||Object.keys(summary.record?.estimates||{}).length||summary.status==='invalid'))x.entered++;
     if(summary.status==='complete'){x.winners++;x.seats+=summary.winners.length;for(const p of summary.parties)x.parties[p.name]=(x.parties[p.name]||0)+p.seats}else{x.incomplete.push(d.id)}
-    if(voteComplete)x.votes++;if(['invalid','quota'].includes(summary.status))x.invalid++;
+    if(voteComplete)x.votes++;else x.incompleteVotes.push(d.id);if(['invalid','quota'].includes(summary.status))x.invalid++;
    }
   }
   return {all,counties};
