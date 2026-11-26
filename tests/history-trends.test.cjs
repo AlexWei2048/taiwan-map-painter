@@ -169,6 +169,26 @@ test('Party trend points skip elections without a nominee, while recorded zero r
  assert.equal(T.partyTrendValue({complete:true,parties:{甲:0}},'', ['甲','乙']),0);
  assert.equal(T.partyTrendValue({complete:false,parties:{甲:0}},'甲'),null);
 });
+test('Independent presidential tickets stay separate and hover details show the named candidate and share',()=>{
+ const norm=require('../assets/opencc.js').Converter({from:'t',to:'cn'});
+ for(const [year,names] of [[1996,['林洋港','陈履安']],[2000,['宋楚瑜','许信良']]]){
+  const snapshot=require('../assets/history-president-'+year+'.json');
+  const row=T.localPartyVoteShares(snapshot,{office:'president',level:'county',normalize:norm})[0];
+  const independents=Object.keys(row.parties).filter(p=>p.startsWith('连署｜'));
+  assert.deepEqual(independents.map(p=>row.partyMeta[p].label.split(' · ')[1]).sort(),names.sort());
+  for(const key of independents){
+   assert.equal(row.candidateDetails[key].length,1);
+   const tip=T.candidateTrendTooltip(row,key);
+   assert.match(tip,/无党籍（连署）/);
+   assert.match(tip,new RegExp(row.candidateDetails[key][0].name));
+   assert.match(tip,/\d+\.\d{2}%/);
+   assert.equal(row.candidateDetails[key][0].votes,row.votes[key]);
+  }
+  assert.ok(Math.abs(Object.values(row.parties).reduce((a,b)=>a+b,0)-100)<1e-8);
+ }
+ const row=T.localPartyVoteShares(require('../assets/history-president-2024.json'),{office:'president',level:'county',normalize:norm})[0];
+ assert.match(T.candidateTrendTooltip(row,'民主进步党'),/赖清德 · 民主进步党 · \d+\.\d{2}%/);
+});
 test('Integer tick marks and parliament dot counts are exact for small and large assemblies',()=>{
  for(const max of [0,1,2,3,22,113,161,164,225,910]){const ticks=T.integerTicks(max);assert.ok(ticks.every(Number.isInteger));assert.ok(ticks.at(-1)>=max)}
  for(const total of [1,2,3,6,22,113,161,164,225,910]){const pts=T.parliamentPoints(total);assert.equal(pts.length,total);assert.ok(pts.every(p=>Number.isFinite(p.x)&&Number.isFinite(p.y)&&p.y<=0));assert.equal(new Set(pts.map(p=>p.x+'|'+p.y)).size,total)}

@@ -11,6 +11,13 @@ function partyTrendValue(row,party,group){
  if(group)return group.some(p=>Object.hasOwn(row.parties,p))?group.reduce((sum,p)=>sum+(row.parties[p]||0),0):null;
  return Object.hasOwn(row.parties,party)?row.parties[party]:null;
 }
+function candidateTrendTooltip(row,key){
+ if(!row?.complete||!Object.hasOwn(row.parties,key))return'';
+ const entries=row.candidateDetails?.[key]||[],label=row.partyMeta?.[key]?.label||key;
+ const lines=entries.slice(0,12).map(r=>r.name+' · '+r.party+' · '+percent(r.votes,row.valid).toFixed(2)+'%');
+ if(entries.length>12)lines.push('其余 '+(entries.length-12)+' 位候选人');
+ return label+' · '+row.parties[key].toFixed(2)+'%'+(lines.length?'\n'+lines.join('\n'):'');
+}
 const knownBool=x=>typeof x==='boolean';
 const genderKnown=x=>['男','女','男性','女性'].includes(x);
 const female=x=>x==='女'||x==='女性';
@@ -225,10 +232,18 @@ function localPartyVoteShares(snapshot,selection){
   if(rows.some(r=>!Number.isFinite(r.votes)||r.votes<0))return empty('得票资料不完整');
   const valid=rows.reduce((n,r)=>n+r.votes,0);
   if(!valid)return empty('有效票为零');
-  const votes=Object.create(null);
-  for(const r of rows){const party=keyParty(norm(r.party));votes[party]=(votes[party]||0)+r.votes}
+  const votes=Object.create(null),partyMeta=Object.create(null),candidateGroups=Object.create(null);
+  for(const r of rows){
+   const party=keyParty(norm(r.party)),name=norm(r.name)||'姓名未载',split=office==='president'&&(party==='连署'||party==='无党籍');
+   const key=split?party+'｜'+name:party,label=split?(party==='连署'?'无党籍（连署）':'无党籍')+' · '+name:party==='连署'?'无党籍（连署）':party;
+   votes[key]=(votes[key]||0)+r.votes;partyMeta[key]={party,label};
+   const candidates=candidateGroups[key]||(candidateGroups[key]=new Map()),identity=[office==='president'?'':norm(r.county),office==='township'?norm(r.town):'',String(r.number||''),name].join('|');
+   const candidate=candidates.get(identity)||{name,party:party==='连署'?'无党籍（连署）':party,votes:0};
+   candidate.votes+=r.votes;candidates.set(identity,candidate);
+  }
   const parties=Object.fromEntries(Object.entries(votes).map(([p,v])=>[p,v/valid*100]));
-  return{...base,complete:true,reason:'',parties,votes,valid};
+  const candidateDetails=Object.fromEntries(Object.entries(candidateGroups).map(([p,group])=>[p,[...group.values()].sort((a,b)=>b.votes-a.votes||a.name.localeCompare(b.name,'zh'))]));
+  return{...base,complete:true,reason:'',parties,votes,valid,partyMeta,candidateDetails};
  });
 }
 function mapTrend(snapshot,selection,anchor){
@@ -359,7 +374,7 @@ function majorityBoundary(points){
  const angle=seats===total?0:(points[seats-1].angle+points[seats].angle)/2;
  return {seats,angle};
 }
-const api={aggregate,value,difference,modern,percent,partyTrendValue,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,historicalScopeRows,legislativeVoteShares,councilBallotRows,localPartyVoteShares,electionDates,trendEffectiveSelection,LEGISLATIVE_TOTALS};
+const api={aggregate,value,difference,modern,percent,partyTrendValue,candidateTrendTooltip,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,historicalScopeRows,legislativeVoteShares,councilBallotRows,localPartyVoteShares,electionDates,trendEffectiveSelection,LEGISLATIVE_TOTALS};
 if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
 root.HistoryTrends=api;
 })(typeof window==='undefined'?{}:window);

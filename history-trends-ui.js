@@ -108,8 +108,10 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
   if(!row.complete)g.append(svg('text',{x:x(i),y:bottom+(row.scopeLabel?51:37),'text-anchor':'middle',fill:'#956e51','font-size':10},'缺档'));
  });
  const addPoint=(p,row,s,v)=>{
-  p.append(svg('title',{},(row.label||row.year)+' '+(row.scopeLabel?row.scopeLabel+' ':'')+s.name+'：'+fmt(v,pct)+(row.dates?.length?' · '+row.dates.join(' / '):'')));
-  p.setAttribute('tabindex','0');p.setAttribute('role','button');p.setAttribute('aria-label',(row.label||row.year)+' '+(row.scopeLabel?row.scopeLabel+' ':'')+s.name+' '+fmt(v,pct));
+  const summary=(row.label||row.year)+' '+(row.scopeLabel?row.scopeLabel+' ':'')+s.name+'：'+fmt(v,pct)+(row.dates?.length?' · '+row.dates.join(' / '):'');
+  const detail=s.tooltip?.(row)||'';
+  p.append(svg('title',{},summary+(detail?'\n'+detail:'')));
+  p.setAttribute('tabindex','0');p.setAttribute('role','button');p.setAttribute('aria-label',summary+(detail?'；'+detail.replaceAll('\n','；'):''));
   const click=()=>showYear(row.year,row.county,row.label);p.addEventListener('click',click);p.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();click()}})
  };
  if(stack){
@@ -228,9 +230,12 @@ function renderParliaments(out,rows,conf,totalLeg){
 }
 function partySeries(rows){
  const totals=new Map();for(const r of rows)for(const [p,v] of Object.entries(r.parties||{}))totals.set(p,(totals.get(p)||0)+v);
- const sorted=[...totals].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],'zh')).map(x=>x[0]),top=sorted.slice(0,7),rest=sorted.slice(7);
- const series=top.map(p=>({name:displayParty(p),color:color(p),get:r=>T.partyTrendValue(r,p),party:p}));
- if(rest.length)series.push({name:'其他政党',color:color('其他政党'),get:r=>T.partyTrendValue(r,'',rest),parties:rest});
+ const meta=new Map();for(const r of rows)for(const [p,m] of Object.entries(r.partyMeta||{}))meta.set(p,m);
+ const sorted=[...totals].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],'zh')).map(x=>x[0]);
+ const top=sorted.filter((p,i)=>i<7||meta.has(p)&&p.includes('｜')),rest=sorted.filter(p=>!top.includes(p));
+ const shade=p=>{const shades=['#728575','#8f9d94','#596d60','#a5aaa1'];let hash=0;for(const c of p)hash=(hash*31+c.codePointAt(0))>>>0;return shades[hash%shades.length]};
+ const series=top.map(p=>({name:meta.get(p)?.label||displayParty(p),color:meta.get(p)&&p.includes('｜')?shade(p):color(meta.get(p)?.party||p),get:r=>T.partyTrendValue(r,p),tooltip:r=>r.candidateDetails?T.candidateTrendTooltip(r,p):'',party:p}));
+ if(rest.length)series.push({name:'其他政党',color:color('其他政党'),get:r=>T.partyTrendValue(r,'',rest),tooltip:r=>r.candidateDetails?rest.map(p=>T.candidateTrendTooltip(r,p)).filter(Boolean).join('\n'):'',parties:rest});
  return series;
 }
 function renderLegislative(conf,anchor,out){
@@ -325,7 +330,7 @@ function render(){
  const body=node('tbody');for(const r of rows){const tr=node('tr');tr.append(node('td','',r.label));if(showCounty)tr.append(node('td','',r.county||conf.county));tr.append(node('td','',r.dates?.join(' / ')||'—'));for(const s of series)tr.append(node('td','',fmt(s.get(r),pct)));if(showTotal)tr.append(node('td','',r.complete?fmt(Object.values(r.parties).reduce((n,v)=>n+v,0)):'—'));body.append(tr)}table.append(body);wrap.append(table);out.append(wrap);
  const voteRows=models.flatMap(item=>item.snapshot?T.localPartyVoteShares(item.snapshot,conf):[{year:item.year,label:label(item.year,conf.office),complete:false,reason:item.error,parties:{},valid:null}]);
  const voteSeries=partySeries(voteRows),voteTitle='候选人票得票率趋势（按所属政党汇总）';
- const voteNote='按当前选举类别和地图范围汇总各党候选人得票，再除以同范围有效票；各党得票率合计为100%。立法机构不分区政党票在“不分区民代”类别单独展示。';
+ const voteNote='按当前选举类别和地图范围汇总候选人得票，再除以同范围有效票；同届多组无党籍（连署）候选人分别绘制。把鼠标移到数据点可查看姓名、政党和得票率。立法机构不分区政党票在“不分区民代”类别单独展示。';
  out.append(card(voteTitle,voteNote,voteRows.some(r=>r.complete)?chart(voteRows,voteSeries,voteTitle,{pct:true}):null));
  const voteWrap=node('div','history-table-wrap'),voteTable=node('table','history-candidate-table'),voteHead=node('thead'),voteHeader=node('tr');
  for(const heading of ['届次','当届县市','投票日期',...voteSeries.map(s=>s.name),'合计'])voteHeader.append(node('th','',heading));voteHead.append(voteHeader);voteTable.append(voteHead);
@@ -351,7 +356,7 @@ function exportCsv(){
   for(const [p,v] of items.length?items:[['',null]])out.push([offices[conf.office],fullLegislature(conf)?'全部民代类型':effective.electorate,[r.county||conf.county||'全部地区',conf.focus].filter(Boolean).join(' · '),effective.office==='legislative'&&effective.electorate==='regional'?'选举区（按县市汇总）':conf.level,r.label,r.dates?.join(' / ')||'',conf.office==='legislative'&&conf.electorate==='all'&&conf.county?'区域民代当选席次':optionText('historyMetric'),displayParty(p),Number.isFinite(v)?Math.round(v*100)/100:'',r.complete?'完整结果':r.reason]);
  }
  if(voteShareExport)for(const r of voteShareExport.rows){
-  for(const [p,v] of r.complete?Object.entries(r.parties):[['',null]])out.push([offices[conf.office],'候选人票',r.county||'全部地区',conf.level,r.label,r.dates?.join(' / ')||'','候选人票得票率（按所属政党汇总）',displayParty(p),Number.isFinite(v)?Math.round(v*100)/100:'',r.complete?'完整结果':r.reason]);
+  for(const [p,v] of r.complete?Object.entries(r.parties):[['',null]])out.push([offices[conf.office],'候选人票',r.county||'全部地区',conf.level,r.label,r.dates?.join(' / ')||'','候选人票得票率（按所属政党汇总）',r.partyMeta?.[p]?.label||displayParty(p),Number.isFinite(v)?Math.round(v*100)/100:'',r.complete?'完整结果':r.reason]);
  }
  exportFile(C.csv(out),'历史趋势-'+offices[conf.office]+'-'+lastTitle+'.csv','text/csv;charset=utf-8')
 }
