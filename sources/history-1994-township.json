@@ -2549,7 +2549,7 @@
               null,
               "陳書禮",
               null,
-              null,
+              "男",
               1430,
               true
             ]
@@ -2561,6 +2561,12 @@
             "name": "陳書禮",
             "source_url": "https://www.nankan.gov.tw/chhtml/Detail/2417?mcid=33000",
             "source_locator": "鄉志第4屆及第5屆鄉長選舉紀錄。"
+          },
+          "gender_evidence": {
+            "name": "陳書禮",
+            "source_url": "https://www.matsu.idv.tw/topicdetail.php?f=176&t=17642",
+            "source_locator": "1998年地方人物報導以男性代詞指稱陳書禮，並明載79、83年同額當選南竿鄉長；鄉志生平、任期交叉核對。此為人物報導證據，非當屆選舉登記性別欄。",
+            "corroboration_url": "https://www.nankan.gov.tw/chhtml/Detail/2417?mcid=33011"
           }
         },
         {
@@ -4716,6 +4722,26 @@
         }
       ],
       "status": "待官方名錄或原始選舉清冊確認"
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "verified_winners_only",
+      "source_url": "https://tfai.openmuseum.tw/muse/digi_object/4b8d7fea9f1aec9530d0b3882edf2275",
+      "source_locator": "國家電影及視聽文化中心典藏《海上明珠－琉球鄉》（1997年），可搜尋文字稿明載琉球鄉鄉長蔡文明／男；歷任首長表第11屆林福泉任至1994年2月28日，第12屆蔡文明1994年3月1日就任。影音原件未取得，當屆原始選舉票表亦待查。",
+      "corroboration_url": "https://zh.wikipedia.org/wiki/琉球鄉",
+      "secondary_source": "https://vod.tfai.org.tw/Video/7319",
+      "winners": [
+        {
+          "town": "琉球鄉",
+          "name": "蔡文明",
+          "gender": "男",
+          "incumbent_at_election": false,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null
+        }
+      ]
     }
   ]
 }
