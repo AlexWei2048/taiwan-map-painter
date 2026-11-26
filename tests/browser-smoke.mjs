@@ -3465,3 +3465,41 @@ test('Historical two-year comparison synchronizes maps, county selection and par
  await page.locator('#historyCompareDialog').getByRole('button',{name:'关闭',exact:true}).click();
  assert.equal(await page.locator('#historyYear').inputValue(),'2022');
 });
+
+
+test('Mobile shortcuts, expandable site information and touch zoom preserve predictions',async t=>{
+ const page=await pageFor(t,{width:390,height:844});
+ assert.equal(await page.locator('#siteAbout').evaluate(el=>el.open),false);
+ await page.locator('#siteAbout summary').click();
+ assert.equal(await page.locator('#siteAbout').evaluate(el=>el.open),true);
+ await page.locator('#siteAbout summary').click();
+ await page.locator('#mobileMapJump').click();
+ await page.waitForFunction(()=>Math.abs(document.querySelector('.map-column').getBoundingClientRect().top-76)<12);
+ const result=await page.evaluate(()=>{
+  const map=document.querySelector('#map'),p=map.querySelector('[data-region]'),r=map.getBoundingClientRect();
+  const cx=r.left+r.width/2,cy=r.top+r.height/2;
+  const before=map.viewBox.baseVal.width,original=JSON.stringify(state.predictions),send=(target,type,id,x,y)=>target.dispatchEvent(new PointerEvent(type,{bubbles:true,pointerType:'touch',pointerId:id,button:0,clientX:x,clientY:y}));
+  send(p,'pointerdown',11,cx-30,cy);send(p,'pointerdown',12,cx+30,cy);
+  send(window,'pointermove',11,cx-60,cy);send(window,'pointermove',12,cx+60,cy);
+  send(window,'pointerup',11,cx-60,cy);send(window,'pointerup',12,cx+60,cy);
+  p.dispatchEvent(new MouseEvent('click',{bubbles:true,detail:1}));
+  return {before,after:view.w,unchanged:JSON.stringify(state.predictions)===original,dialog:!!document.querySelector('dialog[open]')};
+ });
+ assert.ok(result.after<result.before);assert.equal(result.unchanged,true);assert.equal(result.dialog,false);
+ await page.locator('#mobileSettingsJump').click();
+ await page.waitForFunction(()=>Math.abs(document.querySelector('.workspace-categories').getBoundingClientRect().top-76)<12);
+});
+test('Management dialogs use available desktop width and stay within mobile viewport',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ await page.locator('.header-menu:not(.export-menu) summary').click();
+ await page.locator('#managePlans').click();
+ assert.ok((await page.locator('#planDialog').boundingBox()).width>700);
+ await page.locator('#planDialog').getByRole('button',{name:'关闭',exact:true}).click();
+ await page.locator('#categoryHistory').click();
+ await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
+ await page.locator('#historyCompareOpen').click();
+ assert.ok((await page.locator('#historyCompareDialog').boundingBox()).width>800);
+ await page.setViewportSize({width:390,height:844});
+ const b=await page.locator('#historyCompareDialog').boundingBox();assert.ok(b.width<=390&&b.x>=0);
+ assert.equal(await page.locator('#historyCompareDialog').getByRole('button',{name:'关闭',exact:true}).isVisible(),true);
+});
