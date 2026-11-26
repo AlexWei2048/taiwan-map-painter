@@ -708,10 +708,6 @@
   historyOverview()?'点击县市查看'+yearLabel()+'年结果':
   yearLabel()+'选举结果 · 点击区域查看候选人与得票';el('returnTaiwanMap').hidden=!county;el('historyResultSection').hidden=false;el('headerExportPredictions').hidden=true;el('undo').disabled=true;el('redo').disabled=true;window.HistoryWorkspace?.render()}
  function switchMode(){
-  const historicOverlay=document.getElementById('historyTownBoundaryBox');
-  if(historicOverlay)historicOverlay.hidden=!legislativeMode;
-  const historicCheck=document.getElementById('historyTownBoundaries');
-  if(historicCheck)historicCheck.checked=state.showTownBoundaries;
   state.workspaceMode='history';state.fillMode='solid';state.level=legislativeMode?(legislativeBallot==='regional'&&!regionalLegislativeTownView()?'legislative':scale==='town'?'towns':'counties'):kind==='mayor'?(scale==='town'?'towns':'counties'):kind==='council'?'council':'towns';state.county=county;state.villageTown='';
   if(kind==='council')state.councilViewScope='all';
   if(kind!=='council'&&!(legislativeMode&&legislativeBallot==='regional'&&legislativeYear<2008)&&metric==='seats')metric='party';el('historyMetric').value=metric;currentResult=loaded?analyze():null;
@@ -1078,7 +1074,7 @@
    if(el('historyLegislativeMapHint')){el('historyLegislativeMapHint').hidden=false;el('historyLegislativeMapHint').textContent=
     legislativePartyTownView()?(county?'各乡镇市区以当届实际政党票分别上色；可切换领先政党或指定政党的得票数、得票率，点击乡镇查看各党完整结果。':'全台368个乡镇市区直接按各地真实政党票上色，点击任一乡镇即可查看当地各党得票。2008年按当年行政区统计，不按现行县市比例推算。'):
     regionalLegislativeTownView()?'按各乡镇市区最高票候选人所属政党着色，点击地区查看逐候选人得票。':legislativeBallot==='regional'?(!county?(scale==='district'?(legislativeYear<2008?'全部地区的选举区地图按当届选区范围显示逐席当选党徽，点击选区可查看详细结果。':'全部地区的单席选举区按各区当选政党分别填色，点击选区查看详细结果。'):(legislativeYear<2008?'全台按各县市区域民代当选席次最多的政党填色；并列最多使用多党斜纹。点击县市进入后，各多席选区逐席显示党徽。':'全台单席选区按当选政党填色，点击选区进入县市查看完整结果。')):scale==='county'?(legislativeYear<2008?'县市图在各多席选区显示当选党徽，点击选区可查看候选人、得票率与当选结果。':'县市图显示当届选区和选区号；点击选区查看完整候选人、得票率与当选结果。'):'选举区图聚焦本区候选人及法定当选席次。'):
-    !county?'按县市着色，点击县市可查看县市及乡镇市区结果。':scale==='county'?'县市得票分布；选择乡镇市区层级可继续下钻。':'点击乡镇市区查看得票分布。';}
+    !county?'':scale==='county'?'县市得票分布；选择乡镇市区层级可继续下钻。':'点击乡镇市区查看得票分布。';el('historyLegislativeMapHint').hidden=!el('historyLegislativeMapHint').textContent;}
 
   }else{if(el('historyFocusBox'))el('historyFocusBox').hidden=true;if(el('historyLegislativeMapHint'))el('historyLegislativeMapHint').hidden=true;el('historyScale').replaceChildren(new Option('县市','district'),new Option('乡镇市区','town'));el('historyScale').value=scale;if(kind==='council'){
    const options=[['all','全部类型（分别统计）'],['regional','区域议员'],['plains','平地少数民族议员'],['mountain','山地少数民族议员'],['indigenous','少数民族议员']];
@@ -1389,12 +1385,6 @@
  el('districtTableSearch').oninput=event=>{if(active&&kind==='council')renderHistoryDistrictReference();else defaultDistrictSearch?.(event)};
  const defaultDistrictDownload=el('downloadDistrictTable').onclick;
  el('downloadDistrictTable').onclick=event=>{if(!active||kind!=='council')return defaultDistrictDownload?.(event);const lines=[['县市','选区','类别','选区范围','应选名额','妇保名额','地图匹配'],...districtMetadata.filter(d=>(!county||norm(d.county)===county)).map(d=>[norm(d.county),d.name,DistrictCore.identityName(d),mainlandTerms(councilScopeText(d)),d.seats,sharedWomenText(d.womenReservedGroup)||d.womenReserved,d.mapAvailable===false||unmatchedDistricts.has(norm(d.county)+'|'+d.electorate+'|'+d.number)?'未匹配':'已匹配'])];const blob=new Blob(['\uFEFF'+lines.map(row=>row.map(csvCell).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=yearLabel().replaceAll('/','_')+'议员选区范围与名额.csv';a.click();URL.revokeObjectURL(url)};
- const historicTownToggle=el('historyTownBoundaries');
- if(historicTownToggle)historicTownToggle.onchange=()=>{
-  pushHistory();state.showTownBoundaries=historicTownToggle.checked;
-  document.getElementById('showTownBoundaries').checked=state.showTownBoundaries;
-  renderTownBorders();applyBorders();persist();
- };
  const formerReturn=el('returnTaiwanMap').onclick;el('returnTaiwanMap').onclick=()=>{if(!active)return formerReturn();const keepTownView=legislativePartyTownView()||regionalLegislativeTownView();county='';legislativeFocus='';if(legislativeMode)scale=keepTownView?'town':'county';el('historyCounty').value='';switchMode();render()};
  const defaultColor=fillColor;fillColor=function(feature){
   if(!active)return defaultColor(feature);
