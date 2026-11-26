@@ -898,8 +898,8 @@ function townVisualCenter(f,t){
    const score=clearance*3-distance*.2;
    if(score>bestScore){bestScore=score;best=[x,y]}
   }
-  const fallback=mapLabelAnchor(f,unit);
-  raw=best||[fallback?.x??middle[0],fallback?.y??middle[1]];
+  if(best)raw=best;
+  else {const fallback=mapLabelAnchor(f,unit);raw=[fallback?.x??middle[0],fallback?.y??middle[1]]}
   townVisualCenters.set(f,raw);
  }
  return{x:raw[0]*t.scale+t.tx,y:raw[1]*t.scale+t.ty};
@@ -907,15 +907,24 @@ function townVisualCenter(f,t){
 // The entire rendered name (including a small safety margin) must fit inside
 // the true polygon boundary. Sort candidate placements by visual-centre
 // distance; no label is permitted to cross a town border.
-function townInsideLabelFit(f,t,width,height,used,area,reserve){
- const b=f.box,center=townVisualCenter(f,t);
- if((b[2]-b[0])*t.scale<width+3||(b[3]-b[1])*t.scale<height+3)return null;
- const candidates=[center,...mapLabelCandidatePoints(f,t)];
+const townLabelCandidates=new WeakMap();
+function townLabelPlacementCandidates(f,t){
+ const previous=townLabelCandidates.get(f);
+ if(previous&&previous.scale===t.scale&&previous.tx===t.tx&&previous.ty===t.ty)return previous.points;
+ const b=f.box,center=townVisualCenter(f,t),points=[center,...mapLabelCandidatePoints(f,t)];
  for(let ix=1;ix<=15;ix++)for(let iy=1;iy<=15;iy++)
-  candidates.push({x:(b[0]+(b[2]-b[0])*ix/16)*t.scale+t.tx,
+  points.push({x:(b[0]+(b[2]-b[0])*ix/16)*t.scale+t.tx,
    y:(b[1]+(b[3]-b[1])*iy/16)*t.scale+t.ty});
- candidates.sort((a,b)=>Math.hypot(a.x-center.x,a.y-center.y)-Math.hypot(b.x-center.x,b.y-center.y));
- for(const p of candidates){
+ // Compute the distance once per candidate; stable sort preserves tie order.
+ const ordered=points.map(p=>({p,distance:Math.hypot(p.x-center.x,p.y-center.y)}))
+  .sort((a,b)=>a.distance-b.distance).map(entry=>entry.p);
+ townLabelCandidates.set(f,{scale:t.scale,tx:t.tx,ty:t.ty,points:ordered});
+ return ordered;
+}
+function townInsideLabelFit(f,t,width,height,used,area,reserve){
+ const b=f.box;
+ if((b[2]-b[0])*t.scale<width+3||(b[3]-b[1])*t.scale<height+3)return null;
+ for(const p of townLabelPlacementCandidates(f,t)){
   const rect=[p.x-width/2-1.5,p.y-height/2-1.5,p.x+width/2+1.5,p.y+height/2+1.5];
   if(rect[0]<area.left||rect[2]>area.right||rect[1]<area.top||rect[3]>area.bottom)continue;
   if(reserve&&leaderOverlap(rect,[reserve.x,reserve.y,reserve.x+reserve.width,reserve.y+reserve.height]))continue;
