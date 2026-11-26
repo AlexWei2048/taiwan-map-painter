@@ -68,16 +68,15 @@ function currentPlanName(){return planBundle?.plans.find(p=>p.id===planBundle.ac
 function applyPlanAction(action){
  if(planStorageBlocked)throw Error('多方案存储无法读取，请先下载当前备份');
  if(!data||window.History2022View?.active())throw Error('请先返回岛屿画布');
- clearTimeout(persistTimer);
  const base=planBundle||MapPlanStore.initial(state),next=MapPlanStore.change(base,state,action);
  const switched=next.activeId!==base.activeId;
  const project=switched?cleanProject(next.plans.find(p=>p.id===next.activeId).project):state;
  // Validate before writing; a failed storage write leaves the current project untouched.
  if(switched)next.plans.find(p=>p.id===next.activeId).project=project;
  const raw=MapPlanStore.commit(localStorage,planRaw,next);
- planBundle=next;planRaw=raw;
+ clearTimeout(persistTimer);planBundle=next;planRaw=raw;
  if(switched){state=project;undo=[];redo=[];erase=false;view=null;baseView=null;electionResultCache.clear();syncInputs();render()}
- updateHistory();refreshPlanManager();toast('已保存：'+currentPlanName());
+ updateHistory();refreshPlanManager();persist();toast('已保存：'+currentPlanName());
 }
 function toast(s){$('toast').textContent=s;$('toast').classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('visible'),2600)}
 function pushHistory(){undo.push(clone(state));if(undo.length>100)undo.shift();redo=[];updateHistory()}
@@ -1885,6 +1884,37 @@ $('confirmReset').onclick=()=>{
 };
 function download(blob,name){const a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download=name;a.style.display='none';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),10000)}
 const filename=()=>((state.title||((state.county||'全台')+'地图填色')).replace(/[\\/:*?"<>|]/g,'_').slice(0,80));
+function renderPlanComparison(bundle=planBundle||MapPlanStore.initial(state)){
+ const host=$('planComparison');if(!host)return;host.replaceChildren();
+ if(typeof candidateDatabase==='undefined'||!candidateDatabase||typeof PredictionCore==='undefined')return;
+ const office=$('planComparisonOffice').value,metric=$('planCompletionMetric').value;
+ const items=bundle.plans.map(p=>({p,summary:MapPlanStore.progress(candidateDatabase,p.id===bundle.activeId?state:p.project,office,PredictionCore)}));
+ const make=(tag,value)=>{const node=document.createElement(tag);node.textContent=String(value);return node};
+ const cell=(row,tag,value)=>{const el=make(tag,value);row.append(el);return el};
+ const table=document.createElement('table');table.className='history-candidate-table plan-comparison-table';
+ const head=document.createElement('thead'),hr=document.createElement('tr');
+ for(const name of ['方案','胜负完成','得票完成','已完成席次','待复核选区'])cell(hr,'th',name);head.append(hr);table.append(head);
+ const body=document.createElement('tbody');
+ for(const {p,summary:{all}} of items){const row=document.createElement('tr');cell(row,'th',p.name);cell(row,'td',all.winners+'/'+all.total);cell(row,'td',all.votes+'/'+all.total);cell(row,'td',all.seats);cell(row,'td',all.invalid);body.append(row)}
+ table.append(body);host.append(make('h3','方案对比'),table);
+ const parties=[...new Set(items.flatMap(({summary})=>Object.keys(summary.all.parties)))].sort((a,b)=>a.localeCompare(b,'zh-CN'));
+ if(parties.length){
+  const t=document.createElement('table');t.className='history-candidate-table plan-comparison-table';const h=document.createElement('thead'),r=document.createElement('tr');cell(r,'th','政党');for(const {p} of items)cell(r,'th',p.name);h.append(r);t.append(h);
+  const b=document.createElement('tbody');for(const party of parties){const row=document.createElement('tr');cell(row,'th',party);for(const {summary} of items)cell(row,'td',summary.all.parties[party]||0);b.append(row)}t.append(b);host.append(make('h4','各方案已完成选区席次'),t)
+ }
+ const current=items.find(({p})=>p.id===bundle.activeId)?.summary;
+ if(!current)return;host.append(make('h3','当前方案 · 各县市进度'));
+ const counties=document.createElement('table');counties.className='history-candidate-table plan-comparison-table';const h=document.createElement('thead'),r=document.createElement('tr');for(const n of ['县市','胜负完成','得票完成','操作'])cell(r,'th',n);h.append(r);counties.append(h);const b=document.createElement('tbody');
+ const byId=new Map(candidateDatabase.districts.map(d=>[d.id,d]));
+ for(const county of [...current.counties.keys()].sort((a,b)=>COUNTY_ORDER.indexOf(a)-COUNTY_ORDER.indexOf(b))){
+  const row=document.createElement('tr'),x=current.counties.get(county);cell(row,'th',county);cell(row,'td',x.winners+'/'+x.total);cell(row,'td',x.votes+'/'+x.total);
+  const td=cell(row,'td',''),button=make('button','补填选区');button.type='button';button.className='button quiet';
+  const ids=metric==='votes'?x.incompleteVotes:x.incomplete;button.disabled=!ids.length;
+  button.onclick=()=>{const d=byId.get(ids[0]);if(!d)return;$('planDialog').close();state.workspaceMode='prediction';state.county=d.county;state.predictionOffice=d.type;state.predictionScale='district';state.level={mayor:'counties',council:'council',township:'towns'}[d.type];state.fillMode='prediction';openPredictionDistrict(d);persist()};td.append(button);b.append(row)
+ }
+ counties.append(b);host.append(counties);
+ const note=make('p','仅统计当前名册及有效输入；胜负完成沿用选区校验，得票完成须填齐同一指标且票数合计大于0或得票率合计约100%。未完成选区不计入政党席次；跨区妇保仍需另行复核。');note.className='data-help';host.append(note);
+}
 function refreshPlanManager(){
  const list=$('planList');if(!list)return;
  const bundle=planBundle||MapPlanStore.initial(state);
@@ -1903,11 +1933,12 @@ function refreshPlanManager(){
  if(typeof renderPlanComparison==='function')renderPlanComparison(bundle);
 }
 function handlePlan(action){try{applyPlanAction(action);$('planError').textContent=''}catch(e){$('planError').textContent=e.message||'方案操作失败';$('activePlanSelect').value=planBundle?.activeId||'original'}}
-$('managePlans').onclick=()=>{if(window.History2022View?.active()){toast('请先返回岛屿画布');return}$('planError').textContent='';refreshPlanManager();$('planDialog').showModal()};
+$('planComparisonOffice').onchange=()=>renderPlanComparison();$('planCompletionMetric').onchange=()=>renderPlanComparison();
+$('managePlans').onclick=()=>{if(window.History2022View?.active()){toast('请先返回岛屿画布');return}$('planError').textContent='';$('planComparisonOffice').value=state.predictionOffice;refreshPlanManager();$('planDialog').showModal()};
 $('activePlanSelect').onchange=()=>handlePlan({type:'switch',id:$('activePlanSelect').value});
 $('planRename').onclick=()=>handlePlan({type:'rename',name:$('planNameInput').value});
 $('planCreate').onclick=()=>handlePlan({type:'create',id:'plan-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),name:$('planNameInput').value,project:defaults()});
-$('planCopy').onclick=()=>handlePlan({type:'copy',id:'plan-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),name:$('planNameInput').value+'（副本）'});
+$('planCopy').onclick=()=>handlePlan({type:'copy',id:'plan-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),name:$('planNameInput').value.trim().slice(0,36)+'（副本）'});
 $('planDelete').onclick=()=>{if(confirm('删除当前方案「'+currentPlanName()+'」？其他方案不会被删除。'))handlePlan({type:'delete',id:planBundle?.activeId||'original'})};
 $('planCurrentName').textContent=currentPlanName();
 $('saveProject').onclick=()=>{download(new Blob([JSON.stringify(projectStateForSave(),null,2)],{type:'application/json'}),filename()+'.json');toast('方案已保存，可在其他设备打开')};$('loadProject').onclick=()=>$('projectFile').click();$('projectFile').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{if(file.size>10000000)throw Error('方案文件过大');const next=cleanProject(JSON.parse(await file.text()));if(next.county&&!data.counties.some(f=>f.name===next.county))throw Error('方案中的县市未找到');pushHistory();state=next;erase=false;syncInputs();render();persist();toast('已打开地图方案')}catch(err){toast(err.message||'无法读取方案')}finally{e.target.value=''}};
