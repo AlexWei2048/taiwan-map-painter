@@ -7,6 +7,8 @@
  'use strict';
  const YEARS=[1996,2000,2004,2008,2012,2016,2020,2024];
  const YEAR_SET=new Set(YEARS);
+ const dataUrl=year=>'assets/history-president-'+year+'.json?v=20261115-cec-all-towns-v3';
+ const trendSummarySourceVersion=()=>JSON.stringify(YEARS.map(dataUrl));
  // Verified running mates for every officially recorded presidential ticket.
  // Indexed by election year and presidential candidate, not party: independent
  // tickets may share the same party/nomination label in the source vote data.
@@ -70,7 +72,7 @@
   year=Number(year);if(!YEAR_SET.has(year))throw Error('不支持的选举年份：'+year);
   if(activeLoad.has(year))return activeLoad.get(year);
   const promise=(async()=>{
-   const resp=await fetcher('assets/history-president-'+year+'.json?v=20261115-cec-all-towns-v3',{cache:'default'});
+   const resp=await fetcher(dataUrl(year),{cache:'default'});
    if(!resp.ok)throw Error(year+'年历史数据 HTTP '+resp.status);
    const shard=await resp.json();
    if(shard.schemaVersion!==2||shard.year!==year||shard.office!=='president'||
@@ -148,7 +150,7 @@
   }
   return{counties,towns,missing,merges,countyNames:historicCountyNames};
  }
- const api={YEARS,RUNNING_MATES,ticketName,ticketProfile,enrichCandidateProfiles,modernCounty,baseTown,load,geometry,clearPending};
+ const api={trendSummarySourceVersion,YEARS,RUNNING_MATES,ticketName,ticketProfile,enrichCandidateProfiles,modernCounty,baseTown,load,geometry,clearPending};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;
  else root.HistoryPresidential=api;
 })(typeof window==='undefined'?{}:window);

@@ -11,3 +11,10 @@ test('unsupported candidate/focused queries use original data; mismatched source
  assert.equal(Summary.key(conf),'mayor-1');assert.equal(Summary.key({...conf,candidateScope:'candidate'}),'');assert.equal(Summary.key({...conf,focus:'中正区'}),'');
  assert.equal(Summary.compatible({schemaVersion:1,office:'mayor',county:'台北市',algorithmVersion:1,sourceVersion:'old',years:{}},conf,Local,Trends),false);
 });
+
+test('presidential and township summaries match source loaders and aggregation',async()=>{
+ const config={Local,Trends,Summary,OpenCC,Presidential:require('../history-presidential.js'),PresidentialTurnout:require('../history-presidential-turnout.js'),read:async path=>{const bytes=await fs.readFile(path);return{content:bytes.toString('utf8'),sha:crypto.createHash('sha1').update('blob '+bytes.length+'\0').update(bytes).digest('hex')}}};
+ for(const office of ['president','township'])for(const [path,content] of await build({...config,offices:[office]}))assert.equal(await fs.readFile(path,'utf8'),content,path);
+ assert.deepEqual(Summary.summaryYears('president',[2020,2024]),[2020,2024]);
+ assert.deepEqual(Summary.summaryYears('township',[2018,2022,2026]),[2018]);
+});

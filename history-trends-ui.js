@@ -49,8 +49,8 @@ const trendDataKey=conf=>[conf.office,S.key(conf),range(conf).join(',')].join('|
 async function loadSummary(conf){
  const key=S.key(conf);if(!key)return null;
  if(!summaryCache.has(key))summaryCache.set(key,(async()=>{
-  const response=await fetch('assets/history-trend-summary-v1/'+key+'.json?v=20261126-v101');if(!response.ok)throw Error('summary unavailable');
-  const payload=await response.json();return S.compatible(payload,conf,HistoryLocal,T)?payload:null;
+  const response=await fetch('assets/history-trend-summary-v1/'+key+'.json?v='+(['president','township'].includes(conf.office)?'20261126-v102':'20261126-v101'));if(!response.ok)throw Error('summary unavailable');
+  const payload=await response.json();return S.compatible(payload,conf,HistoryLocal,T,HistoryPresidential)?payload:null;
  })().catch(()=>null));
  return summaryCache.get(key);
 }
@@ -61,13 +61,13 @@ async function load(){
  $('trendStatus').textContent='正在载入所选范围的历届正式结果…';$('trendCharts').replaceChildren();$('trendCsv').disabled=true;
  if(!ys.length){loading=false;$('trendStatus').textContent='请至少勾选一个届次。';return}
  try{
-  const summary=ys.some(y=>y<2022)?await loadSummary(conf):null;if(token!==request)return;
+  const summary=S.summaryYears(conf.office,ys).length?await loadSummary(conf):null;if(token!==request)return;
   const result=new Array(ys.length);let next=0,finished=0;
   // A bounded work queue avoids waiting for the slowest request in each old batch.
   async function worker(){while(token===request&&next<ys.length){
    const i=next++,year=ys[i],k=conf.office+'|'+year;
    try{
-    const derived=year<2022?summary?.years?.[year]:null;
+    const derived=S.summaryYears(conf.office,[year]).length?summary?.years?.[year]:null;
     if(S.yearValid(derived,conf))result[i]={year,summary:derived};
     else{if(!cache.has(k)){const pending=Promise.resolve().then(()=>snapshot(conf.office,year));cache.set(k,pending);pending.catch(()=>{if(cache.get(k)===pending)cache.delete(k)})}
     result[i]={year,snapshot:await cache.get(k)}}
