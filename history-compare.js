@@ -65,7 +65,7 @@ const dialog=$('historyCompareDialog'),office=$('compareOffice'),ballot=$('compa
 const node=(tag,t)=>{const e=doc.createElement(tag);if(t!==undefined)e.textContent=t;return e};
 const svg=(tag,attrs={})=>{const e=doc.createElementNS('http://www.w3.org/2000/svg',tag);for(const [k,v]of Object.entries(attrs))e.setAttribute(k,v);return e};
 const normalize=v=>typeof simplify==='function'?simplify(String(v||'')):norm(v);
-let token=0,models=null,baseBox=null,zoom=1,chosen='';
+let token=0,models=null,baseBox=null,zoom=1,offsetX=0,offsetY=0,chosen='';
 const cache=new Map();
 const label=(year,o)=>root.HistoryLocal.yearLabel(year,o);
 const years=o=>o==='president'?root.HistoryPresidential.YEARS:o==='legislative'?root.HistoryLegislative.YEARS:root.HistoryLocal.years(o,root.HISTORY_2026_RESULTS_AVAILABLE===true);
@@ -100,7 +100,7 @@ async function model(o,y,b){
 }
 function setBox(){
  if(!baseBox)return;
- const [x,y,w,h]=baseBox,box=[x+w*(1-1/zoom)/2,y+h*(1-1/zoom)/2,w/zoom,h/zoom].join(' ');
+ const [x,y,w,h]=baseBox,box=[x+w*(1-1/zoom)/2+offsetX,y+h*(1-1/zoom)/2+offsetY,w/zoom,h/zoom].join(' ');
  for(const id of ['compareMapA','compareMapB'])$(id).setAttribute('viewBox',box);
 }
 function color(p){if(!p)return '#edf1e9';return (typeof partyMatch==='function'?partyMatch(p)?.color:null)||'#87988e'}
@@ -113,14 +113,21 @@ function drawMap(model,id,index){
   if(selected&&Number.isFinite(share))fill=typeof ElectionCore!=='undefined'?ElectionCore.shade(color(selected),share,0,100):color(selected);
   else if(!selected&&leaders.length===1)fill=color(leaders[0]);
   else if(!selected&&leaders.length>1){const pid='compare-tie-'+index+'-'+defs.childElementCount,g=svg('linearGradient',{id:pid,x1:'0%',y1:'0%',x2:'100%',y2:'100%'});leaders.forEach((p,i)=>{g.append(svg('stop',{offset:(i/leaders.length*100)+'%','stop-color':color(p)}),svg('stop',{offset:((i+1)/leaders.length*100)+'%','stop-color':color(p)}))});defs.append(g);fill='url(#'+pid+')'}
-  const path=svg('path',{d:f.d,fill,stroke:name===chosen?'#182d26':'#546f62','stroke-width':name===chosen?2.5:.8,'vector-effect':'non-scaling-stroke','fill-rule':f.fillRule||'evenodd',tabindex:'0',role:'button','aria-label':name+' '+(entry?.complete?(selected?rate(share):leaders.join('、')||'席次待核'):'缺档或不适用')});
-  const title=svg('title');title.textContent=path.getAttribute('aria-label');path.append(title);path.onclick=()=>{chosen=name;county.value=name;render()};path.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();path.click?.();chosen=name;county.value=name;render()}};graph.append(path);
+  const changeMode=index===1&&$('compareDifference').checked&&selected;
+  let change=null;
+  if(changeMode){
+   const previous=models[0].summary;
+   if(comparableCounty(name,previous,model.summary))change=delta(previous.counties.get(name),entry,selected).share;
+   fill=Number.isFinite(change)?Math.abs(change)<.005?'#f1f0ec':ElectionCore.shade(change>0?'#26744e':'#a94b35',Math.min(30,Math.abs(change)),0,30):'#d9dfdc';
+  }
+  const path=svg('path',{d:f.d,fill,stroke:name===chosen?'#182d26':'#546f62','stroke-width':name===chosen?2.5:.8,'vector-effect':'non-scaling-stroke','fill-rule':f.fillRule||'evenodd',tabindex:'0',role:'button','aria-label':name+' '+(changeMode?(Number.isFinite(change)?signed(change)+' 个百分点':'不可比较'):entry?.complete?(selected?rate(share):leaders.join('、')||'席次待核'):'缺档或不适用')});
+  const title=svg('title');title.textContent=path.getAttribute('aria-label');path.append(title);path.onclick=()=>{chosen=name;county.value=name;render()};path.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();chosen=name;county.value=name;render()}};graph.append(path);
  }
 }
 function render(){
  if(!models)return;
  const [a,b]=models,as=a.summary,bs=b.summary;
- $('compareMapTitleA').textContent=label(as.year,as.office);$('compareMapTitleB').textContent=label(bs.year,bs.office);
+ $('compareMapTitleA').textContent=label(as.year,as.office);$('compareMapTitleB').textContent=label(bs.year,bs.office)+($('compareDifference').checked&&party.value?' · 得票率变化':'');
  drawMap(a,'compareMapA',0);drawMap(b,'compareMapB',1);setBox();
  const available=chosen?comparableCounty(chosen,as,bs)&&as.counties.has(chosen)&&bs.counties.has(chosen):true;
  const x=chosen?as.counties.get(chosen):as.all,y=chosen?bs.counties.get(chosen):bs.all,host=$('compareTable');host.replaceChildren();
@@ -133,7 +140,8 @@ function render(){
  const body=node('tbody'),parties=[...new Set([...Object.keys(x?.parties||{}),...Object.keys(y?.parties||{})])].sort((p,q)=>(y?.parties[q]?.votes||0)-(y?.parties[p]?.votes||0)||p.localeCompare(q,'zh-CN'));
  for(const p of parties){const tr=node('tr'),l=x?.parties[p],r=y?.parties[p],d=available?delta(x,y,p):{};for(const v of [p,rate(l?.share),rate(r?.share),signed(d.share),x?.complete&&x.seats!==null?(l?.seats||0):'—',y?.complete&&y.seats!==null?(r?.seats||0):'—',signed(d.seats,0)])tr.append(node('td',v));body.append(tr)}
  table.append(body);host.append(table);
- $('compareLegend').textContent=party.value?'同一政党得票率：0%—100%；未参选或缺档为灰色。':as.office==='president'||as.ballot==='party'?'颜色表示最高票政党；并列使用多色。':'颜色表示当选席次最多政党；并列使用多色。';
+ $('compareDifference').disabled=!party.value;
+ $('compareLegend').textContent=party.value&&$('compareDifference').checked?'左图为原届得票率；右图为右届减左届的百分点变化（绿增、红减，绝对值≥30百分点同为最深色，灰色不可比）。':party.value?'同一政党得票率：0%—100%；未参选或缺档为灰色。':as.office==='president'||as.ballot==='party'?'颜色表示最高票政党；并列使用多色。':'颜色表示当选席次最多政党；并列使用多色。';
 }
 async function refresh(){
  const my=++token,o=office.value,b=ballot.value,y1=Number(left.value),y2=Number(right.value);models=null;
@@ -142,7 +150,7 @@ async function refresh(){
  status.textContent='正在载入两届正式历史资料…';
  try{
   const values=await Promise.all([model(o,y1,b),model(o,y2,b)]);if(my!==token)return;
-  models=values;zoom=1;const shapes=values.flatMap(x=>x.shapes),bounds=shapes.reduce((a,f)=>[Math.min(a[0],f.box[0]),Math.min(a[1],f.box[1]),Math.max(a[2],f.box[2]),Math.max(a[3],f.box[3])],[Infinity,Infinity,-Infinity,-Infinity]);const w=bounds[2]-bounds[0],h=bounds[3]-bounds[1];if(!Number.isFinite(w+h)||w<=0||h<=0)throw Error('县市地图范围无效');baseBox=[bounds[0]-w*.06,bounds[1]-h*.06,w*1.12,h*1.12];
+  models=values;zoom=1;offsetX=offsetY=0;const shapes=values.flatMap(x=>x.shapes),bounds=shapes.reduce((a,f)=>[Math.min(a[0],f.box[0]),Math.min(a[1],f.box[1]),Math.max(a[2],f.box[2]),Math.max(a[3],f.box[3])],[Infinity,Infinity,-Infinity,-Infinity]);const w=bounds[2]-bounds[0],h=bounds[3]-bounds[1];if(!Number.isFinite(w+h)||w<=0||h<=0)throw Error('县市地图范围无效');baseBox=[bounds[0]-w*.06,bounds[1]-h*.06,w*1.12,h*1.12];
   const names=[...new Set(values.flatMap(v=>v.shapes.map(f=>normalize(f.name||f.county))))].sort((a,b)=>Core.compareResultRows({county:a},{county:b},o));
   const oldCounty=chosen;county.replaceChildren(new Option('全部地区',''),...names.map(n=>new Option(n,n)));chosen=names.includes(oldCounty)?oldCounty:'';county.value=chosen;
   const oldParty=party.value,ps=[...new Set(values.flatMap(v=>[...v.summary.counties.values()].flatMap(r=>Object.keys(r.parties))))].sort((a,b)=>a.localeCompare(b,'zh-CN'));party.replaceChildren(new Option('当选／领先政党',''),...ps.map(p=>new Option(p,p)));party.value=ps.includes(oldParty)?oldParty:'';
@@ -150,7 +158,7 @@ async function refresh(){
  }catch(e){if(my===token){models=null;status.textContent='载入失败：'+e.message}}
 }
 open.onclick=()=>{office.value=root.History2022View?.office()||'mayor';chosen='';setBallots();setYears(root.History2022View?.year());dialog.showModal();refresh()};
-office.onchange=()=>{chosen='';setBallots();setYears();refresh()};ballot.onchange=()=>{setYears();refresh()};left.onchange=right.onchange=refresh;party.onchange=render;county.onchange=()=>{chosen=county.value;render()};
-$('compareZoomIn').onclick=()=>{zoom=Math.min(5,zoom*1.25);setBox()};$('compareZoomOut').onclick=()=>{zoom=Math.max(1,zoom/1.25);setBox()};$('compareFit').onclick=()=>{zoom=1;setBox()};$('compareRetry').onclick=refresh;
+office.onchange=()=>{chosen='';setBallots();setYears();refresh()};ballot.onchange=()=>{setYears();refresh()};left.onchange=right.onchange=refresh;party.onchange=render;$('compareDifference').onchange=render;county.onchange=()=>{chosen=county.value;render()};
+$('compareZoomIn').onclick=()=>{zoom=Math.min(5,zoom*1.25);setBox()};$('compareZoomOut').onclick=()=>{zoom=Math.max(1,zoom/1.25);setBox()};$('compareFit').onclick=()=>{zoom=1;offsetX=offsetY=0;setBox()};$('compareRetry').onclick=refresh;
 dialog.addEventListener('close',()=>{token++;models=null});
 })(typeof window==='undefined'?globalThis:window);
