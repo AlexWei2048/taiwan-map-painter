@@ -962,3 +962,37 @@ body.history-mode #districtReferenceNote,body.history-mode #districtReferenceSou
 /* Historical comparison uses two independent period geometries with one shared viewBox. */
 .history-compare-dialog{width:min(1180px,96vw)}.compare-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 12px;margin:12px 0}.compare-controls label{display:flex;flex-direction:column;gap:4px;font-size:12px}.compare-controls label[hidden]{display:none}.compare-controls select{width:100%;margin:0}.compare-tools{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:8px 0}.compare-tools button{width:auto}.compare-tools span{font-size:12px;color:#567365}.compare-maps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.compare-maps section{border:1px solid #dce5df;border-radius:9px;overflow:hidden;background:#f9fbfa;min-width:0}.compare-maps h3{text-align:center;font-size:15px;margin:8px}.compare-maps svg{display:block;width:100%;height:clamp(210px,40dvh,420px);touch-action:none}.compare-maps path{cursor:pointer}.compare-maps path:focus-visible{outline:none;stroke:#173e30;stroke-width:3}.compare-table-scroll{overflow:auto}.compare-data-table{width:100%;min-width:650px;white-space:nowrap}.compare-data-table th{position:static}.compare-data-table td{text-align:center}.compare-data-table td:first-child{text-align:left}.compare-table-scroll h3{font-size:15px;margin:8px 0}
 @media(max-width:600px){.compare-controls{grid-template-columns:repeat(2,minmax(0,1fr))}.compare-maps{gap:5px}.compare-maps h3{font-size:12px}.compare-maps svg{height:220px}.compare-data-table{font-size:11px}}
+
+/* v118: modal widths must override the original compact confirmation dialog. */
+dialog.history-coverage-dialog{max-width:none;max-height:calc(100dvh - 28px);margin:auto;overscroll-behavior:contain}
+.history-coverage-dialog>.coverage-heading{margin:0;justify-content:space-between;position:sticky;top:-20px;padding:8px 0;background:#fff;z-index:5}
+.history-coverage-dialog>.coverage-scroll,.history-coverage-dialog>.plan-comparison-scroll,.history-coverage-dialog>.compare-table-scroll{display:block;justify-content:initial;min-width:0;margin-top:10px}
+.history-coverage-dialog>.compare-controls{margin-top:12px;justify-content:initial}
+.history-coverage-dialog>.compare-maps{margin-top:10px;justify-content:initial}
+.history-coverage-dialog>.coverage-controls,.history-coverage-dialog>.plan-form,.history-coverage-dialog>.compare-tools{justify-content:flex-start}
+.site-about-card>summary{cursor:pointer;list-style:none;align-items:center}
+.site-about-card>summary::-webkit-details-marker{display:none}
+.site-about-card>summary::after{content:'▾';margin-left:auto;color:#567365}
+.site-about-card:not([open])>summary{margin-bottom:0}
+.site-about-card[open]>summary::after{content:'▴'}
+.mobile-map-nav{display:none}
+@media(max-width:700px){
+ body{padding-bottom:calc(62px + env(safe-area-inset-bottom,0px))}
+ .mobile-map-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:11;gap:8px;padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px));background:#fbfcf9;border-top:1px solid #d9e5da;box-shadow:0 -2px 10px #233d3910}
+ .mobile-map-nav button{flex:1;min-height:44px;border:1px solid #c7dace;border-radius:8px;background:#fff;color:#315a49;font-size:14px;font-weight:600}
+ .mobile-map-nav #mobileMapJump{background:var(--green);border-color:var(--green);color:#fff}
+ .sidebar .workspace-categories,.map-column{scroll-margin-top:76px}
+ .sidebar .workspace-categories{position:static}
+ .sidebar .site-about-card{padding:8px 12px}
+ .site-about-card>summary{min-height:36px}
+ .sidebar :is(select,input[type=text],input[type=search]),.history-coverage-dialog :is(select,input[type=text],input[type=search]){font-size:16px;min-width:0}
+ .zoom-controls button{width:44px;height:44px;font-size:23px}
+ .history-view-switch button{min-height:44px}
+ dialog.history-coverage-dialog{width:calc(100vw - 16px);max-width:none;max-height:calc(100dvh - 16px);padding:12px}
+ .history-coverage-dialog>.coverage-heading{top:-12px;padding:8px 0}
+ .history-coverage-dialog .button,.history-coverage-dialog .coverage-matrix button{min-height:36px}
+ .compare-controls{gap:8px}
+ .compare-maps svg{height:clamp(240px,44dvh,340px)}
+ .compare-tools .check{margin:0;min-height:36px;font-size:12px}
+ .toast{bottom:calc(74px + env(safe-area-inset-bottom,0px));max-width:calc(100vw - 24px);width:max-content;overflow-wrap:anywhere;z-index:21}
+}
