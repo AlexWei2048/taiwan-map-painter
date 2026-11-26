@@ -1,0 +1,42 @@
+name: Map performance and label audit
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'app.js'
+      - 'index.html'
+      - '*.css'
+      - 'history-*.js'
+      - 'tests/performance-audit.mjs'
+      - '.github/workflows/performance-audit.yml'
+permissions:
+  contents: read
+concurrency:
+  group: map-performance-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  benchmark:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-package-lock playwright@1.56.1
+      - run: npx playwright install chromium
+      - name: Measure desktop and mobile
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/map-perf-server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid"' EXIT
+          node tests/performance-audit.mjs
+      - name: Save timing report and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: map-performance-${{ github.sha }}
+          path: artifacts/map-performance/
+          if-no-files-found: warn
+          retention-days: 14
