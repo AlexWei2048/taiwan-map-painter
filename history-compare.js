@@ -78,6 +78,7 @@ function csvCell(value){
 }
 function comparisonCSV(a,b,scope=''){
  const counties=scope?[scope]:[...new Set([...a.counties.keys(),...b.counties.keys()])].sort((x,y)=>x.localeCompare(y,'zh-CN'));
+ const officeLabel={mayor:'县市长',council:'县市议员',township:'乡镇市区长',president:'台湾地区领导人',legislative:'立法机构民代'}[a.office]||a.office,ballotLabel={all:'全部',regional:'区域',plains:'平地少数民族',mountain:'山地少数民族',party:'不分区政党票'}[a.ballot]||a.ballot;
  const header=['选举类别','票种','左届','右届','县市','政党','左届得票数','右届得票数','左届得票率(%)','右届得票率(%)','得票率变化(百分点)','左届席次','右届席次','席次变化','左届当选政党','右届当选政党','比较说明'];
  const rows=[header];
  for(const county of ['',...counties]){
@@ -88,7 +89,7 @@ function comparisonCSV(a,b,scope=''){
   const t=county&&same&&a.office==='mayor'?turnover(x,y):null;
   for(const p of parties.length?parties:['']){
    const l=x?.complete?x.parties[p]:null,r=y?.complete?y.parties[p]:null,d=same?delta(x,y,p):{};
-   rows.push([a.office,a.ballot,a.year,b.year,county||'全部地区',p,l?.votes,r?.votes,l?.share,r?.share,d.share,x?.complete&&x.seats!==null?(l?.seats||0):null,y?.complete&&y.seats!==null?(r?.seats||0):null,d.seats,t?.from,t?.to,reason]);
+   rows.push([officeLabel,ballotLabel,a.year,b.year,county||'全部地区',p,l?.votes,r?.votes,l?.share,r?.share,d.share,x?.complete&&x.seats!==null?(l?.seats||0):null,y?.complete&&y.seats!==null?(r?.seats||0):null,d.seats,t?.from,t?.to,reason]);
   }
  }
  return '\ufeff'+rows.map(row=>row.map(csvCell).join(',')).join('\r\n');
@@ -201,7 +202,7 @@ function render(){
  for(const p of parties){const tr=node('tr'),l=x?.parties[p],r=y?.parties[p],d=available?delta(x,y,p):{};for(const v of [p,rate(l?.share),rate(r?.share),signed(d.share),x?.complete&&x.seats!==null?(l?.seats||0):'—',y?.complete&&y.seats!==null?(r?.seats||0):'—',signed(d.seats,0)])tr.append(node('td',v));body.append(tr)}
  table.append(body);host.append(table);
  $('compareLegend').textContent=mode.value==='turnover'?'左图为左届当选政党；右图橙色为党籍易手、浅绿色为党籍未变、灰色不可比。无党籍归为同一类别，不代表同一候选人。':mode.value==='seats'?'左图为所选政党左届席次（0—'+seatBaseMax()+' 席）；右图为右届减左届席次（绿增、红减，最大绝对变化 '+seatChangeMax()+' 席；灰色不可比）。':mode.value==='share'?'左图为原届得票率；右图为右届减左届的百分点变化（绿增、红减，绝对值≥30百分点同为最深色，灰色不可比）。':party.value?'同一政党得票率：0%—100%；未参选或缺档为灰色。':as.office==='president'||as.ballot==='party'?'颜色表示最高票政党；并列使用多色。':'颜色表示当选席次最多政党；并列使用多色。';
- for(const id of ['compareExportSvg','compareExportCsv','compareExportPng'])$(id).disabled=false;
+ for(const id of ['compareExportSvg','compareExportCsv','compareExportPng'])$(id).disabled=exporting;
 }
 async function refresh(){
  const my=++token,o=office.value,b=ballot.value,y1=Number(left.value),y2=Number(right.value);models=null;
@@ -256,11 +257,11 @@ function exportGraph(){
   text($(index?'compareMapTitleB':'compareMapTitleA').textContent,x+panel/2,142,24,{'text-anchor':'middle','font-weight':650});
   const graph=$(id).cloneNode(true);graph.removeAttribute('id');graph.removeAttribute('class');graph.removeAttribute('role');graph.removeAttribute('aria-label');
   for(const p of graph.querySelectorAll('[tabindex]')){p.removeAttribute('tabindex');p.removeAttribute('role')}
-  graph.setAttribute('x',x+8);graph.setAttribute('y',mapY);graph.setAttribute('width',panel-16);graph.setAttribute('height',mapH-8);graph.setAttribute('viewBox',baseBox.join(' '));root.append(graph);
+  graph.setAttribute('x',x+8);graph.setAttribute('y',mapY);graph.setAttribute('width',panel-16);graph.setAttribute('height',mapH-8);graph.setAttribute('viewBox',baseBox.join(' '));for(const path of graph.querySelectorAll('path[stroke-width]')){path.setAttribute('stroke','#546f62');path.setAttribute('stroke-width','.8')}root.append(graph);
  }
  let entries=[];
  if(mode.value==='turnover')entries=[['#b56c30','党籍易手'],['#dcebe1','党籍未变'],['#d9dfdc','不可比']];
- else if(mode.value==='share'||mode.value==='seats')entries=[['#26744e','增加'],['#f1f0ec','无变化'],['#a94b35','减少'],['#d9dfdc','不可比']];
+ else if(mode.value==='share'||mode.value==='seats')entries=[[color(party.value),'左图：'+party.value],['#26744e','增加'],['#f1f0ec','无变化'],['#a94b35','减少'],['#d9dfdc','不可比']];
  else if(party.value)entries=[[color(party.value),party.value],['#d9dfdc','未参选或缺档']];
  else entries=[...new Set(models.flatMap(m=>[...m.summary.counties.values()].flatMap(r=>r.leader||[])))].map(p=>[color(p),p]).concat([['#edf1e9','无适用或可核实结果']]);
  // Include both the left-map party colors and the right-map change legend in turnover mode.
