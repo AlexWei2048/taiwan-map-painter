@@ -6,9 +6,9 @@ Without a complete, source-backed post-election roster, the builder stages
 reports ONLY. Publication is explicitly opt-in after 2026-11-28.
 """
 from __future__ import annotations
-import argparse,csv,hashlib,json,re,sys
+import argparse,csv,hashlib,json,re,sys,os,tempfile
 from collections import defaultdict
-from datetime import date,datetime,timezone
+from datetime import date,datetime,timezone,timedelta
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -74,6 +74,12 @@ def prepare(directory,raw,town_raw=(),turnout_raw=(),status="provisional",town_t
     cs={c["id"]:c for c in directory["candidates"]}
     ds={d["id"]:d for d in directory["districts"]}
     issues=[];warnings=[];observed={};towns=defaultdict(list);turnout={};source_set=set()
+    if len(cs)!=len(directory['candidates']) or len(ds)!=len(directory['districts']):issues.append('Duplicate stable IDs in roster')
+    for did,d in ds.items():
+        actual={cid for cid,c in cs.items() if c.get('districtId')==did}
+        expected=d.get('candidateIds') or []
+        if len(expected)!=len(set(expected)) or set(expected)!=actual or any(cs[cid].get('type')!=d.get('type') or cs[cid].get('county')!=d.get('county') for cid in actual):issues.append(did+': inconsistent roster membership')
+    if any(c.get('districtId') not in ds for c in cs.values()):issues.append('Candidate references unknown district')
     for line,row in enumerate(raw,2):
         cid=str(row.get("candidate_id") or "").strip()
         if cid not in cs or cid in observed:
@@ -86,7 +92,7 @@ def prepare(directory,raw,town_raw=(),turnout_raw=(),status="provisional",town_t
             src=official(row)
         except ValueError as error:issues.append(f"row {line}: {error}");continue
         current=number(cs[cid].get("number"),"local ballot",False)
-        if current and current!=ballot:
+        if not current or current!=ballot:
             issues.append(f"{cid}: official ballot {ballot} differs from local {current}; review stable-ID roster before releasing")
         observed[cid]={"number":ballot,"votes":votes,"elected":elected,"source":src}
         source_set.add(src)
@@ -141,9 +147,12 @@ def prepare(directory,raw,town_raw=(),turnout_raw=(),status="provisional",town_t
             issues.append(did+": ballots_cast > registered_voters")
         if None not in (cast,valid,invalid) and valid+invalid!=cast:
             issues.append(did+": valid+invalid != ballots_cast")
-        if valid is not None and len(by_d.get(did,[]))==len(ds[did]["candidateIds"]):
-            if valid!=sum(r["votes"] for _,r in by_d[did]):
-                issues.append(did+": candidate vote total != official valid_votes")
+        if len(by_d.get(did,[]))==len(ds[did]['candidateIds']):
+            total=sum(r['votes'] for _,r in by_d[did])
+            if valid is not None and valid!=total:issues.append(did+': candidate vote total != official valid_votes')
+            if registered is not None and total>registered:issues.append(did+': candidate votes exceed registered voters')
+            if cast is not None and (total>cast or invalid is not None and total+invalid!=cast):issues.append(did+': candidate votes and turnout do not reconcile')
+            if values['valid_votes'] is None:values['valid_votes']=total
         turnout[did]=values;source_set.add(src)
     town_profiles=[];town_profile_keys=set()
     mayors={d["county"].replace("臺","台"):d for d in ds.values() if d["type"]=="mayor"}
@@ -195,6 +204,7 @@ def prepare(directory,raw,town_raw=(),turnout_raw=(),status="provisional",town_t
         shorttown=str(d.get("town") or (name[len(county):] if name.startswith(county) else name))
         level={"mayor":"county","council":"district","township":"town"}[kind]
         votes=sum(r["votes"] for _,r in members)
+        if votes>9007199254740991:issues.append(did+': candidate vote total exceeds safe integer')
         info=turnout.get(did,{})
         contests.append({
             "contest_id":did,"election_id":"2026-"+kind,"county_id":str(d.get("countyId") or ("2026-county-"+hashlib.sha256(county.encode("utf-8")).hexdigest()[:12])),
@@ -222,6 +232,7 @@ def prepare(directory,raw,town_raw=(),turnout_raw=(),status="provisional",town_t
             rows.append({**base,"level":level,"town":shorttown if kind=="township" else "","candidateId":cid})
             for item in towns.get(cid,[]):
                 rows.append({**base,"level":"town","town":item["town"],"votes":item["votes"],"candidateId":cid})
+    complete=complete and not issues
     digest=hashlib.sha256(json.dumps([(x,observed[x]["number"],observed[x]["votes"],observed[x]["elected"]) for x in sorted(observed)],ensure_ascii=False).encode()).hexdigest()
     snapshot={"schemaVersion":2,"year":2026,"office":"local","publicationStatus":status,"completeness":"full" if complete else "partial",
       "elections":elections,"contests":contests,"candidacies":candidacies,"rows":rows,"townProfiles":town_profiles,
@@ -236,7 +247,35 @@ def prepare(directory,raw,town_raw=(),turnout_raw=(),status="provisional",town_t
 
 def save(data,file):
     file=Path(file);file.parent.mkdir(parents=True,exist_ok=True)
-    file.write_text(json.dumps(data,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+    # Atomic replacement prevents an interrupted write from truncating the existing file.
+    fd,tmp=tempfile.mkstemp(prefix="."+file.name+".",dir=file.parent)
+    try:
+        with os.fdopen(fd,"w",encoding="utf-8") as f:
+            f.write(json.dumps(data,ensure_ascii=False,indent=2)+"\n")
+        os.replace(tmp,file)
+    finally:
+        if os.path.exists(tmp):os.unlink(tmp)
+
+def protect_outputs(args):
+    assets=(ROOT/"assets").resolve()
+    protected=(ROOT/"sources").resolve()
+    paths=[p.resolve() for p in (args.report,args.staged_output,args.template) if p is not None]
+    if len(paths)!=len(set(paths)):raise ValueError("Report, staged output and template must be different files")
+    inputs={p.resolve() for p in (args.results,args.town_votes,args.turnout,args.town_turnout) if p is not None}
+    if any(p in inputs or p.is_relative_to(assets) or p.is_relative_to(protected) for p in paths):
+        raise ValueError("Staging outputs must not overwrite input CSVs, site assets or source archives")
+
+def publication_day():
+    return datetime.now(timezone(timedelta(hours=8))).date()
+
+def verify_publication(snapshot,report,status,today,previous=None):
+    if today<ELECTION_DAY:raise ValueError("Result publication is forbidden before polling day")
+    if status=="certified" and today<CERTIFICATION_DAY:raise ValueError("Officially certified 2026 results cannot be released before December 4")
+    if not report["readyToPublish"]:raise ValueError("Cannot publish incomplete or inconsistent data")
+    if any(date.fromisoformat(source["sourceDate"])>today for source in snapshot["provenance"]["sourceLinks"]):
+        raise ValueError("Official source date is in the future")
+    if previous and previous.get("status")=="published" and previous.get("resultStatus")=="certified" and status!="certified":
+        raise ValueError("Cannot replace certified results with provisional results")
 
 def main(argv=None):
     p=argparse.ArgumentParser()
@@ -250,6 +289,7 @@ def main(argv=None):
     p.add_argument("--staged-output",type=Path,default=ROOT/"reports/2026-results-staged.json")
     p.add_argument("--publish",action="store_true")
     args=p.parse_args(argv)
+    protect_outputs(args)
     directory=load_directory()
     if args.template:
         print("Exported",make_template(directory,args.template))
@@ -262,13 +302,10 @@ def main(argv=None):
     snapshot,report=prepare(directory,raw,town,turnout,args.status,town_turnout)
     save(report,args.report)
     if args.publish:
-        if date.today()<ELECTION_DAY:raise ValueError("Result publication is forbidden before polling day")
-        if args.status=="certified" and date.today()<CERTIFICATION_DAY:
-            raise ValueError("Officially certified 2026 results cannot be released before December 4")
-        if not report["readyToPublish"]:
-            raise ValueError("Cannot publish incomplete or inconsistent data. See "+str(args.report))
         out=ROOT/"assets/history-2026.json"
         manifest=ROOT/"assets/history-2026-availability.json"
+        previous=json.loads(manifest.read_text(encoding="utf-8")) if manifest.exists() else None
+        verify_publication(snapshot,report,args.status,publication_day(),previous)
         save(snapshot,out)
         save({"schemaVersion":1,"year":2026,"status":"published",
            "resultStatus":args.status,"file":"assets/history-2026.json",
