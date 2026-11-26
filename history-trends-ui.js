@@ -104,11 +104,13 @@ function card(title,description,graph,exportTitle=title){
 function appendTrendCharts(out,rows,series,title,note,options,county){
  const scopes=T.trendChartScopes(rows,county);
  const layout=scopes.some(s=>s.label.startsWith('合并后'))&&scopes.some(s=>s.label.startsWith('原'))?node('div','trend-merge-layout'):out;
+ // Comparable historical jurisdictions use one numerical scale, not independently rescaled axes.
+ const axisMax=layout!==out&&!options.pct?Math.max(1,...scopes.flatMap(section=>section.rows.flatMap(row=>options.stack?[series.reduce((n,s)=>n+(s.get(row)||0),0)]:series.map(s=>s.get(row))).filter(Number.isFinite))):null;
  for(const section of scopes){
   const scopedTitle=title+(section.label?' · '+section.label:''),scopedSeries=series.filter(s=>section.rows.some(r=>Number.isFinite(s.get(r))));
   const compact=layout!==out&&section.label.startsWith('原'),tall=layout!==out&&section.label.startsWith('合并后');
   const grouped=layout!==out;
-  const graph=scopedSeries.length&&section.rows.some(r=>r.complete)?chart(section.rows,scopedSeries,scopedTitle,{...options,compact,tall,grouped}):null;
+  const graph=scopedSeries.length&&section.rows.some(r=>r.complete)?chart(section.rows,scopedSeries,scopedTitle,{...options,compact,tall,grouped,axisMax}):null;
   const description=graph?(grouped?'':note):'当前范围没有可绘制的完整结果。';
   const item=card(grouped?section.label:scopedTitle,description,graph,scopedTitle);
   if(section.label){item.classList.add('trend-scope-card');item.dataset.trendScope=section.label}
@@ -120,7 +122,7 @@ function baseSvg(title,width,height){
  const g=svg('svg',{viewBox:'0 0 '+width+' '+height,role:'img','aria-label':title,'font-family':'Arial, "Microsoft YaHei", sans-serif','font-size':'12',fill:'#31473e'});
  g.append(svg('rect',{x:0,y:0,width,height,fill:'#fff'}),svg('title',{},title),svg('text',{x:18,y:22,'font-weight':700,'font-size':15},title));return g
 }
-function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=false,integer=false,compact=false,tall=false,grouped=false}={}){
+function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=false,integer=false,compact=false,tall=false,grouped=false,axisMax=null}={}){
  const width=Math.max(compact?520:tall?620:700,rows.length*(compact?72:rows.some(r=>r.scopeLabel)?79:65)+100),l=compact?52:64,r=width-20,top=48,bottom=compact?280:tall?550:270;
  const showScope=!grouped||new Set(rows.map(r=>r.scopeLabel||'')).size>1;
  const legendStart=grouped?bottom+(showScope?70:52):338,legend=[];
@@ -128,8 +130,9 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
  const height=grouped?Math.max(tall?650:0,(legend.at(-1)?.yy||legendStart)+18):346+Math.ceil(series.length/4)*24,g=baseSvg(title,width,height);
  if(grouped){g.setAttribute('data-trend-export-viewbox','0 0 '+width+' '+height);g.setAttribute('viewBox','0 30 '+width+' '+(height-30));}
  const vals=rows.flatMap((row,i)=>stack?[series.reduce((n,s)=>n+(s.get(row)||0),0)]:series.map(s=>s.get(row))).filter(Number.isFinite);
- const ticks=integer?T.integerTicks(Math.max(1,...vals)):null;
- const max=ticks?ticks.at(-1):pct?100:rank?Math.max(3,...vals):Math.max(1,...vals)*1.08;
+ const magnitude=axisMax??Math.max(1,...vals);
+ const ticks=integer?T.integerTicks(magnitude):null;
+ const max=ticks?ticks.at(-1):pct?100:rank?Math.max(3,magnitude):magnitude*1.08;
  const slots=rows.map((row,i)=>i&&rows[i-1].year===row.year?0.72:1.18);
  const centers=[];let offset=0;for(let i=0;i<rows.length;i++){if(i)offset+=slots[i];centers.push(offset)}
  const unit=(r-l)/Math.max(1,offset+1.18),barWidth=Math.min(58,unit*.66);
@@ -176,16 +179,32 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
    if(row.complete)g.append(svg('text',{x:x(i),y:y(acc)-6,'text-anchor':'middle','font-size':11,'font-weight':700,'data-trend-total':String(acc)},fmt(acc)));
   })
  }else for(const s of series){
+  const marks=svg('g',{'data-trend-series':s.name});g.append(marks);
   const branches=new Map();
   rows.forEach((row,i)=>{const k=row.scopeSeries||'',state=branches.get(k)||{d:'',previous:null};const v=s.get(row);if(!Number.isFinite(v)){state.previous=null;branches.set(k,state);return}
    if(breakOld&&state.previous&&state.previous.oldPartyVote!==row.oldPartyVote)state.previous=null;
    state.d+=(state.previous?'L':'M')+x(i)+' '+y(v)+' ';state.previous=row;branches.set(k,state);
   });
-  for(const {d} of branches.values())g.append(svg('path',{d,fill:'none',stroke:s.color,'stroke-width':2.5,'stroke-linejoin':'round',...(s.dash?{'stroke-dasharray':'6 4'}:{})}));
-  rows.forEach((row,i)=>{const v=s.get(row);if(!Number.isFinite(v))return;const p=svg('circle',{cx:x(i),cy:y(v),r:4.5,fill:s.color,stroke:'#fff','stroke-width':1});addPoint(p,row,s,v);g.append(p)})
+  for(const {d} of branches.values())marks.append(svg('path',{d,fill:'none',stroke:s.color,'stroke-width':2.5,'stroke-linejoin':'round',...(s.dash?{'stroke-dasharray':'6 4'}:{})}));
+  rows.forEach((row,i)=>{const v=s.get(row);if(!Number.isFinite(v))return;const p=svg('circle',{cx:x(i),cy:y(v),r:4.5,fill:s.color,stroke:'#fff','stroke-width':1});addPoint(p,row,s,v);marks.append(p)})
  }
  if(breakOld){const i=rows.findIndex(r=>!r.oldPartyVote);if(i>0){const xx=(x(i-1)+x(i))/2;g.append(svg('line',{x1:xx,x2:xx,y1:top,y2:bottom,stroke:'#8a938d','stroke-dasharray':'4 4'}),svg('text',{x:xx+4,y:top-7,'font-size':10},'2008制度改革'))}}
- series.forEach((s,i)=>{const {xx,yy,name}=legend[i];g.append(s.dash?svg('line',{x1:xx,x2:xx+12,y1:yy-5,y2:yy-5,stroke:s.color,'stroke-width':2,'stroke-dasharray':'4 2'}):svg('rect',{x:xx,y:yy-10,width:11,height:11,rx:2,fill:s.color}),svg('text',{x:xx+16,y:yy,'font-size':grouped?13:11},name))});
+ series.forEach((s,i)=>{
+  const {xx,yy,name}=legend[i],entry=svg('g',{'data-trend-legend':s.name});
+  entry.append(s.dash?svg('line',{x1:xx,x2:xx+12,y1:yy-5,y2:yy-5,stroke:s.color,'stroke-width':2,'stroke-dasharray':'4 2'}):svg('rect',{x:xx,y:yy-10,width:11,height:11,rx:2,fill:s.color}),svg('text',{x:xx+16,y:yy,'font-size':grouped?13:11},name));
+  // Do not hide parts of stacked seat totals: the original total must remain visible.
+  if(!stack&&series.length>1){
+   entry.setAttribute('role','button');entry.setAttribute('tabindex','0');entry.setAttribute('aria-pressed','true');entry.setAttribute('aria-label','切换 '+s.name+' 曲线');entry.style.cursor='pointer';
+   entry.append(svg('title',{},'点击显示或隐藏 '+s.name));
+   const toggle=()=>{
+    const scope=g.closest('.trend-merge-layout')||g,visible=entry.getAttribute('aria-pressed')!=='true';
+    for(const mark of scope.querySelectorAll('[data-trend-series]'))if(mark.getAttribute('data-trend-series')===s.name){if(visible)mark.removeAttribute('display');else mark.setAttribute('display','none')}
+    for(const item of scope.querySelectorAll('[data-trend-legend]'))if(item.getAttribute('data-trend-legend')===s.name){item.setAttribute('aria-pressed',String(visible));item.setAttribute('opacity',visible?'1':'.35')}
+   };
+   entry.addEventListener('click',toggle);entry.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle()}});
+  }
+  g.append(entry);
+ });
  return g
 }
 
