@@ -3303,3 +3303,40 @@ test('Changing historical map metric preserves unchanged dropdown options',async
  await page.locator('#historyMetric').selectOption('votes');
  assert.equal(await page.evaluate(()=>window.__p1MetricOption===document.querySelector('#historyMetric option')),true);
 });
+
+
+test('Historical search distinguishes no matches from missing archives and resets filters',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ await page.locator('#categoryHistory').click();
+ await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
+ await page.locator('#historyViewCandidates').click();
+ await page.locator('#historyCounty').selectOption('台北市');
+ await page.locator('#historyResults .history-candidate-table').waitFor();
+ assert.equal(await page.locator('#historyPager').isVisible(),false);
+ await page.locator('#historySearch').fill('ZZZ-不存在-987654');
+ assert.match(await page.locator('#historyResults').textContent(),/没有符合当前搜索或政党筛选/);
+ assert.equal(await page.locator('#historyPager').isVisible(),false);
+ await page.locator('#historyResults').getByRole('button',{name:'清除筛选'}).click();
+ assert.equal(await page.locator('#historySearch').inputValue(),'');
+ assert.ok(await page.locator('#historyResults .history-candidate-table tbody tr').count()>0);
+});
+
+test('Mobile legislative candidate results retain essential columns and expandable details',async t=>{
+ const page=await pageFor(t,{width:390,height:844});
+ await page.locator('#categoryHistory').click();
+ await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
+ await page.locator('#historyOffice').selectOption('legislative');
+ await page.waitForFunction(()=>window.History2022View?.office()==='legislative'&&window.History2022View?.snapshot()?.office==='legislative');
+ await page.locator('#historyElectorate').selectOption('regional');
+ await page.locator('#historyViewCandidates').click();
+ const table=page.locator('#historyResults .history-legislative-table');
+ await table.waitFor();
+ const row=table.locator('tbody tr:not(.history-district-divider)').first();
+ assert.equal(await row.locator('td').nth(0).isVisible(),false);
+ for(const i of [3,5,6,7,8])assert.equal(await row.locator('td').nth(i).isVisible(),true);
+ const detail=row.locator('.legislative-mobile-details');await detail.locator('summary').click();
+ assert.match(await detail.locator('dl').innerText(),/号次/);
+ await page.setViewportSize({width:1440,height:950});
+ assert.equal(await row.locator('td').nth(0).isVisible(),true);
+ assert.equal(await detail.isVisible(),false);
+});
