@@ -7,7 +7,7 @@
  let presidentialMode=false,presidentialYear=2024,presidentialGeometry=null;
  let legislativeMode=false,legislativeYear=2024,legislativeBallot='regional',legislativeGeometry=[],legislativeAreaGeometry=null,legislativeFocus='';
  let history2022Snapshot=null,loadingPresidentialId=0,localGeometry=null;
- let localYear=2022,history2026Manifest=null,history2026Snapshot=null,original2022DistrictMetadata=[];
+ let localYear=2022,history2026Manifest=null,history2026Snapshot=null,history2026Pending=null,original2022DistrictMetadata=[];
  const yearLabel=()=>presidentialMode?String(presidentialYear):legislativeMode?String(legislativeYear):HistoryLocal.yearLabel(localYear,kind);
  // Use the source contest's actual polling year for a local result, not its display cycle.
  function contestYear(contest){
@@ -119,13 +119,30 @@
    const response=await fetch('assets/history-2026-availability.json?v=20261116-polling-gate',{cache:'no-store'});
    if(!response.ok)return;
    const manifest=await response.json();
-   if(manifest.schemaVersion!==1||manifest.year!==2026||manifest.status!=='published')return;
-   if(!/^[0-9a-f]{64}$/i.test(manifest.sha256||'')||manifest.candidateCount!==candidateDatabase?.candidates.length||manifest.districtCount!==candidateDatabase?.districts.length)return;
+   if(!HistoryCore.official2026Manifest(manifest,candidateDatabase))return;
+   if(history2026Manifest?.sha256!==manifest.sha256){history2026Snapshot=null;history2026Pending=null}
    history2026Manifest=manifest;
    window.HISTORY_2026_RESULTS_AVAILABLE=true;
    if(!['president','legislative'].includes(el('historyOffice').value))updateYearOptions();
    window.HistoryWorkspace?.render?.();
   }catch(error){console.warn('2026结果发布状态暂不可用',error.message)}
+ }
+ async function loadOfficial2026(){
+  const manifest=history2026Manifest;
+  if(!HistoryCore.official2026Manifest(manifest,candidateDatabase))throw Error('2026年正式资料尚未发布');
+  if(history2026Snapshot)return history2026Snapshot;
+  if(!history2026Pending){
+   const pending=(async()=>{
+    const response=await fetch(manifest.file+'?v='+manifest.sha256);
+    if(!response.ok)throw Error('2026官方结果 HTTP '+response.status);
+    const shard=await HistoryCore.decodeOfficial2026(await response.arrayBuffer(),manifest,candidateDatabase,window.crypto);
+    if(history2026Manifest?.sha256!==manifest.sha256)throw Error('正式结果版本已更新，请重新载入');
+    history2026Snapshot=shard;return shard;
+   })();
+   history2026Pending=pending;
+   pending.catch(()=>{if(history2026Pending===pending)history2026Pending=null});
+  }
+  return history2026Pending;
  }
  function showLocalSnapshot(shard,office,geometry=null){
   presidentialMode=false;presidentialGeometry=null;legislativeMode=false;
@@ -178,19 +195,9 @@
   indicator.hidden=false;indicator.textContent='正在核对2026年正式结果数据…';
   try{
    await snapshot();
-   if(!history2026Snapshot){
-    const response=await fetch('assets/history-2026.json?v='+history2026Manifest.sha256.slice(0,14));
-    if(!response.ok)throw Error('2026官方结果 HTTP '+response.status);
-    const shard=await response.json();
-    if(shard.schemaVersion!==2||shard.year!==2026||shard.completeness!=='full'||
-       shard.contests?.length!==history2026Manifest.districtCount||shard.candidacies?.length!==history2026Manifest.candidateCount||
-       !Array.isArray(shard.rows)||shard.rows.length<history2026Manifest.candidateCount||
-       !['provisional','certified'].includes(shard.publicationStatus))
-       throw Error('2026选举结果缺少完整的官方选区、候选人或得票明细');
-    history2026Snapshot=shard;
-   }
+   const verified=await loadOfficial2026();
    if(token!==loadingPresidentialId||!active||['president','legislative'].includes(el('historyOffice').value))return;
-   showLocalSnapshot(history2026Snapshot,office);
+   showLocalSnapshot(verified,office);
    indicator.hidden=true;indicator.textContent='';
   }catch(error){
    if(token!==loadingPresidentialId)return;
@@ -1390,7 +1397,7 @@
  el('historyResultDialog').addEventListener('close',()=>{if(!el('historyResultDialog').open){routeDetail=null;window.dispatchEvent(new Event('site-route-change'))}});
 
  window.History2022View={routeSelection,restoreRoute,routeReady,yearLabel,metricLabel,exportRows,exportMetadata,featurePresentation,active:()=>active,activate,deactivate,syncOverviewMap,
-  combinedMap,combinedIdentities,allLegislative,allCouncil,countySeatLeader,kind:()=>kind,office:()=>presidentialMode?'president':legislativeMode?'legislative':kind,year:()=>presidentialMode?presidentialYear:legislativeMode?legislativeYear:localYear,overview:historyOverview,seatMode:historyCouncilSeats,items:historyItems,noElection,districtFor:historicalDistrictFor,seatRows:historicalSeatRows,historicTownFeatures:()=>presidentialMode?presidentialGeometry?.towns||[]:legislativeMode?legislativeAreaGeometry?.towns||[]:localGeometry?.towns||null,allTowns:()=>presidentialMode?presidentialGeometry?.towns||[]:legislativeMode?legislativeAreaGeometry?.towns||[]:localGeometry?.towns||data?.towns||[],openRegion:openHistoryRegion,openContest:openContestById,features:()=>historicalFeatures,legislativeFeatures:()=>legislativeMode?legislativeGeometry:[],legislativeNationwide:legislativeNationalView,legislativeBadgesMode:legislativeMultiView,legislativeCountyFeatures:()=>legislativeMode?legislativeAreaGeometry?.counties||[]:[],historicalCountyFeatures:()=>legislativeMode?legislativeAreaGeometry?.counties||[]:localGeometry?.counties||data.counties,legislativeSeatRows:f=>legislativeMode&&(!allLegislative()||f.electorate==='regional')?HistoryLegislative.winners(snapshotData,{county:f.county,district:f.electorate==='regional'?f.name:''}):[],legislativeBallot:()=>legislativeBallot,legislativeScale:()=>scale,snapshot:()=>snapshotData,trendFilters:()=>({focus:legislativeMode?legislativeFocus:'',candidateScope,party:selectedParty,candidate:candidateScope==='candidate'&&voteMetric()?(()=>{const r=recordsInView().find(r=>candidateKey(r)===selectedCandidate);return r?{name:r.name,party:r.party,county:r.county,district:r.district,town:r.town}:null})():null}),trendCounties:()=>data?.counties||[],trendSnapshot:async year=>{if(year===2022){if(!await snapshot())throw Error('2022年资料未载入');return history2022Snapshot}if(year!==2026||history2026Manifest?.status!=='published')throw Error('该届正式资料尚未发布');if(history2026Snapshot)return history2026Snapshot;const response=await fetch('assets/history-2026.json?v='+history2026Manifest.sha256.slice(0,14));if(!response.ok)throw Error('2026年资料载入失败');const shard=await response.json();if(shard.schemaVersion!==2||shard.year!==2026||shard.completeness!=='full'||shard.contests?.length!==history2026Manifest.districtCount||shard.candidacies?.length!==history2026Manifest.candidateCount||!['provisional','certified'].includes(shard.publicationStatus))throw Error('2026年正式结果校验未通过');return shard}};
+  combinedMap,combinedIdentities,allLegislative,allCouncil,countySeatLeader,kind:()=>kind,office:()=>presidentialMode?'president':legislativeMode?'legislative':kind,year:()=>presidentialMode?presidentialYear:legislativeMode?legislativeYear:localYear,overview:historyOverview,seatMode:historyCouncilSeats,items:historyItems,noElection,districtFor:historicalDistrictFor,seatRows:historicalSeatRows,historicTownFeatures:()=>presidentialMode?presidentialGeometry?.towns||[]:legislativeMode?legislativeAreaGeometry?.towns||[]:localGeometry?.towns||null,allTowns:()=>presidentialMode?presidentialGeometry?.towns||[]:legislativeMode?legislativeAreaGeometry?.towns||[]:localGeometry?.towns||data?.towns||[],openRegion:openHistoryRegion,openContest:openContestById,features:()=>historicalFeatures,legislativeFeatures:()=>legislativeMode?legislativeGeometry:[],legislativeNationwide:legislativeNationalView,legislativeBadgesMode:legislativeMultiView,legislativeCountyFeatures:()=>legislativeMode?legislativeAreaGeometry?.counties||[]:[],historicalCountyFeatures:()=>legislativeMode?legislativeAreaGeometry?.counties||[]:localGeometry?.counties||data.counties,legislativeSeatRows:f=>legislativeMode&&(!allLegislative()||f.electorate==='regional')?HistoryLegislative.winners(snapshotData,{county:f.county,district:f.electorate==='regional'?f.name:''}):[],legislativeBallot:()=>legislativeBallot,legislativeScale:()=>scale,snapshot:()=>snapshotData,trendFilters:()=>({focus:legislativeMode?legislativeFocus:'',candidateScope,party:selectedParty,candidate:candidateScope==='candidate'&&voteMetric()?(()=>{const r=recordsInView().find(r=>candidateKey(r)===selectedCandidate);return r?{name:r.name,party:r.party,county:r.county,district:r.district,town:r.town}:null})():null}),trendCounties:()=>data?.counties||[],trendSnapshot:async year=>{if(year===2022){if(!await snapshot())throw Error('2022年资料未载入');return history2022Snapshot}if(year!==2026)throw Error('该届正式资料尚未发布');return loadOfficial2026()}};
  const resultSection=el('historyResultSection')||(()=>{const section=document.createElement('section');section.id='historyResultSection';section.hidden=true;section.className='history-result-section';const heading=document.createElement('h3');heading.textContent='2022 选举结果';section.append(heading,el('historySummary'),el('historySearchTools'),el('historyResults'),el('historyPager'),el('historyCompare'));el('districtReference').before(section);return section})();
  if(!el('historyResultParty')){const partyLabel=document.createElement('label');partyLabel.className='label';partyLabel.htmlFor='historyResultParty';partyLabel.textContent='筛选政党';const partySelect=document.createElement('select');partySelect.id='historyResultParty';partySelect.append(new Option('全部政党',''));el('historySearchTools').append(partyLabel,partySelect)}
  const dialogNav=document.createElement('div');dialogNav.className='history-dialog-navigation';const dialogBack=document.createElement('button');dialogBack.type='button';dialogBack.id='historyDialogBack';dialogBack.className='button quiet';dialogBack.textContent='返回上一级';const dialogDrilldown=document.createElement('button');dialogDrilldown.type='button';dialogDrilldown.id='historyDialogDrilldown';dialogDrilldown.className='button primary';dialogDrilldown.textContent='查看乡镇市区得票分布';dialogNav.append(dialogBack,dialogDrilldown);const resultDialog=el('historyResultDialog');(resultDialog.querySelector('.floating-dialog-scroll')||resultDialog).append(dialogNav);
