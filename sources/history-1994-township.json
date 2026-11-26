@@ -3668,7 +3668,31 @@
         "female_candidates": 1,
         "candidate_counts_source_url": "https://ws.tycg.gov.tw/Download.ashx?n=MDAzLTk35bm06KGM5pS%2F57WE57mULnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvMTUyL1JlbEZpbGUvMTg1NjAvMTI0MDIyNy8wMDMtOTflubTooYzmlL%2FntYTnuZQucGRm",
         "candidate_counts_source_locator": "97年桃園縣統計要覽表3-10，第12屆；公開文字表格，頁面影像未能取得"
-      }
+      },
+      "winners": [
+        {
+          "town": "桃園市",
+          "name": "李信宏",
+          "incumbent_at_election": true,
+          "source_url": "https://www.tao.tycg.gov.tw/cp.aspx?n=6273",
+          "source_locator": "桃園區公所歷屆首長：1990–1994及1994–1998均李信宏（1994-01-29投票前在任）",
+          "evidence_type": "official_consecutive_term_roster",
+          "votes": null,
+          "party_recommendation": null,
+          "ballot_number": null
+        },
+        {
+          "town": "中壢市",
+          "name": "方力脩",
+          "incumbent_at_election": false,
+          "source_url": "https://www.zhongli.tycg.gov.tw/cp.aspx?n=6367",
+          "source_locator": "中壢區公所沿革：第七屆1990–1994張勝勛、第八屆1994–1998方力脩（1994-03-01就任）",
+          "evidence_type": "official_successive_term_roster",
+          "votes": null,
+          "party_recommendation": null,
+          "ballot_number": null
+        }
+      ]
     },
     {
       "county": "臺中縣",
