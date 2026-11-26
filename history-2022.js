@@ -3,6 +3,7 @@
 (()=>{
  const el=id=>document.getElementById(id), db={mayor:[],council:[],township:[],legislative:[]},titles={mayor:'县市长',council:'县市议员',township:'乡镇市区长',legislative:'立法机构民代'};
  let selectedParty='', active=false,kind='mayor',electorate='all',county='',metric='party',scale='district',candidateScope='top',selectedCandidate='',historicalFeatures=[],hsinchuGeometry=null,loaded=false,loading=null,lastResult=[],savedMapScope=null,unmatchedDistricts=new Set(),districtMetadata=[],currentResult=null,snapshotData=null,lastOpenedFeature=null;
+ let routeDetail=null;
  let presidentialMode=false,presidentialYear=2024,presidentialGeometry=null;
  let legislativeMode=false,legislativeYear=2024,legislativeBallot='regional',legislativeGeometry=[],legislativeAreaGeometry=null,legislativeFocus='';
  let history2022Snapshot=null,loadingPresidentialId=0,localGeometry=null;
@@ -725,6 +726,7 @@
   if(!snapshotData)snapshot().then(success=>{if(active&&success)render()})
  }
  function deactivate(){
+  if(el('historyResultDialog').open)el('historyResultDialog').close();routeDetail=null;
   loadingPresidentialId++;active=false;document.body.classList.remove('history-mode');
   if(savedMapScope){state=clone(savedMapScope);savedMapScope=null;}currentResult=null;districtTableKey='';el('headerExportPredictions').hidden=false;
   el('historyControls').hidden=true;el('historyResultSection').hidden=true;el('mapSettings').hidden=false;
@@ -1108,7 +1110,7 @@
   el('historyCandidate').replaceChildren(...[...choices].map(([id,r])=>new Option(isPartyVote?r.party:(presidentialMode?'':r.county+' · ')+displayedCandidateName(r)+' · '+r.party,id)));el('historyCandidate').value=selectedCandidate;
  }
  function openHistoryRegion(f){
-  lastOpenedFeature=f;
+  lastOpenedFeature=f;routeDetail={area:f.name,detailCounty:f.county,identity:f.electorate||''};
   const key=featureKey(f),rows=currentResult?.rows.filter(r=>areaKey(r)===key)||[];
   const district=historicalDistrictFor(f),contest=localContest(f,district),actualYear=contestYear(contest);
   el('historyDialogTitle').textContent=(f.county===f.name?f.name:f.county+' · '+f.name)+' · '+actualYear+'年 '+(presidentialMode?'台湾地区领导人':legislativeMode?(HistoryLegislative.ballots(legislativeYear).find(item=>item.value===legislativeBallot)?.label||'立法机构民代'):kind==='mayor'&&f.county.endsWith('市')?'市长':titles[kind])+'选举结果';
@@ -1162,13 +1164,14 @@
     f.county===f.name?'查看本县市概况':'查看本乡镇市区概况';
    overviewButton.onclick=()=>{dialog.close();window.HistoryWorkspace?.openFeatureOverview?.(f)};
   }
-  hint.hidden=true;dialog.showModal();
+  hint.hidden=true;if(!dialog.open)dialog.showModal();window.dispatchEvent(new Event('site-route-change'));
   wrap.scrollLeft=0;wrap.scrollTop=0;
   hint.hidden=wrap.scrollWidth<=wrap.clientWidth;
   el('historyDialogDrilldown').hidden=!(kind==='mayor'&&scale==='district');el('historyDialogBack').hidden=!county;
  }
  function openContestById(contestId,summary){
   if(!summary)return;
+  routeDetail={contest:contestId};
   el('historyResultDialog').classList.remove('history-party-vote-dialog');
   const headers=el('historyDialogRows').closest('table').tHead.rows[0].cells;
   [...headers].forEach(cell=>{cell.hidden=false});
@@ -1192,7 +1195,7 @@
   const overviewButton=el('historyDialogOverview');
   if(overviewButton){overviewButton.hidden=false;overviewButton.textContent='查看本选区概况';
    overviewButton.onclick=()=>{el('historyResultDialog').close();window.HistoryWorkspace?.openContestOverview?.(contestId)};}
-  el('historyDialogDrilldown').hidden=true;el('historyDialogBack').hidden=!county;el('historyResultDialog').showModal();
+  el('historyDialogDrilldown').hidden=true;el('historyDialogBack').hidden=!county;if(!el('historyResultDialog').open)el('historyResultDialog').showModal();window.dispatchEvent(new Event('site-route-change'));
  }
  function exportRows(){
   const result=currentResult;
@@ -1277,7 +1280,73 @@
   for(const card of el('labels').querySelectorAll('[data-seat-region]'))
    card.classList.toggle('seat-region-highlighted',!!targetId&&card.dataset.seatRegion===targetId);
  }
- window.History2022View={yearLabel,metricLabel,exportRows,exportMetadata,featurePresentation,active:()=>active,activate,deactivate,syncOverviewMap,
+
+ function routeSelection(){
+  const office=presidentialMode?'president':legislativeMode?'legislative':kind;
+  const year=presidentialMode?presidentialYear:legislativeMode?legislativeYear:localYear;
+  const workspace=window.HistoryWorkspace?.selection?.(),v=workspace?.view||'map';
+  const overview=v==='overview'?window.HistoryWorkspace?.selectedOverviewScope?.():null;
+  const result={office,year,yearLabel:yearLabel(),county,level:legislativeMode?scale:kind==='mayor'?(scale==='town'?'town':'county'):kind==='council'?'district':'town',metric,
+   electorate:legislativeMode?legislativeBallot:kind==='council'?electorate:undefined,focus:legislativeMode?legislativeFocus:undefined,view:v,
+   candidateScope:voteMetric()?candidateScope:undefined,candidate:voteMetric()&&candidateScope==='candidate'?selectedCandidate:undefined,party:metric==='seats'?selectedParty:undefined,
+   scope:overview?.scope,overviewCounty:overview?.scope!=='all'?overview?.county:undefined,overviewArea:['district','town'].includes(overview?.scope)?overview?.area:undefined,
+   years:v==='trends'?window.HistoryTrendsUI?.routeYears?.():undefined};
+  if(el('historyResultDialog').open&&routeDetail)Object.assign(result,routeDetail);
+  return result;
+ }
+ function routeReady(route){
+  const current=routeSelection(),target=HistoryLocal.cycleYear(Number(route.year),route.office);
+  const years=route.office==='president'?HistoryPresidential.YEARS:route.office==='legislative'?HistoryLegislative.YEARS:HistoryLocal.years(route.office,history2026Manifest?.status==='published');
+  const expected=years.includes(target)?target:['president','legislative'].includes(route.office)?2024:2022;
+  return active&&current.office===route.office&&current.year===expected&&snapshotData?.year===expected&&snapshotData?.elections?.some(e=>e.office===route.office)&&el('historyLoadStatus').hidden;
+ }
+ async function restoreRoute(route,isCurrent=()=>true){
+  if(!active)activate();
+  // A previous dialog is not part of the requested view.
+  if(el('historyResultDialog').open)el('historyResultDialog').close();routeDetail=null;
+  if(!await snapshot()||!isCurrent())return false;
+  if(Number(route.year)===2026)await check2026Availability();
+  if(!isCurrent())return false;
+  const office=route.office;
+  el('historyOffice').value=office;
+  updateYearOptions(office);
+  const available=Array.from(el('historyYear').options,o=>Number(o.value));
+  const target=HistoryLocal.cycleYear(Number(route.year),office);
+  const year=available.includes(target)?target:['president','legislative'].includes(office)?2024:2022;
+  el('historyYear').value=String(year);
+  const previous=routeSelection();
+  if(previous.office!==office||previous.year!==year||snapshotData?.year!==year||!snapshotData?.elections?.some(e=>e.office===office)){
+   if(office==='president')await activatePresidential(year);
+   else if(office==='legislative')await activateLegislative(year);
+   else await activateLocalYear(year,office);
+  }
+  if(!isCurrent()||!routeReady(route))return false;
+  county=Array.from(el('historyCounty').options).some(o=>o.value===route.county)?route.county:'';
+  if(legislativeMode){
+   const ballots=HistoryLegislative.ballots(year).map(b=>b.value);
+   legislativeBallot=ballots.includes(route.electorate)?route.electorate:'regional';electorate=legislativeBallot;
+   const levels=HistoryLegislative.levels(year,legislativeBallot).map(x=>x[0]);
+   scale=levels.includes(route.level)?route.level:levels[0];legislativeFocus=route.focus||'';
+  }else{
+   scale=kind==='mayor'&&route.level==='town'?'town':'district';
+   if(kind==='council')electorate=['all','regional','plains','mountain','indigenous'].includes(route.electorate)?route.electorate:'all';
+  }
+  metric=['party','seats','share','votes'].includes(route.metric)?route.metric:'party';
+  candidateScope=route.candidateScope==='candidate'?'candidate':'top';selectedCandidate=route.candidate||'';selectedParty=route.party||'';
+  resultPage=0;switchMode();render();
+  window.HistoryWorkspace?.restoreRouteView?.(route);
+  if(route.view==='trends'&&route.years!==undefined)window.HistoryTrendsUI?.restoreRouteYears?.(route.years);
+  if(!isCurrent())return false;
+  if(route.contest)window.HistoryWorkspace?.openContest?.(route.contest);
+  else if(route.area){
+   const f=currentItems().find(f=>f.name===route.area&&f.county===(route.detailCounty||county)&&(!route.identity||f.electorate===route.identity));
+   if(f)openHistoryRegion(f);
+  }
+  return true;
+ }
+ el('historyResultDialog').addEventListener('close',()=>{if(!el('historyResultDialog').open){routeDetail=null;window.dispatchEvent(new Event('site-route-change'))}});
+
+ window.History2022View={routeSelection,restoreRoute,routeReady,yearLabel,metricLabel,exportRows,exportMetadata,featurePresentation,active:()=>active,activate,deactivate,syncOverviewMap,
   countySeatLeader,kind:()=>kind,office:()=>presidentialMode?'president':legislativeMode?'legislative':kind,year:()=>presidentialMode?presidentialYear:legislativeMode?legislativeYear:localYear,overview:historyOverview,seatMode:historyCouncilSeats,items:historyItems,noElection,districtFor:historicalDistrictFor,seatRows:historicalSeatRows,historicTownFeatures:()=>presidentialMode?presidentialGeometry?.towns||[]:legislativeMode?legislativeAreaGeometry?.towns||[]:localGeometry?.towns||null,allTowns:()=>presidentialMode?presidentialGeometry?.towns||[]:legislativeMode?legislativeAreaGeometry?.towns||[]:localGeometry?.towns||data?.towns||[],openRegion:openHistoryRegion,openContest:openContestById,features:()=>historicalFeatures,legislativeFeatures:()=>legislativeMode?legislativeGeometry:[],legislativeNationwide:legislativeNationalView,legislativeBadgesMode:legislativeMultiView,legislativeCountyFeatures:()=>legislativeMode?legislativeAreaGeometry?.counties||[]:[],legislativeSeatRows:f=>legislativeMode?HistoryLegislative.winners(snapshotData,{county:f.county,district:f.electorate==='regional'?f.name:''}):[],legislativeBallot:()=>legislativeBallot,legislativeScale:()=>scale,snapshot:()=>snapshotData,trendFilters:()=>({focus:legislativeMode?legislativeFocus:'',candidateScope,party:selectedParty,candidate:candidateScope==='candidate'&&voteMetric()?(()=>{const r=recordsInView().find(r=>candidateKey(r)===selectedCandidate);return r?{name:r.name,party:r.party,county:r.county,district:r.district,town:r.town}:null})():null}),trendCounties:()=>data?.counties||[],trendSnapshot:async year=>{if(year===2022){if(!await snapshot())throw Error('2022年资料未载入');return history2022Snapshot}if(year!==2026||history2026Manifest?.status!=='published')throw Error('该届正式资料尚未发布');if(history2026Snapshot)return history2026Snapshot;const response=await fetch('assets/history-2026.json?v='+history2026Manifest.sha256.slice(0,14));if(!response.ok)throw Error('2026年资料载入失败');const shard=await response.json();if(shard.schemaVersion!==2||shard.year!==2026||shard.completeness!=='full'||shard.contests?.length!==history2026Manifest.districtCount||shard.candidacies?.length!==history2026Manifest.candidateCount||!['provisional','certified'].includes(shard.publicationStatus))throw Error('2026年正式结果校验未通过');return shard}};
  const resultSection=el('historyResultSection')||(()=>{const section=document.createElement('section');section.id='historyResultSection';section.hidden=true;section.className='history-result-section';const heading=document.createElement('h3');heading.textContent='2022 选举结果';section.append(heading,el('historySummary'),el('historySearchTools'),el('historyResults'),el('historyPager'),el('historyCompare'));el('districtReference').before(section);return section})();
  if(!el('historyResultParty')){const partyLabel=document.createElement('label');partyLabel.className='label';partyLabel.htmlFor='historyResultParty';partyLabel.textContent='筛选政党';const partySelect=document.createElement('select');partySelect.id='historyResultParty';partySelect.append(new Option('全部政党',''));el('historySearchTools').append(partyLabel,partySelect)}
