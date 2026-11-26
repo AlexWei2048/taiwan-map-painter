@@ -205,6 +205,7 @@
    let alias=town;
    if(snapshot.year<=2001&&county==='台南市'&&['中区','西区'].includes(town))alias='中西区';
    if(county==='高雄县'&&norm(baseTown(town))==='三民')alias='那玛夏区';
+   if(county==='金门县'&&norm(baseTown(town))==='乌丘')alias='乌坵乡';
    const source=byTown.get(norm(modernCounty(county))+'|'+norm(baseTown(alias)));
    if(!source){missing.push({county,town});continue}
    towns.push({...source,id:'legislative-area:'+snapshot.year+':'+key,sourceId:source.id,
@@ -217,6 +218,10 @@
   const counties=[];
   for(const name of names){
    const members=towns.filter(t=>t.county===name);
+   // Kinmen and Wuqiu have a fixed offshore inset geometry; use the complete
+   // county perimeter rather than reconstructing a coastline from vote-bearing towns.
+   const kinmen=name==='金门县'&&(map?.counties||[]).find(f=>norm(f.name||f.county)===name);
+   if(kinmen){counties.push({...kinmen,id:'legislative-county:'+snapshot.year+':'+name,county:name,name,historical:true,historicalYear:snapshot.year,boundaryApproximate:true,historicalBoundaryQuality:'modern-outline'});continue}
    if(members.length){
     const box=members.reduce((b,f)=>[Math.min(b[0],f.box[0]),Math.min(b[1],f.box[1]),Math.max(b[2],f.box[2]),Math.max(b[3],f.box[3])],[Infinity,Infinity,-Infinity,-Infinity]);
     counties.push({id:'legislative-county:'+snapshot.year+':'+name,county:name,name,d:mergePaths([...new Map(members.map(f=>[f.sourceId,f])).values()].map(f=>f.d)),box,
