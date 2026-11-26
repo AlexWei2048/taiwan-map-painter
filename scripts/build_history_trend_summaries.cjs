@@ -1,0 +1,46 @@
+/* Reuse the browser's aggregation; never invent missing results. */
+'use strict';
+async function build({Local,Trends,Summary,OpenCC,read}){
+ const convert=OpenCC.Converter({from:'t',to:'cn'}),names=new Map();
+ const normalize=value=>{const raw=String(value||'');if(!names.has(raw))names.set(raw,convert(raw).replaceAll('臺','台'));return names.get(raw)};
+ const inputs=new Map();
+ const fetcher=async url=>{const path=url.split('?')[0];let entry=inputs.get(path);if(!entry){entry=Promise.resolve(read(path));inputs.set(path,entry)}const source=await entry;return{ok:true,json:async()=>JSON.parse(source.content)}};
+ const files=new Map(),yearsByOffice={};
+ for(const office of ['council','mayor']){
+  const years=Local.years(office).filter(y=>y<2022);yearsByOffice[office]=years;
+  const outputs=Summary.counties.map((county,index)=>({path:'assets/history-trend-summary-v1/'+office+'-'+index+'.json',payload:{schemaVersion:1,office,county,algorithmVersion:Trends.summaryAlgorithmVersion,sourceVersion:Local.trendSummarySourceVersion(),years:{}}}));
+  for(const year of years){
+   const snapshot=await Local.loadCycle(year,office,fetcher);
+   for(const {payload} of outputs){
+    const base={office,county:payload.county,normalize};let result;
+    if(office==='council')result=Object.fromEntries(Summary.ballots.map(electorate=>[electorate,Trends.councilBallotRows(snapshot,{...base,electorate})]));
+    else{
+     result={};
+     for(const level of ['county','town']){
+      const selection={...base,level,electorate:'regional',candidateScope:'top'};
+      result[level]=Object.fromEntries(['party','share','votes'].map(metric=>[metric,Trends.historicalScopeRows(snapshot,{...selection,metric},null)]));
+      result[level].voteRows=Trends.localPartyVoteShares(snapshot,selection);
+     }
+    }
+    if(!Summary.yearValid(result,{office}))throw Error('Invalid summary '+office+' '+payload.county+' '+year);
+    payload.years[year]=result;
+   }
+  }
+  for(const {path,payload} of outputs)files.set(path,JSON.stringify(payload)+'\n');
+ }
+ const sources={};for(const path of [...inputs.keys()].sort())sources[path]=(await inputs.get(path)).sha;
+ files.set('assets/history-trend-summary-v1/manifest.json',JSON.stringify({schemaVersion:1,yearsByOffice,sourceVersion:Local.trendSummarySourceVersion(),algorithmVersion:Trends.summaryAlgorithmVersion,sources},null,2)+'\n');
+ return files;
+}
+module.exports={build};
+if(require.main===module)(async()=>{
+ const fs=require('node:fs/promises'),path=require('node:path'),crypto=require('node:crypto'),root=path.resolve(__dirname,'..');
+ const read=async relative=>{const bytes=await fs.readFile(path.join(root,relative));return{content:bytes.toString('utf8'),sha:crypto.createHash('sha1').update('blob '+bytes.length+'\0').update(bytes).digest('hex')}};
+ const files=await build({Local:require('../history-local.js'),Trends:require('../history-trends.js'),Summary:require('../history-trend-summary.js'),OpenCC:require('../assets/opencc.js'),read});
+ for(const [relative,content] of files){
+  const target=path.join(root,relative);
+  if(process.argv.includes('--check')){if(await fs.readFile(target,'utf8')!==content)throw Error('Outdated summary: '+relative)}
+  else{await fs.mkdir(path.dirname(target),{recursive:true});await fs.writeFile(target,content)}
+ }
+ console.log('Verified '+files.size+' local trend summary files');
+})().catch(error=>{console.error(error);process.exitCode=1});

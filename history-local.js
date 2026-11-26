@@ -16,6 +16,9 @@
   const splitYear=groupedOffice(office)&&CYCLES[year]&&!(office==='council'&&Number(year)<=2002);
   return splitYear?CYCLES[year]+separator+year:String(year);
  }
+ const localUrl=year=>'assets/history-local-'+year+'.json?v=20261126-municipal-roster-v'+(year===1994?'40':year===2018?'7':year===2002?'6':'5');
+ const legacyCouncilUrl='assets/history-local-1994-council.json?v=30',legacyProfileUrl='sources/history-1994-changhua-council-profile.json?v=1',supplementUrl='assets/history-local-council-supplement.json?v=20261126-statutory-quota-v6';
+ const trendSummarySourceVersion=()=>JSON.stringify([...new Set([...YEARS.mayor,...YEARS.council])].filter(y=>y<2022).sort((a,b)=>a-b).map(localUrl).concat([legacyCouncilUrl,legacyProfileUrl,supplementUrl]));
  const pending=new Map(),supplementYears=new Set([1994,1998,2002,2005,2006,2009,2010,2014,2018]);
  let supplementRequest;
  let legacyCouncilRequest;
@@ -56,11 +59,11 @@
  }
  function loadLegacyCouncil(fetcher){
   if(!legacyCouncilRequest)legacyCouncilRequest=(async()=>{
-   const response=await fetcher('assets/history-local-1994-council.json?v=30');
+   const response=await fetcher(legacyCouncilUrl);
    if(!response.ok)throw Error('1994县市议员补充资料 HTTP '+response.status);
    const archive=await response.json();
    if(archive.version!==1||!archive.districts?.length)throw Error('1994县市议员补充资料不完整');
-   const changhuaResponse=await fetcher('sources/history-1994-changhua-council-profile.json?v=1');
+   const changhuaResponse=await fetcher(legacyProfileUrl);
    if(!changhuaResponse.ok)throw Error('1994彰化县议员县级统计 HTTP '+changhuaResponse.status);
    const changhua=await changhuaResponse.json();
    const districts=archive.districts.filter(d=>d.county==='彰化縣');
@@ -112,7 +115,7 @@
  async function loadSupplement(fetcher){
   if(!supplementRequest){
    supplementRequest=(async()=>{
-    const response=await fetcher('assets/history-local-council-supplement.json?v=20261126-statutory-quota-v6');
+    const response=await fetcher(supplementUrl);
     if(!response.ok)throw Error('历史议员补充资料 HTTP '+response.status);
     const supplement=await response.json();
     if(supplement.version!==1||!Array.isArray(supplement.paths)||!supplement.years)throw Error('历史议员补充资料不完整');
@@ -183,7 +186,7 @@
   if(pending.has(year))return pending.get(year);
   const request=(async()=>{
    const [response,supplement]=await Promise.all([
-    fetcher('assets/history-local-'+year+'.json?v=20261126-municipal-roster-v'+(year===1994?'40':year===2018?'7':year===2002?'6':'5')),
+    fetcher(localUrl(year)),
     supplementYears.has(year)?loadSupplement(fetcher):null
    ]);
    if(!response.ok)throw Error('历史数据 HTTP '+response.status);
@@ -338,7 +341,7 @@
   if(matched.size!==215||seats!==910)throw Error('2022议员名额总数核验失败');
   return {...shard,contests};
  }
- const api={reconcile2022Council,YEARS,years,yearLabel,cycleYear,load,loadCycle,geometry,councilMap,applyCouncilSupplement,fillRegionalCouncilQuotas,correctElectionDates,enrichLegacyGender};
+ const api={trendSummarySourceVersion,reconcile2022Council,YEARS,years,yearLabel,cycleYear,load,loadCycle,geometry,councilMap,applyCouncilSupplement,fillRegionalCouncilQuotas,correctElectionDates,enrichLegacyGender};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;
  else root.HistoryLocal=api;
 })(typeof window==='undefined'?{}:window);

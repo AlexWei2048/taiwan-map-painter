@@ -1,10 +1,10 @@
 /* The map sidebar is the only election/scope/metric selector. */
 (function(){
 'use strict';
-const T=window.HistoryTrends,C=window.HistoryCore,$=id=>document.getElementById(id);
+const T=window.HistoryTrends,C=window.HistoryCore,S=window.HistoryTrendSummary,$=id=>document.getElementById(id);
 const offices={president:'台湾地区领导人',legislative:'立法机构民代',mayor:'县市长',council:'县市议员',township:'乡镇市区长'};
 const ns='http://www.w3.org/2000/svg';
-let panel=null,request=0,cache=new Map(),models=[],activeKey='',selection=null,renderedKey='',loading=false,closed=true,lastRows=[],lastSeries=[],lastTitle='',legislativeExport=null,voteShareExport=null,selectedYears=new Set(),knownYears=[];
+let panel=null,request=0,cache=new Map(),summaryCache=new Map(),models=[],activeKey='',selection=null,renderedKey='',loading=false,closed=true,lastRows=[],lastSeries=[],lastTitle='',legislativeExport=null,voteShareExport=null,selectedYears=new Set(),knownYears=[];
 const norm=v=>simplify(String(v||'')).replaceAll('臺','台');
 const fmt=(v,pct=false)=>Number.isFinite(v)?pct?v.toFixed(2)+'%':v.toLocaleString('zh-CN',{maximumFractionDigits:2}):'—';
 const node=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n};
@@ -27,7 +27,7 @@ function create(){
  panel.append(heading,scope,controls,actions,status,output);
  $('trendSelectAll').onclick=()=>{selectedYears=new Set(knownYears);setYears(settings(),false);load();window.dispatchEvent(new Event('site-route-change'))};
  $('trendSelectNone').onclick=()=>{selectedYears.clear();setYears(settings(),false);load();window.dispatchEvent(new Event('site-route-change'))};
- $('trendRetry').onclick=()=>{cache.clear();activeKey='';renderedKey='';load()};
+ $('trendRetry').onclick=()=>{cache.clear();summaryCache.clear();activeKey='';renderedKey='';load()};
  $('trendCsv').onclick=exportCsv;
 }
 function readSelection(s){
@@ -39,28 +39,38 @@ function setYears(conf,reset){
  const host=$('trendYears');host.replaceChildren();for(const y of ys){const l=node('label','trend-year'),input=node('input');input.type='checkbox';input.value=String(y);input.checked=selectedYears.has(y);input.onchange=()=>{if(input.checked)selectedYears.add(y);else selectedYears.delete(y);renderedKey='';load();window.dispatchEvent(new Event('site-route-change'))};l.append(input,node('span','',label(y,conf.office)));host.append(l)}
 }
 async function snapshot(office,year){
- const active=History2022View.snapshot?.();
- if(active?.year===year&&active.elections?.some(e=>e.office===office))return active;
  if(office==='president')return HistoryPresidential.load(year);
  if(office==='legislative')return HistoryLegislative.load(year);
  if(year===2022||year===2026)return History2022View.trendSnapshot(year);
  return HistoryLocal.loadCycle(year,office);
 }
 const range=conf=>yearsFor(conf.office).filter(y=>selectedYears.has(y));
+const trendDataKey=conf=>[conf.office,S.key(conf),range(conf).join(',')].join('|');
+async function loadSummary(conf){
+ const key=S.key(conf);if(!key)return null;
+ if(!summaryCache.has(key))summaryCache.set(key,(async()=>{
+  const response=await fetch('assets/history-trend-summary-v1/'+key+'.json?v=20261126-v101');if(!response.ok)throw Error('summary unavailable');
+  const payload=await response.json();return S.compatible(payload,conf,HistoryLocal,T)?payload:null;
+ })().catch(()=>null));
+ return summaryCache.get(key);
+}
 async function load(){
  if(!selection||panel.hidden)return;
- const conf=settings(),ys=range(conf),key=conf.office+'|'+ys.join(','),token=++request;
+ const conf=settings(),ys=range(conf),key=trendDataKey(conf),token=++request;
  activeKey=key;loading=true;models=[];lastRows=[];lastSeries=[];voteShareExport=null;
  $('trendStatus').textContent='正在载入所选范围的历届正式结果…';$('trendCharts').replaceChildren();$('trendCsv').disabled=true;
  if(!ys.length){loading=false;$('trendStatus').textContent='请至少勾选一个届次。';return}
  try{
+  const summary=ys.some(y=>y<2022)?await loadSummary(conf):null;if(token!==request)return;
   const result=new Array(ys.length);let next=0,finished=0;
   // A bounded work queue avoids waiting for the slowest request in each old batch.
   async function worker(){while(token===request&&next<ys.length){
    const i=next++,year=ys[i],k=conf.office+'|'+year;
    try{
-    if(!cache.has(k)){const pending=Promise.resolve().then(()=>snapshot(conf.office,year));cache.set(k,pending);pending.catch(()=>{if(cache.get(k)===pending)cache.delete(k)})}
-    result[i]={year,snapshot:await cache.get(k)};
+    const derived=year<2022?summary?.years?.[year]:null;
+    if(S.yearValid(derived,conf))result[i]={year,summary:derived};
+    else{if(!cache.has(k)){const pending=Promise.resolve().then(()=>snapshot(conf.office,year));cache.set(k,pending);pending.catch(()=>{if(cache.get(k)===pending)cache.delete(k)})}
+    result[i]={year,snapshot:await cache.get(k)}}
    }catch(e){result[i]={year,error:e.message}}
    if(token!==request)return;
    $('trendStatus').textContent='已载入 '+(++finished)+' / '+ys.length+' 届…';
@@ -261,12 +271,13 @@ function renderLegislative(conf,anchor,out){
  const seatBallot=national||ballot==='all'||ballot==='regional';
  const effective=T.trendEffectiveSelection(conf),allSeats=isLeg&&ballot==='all'&&national;
  const seatRows=seatBallot?models.flatMap(item=>{
+  if(item.summary&&!isLeg)return item.summary[ballot==='all'&&conf.county?'regional':ballot].map(r=>({...r,parties:r.seats}));
   if(!item.snapshot)return[{year:item.year,label:String(item.year),complete:false,reason:item.error,parties:{},values:{}}];
   const officialBallot=isLeg&&national&&['plains','mountain','party'].includes(ballot);
   const result=!isLeg?T.councilBallotRows(item.snapshot,{...conf,electorate:ballot==='all'&&conf.county?'regional':ballot}).map(r=>({...r,parties:r.seats})):allSeats?[T.allLegislativeSeats(item.snapshot,HistoryLegislativeParty.build(item.year,item.snapshot),norm)]:officialBallot?[T.aggregate(item.snapshot,{office:'legislative',electorate:ballot,normalize:norm,partySeats:ballot==='party'?HistoryLegislativeParty.build(item.year,item.snapshot):null})].map(r=>({...r,year:item.year,label:String(item.year),parties:Object.fromEntries(Object.entries(r.parties).map(([p,v])=>[p,v.seats||0]))})):T.historicalScopeRows(item.snapshot,{...effective,electorate:ballot==='all'?'regional':ballot,metric:'party'},anchor);
   return result.map(r=>{if(allSeats||officialBallot)r.dates=T.electionDates(item.snapshot,'legislative','',norm);return r});
  }):[];
- const voteRows=models.flatMap(item=>item.snapshot?isLeg?T.legislativeVoteShares(item.snapshot,conf,anchor):T.councilBallotRows(item.snapshot,conf):[{year:item.year,label:String(item.year),complete:false,reason:item.error,parties:{},votes:{},valid:null}]);
+ const voteRows=models.flatMap(item=>item.summary&&!isLeg?item.summary[ballot]:item.snapshot?isLeg?T.legislativeVoteShares(item.snapshot,conf,anchor):T.councilBallotRows(item.snapshot,conf):[{year:item.year,label:String(item.year),complete:false,reason:item.error,parties:{},votes:{},valid:null}]);
  const allRows=[...seatRows,...voteRows],missing=allRows.filter(r=>!r.complete);
  $('trendStatus').textContent=models.length+' 届 · '+(allRows.length-missing.length)+' 条完整指标结果'+(missing.length?' · '+missing.map(r=>r.label+(r.scopeLabel?' '+r.scopeLabel:'')+'：'+r.reason).join('；'):'');
  if(T.historicalCountyFamily(conf.county).length>1)out.append(node('p','data-help','升格前的原县、原市分别统计；合并后显示新的直辖市，跨边界不连线。'));
@@ -306,8 +317,8 @@ function render(){
  legislativeExport=null;voteShareExport=null;
  const totalLeg=fullLegislature(conf);
  const rows=models.flatMap(item=>{
-  if(!item.snapshot)return{year:item.year,label:label(item.year,conf.office),complete:false,reason:item.error,parties:{},values:{}};
-  const result=totalLeg?[T.allLegislativeSeats(item.snapshot,HistoryLegislativeParty.build(item.year,item.snapshot),norm)]:T.historicalScopeRows(item.snapshot,effective,anchor);
+  if(!item.snapshot&&!item.summary)return{year:item.year,label:label(item.year,conf.office),complete:false,reason:item.error,parties:{},values:{}};
+  const result=item.summary?item.summary[conf.level][conf.metric]:totalLeg?[T.allLegislativeSeats(item.snapshot,HistoryLegislativeParty.build(item.year,item.snapshot),norm)]:T.historicalScopeRows(item.snapshot,effective,anchor);
   return result.map(r=>{if(totalLeg){r.dates=T.electionDates(item.snapshot,conf.office,'',norm);if(conf.metric==='seats'&&r.complete)r.values.value=r.parties[norm(conf.party)]||0;}
    if(!conf.county&&!r.dates?.length)r.label=label(r.year,conf.office);return r})
  });
@@ -345,7 +356,7 @@ function render(){
  const showCounty=rows.some(r=>r.scopeLabel);
  for(const v of ['届次',...(showCounty?['当届县市']:[]),'投票日期',...series.map(s=>s.name),...(showTotal?['合计']:[])])header.append(node('th','',v));thead.append(header);table.append(thead);
  const body=node('tbody');for(const r of rows){const tr=node('tr');tr.append(node('td','',r.label));if(showCounty)tr.append(node('td','',r.county||conf.county));tr.append(node('td','',r.dates?.join(' / ')||'—'));for(const s of series)tr.append(node('td','',fmt(s.get(r),pct)));if(showTotal)tr.append(node('td','',r.complete?fmt(Object.values(r.parties).reduce((n,v)=>n+v,0)):'—'));body.append(tr)}table.append(body);wrap.append(table);out.append(wrap);
- const voteRows=models.flatMap(item=>item.snapshot?T.localPartyVoteShares(item.snapshot,conf):[{year:item.year,label:label(item.year,conf.office),complete:false,reason:item.error,parties:{},valid:null}]);
+ const voteRows=models.flatMap(item=>item.summary?item.summary[conf.level].voteRows:item.snapshot?T.localPartyVoteShares(item.snapshot,conf):[{year:item.year,label:label(item.year,conf.office),complete:false,reason:item.error,parties:{},valid:null}]);
  const voteSeries=partySeries(voteRows),voteTitle='候选人票得票率趋势（按所属政党汇总）';
  const voteNote='按当前选举类别和地图范围汇总候选人得票，再除以同范围有效票；同届多组无党籍（连署）候选人合并为同一类别，悬停可查看各候选人。'+(conf.office==='mayor'&&conf.level==='town'&&models.some(item=>item.year===2018)?'2018年台北市区级采用政大刊载的投票日资料，市级采用重计结果。':'');
  appendTrendCharts(out,voteRows,voteSeries,voteTitle,voteNote,{pct:true},conf.county);
@@ -387,7 +398,7 @@ window.HistoryTrendsUI={routeYears:()=>knownYears.filter(y=>selectedYears.has(y)
  if(!snap||snap.year!==conf.year||!snap.elections?.some(e=>e.office===conf.office)){
   request++;loading=false;activeKey='';renderedKey='';models=[];lastRows=[];$('trendCharts').replaceChildren();$('trendCsv').disabled=true;$('trendStatus').textContent='正在等待左侧选举数据载入…';return
  }
- const dataKey=conf.office+'|'+range(conf).join(','),key=JSON.stringify([conf.office,conf.year,conf.electorate,conf.county,conf.level,conf.focus,conf.metric,conf.party,conf.candidateScope,conf.candidate,range(conf).join(',')]);
+ const dataKey=trendDataKey(conf),key=JSON.stringify([conf.office,conf.year,conf.electorate,conf.county,conf.level,conf.focus,conf.metric,conf.party,conf.candidateScope,conf.candidate,range(conf).join(',')]);
  if(dataKey!==activeKey||range(conf).length&&!models.length&&!loading)load();else if(!loading&&(closed||key!==renderedKey))render();
  closed=false;
 },close(){closed=true},render,exportCsv};
