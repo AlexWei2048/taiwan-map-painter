@@ -24,8 +24,8 @@ function create(){
  const status=node('p','data-help');status.id='trendStatus';status.setAttribute('role','status');
  const output=node('div','trend-charts');output.id='trendCharts';
  panel.append(heading,scope,controls,actions,status,output);
- $('trendSelectAll').onclick=()=>{selectedYears=new Set(knownYears);setYears(settings(),false);load()};
- $('trendSelectNone').onclick=()=>{selectedYears.clear();setYears(settings(),false);load()};
+ $('trendSelectAll').onclick=()=>{selectedYears=new Set(knownYears);setYears(settings(),false);load();window.dispatchEvent(new Event('site-route-change'))};
+ $('trendSelectNone').onclick=()=>{selectedYears.clear();setYears(settings(),false);load();window.dispatchEvent(new Event('site-route-change'))};
  $('trendRetry').onclick=()=>{cache.clear();activeKey='';renderedKey='';load()};
  $('trendCsv').onclick=exportCsv;
 }
@@ -35,7 +35,7 @@ function readSelection(s){
 }
 function setYears(conf,reset){
  const ys=yearsFor(conf.office);if(reset)selectedYears=new Set(ys);else for(const y of ys)if(!knownYears.includes(y))selectedYears.add(y);knownYears=[...ys];
- const host=$('trendYears');host.replaceChildren();for(const y of ys){const l=node('label','trend-year'),input=node('input');input.type='checkbox';input.value=String(y);input.checked=selectedYears.has(y);input.onchange=()=>{if(input.checked)selectedYears.add(y);else selectedYears.delete(y);renderedKey='';load()};l.append(input,node('span','',label(y,conf.office)));host.append(l)}
+ const host=$('trendYears');host.replaceChildren();for(const y of ys){const l=node('label','trend-year'),input=node('input');input.type='checkbox';input.value=String(y);input.checked=selectedYears.has(y);input.onchange=()=>{if(input.checked)selectedYears.add(y);else selectedYears.delete(y);renderedKey='';load();window.dispatchEvent(new Event('site-route-change'))};l.append(input,node('span','',label(y,conf.office)));host.append(l)}
 }
 async function snapshot(office,year){
  if(office==='president')return HistoryPresidential.load(year);
@@ -261,7 +261,7 @@ function exportCsv(){
  }
  exportFile(C.csv(out),'历史趋势-'+offices[conf.office]+'-'+lastTitle+'.csv','text/csv;charset=utf-8')
 }
-window.HistoryTrendsUI={open(s){
+window.HistoryTrendsUI={routeYears:()=>knownYears.filter(y=>selectedYears.has(y)).join(',')||'none',restoreRouteYears(value){if(!selection)return;selectedYears=new Set(String(value).split(',').map(Number).filter(y=>knownYears.includes(y)));setYears(settings(),false);load()},open(s){
  create();if(!panel)return;
  const conf=readSelection(s),prior=selection;selection=conf;
  const reset=!prior||prior.office!==conf.office;
