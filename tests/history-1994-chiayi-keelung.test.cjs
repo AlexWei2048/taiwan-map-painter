@@ -7,6 +7,7 @@ const Local=require('../history-local.js');
 const council=require('../assets/history-local-1994-council.json');
 const chiayi=require('../sources/history-1994-chiayi-prior-council.json');
 const keelung=require('../sources/history-1994-keelung-council-profile.json');
+const taoyuan=require('../sources/history-1994-taoyuan-council-profile.json');
 test('1994 Chiayi previous-term council roster adds 19 sourced positives without overwriting previous evidence',()=>{
  const districts=council.districts.filter(d=>d.county==='嘉義縣');
  assert.equal(districts.length,7);
@@ -48,7 +49,7 @@ test('1994 Keelung city official council totals reconcile without filling distri
  assert.equal(keelung.ballots_cast,keelung.valid_votes+keelung.invalid_votes);
  assert.equal(keelung.candidate_count,keelung.male_candidates+keelung.female_candidates);
  assert.equal(keelung.elected_count,keelung.male_elected+keelung.female_elected);
- assert.deepEqual(council.verified_county_profiles,[keelung]);
+ assert.deepEqual(council.verified_county_profiles,[keelung,taoyuan]);
 });
 test('1994 local council snapshot exposes county-level summary without merging unverified district turnout',async()=>{
  const fetcher=async filename=>({
@@ -56,7 +57,7 @@ test('1994 local council snapshot exposes county-level summary without merging u
   json:async()=>JSON.parse(fs.readFileSync(path.join(__dirname,'..',filename.split('?')[0]),'utf8'))
  });
  const data=await Local.loadCycle(1994,'council',fetcher);
- assert.equal(data.verifiedCouncilCountyProfiles.length,1);
+ assert.equal(data.verifiedCouncilCountyProfiles.length,2);
  assert.equal(data.verifiedCouncilCountyProfiles[0].county,'基隆市');
  const keels=data.contests.filter(c=>c.county_name==='基隆市'&&c.election_id==='1994-council-counties');
  assert.equal(keels.length,8);
