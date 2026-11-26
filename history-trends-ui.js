@@ -63,7 +63,7 @@ async function load(){
   if(token!==request)return;models=result;loading=false;render()
  }catch(e){if(token===request){loading=false;$('trendStatus').textContent='趋势载入失败：'+e.message}}
 }
-function fullLegislature(conf){return conf.office==='legislative'&&!conf.county&&!conf.focus&&(conf.metric==='seats'||conf.metric==='party'&&conf.electorate==='regional')}
+function fullLegislature(conf){return conf.office==='legislative'&&!conf.county&&!conf.focus&&(conf.metric==='seats'||conf.metric==='party'&&['regional','all'].includes(conf.electorate))}
 function description(conf){
  const selected=conf.candidateScope==='candidate'&&(conf.metric==='share'||conf.metric==='votes');
  return [offices[conf.office],fullLegislature(conf)?'全部民代类型（总席次）':optionText('historyElectorate'),conf.county||'全部地区（含金门、马祖）',optionText('historyScale'),conf.focus,optionText('historyMetric'),conf.metric==='seats'?conf.party:selected?(conf.candidate?.name||conf.candidate?.party||'未指定候选人'):''].filter(Boolean).join(' · ');
@@ -207,11 +207,11 @@ function renderParliaments(out,rows,conf,totalLeg){
 }
 function render(){
  if(!panel||panel.hidden||loading||!models.length||!selection)return;
- const conf=settings(),anchor=History2022View.snapshot?.();
+ const conf=settings(),effective=T.trendEffectiveSelection(conf),anchor=History2022View.snapshot?.();
  const totalLeg=fullLegislature(conf);
  const rows=models.flatMap(item=>{
   if(!item.snapshot)return{year:item.year,label:label(item.year,conf.office),complete:false,reason:item.error,parties:{},values:{}};
-  const result=totalLeg?[T.allLegislativeSeats(item.snapshot,HistoryLegislativeParty.build(item.year,item.snapshot),norm)]:T.historicalScopeRows(item.snapshot,conf,anchor);
+  const result=totalLeg?[T.allLegislativeSeats(item.snapshot,HistoryLegislativeParty.build(item.year,item.snapshot),norm)]:T.historicalScopeRows(item.snapshot,effective,anchor);
   return result.map(r=>{if(totalLeg){r.dates=T.electionDates(item.snapshot,conf.office,'',norm);if(conf.metric==='seats'&&r.complete)r.values.value=r.parties[norm(conf.party)]||0;}
    if(!conf.county&&!r.dates?.length)r.label=label(r.year,conf.office);return r})
  });
@@ -220,11 +220,12 @@ function render(){
  $('trendStatus').textContent=models.length+' 届 · '+(rows.length-missing.length)+' 条完整地区/届次结果'+(missing.length?' · '+missing.map(r=>r.label+(r.scopeLabel?' '+r.scopeLabel:'')+'：'+r.reason).join('；'):'');
  if(T.historicalCountyFamily(conf.county).length>1)out.append(node('p','data-help','升格前使用当届县名；合并前原县、原市分列，合并后使用直辖市结果。不同辖区不合计、不跨合并边界连线。'));
  const voteMetric=conf.metric==='share'||conf.metric==='votes',pct=conf.metric==='share';
- const leading=!totalLeg&&(conf.office==='president'||conf.office==='legislative'&&conf.electorate!=='regional'||conf.office==='mayor'&&conf.level==='town');
+ const leading=!totalLeg&&(effective.office==='president'||effective.office==='legislative'&&effective.electorate!=='regional'||effective.office==='mayor'&&effective.level==='town');
  const selected=conf.candidateScope==='candidate'&&voteMetric;
  const name=selected?(conf.office==='legislative'&&conf.electorate==='party'?conf.candidate?.party:conf.candidate?.name)||'指定候选人':voteMetric?'各地区最高票候选人':conf.metric==='seats'?conf.party:'';
  const metricTitle=voteMetric?(pct?'得票率':'得票数'):conf.metric==='seats'?'当选席次':leading?'领先地区数':'当选席次';
- const title=(totalLeg?'立法机构总席次 · ':'')+(name?displayParty(name)+' · '+metricTitle+'趋势':'政党'+metricTitle+'趋势');
+ const combinedCounty=conf.office==='legislative'&&conf.electorate==='all'&&!!conf.county;
+ const title=(totalLeg?'立法机构总席次 · ':combinedCounty?'县市区域民代 · ':'')+(name?displayParty(name)+' · '+metricTitle+'趋势':'政党'+metricTitle+'趋势');
  let series=[];
  if(voteMetric||conf.metric==='seats')series=[{name:displayParty(name||metricTitle),color:conf.candidate?.party?color(conf.candidate.party):conf.party?color(conf.party):'#287963',get:r=>r.values?.value??null}];
  else {
@@ -233,7 +234,7 @@ function render(){
   series=top.map(p=>({name:displayParty(p),color:color(p),get:r=>r.complete?r.parties[p]||0:null}));
   if(rest.length)series.push({name:'其他政党',color:color('其他政党'),get:r=>r.complete?rest.reduce((n,p)=>n+(r.parties[p]||0),0):null});
  }
- const note=totalLeg?'全类型原始当选席次：区域、平地及山地少数民族、不分区，以及旧制侨选。各届合计与法定总席次核对；县市层级不分摊全区名单席次。':voteMetric?(selected?'按左侧指定对象筛选；未核实匹配的届次不连线。候选人按姓名、政党及适用的选区记录匹配，不代表已完成个人身份沿革核验。':'各地区最高票候选人的票数合计；得票率为该合计除以所选范围的有效票合计，不是各地区得票率的简单平均。'):conf.metric==='seats'?'只显示左侧指定政党的当选席次。':leading?'与地图一致，按各统计地区最高票所属政党计数，不等同于当选席次。':'按当届正式当选席次统计；其余政党合并展示，CSV保留完整政党明细。';
+ const note=totalLeg?'全类型原始当选席次：区域、平地及山地少数民族、不分区，以及旧制侨选。各届合计与法定总席次核对；县市层级不分摊全区名单席次。':combinedCounty?'全部类型地图并列展示多个票种；此县市趋势仅按区域民代正式当选席次统计。不分区与少数民族民代由全区选出，不分摊到县市；切换左侧选举类型可查看各地得票领先趋势。':voteMetric?(selected?'按左侧指定对象筛选；未核实匹配的届次不连线。候选人按姓名、政党及适用的选区记录匹配，不代表已完成个人身份沿革核验。':'各地区最高票候选人的票数合计；得票率为该合计除以所选范围的有效票合计，不是各地区得票率的简单平均。'):conf.metric==='seats'?'只显示左侧指定政党的当选席次。':leading?'与地图一致，按各统计地区最高票所属政党计数，不等同于当选席次。':'按当届正式当选席次统计；其余政党合并展示，CSV保留完整政党明细。';
  if(conf.focus&&conf.level==='district')out.append(node('p','data-help','跨届选区须确认乡镇归属相同且无无法核实的部分里；否则保留缺值。'));
  if(conf.level==='town')out.append(node('p','data-help','按当届乡镇市区票数统计；不按现行行政区边界估算历史票数。'));
  const oldParty=!totalLeg&&conf.office==='legislative'&&conf.electorate==='party';
@@ -241,7 +242,7 @@ function render(){
  const readout=node('div','trend-point-readout','点击数据点查看对应届次。');readout.id='trendPointReadout';out.append(readout);
  if(series.length&&rows.some(r=>r.complete))out.append(card(title,note,chart(rows,series,title,{pct,stack:!voteMetric&&conf.metric!=='seats',breakOld:oldParty,integer:!pct})));
  else out.append(card(title,'当前所选范围没有可绘制的完整结果。',null));
- if(!voteMetric&&!leading&&['legislative','council'].includes(conf.office))renderParliaments(out,rows,conf,totalLeg);
+ if(!voteMetric&&!leading&&['legislative','council'].includes(conf.office))renderParliaments(out,rows,effective,totalLeg);
  // A compact exact-value table is limited to the same metric as the chart.
  const wrap=node('div','history-table-wrap'),table=node('table','history-candidate-table'),thead=node('thead'),header=node('tr');
  const showTotal=!voteMetric&&conf.metric==='party';
@@ -253,11 +254,11 @@ function render(){
 }
 function exportCsv(){
  if(!lastRows.length||loading)return;
- const conf=settings(),vote=conf.metric==='share'||conf.metric==='votes',single=vote||conf.metric==='seats';
+ const conf=settings(),effective=T.trendEffectiveSelection(conf),vote=conf.metric==='share'||conf.metric==='votes',single=vote||conf.metric==='seats';
  const out=[['选举类别','票种','范围','地图层级','届次','投票日期','指标','对象','数值','资料状态']];
  for(const r of lastRows){
   const items=single?[[lastSeries[0]?.name||lastTitle,r.values?.value]]:Object.entries(r.parties);
-  for(const [p,v] of items.length?items:[['',null]])out.push([offices[conf.office],fullLegislature(conf)?'全部民代类型':conf.electorate,[r.county||conf.county||'全部地区',conf.focus].filter(Boolean).join(' · '),conf.level,r.label,r.dates?.join(' / ')||'',optionText('historyMetric'),displayParty(p),Number.isFinite(v)?Math.round(v*100)/100:'',r.complete?'完整结果':r.reason]);
+  for(const [p,v] of items.length?items:[['',null]])out.push([offices[conf.office],fullLegislature(conf)?'全部民代类型':effective.electorate,[r.county||conf.county||'全部地区',conf.focus].filter(Boolean).join(' · '),effective.office==='legislative'&&effective.electorate==='regional'?'选举区（按县市汇总）':conf.level,r.label,r.dates?.join(' / ')||'',conf.office==='legislative'&&conf.electorate==='all'&&conf.county?'区域民代当选席次':optionText('historyMetric'),displayParty(p),Number.isFinite(v)?Math.round(v*100)/100:'',r.complete?'完整结果':r.reason]);
  }
  exportFile(C.csv(out),'历史趋势-'+offices[conf.office]+'-'+lastTitle+'.csv','text/csv;charset=utf-8')
 }

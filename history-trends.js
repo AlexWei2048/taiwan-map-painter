@@ -116,6 +116,12 @@ const MERGE_FAMILIES=[['台中县','台中市'],['台南县','台南市'],['高�
 function historicalCountyFamily(county){
  return [...RENAME_FAMILIES,...MERGE_FAMILIES].find(group=>group.includes(county))||[county];
 }
+// A county cannot be assigned seats from nationwide indigenous/list ballots.
+// For the combined map, its comparable historical series is regional seats.
+function trendEffectiveSelection(selection){
+ return selection.office==='legislative'&&selection.electorate==='all'&&selection.county?
+  {...selection,electorate:'regional'}:selection;
+}
 function historicalCountyScopes(snapshot,selection){
  const {county='',office,normalize=String}=selection;
  if(!county)return [''];
@@ -172,6 +178,7 @@ function mapTrend(snapshot,selection,anchor){
  const localDates=(snapshot.contests||[]).filter(c=>ids.has(c.election_id)&&norm(c.county_name)===county&&(identity(c.electorate)===electorate||electorate==='all')).map(c=>c.election_date?.slice(0,4)).filter(Boolean);
  const displayYear=county&&localDates.length?[...new Set(localDates)].sort().join('/'):String(year);
  const empty=reason=>({year,label:displayYear,complete:false,reason,parties:{},values:{},valid:null,areas:0});
+ if(isLeg&&electorate==='all')return empty('全部类型没有共同的县市席次口径，请分别选择票种');
  if(office==='council'&&year===1994&&(!county||county==='金门县'))return empty('当届议员完整得票资料缺档');
  if(office==='mayor'&&grain==='town'&&year===2018&&(!county||county==='台北市'))return empty('台北市重计后的区级得票缺档');
  if(focus&&grain==='district'&&anchor&&(year!==anchor.year||county!==anchorCounty)){
@@ -284,7 +291,7 @@ function majorityBoundary(points){
  const angle=seats===total?0:(points[seats-1].angle+points[seats].angle)/2;
  return {seats,angle};
 }
-const api={aggregate,value,difference,modern,percent,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,historicalScopeRows,electionDates,LEGISLATIVE_TOTALS};
+const api={aggregate,value,difference,modern,percent,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,historicalScopeRows,electionDates,trendEffectiveSelection,LEGISLATIVE_TOTALS};
 if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
 root.HistoryTrends=api;
 })(typeof window==='undefined'?{}:window);

@@ -68,6 +68,22 @@ test('All legislative seats reconcile to official full house totals for every el
  const s=require('../assets/history-legislative-2024.json'),r=T.allLegislativeSeats(s,P.build(2024,s),norm);
  assert.equal(r.parties['中国国民党'],52);assert.equal(r.parties['民主进步党'],51);assert.equal(r.parties['台湾民众党'],8);assert.equal(r.parties['无党籍'],2);
 });
+test('combined legislative county trend counts actual regional seats, never four ballot categories',()=>{
+ const years={1992:[['高雄县',6],['高雄市',12]],2008:[['高雄县',4],['高雄市',5]],2012:[['高雄市',9]],2024:[['高雄市',8]]};
+ const selected={office:'legislative',electorate:'all',county:'高雄市',level:'county',metric:'party'};
+ const effective=T.trendEffectiveSelection(selected);
+ assert.equal(effective.electorate,'regional');
+ for(const [year,expected] of Object.entries(years)){
+  const snapshot=require('../assets/history-legislative-'+year+'.json');
+  const rows=T.historicalScopeRows(snapshot,effective);
+  assert.deepEqual(rows.map(r=>[r.county,Object.values(r.parties).reduce((n,v)=>n+v,0)]),expected,year);
+  assert.ok(rows.every(r=>r.complete));
+  assert.equal(T.mapTrend(snapshot,selected).complete,false,'ambiguous all-ballot count must be rejected');
+ }
+ const local=require('../assets/history-2022.json');
+ assert.equal(T.trendEffectiveSelection({office:'council',electorate:'all',county:'高雄市'}).electorate,'all');
+ assert.equal(T.mapTrend(local,{office:'council',electorate:'all',county:'高雄市',metric:'party'}).complete,true);
+});
 test('Integer tick marks and parliament dot counts are exact for small and large assemblies',()=>{
  for(const max of [0,1,2,3,22,113,161,164,225,910]){const ticks=T.integerTicks(max);assert.ok(ticks.every(Number.isInteger));assert.ok(ticks.at(-1)>=max)}
  for(const total of [1,2,3,6,22,113,161,164,225,910]){const pts=T.parliamentPoints(total);assert.equal(pts.length,total);assert.ok(pts.every(p=>Number.isFinite(p.x)&&Number.isFinite(p.y)&&p.y<=0));assert.equal(new Set(pts.map(p=>p.x+'|'+p.y)).size,total)}
