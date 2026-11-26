@@ -40,3 +40,11 @@ python scripts/audit_2026_official.py --template 2026-official-review.csv
 The 2049-row template retains stable candidate IDs and local reference values. Official number, eligibility, party, gender, source URL and publication date are deliberately blank. The official audit is non-mutating.
 
 In the 2026 prediction workspace, users can manually archive their current forecast, export/import single or multiple JSON snapshots, and restore a snapshot to the editable forecast only after confirmation. Archived records are stored separately from editable map state. After actual 2026 results are officially released and pass source checksum/completeness checks, users can compare exact district winner sets, seat hit rate, party seat errors and vote-share/vote-count error, then export a JSON or PNG review. Missing districts are excluded from denominators. The archive timestamp comes from the user's device, not an independently trusted time authority.
+
+## 11月26日发布前复核
+
+现行基准为447个选区、2049名候选人（县市长22区81人，县市议员221区1493人，乡镇市区长204区475人）。名册及选后官方结果必须逐人核对，任何变化先修订经审定的基准，不能根据总量差额增删候选人。
+
+发布时必须将结果文件与对应发布清单一并提交。清单的 file、resultStatus、数量和完整 SHA-256 必须匹配实际文件；不得手动伪造或只修改清单。网站历史地图和趋势共同执行校验，核对候选人稳定ID、号次、选区、得票、当选标记、应选席次及已有乡镇明细，校验失败则不载入该结果。使用 HTTPS 或本地 localhost 测试，普通 HTTP 可能无法使用浏览器 Web Crypto。哈希用于检查文件一致性，不代表官方数字真实性或数字签名，原始官方来源仍须人工核对。
+
+选前先执行 node --test tests/official-2026-gate.test.cjs，再执行既有导入器测试和浏览器回归测试。模拟夹具只在测试环境使用，绝不写入 assets/history-2026.json。当前保持 awaiting_results，直到投票后收齐、核对真实官方数据并按上述发布流程操作。此前已移除预测封存与选后复盘入口，个人预测与历史结果继续独立保存。
