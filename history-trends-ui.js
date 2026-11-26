@@ -113,7 +113,28 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
   const click=()=>showYear(row.year,row.county,row.label);p.addEventListener('click',click);p.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();click()}})
  };
  if(stack){
-  rows.forEach((row,i)=>{let acc=0;for(const s of series){const v=s.get(row);if(!Number.isFinite(v)||v<=0)continue;const h=v/max*(bottom-top),p=svg('rect',{x:x(i)-barWidth/2,y:y(acc+v),width:barWidth,height:h,fill:s.color,stroke:'#fff','stroke-width':.5});addPoint(p,row,s,v);g.append(p);acc+=v}if(row.complete)g.append(svg('text',{x:x(i),y:y(acc)-6,'text-anchor':'middle','font-size':11,'font-weight':700,'data-trend-total':String(acc)},fmt(acc)))})
+  const labelColor=fill=>{const m=/^#([0-9a-f]{6})$/i.exec(fill||'');if(!m)return'#fff';const c=m[1].match(/../g).map(v=>parseInt(v,16));return(c[0]*.299+c[1]*.587+c[2]*.114)>150?'#17352b':'#fff'};
+  rows.forEach((row,i)=>{
+   let acc=0;const annotations=[];
+   for(const s of series){
+    const v=s.get(row);if(!Number.isFinite(v)||v<=0)continue;
+    const h=v/max*(bottom-top),middle=y(acc+v/2),p=svg('rect',{x:x(i)-barWidth/2,y:y(acc+v),width:barWidth,height:h,fill:s.color,stroke:'#fff','stroke-width':.5});
+    addPoint(p,row,s,v);g.append(p);
+    if(integer){
+     const textValue=fmt(v),inside=h>=13&&barWidth>=textValue.length*6+8;
+     annotations.push({value:textValue,middle,inside,color:s.color,name:s.name});
+    }
+    acc+=v;
+   }
+   for(const a of annotations.filter(a=>a.inside))g.append(svg('text',{x:x(i),y:a.middle+3,'text-anchor':'middle','font-size':10,'font-weight':700,fill:labelColor(a.color),'pointer-events':'none','data-trend-seat-label':a.name},a.value));
+   let last=top-4;
+   for(const a of annotations.filter(a=>!a.inside).sort((a,b)=>a.middle-b.middle)){
+    const baseline=Math.max(a.middle+3,last+11,top+7);last=baseline;
+    const edge=x(i)+barWidth/2;
+    g.append(svg('line',{x1:edge,x2:edge+6,y1:a.middle,y2:baseline-3,stroke:a.color,'stroke-width':1,'pointer-events':'none'}),svg('text',{x:edge+7,y:baseline,'font-size':9,'font-weight':700,fill:'#213b31','pointer-events':'none','data-trend-seat-label':a.name},a.value));
+   }
+   if(row.complete)g.append(svg('text',{x:x(i),y:y(acc)-6,'text-anchor':'middle','font-size':11,'font-weight':700,'data-trend-total':String(acc)},fmt(acc)));
+  })
  }else for(const s of series){
   const branches=new Map();
   rows.forEach((row,i)=>{const k=row.scopeSeries||'',state=branches.get(k)||{d:'',previous:null};const v=s.get(row);if(!Number.isFinite(v)){state.previous=null;branches.set(k,state);return}
