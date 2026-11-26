@@ -3525,3 +3525,33 @@ test('Historical comparison seat changes, mayor turnover and downloadable SVG/CS
   assert.equal(await file.failure(),null);
  }
 });
+
+
+test('Unreadable legacy plan is preserved and available as a raw backup',async t=>{
+ const context=await browser.newContext();t.after(()=>context.close());
+ await context.addInitScript(()=>localStorage.setItem('island-palette-v1','{damaged-original'));
+ const page=await context.newPage();
+ await page.goto(base);await page.locator('#regions path[data-region]').first().waitFor();
+ const result=await page.evaluate(()=>{
+  let error='';try{writeProject()}catch(e){error=e.message}
+  return {error,raw:localStorage.getItem(KEY),bundle:localStorage.getItem(MapPlanStore.KEY)}
+ });
+ assert.match(result.error,/原有方案无法读取/);assert.equal(result.raw,'{damaged-original');assert.equal(result.bundle,null);
+ await page.locator('.header-menu:not(.export-menu) summary').click();
+ await page.locator('#managePlans').click();
+ assert.equal(await page.locator('#planBackupAll').isDisabled(),true);
+ const raw=JSON.parse(await download(page,'#planRawBackup'));
+ assert.equal(raw.legacy,'{damaged-original');
+});
+test('Full plan backup merges without replacing current forecast',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ await selectMayor(page);
+ await page.locator('.header-menu:not(.export-menu) summary').click();await page.locator('#managePlans').click();
+ const backup=JSON.parse(await download(page,'#planBackupAll'));
+ const before=await page.evaluate(()=>JSON.stringify(state.predictions));
+ page.once('dialog',d=>d.accept());
+ await page.locator('#planBundleFile').setInputFiles({name:'backup.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(backup))});
+ await page.waitForFunction(()=>document.querySelector('#activePlanSelect').options.length===2);
+ assert.equal(await page.evaluate(()=>JSON.stringify(state.predictions)),before);
+ assert.equal(await page.locator('#activePlanSelect').inputValue(),'original');
+});
