@@ -3176,3 +3176,20 @@ test('Sidebar keeps site information directly above the mode switch and removes 
  assert.equal(await page.locator('#siteAbout .about-sources').isVisible(),true);
  assert.equal(await page.locator('#siteAbout .about-credits').isVisible(),true);
 });
+
+test('Shareable URL restores history and future query settings',async t=>{
+ const page=await pageFor(t);
+ const target='#/history/mayor/2022/'+encodeURIComponent('台北市')+'?level=town&metric=share&view=overview';
+ await page.goto(base+target);
+ await page.waitForFunction(()=>window.History2022View?.routeSelection?.().county==='台北市'&&window.History2022View.routeSelection().level==='town'&&window.History2022View.routeSelection().metric==='share');
+ assert.equal(await page.locator('#historyOffice').inputValue(),'mayor');
+ await page.waitForFunction(()=>window.HistoryWorkspace?.selection().view==='overview');
+ await page.locator('#historyMetric').selectOption('votes');
+ await page.waitForFunction(()=>location.hash.includes('metric=votes'));
+ await page.goBack();await page.waitForFunction(()=>window.History2022View?.routeSelection?.().metric==='share');
+ await page.reload();await page.waitForFunction(()=>window.History2022View?.routeSelection?.().county==='台北市'&&window.History2022View.routeSelection().metric==='share');
+ await page.goto(base+'#/prediction/2026/mayor/'+encodeURIComponent('高雄市')+'?level=town');
+ await page.waitForFunction(()=>document.querySelector('#county').value==='高雄市'&&document.querySelector('#predictionScale').value==='overlay');
+ await page.locator('#workspaceFree').click();
+ await page.waitForFunction(()=>location.hash.startsWith('#/free/'));
+});
