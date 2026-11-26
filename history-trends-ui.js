@@ -19,15 +19,15 @@ function settings(){return selection||{}}
 function create(){
  if(panel)return;panel=$('historyTrendsPanel');if(!panel)return;
  $('historyTrendModuleStatus')?.remove();
- const heading=node('div','trend-heading');heading.append(node('h3','','跨届选举趋势'),node('p','','按左侧选举类别、民代类别及地图范围展示所选届次。'));
+ const heading=node('div','trend-heading');heading.append(node('h3','','跨届选举趋势'));
  const scope=node('p','data-help');scope.id='trendScope';
  const controls=node('div','trend-year-controls');controls.id='trendYearControls';const yearTitle=node('div','trend-year-title');yearTitle.append(node('strong','','比较届次'));for(const [id,text] of [['trendSelectAll','全选'],['trendSelectNone','清空']]){const b=node('button','button quiet',text);b.type='button';b.id=id;yearTitle.append(b)}const years=node('div','trend-year-picker');years.id='trendYears';controls.append(yearTitle,years);
  const actions=node('div','trend-actions');for(const [id,title] of [['trendRetry','重新载入'],['trendCsv','导出当前趋势 CSV']]){const b=node('button','button quiet',title);b.type='button';b.id=id;actions.append(b)}
  const status=node('p','data-help');status.id='trendStatus';status.setAttribute('role','status');
  const output=node('div','trend-charts');output.id='trendCharts';
  panel.append(heading,scope,controls,actions,status,output);
- $('trendSelectAll').onclick=()=>{selectedYears=new Set(knownYears);setYears(settings(),false);load();window.dispatchEvent(new Event('site-route-change'))};
- $('trendSelectNone').onclick=()=>{selectedYears.clear();setYears(settings(),false);load();window.dispatchEvent(new Event('site-route-change'))};
+ $('trendSelectAll').onclick=()=>changeYears(knownYears);
+ $('trendSelectNone').onclick=()=>changeYears([]);
  $('trendRetry').onclick=()=>{cache.clear();summaryCache.clear();legislativeTrendCache.clear();activeKey='';renderedKey='';load()};
  $('trendCsv').onclick=exportCsv;
 }
@@ -37,7 +37,22 @@ function readSelection(s){
 }
 function setYears(conf,reset){
  const ys=yearsFor(conf.office);if(reset)selectedYears=new Set(ys);else for(const y of ys)if(!knownYears.includes(y))selectedYears.add(y);knownYears=[...ys];
- const host=$('trendYears');host.replaceChildren();for(const y of ys){const l=node('label','trend-year'),input=node('input');input.type='checkbox';input.value=String(y);input.checked=selectedYears.has(y);input.onchange=()=>{if(input.checked)selectedYears.add(y);else selectedYears.delete(y);renderedKey='';load();window.dispatchEvent(new Event('site-route-change'))};l.append(input,node('span','',label(y,conf.office)));host.append(l)}
+ const host=$('trendYears'),existing=[...host.querySelectorAll('input')];
+ if(existing.length===ys.length&&existing.every((input,i)=>Number(input.value)===ys[i]&&input.nextElementSibling?.textContent===label(ys[i],conf.office))){
+  for(const input of existing)input.checked=selectedYears.has(Number(input.value));
+ }else{
+  host.replaceChildren();
+  for(const y of ys){const l=node('label','trend-year'),input=node('input');input.type='checkbox';input.value=String(y);input.checked=selectedYears.has(y);input.onchange=()=>{const next=new Set(selectedYears);if(input.checked)next.add(y);else next.delete(y);changeYears(next)};l.append(input,node('span','',label(y,conf.office)));host.append(l)}
+ }
+ $('trendSelectAll').disabled=ys.every(y=>selectedYears.has(y));
+ $('trendSelectNone').disabled=!ys.some(y=>selectedYears.has(y));
+}
+function changeYears(values,notify=true){
+ const next=new Set([...values].filter(y=>knownYears.includes(y)));
+ if(next.size===selectedYears.size&&[...next].every(y=>selectedYears.has(y)))return false;
+ selectedYears=next;setYears(settings(),false);load();
+ if(notify)window.dispatchEvent(new Event('site-route-change'));
+ return true;
 }
 async function snapshot(office,year){
  if(office==='president')return HistoryPresidential.load(year);
@@ -58,7 +73,7 @@ async function loadSummary(conf){
 async function load(){
  if(!selection||panel.hidden)return;
  const conf=settings(),ys=range(conf),key=trendDataKey(conf),token=++request;
- activeKey=key;renderedKey='';loading=true;models=[];lastRows=[];lastSeries=[];voteShareExport=null;
+ activeKey=key;renderedKey='';loading=true;models=[];lastRows=[];lastSeries=[];legislativeExport=null;voteShareExport=null;
  $('trendStatus').textContent='正在载入所选范围的历届正式结果…';$('trendCharts').replaceChildren();$('trendCsv').disabled=true;
  if(!ys.length){loading=false;$('trendStatus').textContent='请至少勾选一个届次。';return}
  try{
@@ -83,7 +98,7 @@ async function load(){
 function fullLegislature(conf){return conf.office==='legislative'&&!conf.county&&!conf.focus&&(conf.metric==='seats'||conf.metric==='party'&&['regional','all'].includes(conf.electorate))}
 function description(conf){
  const selected=conf.candidateScope==='candidate'&&(conf.metric==='share'||conf.metric==='votes');
- return [offices[conf.office],conf.office==='legislative'&&conf.electorate==='all'?'全部类型（总席次；不分区票得票率）':optionText('historyElectorate'),conf.county||'全部地区（含金门、马祖）',optionText('historyScale'),conf.focus,['legislative','council'].includes(conf.office)?'当选席次与得票率':optionText('historyMetric'),conf.metric==='seats'?conf.party:selected?(conf.candidate?.name||conf.candidate?.party||'未指定候选人'):''].filter(Boolean).join(' · ');
+ return [offices[conf.office],conf.office==='legislative'&&conf.electorate==='all'?'全部类型（总席次；不分区票得票率）':['council','legislative'].includes(conf.office)?optionText('historyElectorate'):'',conf.county||'全部地区（含金门、马祖）',optionText('historyScale'),conf.focus,['legislative','council'].includes(conf.office)?'当选席次与得票率':optionText('historyMetric'),conf.metric==='seats'?conf.party:selected?(conf.candidate?.name||conf.candidate?.party||'未指定候选人'):''].filter(Boolean).join(' · ');
 }
 function exportFile(content,name,mime){const url=URL.createObjectURL(new Blob([content],{type:mime}));const a=node('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),2000)}
 async function chartExport(graph,title,png){
@@ -432,7 +447,7 @@ function exportCsv(){
  }
  exportFile(C.csv(out),'历史趋势-'+offices[conf.office]+'-'+lastTitle+'.csv','text/csv;charset=utf-8')
 }
-window.HistoryTrendsUI={routeYears:()=>knownYears.filter(y=>selectedYears.has(y)).join(',')||'none',restoreRouteYears(value){if(!selection)return;selectedYears=new Set(String(value).split(',').map(Number).filter(y=>knownYears.includes(y)));setYears(settings(),false);load()},open(s){
+window.HistoryTrendsUI={routeYears:()=>knownYears.filter(y=>selectedYears.has(y)).join(',')||'none',restoreRouteYears(value){if(!selection)return;changeYears(String(value).split(',').map(Number),false)},open(s){
  create();if(!panel)return;
  const conf=readSelection(s),prior=selection;selection=conf;
  const reset=!prior||prior.office!==conf.office;
