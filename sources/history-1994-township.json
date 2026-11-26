@@ -4426,6 +4426,35 @@
           "incumbent_at_election": true
         }
       ]
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://www.cna.com.tw/news/aloc/202310270272.aspx",
+      "source_locator": "中央社2023-10-27，記載李棟樑1994至2002年任鹿港鎮第12、13屆鎮長；彰化縣議會電子報另證實先任第11、12屆縣議員、再任兩屆鎮長。未取得1994原始選票結果。",
+      "corroboration_url": "https://www.chcc.gov.tw/epaper/Epaper.aspx?Parser=99%2C9%2C59%2C%2C%2C%2C%2C7",
+      "winners": [
+        {
+          "town": "鹿港鎮",
+          "name": "李棟樑",
+          "gender": "男",
+          "incumbent_at_election": false
+        }
+      ]
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://web.cec.gov.tw/api/file/8fa41f91-c505-44b4-9c5b-2638fccc5726.pdf",
+      "source_locator": "彰化縣選委會第17屆芬園鄉長選舉公報，第一頁候選人洪慶章經歷欄載第十二、十三、十四屆芬園鄉鄉長，性別男；新聞報導獨立佐證第12、13屆。原1994票數、提名黨籍及號次未取得；公報為文字轉錄，原圖未取得。",
+      "corroboration_url": "https://org-today.line-apps.com/tw/v3/article/RBqqL6W",
+      "winners": [
+        {
+          "town": "芬園鄉",
+          "name": "洪慶章",
+          "gender": "男"
+        }
+      ]
     }
   ]
 }
