@@ -11,6 +11,21 @@ function partyTrendValue(row,party,group){
  if(group)return group.some(p=>Object.hasOwn(row.parties,p))?group.reduce((sum,p)=>sum+(row.parties[p]||0),0):null;
  return Object.hasOwn(row.parties,party)?row.parties[party]:null;
 }
+// Only documented name changes are unified in the party-list vote series.
+function partyListTrendKey(name){
+ const key=String(name||'').trim().replaceAll('臺','台').replaceAll('灣','湾').replaceAll('時','时').replaceAll('進','进').replaceAll('黨','党');
+ if(['基进党','台湾基进','台湾基进党'].includes(key))return '台湾基进';
+ return key;
+}
+// Strict, unrounded threshold over all verified archive rows in the same scope.
+// Selection of displayed years only changes the visible points, not eligibility.
+function partyListTrendGroups(rows,history=rows){
+ const stats=new Map(),eligible=new Set(['时代力量','台湾基进']);
+ for(const r of history||[])if(r.complete)for(const [p,v] of Object.entries(r.parties||{}))if(Number.isFinite(v)&&v>1)eligible.add(p);
+ for(const r of rows||[])if(r.complete)for(const [p,v] of Object.entries(r.parties||{}))if(Number.isFinite(v))stats.set(p,(stats.get(p)||0)+v);
+ const sorted=[...stats].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],'zh')).map(([p])=>p);
+ return {individual:sorted.filter(p=>eligible.has(p)),other:sorted.filter(p=>!eligible.has(p))};
+}
 function candidateTrendTooltip(row,key){
  if(!row?.complete||!Object.hasOwn(row.parties,key))return'';
  const entries=row.candidateDetails?.[key]||[],label=row.partyMeta?.[key]?.label||key;
@@ -206,7 +221,7 @@ function legislativeVoteShares(snapshot,selection,anchor){
   const valid=rows.reduce((n,r)=>n+r.votes,0);
   if(!valid)return empty('该票种有效票为零');
   const votes=Object.create(null);
-  for(const r of rows){const party=keyParty(norm(r.party));votes[party]=(votes[party]||0)+r.votes}
+  for(const r of rows){const raw=keyParty(norm(r.party)),party=ballot==='party'?partyListTrendKey(raw):raw;votes[party]=(votes[party]||0)+r.votes}
   const parties=Object.fromEntries(Object.entries(votes).map(([p,v])=>[p,v/valid*100]));
   return {...base,complete:true,reason:'',parties,votes,valid};
  });
@@ -431,7 +446,7 @@ function createLegislativeTrendCache({normalize=String,buildList,maxScopes=64}={
  }
  return{read,clear(){cache=new WeakMap();lists=new WeakMap()}};
 }
-const api={createLegislativeTrendCache,summaryAlgorithmVersion:1,aggregate,value,difference,modern,percent,partyTrendValue,candidateTrendTooltip,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,trendChartScopes,historicalScopeRows,legislativeVoteShares,councilBallotRows,localPartyVoteShares,electionDates,trendEffectiveSelection,LEGISLATIVE_TOTALS};
+const api={partyListTrendKey,partyListTrendGroups,createLegislativeTrendCache,summaryAlgorithmVersion:1,aggregate,value,difference,modern,percent,partyTrendValue,candidateTrendTooltip,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,trendChartScopes,historicalScopeRows,legislativeVoteShares,councilBallotRows,localPartyVoteShares,electionDates,trendEffectiveSelection,LEGISLATIVE_TOTALS};
 if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
 root.HistoryTrends=api;
 })(typeof window==='undefined'?{}:window);

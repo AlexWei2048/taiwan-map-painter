@@ -4,7 +4,7 @@
 const T=window.HistoryTrends,C=window.HistoryCore,S=window.HistoryTrendSummary,$=id=>document.getElementById(id);
 const offices={president:'台湾地区领导人',legislative:'立法机构民代',mayor:'县市长',council:'县市议员',township:'乡镇市区长'};
 const ns='http://www.w3.org/2000/svg';
-let panel=null,request=0,cache=new Map(),summaryCache=new Map(),models=[],activeKey='',selection=null,renderedKey='',loading=false,closed=true,lastRows=[],lastSeries=[],lastTitle='',legislativeExport=null,voteShareExport=null,selectedYears=new Set(),knownYears=[];
+let panel=null,request=0,cache=new Map(),summaryCache=new Map(),models=[],eligibilityModels=[],activeKey='',selection=null,renderedKey='',loading=false,closed=true,lastRows=[],lastSeries=[],lastTitle='',legislativeExport=null,voteShareExport=null,selectedYears=new Set(),knownYears=[];
 const norm=v=>simplify(String(v||'')).replaceAll('臺','台');
  const legislativeTrendCache=T.createLegislativeTrendCache({normalize:norm,buildList:(year,snapshot)=>HistoryLegislativeParty.build(year,snapshot)});
 const fmt=(v,pct=false)=>Number.isFinite(v)?pct?v.toFixed(2)+'%':v.toLocaleString('zh-CN',{maximumFractionDigits:2}):'—';
@@ -61,7 +61,8 @@ async function snapshot(office,year){
  return HistoryLocal.loadCycle(year,office);
 }
 const range=conf=>yearsFor(conf.office).filter(y=>selectedYears.has(y));
-const trendDataKey=conf=>[conf.office,S.key(conf),range(conf).join(',')].join('|');
+const listVoteChart=conf=>conf.office==='legislative'&&['all','party'].includes(conf.electorate);
+const trendDataKey=conf=>[conf.office,S.key(conf),range(conf).join(','),listVoteChart(conf)?'list-vote-all-years':''].join('|');
 async function loadSummary(conf){
  const key=S.key(conf);if(!key)return null;
  if(!summaryCache.has(key))summaryCache.set(key,(async()=>{
@@ -72,8 +73,8 @@ async function loadSummary(conf){
 }
 async function load(){
  if(!selection||panel.hidden)return;
- const conf=settings(),ys=range(conf),key=trendDataKey(conf),token=++request;
- activeKey=key;renderedKey='';loading=true;models=[];lastRows=[];lastSeries=[];legislativeExport=null;voteShareExport=null;
+ const conf=settings(),selected=range(conf),ys=listVoteChart(conf)&&selected.length?yearsFor(conf.office):selected,key=trendDataKey(conf),token=++request;
+ activeKey=key;renderedKey='';loading=true;models=[];eligibilityModels=[];lastRows=[];lastSeries=[];legislativeExport=null;voteShareExport=null;
  $('trendStatus').textContent='正在载入所选范围的历届正式结果…';$('trendCharts').replaceChildren();$('trendCsv').disabled=true;
  if(!ys.length){loading=false;$('trendStatus').textContent='请至少勾选一个届次。';return}
  try{
@@ -92,7 +93,7 @@ async function load(){
    $('trendStatus').textContent='已载入 '+(++finished)+' / '+ys.length+' 届…';
   }}
   await Promise.all(Array.from({length:Math.min(4,ys.length)},worker));
-  if(token!==request)return;models=result;loading=false;render()
+  if(token!==request)return;eligibilityModels=listVoteChart(conf)?result:[];models=result.filter(item=>selected.includes(item.year));loading=false;render()
  }catch(e){if(token===request){loading=false;$('trendStatus').textContent='趋势载入失败：'+e.message}}
 }
 function fullLegislature(conf){return conf.office==='legislative'&&!conf.county&&!conf.focus&&(conf.metric==='seats'||conf.metric==='party'&&['regional','all'].includes(conf.electorate))}
@@ -322,10 +323,10 @@ function renderParliaments(out,rows,conf,totalLeg){
  }
  out.append(section);
 }
-function partySeries(rows){
+function partySeries(rows,listHistory=null){
  const totals=new Map();for(const r of rows)for(const [p,v] of Object.entries(r.parties||{}))totals.set(p,(totals.get(p)||0)+v);
  const meta=new Map();for(const r of rows)for(const [p,m] of Object.entries(r.partyMeta||{}))meta.set(p,m);
- const sorted=[...totals].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],'zh')).map(x=>x[0]),top=sorted.slice(0,7),rest=sorted.slice(7);
+ const sorted=[...totals].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],'zh')).map(x=>x[0]),groups=listHistory?T.partyListTrendGroups(rows,listHistory):null,top=groups?groups.individual:sorted.slice(0,7),rest=groups?groups.other:sorted.slice(7);
  const series=top.map(p=>({name:meta.get(p)?.label||displayParty(p),color:color(meta.get(p)?.party||p),get:r=>T.partyTrendValue(r,p),tooltip:r=>r.candidateDetails?T.candidateTrendTooltip(r,p):'',party:p}));
  if(rest.length)series.push({name:'其他政党',color:color('其他政党'),get:r=>T.partyTrendValue(r,'',rest),tooltip:r=>r.candidateDetails?rest.map(p=>T.candidateTrendTooltip(r,p)).filter(Boolean).join('\n'):'',parties:rest});
  return series;
@@ -354,10 +355,11 @@ function renderLegislative(conf,anchor,out){
   appendTrendCharts(out,seatRows,seatSeries,title,note,{stack:true,integer:true},conf.county);
   if(seatRows.some(r=>r.complete))renderParliaments(out,seatRows,{...effective,metric:'party'},allSeats);
  }
- const voteSeries=partySeries(voteRows),voteType=ballot==='all'?(isLeg?'不分区':'全部议员'):({regional:'区域',plains:'平地少数民族',mountain:'山地少数民族',party:'不分区',indigenous:'原住民'}[ballot]||ballot);
+ const listMode=listVoteChart(conf),listHistory=listMode?eligibilityModels.flatMap(item=>item.snapshot?legislativeTrendCache.read(item.snapshot,conf,anchor).votes:[]):null;
+ const voteSeries=partySeries(voteRows,listHistory),voteType=ballot==='all'?(isLeg?'不分区':'全部议员'):({regional:'区域',plains:'平地少数民族',mountain:'山地少数民族',party:'不分区',indigenous:'原住民'}[ballot]||ballot);
  const voteSubject=ballot==='all'?(isLeg?'不分区民代':'全部议员'):voteType+(isLeg?'民代':'议员');
  const voteTitle=voteSubject+' · '+(isLeg&&(ballot==='all'||ballot==='party')?'政党票／旧制席次计算票得票率趋势':'候选人票得票率趋势（按所属政党汇总）');
- const voteNote=isLeg&&(ballot==='all'||ballot==='party')?'2008年前为各党推荐的区域与少数民族候选人票汇总，用于分配名单席次；2008年起为独立政党票。两种票源分别绘制，不跨制度连线。':!isLeg&&ballot==='all'?'区域和少数民族选票分别统计后汇总党派候选人票，分母为这些票数之和；选民可能投不同类别选票，不代表单一选民支持率。':'每个政党的候选人得票之和除以当前票种、当前范围的有效票；各党占比合计为100%。';
+ const voteNote=isLeg&&(ballot==='all'||ballot==='party')?'2008年前为各党推荐的区域与少数民族候选人票汇总，用于分配名单席次；2008年起为独立政党票。两种票源分别绘制，不跨制度连线。历届任一届得票率超过1%的政党单列，时代力量与台湾基进亦单列；未参选不补零。'+(eligibilityModels.some(item=>item.error)?' 部分历届资料未载入，单列名单可能不完整。':''):!isLeg&&ballot==='all'?'区域和少数民族选票分别统计后汇总党派候选人票，分母为这些票数之和；选民可能投不同类别选票，不代表单一选民支持率。':'每个政党的候选人得票之和除以当前票种、当前范围的有效票；各党占比合计为100%。';
  appendTrendCharts(out,voteRows,voteSeries,voteTitle,voteNote,{pct:true,breakOld:isLeg&&(ballot==='all'||ballot==='party')},conf.county);
  const valuesTable=(rows,series,pct,title)=>{
   const wrap=node('div','history-table-wrap'),table=node('table','history-candidate-table'),head=node('thead'),tr=node('tr');
@@ -460,7 +462,7 @@ window.HistoryTrendsUI={routeYears:()=>knownYears.filter(y=>selectedYears.has(y)
  $('trendScope').textContent='当前范围：'+description(conf);
  const snap=History2022View.snapshot?.();
  if(!snap||snap.year!==conf.year||!snap.elections?.some(e=>e.office===conf.office)){
-  request++;loading=false;activeKey='';renderedKey='';models=[];lastRows=[];$('trendCharts').replaceChildren();$('trendCsv').disabled=true;$('trendStatus').textContent='正在等待左侧选举数据载入…';return
+  request++;loading=false;activeKey='';renderedKey='';models=[];eligibilityModels=[];lastRows=[];$('trendCharts').replaceChildren();$('trendCsv').disabled=true;$('trendStatus').textContent='正在等待左侧选举数据载入…';return
  }
  const dataKey=trendDataKey(conf),key=JSON.stringify([conf.office,conf.year,conf.electorate,conf.county,conf.level,conf.focus,conf.metric,conf.party,conf.candidateScope,conf.candidate,range(conf).join(',')]);
  if(dataKey!==activeKey||range(conf).length&&!models.length&&!loading)load();else if(!loading&&(key!==renderedKey||(closed&&!$('trendCharts').childElementCount&&models.length)))render();

@@ -316,3 +316,36 @@ test('focused legislative trend rechecks boundaries against its active anchor',(
  assert.deepEqual(a.seats,T.historicalScopeRows(s,{...conf,metric:'party'},s));
  assert.deepEqual(b.votes,T.legislativeVoteShares(s,conf,other));
 });
+
+test('Party-list series uses strictly greater than one percent in any verified election, no seven-party cap',()=>{
+ const history=[{complete:true,parties:{甲:50,乙:30,丙:2,丁:2,戊:2,己:2,庚:2,辛:2,壬:1,癸:.5,'时代力量':.3,'台湾基进':.4}},
+ {complete:true,parties:{丙:.1,壬:1,癸:.3,'台湾基进':.2}},
+ {complete:false,parties:{癸:99}}];
+ const g=T.partyListTrendGroups(history,history);
+ for(const p of ['甲','乙','丙','丁','戊','己','庚','辛','时代力量','台湾基进'])assert.ok(g.individual.includes(p),p);
+ assert.deepEqual(new Set(g.other),new Set(['壬','癸']));
+ const filtered=T.partyListTrendGroups([history[1]],history);
+ assert.ok(filtered.individual.includes('丙'),'eligible historical party keeps its own line after filtering');
+ assert.equal(T.partyTrendValue(history[1],'甲'),null);
+ assert.equal(T.partyListTrendKey('基進黨'),'台湾基进');
+ assert.equal(T.partyListTrendKey('臺灣基進'),'台湾基进');
+ assert.notEqual(T.partyListTrendKey('绿党社会民主党联盟'),T.partyListTrendKey('台湾绿党'));
+ const snapshot={year:2020,rows:[{type:'legislative',electorate:'party',level:'national',party:'基進黨',votes:3},{type:'legislative',electorate:'party',level:'national',party:'台灣基進',votes:7},{type:'legislative',electorate:'party',level:'national',party:'甲',votes:90}]};
+ const r=T.legislativeVoteShares(snapshot,{office:'legislative',electorate:'party'})[0];
+ assert.equal(r.votes['台湾基进'],10);assert.equal(r.valid,100);assert.equal(r.parties['台湾基进'],10);
+});
+test('All ten archived party-list elections produce a complete threshold partition and exact totals',()=>{
+ const norm=require('../assets/opencc.js').Converter({from:'t',to:'cn'});
+ const years=[1992,1995,1998,2001,2004,2008,2012,2016,2020,2024];
+ const rows=years.map(year=>T.legislativeVoteShares(require('../assets/history-legislative-'+year+'.json'),{office:'legislative',electorate:'party',normalize:norm})[0]);
+ assert.ok(rows.every(r=>r.complete));
+ const groups=T.partyListTrendGroups(rows);
+ for(const r of rows)for(const [p,v] of Object.entries(r.parties))if(v>1)assert.ok(groups.individual.includes(p),p+' '+r.year);
+ for(const p of ['时代力量','台湾基进','中国国民党','民主进步党','中华社会民主党'])assert.ok(groups.individual.includes(p),p);
+ for(const r of rows){
+  const total=[...groups.individual.map(p=>T.partyTrendValue(r,p)),T.partyTrendValue(r,'',groups.other)].reduce((s,v)=>s+(v??0),0);
+  assert.ok(Math.abs(total-100)<1e-8,r.year);
+ }
+ assert.equal(T.partyTrendValue(rows[0],'时代力量'),null);
+ console.log('Archived party-list threshold series:',JSON.stringify(groups.individual.map(p=>({party:p,max:Math.max(...rows.map(r=>r.parties[p]??0))}))));
+});

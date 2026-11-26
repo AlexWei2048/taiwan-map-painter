@@ -314,12 +314,14 @@ test('Independent-candidate emblem is bundled for sidebar, legend and standalone
  assert.ok(svg.includes('data:image/png;base64,'));
 });
 test('Recording votes retains chosen winners and exports a complete vote table',async t=>{
- const page=await pageFor(t);await selectMayor(page);await enterRates(page);
+ const page=await pageFor(t);await selectMayor(page);
+ const selected=await page.evaluate(()=>{const d=predictionDistricts()[0],r=predictionRecord(d);return {id:d.id,winners:[...r.winners],names:r.winners.map(id=>candidateDisplayName(candidateById.get(id)))}});assert.deepEqual(selected.names,['蒋万安']);
+ await enterRates(page);
  const svg=await exportSvg(page);assert.doesNotMatch(svg,/预测得票候选人|2022 实际选举结果/);assert.match(svg,/预测得票率/);assert.match(svg,/data-export-party-logo/);
  assert.equal((svg.match(/data-export-winner-entry=/g)||[]).length,6);assert.equal((svg.match(/data-export-winner-row=/g)||[]).length,6);
- await page.locator('#predictionDisplay').selectOption('composition');assert.match(await page.locator('#predictionCoverage').innerText(),/1\/1 区/);assert.equal(await page.evaluate(()=>Object.values(state.predictions).some(r=>r.winners?.some(id=>candidateById.get(id)?.name==='蒋万安'))),true);
+ await page.locator('#predictionDisplay').selectOption('composition');assert.match(await page.locator('#predictionCoverage').innerText(),/1\/1 区/);assert.deepEqual(await page.evaluate(id=>state.predictions[id]?.winners,selected.id),selected.winners);
  assert.match(await page.locator('#legend').textContent(),/中国国民党（1席）/);
- await page.reload();await page.locator('#regions path').first().waitFor();assert.match(await page.locator('#predictionCoverage').innerText(),/1\/1 区/);assert.equal(await page.evaluate(()=>Object.values(state.predictions).some(r=>r.winners?.some(id=>candidateById.get(id)?.name==='蒋万安'))),true);
+ await page.reload();await page.locator('#regions path').first().waitFor();assert.match(await page.locator('#predictionCoverage').innerText(),/1\/1 区/);assert.deepEqual(await page.evaluate(id=>state.predictions[id]?.winners,selected.id),selected.winners);
 });
 test('Unified forecast selectors and exclusive metric columns work in district and township dialogs',async t=>{
  const page=await pageFor(t);
@@ -3583,4 +3585,24 @@ test('Observation topics and historical batch download remain isolated from the 
  assert.match(await page.locator('#observationContent').textContent(),/蒋万安/);
  await page.locator('#categoryHistory').click();await page.locator('#mapWithKey').waitFor({state:'visible'});assert.equal(await page.locator('#observationContent').isVisible(),false);
  const [file]=await Promise.all([page.waitForEvent('download',{timeout:90000}),page.locator('#historyBatchDownload').click()]);assert.match(file.suggestedFilename(),/历届历史数据\.json$/);
+});
+
+test('Party-list trend retains every party above one percent and verified rename across selected years',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ await page.locator('#categoryHistory').click();
+ await page.locator('#historyOffice').selectOption('legislative');
+ await page.waitForFunction(()=>History2022View.office()==='legislative'&&History2022View.snapshot()?.year===2024);
+ await page.locator('#historyElectorate').selectOption('party');
+ await page.locator('#categoryAnalysis').click();
+ const chart=page.locator('#trendCharts svg[aria-label*="旧制席次计算票得票率趋势"]');
+ await chart.waitFor({timeout:120000});
+ const audit=await page.evaluate(async()=>{
+  const years=HistoryLegislative.YEARS,rows=await Promise.all(years.map(async year=>HistoryTrends.legislativeVoteShares(await HistoryLegislative.load(year),{office:'legislative',electorate:'party',normalize:simplify})[0]));
+  return HistoryTrends.partyListTrendGroups(rows);
+ });
+ const names=await chart.locator('[data-trend-legend]').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('data-trend-legend')));
+ for(const p of audit.individual)assert.ok(names.includes(windowlessName(p))||names.some(n=>n.replace(/[“”]/g,'')===p.replace(/[“”]/g,'')),p);
+ assert.ok(names.includes('时代力量'));assert.ok(names.includes('台湾基进'));assert.ok(!names.includes('基进党'));
+ assert.ok(names.length>8,'do not truncate small party series to seven');
+ function windowlessName(p){return p}
 });
