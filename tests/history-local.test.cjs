@@ -258,7 +258,7 @@ test('The partial 1994 township archive reconciles all 89 contests across eight 
   ['斗南鎮',30951,24399,23904,495],['西螺鎮',33754,26078,25737,341],
   ['水林鄉',25077,18426,18180,246],
  ]);
- assert.deepEqual(extra.find(r=>r.winners).winners,[{town:'清水鎮',name:'吳金生'}]);
+ assert.deepEqual(extra.find(r=>r.winners?.some(w=>w.town==='清水鎮')).winners,[{town:'清水鎮',name:'吳金生'}]);
  const kouhu=extra.flatMap(r=>r.profiles||[]).find(p=>p.town==='口湖鄉');
  assert.equal(kouhu.candidate_count,4);
  assert.deepEqual(kouhu.candidate_names,['蘇青山','王文祥','王茂三','李印緞']);
