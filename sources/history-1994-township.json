@@ -4577,6 +4577,120 @@
           "incumbent_at_election": true
         }
       ]
+    },
+    {
+      "county": "苗栗縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://zh.wikipedia.org/wiki/大湖鄉_(台灣)",
+      "source_locator": "歷屆鄉長表第11屆陳銘岳、第12、13屆黃碧忠；後屆候選人資料列黃碧忠性別男。當屆原始得票清冊未取得。",
+      "corroboration_url": "https://votetw.com/data/candidate/廖秀錦",
+      "winners": [
+        {
+          "town": "大湖鄉",
+          "name": "黃碧忠",
+          "gender": "男",
+          "incumbent_at_election": false
+        }
+      ]
+    },
+    {
+      "county": "苗栗縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://zh.wikipedia.org/wiki/頭屋鄉",
+      "source_locator": "歷任首長表：第11屆張毓秀過世，由范雄達補選上任，第12屆范雄達；2018年自由時報確認其曾任鄉長。任期表推定當屆現任，未取得1994投票日任免原件。",
+      "corroboration_url": "https://election.ltn.com.tw/2018/print/New/breakingnews/2586565",
+      "winners": [
+        {
+          "town": "頭屋鄉",
+          "name": "范雄達",
+          "incumbent_at_election": true
+        }
+      ]
+    },
+    {
+      "county": "苗栗縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://tw.news.yahoo.com/西湖鄉長古木賢-為鄉政鞠躬盡瘁-215007344.html",
+      "source_locator": "2017年4月28日地方新聞追述1990年當選、連任兩屆及卸任後其妻接任，對照歷任表第11、12屆古木賢。中央社所稱兩屆未計明各任年份，採有時間資訊的任期記載。",
+      "corroboration_url": "https://zh.wikipedia.org/wiki/西湖鄉_(台灣)",
+      "winners": [
+        {
+          "town": "西湖鄉",
+          "name": "古木賢",
+          "gender": "男",
+          "incumbent_at_election": true
+        }
+      ]
+    },
+    {
+      "county": "苗栗縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://zh.wikipedia.org/wiki/造橋鄉",
+      "source_locator": "歷任首長表第10、11屆徐純仁，第12、13屆張炳源；造橋鄉公所2016年親恩堂啟用報導確認張炳源為歷任鄉長及約1994年開始籌建的推動者。尚缺當屆票數清冊。",
+      "corroboration_url": "https://www.tch.gov.tw/News_Photo_Content.aspx?n=3713&s=138521&sms=10774",
+      "winners": [
+        {
+          "town": "造橋鄉",
+          "name": "張炳源",
+          "incumbent_at_election": false
+        }
+      ]
+    },
+    {
+      "county": "苗栗縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://www.tfrin.gov.tw/redirect_files.php?file_name=85cEN1LFuZFEG0oWGSlashT4iMlBpLsYWBF0frpWWGPlusoQWGEqualWGEqualiCQMuYtW25egyWGSlashXVGeeWGSlashYYqckscccois6fea0FdbNz0ZiahTG&id=10679",
+      "source_locator": "水產試驗所《毛蟹資源復育——毛蟹人工繁殖與標識放流試驗》印刷頁7，1998年4月3日記載三灣鄉長黃文貴先生；歷任表第11屆鍾澄賢、第12、13屆黃文貴。PDF文字可讀，原圖未取得。",
+      "corroboration_url": "https://zh.wikipedia.org/wiki/三灣鄉_(台灣)",
+      "winners": [
+        {
+          "town": "三灣鄉",
+          "name": "黃文貴",
+          "gender": "男",
+          "incumbent_at_election": false
+        }
+      ]
+    },
+    {
+      "county": "苗栗縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://aborgpedia.alcd.center/detail?cat=29&id=10921&race=0&search=%E6%96%B0%E7%A4%BE&writer=",
+      "source_locator": "《臺灣原住民族事典》Malabang馬那邦部落條目搜尋索引明載黃津1994年獲國民黨提名參選、敗於黃見德；榮安部落條目及歷任表記載黃見德於第11屆補選上任。全文頁面未能取得；當屆得票、號次及黃見德推薦黨籍待查。",
+      "corroboration_url": "https://indigenapedia-alcd.nccu.edu.tw/detail?cat=29&id=10925&race=0&search=&writer=",
+      "secondary_source": "https://zh.wikipedia.org/wiki/泰安鄉",
+      "winners": [
+        {
+          "town": "泰安鄉",
+          "name": "黃見德",
+          "incumbent_at_election": true
+        }
+      ],
+      "other_candidates": [
+        {
+          "town": "泰安鄉",
+          "name": "黃津",
+          "gender": "女",
+          "party_recommendation": "中國國民黨",
+          "elected": false,
+          "votes": null,
+          "ballot_number": null
+        }
+      ]
+    },
+    {
+      "county": "苗栗縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://zh.wikipedia.org/wiki/獅潭鄉",
+      "source_locator": "歷屆鄉長表第11、12屆列黃國光；其他新聞只證實同名人士曾任鄉公所秘書，未證實當屆鄉長身分。僅單一次級名錄，保留待核線索，不列為已核實當選者。",
+      "supplement_type": "unverified_roster_lead",
+      "unverified_winners": [
+        {
+          "town": "獅潭鄉",
+          "name": "黃國光",
+          "incumbent_at_election": null
+        }
+      ],
+      "status": "待官方名錄或原始選舉清冊確認"
     }
   ]
 }
