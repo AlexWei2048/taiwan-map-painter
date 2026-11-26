@@ -97,6 +97,7 @@
   return'\uFEFF'+rows.map(row=>row.map(cell).join(',')).join('\r\n');
  }
 
+ const queryIndexes=new WeakMap();
  function index(snapshot){
   if(!snapshot||snapshot.schemaVersion!==2)throw Error('Unsupported history snapshot');
   const electionsById=new Map(snapshot.elections.map(item=>[item.election_id,item]));
@@ -107,7 +108,12 @@
    if(!candidaciesByContest.has(item.contest_id))candidaciesByContest.set(item.contest_id,[]);
    candidaciesByContest.get(item.contest_id).push(item);
   }
-  return{snapshot,electionsById,contestsById,candidaciesByContest};
+  const indexed={snapshot,electionsById,contestsById,candidaciesByContest};
+  queryIndexes.set(indexed,{electionsByOffice:new Map(),contestsByElection:new Map(),summaries:new Map()});
+  const queries=queryIndexes.get(indexed);
+  for(const item of electionsById.values()){if(!queries.electionsByOffice.has(item.office))queries.electionsByOffice.set(item.office,[]);queries.electionsByOffice.get(item.office).push(item)}
+  for(const contest of contestsById.values()){if(!queries.contestsByElection.has(contest.election_id))queries.contestsByElection.set(contest.election_id,[]);queries.contestsByElection.get(contest.election_id).push(contest)}
+  return indexed;
  }
 
  function contestSummary(contest,candidacies){
@@ -136,15 +142,24 @@
   const year=Number(selection.year||2022),office=selection.office||'mayor';
   const electorate=identity(selection.electorate||'regional');
   const years=indexed.snapshot.year===year&&Array.isArray(indexed.snapshot.cycleYears)?indexed.snapshot.cycleYears:[year];
-  const electionIds=new Set([...indexed.electionsById.values()]
-   .filter(item=>years.includes(Number(item.year))&&item.office===office).map(item=>item.election_id));
-  const contests=[...indexed.contestsById.values()].filter(item=>
+  const queries=queryIndexes.get(indexed);
+  const elections=queries?queries.electionsByOffice.get(office)||[]:[...indexed.electionsById.values()];
+  const electionIds=new Set(elections.filter(item=>years.includes(Number(item.year))&&item.office===office).map(item=>item.election_id));
+  // Keep snapshot order for multi-year batches; direct lookups avoid a full scan for one contest.
+  const selectedContest=selection.contestId?indexed.contestsById.get(selection.contestId):null;
+  const candidates=selection.contestId?(selectedContest?[selectedContest]:[]):queries&&electionIds.size===1?(queries.contestsByElection.get(electionIds.values().next().value)||[]):[...indexed.contestsById.values()];
+  const contests=candidates.filter(item=>
    electionIds.has(item.election_id)&&
    (!selection.countyId||item.county_id===selection.countyId)&&
-   (selection.electorate==='all'||electorate==='all'||identity(item.electorate)===electorate)&&
-   (!selection.contestId||item.contest_id===selection.contestId)
+   (selection.electorate==='all'||electorate==='all'||identity(item.electorate)===electorate)
   );
-  const summaries=contests.map(contest=>contestSummary(contest,indexed.candidaciesByContest.get(contest.contest_id)||[]));
+  const summaries=contests.map(contest=>{
+   if(!queries)return contestSummary(contest,indexed.candidaciesByContest.get(contest.contest_id)||[]);
+   if(!queries.summaries.has(contest.contest_id))queries.summaries.set(contest.contest_id,contestSummary(contest,indexed.candidaciesByContest.get(contest.contest_id)||[]));
+   const summary=queries.summaries.get(contest.contest_id);
+   // Return independent arrays/maps as before; consumers may sort or annotate them.
+   return {...summary,candidacies:[...summary.candidacies],winners:[...summary.winners],partySeats:new Map(summary.partySeats)};
+  });
   return{index:indexed,selection:{...selection,year,office,electorate:selection.electorate||'regional'},contests,summaries,
    candidacies:summaries.flatMap(item=>item.candidacies)};
  }
