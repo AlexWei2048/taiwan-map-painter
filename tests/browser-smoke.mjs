@@ -2895,14 +2895,14 @@ test('Published-only 2026 results can load in history, switch offices and return
   }));
   const contests=ds.map(d=>({
    contest_id:d.id,election_id:'2026-'+d.type,county_id:d.county,county_name:d.county,
-   district_name:d.type==='township'?d.name.replace(d.county,''):d.name,
+   district_name:d.type==='township'?(d.town||(d.name.startsWith(d.county)?d.name.slice(d.county.length):d.name)):d.name,
    electorate:HistoryCore.identity(d.electorate),seats:d.seats||1,reserved_seats:d.womenReserved||0,
    registered_voters:null,ballots_cast:null,valid_votes:ds.find(x=>x.id===d.id).candidateIds.reduce((n,id)=>n+1000+Number(cs.find(c=>c.id===id).number||0),0),invalid_votes:null
   }));
   const candidacies=cs.map(c=>{
    const d=byDistrict.get(c.districtId);return{
     candidacy_id:c.id,candidate_id:c.id,contest_id:d.id,ballot_number:String(c.number),
-    candidate_name:c.nameSimplified||c.name,party_name:c.party||'无党籍',
+    candidate_name:c.nameSimplified||c.name||c.nameOriginal,party_name:c.party||'无党籍',
     votes:1000+Number(c.number||0),elected_official:d.candidateIds.slice(0,d.seats||1).includes(c.id)
    }
   });
@@ -2910,8 +2910,8 @@ test('Published-only 2026 results can load in history, switch offices and return
    const d=byDistrict.get(c.districtId);
    return{type:c.type,level:c.type==='mayor'?'county':c.type==='council'?'district':'town',
     electorate:HistoryCore.identity(d.electorate),county:c.county,
-    district:c.type==='council'?d.name:'',town:c.type==='township'?d.name.replace(c.county,''):'',
-    name:c.nameSimplified||c.name,party:c.party,number:String(c.number),gender:c.gender,candidateId:c.id,
+    district:c.type==='council'?d.name:'',town:c.type==='township'?(d.town||(d.name.startsWith(d.county)?d.name.slice(d.county.length):d.name)):'',
+    name:c.nameSimplified||c.name||c.nameOriginal,party:c.party||'无党籍',number:String(c.number),gender:c.gender,candidateId:c.id,
     votes:1000+Number(c.number||0),elected:d.candidateIds.slice(0,d.seats||1).includes(c.id)}
   });
   return{schemaVersion:2,year:2026,completeness:'full',publicationStatus:'provisional',
