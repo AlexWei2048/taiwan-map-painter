@@ -3601,8 +3601,13 @@ test('Party-list trend retains every party above one percent and verified rename
   return HistoryTrends.partyListTrendGroups(rows);
  });
  const names=await chart.locator('[data-trend-legend]').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('data-trend-legend')));
- for(const p of audit.individual)assert.ok(names.includes(windowlessName(p))||names.some(n=>n.replace(/[“”]/g,'')===p.replace(/[“”]/g,'')),p);
- assert.ok(names.includes('时代力量'));assert.ok(names.includes('台湾基进'));assert.ok(!names.includes('基进党'));
+ const plain=p=>p.replace(/[“”]/g,'');
+ for(const p of audit.individual)assert.ok(names.some(n=>plain(n)===plain(p)),p);
+ assert.ok(names.map(plain).includes('时代力量'));assert.ok(names.map(plain).includes('台湾基进'));assert.ok(!names.map(plain).includes('基进党'));
  assert.ok(names.length>8,'do not truncate small party series to seven');
- function windowlessName(p){return p}
+ const fallback=await chart.locator('[data-trend-legend]').evaluateAll(nodes=>nodes.filter(n=>['民主联盟','绿党社会民主党联盟','新国家连线'].includes(n.getAttribute('data-trend-legend').replace(/[“”]/g,''))).map(n=>n.querySelector('rect:not([data-trend-legend-hit])')?.getAttribute('fill')));assert.equal(fallback.length,3);assert.equal(new Set(fallback).size,3);
+ await page.evaluate(()=>HistoryTrendsUI.restoreRouteYears('2024'));
+ await page.waitForFunction(()=>document.querySelector('#trendStatus')?.textContent.includes('1 届')&&!!document.querySelector('#trendCharts svg[aria-label*="旧制席次计算票得票率趋势"]'));
+ const filtered=(await chart.locator('[data-trend-legend]').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('data-trend-legend')))).map(plain);
+ assert.ok(filtered.includes('台湾基进'),'historical eligibility retained when selected year is below one percent');assert.ok(filtered.includes('时代力量'));assert.ok(!filtered.includes('民主联盟'),'do not display series with no record in the chosen year');
 });

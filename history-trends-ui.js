@@ -12,6 +12,9 @@ const node=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.classNa
 const svg=(tag,attrs={},text)=>{const n=document.createElementNS(ns,tag);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,v);if(text!==undefined)n.textContent=text;return n};
 const displayParty=p=>/^(连署|連署)$/.test(String(p))?'无党籍（连署）':p;
 const color=p=>p==='并列'?'#9ba69f':p==='其他政党'?'#aebbb2':predictionParty(p).color;
+// Distinct chart-only fallback colors, not historical official party colors.
+const listFallbackColors={'民主联盟':'#5366B7','绿党社会民主党联盟':'#C65B9C','新国家连线':'#8754B1'};
+const listColor=p=>{const original=color(p);return original.toLowerCase()==='#738772'?(listFallbackColors[p.replace(/[“”]/g,'')]||original):original};
 const yearsFor=o=>o==='president'?HistoryPresidential.YEARS:o==='legislative'?HistoryLegislative.YEARS:HistoryLocal.years(o,window.HISTORY_2026_RESULTS_AVAILABLE===true);
 const label=(y,o)=>o==='council'&&[1994,1998,2002].includes(Number(y))?String(y):HistoryLocal.yearLabel(y,o);
 const optionText=id=>$(id)?.selectedOptions?.[0]?.textContent||'';
@@ -327,7 +330,7 @@ function partySeries(rows,listHistory=null){
  const totals=new Map();for(const r of rows)for(const [p,v] of Object.entries(r.parties||{}))totals.set(p,(totals.get(p)||0)+v);
  const meta=new Map();for(const r of rows)for(const [p,m] of Object.entries(r.partyMeta||{}))meta.set(p,m);
  const sorted=[...totals].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],'zh')).map(x=>x[0]),groups=listHistory?T.partyListTrendGroups(rows,listHistory):null,top=groups?groups.individual:sorted.slice(0,7),rest=groups?groups.other:sorted.slice(7);
- const series=top.map(p=>({name:meta.get(p)?.label||displayParty(p),color:color(meta.get(p)?.party||p),get:r=>T.partyTrendValue(r,p),tooltip:r=>r.candidateDetails?T.candidateTrendTooltip(r,p):'',party:p}));
+ const series=top.map(p=>({name:meta.get(p)?.label||displayParty(p),color:(listHistory?listColor:color)(meta.get(p)?.party||p),get:r=>T.partyTrendValue(r,p),tooltip:r=>r.candidateDetails?T.candidateTrendTooltip(r,p):'',party:p}));
  if(rest.length)series.push({name:'其他政党',color:color('其他政党'),get:r=>T.partyTrendValue(r,'',rest),tooltip:r=>r.candidateDetails?rest.map(p=>T.candidateTrendTooltip(r,p)).filter(Boolean).join('\n'):'',parties:rest});
  return series;
 }
@@ -359,7 +362,7 @@ function renderLegislative(conf,anchor,out){
  const voteSeries=partySeries(voteRows,listHistory),voteType=ballot==='all'?(isLeg?'不分区':'全部议员'):({regional:'区域',plains:'平地少数民族',mountain:'山地少数民族',party:'不分区',indigenous:'原住民'}[ballot]||ballot);
  const voteSubject=ballot==='all'?(isLeg?'不分区民代':'全部议员'):voteType+(isLeg?'民代':'议员');
  const voteTitle=voteSubject+' · '+(isLeg&&(ballot==='all'||ballot==='party')?'政党票／旧制席次计算票得票率趋势':'候选人票得票率趋势（按所属政党汇总）');
- const voteNote=isLeg&&(ballot==='all'||ballot==='party')?'2008年前为各党推荐的区域与少数民族候选人票汇总，用于分配名单席次；2008年起为独立政党票。两种票源分别绘制，不跨制度连线。历届任一届得票率超过1%的政党单列，时代力量与台湾基进亦单列；未参选不补零。'+(eligibilityModels.some(item=>item.error)?' 部分历届资料未载入，单列名单可能不完整。':''):!isLeg&&ballot==='all'?'区域和少数民族选票分别统计后汇总党派候选人票，分母为这些票数之和；选民可能投不同类别选票，不代表单一选民支持率。':'每个政党的候选人得票之和除以当前票种、当前范围的有效票；各党占比合计为100%。';
+ const voteNote=isLeg&&(ballot==='all'||ballot==='party')?'2008年前为各党推荐的区域与少数民族候选人票汇总，用于分配名单席次；2008年起为独立政党票。两种票源分别绘制，不跨制度连线。历届任一届得票率超过1%的政党单列，时代力量与台湾基进亦单列；未参选不补零。无既定党色的个别历史政党采用区分色。'+(eligibilityModels.some(item=>item.error)?' 部分历届资料未载入，单列名单可能不完整。':''):!isLeg&&ballot==='all'?'区域和少数民族选票分别统计后汇总党派候选人票，分母为这些票数之和；选民可能投不同类别选票，不代表单一选民支持率。':'每个政党的候选人得票之和除以当前票种、当前范围的有效票；各党占比合计为100%。';
  appendTrendCharts(out,voteRows,voteSeries,voteTitle,voteNote,{pct:true,breakOld:isLeg&&(ballot==='all'||ballot==='party')},conf.county);
  const valuesTable=(rows,series,pct,title)=>{
   const wrap=node('div','history-table-wrap'),table=node('table','history-candidate-table'),head=node('thead'),tr=node('tr');
