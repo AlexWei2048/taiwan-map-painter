@@ -1758,6 +1758,7 @@ function render(){
  syncCouncilExportScopeVisibility();
  if(!data)return;resetSeatTiePatterns();ensureMapDetails();syncMapLayerStatus();$('canvas').classList.toggle('nationwide-mode',isNationwide());$('canvas').classList.toggle('county-mode',state.level==='counties'||mayorTownBoundaryOverlay());
  $('canvas').classList.toggle('council-overview-mode',councilCountyOverview());
+ $('canvas').classList.toggle('history-combined-mode',historicalCombinedMap());
  const regionGroup=$('regions'),borderGroup=$('borders'),districtGroup=$('districtBorders'),townGroup=$('townBorders');
  const restoreMapFocus=regionGroup.contains(document.activeElement);
  for(const group of [regionGroup,borderGroup,districtGroup,townGroup]){group.replaceChildren();group.removeAttribute('transform')}
