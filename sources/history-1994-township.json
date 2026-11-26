@@ -3515,6 +3515,57 @@
       }
     },
     {
+      "county": "花蓮縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "verified_winners_only",
+      "source_url": "https://cloud.hakka.gov.tw/Attachment/1/842313544171.pdf",
+      "source_locator": "1994年花蓮縣第12屆鄉鎮市長部分當選名冊，來源分別為中選會官方選舉公報及客委會典藏地方史料（詳逐人連結）。",
+      "profile_scope": "winners_only_not_complete_candidates",
+      "data_quality": "verified_biographies_not_contemporaneous_1994_results",
+      "validation_note": "全縣13鄉鎮的選舉人數、投票與有效無效票已另由花蓮縣志部分檔案保存；本記錄只補當選人，不增加未核實候選人、票數、號次及黨籍。",
+      "winners": [
+        {
+          "town": "花蓮市",
+          "name": "陳清水",
+          "gender": "男",
+          "incumbent_at_election": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://web.cec.gov.tw/api/file/aa7a7df8-b730-4f28-bd83-d2ff1d8ec042.pdf",
+          "source_locator": "中選會2009年花蓮市第16屆市長選舉公報，陳清水第2號學經歷「花蓮市第十二屆市長」；同表性別「男」。",
+          "method": "cec_official_later_candidate_biography",
+          "evidence_notes": "只核實第12屆市長任職和性別。該公告為2009年資料，性別可跨屆同人延用；2009推薦政黨不是1994推薦政黨。未取得1994原始票表。"
+        },
+        {
+          "town": "吉安鄉",
+          "name": "徐松海",
+          "gender": null,
+          "incumbent_at_election": false,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://cloud.hakka.gov.tw/Attachment/1/842313544171.pdf",
+          "source_locator": "行政院客家委員會典藏地方研究，附錄一「吉安鄉歷屆鄉長」印刷頁163，引《吉安鄉志》(2002)頁220–221：第11屆徐永滿(79–83年3月)，第12屆徐松海(83年3月10日–87年3月)。",
+          "method": "hakka_council_research_previous_successive_term_roster",
+          "evidence_notes": "1994選舉投票日(83年1月29日)仍由徐永滿擔任第11屆，故徐松海不是在任連任。任期名錄與全縣選舉概況交叉核對；未取得個人得票。"
+        },
+        {
+          "town": "富里鄉",
+          "name": "蘇孝信",
+          "gender": "男",
+          "incumbent_at_election": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://eebulletin.cec.gov.tw/103/16%E8%8A%B1%E8%93%AE%E7%B8%A3/%E7%B8%A3%E8%AD%B0%E5%93%A1/%E8%8A%B1%E8%93%AE%E7%B8%A3%E7%AC%AC04%E3%80%8105%E3%80%8106%E9%81%B8%E8%88%89%E5%8D%80%20.pdf",
+          "source_locator": "中選會2014年花蓮縣第4、5、6選區議員公報，蘇孝信第1號經歷「富里鄉第12、13屆鄉長」，同表性別「男」。",
+          "method": "cec_official_later_candidate_biography",
+          "evidence_notes": "證明曾擔任1994第12屆富里鄉長和性別，沒有1994個人得票、號次、推薦政黨；1994選舉時現任身分尚待官方第11屆任期名錄核查。"
+        }
+      ]
+    },
+    {
       "county": "臺東縣",
       "election_date": "1994-01-29",
       "source_url": "https://www.donghe.gov.tw/home/attachments/article/592/103%E5%B9%B4%E6%9D%B1%E6%B2%B3%E9%84%89%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1.pdf",
