@@ -253,6 +253,68 @@
   }
   return rings.join('');
  }
- const api={identity,districtNumber,compareResultRows,key,sameScope,councilScope,legislativeScopeIndex,legislativeScope,csv,index,filter,contestSummary,overview,councilBadges,mergePaths};
+ // A publication checksum detects stale/corrupt data; it is not a source signature.
+ function official2026Manifest(manifest,directory){
+  return manifest?.schemaVersion===1&&manifest.year===2026&&manifest.status==='published'&&
+   manifest.file==='assets/history-2026.json'&&['provisional','certified'].includes(manifest.resultStatus)&&
+   /^[0-9a-f]{64}$/i.test(manifest.sha256||'')&&Array.isArray(directory?.candidates)&&Array.isArray(directory?.districts)&&
+   manifest.candidateCount===directory.candidates.length&&manifest.districtCount===directory.districts.length;
+ }
+ function validateOfficial2026(shard,manifest,directory){
+  const fail=message=>{throw Error('2026结果校验失败：'+message)};
+  if(!official2026Manifest(manifest,directory))fail('发布清单无效');
+  if(shard?.schemaVersion!==2||shard.year!==2026||shard.completeness!=='full'||shard.publicationStatus!==manifest.resultStatus||
+   !Array.isArray(shard.contests)||shard.contests.length!==manifest.districtCount||
+   !Array.isArray(shard.candidacies)||shard.candidacies.length!==manifest.candidateCount||!Array.isArray(shard.rows)||
+   !Array.isArray(shard.elections)||!['mayor','council','township'].every(office=>shard.elections.some(e=>e.office===office&&e.election_id==='2026-'+office&&e.year===2026)))fail('资料格式或数量不符');
+  const districts=new Map(directory.districts.map(d=>[d.id,d])),candidates=new Map(directory.candidates.map(c=>[c.id,c]));
+  const contests=new Map(),results=new Map(),totals=new Map(),winners=new Map(),ballots=new Map();
+  for(const c of shard.contests){
+   const d=districts.get(c.contest_id);
+   if(!d||contests.has(c.contest_id)||c.election_id!=='2026-'+d.type||c.seats!==(Number(d.seats)||1))fail('选区不符或重复');
+   contests.set(c.contest_id,c);
+  }
+  for(const c of shard.candidacies){
+   const ref=candidates.get(c.candidate_id),did=c.contest_id;
+   if(!ref||results.has(c.candidate_id)||ref.districtId!==did||!contests.has(did)||String(ref.number)!==String(c.ballot_number)||
+    !Number.isSafeInteger(c.votes)||c.votes<0||typeof c.elected_official!=='boolean')fail('候选人身份、号次、得票或当选标记不符');
+   const ballot=did+'|'+c.ballot_number;if(ballots.has(ballot))fail('重复号次');ballots.set(ballot,true);
+   results.set(c.candidate_id,c);totals.set(did,(totals.get(did)||0)+c.votes);winners.set(did,(winners.get(did)||0)+Number(c.elected_official));
+  }
+  for(const [id,c] of contests){
+   const total=totals.get(id);
+   if(!Number.isSafeInteger(total)||winners.get(id)!==c.seats||c.valid_votes!==null&&c.valid_votes!==undefined&&c.valid_votes!==total)fail('选区票数或席次不一致');
+   for(const value of [c.registered_voters,c.ballots_cast,c.invalid_votes])if(value!=null&&(!Number.isSafeInteger(value)||value<0))fail('投票统计无效');
+   if(c.ballots_cast!=null&&(c.ballots_cast<total||c.registered_voters!=null&&c.ballots_cast>c.registered_voters||c.invalid_votes!=null&&c.ballots_cast!==total+c.invalid_votes))fail('投票统计未对账');
+   if(c.registered_voters!=null&&total>c.registered_voters)fail('有效票超过选举人数');
+  }
+  const primary=new Set(),towns=new Map();
+  for(const row of shard.rows){
+   const ref=candidates.get(row.candidateId),c=results.get(row.candidateId);
+   if(!ref||!c||row.type!==ref.type||String(row.number)!==String(c.ballot_number)||row.elected!==c.elected_official||!Number.isSafeInteger(row.votes)||row.votes<0)fail('地图记录与候选人结果不一致');
+   const level={mayor:'county',council:'district',township:'town'}[ref.type];
+   if(row.level===level){if(primary.has(row.candidateId)||row.votes!==c.votes)fail('选区地图记录重复或票数不同');primary.add(row.candidateId)}
+   else if(row.level==='town'&&ref.type!=='township'&&row.town){
+    const group=towns.get(row.candidateId)||new Map();if(group.has(row.town))fail('重复乡镇得票');group.set(row.town,row.votes);towns.set(row.candidateId,group);
+   }else fail('地图层级无效');
+  }
+  if(primary.size!==results.size)fail('缺少选区地图记录');
+  for(const [id,group] of towns){if([...group.values()].reduce((a,b)=>a+b,0)!==results.get(id).votes)fail('乡镇得票与选区总票不符')}
+  for(const d of districts.values()){
+   const members=d.candidateIds||[],provided=members.filter(id=>towns.has(id));
+   if(provided.length&&provided.length!==members.length)fail('乡镇得票覆盖不完整');
+   if(provided.length){const first=towns.get(provided[0]);if(provided.some(id=>towns.get(id).size!==first.size||[...first.keys()].some(t=>!towns.get(id).has(t))))fail('候选人乡镇范围不一致')}
+  }
+  return shard;
+ }
+ async function decodeOfficial2026(bytes,manifest,directory,cryptoApi){
+  if(!official2026Manifest(manifest,directory))throw Error('2026发布清单无效');
+  if(!cryptoApi?.subtle)throw Error('当前浏览器无法验证正式结果校验值，请使用 HTTPS');
+  const hash=await cryptoApi.subtle.digest('SHA-256',bytes);
+  const hex=Array.from(new Uint8Array(hash),n=>n.toString(16).padStart(2,'0')).join('');
+  if(hex!==manifest.sha256.toLowerCase())throw Error('2026正式结果文件校验值不一致，请重新载入');
+  return validateOfficial2026(JSON.parse(new TextDecoder().decode(bytes)),manifest,directory);
+ }
+ const api={official2026Manifest,validateOfficial2026,decodeOfficial2026,identity,districtNumber,compareResultRows,key,sameScope,councilScope,legislativeScopeIndex,legislativeScope,csv,index,filter,contestSummary,overview,councilBadges,mergePaths};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.HistoryCore=api;
 })(typeof window==='undefined'?{}:window);
