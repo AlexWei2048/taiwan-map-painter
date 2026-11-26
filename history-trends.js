@@ -190,6 +190,20 @@ function legislativeVoteShares(snapshot,selection,anchor){
   return {...base,complete:true,reason:'',parties,votes,valid};
  });
 }
+function councilBallotRows(snapshot,selection){
+ const {county='',electorate='all',normalize=String}=selection;
+ const family=historicalCountyFamily(county),merged=MERGE_FAMILIES.some(g=>g.includes(county));
+ return historicalCountyScopes(snapshot,{...selection,office:'council'}).map(actualCounty=>{
+  const dates=electionDates(snapshot,'council',actualCounty,normalize),years=[...new Set(dates.map(d=>d.slice(0,4)))];
+  const oldPair=merged&&(family.length>1&&actualCounty===family[0]||snapshot.year<2010);
+  const base={year:snapshot.year,label:years.join('/')||String(snapshot.year),dates,county:actualCounty,scopeLabel:family.length>1?actualCounty:'',scopeSeries:merged?(oldPair?'旧'+actualCounty:'合并后'+actualCounty):family[0]};
+  const result=aggregate(snapshot,{office:'council',electorate,county:actualCounty,unified:false,normalize});
+  if(!result.complete||!result.valid)return{...base,complete:false,reason:result.reason||'该票种当前范围没有可核实的得票记录',seats:{},parties:{},valid:null};
+  const seats=Object.fromEntries(Object.entries(result.parties).map(([party,p])=>[party,p.seats||0]));
+  const parties=Object.fromEntries(Object.entries(result.parties).map(([party,p])=>[party,p.votes/result.valid*100]));
+  return{...base,complete:true,reason:'',seats,parties,valid:result.valid};
+ });
+}
 function mapTrend(snapshot,selection,anchor){
  const {office,electorate='regional',county='',anchorCounty=county,level='county',focus='',metric='party',candidateScope='top',candidate=null,party='',normalize=String}=selection;
  const norm=v=>normalize(String(v||''));
@@ -318,7 +332,7 @@ function majorityBoundary(points){
  const angle=seats===total?0:(points[seats-1].angle+points[seats].angle)/2;
  return {seats,angle};
 }
-const api={aggregate,value,difference,modern,percent,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,historicalScopeRows,legislativeVoteShares,electionDates,trendEffectiveSelection,LEGISLATIVE_TOTALS};
+const api={aggregate,value,difference,modern,percent,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,historicalScopeRows,legislativeVoteShares,councilBallotRows,electionDates,trendEffectiveSelection,LEGISLATIVE_TOTALS};
 if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
 root.HistoryTrends=api;
 })(typeof window==='undefined'?{}:window);

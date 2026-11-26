@@ -111,6 +111,33 @@ test('Legislative vote-share trends use a single ballot at each geographic scope
   }
  }
 });
+test('National minority and list seats use official winner counts, while county trends use regional seats',()=>{
+ const norm=require('../assets/opencc.js').Converter({from:'t',to:'cn'}),P=require('../history-legislative-party.js');
+ for(const [year,expected] of [[1992,[3,3,36]],[2008,[3,3,34]],[2024,[3,3,34]]]){
+  const s=require('../assets/history-legislative-'+year+'.json');
+  for(const [i,ballot] of ['plains','mountain','party'].entries()){
+   const result=T.aggregate(s,{office:'legislative',electorate:ballot,normalize:norm,partySeats:ballot==='party'?P.build(year,s):null});
+   assert.equal(result.complete,true,year+' '+ballot+' '+result.reason);
+   assert.equal(result.seats,expected[i]);
+   assert.equal(Object.values(result.parties).reduce((sum,p)=>sum+(p.seats||0),0),expected[i]);
+   assert.equal(T.legislativeVoteShares(s,{office:'legislative',electorate:ballot,normalize:norm})[0].complete,true);
+  }
+ }
+});
+test('Council ballot trends keep elected seats and candidate vote shares separate',()=>{
+ const s=require('../assets/history-2022.json'),norm=require('../assets/opencc.js').Converter({from:'t',to:'cn'});
+ for(const electorate of ['all','regional','plains','mountain']){
+  const national=T.councilBallotRows(s,{office:'council',electorate,normalize:norm})[0];
+  assert.equal(national.complete,true,electorate+' '+national.reason);
+  assert.equal(Object.values(national.seats).reduce((a,b)=>a+b,0),T.aggregate(s,{office:'council',electorate,normalize:norm}).seats);
+  assert.ok(Math.abs(Object.values(national.parties).reduce((a,b)=>a+b,0)-100)<1e-8);
+  const county=T.councilBallotRows(s,{office:'council',electorate,county:'高雄市',normalize:norm})[0];
+  assert.equal(county.complete,true,electorate+' '+county.reason);
+  assert.ok(Math.abs(Object.values(county.parties).reduce((a,b)=>a+b,0)-100)<1e-8);
+ }
+ const old={...s,year:1994};
+ assert.equal(T.councilBallotRows(old,{office:'council',electorate:'all',normalize:norm})[0].complete,false);
+});
 test('Integer tick marks and parliament dot counts are exact for small and large assemblies',()=>{
  for(const max of [0,1,2,3,22,113,161,164,225,910]){const ticks=T.integerTicks(max);assert.ok(ticks.every(Number.isInteger));assert.ok(ticks.at(-1)>=max)}
  for(const total of [1,2,3,6,22,113,161,164,225,910]){const pts=T.parliamentPoints(total);assert.equal(pts.length,total);assert.ok(pts.every(p=>Number.isFinite(p.x)&&Number.isFinite(p.y)&&p.y<=0));assert.equal(new Set(pts.map(p=>p.x+'|'+p.y)).size,total)}
