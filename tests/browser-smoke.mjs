@@ -1577,7 +1577,7 @@ test('Council and township winner tables use the mayor design without losing lon
 
 test('2022 council result filters, regional search and historical export',async t=>{
  const page=await pageFor(t);
- await page.locator('#historyFromPrediction').click();
+ await page.locator('#categoryHistory').click();
  await page.waitForFunction(()=>document.querySelector('#historySummary').textContent.includes('22席'));
  await page.locator('#historyOffice').selectOption('council');
  await page.locator('#historyCounty').selectOption({label:'台北市'});
@@ -3160,11 +3160,12 @@ test('Historical council trends resolve former names and show pre-merger county 
  assert.equal(await page.locator('.trend-parliament-card svg').count(),8);
 });
 
-test('Sidebar uses clear headings and keeps site information directly below the mode switch',async t=>{
+test('Sidebar keeps site information directly above the mode switch and removes redundant controls',async t=>{
  const page=await pageFor(t);
  assert.equal(await page.locator('.brand small').count(),0);
  assert.equal(await page.locator('.intro > .eyebrow').count(),0);
- assert.equal(await page.locator('.workspace-categories + #siteAbout').count(),1);
+ assert.equal(await page.locator('#siteAbout + .workspace-categories').count(),1);
+ assert.equal(await page.locator('.intro > h1, .intro > p, #historyFromPrediction, #editLegend, #legendDialog').count(),0);
  assert.equal(await page.locator('#siteAbout').isVisible(),true);
  assert.equal(await page.locator('.sidebar .section-label > span:first-child').count(),0);
  await page.locator('#categoryHistory').click();
