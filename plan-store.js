@@ -33,6 +33,26 @@
   if(storage.getItem(KEY)!==expected)throw Error('另一标签页已修改方案，请先下载当前备份，再刷新页面');
   const raw=JSON.stringify(validate(bundle));storage.setItem(KEY,raw);return raw;
  }
- const api={KEY,MAX,validate,initial,capture,change,commit};
+ // Completion is calculated from the current roster, not the number of saved objects.
+ function progress(directory,project,office,core){
+  const candidates=new Map(directory.candidates.map(c=>[c.id,c])),counties=new Map();
+  const empty=()=>({total:0,winners:0,votes:0,entered:0,invalid:0,seats:0,parties:Object.create(null),incomplete:[]});
+  const all=empty();
+  for(const d of directory.districts){if(d.type!==office)continue;
+   const cs=d.candidateIds.map(id=>candidates.get(id)).filter(Boolean),record=project.predictions?.[d.id],summary=core.summary(d,cs,record);
+   const entries=cs.map(c=>summary.record?.estimates?.[c.id]||{});
+   const voteComplete=entries.length>0&&(
+    entries.every(e=>Number.isSafeInteger(e.votes)&&e.votes>=0)&&entries.reduce((n,e)=>n+e.votes,0)>0||
+    entries.every(e=>Number.isFinite(e.share)&&e.share>=0)&&Math.abs(entries.reduce((n,e)=>n+e.share,0)-100)<=.101);
+   if(!counties.has(d.county))counties.set(d.county,empty());
+   for(const x of [all,counties.get(d.county)]){
+    x.total++;if(record&&(summary.winners.length||Object.keys(summary.record?.estimates||{}).length||summary.status==='invalid'))x.entered++;
+    if(summary.status==='complete'){x.winners++;x.seats+=summary.winners.length;for(const p of summary.parties)x.parties[p.name]=(x.parties[p.name]||0)+p.seats}else{x.incomplete.push(d.id)}
+    if(voteComplete)x.votes++;if(['invalid','quota'].includes(summary.status))x.invalid++;
+   }
+  }
+  return {all,counties};
+ }
+ const api={KEY,MAX,validate,initial,capture,change,commit,progress};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.MapPlanStore=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
