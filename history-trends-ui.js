@@ -4,6 +4,7 @@
 const T=window.HistoryTrends,C=window.HistoryCore,S=window.HistoryTrendSummary,$=id=>document.getElementById(id);
 const offices={president:'台湾地区领导人',legislative:'立法机构民代',mayor:'县市长',council:'县市议员',township:'乡镇市区长'};
 const ns='http://www.w3.org/2000/svg';
+let zoomClipId=0;
 let panel=null,request=0,cache=new Map(),summaryCache=new Map(),models=[],activeKey='',selection=null,renderedKey='',loading=false,closed=true,lastRows=[],lastSeries=[],lastTitle='',legislativeExport=null,voteShareExport=null,selectedYears=new Set(),knownYears=[];
 const norm=v=>simplify(String(v||'')).replaceAll('臺','台');
  const legislativeTrendCache=T.createLegislativeTrendCache({normalize:norm,buildList:(year,snapshot)=>HistoryLegislativeParty.build(year,snapshot)});
@@ -136,6 +137,7 @@ async function chartExport(graph,title,png){
 function card(title,description,graph,exportTitle=title){
  const c=node('article','trend-card'),h=node('div','trend-card-heading'),buttons=node('div','trend-card-actions');h.append(node('h4','',title),buttons);
  if(graph)for(const ext of ['SVG','PNG']){const b=node('button','button quiet',ext);b.type='button';b.onclick=async()=>{for(const button of buttons.querySelectorAll('button'))button.disabled=true;try{await chartExport(graph,exportTitle,ext==='PNG')}finally{for(const button of buttons.querySelectorAll('button'))button.disabled=false}};buttons.append(b)}
+ if(graph?.hasAttribute('data-trend-zoom')){for(const [caption,action,label] of [['＋','in','放大纵轴'],['－','out','缩小纵轴'],['复位','reset','恢复0–60%纵轴']]){const button=node('button','button quiet',caption);button.type='button';button.setAttribute('aria-label',label);button.title=label;button.onclick=()=>graph.dispatchEvent(new Event('trend-zoom-'+action));buttons.prepend(button)}}
  c.append(h);if(description)c.append(node('p','data-help',description));if(graph)c.append(graph);return c
 }
 function appendTrendCharts(out,rows,series,title,note,options,county){
@@ -159,7 +161,7 @@ function baseSvg(title,width,height){
  const g=svg('svg',{viewBox:'0 0 '+width+' '+height,role:'img','aria-label':title,'font-family':'Arial, "Microsoft YaHei", sans-serif','font-size':'12',fill:'#31473e'});
  g.append(svg('rect',{x:0,y:0,width,height,fill:'#fff'}),svg('title',{},title),svg('text',{x:18,y:22,'font-weight':700,'font-size':15},title));return g
 }
-function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=false,integer=false,compact=false,tall=false,grouped=false,axisMax=null}={}){
+function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=false,integer=false,compact=false,tall=false,grouped=false,axisMax=null,zoomPercent=false}={}){
  const width=Math.max(compact?520:tall?620:700,rows.length*(compact?72:rows.some(r=>r.scopeLabel)?79:65)+100),l=compact?52:64,r=width-20,top=48,bottom=compact?280:tall?550:270;
  const showScope=!grouped||new Set(rows.map(r=>r.scopeLabel||'')).size>1;
  const legendStart=grouped?bottom+(showScope?70:52):338,legend=[];
@@ -179,11 +181,20 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
  const slots=rows.map((row,i)=>i&&rows[i-1].year===row.year?0.72:1.18);
  const centers=[];let offset=0;for(let i=0;i<rows.length;i++){if(i)offset+=slots[i];centers.push(offset)}
  const unit=(r-l)/Math.max(1,offset+1.18),barWidth=Math.min(58,unit*.66);
- const x=i=>l+unit*(.59+centers[i]),y=v=>rank?top+(v-1)/(max-1)*(bottom-top):bottom-v/max*(bottom-top);
- for(const v of ticks||Array.from({length:5},(_,i)=>rank?1+i*(max-1)/4:i*max/4)){
-  const yy=y(v);
-  g.append(svg('line',{x1:l,x2:r,y1:yy,y2:yy,stroke:'#e2eae5'}),svg('text',{x:l-9,y:yy+4,'text-anchor':'end','font-size':grouped?13:11,'data-trend-axis-tick':String(v)},integer?String(v):rank?Math.round(v):pct?Math.round(v)+'%':Intl.NumberFormat('zh-CN',{notation:'compact',maximumFractionDigits:1}).format(v)))
+ let domain=zoomPercent?[0,60]:[0,max];const x=i=>l+unit*(.59+centers[i]),y=v=>rank?top+(v-1)/(max-1)*(bottom-top):bottom-(v-domain[0])/(domain[1]-domain[0])*(bottom-top);
+ const axis=svg('g',{'data-trend-y-axis':'true'});g.append(axis);
+ function drawAxis(){
+  axis.replaceChildren();
+  for(const v of zoomPercent?T.percentZoomTicks(domain):ticks||Array.from({length:5},(_,i)=>rank?1+i*(max-1)/4:i*max/4)){
+   const yy=y(v);
+   axis.append(svg('line',{x1:l,x2:r,y1:yy,y2:yy,stroke:'#e2eae5'}),svg('text',{x:l-9,y:yy+4,'text-anchor':'end','font-size':grouped?13:11,'data-trend-axis-tick':String(v)},integer?String(v):rank?Math.round(v):pct?(zoomPercent?Number(v.toFixed(2)):Math.round(v))+'%':Intl.NumberFormat('zh-CN',{notation:'compact',maximumFractionDigits:1}).format(v)));
+  }
+  if(zoomPercent){g.setAttribute('data-trend-y-min',String(domain[0]));g.setAttribute('data-trend-y-max',String(domain[1]))}
  }
+ drawAxis();
+ const plotUpdates=[];let clipId='';
+ if(zoomPercent){clipId='trend-vote-clip-'+(++zoomClipId);const defs=svg('defs'),clip=svg('clipPath',{id:clipId});clip.append(svg('rect',{x:l,y:top,width:r-l,height:bottom-top}));defs.append(clip);g.append(defs);g.setAttribute('data-trend-zoom','percent');}
+
  rows.forEach((row,i)=>{
   const labelText=row.label||String(row.year);
   g.append(svg('text',{x:x(i),y:bottom+21,'text-anchor':'middle','font-size':grouped?13:11},labelText));
@@ -224,14 +235,28 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
    if(row.complete)g.append(svg('text',{x:x(i),y:y(acc)-6,'text-anchor':'middle','font-size':11,'font-weight':700,'data-trend-total':String(acc)},fmt(acc)));
   })
  }else for(const s of series){
-  const marks=svg('g',{'data-trend-series':s.name});g.append(marks);
+  const marks=svg('g',{'data-trend-series':s.name,...(clipId?{'clip-path':'url(#'+clipId+')'}:{})});g.append(marks);
   const branches=new Map();
-  rows.forEach((row,i)=>{const k=row.scopeSeries||'',state=branches.get(k)||{d:'',previous:null};const v=s.get(row);if(!Number.isFinite(v)){state.previous=null;branches.set(k,state);return}
+  rows.forEach((row,i)=>{const k=row.scopeSeries||'',state=branches.get(k)||{points:[],previous:null};const v=s.get(row);if(!Number.isFinite(v)){state.previous=null;branches.set(k,state);return}
    if(breakOld&&state.previous&&state.previous.oldPartyVote!==row.oldPartyVote)state.previous=null;
-   state.d+=(state.previous?'L':'M')+x(i)+' '+y(v)+' ';state.previous=row;branches.set(k,state);
+   state.points.push({i,v,move:!state.previous});state.previous=row;branches.set(k,state);
   });
-  for(const {d} of branches.values())marks.append(svg('path',{d,fill:'none',stroke:s.color,'stroke-width':2.5,'stroke-linejoin':'round',...(s.dash?{'stroke-dasharray':'6 4'}:{})}));
-  rows.forEach((row,i)=>{const v=s.get(row);if(!Number.isFinite(v))return;const p=svg('circle',{cx:x(i),cy:y(v),r:4.5,fill:s.color,stroke:'#fff','stroke-width':1});addPoint(p,row,s,v);marks.append(p)})
+  for(const {points} of branches.values()){const path=svg('path',{fill:'none',stroke:s.color,'stroke-width':zoomPercent?1.4:2.5,'stroke-linejoin':'round',...(s.dash?{'stroke-dasharray':'6 4'}:{})});const update=()=>path.setAttribute('d',points.map(p=>(p.move?'M':'L')+x(p.i)+' '+y(p.v)).join(' '));update();if(zoomPercent)plotUpdates.push(update);marks.append(path)}
+  rows.forEach((row,i)=>{const v=s.get(row);if(!Number.isFinite(v))return;const p=svg('circle',{cx:x(i),cy:y(v),r:zoomPercent?2.8:4.5,fill:s.color,stroke:'#fff','stroke-width':zoomPercent?.6:1});addPoint(p,row,s,v);if(zoomPercent){const update=()=>{p.setAttribute('cy',y(v));p.setAttribute('tabindex',v>=domain[0]&&v<=domain[1]?'0':'-1')};update();plotUpdates.push(update)}marks.append(p)})
+
+ }
+ if(zoomPercent){
+  function setDomain(next){if(Math.abs(next[0]-domain[0])<1e-8&&Math.abs(next[1]-domain[1])<1e-8)return false;domain=next;drawAxis();for(const update of plotUpdates)update();return true}
+  const zoom=(scale,anchor=.5)=>setDomain(T.percentZoomRange(domain,scale,anchor));
+  g.addEventListener('wheel',e=>{
+   if(!e.deltaY||e.ctrlKey||e.metaKey)return;
+   const matrix=g.getScreenCTM();if(!matrix)return;const point=new DOMPoint(e.clientX,e.clientY).matrixTransform(matrix.inverse());
+   if(point.x<l||point.x>r||point.y<top||point.y>bottom)return;
+   const delta=e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?240:1);
+   if(zoom(Math.exp(Math.max(-1.2,Math.min(1.2,delta*.002))), (bottom-point.y)/(bottom-top)))e.preventDefault();
+  },{passive:false});
+  g.addEventListener('trend-zoom-in',()=>zoom(.8));g.addEventListener('trend-zoom-out',()=>zoom(1.25));g.addEventListener('trend-zoom-reset',()=>setDomain([0,60]));
+  g.addEventListener('dblclick',e=>{const matrix=g.getScreenCTM();if(!matrix)return;const p=new DOMPoint(e.clientX,e.clientY).matrixTransform(matrix.inverse());if(p.x>=l&&p.x<=r&&p.y>=top&&p.y<=bottom)setDomain([0,60])});
  }
  if(breakOld){const i=rows.findIndex(r=>!r.oldPartyVote);if(i>0){const xx=(x(i-1)+x(i))/2;g.append(svg('line',{x1:xx,x2:xx,y1:top,y2:bottom,stroke:'#8a938d','stroke-dasharray':'4 4'}),svg('text',{x:xx+4,y:top-7,'font-size':10},'2008制度改革'))}}
  series.forEach((s,i)=>{
@@ -366,8 +391,8 @@ function renderLegislative(conf,anchor,out){
  const voteSeries=partySeries(voteRows,listMode),voteType=ballot==='all'?(isLeg?'不分区':'全部议员'):({regional:'区域',plains:'平地少数民族',mountain:'山地少数民族',party:'不分区',indigenous:'原住民'}[ballot]||ballot);
  const voteSubject=ballot==='all'?(isLeg?'不分区民代':'全部议员'):voteType+(isLeg?'民代':'议员');
  const voteTitle=voteSubject+' · '+(isLeg&&(ballot==='all'||ballot==='party')?'政党票／旧制席次计算票得票率趋势':'候选人票得票率趋势（按所属政党汇总）');
- const voteNote=isLeg&&(ballot==='all'||ballot==='party')?'2008年前为各党推荐的区域与少数民族候选人票汇总，用于分配名单席次；2008年起为独立政党票。两种票源分别绘制，不跨制度连线。无党籍不显示、不计入其他政党；保留原得票率，显示合计可能低于100%。':!isLeg&&ballot==='all'?'区域和少数民族选票分别统计后汇总党派候选人票，分母为这些票数之和；选民可能投不同类别选票，不代表单一选民支持率。':'每个政党的候选人得票之和除以当前票种、当前范围的有效票；各党占比合计为100%。';
- appendTrendCharts(out,voteRows,voteSeries,voteTitle,voteNote,{pct:true,breakOld:isLeg&&(ballot==='all'||ballot==='party')},conf.county);
+ const voteNote=isLeg&&(ballot==='all'||ballot==='party')?'2008年前为各党推荐的区域与少数民族候选人票汇总，用于分配名单席次；2008年起为独立政党票。两种票源分别绘制，不跨制度连线。无党籍不显示、不计入其他政党；保留原得票率，显示合计可能低于100%。图内滚轮缩放纵轴，双击复位；超过60%的数据可缩小视图查看。':!isLeg&&ballot==='all'?'区域和少数民族选票分别统计后汇总党派候选人票，分母为这些票数之和；选民可能投不同类别选票，不代表单一选民支持率。':'每个政党的候选人得票之和除以当前票种、当前范围的有效票；各党占比合计为100%。';
+ appendTrendCharts(out,voteRows,voteSeries,voteTitle,voteNote,{pct:true,breakOld:isLeg&&(ballot==='all'||ballot==='party'),zoomPercent:listMode},conf.county);
  const valuesTable=(rows,series,pct,title,displayedOnly=false)=>{
   const wrap=node('div','history-table-wrap'),table=node('table','history-candidate-table'),head=node('thead'),tr=node('tr');
   for(const heading of ['届次','当届地区','投票日期',...series.map(s=>s.name),displayedOnly?'显示合计':'合计'])tr.append(node('th','',heading));head.append(tr);table.append(head);

@@ -365,3 +365,13 @@ test('Legislative seat series includes all seat-winning parties, not an aggregat
  assert.deepEqual(T.legislativeSeatTrendParties(fake),['甲','丙']);
  console.log('All legislative seat-winning party series:',JSON.stringify(names));
 });
+
+test('Party-list percent zoom uses a bounded pointer-anchored domain and readable ticks',()=>{
+ assert.deepEqual(T.percentZoomTicks([0,60]),[0,10,20,30,40,50,60]);
+ assert.deepEqual(T.percentZoomRange([0,60],.5,.5),[15,45]);
+ assert.deepEqual(T.percentZoomRange([0,60],.5,0),[0,30]);
+ assert.deepEqual(T.percentZoomRange([0,60],.5,1),[30,60]);
+ assert.deepEqual(T.percentZoomRange([0,60],10,.5),[0,100]);
+ assert.deepEqual(T.percentZoomRange([20,30],.001,.5),[24,26]);
+ assert.ok(T.percentZoomTicks([24,26]).every(x=>x>=24&&x<=26));
+});

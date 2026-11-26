@@ -32,6 +32,17 @@ function legislativeSeatTrendParties(rows){
  for(const r of rows||[])if(r.complete)for(const [p,n] of Object.entries(r.parties||{}))if(Number.isSafeInteger(n)&&n>0)totals.set(p,(totals.get(p)||0)+n);
  return [...totals].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],'zh')).map(([p])=>p);
 }
+// A bounded percentage axis zoom. Anchor is a fraction from bottom to top.
+function percentZoomRange(range,scale,anchor=.5){
+ const [lo,hi]=range;if(!Number.isFinite(lo)||!Number.isFinite(hi)||hi<=lo||!Number.isFinite(scale)||scale<=0)return [0,60];
+ const ratio=Math.max(0,Math.min(1,Number.isFinite(anchor)?anchor:.5)),span=Math.max(2,Math.min(100,(hi-lo)*scale));
+ const point=lo+(hi-lo)*ratio,min=Math.max(0,Math.min(100-span,point-span*ratio));
+ return [min,min+span];
+}
+function percentZoomTicks(range){
+ const [lo,hi]=range,rough=(hi-lo)/6,order=10**Math.floor(Math.log10(rough)),step=([1,2,2.5,5,10].find(n=>n*order>=rough-1e-9)||10)*order;
+ const ticks=[];for(let i=Math.ceil((lo-1e-9)/step);i*step<=hi+1e-9;i++)ticks.push(Number((i*step).toFixed(6)));return ticks;
+}
 function candidateTrendTooltip(row,key){
  if(!row?.complete||!Object.hasOwn(row.parties,key))return'';
  const entries=row.candidateDetails?.[key]||[],label=row.partyMeta?.[key]?.label||key;
@@ -452,7 +463,7 @@ function createLegislativeTrendCache({normalize=String,buildList,maxScopes=64}={
  }
  return{read,clear(){cache=new WeakMap();lists=new WeakMap()}};
 }
-const api={legislativeSeatTrendParties,partyListTrendKey,partyListTrendGroups,partyListTrendExcluded,PARTY_LIST_TREND_ORDER,createLegislativeTrendCache,summaryAlgorithmVersion:1,aggregate,value,difference,modern,percent,partyTrendValue,candidateTrendTooltip,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,trendChartScopes,historicalScopeRows,legislativeVoteShares,councilBallotRows,localPartyVoteShares,electionDates,trendEffectiveSelection,LEGISLATIVE_TOTALS};
+const api={percentZoomRange,percentZoomTicks,legislativeSeatTrendParties,partyListTrendKey,partyListTrendGroups,partyListTrendExcluded,PARTY_LIST_TREND_ORDER,createLegislativeTrendCache,summaryAlgorithmVersion:1,aggregate,value,difference,modern,percent,partyTrendValue,candidateTrendTooltip,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,trendChartScopes,historicalScopeRows,legislativeVoteShares,councilBallotRows,localPartyVoteShares,electionDates,trendEffectiveSelection,LEGISLATIVE_TOTALS};
 if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
 root.HistoryTrends=api;
 })(typeof window==='undefined'?{}:window);
