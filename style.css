@@ -100,7 +100,7 @@ body.history-mode #predictionPanel,body.history-mode .regions-panel,body.history
 body.history-mode #workspaceFree,body.history-mode #workspacePrediction{opacity:.8}
 
 /* Group election tools by future predictions and historical results. */
-.workspace-categories{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;background:#eaf0ea;border:1px solid #dce8df;border-radius:11px;margin:17px 0 9px}
+.workspace-categories{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:4px;background:#eaf0ea;border:1px solid #dce8df;border-radius:11px;margin:17px 0 9px}
 .workspace-categories button{min-height:43px;border:0;border-radius:8px;background:transparent;color:#587064;font-size:14px;font-weight:650;cursor:pointer}
 .workspace-categories button.active{background:#216b54;color:#fff;box-shadow:0 2px 6px #244a3e22}
 .workspace-categories button:focus-visible{outline:3px solid #7fc9b4;outline-offset:2px}
@@ -1002,3 +1002,6 @@ dialog.history-coverage-dialog{max-width:none;max-height:calc(100dvh - 28px);mar
 @media(max-width:700px){.compare-mode-label{flex:1 1 100%}.compare-mode-label select{flex:1;min-width:0;font-size:16px}.compare-export-actions{margin-left:0}.compare-export-actions button{min-height:44px}}
 
 .plan-backup-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-start;margin:10px 0}.plan-backup-actions button{min-height:36px}@media(max-width:700px){.plan-backup-actions button{min-height:44px}}
+
+/* Three workspaces, shared archive. */
+.workspace-categories button{font-size:13px;padding-inline:2px;white-space:nowrap}.history-view-switch[hidden]{display:none!important}body.analysis-mode .history-result-heading>.history-view-switch:not(#analysisViews){display:none}body:not(.analysis-mode) #analysisViews{display:none!important}body.analysis-mode #analysisViews{display:flex}.coverage-matrix [data-coverage-status=na]{background:#eef1ef;color:#78847d}

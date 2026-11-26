@@ -795,7 +795,7 @@
  el('historyOverviewScope')?.addEventListener('change',event=>{overviewScope=event.target.value;overviewArea='';changeOverviewMap()});
  el('historyOverviewCounty')?.addEventListener('change',event=>{overviewCounty=event.target.value||'';overviewArea='';changeOverviewMap()});
  el('historyOverviewContest')?.addEventListener('change',event=>{overviewArea=event.target.value||'';changeOverviewMap()});
- for(const [view,id] of [['candidates','historyViewCandidates'],['overview','historyViewOverview'],['trends','historyViewTrends']])el(id)?.addEventListener('click',()=>setView(state.view===view?'map':view));
+ for(const [view,id] of [['candidates','historyViewCandidates'],['overview','historyViewOverview'],['trends','historyViewTrends']])el(id)?.addEventListener('click',()=>setView(view==='trends'?'trends':state.view===view?'map':view));
  for(const id of ['workspacePrediction','workspaceFree'])el(id)?.addEventListener('click',()=>{active=false});
  function setSnapshot(snapshot){try{indexed=root.HistoryCore.index(snapshot);resetWorkspaceMemo();render();return true}catch(error){if(el('historyLoadStatus')){el('historyLoadStatus').hidden=false;el('historyLoadStatus').textContent='历史数据版本不兼容，请重新载入。'};if(el('historyRetry'))el('historyRetry').hidden=false;return false}}
  root.addEventListener('historysnapshotready',event=>setSnapshot(event.detail.snapshot));

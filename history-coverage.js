@@ -6,10 +6,40 @@
  const labels={recorded:'已收录',partial:'部分缺失',missing:'缺档',unknown:'待核实',na:'不适用',error:'读取失败'};
  const valid=v=>Number.isSafeInteger(v)&&v>=0;
  const defaultNorm=v=>String(v||'').trim().replaceAll('臺','台').replaceAll('縣','县').replaceAll('蓮','莲').replaceAll('東','东').replaceAll('門','门').replaceAll('雲','云').replaceAll('連','连').replaceAll('園','园');
+ // Administrative existence is not a vote result. Preserve each merger's old city/county.
+ const mergedCities=['台中市','台南市','高雄市'];
+ const oldCounties=['台北县','台中县','台南县','高雄县'];
+ const renamedPairs=[['台北县','新北市',2010],['桃园县','桃园市',2014]];
+ const knownCounties=new Set(['台北市','新北市','桃园市','台中市','台南市','高雄市','基隆市','新竹市','嘉义市','新竹县','苗栗县','彰化县','南投县','云林县','嘉义县','屏东县','宜兰县','花莲县','台东县','澎湖县','金门县','连江县',...oldCounties,'桃园县',...mergedCities.map(c=>'原'+c)]);
+ const countyKey=(name,year)=>mergedCities.includes(name)&&year<2010?'原'+name:name;
+ function applicability(name,year,office){
+  year=Number(year);
+  if(!knownCounties.has(name)||!Number.isInteger(year))return null;
+  for(const [oldName,newName,start] of renamedPairs){
+   if(name===oldName&&year>=start)return {status:'na',reason:'当届已改为'+newName+'，请查看对应地区。'};
+   if(name===newName&&year<start)return {status:'na',reason:'当届仍为'+oldName+'，请查看对应地区。'};
+  }
+  if(oldCounties.includes(name)&&name!=='台北县'&&year>=2010)return {status:'na',reason:'当届已完成县市合并。'};
+  if(name.startsWith('原')&&mergedCities.includes(name.slice(1))&&year>=2010)return {status:'na',reason:'当届已完成县市合并。'};
+  if(mergedCities.includes(name)&&year<2010)return {status:'na',reason:'当届尚未合并，原县、市分别列示。'};
+  if(office==='township'){
+   const always=['台北市','基隆市','新竹市','嘉义市','原台中市','原台南市','原高雄市','台南市'];
+   const restructured=['新北市','台中市','高雄市'];
+   if(always.includes(name)||restructured.includes(name)&&year<2014)return {status:'na',reason:'当届该地区未举行乡镇市区长选举。'};
+  }
+  return null;
+ }
+ function matrixEntry(result,county,year,office){
+  if(result?.error)return {status:'error'};
+  if(county==='全部地区')return result?.all||{status:'unknown'};
+  const existing=result?.counties?.find(x=>x.county===county);
+  if(existing&&existing.status!=='unknown')return existing;
+  return applicability(county,year,office)||existing||{status:'unknown'};
+ }
  function analyze(snapshot,office,normalize=defaultNorm){
   const norm=v=>normalize(defaultNorm(v)),buckets=new Map(),ids=new Set((snapshot.elections||[]).filter(e=>e.office===office).map(e=>e.election_id));
   const create=county=>({county,contests:0,candidates:0,countyRows:0,townRows:0,towns:0,missingVotes:0,missingWinners:0,missingNumber:0,missingGender:0,missingParty:0,missingIncumbent:0,unreconciled:0,missingFields:Object.fromEntries(Object.keys(fields).map(f=>[f,0])),partialArchives:0,declared:false,notApplicable:false});
-  const all=create('全部地区'),get=county=>{county=norm(county);if(!county)return null;if(!buckets.has(county))buckets.set(county,create(county));return buckets.get(county)};
+  const all=create('全部地区'),get=county=>{county=countyKey(norm(county),Number(snapshot.year));if(!county)return null;if(!buckets.has(county))buckets.set(county,create(county));return buckets.get(county)};
   const contestById=new Map(),members=new Map(),townSets=new Map();
   for(const c of snapshot.contests||[]){if(!ids.has(c.election_id)){if(office==='township')get(c.county_name);continue}contestById.set(c.contest_id,c);get(c.county_name)}
   for(const e of snapshot.elections||[])if(ids.has(e.election_id)){
@@ -38,13 +68,15 @@
    x.towns=townSets.get(x)?.size||0;
    const has=x.contests>0||x.countyRows>0||x.townRows>0;
    const gaps=x.missingVotes||x.missingWinners||x.unreconciled||x.missingNumber||x.missingGender||x.missingParty||x.missingIncumbent||Object.values(x.missingFields).some(Boolean);
-   x.status=x.partialArchives||has&&(gaps||declaredPartial)?'partial':has?'recorded':x.declared?'missing':x.notApplicable?'na':'unknown';
+   const na=x===all?null:applicability(x.county,snapshot.year,office);
+   x.status=x.partialArchives||has&&(gaps||x===all&&declaredPartial)?'partial':has?'recorded':x.notApplicable||na?'na':x.declared?'missing':'unknown';
+   if(!has&&na)x.reason=na.reason;
   }
   // An explicitly missing county must also be reflected in the whole archive.
   if([...buckets.values()].some(b=>['partial','missing'].includes(b.status)))all.status='partial';
   return {year:snapshot.year,office,all,counties:[...buckets.values()]};
  }
- const api={analyze,labels};
+ const api={analyze,labels,countyKey,applicability,matrixEntry};
  if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
  root.HistoryCoverage=api;
  const doc=root.document,$=id=>doc.getElementById(id);
@@ -67,7 +99,7 @@
  function showDetail(entry,year,county,office){
   detail.replaceChildren(element('h4',root.HistoryLocal.yearLabel(year,office)+' · '+county+' · '+labels[entry.status]));
   if(entry.status==='unknown'||entry.status==='error'||entry.status==='na'||entry.status==='missing'){
-   detail.append(element('p',entry.status==='unknown'?'没有对应记录，尚不能区分历史行政区不适用或档案未收录。':entry.status==='error'?'资料读取失败，不作为缺档统计。':entry.status==='na'?'档案明确标记未举行此类选举。':'档案声明覆盖该地区，但未发现结果记录。'));return;
+   detail.append(element('p',entry.status==='unknown'?'该届行政区划下尚无对应记录或明确覆盖声明，需要核实档案。':entry.status==='error'?'资料读取失败，不作为缺档统计。':entry.status==='na'?(entry.reason||'档案明确标记未举行此类选举。'):'档案声明覆盖该地区，但未发现结果记录。'));return;
   }
   detail.append(element('p','已收录：'+entry.contests+'个选区 / '+entry.candidates+'条候选人记录；县市得票明细 '+entry.countyRows+'条，乡镇市区得票明细 '+entry.townRows+'条（'+entry.towns+'个地区）。'));
   const table=element('table',undefined,'history-candidate-table'),body=element('tbody');
@@ -81,7 +113,7 @@
   const body=element('tbody');
   for(const county of ['全部地区',...names]){
    const tr=element('tr');tr.append(element('th',county));
-   ys.forEach((y,i)=>{const result=results[i],entry=result?.error?{status:'error'}:county==='全部地区'?result?.all:result?.counties?.find(x=>x.county===county);const cell=entry||{status:'unknown'},td=element('td'),b=element('button',labels[cell.status]);b.type='button';b.dataset.coverageStatus=cell.status;b.setAttribute('aria-label',county+' '+root.HistoryLocal.yearLabel(y,office)+' '+labels[cell.status]);b.onclick=()=>showDetail(cell,y,county,office);td.append(b);tr.append(td)});
+   ys.forEach((y,i)=>{const cell=matrixEntry(results[i],county,y,office),td=element('td'),b=element('button',labels[cell.status]);b.type='button';b.dataset.coverageStatus=cell.status;b.setAttribute('aria-label',county+' '+root.HistoryLocal.yearLabel(y,office)+' '+labels[cell.status]);b.onclick=()=>showDetail(cell,y,county,office);td.append(b);tr.append(td)});
    body.append(tr);
   }
   table.append(body);host.replaceChildren(table);

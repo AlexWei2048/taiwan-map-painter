@@ -153,7 +153,7 @@
  root.addEventListener('hashchange',navigation);
  document.addEventListener('change',schedule);
  document.addEventListener('click',event=>{
-  if(event.target.closest?.('#categoryFuture,#categoryHistory,#workspacePrediction,#workspaceFree,#historyViewCandidates,#historyViewOverview,#historyViewTrends,#trendSelectAll,#trendSelectNone'))schedule();
+  if(event.target.closest?.('#categoryFuture,#categoryHistory,#categoryAnalysis,#workspacePrediction,#workspaceFree,#historyViewCandidates,#historyViewOverview,#historyViewTrends,#trendSelectAll,#trendSelectNone'))schedule();
  });
  function start(){
   if(started)return;started=true;
