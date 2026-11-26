@@ -41,7 +41,8 @@ test('Historical county mayors and councils use five shared election cycles with
  assert.deepEqual(Local.years('council'),Local.years('mayor'));
  assert.deepEqual(Local.years('township'),[1994,1998,2002,2005,2009,2014,2018,2022]);
  const supplement=require('../assets/history-local-council-supplement.json');
- const fetcher=async url=>({ok:true,json:async()=>url.includes('supplement')?supplement:
+ const fetcher=async url=>({ok:true,json:async()=>url.includes('history-1994-changhua-council-profile')?require('../sources/history-1994-changhua-council-profile.json'):
+  url.includes('supplement')?supplement:
   url.includes('1994-council')?require('../assets/history-local-1994-council.json'):data(Number(url.match(/local-(\d{4})/)[1]))});
  for(const [first,last,expected] of batches){
   assert.equal(Local.yearLabel(last,'mayor'),first+'/'+last);

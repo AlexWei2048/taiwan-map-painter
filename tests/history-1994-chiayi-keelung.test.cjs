@@ -8,6 +8,7 @@ const council=require('../assets/history-local-1994-council.json');
 const chiayi=require('../sources/history-1994-chiayi-prior-council.json');
 const keelung=require('../sources/history-1994-keelung-council-profile.json');
 const taoyuan=require('../sources/history-1994-taoyuan-council-profile.json');
+const changhua=require('../sources/history-1994-changhua-council-profile.json');
 test('1994 Chiayi previous-term council roster adds 19 sourced positives without overwriting previous evidence',()=>{
  const districts=council.districts.filter(d=>d.county==='嘉義縣');
  assert.equal(districts.length,7);
@@ -51,13 +52,24 @@ test('1994 Keelung city official council totals reconcile without filling distri
  assert.equal(keelung.elected_count,keelung.male_elected+keelung.female_elected);
  assert.deepEqual(council.verified_county_profiles,[keelung,taoyuan]);
 });
+test('1994 Changhua official county profile reconciles with eight published constituencies',()=>{
+ const districts=council.districts.filter(d=>d.county==='彰化縣');
+ assert.equal(districts.length,8);
+ assert.equal(districts.reduce((n,d)=>n+d.candidates.length,0),changhua.candidate_count);
+ assert.equal(districts.reduce((n,d)=>n+d.valid_votes,0),changhua.valid_votes);
+ assert.equal(districts.reduce((n,d)=>n+d.candidates.filter(c=>c[5]).length,0),changhua.elected_count);
+ assert.equal(changhua.ballots_cast,changhua.valid_votes+changhua.invalid_votes);
+ assert.equal(changhua.candidate_count,changhua.male_candidates+changhua.female_candidates);
+ assert.ok(districts.every(d=>d.registered_voters===null&&d.ballots_cast===null));
+});
 test('1994 local council snapshot exposes county-level summary without merging unverified district turnout',async()=>{
  const fetcher=async filename=>({
   ok:true,
   json:async()=>JSON.parse(fs.readFileSync(path.join(__dirname,'..',filename.split('?')[0]),'utf8'))
  });
  const data=await Local.loadCycle(1994,'council',fetcher);
- assert.equal(data.verifiedCouncilCountyProfiles.length,2);
+ assert.equal(data.verifiedCouncilCountyProfiles.length,3);
+ assert.deepEqual(data.verifiedCouncilCountyProfiles[2],changhua);
  assert.equal(data.verifiedCouncilCountyProfiles[0].county,'基隆市');
  const keels=data.contests.filter(c=>c.county_name==='基隆市'&&c.election_id==='1994-council-counties');
  assert.equal(keels.length,8);

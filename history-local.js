@@ -59,6 +59,18 @@
    if(!response.ok)throw Error('1994县市议员补充资料 HTTP '+response.status);
    const archive=await response.json();
    if(archive.version!==1||!archive.districts?.length)throw Error('1994县市议员补充资料不完整');
+   const changhuaResponse=await fetcher('sources/history-1994-changhua-council-profile.json?v=1');
+   if(!changhuaResponse.ok)throw Error('1994彰化县议员县级统计 HTTP '+changhuaResponse.status);
+   const changhua=await changhuaResponse.json();
+   const districts=archive.districts.filter(d=>d.county==='彰化縣');
+   if(changhua.county!=='彰化縣'||districts.length!==8||
+      districts.reduce((n,d)=>n+d.valid_votes,0)!==changhua.valid_votes||
+      districts.reduce((n,d)=>n+d.candidates.length,0)!==changhua.candidate_count||
+      districts.reduce((n,d)=>n+d.candidates.filter(c=>c[5]).length,0)!==changhua.elected_count||
+      changhua.ballots_cast!==changhua.valid_votes+changhua.invalid_votes){
+    throw Error('1994彰化县议员县级统计与选区资料不符');
+   }
+   archive.verified_county_profiles=[...(archive.verified_county_profiles||[]),changhua];
    const refs=await Promise.allSettled([load(1998,fetcher),load(2002,fetcher)]);
    return enrichLegacyGender(archive,refs.map(r=>r.status==='fulfilled'?r.value:null));
   })().catch(error=>{legacyCouncilRequest=null;throw error});
