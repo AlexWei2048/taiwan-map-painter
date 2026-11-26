@@ -159,6 +159,23 @@ async function refresh(){
 }
 open.onclick=()=>{office.value=root.History2022View?.office()||'mayor';chosen='';setBallots();setYears(root.History2022View?.year());dialog.showModal();refresh()};
 office.onchange=()=>{chosen='';setBallots();setYears();refresh()};ballot.onchange=()=>{setYears();refresh()};left.onchange=right.onchange=refresh;party.onchange=render;$('compareDifference').onchange=render;county.onchange=()=>{chosen=county.value;render()};
-$('compareZoomIn').onclick=()=>{zoom=Math.min(5,zoom*1.25);setBox()};$('compareZoomOut').onclick=()=>{zoom=Math.max(1,zoom/1.25);setBox()};$('compareFit').onclick=()=>{zoom=1;offsetX=offsetY=0;setBox()};$('compareRetry').onclick=refresh;
+$('compareZoomIn').onclick=()=>{zoom=Math.min(5,zoom*1.25);setBox()};$('compareZoomOut').onclick=()=>{zoom=Math.max(1,zoom/1.25);if(baseBox){const mx=baseBox[2]*(1-1/zoom)/2,my=baseBox[3]*(1-1/zoom)/2;offsetX=Math.max(-mx,Math.min(mx,offsetX));offsetY=Math.max(-my,Math.min(my,offsetY))}setBox()};$('compareFit').onclick=()=>{zoom=1;offsetX=offsetY=0;setBox()};$('compareRetry').onclick=refresh;
+// Pan either map, preserving the same viewBox on the other. Do not turn a drag into a county selection.
+for(const id of ['compareMapA','compareMapB']){
+ const graph=$(id);let drag=null,suppress=false;
+ graph.addEventListener('pointerdown',e=>{if(!baseBox||zoom<=1||e.button!==0)return;drag={x:e.clientX,y:e.clientY,ox:offsetX,oy:offsetY,id:e.pointerId,moved:false};suppress=false});
+ graph.addEventListener('pointermove',e=>{
+  if(!drag||drag.id!==e.pointerId)return;
+  const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(!drag.moved&&Math.hypot(dx,dy)<5)return;
+  if(!drag.moved){drag.moved=true;graph.setPointerCapture?.(e.pointerId)}
+  const rect=graph.getBoundingClientRect(),scale=Math.min(rect.width/(baseBox[2]/zoom),rect.height/(baseBox[3]/zoom));
+  if(!(scale>0))return;
+  const maxX=baseBox[2]*(1-1/zoom)/2,maxY=baseBox[3]*(1-1/zoom)/2;
+  offsetX=Math.max(-maxX,Math.min(maxX,drag.ox-dx/scale));offsetY=Math.max(-maxY,Math.min(maxY,drag.oy-dy/scale));setBox();
+ });
+ const end=()=>{suppress=!!drag?.moved;drag=null};
+ graph.addEventListener('pointerup',end);graph.addEventListener('pointercancel',end);
+ graph.addEventListener('click',e=>{if(suppress){e.preventDefault();e.stopImmediatePropagation();suppress=false}},true);
+}
 dialog.addEventListener('close',()=>{token++;models=null});
 })(typeof window==='undefined'?globalThis:window);
