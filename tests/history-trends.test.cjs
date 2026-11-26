@@ -138,6 +138,25 @@ test('Council ballot trends keep elected seats and candidate vote shares separat
  const old={...s,year:1994};
  assert.equal(T.councilBallotRows(old,{office:'council',electorate:'all',normalize:norm})[0].complete,false);
 });
+test('Presidential, mayoral and township party vote-share trends use one geographic grain',()=>{
+ const norm=require('../assets/opencc.js').Converter({from:'t',to:'cn'});
+ const cases=[
+  [require('../assets/history-president-2024.json'),{office:'president',level:'county'},13947506],
+  [require('../assets/history-president-2024.json'),{office:'president',level:'town',county:'台北市'},1542011],
+  [require('../assets/history-2022.json'),{office:'mayor',level:'county'},11490975],
+  [require('../assets/history-2022.json'),{office:'mayor',level:'town',county:'台北市'},1360951],
+  [require('../assets/history-2022.json'),{office:'township',level:'county'},3131910]
+ ];
+ for(const [snapshot,selection,valid] of cases){
+  const r=T.localPartyVoteShares(snapshot,{...selection,normalize:norm})[0];
+  assert.equal(r.complete,true,selection.office+' '+selection.level+' '+r.reason);
+  assert.equal(r.valid,valid);
+  assert.equal(Object.values(r.votes).reduce((a,b)=>a+b,0),valid);
+  assert.ok(Math.abs(Object.values(r.parties).reduce((a,b)=>a+b,0)-100)<1e-8);
+ }
+ const old=T.localPartyVoteShares(require('../assets/history-local-2018.json'),{office:'mayor',level:'town',normalize:norm})[0];
+ assert.equal(old.complete,false);
+});
 test('Integer tick marks and parliament dot counts are exact for small and large assemblies',()=>{
  for(const max of [0,1,2,3,22,113,161,164,225,910]){const ticks=T.integerTicks(max);assert.ok(ticks.every(Number.isInteger));assert.ok(ticks.at(-1)>=max)}
  for(const total of [1,2,3,6,22,113,161,164,225,910]){const pts=T.parliamentPoints(total);assert.equal(pts.length,total);assert.ok(pts.every(p=>Number.isFinite(p.x)&&Number.isFinite(p.y)&&p.y<=0));assert.equal(new Set(pts.map(p=>p.x+'|'+p.y)).size,total)}

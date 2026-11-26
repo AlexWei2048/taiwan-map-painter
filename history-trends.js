@@ -204,6 +204,28 @@ function councilBallotRows(snapshot,selection){
   return{...base,complete:true,reason:'',seats,parties,valid:result.valid};
  });
 }
+function localPartyVoteShares(snapshot,selection){
+ const {office,county='',level='county',focus='',normalize=String}=selection;
+ const grain=office==='township'||level==='town'?'town':'county';
+ const norm=v=>normalize(String(v||''));
+ const family=historicalCountyFamily(county),merged=MERGE_FAMILIES.some(g=>g.includes(county));
+ return historicalCountyScopes(snapshot,selection).map(actualCounty=>{
+  const dates=electionDates(snapshot,office,actualCounty,normalize),years=[...new Set(dates.map(d=>d.slice(0,4)))];
+  const oldPair=merged&&(family.length>1&&actualCounty===family[0]||snapshot.year<2010);
+  const base={year:snapshot.year,label:years.join('/')||String(snapshot.year),dates,county:actualCounty,scopeLabel:family.length>1?actualCounty:'',scopeSeries:merged?(oldPair?'旧'+actualCounty:'合并后'+actualCounty):family[0]};
+  const empty=reason=>({...base,complete:false,reason,parties:{},votes:{},valid:null});
+  if(office==='mayor'&&grain==='town'&&snapshot.year===2018&&(!actualCounty||actualCounty==='台北市'))return empty('台北市重计后的区级得票缺档');
+  const rows=(snapshot.rows||[]).filter(r=>r.type===office&&r.level===grain&&(!actualCounty||norm(r.county)===actualCounty)&&(!focus||grain==='town'&&norm(r.town)===focus));
+  if(!rows.length)return empty('当前范围没有可核实的得票记录');
+  if(rows.some(r=>!Number.isFinite(r.votes)||r.votes<0))return empty('得票资料不完整');
+  const valid=rows.reduce((n,r)=>n+r.votes,0);
+  if(!valid)return empty('有效票为零');
+  const votes=Object.create(null);
+  for(const r of rows){const party=keyParty(norm(r.party));votes[party]=(votes[party]||0)+r.votes}
+  const parties=Object.fromEntries(Object.entries(votes).map(([p,v])=>[p,v/valid*100]));
+  return{...base,complete:true,reason:'',parties,votes,valid};
+ });
+}
 function mapTrend(snapshot,selection,anchor){
  const {office,electorate='regional',county='',anchorCounty=county,level='county',focus='',metric='party',candidateScope='top',candidate=null,party='',normalize=String}=selection;
  const norm=v=>normalize(String(v||''));
@@ -332,7 +354,7 @@ function majorityBoundary(points){
  const angle=seats===total?0:(points[seats-1].angle+points[seats].angle)/2;
  return {seats,angle};
 }
-const api={aggregate,value,difference,modern,percent,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,historicalScopeRows,legislativeVoteShares,councilBallotRows,electionDates,trendEffectiveSelection,LEGISLATIVE_TOTALS};
+const api={aggregate,value,difference,modern,percent,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,historicalScopeRows,legislativeVoteShares,councilBallotRows,localPartyVoteShares,electionDates,trendEffectiveSelection,LEGISLATIVE_TOTALS};
 if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
 root.HistoryTrends=api;
 })(typeof window==='undefined'?{}:window);
