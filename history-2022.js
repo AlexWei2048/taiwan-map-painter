@@ -1018,7 +1018,7 @@
     wrap.append(table);details.append(intro,wrap);
    }
    const citation=document.createElement('p');
-   for(const evidence of [record,record.county_summary,record.candidate_roster_source,record.profile_detail_source].filter(Boolean)){
+   for(const evidence of [record,record.county_summary,record.candidate_roster_source,record.profile_detail_source,...(record.winners||[])].filter(Boolean)){
     const url=evidence.source_url||evidence.candidate_counts_source_url;
     const locator=evidence.source_locator||evidence.candidate_counts_source_locator;
     if(!url||!locator)continue;

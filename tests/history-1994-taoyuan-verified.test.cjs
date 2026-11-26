@@ -18,14 +18,18 @@ test('1994 Taoyuan council official county totals reconcile with all 12 original
  assert.deepEqual(council.verified_county_profiles.filter(x=>x.county==='桃園縣'),[source]);
 });
 test('1994 township source and live snapshot preserve two independently sourced winners without invented votes',()=>{
- const sourcePart=townSource.partial_counties.find(x=>x.county==='桃園縣'&&x.summary_scope==='county');
- const runtimePart=local.partialTownshipReturns.find(x=>x.county==='桃園縣'&&x.summary_scope==='county');
+ const sourcePart=townSource.partial_counties.find(x=>x.county==='桃園縣'&&x.supplement_type==='verified_winners_only');
+ const runtimePart=local.partialTownshipReturns.find(x=>x.county==='桃園縣'&&x.supplement_type==='verified_winners_only');
+ const sourceSummary=townSource.partial_counties.find(x=>x.county==='桃園縣'&&x.summary_scope==='county');
+ const runtimeSummary=local.partialTownshipReturns.find(x=>x.county==='桃園縣'&&x.summary_scope==='county');
  assert.ok(sourcePart&&runtimePart);
  assert.deepEqual(runtimePart.winners,sourcePart.winners);
  assert.deepEqual(sourcePart.winners.map(x=>[x.town,x.name,x.incumbent_at_election]),[
   ['桃園市','李信宏',true],['中壢市','方力脩',false]
  ]);
  assert.ok(sourcePart.winners.every(x=>x.source_url.startsWith('https://www.')&&x.votes===null&&x.party_recommendation===null&&x.ballot_number===null));
- assert.equal(sourcePart.county_summary.candidate_count,29);
+ assert.equal(sourceSummary.county_summary.candidate_count,29);
+ assert.deepEqual(runtimeSummary,sourceSummary);
+ assert.equal(sourceSummary.winners,undefined);
  assert.equal(local.contests.some(c=>c.election_id==='1994-township'&&c.county_name==='桃園縣'),false);
 });

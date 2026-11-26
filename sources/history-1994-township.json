@@ -3668,7 +3668,14 @@
         "female_candidates": 1,
         "candidate_counts_source_url": "https://ws.tycg.gov.tw/Download.ashx?n=MDAzLTk35bm06KGM5pS%2F57WE57mULnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvMTUyL1JlbEZpbGUvMTg1NjAvMTI0MDIyNy8wMDMtOTflubTooYzmlL%2FntYTnuZQucGRm",
         "candidate_counts_source_locator": "97年桃園縣統計要覽表3-10，第12屆；公開文字表格，頁面影像未能取得"
-      },
+      }
+    },
+    {
+      "county": "桃園縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "verified_winners_only",
+      "source_url": "https://www.tao.tycg.gov.tw/cp.aspx?n=6273",
+      "source_locator": "1994年桃園縣鄉鎮市長部分當選人，逐人官方任期來源見下列連結",
       "winners": [
         {
           "town": "桃園市",
