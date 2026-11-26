@@ -133,6 +133,25 @@
   }
   const result=Core.filter(indexed,query);
   let overview=Core.overview(result),townVotesVerified=false,tallyBasis='';
+  if(year===1994&&office==='council'&&scope==='county'){
+   const profile=(indexed.snapshot.verifiedCouncilCountyProfiles||[]).find(p=>
+    p.county===county||p.county===countyContest?.county_name_official);
+   if(profile&&result.contests.length===8&&overview.validVotes===profile.valid_votes&&
+      result.candidacies.length===profile.candidate_count&&
+      result.candidacies.filter(c=>c.elected_official).length===profile.elected_count&&
+      Number.isSafeInteger(profile.registered_voters)&&
+      profile.ballots_cast<=profile.registered_voters&&
+      profile.ballots_cast===profile.valid_votes+profile.invalid_votes){
+    const group={electorate:'regional',registeredVoters:profile.registered_voters,
+     ballotsCast:profile.ballots_cast,validVotes:profile.valid_votes,
+     invalidVotes:profile.invalid_votes,
+     turnout:profile.ballots_cast/profile.registered_voters*100};
+    overview={...overview,registeredVoters:group.registeredVoters,
+     ballotsCast:group.ballotsCast,validVotes:group.validVotes,
+     invalidVotes:group.invalidVotes,turnout:group.turnout,
+     turnoutGroups:[group],turnoutSource:profile.source_url};
+   }
+  }
   if(scope==='town'&&(office==='mayor'||office==='president')){
    // TaiwanVotes preserves traditional source names in rows, but the map
    // uses simplified locality labels. Join through the source-verified
