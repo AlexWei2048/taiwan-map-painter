@@ -1,0 +1,36 @@
+'use strict';
+const assert=require('node:assert/strict');
+const {test}=require('node:test');
+const fs=require('node:fs');
+const path=require('node:path');
+const Local=require('../history-local.js');
+const archive=require('../sources/history-1994-township.json');
+const runtime=require('../assets/history-local-1994.json');
+const expected=['桃園市','中壢市','平鎮市','八德鄉','大溪鎮','楊梅鎮','蘆竹鄉','大園鄉','龜山鄉','龍潭鄉','新屋鄉','觀音鄉','復興鄉'];
+test('1994 Taoyuan 13 towns each have a unique sourced winner without invented candidate votes',()=>{
+ const source=archive.partial_counties.filter(x=>x.county==='桃園縣');
+ const display=runtime.partialTownshipReturns.filter(x=>x.county==='桃園縣');
+ const winners=source.flatMap(x=>x.winners||[]);
+ assert.deepEqual([...new Set(winners.map(x=>x.town))].sort(),expected.slice().sort());
+ assert.equal(winners.length,13);
+ assert.equal(source.find(x=>x.summary_scope==='county').county_summary.candidate_count,29);
+ const addition=source.find(x=>x.supplement_type==='verified_winners_only');
+ const displayAddition=display.find(x=>x.supplement_type==='verified_winners_only');
+ assert.deepEqual(displayAddition,addition);
+ assert.equal(addition.winners.length,9);
+ const newOnes=addition.winners.slice(2);
+ assert.equal(newOnes.length,7);
+ assert.ok(newOnes.every(x=>typeof x.name==='string'&&x.source_url.startsWith('https://')&&x.evidence_type&&x.confidence));
+ assert.ok(newOnes.every(x=>x.ballot_number===null&&x.votes===null&&x.party_recommendation===null));
+ assert.equal(newOnes.find(x=>x.town==='龍潭鄉').incumbent_at_election,null);
+ assert.equal(newOnes.find(x=>x.town==='新屋鄉').name,'陳江順');
+ assert.equal(newOnes.find(x=>x.town==='大溪鎮').name,'林熺達');
+ assert.equal(newOnes.find(x=>x.town==='八德鄉').confidence,'provisional_secondary_requires_original');
+});
+test('1994 Taoyuan partial winner names must not be counted as complete 1994 constituency results',async()=>{
+ const fetcher=async filename=>({ok:true,json:async()=>JSON.parse(fs.readFileSync(path.join(__dirname,'..',filename.split('?')[0]),'utf8'))});
+ const snapshot=await Local.loadCycle(1994,'township',fetcher);
+ assert.equal(snapshot.contests.filter(x=>x.county_name==='桃园县'&&x.election_id==='1994-township').length,0);
+ const partial=snapshot.partialTownshipReturns.filter(x=>x.county==='桃園縣');
+ assert.equal(partial.flatMap(x=>x.winners||[]).length,13);
+});

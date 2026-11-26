@@ -25,9 +25,13 @@ test('1994 township source and live snapshot preserve two independently sourced 
  assert.ok(sourcePart&&runtimePart);
  assert.deepEqual(runtimePart.winners,sourcePart.winners);
  assert.deepEqual(sourcePart.winners.map(x=>[x.town,x.name,x.incumbent_at_election]),[
-  ['桃園市','李信宏',true],['中壢市','方力脩',false]
+  ['桃園市','李信宏',true],['中壢市','方力脩',false],
+  ['大溪鎮','林熺達',true],['楊梅鎮','宋明雄',true],
+  ['大園鄉','劉春生',false],['八德鄉','李金水',false],
+  ['龍潭鄉','林忠正',null],['復興鄉','游金紱',false],
+  ['新屋鄉','陳江順',false]
  ]);
- assert.ok(sourcePart.winners.every(x=>x.source_url.startsWith('https://www.')&&x.votes===null&&x.party_recommendation===null&&x.ballot_number===null));
+ assert.ok(sourcePart.winners.every(x=>x.source_url.startsWith('https://')&&x.votes===null&&x.party_recommendation===null&&x.ballot_number===null));
  assert.equal(sourceSummary.county_summary.candidate_count,29);
  assert.deepEqual(runtimeSummary,sourceSummary);
  assert.equal(sourceSummary.winners,undefined);
