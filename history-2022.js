@@ -204,7 +204,7 @@
   const list=el('historyCounty'),previous=county;
   const ordered=[...new Set(counties)].sort((a,b)=>
    HistoryCore.compareResultRows({county_name:a},{county_name:b},'mayor'));
-  list.replaceChildren(new Option('全部地区（含金门、马祖）',''),...ordered.map(c=>new Option(c,c)));
+  syncHistoryOptions(list,[['全部地区（含金门、马祖）',''],...ordered.map(c=>[c,c])]);
   county=ordered.includes(previous)?previous:'';
   list.value=county;
  }
@@ -572,7 +572,7 @@
   const search=normCandidate(el('historySearch').value),partySelect=el('historyResultParty');
   const all=legislativeResultRows(),parties=[...new Set(all.map(r=>r.party))].sort((a,b)=>a.localeCompare(b,'zh'));
   const previous=partySelect?.value||'';
-  if(partySelect){partySelect.replaceChildren(new Option('全部政党',''),...parties.map(p=>new Option(p,p)));partySelect.value=parties.includes(previous)?previous:''}
+  if(partySelect){syncHistoryOptions(partySelect,[['全部政党',''],...parties.map(p=>[p,p])]);partySelect.value=parties.includes(previous)?previous:''}
   const partyFilter=partySelect?.value||'';
   const rows=all.filter(r=>(!partyFilter||r.party===partyFilter)&&(!search||[r.county,r.town,r.district,r.name,r.party].some(v=>String(v||'').includes(search))))
    .sort((a,b)=>(allLegislative()?combinedIdentities().indexOf(a.electorate)-combinedIdentities().indexOf(b.electorate):0)||HistoryCore.compareResultRows(a,b,legislativeBallot==='regional'?'council':'mayor')||
@@ -636,7 +636,7 @@
   if(legislativeMode){showLegislativeRows();return}
   const search=normCandidate(el('historySearch').value);
   const partySelect=el('historyResultParty'),parties=[...new Set(result.rows.map(r=>r.party))].sort((a,b)=>a.localeCompare(b,'zh')),priorParty=partySelect?.value||'';
-  if(partySelect){partySelect.replaceChildren(new Option('全部政党',''),...parties.map(p=>new Option(p,p)));partySelect.value=parties.includes(priorParty)?priorParty:''}
+  if(partySelect){syncHistoryOptions(partySelect,[['全部政党',''],...parties.map(p=>[p,p])]);partySelect.value=parties.includes(priorParty)?priorParty:''}
   const partyFilter=partySelect?.value||'',rows=result.rows.filter(r=>(!partyFilter||r.party===partyFilter)&&(!search||[r.county,r.town,r.district,r.name,r.party].some(v=>v.includes(search)))).sort((a,b)=>HistoryCore.compareResultRows(a,b,kind));
   const root=el('historyResults');root.replaceChildren();
   resultPage=Math.min(resultPage,Math.max(0,Math.ceil(rows.length/100)-1));
@@ -1042,6 +1042,11 @@
    details.append(citation);
   }
  }
+ // Reuse option DOM nodes when their values and labels are unchanged.
+ function syncHistoryOptions(select,options){
+  if(select.options.length===options.length&&options.every(([label,value],i)=>select.options[i].textContent===String(label)&&select.options[i].value===String(value)))return;
+  select.replaceChildren(...options.map(([label,value])=>new Option(label,value)));
+ }
  function syncHistoryControls(){
   const titleEyebrow=el('historyResultSection')?.querySelector('.eyebrow');
   if(titleEyebrow)titleEyebrow.textContent=yearLabel()+' 历史数据';
@@ -1068,8 +1073,8 @@
   renderPartialTownshipReturns();
   el('historyCounty').value=county;el('historyScaleBox').hidden=false;
   if(legislativeMode){
-   const ballot=el('historyElectorate');ballot.replaceChildren(...HistoryLegislative.ballots(legislativeYear).map(item=>new Option(item.label,item.value)));ballot.value=legislativeBallot;
-   const levels=HistoryLegislative.levels(legislativeYear,legislativeBallot),scaleSelect=el('historyScale');scaleSelect.replaceChildren(...levels.map(([value,label])=>new Option(legislativeYear>=2008&&legislativeBallot==='party'&&value==='town'&&!county?'乡镇市区（全台368个）':label,value)));if(!levels.some(([value])=>value===scale))scale=levels[0][0];scaleSelect.value=scale;scaleSelect.disabled=levels.length===1;
+   const ballot=el('historyElectorate');syncHistoryOptions(ballot,HistoryLegislative.ballots(legislativeYear).map(item=>[item.label,item.value]));ballot.value=legislativeBallot;
+   const levels=HistoryLegislative.levels(legislativeYear,legislativeBallot),scaleSelect=el('historyScale');syncHistoryOptions(scaleSelect,levels.map(([value,label])=>[legislativeYear>=2008&&legislativeBallot==='party'&&value==='town'&&!county?'乡镇市区（全台368个）':label,value]));if(!levels.some(([value])=>value===scale))scale=levels[0][0];scaleSelect.value=scale;scaleSelect.disabled=levels.length===1;
    const focusBox=el('historyFocusBox'),focusSelect=el('historyFocus'),focusLabel=el('historyFocusLabel');
    if(focusBox&&focusSelect){
     const eligible=!allLegislative()&&!!county&&['district','town'].includes(scale);
@@ -1082,7 +1087,7 @@
     options.sort((a,b)=>scale==='district'?HistoryLegislative.districtNumber(a)-HistoryLegislative.districtNumber(b):a.localeCompare(b,'zh',{numeric:true}));
     if(!options.includes(legislativeFocus))legislativeFocus='';
     focusLabel.textContent=scale==='district'?'选举区':'乡镇市区';
-    focusSelect.replaceChildren(new Option(scale==='district'?'全部选举区':'全部乡镇市区',''),...options.map(name=>new Option(name,name)));
+    syncHistoryOptions(focusSelect,[[scale==='district'?'全部选举区':'全部乡镇市区',''],...options.map(name=>[name,name])]);
     focusSelect.value=legislativeFocus;
    }
    if(el('historyLegislativeMapHint')){el('historyLegislativeMapHint').hidden=false;el('historyLegislativeMapHint').textContent=
@@ -1093,13 +1098,13 @@
   }else{if(el('historyFocusBox'))el('historyFocusBox').hidden=true;if(el('historyLegislativeMapHint'))el('historyLegislativeMapHint').hidden=true;
    const scaleOptions=kind==='council'?[['district','选举区']]:kind==='township'?[['town','乡镇市区']]:[['district','县市'],['town','乡镇市区']];
    if(!scaleOptions.some(([value])=>value===scale))scale=scaleOptions[0][0];
-   el('historyScale').replaceChildren(...scaleOptions.map(([value,label])=>new Option(label,value)));
+   syncHistoryOptions(el('historyScale'),scaleOptions.map(([value,label])=>[label,value]));
    el('historyScale').value=scale;el('historyScale').disabled=scaleOptions.length===1;
    if(kind==='council'){
    const options=[['all','全部类型（分别统计）'],['regional','区域议员'],['plains','平地少数民族议员'],['mountain','山地少数民族议员'],['indigenous','历史合并选区（未分平地／山地）']];
    const available=localGeometry?options.filter(([id])=>id==='all'||db.council.some(row=>row.electorate===id)):options.slice(0,4);
    if(!available.some(([id])=>id===electorate))electorate='all';
-   el('historyElectorate').replaceChildren(...available.map(([id,label])=>new Option(label,id)));
+   syncHistoryOptions(el('historyElectorate'),available.map(([id,label])=>[label,id]));
   }}
   if(el('historyElectorateBox'))el('historyElectorateBox').hidden=kind!=='council'&&!legislativeMode;if(el('historyElectorate'))el('historyElectorate').value=electorate;
   if(el('historyLegislativeNote')){el('historyLegislativeNote').hidden=legislativeMode?(allLegislative()&&legislativeYear>=2008):!(kind==='council'&&db.council.some(r=>r.electorate==='indigenous'));el('historyLegislativeNote').textContent=!legislativeMode?'少数民族议员分平地、山地两类。早期个别市议员原始档案仅记为合并选区，单列为历史资料，不推定其平地或山地身份。':allLegislative()?(legislativeYear<2008?'旧制不分区及侨选没有独立政党票：选民投区域或少数民族候选人一票，政党推荐候选人的票汇总用于分配各党名单席次。不分区小图显示各地区这一席次计算票的领先政党，并非当地另投的政党票；缺少可核实的地方明细则不着色。':'区域显示选区当选结果，其余三图显示各地区最高票政党或候选人。'):HistoryLegislative.note(legislativeYear,legislativeBallot)||(legislativeYear>=2008&&legislativeBallot==='party'?'可按县市及全台368个乡镇市区查看原始政党票得票。得票数字精准对应当届行政区；历史地图边界采用可匹配的现有轮廓。':'2008年起不分区采用独立政党票；区域选举为单一选区一席。')}
@@ -1111,20 +1116,20 @@
   const parties=[...new Set((legislativeMode?db.legislative.filter(r=>legislativeBallot==='party'||r.elected):db.council.filter(r=>r.elected)).map(r=>r.party))].sort();
   if(!parties.includes(selectedParty))selectedParty=parties[0]||'';
   el('historyPartyBox').hidden=metric!=='seats';
-  el('historyParty').replaceChildren(...parties.map(p=>new Option(p,p)));el('historyParty').value=selectedParty;
-  const select=el('historyMetric');select.replaceChildren(...metrics.map(([v,l])=>new Option(l,v)));select.value=metric;
+  syncHistoryOptions(el('historyParty'),parties.map(p=>[p,p]));el('historyParty').value=selectedParty;
+  const select=el('historyMetric');syncHistoryOptions(select,metrics.map(([v,l])=>[l,v]));select.value=metric;
   select.disabled=metrics.length===1;
   select.title=select.disabled?'当前范围只有这一种地图显示内容':'';
    el('historyCandidateScopeBox').hidden=!voteMetric();el('historyCandidateScope').value=candidateScope;
   const isPartyVote=legislativeMode&&legislativeBallot==='party';
-  el('historyCandidateScope').querySelector('option[value="top"]').textContent=isPartyVote?'各地区领先政党':'最高票候选人';
-  el('historyCandidateScope').querySelector('option[value="candidate"]').textContent=isPartyVote?'指定政党':'指定候选人';
+  syncHistoryOptions(el('historyCandidateScope'),[[isPartyVote?'各地区领先政党':'最高票候选人','top'],[isPartyVote?'指定政党':'指定候选人','candidate']]);
+  el('historyCandidateScope').value=candidateScope;
   const candidateLabel=document.querySelector('label[for="historyCandidate"]');if(candidateLabel)candidateLabel.textContent=isPartyVote?'政党':'候选人';
   el('historyCandidateBox').hidden=!voteMetric()||candidateScope!=='candidate';
   if(!voteMetric()||candidateScope!=='candidate')return;
   const choices=new Map();for(const r of recordsInView())choices.set(candidateKey(r),r);
   if(!choices.has(selectedCandidate))selectedCandidate=choices.keys().next().value||'';
-  el('historyCandidate').replaceChildren(...[...choices].map(([id,r])=>new Option(isPartyVote?r.party:(presidentialMode?'':r.county+' · ')+displayedCandidateName(r)+' · '+r.party,id)));el('historyCandidate').value=selectedCandidate;
+  syncHistoryOptions(el('historyCandidate'),[...choices].map(([id,r])=>[isPartyVote?r.party:(presidentialMode?'':r.county+' · ')+displayedCandidateName(r)+' · '+r.party,id]));el('historyCandidate').value=selectedCandidate;
  }
  function openHistoryRegion(f){
   lastOpenedFeature=f;routeDetail={area:f.name,detailCounty:f.county,identity:f.electorate||''};
