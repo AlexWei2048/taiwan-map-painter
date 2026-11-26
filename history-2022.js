@@ -1136,6 +1136,7 @@
   }}
   if(el('historyElectorateBox'))el('historyElectorateBox').hidden=kind!=='council'&&!legislativeMode;if(el('historyElectorate'))el('historyElectorate').value=electorate;
   if(el('historyLegislativeNote')){el('historyLegislativeNote').hidden=legislativeMode?(allLegislative()&&legislativeYear>=2008):!(kind==='council'&&db.council.some(r=>r.electorate==='indigenous'));el('historyLegislativeNote').textContent=!legislativeMode?'少数民族议员分平地、山地两类。早期个别市议员原始档案仅记为合并选区，单列为历史资料，不推定其平地或山地身份。':allLegislative()?(legislativeYear<2008?'旧制不分区及侨选没有独立政党票：选民投区域或少数民族候选人一票，政党推荐候选人的票汇总用于分配各党名单席次。不分区小图显示各地区这一席次计算票的领先政党，并非当地另投的政党票；缺少可核实的地方明细则不着色。':'区域显示选区当选结果，其余三图显示各地区最高票政党或候选人。'):HistoryLegislative.note(legislativeYear,legislativeBallot)||(legislativeYear>=2008&&legislativeBallot==='party'?'可按县市及全台368个乡镇市区查看原始政党票得票。得票数字精准对应当届行政区；历史地图边界采用可匹配的现有轮廓。':'2008年起不分区采用独立政党票；区域选举为单一选区一席。')}
+  if(el('historyTownBoundaryBox')){el('historyTownBoundaryBox').hidden=!(legislativeMode&&(legislativeBallot==='regional'||allLegislative())&&!regionalLegislativeTownView()||kind==='council'||mayorTownView());el('historyTownBoundaries').checked=state.showTownBoundaries!==false;}
   const legislativeBadges=legislativeMode&&legislativeBallot==='regional'&&legislativeYear<2008&&!regionalLegislativeTownView();
   const metrics=[['party',allLegislative()?'各类型选举结果（分别统计）':kind==='council'||legislativeBadges?'当选席次':presidentialMode?(scale==='town'?'各乡镇市区最高票候选人所属政党':'各县市最高票候选人所属政党'):legislativeMode?(legislativeBallot==='party'?'各地区领先政党':'各地区最高票候选人所属政党'):mayorTownView()?'各乡镇市区最高票候选人':'当选结果']];
   if(kind==='council'||legislativeBadges)metrics.push(['seats','指定政党席次']);
@@ -1425,6 +1426,7 @@
  if(el('historyElectorate'))el('historyElectorate').onchange=()=>{electorate=el('historyElectorate').value;if(legislativeMode){legislativeBallot=electorate;scale='county';legislativeFocus='';if(allLegislative())metric='party'}resultPage=0;switchMode();render()};
  el('historyCounty').onchange=()=>{county=el('historyCounty').value;legislativeFocus='';if(legislativeMode&&!legislativePartyTownView()&&!regionalLegislativeTownView()&&county)scale='county';resultPage=0;switchMode();render()};
  el('historyMetric').onchange=()=>{metric=el('historyMetric').value;render()};
+ if(el('historyTownBoundaries'))el('historyTownBoundaries').onchange=()=>{if(!active)return;state.showTownBoundaries=el('historyTownBoundaries').checked;applyBorders()};
  el('historyParty').onchange=()=>{selectedParty=el('historyParty').value;render()};
  el('historySearch').oninput=()=>{resultPage=0;if(currentResult)showRows(currentResult)};
  if(el('historyResultParty'))el('historyResultParty').onchange=()=>{resultPage=0;if(currentResult)showRows(currentResult)};

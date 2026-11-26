@@ -1020,3 +1020,7 @@ body.analysis-mode #historyTrendsPanel{margin-top:14px}
 
 #planShareOutput textarea{display:block;width:100%;resize:vertical;min-height:70px;overflow-wrap:anywhere}.plan-pair-comparison{border-top:1px solid var(--line);padding-top:14px;margin:12px 0}.plan-pair-comparison .plan-form{max-width:540px}
 body.analysis-mode #mobileMapJump{font-size:12px}
+
+/* Historical geography controls belong to the archive only. */
+body.analysis-mode #historyTownBoundaryBox{display:none!important}
+#historyTownBoundaryBox{margin:8px 0}

@@ -2820,8 +2820,8 @@ test('Official Kaohsiung 2008–2016 village splits fill exactly one historic co
    }
    const town=document.querySelector('#townBorders path[data-shared-boundary="towns"]');
    const start={exists:!!town,length:town?.getAttribute('d')?.length||0,visible:document.querySelector('#townBorders').style.display!=='none',stroke:town?.getAttribute('stroke')};
-   const check=document.getElementById('showTownBoundaries');
-   const available=!!check;
+   const check=document.getElementById('historyTownBoundaries');
+   const available=!!check&&document.getElementById('historyTownBoundaryBox')?.hidden===false;
    const before=check?.checked;
    if(!before){check.checked=true;check.dispatchEvent(new Event('change',{bubbles:true}));}
    const shown=document.querySelector('#townBorders').style.display!=='none';
@@ -2833,7 +2833,7 @@ test('Official Kaohsiung 2008–2016 village splits fill exactly one historic co
   assert.deepEqual(result.misses,[],year+' official Kaohsiung village-split fills must be disjoint and exhaustive');
   assert.ok(result.scanned>120,year+' village polygons are loaded');
   assert.ok(result.town.exists&&result.town.length>1000,year+' historical township boundary paths exist');
-  assert.equal(result.toggleVisible,true,year+' shared township overlay control exists');
+  assert.equal(result.toggleVisible,true,year+' historical township overlay toggle is visible in sidebar');
   assert.equal(result.shown,true,year+' township overlay visible when enabled');
   assert.equal(result.hidden,true,year+' township overlay hides when disabled');
   assert.equal(result.restored,true,year+' township overlay restores without reloading');
@@ -3410,7 +3410,7 @@ test('Historical coverage matrix opens on demand and reveals known partial archi
  await page.locator('#historyCoverageOffice').selectOption('township');
  await page.locator('#historyCoverageMatrix table').waitFor({timeout:90000});
  const real=await page.evaluate(async()=>{const s=await HistoryLocal.loadCycle(1994,'township');return HistoryCoverage.matrixEntry(HistoryCoverage.analyze(s,'township',simplify),'金门县',1994,'township')});assert.equal(real.status,'partial');assert.ok(real.partialArchives>0);
- const button=page.locator('#historyCoverageMatrix button[aria-label^="金门县 1994 "]');assert.equal(await button.count(),1,await page.locator('#historyCoverageStatus').textContent());assert.equal(await button.getAttribute('data-coverage-status'),'partial');await button.click();
+ const button=page.locator('#historyCoverageMatrix button[aria-label^="金门 1994 "]');assert.equal(await button.count(),1,await page.locator('#historyCoverageStatus').textContent());assert.equal(await button.getAttribute('data-coverage-status'),'partial');await button.click();
  assert.match(await page.locator('#historyCoverageDetail').textContent(),/部分档案条目/);
  assert.equal(await page.locator('#historyYear').inputValue(),'2022');
  await page.locator('#historyCoverageDialog').getByRole('button',{name:'关闭',exact:true}).click();
