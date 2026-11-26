@@ -67,8 +67,8 @@ test('initial document defers history-only resources until the history tab is op
  for(const path of ['index.html','map-v60.html']){
  const html=fs.readFileSync(path,'utf8');
  assert.match(html,/src="history-loader\.js\?v=/);
- assert.match(html,/id="categoryFuture"[^>]*>调色盘/);
- assert.match(html,/id="categoryHistory"[^>]*>选举档案/);
+ assert.match(html,/id="categoryFuture"[^>]*>岛屿画布/);
+ assert.match(html,/id="categoryHistory"[^>]*>岛屿图鉴/);
  assert.match(html,/id="workspacePrediction"[^>]*>未来预测/);
  assert.match(html,/rel="preload" as="fetch" href="assets\/map-base\.json/);
  assert.ok([...html.matchAll(/<script\b[^>]*src="[^"]+"[^>]*>/g)].every(([tag])=>/\bdefer\b/.test(tag)));
