@@ -704,6 +704,15 @@
   if(el('historyExportCsv'))el('historyExportCsv').textContent=state.view==='trends'?'导出历史趋势 CSV':'导出当前结果 CSV';
   renderTurnoutCards();if(el('historyCoverage')&&currentResult)el('historyCoverage').textContent=state.office==='legislative'?'当前票种：'+(root.HistoryLegislative?.ballots(state.year).find(x=>x.value===state.electorate)?.label||'立法机构民代')+' · '+currentResult.contests.length+'个统计区域 · '+currentResult.candidacies.length+'条结果。':'当前范围：'+currentResult.contests.length+'个选举区 · '+currentResult.candidacies.length+'条候选人记录。';emit();return{...state};
  }
+ function restoreRouteView(route){
+  const v=VIEWS.has(route.view)?route.view:'map';
+  state=normalizeSelection({...readSelection(),view:v});
+  if(v==='overview'&&['all','county','district','town'].includes(route.scope)){
+   overviewInitialized=true;overviewContext=overviewContextKey();overviewSidebarKey=sidebarScopeKey();
+   overviewScope=route.scope;overviewCounty=route.overviewCounty||state.county;overviewMapCounty=state.county;overviewArea=route.overviewArea||'';
+   changeOverviewMap();
+  }else render();
+ }
  function setView(view){state=normalizeSelection({...readSelection(),view});
   render()}
  function activate(initialSelection={}){
@@ -743,7 +752,7 @@
  root.addEventListener('historysnapshotready',event=>setSnapshot(event.detail.snapshot));
  const existing=root.History2022View?.snapshot?.();if(existing)setSnapshot(existing);
  const heading=el('historyResultSection')?.querySelector('.history-result-heading');if(heading&&!el('historyExportCsv')){const button=doc.createElement('button');button.type='button';button.id='historyExportCsv';button.className='button quiet';button.textContent='导出当前结果 CSV';button.onclick=exportCsv;heading.append(button)}
- root.HistoryWorkspace={...api,activate,deactivate,selection:()=>({...state}),render,openContest,
+ root.HistoryWorkspace={...api,activate,deactivate,restoreRouteView,selection:()=>({...state}),render,openContest,
   openContestOverview,openFeatureOverview,contestForFeature,selectedOverviewContest:()=>overviewContestId,
   selectedOverviewScope:()=>({scope:overviewScope,county:overviewCounty,area:overviewArea}),
   setSnapshot,exportCsv,result:()=>currentResult,overview:()=>currentOverview,active:()=>active};
