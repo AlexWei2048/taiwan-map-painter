@@ -155,7 +155,7 @@ test('Presidential, mayoral and township party vote-share trends use one geograp
   assert.ok(Math.abs(Object.values(r.parties).reduce((a,b)=>a+b,0)-100)<1e-8);
  }
  const old=T.localPartyVoteShares(require('../assets/history-local-2018.json'),{office:'mayor',level:'town',normalize:norm})[0];
- assert.equal(old.complete,false);
+ assert.equal(old.complete,true);
 });
 test('Party trend points skip elections without a nominee, while recorded zero remains visible',()=>{
  const norm=require('../assets/opencc.js').Converter({from:'t',to:'cn'});
@@ -169,25 +169,52 @@ test('Party trend points skip elections without a nominee, while recorded zero r
  assert.equal(T.partyTrendValue({complete:true,parties:{甲:0}},'', ['甲','乙']),0);
  assert.equal(T.partyTrendValue({complete:false,parties:{甲:0}},'甲'),null);
 });
-test('Independent presidential tickets stay separate and hover details show the named candidate and share',()=>{
+test('Independent presidential tickets share one party series and hover lists each candidate without repeating the total',()=>{
  const norm=require('../assets/opencc.js').Converter({from:'t',to:'cn'});
  for(const [year,names] of [[1996,['林洋港','陈履安']],[2000,['宋楚瑜','许信良']]]){
   const snapshot=require('../assets/history-president-'+year+'.json');
   const row=T.localPartyVoteShares(snapshot,{office:'president',level:'county',normalize:norm})[0];
-  const independents=Object.keys(row.parties).filter(p=>p.startsWith('连署｜'));
-  assert.deepEqual(independents.map(p=>row.partyMeta[p].label.split(' · ')[1]).sort(),names.sort());
-  for(const key of independents){
-   assert.equal(row.candidateDetails[key].length,1);
-   const tip=T.candidateTrendTooltip(row,key);
-   assert.match(tip,/无党籍（连署）/);
-   assert.match(tip,new RegExp(row.candidateDetails[key][0].name));
-   assert.match(tip,/\d+\.\d{2}%/);
-   assert.equal(row.candidateDetails[key][0].votes,row.votes[key]);
-  }
+  assert.deepEqual(row.candidateDetails['连署'].map(r=>r.name).sort(),names.sort());
+  assert.equal(row.partyMeta['连署'].label,'无党籍（连署）');
+  assert.equal(row.candidateDetails['连署'].reduce((sum,r)=>sum+r.votes,0),row.votes['连署']);
+  const tip=T.candidateTrendTooltip(row,'连署');
+  for(const name of names)assert.match(tip,new RegExp(name+' · 无党籍（连署） · \\d+\\.\\d{2}%'));
+  assert.match(tip,/合计 · \d+\.\d{2}%/);
   assert.ok(Math.abs(Object.values(row.parties).reduce((a,b)=>a+b,0)-100)<1e-8);
  }
  const row=T.localPartyVoteShares(require('../assets/history-president-2024.json'),{office:'president',level:'county',normalize:norm})[0];
- assert.match(T.candidateTrendTooltip(row,'民主进步党'),/赖清德 · 民主进步党 · \d+\.\d{2}%/);
+ assert.match(T.candidateTrendTooltip(row,'民主进步党'),/^赖清德 · 民主进步党 · \d+\.\d{2}%$/);
+});
+test('2018 Taipei district mayor returns reconcile to NCCU election-day party totals',()=>{
+ const norm=require('../assets/opencc.js').Converter({from:'t',to:'cn'}),s=require('../assets/history-local-2018.json');
+ const district=T.localPartyVoteShares(s,{office:'mayor',level:'town',county:'台北市',normalize:norm})[0];
+ assert.equal(district.complete,true);assert.equal(district.valid,1414816);
+ assert.equal(district.votes['中国国民党'],577566);
+ assert.equal(district.votes['民主进步党'],244641);
+ assert.equal(district.votes['无党籍'],592609);
+ const songshan=T.localPartyVoteShares(s,{office:'mayor',level:'town',county:'台北市',focus:'松山区',normalize:norm})[0];
+ assert.equal(songshan.valid,106972);
+ assert.equal(songshan.votes['中国国民党'],46381);
+ assert.equal(songshan.votes['民主进步党'],17387);
+ assert.equal(songshan.votes['无党籍'],43204);
+ const city=T.localPartyVoteShares(s,{office:'mayor',level:'county',county:'台北市',normalize:norm})[0];
+ assert.equal(city.valid,1413870,'the separately certified recount remains citywide');
+ assert.equal(T.mapTrend(s,{office:'mayor',level:'town',county:'台北市',normalize:norm,metric:'party'}).areas,12);
+ const all=T.localPartyVoteShares(s,{office:'mayor',level:'town',normalize:norm})[0];
+ assert.equal(all.complete,true);
+});
+test('Pre-merger county and city form separate mayor and council trend branches',()=>{
+ const norm=require('../assets/opencc.js').Converter({from:'t',to:'cn'}),first=require('../assets/history-local-2005.json'),second=require('../assets/history-local-2006.json');
+ const merged={year:2006,elections:[...first.elections,...second.elections],contests:[...first.contests,...second.contests],candidacies:[...first.candidacies,...second.candidacies],rows:[...first.rows,...second.rows]};
+ const after=require('../assets/history-local-2010.json');
+ for(const office of ['mayor','council']){
+  const selection={office,county:'高雄市',normalize:norm};
+  const old=office==='mayor'?T.localPartyVoteShares(merged,{...selection,level:'county'}):T.councilBallotRows(merged,{...selection,electorate:'all'});
+  const newer=office==='mayor'?T.localPartyVoteShares(after,{...selection,level:'county'}):T.councilBallotRows(after,{...selection,electorate:'all'});
+  assert.deepEqual(old.map(r=>[r.county,r.label,r.scopeSeries]),[['高雄县','2005','旧高雄县'],['高雄市','2006','旧高雄市']]);
+  assert.equal(newer[0].scopeSeries,'合并后高雄市');
+  assert.ok(old.every(r=>r.complete));assert.equal(newer[0].complete,true);
+ }
 });
 test('Integer tick marks and parliament dot counts are exact for small and large assemblies',()=>{
  for(const max of [0,1,2,3,22,113,161,164,225,910]){const ticks=T.integerTicks(max);assert.ok(ticks.every(Number.isInteger));assert.ok(ticks.at(-1)>=max)}

@@ -16,7 +16,7 @@ function candidateTrendTooltip(row,key){
  const entries=row.candidateDetails?.[key]||[],label=row.partyMeta?.[key]?.label||key;
  const lines=entries.slice(0,12).map(r=>r.name+' · '+r.party+' · '+percent(r.votes,row.valid).toFixed(2)+'%');
  if(entries.length>12)lines.push('其余 '+(entries.length-12)+' 位候选人');
- return label+' · '+row.parties[key].toFixed(2)+'%'+(lines.length?'\n'+lines.join('\n'):'');
+ return entries.length===1?lines[0]:label+'合计 · '+row.parties[key].toFixed(2)+'%'+(lines.length?'\n'+lines.join('\n'):'');
 }
 const knownBool=x=>typeof x==='boolean';
 const genderKnown=x=>['男','女','男性','女性'].includes(x);
@@ -216,6 +216,29 @@ function councilBallotRows(snapshot,selection){
   return{...base,complete:true,reason:'',seats,parties,valid:result.valid};
  });
 }
+// NCCU https://vote.nccu.edu.tw/cec/D2018635.PDF publishes the 2018 Taipei
+// district party totals. Its 12 rows reconcile exactly with the five candidate
+// columns in the CEC election-day county table 5-1:
+// https://web.cec.gov.tw/upload/file/2018-12-03/37318f85-8abe-4eb3-aade-98eb7f7879a8/7f52f9371d90a38a0280bee4e7a3cd3f.pdf
+// The citywide archive separately
+// preserves the later court recount and must not be replaced by these rows.
+const TAIPEI_2018_TOWN_VOTES=Object.fromEntries([
+ ['松山区',428,46381,17387,42356,420],['信义区',502,53955,19934,47762,512],
+ ['大安区',585,72325,23651,60939,662],['中山区',476,46746,23483,50604,491],
+ ['中正区',370,33897,12633,33752,378],['大同区',266,20763,16896,31679,339],
+ ['万华区',427,38666,21400,43411,464],['文山区',707,68586,18985,56479,713],
+ ['南港区',287,26282,10830,28896,325],['内湖区',548,61566,21746,65599,639],
+ ['士林区',522,55954,33110,63247,651],['北投区',499,52445,24586,56096,578]
+].map(([town,...votes])=>[town,votes]));
+function trendCandidateRows(snapshot,office,grain,county,focus,norm){
+ const rows=(snapshot.rows||[]).filter(r=>r.type===office&&r.level===grain&&(!county||norm(r.county)===county)&&(!focus||grain==='town'&&norm(r.town)===focus));
+ if(office!=='mayor'||grain!=='town'||snapshot.year!==2018)return rows;
+ return rows.map(r=>{
+  if(norm(r.county)!=='台北市')return r;
+  const votes=TAIPEI_2018_TOWN_VOTES[norm(r.town)]?.[Number(r.number)-1];
+  return Number.isInteger(votes)?{...r,votes}: {...r,votes:null};
+ });
+}
 function localPartyVoteShares(snapshot,selection){
  const {office,county='',level='county',focus='',normalize=String}=selection;
  const grain=office==='township'||level==='town'?'town':'county';
@@ -226,16 +249,15 @@ function localPartyVoteShares(snapshot,selection){
   const oldPair=merged&&(family.length>1&&actualCounty===family[0]||snapshot.year<2010);
   const base={year:snapshot.year,label:years.join('/')||String(snapshot.year),dates,county:actualCounty,scopeLabel:family.length>1?actualCounty:'',scopeSeries:merged?(oldPair?'旧'+actualCounty:'合并后'+actualCounty):family[0]};
   const empty=reason=>({...base,complete:false,reason,parties:{},votes:{},valid:null});
-  if(office==='mayor'&&grain==='town'&&snapshot.year===2018&&(!actualCounty||actualCounty==='台北市'))return empty('台北市重计后的区级得票缺档');
-  const rows=(snapshot.rows||[]).filter(r=>r.type===office&&r.level===grain&&(!actualCounty||norm(r.county)===actualCounty)&&(!focus||grain==='town'&&norm(r.town)===focus));
+  const rows=trendCandidateRows(snapshot,office,grain,actualCounty,focus,norm);
   if(!rows.length)return empty('当前范围没有可核实的得票记录');
   if(rows.some(r=>!Number.isFinite(r.votes)||r.votes<0))return empty('得票资料不完整');
   const valid=rows.reduce((n,r)=>n+r.votes,0);
   if(!valid)return empty('有效票为零');
   const votes=Object.create(null),partyMeta=Object.create(null),candidateGroups=Object.create(null);
   for(const r of rows){
-   const party=keyParty(norm(r.party)),name=norm(r.name)||'姓名未载',split=office==='president'&&(party==='连署'||party==='无党籍');
-   const key=split?party+'｜'+name:party,label=split?(party==='连署'?'无党籍（连署）':'无党籍')+' · '+name:party==='连署'?'无党籍（连署）':party;
+   const party=keyParty(norm(r.party)),name=norm(r.name)||'姓名未载';
+   const key=party,label=party==='连署'?'无党籍（连署）':party;
    votes[key]=(votes[key]||0)+r.votes;partyMeta[key]={party,label};
    const candidates=candidateGroups[key]||(candidateGroups[key]=new Map()),identity=[office==='president'?'':norm(r.county),office==='township'?norm(r.town):'',String(r.number||''),name].join('|');
    const candidate=candidates.get(identity)||{name,party:party==='连署'?'无党籍（连署）':party,votes:0};
@@ -263,7 +285,6 @@ function mapTrend(snapshot,selection,anchor){
  const empty=reason=>({year,label:displayYear,complete:false,reason,parties:{},values:{},valid:null,areas:0});
  if(isLeg&&electorate==='all')return empty('全部类型没有共同的县市席次口径，请分别选择票种');
  if(office==='council'&&year===1994&&(!county||county==='金门县'))return empty('当届议员完整得票资料缺档');
- if(office==='mayor'&&grain==='town'&&year===2018&&(!county||county==='台北市'))return empty('台北市重计后的区级得票缺档');
  if(focus&&grain==='district'&&anchor&&(year!==anchor.year||county!==anchorCounty)){
   // District number alone is never a cross-year geographic identifier.
   const getSignature=(s,area)=>{
@@ -275,7 +296,7 @@ function mapTrend(snapshot,selection,anchor){
   if(!a||!b||a!==b)return empty('选区历届范围不能确认一致');
  }
  const candidateCountyMatches=r=>!candidate?.county||office==='president'||norm(r.county)===norm(candidate.county)||RENAME_FAMILIES.some(g=>g.includes(norm(r.county))&&g.includes(norm(candidate.county)));
- let rows=(snapshot.rows||[]).filter(r=>r.type===office&&r.level===grain&&(electorate==='all'||identity(r.electorate)===electorate)&&(!county||norm(r.county)===county)&&(!focus||(grain==='town'?norm(r.town)===focus:grain==='district'?Core.districtNumber(r.district)===Core.districtNumber(focus):true)));
+ let rows=(office==='mayor'&&grain==='town'?trendCandidateRows(snapshot,office,grain,county,focus,norm):snapshot.rows||[]).filter(r=>r.type===office&&r.level===grain&&(electorate==='all'||identity(r.electorate)===electorate)&&(!county||norm(r.county)===county)&&(!focus||(grain==='town'?norm(r.town)===focus:grain==='district'?Core.districtNumber(r.district)===Core.districtNumber(focus):true)));
  // 1992 has national-only indigenous returns. Use the actual national
  // electoral district only for an all-area selection, never invent local votes.
  if(!rows.length&&isLeg&&year===1992&&!county&&!focus&&['plains','mountain'].includes(electorate)&&grain==='county')
