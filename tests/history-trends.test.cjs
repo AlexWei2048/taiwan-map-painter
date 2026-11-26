@@ -214,7 +214,11 @@ test('Pre-merger county and city form separate mayor and council trend branches'
   assert.deepEqual(old.map(r=>[r.county,r.label,r.scopeSeries]),[['高雄县','2005','旧高雄县'],['高雄市','2006','旧高雄市']]);
   assert.equal(newer[0].scopeSeries,'合并后高雄市');
   assert.ok(old.every(r=>r.complete));assert.equal(newer[0].complete,true);
+  const sections=T.trendChartScopes([...old,...newer],'高雄市');
+  assert.deepEqual(sections.map(s=>s.label),['原高雄县','原高雄市','合并后高雄市']);
+  assert.deepEqual(sections.map(s=>s.rows.map(r=>r.label)),[['2005'],['2006'],['2010']]);
  }
+ assert.equal(T.trendChartScopes([{year:2022,scopeSeries:'台北县'}],'新北市').length,1);
 });
 test('Integer tick marks and parliament dot counts are exact for small and large assemblies',()=>{
  for(const max of [0,1,2,3,22,113,161,164,225,910]){const ticks=T.integerTicks(max);assert.ok(ticks.every(Number.isInteger));assert.ok(ticks.at(-1)>=max)}

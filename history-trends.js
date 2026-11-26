@@ -128,6 +128,15 @@ const MERGE_FAMILIES=[['台中县','台中市'],['台南县','台南市'],['高�
 function historicalCountyFamily(county){
  return [...RENAME_FAMILIES,...MERGE_FAMILIES].find(group=>group.includes(county))||[county];
 }
+function trendChartScopes(rows,county){
+ if(!MERGE_FAMILIES.some(group=>group[1]===county))return[{label:'',rows}];
+ const [oldCounty,oldCity]=historicalCountyFamily(county);
+ const order=[['原'+oldCounty,'旧'+oldCounty],['原'+oldCity,'旧'+oldCity],['合并后'+oldCity,'合并后'+oldCity]];
+ const sections=order.map(([label,key])=>({label,rows:rows.filter(r=>r.scopeSeries===key)})).filter(section=>section.rows.length);
+ const unmatched=rows.filter(r=>!order.some(([,key])=>r.scopeSeries===key));
+ if(unmatched.length)sections.push({label:'未能归属当届县市',rows:unmatched});
+ return sections.length>1?sections:[{label:'',rows}];
+}
 // A county cannot be assigned seats from nationwide indigenous/list ballots.
 // For the combined map, its comparable historical series is regional seats.
 function trendEffectiveSelection(selection){
@@ -395,7 +404,7 @@ function majorityBoundary(points){
  const angle=seats===total?0:(points[seats-1].angle+points[seats].angle)/2;
  return {seats,angle};
 }
-const api={aggregate,value,difference,modern,percent,partyTrendValue,candidateTrendTooltip,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,historicalScopeRows,legislativeVoteShares,councilBallotRows,localPartyVoteShares,electionDates,trendEffectiveSelection,LEGISLATIVE_TOTALS};
+const api={aggregate,value,difference,modern,percent,partyTrendValue,candidateTrendTooltip,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,trendChartScopes,historicalScopeRows,legislativeVoteShares,councilBallotRows,localPartyVoteShares,electionDates,trendEffectiveSelection,LEGISLATIVE_TOTALS};
 if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
 root.HistoryTrends=api;
 })(typeof window==='undefined'?{}:window);

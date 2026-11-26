@@ -84,6 +84,16 @@ function card(title,description,graph){
  if(graph)for(const ext of ['SVG','PNG']){const b=node('button','button quiet',ext);b.type='button';b.onclick=()=>chartExport(graph,title,ext==='PNG');buttons.append(b)}
  c.append(h,node('p','data-help',description));if(graph)c.append(graph);return c
 }
+function appendTrendCharts(out,rows,series,title,note,options,county){
+ const scopes=T.trendChartScopes(rows,county);
+ for(const section of scopes){
+  const scopedTitle=title+(section.label?' · '+section.label:''),scopedSeries=series.filter(s=>section.rows.some(r=>Number.isFinite(s.get(r))));
+  const graph=scopedSeries.length&&section.rows.some(r=>r.complete)?chart(section.rows,scopedSeries,scopedTitle,options):null;
+  const item=card(scopedTitle,graph?note:'当前范围没有可绘制的完整结果。',graph);
+  if(section.label)item.classList.add('trend-scope-card');
+  out.append(item);
+ }
+}
 function baseSvg(title,width,height){
  const g=svg('svg',{viewBox:'0 0 '+width+' '+height,role:'img','aria-label':title,'font-family':'Arial, "Microsoft YaHei", sans-serif','font-size':'12',fill:'#31473e'});
  g.append(svg('rect',{x:0,y:0,width,height,fill:'#fff'}),svg('title',{},title),svg('text',{x:18,y:22,'font-weight':700,'font-size':15},title));return g
@@ -209,23 +219,16 @@ function parliamentSvg(row,conf,totalLeg){
 }
 function renderParliaments(out,rows,conf,totalLeg){
  const section=node('section','trend-parliament-section');
- section.append(node('h4','','历届席次分布'),node('p','data-help','每个圆点代表一席；民进党居左、国民党居右，明确的传统亲绿或亲蓝政党邻近排列，其余政党和无党籍居中。标线为过半门槛。合并前原县与原市并排展示，分别计算。'));
+ section.append(node('h4','','历届席次分布'),node('p','data-help','每个圆点代表一席；民进党居左、国民党居右，明确的传统亲绿或亲蓝政党邻近排列，其余政党和无党籍居中。标线为过半门槛。合并前原县与原市上下分开展示，分别计算。'));
  const grid=node('div','trend-parliament-grid');section.append(grid);
  const groups=new Map();for(const row of rows){if(!groups.has(row.year))groups.set(row.year,[]);groups.get(row.year).push(row)}
  if([...groups.values()].some(list=>list.length>1))grid.classList.add('trend-parliament-paired-grid');
- for(const [year,list] of groups){
-  const title=list.map(r=>r.label+(r.scopeLabel?' · '+r.scopeLabel:'')).join(' / ')+' · 席次分布';
-  const graphs=list.map(row=>parliamentSvg(row,conf,totalLeg));
-  if(!graphs.some(Boolean)){grid.append(card(title,list.map(r=>r.reason||'无完整席次资料').join('；'),null));continue}
-  let graph=graphs[0];
-  if(list.length>1){
-   const W=840,H=Math.max(...graphs.map(g=>g?Number(g.getAttribute('viewBox').split(' ')[3]):280));
-   graph=svg('svg',{viewBox:'0 0 '+W+' '+H,role:'img','aria-label':title,'font-family':'Arial, "Microsoft YaHei", sans-serif','font-size':'12',fill:'#31473e','data-seat-pair':year});
-   graph.append(svg('rect',{x:0,y:0,width:W,height:H,fill:'#fff'}),svg('title',{},title));
-   graphs.forEach((g,i)=>{if(g){const group=svg('g',{transform:'translate('+(i*420)+' 0)'});for(const child of [...g.children])group.append(child);graph.append(group)}else{graph.append(svg('text',{x:i*420+20,y:30,'font-weight':700},list[i].label+' · '+list[i].scopeLabel),svg('text',{x:i*420+20,y:60},list[i].reason||'无完整资料'))}});
-   graph.append(svg('line',{x1:420,x2:420,y1:15,y2:H-12,stroke:'#dce8e0','stroke-width':1}));
+ for(const list of groups.values()){
+  for(const row of list){
+   const title=row.label+(row.scopeLabel?' · '+row.scopeLabel:'')+' · 席次分布',graph=parliamentSvg(row,conf,totalLeg);
+   const item=card(title,graph?'':row.reason||'无完整席次资料',graph);
+   item.classList.add('trend-parliament-card');if(list.length>1)item.classList.add('trend-parliament-pair');grid.append(item);
   }
-  const item=card(title,'',graph);item.classList.add('trend-parliament-card');if(list.length>1)item.classList.add('trend-parliament-pair');grid.append(item);
  }
  out.append(section);
 }
@@ -257,14 +260,14 @@ function renderLegislative(conf,anchor,out){
   const seatType=allSeats?'全部民代':ballot==='all'?(national?'全部议员':isLeg?'区域民代':'区域议员'):({regional:isLeg?'区域民代':'区域议员',plains:'平地少数民族',mountain:'山地少数民族',party:'不分区',indigenous:'原住民'}[ballot]||ballot);
   const title=(isLeg?'立法机构':'县市议员')+' · '+seatType+' · 政党当选席次趋势';
   const note=allSeats?'区域、平地与山地少数民族、不分区及旧制侨选的正式当选席次合计。':national?'仅计所选民代类别在全部地区正式当选的席次。':isLeg?'仅计该范围区域民代的正式当选席次；其余类型不分摊到县市。':'仅计该范围可归属的议员席次。';
-  out.append(card(title,note,seatRows.some(r=>r.complete)?chart(seatRows,seatSeries,title,{stack:true,integer:true}):null));
+  appendTrendCharts(out,seatRows,seatSeries,title,note,{stack:true,integer:true},conf.county);
   if(seatRows.some(r=>r.complete))renderParliaments(out,seatRows,{...effective,metric:'party'},allSeats);
  }
  const voteSeries=partySeries(voteRows),voteType=ballot==='all'?(isLeg?'不分区':'全部议员'):({regional:'区域',plains:'平地少数民族',mountain:'山地少数民族',party:'不分区',indigenous:'原住民'}[ballot]||ballot);
  const voteSubject=ballot==='all'?(isLeg?'不分区民代':'全部议员'):voteType+(isLeg?'民代':'议员');
  const voteTitle=voteSubject+' · '+(isLeg&&(ballot==='all'||ballot==='party')?'政党票／旧制席次计算票得票率趋势':'候选人票得票率趋势（按所属政党汇总）');
  const voteNote=isLeg&&(ballot==='all'||ballot==='party')?'2008年前为各党推荐的区域与少数民族候选人票汇总，用于分配名单席次；2008年起为独立政党票。两种票源分别绘制，不跨制度连线。':!isLeg&&ballot==='all'?'区域和少数民族选票分别统计后汇总党派候选人票，分母为这些票数之和；选民可能投不同类别选票，不代表单一选民支持率。':'每个政党的候选人得票之和除以当前票种、当前范围的有效票；各党占比合计为100%。';
- out.append(card(voteTitle,voteNote,voteRows.some(r=>r.complete)?chart(voteRows,voteSeries,voteTitle,{pct:true,breakOld:isLeg&&(ballot==='all'||ballot==='party')}):null));
+ appendTrendCharts(out,voteRows,voteSeries,voteTitle,voteNote,{pct:true,breakOld:isLeg&&(ballot==='all'||ballot==='party')},conf.county);
  const valuesTable=(rows,series,pct,title)=>{
   const wrap=node('div','history-table-wrap'),table=node('table','history-candidate-table'),head=node('thead'),tr=node('tr');
   for(const heading of ['届次','当届地区','投票日期',...series.map(s=>s.name),'合计'])tr.append(node('th','',heading));head.append(tr);table.append(head);
@@ -318,8 +321,7 @@ function render(){
  const oldParty=!totalLeg&&conf.office==='legislative'&&conf.electorate==='party';
  if(oldParty){for(const r of rows)r.oldPartyVote=r.year<2008;out.append(node('p','data-help','2008年前为旧制席次计算票，2008年起为独立政党票，跨制度不连续绘制。'))}
  const readout=node('div','trend-point-readout','点击数据点查看对应届次。');readout.id='trendPointReadout';out.append(readout);
- if(series.length&&rows.some(r=>r.complete))out.append(card(title,note,chart(rows,series,title,{pct,stack:!voteMetric&&conf.metric!=='seats',breakOld:oldParty,integer:!pct})));
- else out.append(card(title,'当前所选范围没有可绘制的完整结果。',null));
+ appendTrendCharts(out,rows,series,title,note,{pct,stack:!voteMetric&&conf.metric!=='seats',breakOld:oldParty,integer:!pct},conf.county);
  if(!voteMetric&&!leading&&['legislative','council'].includes(conf.office))renderParliaments(out,rows,effective,totalLeg);
  // A compact exact-value table is limited to the same metric as the chart.
  const wrap=node('div','history-table-wrap'),table=node('table','history-candidate-table'),thead=node('thead'),header=node('tr');
@@ -330,7 +332,7 @@ function render(){
  const voteRows=models.flatMap(item=>item.snapshot?T.localPartyVoteShares(item.snapshot,conf):[{year:item.year,label:label(item.year,conf.office),complete:false,reason:item.error,parties:{},valid:null}]);
  const voteSeries=partySeries(voteRows),voteTitle='候选人票得票率趋势（按所属政党汇总）';
  const voteNote='按当前选举类别和地图范围汇总候选人得票，再除以同范围有效票；同届多组无党籍（连署）候选人合并为同一类别，悬停可查看各候选人。'+(conf.office==='mayor'&&conf.level==='town'&&models.some(item=>item.year===2018)?'2018年台北市区级采用政大刊载的投票日资料，市级采用重计结果。':'');
- out.append(card(voteTitle,voteNote,voteRows.some(r=>r.complete)?chart(voteRows,voteSeries,voteTitle,{pct:true}):null));
+ appendTrendCharts(out,voteRows,voteSeries,voteTitle,voteNote,{pct:true},conf.county);
  const voteWrap=node('div','history-table-wrap'),voteTable=node('table','history-candidate-table'),voteHead=node('thead'),voteHeader=node('tr');
  for(const heading of ['届次','当届县市','投票日期',...voteSeries.map(s=>s.name),'合计'])voteHeader.append(node('th','',heading));voteHead.append(voteHeader);voteTable.append(voteHead);
  const voteBody=node('tbody');for(const r of voteRows){const tr=node('tr');tr.append(node('td','',r.label),node('td','',r.county||'全部地区'),node('td','',r.dates?.join(' / ')||'—'));for(const s of voteSeries)tr.append(node('td','',fmt(s.get(r),true)));tr.append(node('td','',r.complete?'100.00%':'—'));voteBody.append(tr)}voteTable.append(voteBody);voteWrap.append(node('h4','','候选人票得票率逐届明细（按所属政党汇总）'),voteTable);out.append(voteWrap);

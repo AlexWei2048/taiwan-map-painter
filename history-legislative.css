@@ -156,7 +156,7 @@
 
 .trend-parliament-pair{grid-column:span 2}.trend-parliament-pair svg{min-width:560px}@media(max-width:680px){.trend-parliament-pair{grid-column:1/-1}.trend-parliament-pair svg{min-width:520px}}
 
-.trend-parliament-paired-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.trend-parliament-paired-grid .trend-parliament-pair{grid-column:1/-1}@media(max-width:680px){.trend-parliament-paired-grid{grid-template-columns:1fr}}
+.trend-parliament-paired-grid{grid-template-columns:1fr}.trend-parliament-paired-grid .trend-parliament-pair{grid-column:1/-1}.trend-parliament-paired-grid .trend-parliament-pair svg{max-width:420px;min-width:0;margin:0 auto}
 
 /* Legislative result tables: preserve the native cell box for party badges
    and balance widths across the actual columns (including incumbency). */

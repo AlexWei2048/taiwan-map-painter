@@ -3154,10 +3154,13 @@ test('Historical council trends resolve former names and show pre-merger county 
  const labels=await page.locator('.trend-parliament-card [data-seat-year]').allTextContents();
  assert.ok(labels.includes('1994 · 高雄县'));assert.ok(labels.includes('1994 · 高雄市'));assert.ok(labels.includes('2010 · 高雄市'));
  assert.equal(labels.filter(x=>x.startsWith('2010')).length,1);
- const pair=page.locator('[data-seat-pair="1994"]');assert.equal(await pair.count(),1);
+ const titles=await page.locator('.trend-scope-card .trend-card-heading h4').allTextContents();
+ for(const suffix of ['原高雄县','原高雄市','合并后高雄市'])assert.ok(titles.some(title=>title.includes('候选人票得票率趋势')&&title.endsWith(suffix)),suffix);
+ const pair=page.locator('.trend-parliament-pair').filter({has:page.locator('[data-seat-year]')}).filter({hasText:'1994'});
+ assert.equal(await pair.count(),2);
  assert.deepEqual(await pair.locator('[data-seat-date]').allTextContents(),['1994-01-29','1994-12-03']);
  assert.equal(await pair.locator('[data-majority-seats]').count(),2);
- assert.equal(await page.locator('.trend-parliament-card svg').count(),8);
+ assert.equal(await page.locator('.trend-parliament-card svg').count(),12);
 });
 
 test('Sidebar keeps site information directly above the mode switch and removes redundant controls',async t=>{
