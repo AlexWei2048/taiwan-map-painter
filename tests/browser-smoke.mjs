@@ -733,6 +733,14 @@ test('Town label hover highlights the matching polygon and restores its predicti
  assert.notEqual(during.fill,baseline,'Hover must visibly change the corresponding map polygon');
  const others=await page.locator('#regions path[data-region]').evaluateAll(els=>els.filter(e=>e.classList.contains('label-region-highlighted')).map(e=>e.dataset.region));
  assert.deepEqual(others,[candidate],'Hover must highlight only the name’s town');
+ const tooltipReuse=await polygon.evaluate(path=>{
+  const tip=document.querySelector('#tooltip'),rect=path.getBoundingClientRect();
+  const move=offset=>path.dispatchEvent(new PointerEvent('pointermove',{clientX:rect.left+rect.width/2+offset,clientY:rect.top+rect.height/2,bubbles:true}));
+  move(0);const initial=tip.firstElementChild,initialText=tip.textContent;
+  move(1);const reused=initial!==null&&initial===tip.firstElementChild&&initialText===tip.textContent;
+  path.dispatchEvent(new PointerEvent('pointerleave'));return reused;
+ });
+ assert.equal(tooltipReuse,true,'Moving within the same region reuses tooltip content');
  await page.mouse.move(2,2);
  await page.waitForFunction(({id,baseline})=>{
   const el=[...document.querySelectorAll('#regions path[data-region]')].find(x=>x.dataset.region===id);
