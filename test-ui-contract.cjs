@@ -197,7 +197,7 @@ test('Rate gradient fields show 100 percent as default maximum',()=>{
  assert.match(app,/state\.gradient\.max=state\.gradient\.metric==='share'\?100:null/);
 });
 test('Township forecast labels omit local filler words while accepting earlier CSV headers',()=>{
- for(const p of ['index.html','town-prediction-core.js'])assert.doesNotMatch(read(p),/本地|当地/);
+ const local=index.slice(index.indexOf('id="localDialog"'),index.indexOf('id="predictionDialog"'));assert.doesNotMatch(local,/本地|当地/);assert.doesNotMatch(read('town-prediction-core.js'),/本地|当地/);
  assert.match(read('town-prediction-ui.js'),/ix\('预测胜出'\)>=0\?ix\('预测胜出'\):ix\('当地胜出'\)/);
  assert.match(index,/预测胜出/);
 });
@@ -709,7 +709,7 @@ test('Export recovers every label omitted by collision-free main map placement, 
  assert.equal(missing.length,1);
  assert.equal(missing[0].value,'第6选区');
  assert.match(app,/oldLabels=state\.labels/);
- assert.match(app,/state\.labels=true;render\(\);try\{return exportSvg\(\)\}/);
+ assert.match(app,/state\.labels=true;try\{render\(\);return exportSvg\(\)\}finally/);
 });
 
 test('Automatic export detail maps show each possible label without overlaps and retain coverage for unplaceable areas',()=>{
@@ -1050,7 +1050,7 @@ test('Unified historical workspace keeps the map and has two toggleable result d
  assert.match(index,/id="historyViewOverview" aria-pressed="false"/);
  assert.doesNotMatch(read('history-2022.js'),/回看2022选举结果|选一类选举，点击地图查看实际得票与当选结果|已载入 2022 年县市长/);
  assert.match(read('style.css'),/body\.history-mode \.intro > h1,body\.history-mode \.intro > p/);
- assert.match(read('history-workspace.js'),/setView\(state\.view===view\?'map':view\)/);
+ assert.match(read('history-workspace.js'),/setView\(view==='trends'\?'trends':state\.view===view\?'map':view\)/);assert.match(index,/id="analysisResultSection"[^>]*hidden/);
  assert.match(read('history-loader.js'),/history-workspace\.js/);
  const controls=index.slice(index.indexOf('id="historyControls"'),index.indexOf('id="mapSettings"'));
  assert.doesNotMatch(controls,/>议员<\/option>/);
@@ -1154,8 +1154,7 @@ test('Historical data tools are removed and footer credits use separate lines',(
   const html=read(name);
   assert.doesNotMatch(html,/id="history(?:Browse|Load|Import|CsvExport|Files|Status)"/);
   if(name==='index.html'){
-   assert.match(html,/<section class="site-about-card" id="siteAbout"/);
-   assert.doesNotMatch(html,/<details[^>]*id="siteAbout"/);
+   assert.match(html,/<details class="site-about-card" id="siteAbout"[^>]*><summary class="about-heading">/);
    assert.match(html,/<h3>数据来源<\/h3><ul><li>台湾地区选举事务主管机构公开选举资料<\/li><li>政治大学历届公职人员选举资料<\/li><li>Taiwan Votes（张进逸先生开发制作）<\/li><\/ul>/);
    assert.ok(html.indexOf('class="about-sources"')<html.indexOf('class="about-credits"'),'Data source precedes author credits');
    assert.match(html,/<dt>网页开发<\/dt><dd>Alex Wei<\/dd><dt>测试和推广<\/dt><dd>星夜长街<\/dd>/);

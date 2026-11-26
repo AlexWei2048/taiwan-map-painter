@@ -30,3 +30,20 @@ jobs:
           for i in {1..30}; do curl -fsS http://127.0.0.1:8765/ >/dev/null && break; sleep 1; done
           curl -fsS http://127.0.0.1:8765/ >/dev/null
           node --test tests/browser-smoke.mjs
+
+  data-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Rescan historical data completeness
+        run: python3 scripts/audit_data_completeness.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: data-completeness
+          path: reports/data-completeness.*
+          if-no-files-found: error

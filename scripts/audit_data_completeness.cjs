@@ -9,6 +9,21 @@ for(const y of [1996,2000,2004,2008,2012,2016,2020,2024]){const source='assets/h
 for(const y of [1992,1995,1998,2001,2004,2008,2012,2016,2020,2024]){const source='assets/history-legislative-'+y+'.json';await run(y,'legislative',source,async()=>{const s=await G.load(y,fetcher);await T.load(y,fetcher);return scan(s,y,'legislative',source,{turnout:T,districtNumber:G.districtNumber,party})})}
 await run(2026,'roster','assets/election-2026.js',async()=>{const s=await read('assets/election-2026.js');return scanRoster(JSON.parse(s.slice(s.indexOf('=')+1,s.lastIndexOf(';'))),'assets/election-2026.js')});
 reports.push(extra(await json('sources/history-1994-township.json'),await json('sources/history-1994-kinmen-partial.json'),await json('assets/history-2026-availability.json')));
+const C=require('../history-coverage.js');
+const matrix={schemaVersion:1,offices:{}};
+for(const office of ['mayor','council','township','president','legislative']){
+ const years=office==='president'?P.YEARS:office==='legislative'?G.YEARS:L.years(office,false),results=[];
+ for(const year of years){try{
+  const snapshot=office==='president'?await P.load(year,fetcher):office==='legislative'?await G.load(year,fetcher):year===2022?L.reconcile2022Council(await json('assets/history-2022.json'),await json('assets/history-council-districts-2022.json'),norm):await L.loadCycle(year,office,fetcher);
+  results.push(C.analyze(snapshot,office,norm));
+ }catch(e){results.push({error:String(e),year})}}
+ const names=C.countyRows(results),counts={};
+ const rows=names.map(county=>({county,years:years.map((year,i)=>{const cell=C.matrixEntry(results[i],county,year,office);counts[cell.status]=(counts[cell.status]||0)+1;return{year,status:cell.status,reason:cell.reason||''}})}));
+ matrix.offices[office]={years,counts,rows,errors:results.filter(r=>r.error)};
+}
+await fs.mkdir(path.join(root,'reports'),{recursive:true});
+await fs.writeFile(path.join(root,'reports/data-completeness.matrix.json'),JSON.stringify(matrix,null,2)+'\n');
+console.log('Administrative coverage matrix: '+JSON.stringify(Object.fromEntries(Object.entries(matrix.offices).map(([k,v])=>[k,v.counts]))));
 const revision=require('node:child_process').execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),out=render(reports,revision);
 await fs.mkdir(path.join(root,'reports'),{recursive:true});for(const [ext,data] of Object.entries(out))await fs.writeFile(path.join(root,'reports/data-completeness.'+ext),data);
 const result=JSON.parse(out.json);console.log(JSON.stringify({counts:result.counts,errors:result.errors},null,2));if(result.errors.length)process.exitCode=2;

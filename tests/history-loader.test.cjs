@@ -14,9 +14,9 @@ test('the latest history click wins after navigating away during loading',async(
  }
  let release,opened=0;
  const loading=new Promise(resolve=>{release=resolve});
- const window={HistoryLoader:{load:()=>loading}};
+ const window={HistoryLoader:{load:()=>loading},addEventListener(){}};
  vm.runInNewContext(fs.readFileSync('workspace-categories.js','utf8'),{
-  window,document:{getElementById:id=>buttons.get(id),body:{classList:{contains:()=>false}}}
+  window,document:{getElementById:id=>buttons.get(id),querySelector:()=>null,body:{classList:{contains:()=>false,toggle(){}}}}
  });
  const history=buttons.get('categoryHistory');
  const first=history.click();
