@@ -3100,7 +3100,7 @@ test('Historical trends follow sidebar election, year, scope and metric with mat
  const page=await pageFor(t,{width:1440,height:950});
  await page.locator('#categoryHistory').click();
  await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
- await page.locator('#historyViewTrends').click();
+ await page.locator('#categoryAnalysis').click();await page.locator('#historyTrendsPanel').waitFor({state:'visible'});
  await page.locator('#trendCharts svg').first().waitFor({timeout:60000});
  assert.equal(await page.locator('#historyTrendsPanel').isVisible(),true);
  assert.equal(await page.locator('#trendCharts .trend-card svg').count(),2);
@@ -3123,8 +3123,8 @@ test('Historical trends follow sidebar election, year, scope and metric with mat
  await page.waitForFunction(()=>History2022View.snapshot()?.year===2018&&document.querySelector('#trendStatus').textContent.includes('2 届'));
  assert.match(await page.locator('#trendCharts svg').first().textContent(),/2022/);
  assert.equal(await page.locator('#trendStart').count(),0);
- await page.locator('#historyViewTrends').click();assert.equal(await page.locator('#historyTrendsPanel').isVisible(),false);
- await page.locator('#historyViewTrends').click();assert.equal(await page.locator('#historyTrendsPanel').isVisible(),true);
+ await page.locator('#categoryHistory').click();await page.locator('#historyTrendsPanel').waitFor({state:'hidden'});assert.equal(await page.locator('#historyTrendsPanel').isVisible(),false);
+ await page.locator('#categoryAnalysis').click();await page.locator('#historyTrendsPanel').waitFor({state:'visible'});assert.equal(await page.locator('#historyTrendsPanel').isVisible(),true);
 });
 
 test('Legislative seat trends default to all years and show complete integer parliament seats',async t=>{
@@ -3133,7 +3133,7 @@ test('Legislative seat trends default to all years and show complete integer par
  await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
  await page.locator('#historyOffice').selectOption('legislative');
  await page.waitForFunction(()=>History2022View.office()==='legislative');
- await page.locator('#historyViewTrends').click();
+ await page.locator('#categoryAnalysis').click();await page.locator('#historyTrendsPanel').waitFor({state:'visible'});
  await page.locator('.trend-parliament-card svg').first().waitFor({timeout:60000});
  assert.equal(await page.locator('#trendYears input:checked').count(),10);
  assert.match(await page.locator('#trendScope').textContent(),/全部类型（总席次；不分区票得票率）/);
@@ -3160,7 +3160,7 @@ test('Historical council trends resolve former names and show pre-merger county 
  await page.locator('#historyOffice').selectOption('council');
  await page.waitForFunction(()=>History2022View.office()==='council');
  await page.locator('#historyCounty').selectOption('新北市');
- await page.locator('#historyViewTrends').click();
+ await page.locator('#categoryAnalysis').click();await page.locator('#historyTrendsPanel').waitFor({state:'visible'});
  await page.waitForFunction(()=>document.querySelectorAll('.trend-parliament-card [data-seat-year]').length===8,{},{timeout:60000});
  assert.match(await page.locator('.trend-parliament-card [data-seat-year]').first().textContent(),/1994 · 台北县/);
  await page.locator('#historyCounty').selectOption('高雄市');
@@ -3233,7 +3233,7 @@ test('Archive maps do not fetch trend scripts before the trend view is selected'
  await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
  assert.equal(await page.evaluate(()=>!!window.HistoryTrendsUI),false);
  assert.ok(!requested.some(path=>/history-trends(?:-ui)?\.js$/.test(path)));
- await page.locator('#historyViewTrends').click();
+ await page.locator('#categoryAnalysis').click();await page.locator('#historyTrendsPanel').waitFor({state:'visible'});
  await page.locator('#trendYears').waitFor({timeout:60000});
  assert.equal(await page.evaluate(()=>!!window.HistoryTrendsUI),true);
  assert.ok(requested.some(path=>path.endsWith('/history-trends-ui.js')));
@@ -3282,11 +3282,11 @@ test('Returning to the same historical trend preserves its rendered graph',async
  const page=await pageFor(t,{width:1440,height:950});
  await page.locator('#categoryHistory').click();
  await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
- await page.locator('#historyViewTrends').click();
+ await page.locator('#categoryAnalysis').click();await page.locator('#historyTrendsPanel').waitFor({state:'visible'});
  await page.locator('#trendCharts svg').first().waitFor({timeout:60000});
  await page.evaluate(()=>{window.__trendReuseGraph=document.querySelector('#trendCharts svg')});
- await page.locator('#historyViewTrends').click();
- await page.locator('#historyViewTrends').click();
+ await page.locator('#categoryHistory').click();await page.locator('#historyTrendsPanel').waitFor({state:'hidden'});
+ await page.locator('#categoryAnalysis').click();
  await page.locator('#trendCharts svg').first().waitFor({timeout:60000});
  assert.equal(await page.evaluate(()=>window.__trendReuseGraph===document.querySelector('#trendCharts svg')),true);
 });
@@ -3366,7 +3366,7 @@ test('Restoring unchanged trend years preserves checkbox nodes and chart',async 
  const page=await pageFor(t,{width:1440,height:950});
  await page.locator('#categoryHistory').click();
  await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
- await page.locator('#historyViewTrends').click();
+ await page.locator('#categoryAnalysis').click();await page.locator('#historyTrendsPanel').waitFor({state:'visible'});
  await page.locator('#trendCharts svg').first().waitFor({timeout:60000});
  const stable=await page.evaluate(()=>{
   const input=document.querySelector('#trendYears input'),graph=document.querySelector('#trendCharts svg');
@@ -3389,7 +3389,7 @@ test('Historical trend point opens the correct year and county on the map',async
  await page.locator('#categoryHistory').click();
  await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
  await page.locator('#historyCounty').selectOption('台北市');
- await page.locator('#historyViewTrends').click();
+ await page.locator('#categoryAnalysis').click();await page.locator('#historyTrendsPanel').waitFor({state:'visible'});
  await page.locator('#trendYears').waitFor();
  await page.locator('#trendSelectNone').click();
  await page.locator('#trendYears input[value="2018"]').check();
@@ -3448,7 +3448,7 @@ test('Historical two-year comparison synchronizes maps, county selection and par
  const page=await pageFor(t,{width:1440,height:950});
  await page.locator('#categoryHistory').click();
  await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
- await page.locator('#historyCompareOpen').click();
+ await page.locator('#categoryAnalysis').click();await page.locator('#historyCompareOpen').click();
  await page.locator('#compareOffice').selectOption('president');
  await page.locator('#compareMapA path').first().waitFor({timeout:90000});
  assert.ok(await page.locator('#compareMapB path').count()>=22);
@@ -3497,7 +3497,7 @@ test('Management dialogs use available desktop width and stay within mobile view
  await page.locator('#planDialog').getByRole('button',{name:'关闭',exact:true}).click();
  await page.locator('#categoryHistory').click();
  await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
- await page.locator('#historyCompareOpen').click();
+ await page.locator('#categoryAnalysis').click();await page.locator('#historyCompareOpen').click();
  assert.ok((await page.locator('#historyCompareDialog').boundingBox()).width>800);
  await page.setViewportSize({width:390,height:844});
  const b=await page.locator('#historyCompareDialog').boundingBox();assert.ok(b.width<=390&&b.x>=0);
@@ -3509,7 +3509,7 @@ test('Historical comparison seat changes, mayor turnover and downloadable SVG/CS
  const page=await pageFor(t,{width:1440,height:950});
  await page.locator('#categoryHistory').click();
  await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
- await page.locator('#historyCompareOpen').click();
+ await page.locator('#categoryAnalysis').click();await page.locator('#historyCompareOpen').click();
  await page.locator('#compareOffice').selectOption('mayor');
  await page.locator('#compareExportSvg').waitFor({state:'visible'});
  await page.waitForFunction(()=>!document.getElementById('compareExportSvg').disabled,{},{timeout:90000});
@@ -3555,3 +3555,12 @@ test('Full plan backup merges without replacing current forecast',async t=>{
  assert.equal(await page.evaluate(()=>JSON.stringify(state.predictions)),before);
  assert.equal(await page.locator('#activePlanSelect').inputValue(),'original');
 });
+
+ test('Three core workspaces expose only their respective views',async t=>{
+ const page=await pageFor(t);await page.locator('#categoryHistory').click();await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
+ assert.equal(await page.locator('#categoryHistory').getAttribute('aria-selected'),'true');assert.equal(await page.locator('#historyCoverageOpen').isVisible(),true);assert.equal(await page.locator('#historyCompareOpen').isVisible(),false);
+ await page.locator('#categoryAnalysis').click();await page.locator('#historyTrendsPanel').waitFor({state:'visible'});
+ assert.equal(await page.locator('#categoryAnalysis').getAttribute('aria-selected'),'true');assert.equal(await page.locator('#historyCoverageOpen').isVisible(),false);assert.equal(await page.locator('#historyCompareOpen').isVisible(),true);
+ await page.locator('#categoryHistory').click();await page.locator('#historyTrendsPanel').waitFor({state:'hidden'});assert.equal(await page.locator('#categoryHistory').getAttribute('aria-selected'),'true');
+ await page.locator('#categoryFuture').click();assert.equal(await page.locator('#categoryFuture').getAttribute('aria-selected'),'true');
+ });

@@ -68,7 +68,7 @@ try{
     await page.locator('#historyYear').selectOption('2022');await waitHistory(page,2022);
    });
    metrics.ms.firstTrend=await measured(page,async()=>{
-    await page.locator('#historyViewTrends').click();
+    await page.locator('#categoryAnalysis').click();
     await page.locator('#trendCharts svg').first().waitFor({timeout:60000});
    });
    metrics.trendStatus=await page.locator('#trendStatus').textContent();

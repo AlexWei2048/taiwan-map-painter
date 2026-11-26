@@ -956,7 +956,7 @@ test('2022 history opens directly from its tab without a redundant sub-button',(
  for(const page of ['index.html','map-v60.html'])assert.doesNotMatch(read(page),/id="workspaceHistory"|id="historyModes"|2022 九合一<\/button>/);
  assert.match(categories,/await window\.HistoryLoader\.load\(\)/);
  assert.match(categories,/if\(request!==navigation\|\|!isCurrent\(\)\)return false/);
- assert.match(categories,/view\.activate\(\);return true/);
+ assert.match(categories,/view\.activate\(\);/);assert.match(categories,/restoreRouteView/);assert.match(index,/id="categoryAnalysis"[^>]*>岛屿观测/);
  assert.doesNotMatch(categories,/workspaceHistory|historyModes/);
  assert.doesNotMatch(history,/workspaceHistory/);
  assert.doesNotMatch(history,/HistoryAccess/);
