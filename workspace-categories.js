@@ -11,6 +11,11 @@
   futureModes.hidden=group!=='future';
   document.body.classList.toggle('analysis-mode',group==='analysis');
   if($c('analysisViews'))$c('analysisViews').hidden=group!=='analysis';
+  if($c('analysisResultSection'))$c('analysisResultSection').hidden=group!=='analysis';
+  if($c('historyControlTitle'))$c('historyControlTitle').textContent=group==='analysis'?'观测范围':'历史选举数据';
+  const metricLabel=document.querySelector('label[for="historyMetric"]');if(metricLabel)metricLabel.textContent=group==='analysis'?'统计指标':'地图显示内容';
+  const countyLabel=document.querySelector('label[for="historyCounty"]');if(countyLabel)countyLabel.textContent=group==='analysis'?'统计范围':'地图范围';
+  const scaleLabel=document.querySelector('label[for="historyScale"]');if(scaleLabel)scaleLabel.textContent=group==='analysis'?'统计层级':'地图层级';
  }
  function selectFuture(){navigation++;transitioning=0;select('future')}
  future.addEventListener('click',()=>$c('workspacePrediction').click());

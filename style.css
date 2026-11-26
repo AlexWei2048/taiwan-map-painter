@@ -1005,3 +1005,12 @@ dialog.history-coverage-dialog{max-width:none;max-height:calc(100dvh - 28px);mar
 
 /* Three workspaces, shared archive. */
 .workspace-categories button{font-size:13px;padding-inline:2px;white-space:nowrap}.history-view-switch[hidden]{display:none!important}body.analysis-mode .history-result-heading>.history-view-switch:not(#analysisViews){display:none}body:not(.analysis-mode) #analysisViews{display:none!important}body.analysis-mode #analysisViews{display:flex}.coverage-matrix [data-coverage-status=na]{background:#eef1ef;color:#78847d}
+
+/* Independent observation workspace: no duplicate history map or results. */
+#analysisResultSection[hidden]{display:none!important}
+body.analysis-mode #historyResultSection,body.analysis-mode #mapWithKey,body.analysis-mode .map-topbar,body.analysis-mode .title-row,body.analysis-mode #districtReference,body.analysis-mode .sidebar .regions-panel,body.analysis-mode .sidebar .settings-panel,body.analysis-mode .sidebar-save-note,body.analysis-mode .header-menu,body.analysis-mode #saved,body.analysis-mode #historyLegislativeMapHint,body.analysis-mode #afterMap,body.analysis-mode #mapKeyboardHelp{display:none!important}
+body.analysis-mode #analysisResultSection{margin-top:0;min-width:0}
+body.analysis-mode #analysisViews{display:flex}
+body.analysis-mode #analysisViews[hidden]{display:none!important}
+body.analysis-mode #historyTrendsPanel{margin-top:14px}
+@media(max-width:700px){body.analysis-mode #analysisResultSection{padding:14px;margin-top:0}}

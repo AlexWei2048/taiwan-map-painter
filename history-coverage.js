@@ -8,30 +8,43 @@
  const defaultNorm=v=>String(v||'').trim().replaceAll('臺','台').replaceAll('縣','县').replaceAll('蓮','莲').replaceAll('東','东').replaceAll('門','门').replaceAll('雲','云').replaceAll('連','连').replaceAll('園','园');
  // Administrative existence is not a vote result. Preserve each merger's old city/county.
  const mergedCities=['台中市','台南市','高雄市'];
- const oldCounties=['台北县','台中县','台南县','高雄县'];
- const renamedPairs=[['台北县','新北市',2010],['桃园县','桃园市',2014]];
- const knownCounties=new Set(['台北市','新北市','桃园市','台中市','台南市','高雄市','基隆市','新竹市','嘉义市','新竹县','苗栗县','彰化县','南投县','云林县','嘉义县','屏东县','宜兰县','花莲县','台东县','澎湖县','金门县','连江县',...oldCounties,'桃园县',...mergedCities.map(c=>'原'+c)]);
- const countyKey=(name,year)=>mergedCities.includes(name)&&year<2010?'原'+name:name;
+ const formerCounties=['原台中县','原台南县','原高雄县'];
+ const renamedPairs=[['台北县','新北市','新北市／台北县',2010],['桃园县','桃园市','桃园市／桃园县',2014]];
+ // Same order as the site's COUNTY_ORDER, with former jurisdictions adjacent.
+ const COUNTY_ORDER=['台北市','新北市／台北县','桃园市／桃园县','台中市','原台中市','原台中县','台南市','原台南市','原台南县','高雄市','原高雄市','原高雄县','新竹县','苗栗县','彰化县','南投县','云林县','嘉义县','屏东县','宜兰县','花莲县','台东县','澎湖县','基隆市','新竹市','嘉义市','金门县','连江县'];
+ const order=new Map(COUNTY_ORDER.map((name,i)=>[name,i]));
+ const rowKey=name=>{
+  const pair=renamedPairs.find(([oldName,newName,label])=>[oldName,newName,label].includes(name));
+  if(pair)return pair[2];
+  if(['台中县','台南县','高雄县'].includes(name))return '原'+name;
+  return name;
+ };
+ const countyKey=(name,year)=>mergedCities.includes(name)&&year<2010?'原'+name:rowKey(name);
+ const countyLabel=(name,year)=>{
+  const pair=renamedPairs.find(p=>p[2]===name);
+  return pair?(year<pair[3]?pair[0]:pair[1]):name;
+ };
+ function countyRows(results){
+  const names=new Set(COUNTY_ORDER);
+  for(const r of results)for(const c of r?.counties||[])if(c.county&&c.county!=='全部地区')names.add(c.county);
+  return [...names].sort((a,b)=>(order.get(a)??Infinity)-(order.get(b)??Infinity)||a.localeCompare(b,'zh-CN'));
+ }
  function applicability(name,year,office){
-  year=Number(year);
-  if(!knownCounties.has(name)||!Number.isInteger(year))return null;
-  for(const [oldName,newName,start] of renamedPairs){
-   if(name===oldName&&year>=start)return {status:'na',reason:'当届已改为'+newName+'，请查看对应地区。'};
-   if(name===newName&&year<start)return {status:'na',reason:'当届仍为'+oldName+'，请查看对应地区。'};
-  }
-  if(oldCounties.includes(name)&&name!=='台北县'&&year>=2010)return {status:'na',reason:'当届已完成县市合并。'};
-  if(name.startsWith('原')&&mergedCities.includes(name.slice(1))&&year>=2010)return {status:'na',reason:'当届已完成县市合并。'};
+  name=rowKey(name);year=Number(year);
+  if(!order.has(name)||!Number.isInteger(year))return null;
+  if((formerCounties.includes(name)||name.startsWith('原')&&mergedCities.includes(name.slice(1)))&&year>=2010)return {status:'na',reason:'当届已完成县市合并。'};
   if(mergedCities.includes(name)&&year<2010)return {status:'na',reason:'当届尚未合并，原县、市分别列示。'};
   if(office==='township'){
    const always=['台北市','基隆市','新竹市','嘉义市','原台中市','原台南市','原高雄市','台南市'];
-   const restructured=['新北市','台中市','高雄市'];
-   if(always.includes(name)||restructured.includes(name)&&year<2014)return {status:'na',reason:'当届该地区未举行乡镇市区长选举。'};
+   const restructured=['新北市／台北县','台中市','高雄市'];
+   if(always.includes(name)||restructured.includes(name)&&year>=2010&&year<2014)return {status:'na',reason:'当届该地区未举行乡镇市区长选举。'};
   }
   return null;
  }
  function matrixEntry(result,county,year,office){
   if(result?.error)return {status:'error'};
   if(county==='全部地区')return result?.all||{status:'unknown'};
+  county=rowKey(county);
   const existing=result?.counties?.find(x=>x.county===county);
   if(existing&&existing.status!=='unknown')return existing;
   return applicability(county,year,office)||existing||{status:'unknown'};
@@ -76,7 +89,7 @@
   if([...buckets.values()].some(b=>['partial','missing'].includes(b.status)))all.status='partial';
   return {year:snapshot.year,office,all,counties:[...buckets.values()]};
  }
- const api={analyze,labels,countyKey,applicability,matrixEntry};
+ const api={analyze,labels,countyKey,countyLabel,countyRows,applicability,matrixEntry};
  if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
  root.HistoryCoverage=api;
  const doc=root.document,$=id=>doc.getElementById(id);
@@ -97,7 +110,7 @@
   return cache.get(key);
  }
  function showDetail(entry,year,county,office){
-  detail.replaceChildren(element('h4',root.HistoryLocal.yearLabel(year,office)+' · '+county+' · '+labels[entry.status]));
+  detail.replaceChildren(element('h4',root.HistoryLocal.yearLabel(year,office)+' · '+countyLabel(county,year)+' · '+labels[entry.status]));
   if(entry.status==='unknown'||entry.status==='error'||entry.status==='na'||entry.status==='missing'){
    detail.append(element('p',entry.status==='unknown'?'该届行政区划下尚无对应记录或明确覆盖声明，需要核实档案。':entry.status==='error'?'资料读取失败，不作为缺档统计。':entry.status==='na'?(entry.reason||'档案明确标记未举行此类选举。'):'档案声明覆盖该地区，但未发现结果记录。'));return;
   }
@@ -107,13 +120,13 @@
   table.append(body);detail.append(table,element('p','以上仅检查本站已收录字段，不证明全部历史选区、候选人或乡镇明细已齐全。','data-help'));
  }
  function draw(office,ys,results){
-  const names=[...new Set(results.flatMap(r=>r?.counties?.map(c=>c.county)||[]))].sort((a,b)=>a.localeCompare(b,'zh-CN'));
+  const names=countyRows(results);
   const table=element('table',undefined,'coverage-matrix'),head=element('thead'),row=element('tr');row.append(element('th','当届县市'));
   for(const y of ys)row.append(element('th',root.HistoryLocal.yearLabel(y,office)));head.append(row);table.append(head);
   const body=element('tbody');
   for(const county of ['全部地区',...names]){
    const tr=element('tr');tr.append(element('th',county));
-   ys.forEach((y,i)=>{const cell=matrixEntry(results[i],county,y,office),td=element('td'),b=element('button',labels[cell.status]);b.type='button';b.dataset.coverageStatus=cell.status;b.setAttribute('aria-label',county+' '+root.HistoryLocal.yearLabel(y,office)+' '+labels[cell.status]);b.onclick=()=>showDetail(cell,y,county,office);td.append(b);tr.append(td)});
+   ys.forEach((y,i)=>{const cell=matrixEntry(results[i],county,y,office),td=element('td'),b=element('button',labels[cell.status]);b.type='button';b.dataset.coverageStatus=cell.status;b.setAttribute('aria-label',countyLabel(county,y)+' '+root.HistoryLocal.yearLabel(y,office)+' '+labels[cell.status]);b.onclick=()=>showDetail(cell,y,county,office);td.append(b);tr.append(td)});
    body.append(tr);
   }
   table.append(body);host.replaceChildren(table);

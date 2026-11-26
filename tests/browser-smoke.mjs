@@ -3561,6 +3561,7 @@ test('Full plan backup merges without replacing current forecast',async t=>{
  assert.equal(await page.locator('#categoryHistory').getAttribute('aria-selected'),'true');assert.equal(await page.locator('#historyCoverageOpen').isVisible(),true);assert.equal(await page.locator('#historyCompareOpen').isVisible(),false);
  await page.locator('#categoryAnalysis').click();await page.locator('#historyTrendsPanel').waitFor({state:'visible'});
  assert.equal(await page.locator('#categoryAnalysis').getAttribute('aria-selected'),'true');assert.equal(await page.locator('#historyCoverageOpen').isVisible(),false);assert.equal(await page.locator('#historyCompareOpen').isVisible(),true);
- await page.locator('#categoryHistory').click();await page.locator('#historyTrendsPanel').waitFor({state:'hidden'});assert.equal(await page.locator('#categoryHistory').getAttribute('aria-selected'),'true');
+ assert.equal(await page.locator('#analysisResultSection').isVisible(),true);assert.equal(await page.locator('#historyResultSection').isVisible(),false);assert.equal(await page.locator('#mapWithKey').isVisible(),false);assert.equal(await page.locator('#districtReference').isVisible(),false);
+ await page.locator('#categoryHistory').click();await page.locator('#historyTrendsPanel').waitFor({state:'hidden'});assert.equal(await page.locator('#categoryHistory').getAttribute('aria-selected'),'true');assert.equal(await page.locator('#analysisResultSection').isVisible(),false);assert.equal(await page.locator('#mapWithKey').isVisible(),true);
  await page.locator('#categoryFuture').click();assert.equal(await page.locator('#categoryFuture').getAttribute('aria-selected'),'true');
  });
