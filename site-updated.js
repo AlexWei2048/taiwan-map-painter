@@ -8,6 +8,7 @@
   timeZone:timezone,year:'numeric',month:'2-digit',day:'2-digit',
   hour:'2-digit',minute:'2-digit',hourCycle:'h23'
  });
+ const cacheKey='island-palette-published-at-v1',cacheTTL=5*60*1000;
  let priority=0;
  function show(value,source,rank){
   const date=new Date(value);
@@ -47,11 +48,16 @@
    .sort((a,b)=>Date.parse(b.updated_at)-Date.parse(a.updated_at));
   if(!runs.length)throw Error('No successful Pages deployment');
   show(runs[0].updated_at,'GitHub Pages 最近一次成功部署的完成时间',2);
+  try{localStorage.setItem(cacheKey,JSON.stringify({value:runs[0].updated_at,checkedAt:Date.now()}))}catch(e){/* storage optional */}
  }
- Promise.allSettled([siteHeader(),successfulDeployment()]).then(()=>{
+ try{const cached=JSON.parse(localStorage.getItem(cacheKey)||'null');if(cached&&Date.now()>=cached.checkedAt&&Date.now()-cached.checkedAt<cacheTTL&&Number.isFinite(Date.parse(cached.value))){show(cached.value,'GitHub Pages 最近一次成功部署的完成时间（5分钟内缓存）',2);return}}catch(e){/* storage optional */}
+ function refresh(){Promise.allSettled([siteHeader(),successfulDeployment()]).then(()=>{
   if(!priority){
    target.textContent='更新时间：暂时无法获取';
    target.title='网站的发布时间接口暂时不可用';
   }
- });
+ });}
+ // The timestamp is noncritical; start after the initial page load, not alongside the map.
+ function idleRefresh(){if(typeof requestIdleCallback==='function')requestIdleCallback(refresh,{timeout:1500});else setTimeout(refresh,0)}
+ if(document.readyState==='complete')idleRefresh();else window.addEventListener('load',idleRefresh,{once:true});
 })();

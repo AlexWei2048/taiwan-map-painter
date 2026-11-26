@@ -2460,6 +2460,8 @@ async function ensureExportMapReady(){
  }
 }
 let mapPromise,mapLoadSequence=0;
+// Deferred entry scripts still execute in dependency order. Do not render until all have executed.
+const mapScriptsReady=(document.readyState==='loading'||(document.currentScript?.defer&&document.readyState!=='complete'))?new Promise(resolve=>document.addEventListener('DOMContentLoaded',resolve,{once:true})):Promise.resolve();
 function showMapLoadError(error,phase='下载'){
  const message=error?.message||String(error)||'未知错误';
  $('loadError').hidden=false;
@@ -2485,15 +2487,17 @@ function startMapLoad(){
  $('loadError').hidden=true;
  $('progress').textContent='正在载入地图…';
  const embedded=$('embeddedMap');
- mapPromise=embedded?new Promise((resolve,reject)=>{
+ const download=embedded?new Promise((resolve,reject)=>{
   const ready=()=>{try{resolve(JSON.parse(embedded.textContent))}catch(error){reject(error)}};
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ready,{once:true});else ready()
  }):fetchMapJson('assets/map-base.json?v=20261031-split-v25','基础地图');
- mapPromise.then(async d=>{
-  if(document.readyState==='loading')await new Promise(resolve=>document.addEventListener('DOMContentLoaded',resolve,{once:true}));
-  if(sequence!==mapLoadSequence)return;
-  try{finishMapInitialization(d)}catch(error){showMapLoadError(error,'渲染')}
- }).catch(error=>{if(sequence===mapLoadSequence)showMapLoadError(error)});
+ mapPromise=download.then(async d=>{
+  await mapScriptsReady;
+  if(sequence!==mapLoadSequence)return d;
+  try{finishMapInitialization(d)}catch(error){showMapLoadError(error,'渲染');throw error}
+  return d;
+ });
+ mapPromise.catch(error=>{if(sequence===mapLoadSequence&&!data)showMapLoadError(error)});
  return mapPromise;
 }
 $('retryMapLoad').onclick=()=>{

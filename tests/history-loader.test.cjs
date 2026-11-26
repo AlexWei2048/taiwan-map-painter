@@ -34,12 +34,14 @@ test('history loader loads public history assets once in dependency order and ac
  let activations=0;
  const {createHistoryLoader,HISTORY_STYLES,HISTORY_SCRIPTS}=require('../history-loader.js');
  const loader=createHistoryLoader({
+  preloadScripts:paths=>calls.push(['preload',...paths]),
   loadStyle:async href=>calls.push(['style',href]),
   loadScript:async src=>calls.push(['script',src]),
   getView:()=>({activate(){activations++}})
  });
  await Promise.all([loader.activate(),loader.activate()]);
  assert.deepEqual(calls,[
+  ['preload',...HISTORY_SCRIPTS],
   ...HISTORY_STYLES.map(value=>['style',value]),
   ...HISTORY_SCRIPTS.map(value=>['script',value])
  ]);
@@ -65,6 +67,11 @@ test('initial document defers history-only resources until the history tab is op
  for(const path of ['index.html','map-v60.html']){
  const html=fs.readFileSync(path,'utf8');
  assert.match(html,/src="history-loader\.js\?v=/);
+ assert.match(html,/id="categoryFuture"[^>]*>调色盘/);
+ assert.match(html,/id="categoryHistory"[^>]*>选举档案/);
+ assert.match(html,/id="workspacePrediction"[^>]*>未来预测/);
+ assert.match(html,/rel="preload" as="fetch" href="assets\/map-base\.json/);
+ assert.ok([...html.matchAll(/<script\b[^>]*src="[^"]+"[^>]*>/g)].every(([tag])=>/\bdefer\b/.test(tag)));
  assert.doesNotMatch(html,/<script[^>]+src="(?:history-(?:workspace|core|presidential|legislative|local|2022)|assets\/party-logos-archive)\.js/);
  assert.doesNotMatch(html,/<link[^>]+href="history-legislative\.css/);
  assert.doesNotMatch(html,/src="history-access\.js/);

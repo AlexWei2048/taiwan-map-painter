@@ -51,15 +51,18 @@ async function load(){
  $('trendStatus').textContent='正在载入所选范围的历届正式结果…';$('trendCharts').replaceChildren();$('trendCsv').disabled=true;
  if(!ys.length){loading=false;$('trendStatus').textContent='请至少勾选一个届次。';return}
  try{
-  const result=[];
-  for(let i=0;i<ys.length;i+=3){
-   const group=await Promise.all(ys.slice(i,i+3).map(async year=>{
-    const k=conf.office+'|'+year;
-    try{if(!cache.has(k))cache.set(k,await snapshot(conf.office,year));return{year,snapshot:cache.get(k)}}catch(e){return{year,error:e.message}}
-   }));
-   if(token!==request)return;result.push(...group);
-   $('trendStatus').textContent='已载入 '+result.length+' / '+ys.length+' 届…';
-  }
+  const result=new Array(ys.length);let next=0,finished=0;
+  // A bounded work queue avoids waiting for the slowest request in each old batch.
+  async function worker(){while(token===request&&next<ys.length){
+   const i=next++,year=ys[i],k=conf.office+'|'+year;
+   try{
+    if(!cache.has(k)){const pending=Promise.resolve().then(()=>snapshot(conf.office,year));cache.set(k,pending);pending.catch(()=>{if(cache.get(k)===pending)cache.delete(k)})}
+    result[i]={year,snapshot:await cache.get(k)};
+   }catch(e){result[i]={year,error:e.message}}
+   if(token!==request)return;
+   $('trendStatus').textContent='已载入 '+(++finished)+' / '+ys.length+' 届…';
+  }}
+  await Promise.all(Array.from({length:Math.min(4,ys.length)},worker));
   if(token!==request)return;models=result;loading=false;render()
  }catch(e){if(token===request){loading=false;$('trendStatus').textContent='趋势载入失败：'+e.message}}
 }

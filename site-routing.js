@@ -161,5 +161,5 @@
   else if(data)write(true);
   else mapPromise.then(()=>{if(!restoring&&!root.location.hash)write(true)}).catch(()=>{});
  }
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
+ if(document.readyState==='loading'||(document.currentScript?.defer&&document.readyState!=='complete'))document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })(typeof window==='undefined'?globalThis:window);
