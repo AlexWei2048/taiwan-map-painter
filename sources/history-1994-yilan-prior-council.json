@@ -1,0 +1,501 @@
+{
+  "county": "宜蘭縣",
+  "previous_election_date": "1990-01-20",
+  "new_election_date": "1994-01-29",
+  "previous_term": "第十二屆",
+  "new_term": "第十三屆",
+  "source_url": "https://web.cec.gov.tw/api/file/0965a18d-e101-4921-bee3-e56b5e0dd062.pdf",
+  "source_page_count": 3,
+  "source_name": "中選會《宜蘭縣第十二屆縣議員選舉結果清冊》",
+  "official_elected_winners": [
+    {
+      "name": "林榮星",
+      "district": 1
+    },
+    {
+      "name": "張建榮",
+      "district": 1
+    },
+    {
+      "name": "林明昌",
+      "district": 1
+    },
+    {
+      "name": "游萬年",
+      "district": 1
+    },
+    {
+      "name": "林海進",
+      "district": 1
+    },
+    {
+      "name": "林于月",
+      "district": 1
+    },
+    {
+      "name": "林月霞",
+      "district": 2
+    },
+    {
+      "name": "吳坤鐘",
+      "district": 2
+    },
+    {
+      "name": "鄭美蘭",
+      "district": 2
+    },
+    {
+      "name": "游旺欉",
+      "district": 2
+    },
+    {
+      "name": "尤松雄",
+      "district": 2
+    },
+    {
+      "name": "陳榮宗",
+      "district": 3
+    },
+    {
+      "name": "歐耀北",
+      "district": 3
+    },
+    {
+      "name": "黃重邱",
+      "district": 3
+    },
+    {
+      "name": "廖明灶",
+      "district": 3
+    },
+    {
+      "name": "羅國雄",
+      "district": 4
+    },
+    {
+      "name": "陳淑暖",
+      "district": 4
+    },
+    {
+      "name": "賴翰霆",
+      "district": 4
+    },
+    {
+      "name": "游玉麟",
+      "district": 4
+    },
+    {
+      "name": "羅素貞",
+      "district": 5
+    },
+    {
+      "name": "林丙丁",
+      "district": 5
+    },
+    {
+      "name": "游振亮",
+      "district": 5
+    },
+    {
+      "name": "楊政誠",
+      "district": 5
+    },
+    {
+      "name": "張春煌",
+      "district": 5
+    },
+    {
+      "name": "李阿紅",
+      "district": 5
+    },
+    {
+      "name": "陳文昌",
+      "district": 6
+    },
+    {
+      "name": "李正廷",
+      "district": 6
+    },
+    {
+      "name": "陳金麟",
+      "district": 7
+    },
+    {
+      "name": "吳文發",
+      "district": 7
+    },
+    {
+      "name": "李坤山",
+      "district": 7
+    },
+    {
+      "name": "林正標",
+      "district": 7
+    },
+    {
+      "name": "許金虎",
+      "district": 8
+    },
+    {
+      "name": "江新財",
+      "district": 9
+    }
+  ],
+  "source_note": "官方PDF第1–3頁可讀文字；PDF截圖服務緩存錯誤，因此本輪未能做全頁影像逐欄人工複查。",
+  "totals": {
+    "prior_elected": 33,
+    "candidates_1994": 69,
+    "previously_positive": 25,
+    "previously_negative": 5,
+    "newly_negative": 37,
+    "remaining_unknown": 2
+  },
+  "reserved_unknowns": [
+    {
+      "candidate_name": "陳秀暖",
+      "similar_to_prior": "陳淑暖",
+      "reason": "一字不同，候選人身分無法保證不為校勘異體或同名記錄"
+    },
+    {
+      "candidate_name": "林榮木",
+      "similar_to_prior": "林榮星",
+      "reason": "一字不同，候選人身分無法保證不為校勘異體或同名記錄"
+    }
+  ],
+  "newly_matched_negative_candidates": [
+    {
+      "district_number": 1,
+      "ballot_number": 2,
+      "candidate_name": "李鑫城",
+      "votes": 3284,
+      "gender": "男",
+      "party": "民主進步黨",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 1,
+      "ballot_number": 3,
+      "candidate_name": "陳本川",
+      "votes": 2076,
+      "gender": "男",
+      "party": "中國國民黨",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 1,
+      "ballot_number": 4,
+      "candidate_name": "吳福田",
+      "votes": 3322,
+      "gender": "男",
+      "party": "民主進步黨",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 1,
+      "ballot_number": 5,
+      "candidate_name": "吳正欉",
+      "votes": 1026,
+      "gender": "男",
+      "party": "中國國民黨",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 1,
+      "ballot_number": 7,
+      "candidate_name": "江碧華",
+      "votes": 4011,
+      "gender": "女",
+      "party": "無黨籍",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 1,
+      "ballot_number": 9,
+      "candidate_name": "尤正國",
+      "votes": 3109,
+      "gender": "男",
+      "party": "中國國民黨",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 1,
+      "ballot_number": 10,
+      "candidate_name": "林振三",
+      "votes": 371,
+      "gender": "男",
+      "party": "無黨籍",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 1,
+      "ballot_number": 13,
+      "candidate_name": "謝阿溪",
+      "votes": 5672,
+      "gender": "男",
+      "party": "中國國民黨",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 1,
+      "ballot_number": 14,
+      "candidate_name": "郝武平",
+      "votes": 3127,
+      "gender": "男",
+      "party": "中國國民黨",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 3,
+      "ballot_number": 1,
+      "candidate_name": "簡連發",
+      "votes": 5313,
+      "gender": "男",
+      "party": "無黨籍",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 3,
+      "ballot_number": 2,
+      "candidate_name": "林萬春",
+      "votes": 4724,
+      "gender": "男",
+      "party": "中國國民黨",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 3,
+      "ballot_number": 3,
+      "candidate_name": "黃評譿",
+      "votes": 5298,
+      "gender": "男",
+      "party": "無黨籍",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 4,
+      "ballot_number": 2,
+      "candidate_name": "林文賢",
+      "votes": 3511,
+      "gender": "男",
+      "party": "中國國民黨",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 4,
+      "ballot_number": 4,
+      "candidate_name": "林水金",
+      "votes": 3118,
+      "gender": "男",
+      "party": "民主進步黨",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 5,
+      "ballot_number": 2,
+      "candidate_name": "林傳泉",
+      "votes": 4809,
+      "gender": "男",
+      "party": "中國國民黨",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 5,
+      "ballot_number": 3,
+      "candidate_name": "謝榮洲",
+      "votes": 3615,
+      "gender": "男",
+      "party": "民主進步黨",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 5,
+      "ballot_number": 4,
+      "candidate_name": "黃玲如",
+      "votes": 827,
+      "gender": "女",
+      "party": "中國國民黨",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 5,
+      "ballot_number": 6,
+      "candidate_name": "石維雄",
+      "votes": 2246,
+      "gender": "男",
+      "party": "中國國民黨",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 5,
+      "ballot_number": 7,
+      "candidate_name": "游德全",
+      "votes": 2134,
+      "gender": "男",
+      "party": "中國國民黨",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 5,
+      "ballot_number": 8,
+      "candidate_name": "劉添梧",
+      "votes": 4876,
+      "gender": "男",
+      "party": "民主進步黨",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 5,
+      "ballot_number": 9,
+      "candidate_name": "楊振聲",
+      "votes": 2541,
+      "gender": "男",
+      "party": "中國國民黨",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 6,
+      "ballot_number": 2,
+      "candidate_name": "李明政",
+      "votes": 1005,
+      "gender": "男",
+      "party": "無黨籍",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 6,
+      "ballot_number": 3,
+      "candidate_name": "張國祥",
+      "votes": 842,
+      "gender": "男",
+      "party": "無黨籍",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 6,
+      "ballot_number": 6,
+      "candidate_name": "簡宏奇",
+      "votes": 1721,
+      "gender": "男",
+      "party": "無黨籍",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 6,
+      "ballot_number": 8,
+      "candidate_name": "林松山",
+      "votes": 76,
+      "gender": "男",
+      "party": "中國國民黨",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 6,
+      "ballot_number": 9,
+      "candidate_name": "林健朗",
+      "votes": 4078,
+      "gender": "男",
+      "party": "中國國民黨",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 6,
+      "ballot_number": 11,
+      "candidate_name": "林文正",
+      "votes": 2830,
+      "gender": "男",
+      "party": "無黨籍",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 6,
+      "ballot_number": 12,
+      "candidate_name": "吳正義",
+      "votes": 614,
+      "gender": "男",
+      "party": "無黨籍",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 6,
+      "ballot_number": 13,
+      "candidate_name": "林進財",
+      "votes": 6345,
+      "gender": "男",
+      "party": "民主進步黨",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 7,
+      "ballot_number": 3,
+      "candidate_name": "江明勝",
+      "votes": 3239,
+      "gender": "男",
+      "party": "無黨籍",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 7,
+      "ballot_number": 4,
+      "candidate_name": "劉燉亮",
+      "votes": 3056,
+      "gender": "男",
+      "party": "民主進步黨",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 8,
+      "ballot_number": 1,
+      "candidate_name": "邱博和",
+      "votes": 333,
+      "gender": "男",
+      "party": "無黨籍",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 8,
+      "ballot_number": 2,
+      "candidate_name": "陳正男",
+      "votes": 4709,
+      "gender": "男",
+      "party": "中國國民黨",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 8,
+      "ballot_number": 6,
+      "candidate_name": "張添濤",
+      "votes": 2001,
+      "gender": "男",
+      "party": "無黨籍",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 8,
+      "ballot_number": 7,
+      "candidate_name": "邱照庚",
+      "votes": 1545,
+      "gender": "男",
+      "party": "無黨籍",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 9,
+      "ballot_number": 3,
+      "candidate_name": "游阿爐",
+      "votes": 681,
+      "gender": "男",
+      "party": "中國國民黨",
+      "prior_election_winner_match": false
+    },
+    {
+      "district_number": 10,
+      "ballot_number": 2,
+      "candidate_name": "陳英明",
+      "votes": 1022,
+      "gender": "男",
+      "party": "中國國民黨",
+      "prior_election_winner_match": false
+    }
+  ],
+  "caveat": "當選名冊非全任期逐日人事名錄，資料欄位附帶 inferred 方法；未經原件判斷的人保留未知。"
+}
