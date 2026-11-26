@@ -1041,7 +1041,7 @@
    '历史选区按当届县市、乡镇市区归属重建；底图几何使用现行行政区近似，无法精确还原的旧里界不作推算。';
   else if(localYear===2026)el('historyBoundaryNote').textContent='2026年正式结果仅在中选会或地方选委会资料逐项核对、选区得票与席次校验通过后发布；预测与官方结果分开保存。未核实的乡镇得票不推算。';
   else if(!presidentialMode&&localGeometry){
-   const cycle=snapshotData?.cycleYears?'按选举批次合并显示，各地实际投票日期见选区结果。':'按实际投票年显示。';
+   const cycle=snapshotData?.cycleYears&&yearLabel().includes('/')?'按选举批次合并显示，各地实际投票日期见选区结果。':'按实际投票年显示。';
    const scope=partialTownship()?snapshotData.elections.find(e=>e.office==='township'):null;
    const coverage=archivedCouncil()?' 1994年1月的县市议员资料采用地方选务档案转录，经选区有效票和当选席次对账。金门县可查已核实的部分候选人资料，合计采用已收录的完整结果。':
     scope?' 已收录'+scope.counties.join('、')+'共'+snapshotData.contests.filter(c=>c.election_id===scope.election_id).length+'个选区的候选人结果。部分选区的政党或投票统计仍缺资料。':'';
