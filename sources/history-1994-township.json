@@ -4742,6 +4742,62 @@
           "party_recommendation": null
         }
       ]
+    },
+    {
+      "county": "花蓮縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "verified_candidate_roster_without_votes",
+      "source_url": "https://lawplayer.com/valuable-judgment/646b89dbc3e2a9cc78b4335f",
+      "source_locator": "花蓮地方法院84年度訴字第318號刑事判決（1995-11-14），事實一及理由一(1)：明載賴文吉1994-01-29當選第12屆鄉長，當屆候選人許添財1號、賴文吉2號，並引同屆選舉公報；理由一確認僅二人參選。判決為司法院資料轉載。",
+      "corroboration_url": "https://document.hccc.gov.tw/records/files/03/4-%E7%B8%A3%E8%AA%8C%E6%94%BF%E4%BA%8B%E7%AF%87.pdf#page=66",
+      "secondary_source": "https://zh.wikipedia.org/wiki/壽豐鄉",
+      "validation_note": "縣志表3-1-2候選人數2、有效票9471、無效票296、投票9767與本名冊交叉核對。歷任表第11屆賴文吉，故現任為任期名錄推定；1994候選人個人票數與推薦政黨仍缺，不分配總票。",
+      "winners": [
+        {
+          "town": "壽豐鄉",
+          "name": "賴文吉",
+          "gender": "男",
+          "incumbent_at_election": true,
+          "ballot_number": 2,
+          "votes": null,
+          "party_recommendation": null
+        }
+      ],
+      "other_candidates": [
+        {
+          "town": "壽豐鄉",
+          "name": "許添財",
+          "ballot_number": 1,
+          "elected": false,
+          "votes": null,
+          "party_recommendation": null,
+          "gender": null,
+          "incumbent_at_election": false
+        }
+      ],
+      "candidate_roster_complete": true,
+      "individual_votes_complete": false
+    },
+    {
+      "county": "雲林縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "verified_winners_only",
+      "source_url": "https://lib.ylccb.gov.tw/wSite/public/Data/f1659691679953.pdf",
+      "source_locator": "雲林縣公共圖書館地方文獻，附錄六二崙鄉歷屆鄉長一覽表，印刷頁75，列第11屆李裕廷、第12屆鍾合郎。原表任期月份有疑義，故不直接採用任期日期；原頁截圖無法取得。",
+      "corroboration_url": "https://votetw.com/data/candidate/鍾合郎",
+      "secondary_source": "https://lawplayer.com/valuable-judgment/646b350cc3e2a9cc78b2131e",
+      "validation_note": "後屆公職資料明載第12屆鄉長及男性，1998年選舉資料與最高法院89年度台上字第2743號判決確認其當時在任。未將後屆黨籍回填至1994年。",
+      "winners": [
+        {
+          "town": "二崙鄉",
+          "name": "鍾合郎",
+          "gender": "男",
+          "incumbent_at_election": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null
+        }
+      ]
     }
   ]
 }
