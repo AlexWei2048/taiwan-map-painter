@@ -188,3 +188,12 @@
 #historyResults .history-legislative-table[data-ballot="party"] .legislative-col-party{width:38%}
 #historyResults .history-legislative-table[data-ballot="party"] .legislative-col-votes{width:19%}
 #historyResults .history-legislative-table[data-ballot="party"] .legislative-col-share{width:17%}
+
+/* Larger hit areas for trend legends; don't outline the text itself. */
+.trend-card svg [data-trend-legend][role=button]:focus{stroke:none;stroke-width:0}
+.trend-card svg [data-trend-legend][role=button]:focus-visible [data-trend-legend-hit]{stroke:#d38b25;stroke-width:1.5;fill:#f7f3e6;fill-opacity:.45}
+.trend-point-details{flex-basis:100%;min-width:0;font-size:12px;color:#315948}
+.trend-point-details summary{cursor:pointer;width:fit-content}
+.trend-point-details p{white-space:pre-line;overflow-wrap:anywhere;line-height:1.6;margin:6px 0 0}
+/* On small screens, preserve a readable graph rather than scaling all text down. */
+@media(max-width:650px){.trend-merge-layout .trend-card svg{min-width:440px}.trend-merge-layout .trend-card-heading{flex-wrap:wrap}}
