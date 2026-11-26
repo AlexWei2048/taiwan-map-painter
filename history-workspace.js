@@ -33,7 +33,7 @@
   const available=(years||yearsForOffice(office)).map(Number).filter(Number.isFinite);
   const requested=(root.HistoryLocal||Local).cycleYear(Number(input.year),office);
   const year=available.includes(requested)?requested:(office==='president'||office==='legislative'?2024:2022);
-  const requestedElectorate=['regional','plains','mountain','party'].includes(input.electorate)?input.electorate:'regional';
+  const requestedElectorate=['all','regional','plains','mountain','party'].includes(input.electorate)?input.electorate:office==='legislative'?'all':'regional';
   const allowedLevels=levelOptions(office,year,requestedElectorate).map(item=>item[0]);
   const defaultLevel=allowedLevels[0];
   const level=allowedLevels.includes(input.level)?input.level:defaultLevel;
@@ -693,7 +693,7 @@
   const electorate=el('historyElectorate');if(electorate){
    if(state.office==='council'||state.office==='legislative'){
     const options=electorateOptions(state.office,state.year);
-    if(electorate.options.length!==options.length)electorate.replaceChildren(...options.map(([value,label])=>new Option(label,value)));
+    if(state.office==='legislative'&&electorate.options.length!==options.length)electorate.replaceChildren(...options.map(([value,label])=>new Option(label,value)));
     electorate.value=state.electorate;
    }else electorate.value='regional';
   }
