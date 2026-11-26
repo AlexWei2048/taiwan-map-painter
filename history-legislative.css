@@ -197,3 +197,25 @@
 .trend-point-details p{white-space:pre-line;overflow-wrap:anywhere;line-height:1.6;margin:6px 0 0}
 /* On small screens, preserve a readable graph rather than scaling all text down. */
 @media(max-width:650px){.trend-merge-layout .trend-card svg{min-width:440px}.trend-merge-layout .trend-card-heading{flex-wrap:wrap}}
+
+/* Compact mobile candidate lists: geography remains in the group header. */
+#historyResults .legislative-mobile-details{display:none}
+@media(max-width:600px){
+ #historyResults .history-legislative-table,#historyResults .history-legislative-table[data-ballot="party"]{min-width:0;table-layout:fixed}
+ #historyResults .history-legislative-table:not([data-ballot="party"]) :is(col.legislative-col-county,col.legislative-col-area,col.legislative-col-number,col.legislative-col-incumbent),
+ #historyResults .history-legislative-table:not([data-ballot="party"]) tr:not(.history-district-divider)>:is(:nth-child(1),:nth-child(2),:nth-child(3),:nth-child(5)){display:none}
+ #historyResults .history-legislative-table:not([data-ballot="party"]) .legislative-col-name{width:29%}
+ #historyResults .history-legislative-table:not([data-ballot="party"]) .legislative-col-party{width:27%}
+ #historyResults .history-legislative-table:not([data-ballot="party"]) .legislative-col-votes{width:19%}
+ #historyResults .history-legislative-table:not([data-ballot="party"]) .legislative-col-share{width:17%}
+ #historyResults .history-legislative-table:not([data-ballot="party"]) .legislative-col-elected{width:8%}
+ #historyResults .history-legislative-table :is(th,td){padding:7px 3px;font-size:11px;white-space:normal;overflow-wrap:anywhere}
+ #historyResults .history-legislative-table .history-number{white-space:normal;overflow-wrap:anywhere}
+ #historyResults .history-legislative-table .history-party-inline{gap:3px;flex-wrap:wrap;justify-content:center}
+ #historyResults .history-legislative-table .history-party-inline img{width:17px;height:17px}
+ #historyResults .legislative-mobile-details{display:block;font-size:10px;font-weight:400;text-align:left;margin:4px 0 0}
+ #historyResults .legislative-mobile-details summary{cursor:pointer;text-align:center;color:#466e5c}
+ #historyResults .legislative-mobile-details dl{margin:4px 0 0}
+ #historyResults .legislative-mobile-details dt{color:#567365}
+ #historyResults .legislative-mobile-details dd{margin:0 0 4px}
+}
