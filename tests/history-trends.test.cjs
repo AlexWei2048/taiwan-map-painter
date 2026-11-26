@@ -157,6 +157,18 @@ test('Presidential, mayoral and township party vote-share trends use one geograp
  const old=T.localPartyVoteShares(require('../assets/history-local-2018.json'),{office:'mayor',level:'town',normalize:norm})[0];
  assert.equal(old.complete,false);
 });
+test('Party trend points skip elections without a nominee, while recorded zero remains visible',()=>{
+ const norm=require('../assets/opencc.js').Converter({from:'t',to:'cn'});
+ const old=T.localPartyVoteShares(require('../assets/history-president-1996.json'),{office:'president',level:'county',normalize:norm})[0];
+ const current=T.localPartyVoteShares(require('../assets/history-president-2024.json'),{office:'president',level:'county',normalize:norm})[0];
+ assert.equal(T.partyTrendValue(old,'台湾民众党'),null);
+ assert.ok(T.partyTrendValue(current,'台湾民众党')>0);
+ assert.equal(T.partyTrendValue({complete:true,parties:{甲:0}},'甲'),0);
+ assert.equal(T.partyTrendValue({complete:true,parties:{甲:0}},'乙'),null);
+ assert.equal(T.partyTrendValue({complete:true,parties:{甲:0}},'', ['乙','丙']),null);
+ assert.equal(T.partyTrendValue({complete:true,parties:{甲:0}},'', ['甲','乙']),0);
+ assert.equal(T.partyTrendValue({complete:false,parties:{甲:0}},'甲'),null);
+});
 test('Integer tick marks and parliament dot counts are exact for small and large assemblies',()=>{
  for(const max of [0,1,2,3,22,113,161,164,225,910]){const ticks=T.integerTicks(max);assert.ok(ticks.every(Number.isInteger));assert.ok(ticks.at(-1)>=max)}
  for(const total of [1,2,3,6,22,113,161,164,225,910]){const pts=T.parliamentPoints(total);assert.equal(pts.length,total);assert.ok(pts.every(p=>Number.isFinite(p.x)&&Number.isFinite(p.y)&&p.y<=0));assert.equal(new Set(pts.map(p=>p.x+'|'+p.y)).size,total)}

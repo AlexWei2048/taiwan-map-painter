@@ -6,6 +6,11 @@ const MERGED={'台北县':'新北市','桃园县':'桃园市','台中县':'台�
 const modern=n=>MERGED[n]||n;
 const sum=(rows,key)=>rows.length&&rows.every(r=>Number.isFinite(r[key]))?rows.reduce((s,r)=>s+r[key],0):null;
 const percent=(n,d)=>Number.isFinite(n)&&d>0?n/d*100:null;
+function partyTrendValue(row,party,group){
+ if(!row?.complete)return null;
+ if(group)return group.some(p=>Object.hasOwn(row.parties,p))?group.reduce((sum,p)=>sum+(row.parties[p]||0),0):null;
+ return Object.hasOwn(row.parties,party)?row.parties[party]:null;
+}
 const knownBool=x=>typeof x==='boolean';
 const genderKnown=x=>['男','女','男性','女性'].includes(x);
 const female=x=>x==='女'||x==='女性';
@@ -354,7 +359,7 @@ function majorityBoundary(points){
  const angle=seats===total?0:(points[seats-1].angle+points[seats].angle)/2;
  return {seats,angle};
 }
-const api={aggregate,value,difference,modern,percent,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,historicalScopeRows,legislativeVoteShares,councilBallotRows,localPartyVoteShares,electionDates,trendEffectiveSelection,LEGISLATIVE_TOTALS};
+const api={aggregate,value,difference,modern,percent,partyTrendValue,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,historicalScopeRows,legislativeVoteShares,councilBallotRows,localPartyVoteShares,electionDates,trendEffectiveSelection,LEGISLATIVE_TOTALS};
 if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
 root.HistoryTrends=api;
 })(typeof window==='undefined'?{}:window);
