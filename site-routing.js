@@ -142,7 +142,7 @@
   }
  }
  function navigation(){
-  if(!started||root.location.hash===lastHash&&!restoring)return;
+  if(!started||root.location.hash===lastHash)return;
   lastHash=root.location.hash;apply(lastHash);
  }
  // Future map actions persist only the local project; the route stores its view.
@@ -157,7 +157,7 @@
  });
  function start(){
   if(started)return;started=true;
-  if(root.location.hash)apply(root.location.hash,true);
+  if(root.location.hash){lastHash=root.location.hash;apply(lastHash,true)}
   else if(data)write(true);
   else mapPromise.then(()=>{if(!restoring&&!root.location.hash)write(true)}).catch(()=>{});
  }
