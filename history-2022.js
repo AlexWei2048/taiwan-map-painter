@@ -291,9 +291,9 @@
  const allLegislative=()=>legislativeMode&&legislativeBallot==='all';
  const allCouncil=()=>kind==='council'&&electorate==='all';
  const combinedMap=()=>active&&(allLegislative()||allCouncil());
- const combinedIdentities=()=>allLegislative()?['regional','party','plains','mountain']:['regional','plains','mountain',...(db.council.some(r=>r.electorate==='indigenous')?['indigenous']:[])];
+ const combinedIdentities=()=>allLegislative()?['regional','party','plains','mountain']:['regional',...(['plains','mountain'].some(id=>db.council.some(r=>r.electorate===id))?['plains','mountain']:db.council.some(r=>r.electorate==='indigenous')?[]:['plains','mountain']),...(db.council.some(r=>r.electorate==='indigenous')?['indigenous']:[])];
  const localLegislativeLevel=id=>id==='regional'?'district':county&&db.legislative.some(r=>r.electorate===id&&r.county===county&&r.level==='town')?'town':'county';
- const combinedLegislativeRows=()=>db.legislative.filter(r=>(!county||r.county===county)&&r.level===localLegislativeLevel(r.electorate));
+ const combinedLegislativeRows=()=>{const levels=Object.fromEntries(combinedIdentities().map(id=>[id,localLegislativeLevel(id)]));return db.legislative.filter(r=>(!county||r.county===county)&&r.level===levels[r.electorate])};
  function legislativeNationalRows(){
   if(!legislativeMode)return [];
   return(snapshotData?.rows||[]).filter(r=>r.electorate===legislativeBallot&&r.level==='national').map(src=>({
@@ -514,7 +514,7 @@
  function renderLegislativeSummary(){
   const root=el('historyLegislativeSummary');if(!root)return;
   root.hidden=!legislativeMode;root.replaceChildren();if(!legislativeMode)return;
-  if(allLegislative()){for(const id of combinedIdentities()){const rows=combinedLegislativeRows().filter(r=>r.electorate===id),head=createHistoryElement('div','history-legislative-head');head.append(createHistoryElement('strong','',electorateName(id)),createHistoryElement('span','',rows.length?'有效票 '+rows.reduce((s,r)=>s+r.votes,0).toLocaleString('zh-CN'):'暂无该层级资料'));root.append(head)}return}
+  if(allLegislative()){const records=combinedLegislativeRows();for(const id of combinedIdentities()){const rows=records.filter(r=>r.electorate===id),head=createHistoryElement('div','history-legislative-head');head.append(createHistoryElement('strong','',electorateName(id)),createHistoryElement('span','',rows.length?(id==='party'&&legislativeYear<2008?'席次计算票 ':'有效票 ')+rows.reduce((s,r)=>s+r.votes,0).toLocaleString('zh-CN'):'暂无该层级资料'));root.append(head)}return}
   if(legislativeBallot==='party'&&window.HistoryLegislativeParty){
    window.HistoryLegislativeParty.render(root,{year:legislativeYear,snapshot:snapshotData,makeParty:appendHistoryParty});
    return;
@@ -1147,7 +1147,7 @@
     if(i===3&&r.incumbent==null)td.title='现任资料缺失';
     const logo=i===4||partyBallotDialog&&i===1?logoFor(predictionParty(r.party)):'';
     if(logo){const img=document.createElement('img');img.src=logo;img.alt='';const party=document.createElement('span');party.className='history-party-cell';party.append(img,value);td.append(party)}
-    if(i===7)appendResultMark(td,r);else if(i===3)appendIncumbentTag(td,value);else if(!logo)td.append(value);tr.append(td);
+    if(i===7){if(!allLegislative()||f.electorate==='regional')appendResultMark(td,r)}else if(i===3)appendIncumbentTag(td,value);else if(!logo)td.append(value);tr.append(td);
    }
    if(!partyBallotDialog)appendMobileCandidateDetails(tr,[['号次',r.number],['性别',displayedGender(r)],['选举时现任',incumbentLabel(r)],['得票率',(r._share||0).toFixed(2)+'%']]);
    body.append(tr);
@@ -1402,7 +1402,7 @@
  const formerReturn=el('returnTaiwanMap').onclick;el('returnTaiwanMap').onclick=()=>{if(!active)return formerReturn();const keepTownView=legislativePartyTownView()||regionalLegislativeTownView();county='';legislativeFocus='';if(legislativeMode)scale=keepTownView?'town':'county';el('historyCounty').value='';switchMode();render()};
  const defaultColor=fillColor;fillColor=function(feature){
   if(!active)return defaultColor(feature);
-  if(allLegislative()){const region=currentResult?.regions.get(featureKey(feature));if(feature.electorate==='regional'&&legislativeYear<2008)return '#f0f3ed';return region?.party?partyColor(region.party):'#edf1e9'}
+  if(allLegislative()){if(feature.unresolvedHistorical)return '#cbd3ce';const region=currentResult?.regions.get(featureKey(feature));if(feature.electorate==='regional'&&legislativeYear<2008)return '#f0f3ed';return region?.party?partyColor(region.party):'#edf1e9'}
   if(allCouncil()&&!county&&metric==='party'){const counts=currentResult?.panelSeats.get(feature.electorate+'|'+feature.county);const leaders=counts?seatTieLeaderColors(counts,partyColor):[];return leaders.length>1?seatTiePatternFill(leaders):leaders[0]?.color||'#edf1e9'}
   // Qianzhen was divided at village level in 2008–2016. Never attribute
   // its unresolved whole-town geometry to either constituency's winner.
