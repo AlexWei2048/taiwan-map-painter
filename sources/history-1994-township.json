@@ -3761,6 +3761,42 @@
       }
     },
     {
+      "county": "苗栗縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "verified_winner_with_votes",
+      "source_url": "https://gozhuolan.com.tw/wp-content/uploads/2023/09/13%E4%BA%BA%E7%89%A9%E7%AF%87.pdf",
+      "source_locator": "《卓蘭鎮志·人物篇》，頁951，張明豐傳：1994年第12屆鎮長選舉得票4,635，對手詹豐治",
+      "source_page": 951,
+      "source_note": "本記錄為地方鎮志可檢索文字及歷任鎮長交叉佐證，PDF原頁影像未能成功擷取；非候選人完整開票表。",
+      "winners": [
+        {
+          "town": "卓蘭鎮",
+          "name": "張明豐",
+          "votes": 4635,
+          "incumbent_at_election": false,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "gender": null,
+          "source_url": "https://gozhuolan.com.tw/wp-content/uploads/2023/09/13%E4%BA%BA%E7%89%A9%E7%AF%87.pdf",
+          "evidence": "地方鎮志記載民國83年以4,635票擊敗詹豐治而當選第12屆鎮長，前任第10、11屆鎮長為陸慶助。"
+        }
+      ],
+      "other_candidates": [
+        {
+          "town": "卓蘭鎮",
+          "name": "詹豐治",
+          "votes": null,
+          "ballot_number": null,
+          "elected": false,
+          "party_recommendation": null,
+          "gender": null
+        }
+      ],
+      "previous_term_holder": "陸慶助",
+      "status": "partial_candidate_returns",
+      "do_not_infer_turnout": true
+    },
+    {
       "county": "彰化縣",
       "election_date": "1994-01-29",
       "source_url": "https://ctrl.chcg.gov.tw/files/101%E5%B9%B4%E5%BD%B0%E5%8C%96%E7%B8%A3%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1_16_1081217_2025.pdf",
