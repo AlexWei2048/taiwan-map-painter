@@ -1070,8 +1070,6 @@
   select.replaceChildren(...options.map(([label,value])=>new Option(label,value)));
  }
  function syncHistoryControls(){
-  const titleEyebrow=el('historyResultSection')?.querySelector('.eyebrow');
-  if(titleEyebrow)titleEyebrow.textContent=yearLabel()+' 历史数据';
   if(el('historyWorkspaceTitle'))el('historyWorkspaceTitle').textContent=yearLabel()+' '+officeTitle()+'选举结果';
   if(el('historyBoundaryNote')){
   el('historyBoundaryNote').hidden=!presidentialMode&&!legislativeMode&&localYear===2022;
