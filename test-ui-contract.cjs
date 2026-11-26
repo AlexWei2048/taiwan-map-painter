@@ -1018,10 +1018,13 @@ test('County and township map callouts use one readable font and never share a l
 
 test('Both historical entry pages include the controls wired by history JavaScript',()=>{
  const ids=['historyParty','historySearch','historyPrev','historyNext','historyPage',
-  'historyPager','historyCompare','historyCompareStatus','historyCompareRows','historyFromPrediction'];
+  'historyPager','historyCompare','historyCompareStatus','historyCompareRows'];
  for(const name of ['index.html','map-v60.html']){
   const html=read(name);
   for(const id of ids)assert.equal(html.split('id="'+id+'"').length-1,1,name+': '+id);
+  for(const id of ['historyFromPrediction','editLegend','legendDialog'])assert.ok(!html.includes('id="'+id+'"'),name+': removed '+id);
+  assert.doesNotMatch(html,/画出你的选举预测|选一场选举，点选区，开始预测。|图例显示与配色|查看同范围\s*2022\s*结果/);
+  assert.ok(html.indexOf('id="siteAbout"')<html.indexOf('class="workspace-categories"'),name+': site information precedes modes');
  }
 });
 
