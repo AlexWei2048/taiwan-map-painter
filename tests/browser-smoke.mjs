@@ -3090,14 +3090,14 @@ test('All archived mayor and council national maps use official winners and seat
 });
 
 
-test('Historical trends follow sidebar election, year, scope and metric with one relevant chart',async t=>{
+test('Historical trends follow sidebar election, year, scope and metric with matching metric and party-share charts',async t=>{
  const page=await pageFor(t,{width:1440,height:950});
  await page.locator('#categoryHistory').click();
  await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
  await page.locator('#historyViewTrends').click();
  await page.locator('#trendCharts svg').first().waitFor({timeout:60000});
  assert.equal(await page.locator('#historyTrendsPanel').isVisible(),true);
- assert.equal(await page.locator('#trendCharts .trend-card svg').count(),1);
+ assert.equal(await page.locator('#trendCharts .trend-card svg').count(),2);
  assert.equal(await page.locator('#trendOffice,#trendCounty,#trendMetric,#trendBallot').count(),0);
  await page.locator('#historyCounty').selectOption('台北市');
  await page.locator('#trendSelectNone').click();
@@ -3107,7 +3107,7 @@ test('Historical trends follow sidebar election, year, scope and metric with one
  assert.match(await page.locator('#trendScope').textContent(),/台北市/);
  await page.locator('#historyMetric').selectOption('share');
  await page.waitForFunction(()=>document.querySelector('#trendCharts h4')?.textContent.includes('得票率'));
- assert.equal(await page.locator('#trendCharts .trend-card svg').count(),1);
+ assert.equal(await page.locator('#trendCharts .trend-card svg').count(),2);
  assert.doesNotMatch(await page.locator('#trendCharts').textContent(),/投票率与有效率|候选人与当选人结构/);
  const graph=page.locator('#trendCharts .trend-card svg').first();
  assert.ok(await graph.locator('circle[role="button"]').count()>0);
@@ -3130,7 +3130,7 @@ test('Legislative seat trends default to all years and show complete integer par
  await page.locator('#historyViewTrends').click();
  await page.locator('.trend-parliament-card svg').first().waitFor({timeout:60000});
  assert.equal(await page.locator('#trendYears input:checked').count(),10);
- assert.match(await page.locator('#trendScope').textContent(),/全部民代类型（总席次）/);
+ assert.match(await page.locator('#trendScope').textContent(),/全部类型（总席次；不分区票得票率）/);
  assert.equal(await page.locator('#trendCharts table thead th').last().textContent(),'合计');
  const graph=page.locator('#trendCharts > .trend-card svg').first();
  assert.ok((await graph.locator('[data-trend-axis-tick]').allTextContents()).every(v=>/^\d+$/.test(v)));
@@ -3353,4 +3353,26 @@ test('Exported administrative index wraps long names without clipping or droppin
  });
  assert.ok(result.rowHeight>34);assert.ok(result.lines.every(n=>n>1));
  assert.deepEqual(result.names,result.expected);
+});
+
+
+test('Restoring unchanged trend years preserves checkbox nodes and chart',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ await page.locator('#categoryHistory').click();
+ await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
+ await page.locator('#historyViewTrends').click();
+ await page.locator('#trendCharts svg').first().waitFor({timeout:60000});
+ const stable=await page.evaluate(()=>{
+  const input=document.querySelector('#trendYears input'),graph=document.querySelector('#trendCharts svg');
+  HistoryTrendsUI.restoreRouteYears(HistoryTrendsUI.routeYears());
+  return input===document.querySelector('#trendYears input')&&graph===document.querySelector('#trendCharts svg');
+ });
+ assert.equal(stable,true);
+ assert.equal(await page.locator('#trendSelectAll').isDisabled(),true);
+ await page.locator('#trendSelectNone').click();
+ assert.equal(await page.locator('#trendSelectNone').isDisabled(),true);
+ assert.equal(await page.locator('#trendCsv').isDisabled(),true);
+ await page.locator('#trendYears input[value="2022"]').check();
+ await page.locator('#trendCharts svg').first().waitFor({timeout:60000});
+ assert.equal(await page.locator('#trendSelectNone').isDisabled(),false);
 });
