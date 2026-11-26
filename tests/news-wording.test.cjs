@@ -132,3 +132,11 @@ test('public site source wording and export call sites have the 2502 guards wire
  assert.ok(fs.readFileSync('news-wording.js','utf8').includes("new DOMParser().parseFromString(original,'image/svg+xml')"),
   'exported SVG text is normalized without rewriting geographic source IDs');
 });
+
+test('Independent nomination wording is uniform in visible text and CSV exports',()=>{
+ for(const input of ['无党籍（连署）','無黨籍（連署）','无党籍(连署)','连署','連署','无党籍'])assert.equal(W.normalize(input),'无党籍');
+ assert.equal(W.normalize('候选人 · 无党籍（连署） · 20%'),'候选人 · 无党籍 · 20%');
+ assert.equal(W.normalize('连署人数'),'连署人数');
+ assert.equal(W.normalize(W.normalize('无党籍（连署）')),'无党籍');
+ assert.match(HistoryCore.csv([['无党籍（连署）','連署']]),/"无党籍","无党籍"/);
+});

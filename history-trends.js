@@ -280,18 +280,18 @@ function trendCandidateRows(snapshot,office,grain,county,focus,norm){
   return Number.isInteger(votes)?{...r,votes}: {...r,votes:null};
  });
 }
-// Merge independent presidential tickets only, including older precomputed summary rows.
+// Normalize independent party presentation after raw or cached aggregation. Preserve v1 archive summaries.
 function presidentialIndependentKey(p){
  return /^(?:无党籍|無黨籍|连署|連署)(?:[（(].*[）)])?$/.test(String(p||'').trim())?'无党籍':p;
 }
 function mergePresidentialIndependents(row){
  if(!row?.complete)return row;
- const parties={},votes={},partyMeta={},candidateDetails={};
+ const parties=Object.create(null),votes=Object.create(null),partyMeta=Object.create(null),candidateDetails=Object.create(null);
  for(const [p,v] of Object.entries(row.parties||{})){const k=presidentialIndependentKey(p);parties[k]=(parties[k]||0)+v;partyMeta[k]=k==='无党籍'?{party:k,label:k}:row.partyMeta?.[p]||{party:k,label:k};}
  for(const [p,v] of Object.entries(row.votes||{})){const k=presidentialIndependentKey(p);votes[k]=(votes[k]||0)+v;}
  for(const [p,entries] of Object.entries(row.candidateDetails||{})){const k=presidentialIndependentKey(p);(candidateDetails[k]||(candidateDetails[k]=[])).push(...entries.map(r=>({...r,party:presidentialIndependentKey(r.party)})));}
  for(const entries of Object.values(candidateDetails))entries.sort((a,b)=>b.votes-a.votes||a.name.localeCompare(b.name,'zh'));
- return {...row,parties,votes,partyMeta,candidateDetails};
+ return {...row,parties,votes,partyMeta,candidateDetails,...(row.seats?{seats:Object.entries(row.seats).reduce((acc,[p,v])=>{const k=presidentialIndependentKey(p);acc[k]=(acc[k]||0)+v;return acc},Object.create(null))}:{})};
 }
 function localPartyVoteShares(snapshot,selection){
  const {office,county='',level='county',focus='',normalize=String}=selection;
@@ -319,7 +319,7 @@ function localPartyVoteShares(snapshot,selection){
   }
   const parties=Object.fromEntries(Object.entries(votes).map(([p,v])=>[p,v/valid*100]));
   const candidateDetails=Object.fromEntries(Object.entries(candidateGroups).map(([p,group])=>[p,[...group.values()].sort((a,b)=>b.votes-a.votes||a.name.localeCompare(b.name,'zh'))]));
-  const row={...base,complete:true,reason:'',parties,votes,valid,partyMeta,candidateDetails};return office==='president'?mergePresidentialIndependents(row):row;
+  return{...base,complete:true,reason:'',parties,votes,valid,partyMeta,candidateDetails};
  });
 }
 function mapTrend(snapshot,selection,anchor){

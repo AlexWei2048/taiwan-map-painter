@@ -3,7 +3,7 @@
 'use strict';
 const valid=v=>Number.isSafeInteger(v)&&v>=0;
 const norm=v=>String(v??'').trim().replaceAll('臺','台').replaceAll('縣','县').replaceAll('黨','党').replaceAll('無','无').replaceAll('連','连');
-const party=v=>/^(无党籍|连署)/.test(norm(v))?'无党籍（连署）':norm(v)||'政党资料缺失';
+const party=v=>/^(无党籍|连署)/.test(norm(v))?'无党籍':norm(v)||'政党资料缺失';
 const offices={mayor:'县市长',council:'县市议员',township:'乡镇市区长',president:'台湾地区领导人',legislative:'立法机构民代'};
 function group(items,key){const m=new Map();for(const x of items){const k=key(x);if(!m.has(k))m.set(k,[]);m.get(k).push(x)}return m}
 function select(s,o,ballot='all',county='',n=norm){
