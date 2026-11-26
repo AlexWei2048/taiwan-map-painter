@@ -4,12 +4,13 @@
  const YEAR_SET=new Set(YEARS),loads=new Map();let mapLoad=null;
  const LABELS={regional:'区域民代',plains:'平地少数民族民代',mountain:'山地少数民族民代'};
  function ballots(year){
-  const items=Object.entries(LABELS).map(([value,label])=>({value,label}));
+  const items=[{value:'all',label:'全部类型（分别统计）'},...Object.entries(LABELS).map(([value,label])=>({value,label}))];
   items.push({value:'party',label:'不分区民代'});
   return items;
  }
  // "全部地区" is a map-range choice, not an administrative hierarchy.
  function levels(year,electorate){
+  if(electorate==='all')return [['county','县市']];
   if(electorate==='regional')return [['county','县市'],['district','选举区'],...(Number(year)===1992?[['town','乡镇市区']]:[])];
   if(Number(year)===1992&&electorate==='party')return [['county','县市']];
   return [['county','县市'],['town','乡镇市区']];
