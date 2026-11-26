@@ -2173,12 +2173,14 @@ function expandExportWinnerLayout(layout,targetWidth){
 
 function numberTableExportMetrics(entries,columns=1){
  const rows=mapNumberSorted(entries),cols=Math.max(1,Math.min(4,Math.round(columns))),perColumn=Math.ceil(rows.length/cols);
- const cellWidth=264,rowHeight=34,headerHeight=70;
- return{width:cols*cellWidth+22,height:headerHeight+perColumn*rowHeight+12,columns:cols,perColumn,cellWidth,rowHeight,headerHeight};
+ const cellWidth=264,headerHeight=70,nameCounts=mapNumberNameCounts(rows);
+ const nameLines=rows.map(row=>wrapExportText(mapNumberDisplayName(row,rows,nameCounts),(cellWidth-65)/16));
+ const rowHeight=Math.max(34,...nameLines.map(lines=>lines.length*19+12));
+ return{width:cols*cellWidth+22,height:headerHeight+perColumn*rowHeight+12,columns:cols,perColumn,cellWidth,rowHeight,headerHeight,nameLines};
 }
 function appendNumberTableExport(root,entries,x,y,columns=1){
  const rows=mapNumberSorted(entries);if(!rows.length)return 0;
- const m=numberTableExportMetrics(rows,columns),nameCounts=mapNumberNameCounts(rows);
+ const m=numberTableExportMetrics(rows,columns);
  const panel=svgEl('g',{'data-map-number-key':'true','data-export-layout':'separate-sidebar'});
  panel.append(svgEl('rect',{x,y,width:m.width,height:m.height,rx:14,fill:'#fff',stroke:'#dce5df','stroke-width':1.15}));
  panel.append(svgEl('rect',{x:x+1,y:y+1,width:m.width-2,height:4,rx:2,fill:'#2a805d'}));
@@ -2190,10 +2192,11 @@ function appendNumberTableExport(root,entries,x,y,columns=1){
   const bx=x+11+col*m.cellWidth,by=y+m.headerHeight+index*m.rowHeight;
   panel.append(svgEl('rect',{x:bx,y:by-3,width:m.cellWidth-8,height:m.rowHeight-2,rx:5,fill:index%2?'#f6f9f6':'#eff5ef'}));
   panel.append(svgEl('rect',{x:bx+6,y:by+1,width:36,height:m.rowHeight-9,rx:5,fill:'#dfeee2'}));
-  const num=svgEl('text',{x:bx+24,y:by+19,'text-anchor':'middle','font-size':16,'font-weight':700,fill:'#2b664e'});
+  const num=svgEl('text',{x:bx+24,y:by+(m.rowHeight-5)/2+4,'text-anchor':'middle','font-size':16,'font-weight':700,fill:'#2b664e'});
   num.textContent=row.number;panel.append(num);
-  const value=svgEl('text',{x:bx+51,y:by+19,'font-size':16,'font-weight':550,fill:'#365344'});
-  value.textContent=mapNumberDisplayName(row,rows,nameCounts);panel.append(value);
+  const lines=m.nameLines[i],baseline=by+(m.rowHeight-5-(lines.length-1)*19)/2+4;
+  const value=svgEl('text',{x:bx+51,y:baseline,'font-size':16,'font-weight':550,fill:'#365344'});
+  lines.forEach((line,j)=>{const part=svgEl('tspan',{x:bx+51,dy:j?19:0});part.textContent=line;value.append(part)});panel.append(value);
  }
  root.append(panel);return m.height;
 }
@@ -2378,9 +2381,9 @@ function exportSvg(){
   const detailY=mapY+contentHeight+(appendixHeight?appendixHeight+24:14);
   const details={height:0,labelled:new Set()};
   const coverageRows=exportLabelCoverage(originalItems,map,details.labelled);
-  const coverageY=detailY+(details.height?details.height+22:0);
+  const coverageY=Math.max(detailY+(details.height?details.height+22:0),sidebarHeight);
   const coverageHeight=appendExportLabelCoverage(root,coverageRows,40,coverageY,contentWidth);
-  const tableY=Math.max(mapY+contentHeight+40,coverageY+coverageHeight+30);
+  const tableY=Math.max(mapY+contentHeight+40,coverageY+coverageHeight+30,sidebarHeight+16);
   const actualWidth=coreWidth+sidebarWidth;
   const winnerLayout=tableLayout?expandExportWinnerLayout(tableLayout,actualWidth-80):null;
   if(winnerRows.length)appendExportPredictionTable(root,winnerRows,tableY,winnerLayout);
@@ -2391,7 +2394,7 @@ function exportSvg(){
  }finally{exportNumberRows=null}
 }
 
-function preparedExportSvg(){const oldFilter=exportPanelFilter,oldLegend=state.legend.show,oldCouncilView=state.councilViewScope,oldLabels=state.labels;state.councilViewScope='all';exportPanelFilter=state.level==='council'&&state.exportSettings.councilScope!=='all'?state.exportSettings.councilScope:'';state.legend.show=true;state.labels=true;render();try{return exportSvg()}finally{exportPanelFilter=oldFilter;state.legend.show=oldLegend;state.councilViewScope=oldCouncilView;state.labels=oldLabels;render()}}
+function preparedExportSvg(){const oldFilter=exportPanelFilter,oldLegend=state.legend.show,oldCouncilView=state.councilViewScope,oldLabels=state.labels;state.councilViewScope='all';exportPanelFilter=state.level==='council'&&state.exportSettings.councilScope!=='all'?state.exportSettings.councilScope:'';state.legend.show=true;state.labels=true;try{render();return exportSvg()}finally{exportPanelFilter=oldFilter;state.legend.show=oldLegend;state.councilViewScope=oldCouncilView;state.labels=oldLabels;render()}}
 function exportElectionType(){
  if(typeof History2022View!=='undefined'&&History2022View.active())return History2022View.yearLabel()+' '+({mayor:'县市长',council:'县市议员',township:'乡镇市区长',president:'台湾地区领导人',legislative:'立法机构民代'}[History2022View.office()]);
  if(state.workspaceMode==='prediction')return '2026 '+directoryOfficeName[state.predictionOffice];
@@ -2399,7 +2402,7 @@ function exportElectionType(){
 }
 function exportMapTitle(){const type=exportElectionType();if(typeof History2022View!=='undefined'&&History2022View.active())return type+'选举结果 · '+(state.county||'全台')+' · '+History2022View.metricLabel();const custom=String(state.title||'').trim();if(custom)return custom.includes(type)?custom:type+' · '+custom;return type+' · '+(state.county||'全台')+(state.workspaceMode==='prediction'?'预测地图':'地图')}
 function exportFilename(){if(typeof History2022View!=='undefined'&&History2022View.active()&&window.HistoryWorkspace)return HistoryWorkspace.exportStem(HistoryWorkspace.selection());const suffix=state.level==='council'&&state.exportSettings.councilScope!=='all'?'_'+electorateName(state.exportSettings.councilScope):'';return exportMapTitle().replace(/[\\/:*?"<>|]/g,'_').slice(0,120)+suffix}
-$('exportWinnerTable').onchange=()=>{state.exportSettings.winnerTable=$('exportWinnerTable').checked;$('exportCandidateScope').disabled=!state.exportSettings.winnerTable;persist()};$('exportCandidateScope').onchange=()=>{state.exportSettings.candidateScope=$('exportCandidateScope').value==='all'?'all':'winners';persist()};$('exportNote').oninput=()=>{state.exportSettings.note=simplify($('exportNote').value).trim().slice(0,500);persist()};$('councilExportScope').onchange=()=>{state.exportSettings.councilScope=$('councilExportScope').value;persist()};$('exportSvg').onclick=async()=>{try{await ensureExportMapReady();download(new Blob([preparedExportSvg()],{type:'image/svg+xml;charset=utf-8'}),exportFilename()+'.svg');toast('SVG 矢量图已导出，包含比例尺、指北针和对应图例')}catch(e){toast(e.message||'SVG 导出失败')}};$('exportPng').onclick=async()=>{const b=$('exportPng');b.disabled=true;const old=b.textContent;b.textContent='正在导出…';let url;try{await ensureExportMapReady();const source=preparedExportSvg(),doc=new DOMParser().parseFromString(source,'image/svg+xml'),height=Number(doc.documentElement.getAttribute('height')),width=Number(doc.documentElement.getAttribute('width'));if(!width||!height)throw Error('图片尺寸无效');const scale=Math.min(3,Math.floor(16000/Math.max(width,height)),Math.floor(Math.sqrt(55000000/(width*height))));if(scale<1)throw Error('图片过大，请选择“仅显示当选人”，或改用 SVG 矢量图完整导出');url=URL.createObjectURL(new Blob([source],{type:'image/svg+xml;charset=utf-8'}));const img=new Image();img.src=url;await new Promise((ok,no)=>{img.onload=ok;img.onerror=no});const c=document.createElement('canvas');c.width=width*scale;c.height=height*scale;const ctx=c.getContext('2d');if(!ctx)throw Error('设备无法创建图片画布，请改用 SVG');ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(img,0,0,c.width,c.height);const blob=await new Promise(ok=>c.toBlob(ok,'image/png'));if(!blob)throw Error('图片生成失败，请改用 SVG');download(blob,exportFilename()+'.png');toast(scale===3?'已导出 3 倍清晰度 PNG 图片':'大图已自动调整为 '+scale+' 倍清晰度 PNG')}catch(e){toast(e.message||'导出失败，请尝试导出 SVG 矢量图')}finally{if(url)URL.revokeObjectURL(url);b.disabled=false;b.textContent=old}};
+$('exportWinnerTable').onchange=()=>{state.exportSettings.winnerTable=$('exportWinnerTable').checked;$('exportCandidateScope').disabled=!state.exportSettings.winnerTable;persist()};$('exportCandidateScope').onchange=()=>{state.exportSettings.candidateScope=$('exportCandidateScope').value==='all'?'all':'winners';persist()};$('exportNote').oninput=()=>{state.exportSettings.note=simplify($('exportNote').value).trim().slice(0,500);persist()};$('councilExportScope').onchange=()=>{state.exportSettings.councilScope=$('councilExportScope').value;persist()};$('exportSvg').onclick=async()=>{try{await ensureExportMapReady();download(new Blob([preparedExportSvg()],{type:'image/svg+xml;charset=utf-8'}),exportFilename()+'.svg');toast('SVG 矢量图已导出，包含比例尺、指北针和对应图例')}catch(e){toast(e.message||'SVG 导出失败')}};$('exportPng').onclick=async()=>{const b=$('exportPng');b.disabled=true;const old=b.textContent;b.textContent='正在导出…';let url;try{await ensureExportMapReady();const source=preparedExportSvg(),name=exportFilename()+'.png',doc=new DOMParser().parseFromString(source,'image/svg+xml'),height=Number(doc.documentElement.getAttribute('height')),width=Number(doc.documentElement.getAttribute('width'));if(!width||!height)throw Error('图片尺寸无效');const scale=Math.min(3,Math.floor(16000/Math.max(width,height)),Math.floor(Math.sqrt(55000000/(width*height))));if(scale<1)throw Error('图片过大，请选择“仅显示当选人”，或改用 SVG 矢量图完整导出');url=URL.createObjectURL(new Blob([source],{type:'image/svg+xml;charset=utf-8'}));const img=new Image();await new Promise((ok,no)=>{img.onload=ok;img.onerror=()=>no(Error('SVG 图像读取失败，请改用 SVG 导出'));img.src=url});const c=document.createElement('canvas');c.width=width*scale;c.height=height*scale;const ctx=c.getContext('2d');if(!ctx)throw Error('设备无法创建图片画布，请改用 SVG');ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(img,0,0,c.width,c.height);const blob=await new Promise(ok=>c.toBlob(ok,'image/png'));if(!blob)throw Error('图片生成失败，请改用 SVG');download(blob,name);toast(scale===3?'已导出 3 倍清晰度 PNG 图片':'大图已自动调整为 '+scale+' 倍清晰度 PNG')}catch(e){toast(e.message||'导出失败，请尝试导出 SVG 矢量图')}finally{if(url)URL.revokeObjectURL(url);b.disabled=false;b.textContent=old}};
 // Retry large static map downloads without losing locally saved election projects.
 // The retry URL bypasses stale/corrupt intermediary caches while remaining same-origin.
 async function fetchMapJson(url,label,attempts=3){
