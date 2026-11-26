@@ -687,7 +687,7 @@
   const scoped=state.view==='overview'?overviewRegionData(indexed,{
    year:state.year,office:state.office,electorate:state.electorate,scope:overviewScope,county:overviewCounty,area:overviewArea}):null;
   currentResult=scoped?.result||fullResult;
-  currentOverview=scoped?.overview||(currentResult&&root.HistoryCore?root.HistoryCore.overview(currentResult):null);
+  currentOverview=scoped?.overview||(state.office==='legislative'&&state.electorate==='all'&&indexed?root.HistoryLegislativeData?.localResult(indexed,{year:state.year,electorate:'all',scope:state.county?'county':'all',county:state.county})?.overview:null)||(currentResult&&root.HistoryCore?root.HistoryCore.overview(currentResult):null);
   renderOverviewScope(scoped);
    const electorateBox=el('historyElectorateBox');if(electorateBox)electorateBox.hidden=!['council','legislative'].includes(state.office);
   const electorate=el('historyElectorate');if(electorate){
