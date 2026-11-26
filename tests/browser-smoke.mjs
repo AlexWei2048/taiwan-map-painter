@@ -3248,3 +3248,39 @@ test('Fixed election choices are hidden and restored when choices become availab
  assert.equal(await page.locator('#historyScale').isVisible(),true);
  assert.equal(await page.locator('#historyMetric').isVisible(),true);
 });
+
+
+test('Repeated historical statistics renders retain identical data and DOM nodes',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ await page.locator('#categoryHistory').click();
+ await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022&&window.HistoryWorkspace?.overview());
+ await page.locator('#historyViewOverview').click();
+ await page.waitForFunction(()=>window.HistoryWorkspace?.selection().view==='overview'&&document.querySelector('#historyOverviewCards .history-overview-card'));
+ const checks=await page.evaluate(()=>{
+  const result=HistoryWorkspace.result(),overview=HistoryWorkspace.overview();
+  const card=document.querySelector('#historyOverviewCards .history-overview-card');
+  const option=document.querySelector('#historyOverviewScope option');
+  HistoryWorkspace.render();HistoryWorkspace.render();
+  return{result:result===HistoryWorkspace.result(),overview:overview===HistoryWorkspace.overview(),
+   card:card===document.querySelector('#historyOverviewCards .history-overview-card'),
+   option:option===document.querySelector('#historyOverviewScope option')};
+ });
+ assert.deepEqual(checks,{result:true,overview:true,card:true,option:true});
+ await page.locator('#historyViewOverview').click();
+ await page.locator('#historyYear').selectOption('2018');
+ await page.waitForFunction(()=>History2022View.snapshot()?.year===2018&&HistoryWorkspace.result()?.index?.snapshot?.year===2018);
+ assert.equal(await page.evaluate(()=>HistoryWorkspace.result().index.snapshot.year),2018);
+});
+
+test('Returning to the same historical trend preserves its rendered graph',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ await page.locator('#categoryHistory').click();
+ await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
+ await page.locator('#historyViewTrends').click();
+ await page.locator('#trendCharts svg').first().waitFor({timeout:60000});
+ await page.evaluate(()=>{window.__trendReuseGraph=document.querySelector('#trendCharts svg')});
+ await page.locator('#historyViewTrends').click();
+ await page.locator('#historyViewTrends').click();
+ await page.locator('#trendCharts svg').first().waitFor({timeout:60000});
+ assert.equal(await page.evaluate(()=>window.__trendReuseGraph===document.querySelector('#trendCharts svg')),true);
+});
