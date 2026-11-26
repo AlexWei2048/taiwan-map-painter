@@ -4394,14 +4394,39 @@
       "county": "桃園縣",
       "election_date": "1994-01-29",
       "source_url": "https://ws.tycg.gov.tw/Download.ashx?n=5Y%2BD44CB6KGM5pS%2F57WE57mU6IiH5Zyw5pa56YG46IiJLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvOTIvUmVsRmlsZS8xMjE0My83MDI2NDAv5Y%2BD44CB6KGM5pS%2F57WE57mU6IiH5Zyw5pa56YG46IiJLnBkZg%3D%3D",
-      "source_locator": "龜山區志歷屆鄉長，第十一、十二屆（公開文字；原頁截圖未取得）",
+      "source_locator": "龜山區志歷屆鄉長，第十一、十二屆（公開文字；原頁截圖未取得）；第十二屆選舉統計完整列，投票數38228＝有效37261＋無效967，投票率71.62%。",
       "winners": [
         {
           "town": "龜山鄉",
           "name": "曾忠義",
           "incumbent_at_election": true
         }
-      ]
+      ],
+      "profile_totals": [
+        53373,
+        38228,
+        37261,
+        967
+      ],
+      "profiles": [
+        {
+          "town": "龜山鄉",
+          "registered_voters": 53373,
+          "ballots_cast": 38228,
+          "valid_votes": 37261,
+          "invalid_votes": 967,
+          "candidate_count": 2,
+          "male_candidates": 1,
+          "female_candidates": 1,
+          "winner_name": "曾忠義",
+          "previous_election_winner": "曾忠義",
+          "turnout_pct": 71.62
+        }
+      ],
+      "profile_detail_source": {
+        "source_url": "https://ws.tycg.gov.tw/Download.ashx?n=5Y%2BD44CB6KGM5pS%2F57WE57mU6IiH5Zyw5pa56YG46IiJLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvOTIvUmVsRmlsZS8xMjE0My83MDI2NDAv5Y%2BD44CB6KGM5pS%2F57WE57mU6IiH5Zyw5pa56YG46IiJLnBkZg%3D%3D",
+        "source_locator": "龜山區統計年報，表3-7「本區改制前鄉長選舉狀況」，民國83年1月29日第十二屆；公開文字列可讀，原頁影像未取得。原表另列已領未投票1張，未計入有效或無效票。"
+      }
     },
     {
       "county": "桃園縣",
