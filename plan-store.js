@@ -39,7 +39,9 @@
   const empty=()=>({total:0,winners:0,votes:0,entered:0,invalid:0,seats:0,parties:Object.create(null),incomplete:[],incompleteVotes:[]});
   const all=empty();
   for(const d of directory.districts){if(d.type!==office)continue;
-   const cs=d.candidateIds.map(id=>candidates.get(id)).filter(Boolean),record=project.predictions?.[d.id],summary=core.summary(d,cs,record);
+   const cs=d.candidateIds.map(id=>candidates.get(id)).filter(Boolean);let record=project.predictions?.[d.id];
+   if(record&&d.excludedCount){const excluded=new Set((directory.excluded||[]).filter(x=>x.districtId===d.id).map(x=>x.candidateId));record={...record,winners:(record.winners||[]).filter(id=>!excluded.has(id)),estimates:Object.fromEntries(Object.entries(record.estimates||{}).filter(([id])=>!excluded.has(id)))}}
+   const summary=core.summary(d,cs,record);
    const entries=cs.map(c=>summary.record?.estimates?.[c.id]||{});
    const voteComplete=entries.length>0&&(
     entries.every(e=>Number.isSafeInteger(e.votes)&&e.votes>=0)&&entries.reduce((n,e)=>n+e.votes,0)>0||
