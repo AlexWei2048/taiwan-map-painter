@@ -40,6 +40,8 @@
    const gaps=x.missingVotes||x.missingWinners||x.unreconciled||x.missingNumber||x.missingGender||x.missingParty||x.missingIncumbent||Object.values(x.missingFields).some(Boolean);
    x.status=x.partialArchives||has&&(gaps||declaredPartial)?'partial':has?'recorded':x.declared?'missing':x.notApplicable?'na':'unknown';
   }
+  // An explicitly missing county must also be reflected in the whole archive.
+  if([...buckets.values()].some(b=>['partial','missing'].includes(b.status)))all.status='partial';
   return {year:snapshot.year,office,all,counties:[...buckets.values()]};
  }
  const api={analyze,labels};
