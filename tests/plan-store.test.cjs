@@ -47,3 +47,11 @@ test('Full backup merge retains unsaved edits, selection and all existing IDs',(
  const full={version:1,activeId:'original',plans:Array.from({length:12},(_,i)=>({id:i?'p'+i:'original',name:'方案'+i,project:project()}))};
  assert.throws(()=>P.merge(full,draft,imported,x=>x),/超过12/);
 });
+
+test('Plan comparison distinguishes confirmed differences from incomplete predictions',()=>{
+ const directory={districts:[{id:'d',type:'mayor',county:'甲县',candidateIds:['a','b'],seats:1}],candidates:[{id:'a',name:'甲',party:'甲党'},{id:'b',name:'乙',party:'乙党'}]};
+ const left=project(),right=project();right.predictions.d.winners=['b'];right.predictions.d.estimates={a:{votes:40},b:{votes:60}};
+ const [r]=P.compare(directory,left,right,'mayor',C);assert.equal(r.different,true);assert.equal(r.maxShareChange,20);
+ assert.equal(P.compare(directory,left,{predictions:{}},'mayor',C)[0].different,null);
+ assert.equal(P.compare(directory,left,left,'mayor',C)[0].different,false);
+});

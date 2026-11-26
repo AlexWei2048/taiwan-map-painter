@@ -68,6 +68,20 @@
   }
   return validate(next);
  }
- const api={KEY,MAX,validate,initial,capture,change,commit,progress,merge};
+ // Compare validated predictions only; absent or invalid entries are never counted as defeats.
+ function compare(directory,left,right,office,core){
+  const candidates=new Map(directory.candidates.map(c=>[c.id,c])),rows=[];
+  for(const d of directory.districts){if(d.type!==office)continue;
+   const cs=d.candidateIds.map(id=>candidates.get(id)).filter(Boolean);
+   function get(project){let record=project.predictions?.[d.id];if(record&&d.excludedCount){const excluded=new Set((directory.excluded||[]).filter(x=>x.districtId===d.id).map(x=>x.candidateId));record={...record,winners:(record.winners||[]).filter(id=>!excluded.has(id)),estimates:Object.fromEntries(Object.entries(record.estimates||{}).filter(([id])=>!excluded.has(id)))}}
+    const s=core.summary(d,cs,record),entries=cs.map(c=>s.record?.estimates?.[c.id]||{}),votes=entries.every(e=>Number.isSafeInteger(e.votes)&&e.votes>=0)?entries.reduce((n,e)=>n+e.votes,0):0;
+    const shares=votes>0?entries.map(e=>e.votes/votes*100):entries.every(e=>Number.isFinite(e.share)&&e.share>=0)&&Math.abs(entries.reduce((n,e)=>n+e.share,0)-100)<=.101?entries.map(e=>e.share):null;
+    return {status:s.status,winners:s.winners.map(c=>({id:c.id,name:c.name||c.id,party:c.party})),shares}}
+   const a=get(left),b=get(right),complete=a.status==='complete'&&b.status==='complete',aw=a.winners.map(c=>c.id).sort().join('|'),bw=b.winners.map(c=>c.id).sort().join('|'),different=complete?aw!==bw:null;
+   const delta=a.shares&&b.shares?Math.max(0,...a.shares.map((v,i)=>Math.abs(v-b.shares[i]))):null;
+   rows.push({districtId:d.id,county:d.county,district:d.name||d.id,left:a,right:b,different,maxShareChange:delta});
+  }return rows;
+ }
+ const api={KEY,MAX,validate,initial,capture,change,commit,progress,merge,compare};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.MapPlanStore=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

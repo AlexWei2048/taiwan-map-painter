@@ -127,6 +127,7 @@
   try{
    if(!data){await mapPromise;if(!data)throw Error('基础地图尚未载入')}
    if(!valid())return;
+   if(typeof hash==='string'&&hash.startsWith('#plan-v1=')){if(!root.PlanShareUI)throw Error('分享模块尚未载入');await root.PlanShareUI.receive(hash);return}
    if(r?.mode==='history'){
     const ok=await root.SiteWorkspaceCategories.openHistory(r,valid);
     if(valid()&&!ok)throw Error('所选历史资料暂时无法载入');

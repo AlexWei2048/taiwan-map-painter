@@ -3565,3 +3565,23 @@ test('Full plan backup merges without replacing current forecast',async t=>{
  await page.locator('#categoryHistory').click();await page.locator('#historyTrendsPanel').waitFor({state:'hidden'});assert.equal(await page.locator('#categoryHistory').getAttribute('aria-selected'),'true');assert.equal(await page.locator('#analysisResultSection').isVisible(),false);assert.equal(await page.locator('#mapWithKey').isVisible(),true);
  await page.locator('#categoryFuture').click();assert.equal(await page.locator('#categoryFuture').getAttribute('aria-selected'),'true');
  });
+
+test('Observation topics and historical batch download remain isolated from the history map',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});await page.locator('#categoryAnalysis').click();
+ await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
+ await page.locator('[data-observation="seats"]').click();
+ await page.locator('#observationContent svg[aria-label="政党半圆形席次构成图"]').waitFor({timeout:60000});
+ assert.equal(await page.locator('#observationContent svg[aria-label="政党半圆形席次构成图"] circle').count(),22);
+ assert.equal(await page.locator('#mapWithKey').isVisible(),false);
+ await page.locator('[data-observation="margin"]').click();
+ await page.locator('.observation-margin-map path').first().waitFor({timeout:60000});
+ assert.ok(await page.locator('.observation-margin-map path').count()>=22);
+ await page.locator('[data-observation="categories"]').click();
+ await page.locator('#observationContent table').waitFor({timeout:90000});
+ assert.match(await page.locator('#observationContent').textContent(),/县市议员/);
+ await page.locator('[data-observation="candidate"]').click();await page.locator('#observationContent input[type=search]').fill('蒋万安');await page.locator('#observationContent button[type=submit]').click();
+ await page.locator('#observationContent table').waitFor({timeout:90000});
+ assert.match(await page.locator('#observationContent').textContent(),/蒋万安/);
+ await page.locator('#categoryHistory').click();await page.locator('#mapWithKey').waitFor({state:'visible'});assert.equal(await page.locator('#observationContent').isVisible(),false);
+ const [file]=await Promise.all([page.waitForEvent('download',{timeout:90000}),page.locator('#historyBatchDownload').click()]);assert.match(file.suggestedFilename(),/历届历史数据\.json$/);
+});
