@@ -21,3 +21,24 @@ test('Council ballot scope is not combined with other identities',()=>{
  const snapshot={year:2022,elections:[{office:'council',election_id:'c'}],contests:[{election_id:'c',contest_id:'a',county_name:'甲县',electorate:'regional',seats:1,valid_votes:100},{election_id:'c',contest_id:'b',county_name:'甲县',electorate:'plains',seats:1,valid_votes:100}],candidacies:[{contest_id:'a',party_name:'甲党',votes:100,elected_official:true},{contest_id:'b',party_name:'乙党',votes:100,elected_official:true}]};
  const r=C.summarize(snapshot,'council','regional');assert.equal(r.all.valid,100);assert.equal(r.all.parties['乙党'],undefined);assert.equal(r.all.seats,1);
 });
+
+
+test('Seat and mayor party changes exclude incomparable geography and unknown winners',()=>{
+ const row=(party,share,seats)=>({complete:true,seats,leader:[party],parties:{[party]:{votes:share*10,share,seats}}});
+ const a={year:2009,office:'mayor',ballot:'all',counties:new Map([['台北市',row('甲党',50,1)],['台中市',row('甲党',50,1)],['花莲县',row('无党籍（连署）',60,1)]]),all:row('甲党',50,1)};
+ const b={year:2014,office:'mayor',ballot:'all',counties:new Map([['台北市',row('乙党',60,1)],['台中市',row('乙党',60,1)],['花莲县',row('无党籍（连署）',55,1)]]),all:row('乙党',60,1)};
+ assert.equal(C.countyChange(a,b,'台北市','甲党','seats'),-1);
+ assert.equal(C.countyChange(a,b,'台北市','乙党','seats'),1);
+ assert.equal(C.countyChange(a,b,'台北市','甲党','share'),null);
+ assert.equal(C.countyChange(a,b,'台中市','甲党','seats'),null);
+ assert.equal(C.countyChange(a,b,'台中市','','turnover'),null);
+ assert.deepEqual(C.countyChange(a,b,'台北市','','turnover'),{from:'甲党',to:'乙党',changed:true});
+ assert.deepEqual(C.countyChange(a,b,'花莲县','','turnover'),{from:'无党籍（连署）',to:'无党籍（连署）',changed:false});
+ assert.equal(C.turnover(row('政党资料缺失',50,1),row('乙党',60,1)),null);
+ assert.equal(C.turnover(row('甲党',50,2),row('乙党',60,1)),null);
+ const csv=C.comparisonCSV(a,b);
+ assert.match(csv,/^\ufeff"选举类别"/);
+ assert.ok(csv.includes('"台中市","甲党","500","","50","","","1","0","","","","当届行政区范围不同或资料不存在"'));
+ assert.ok(csv.includes('"台北市","甲党","500","","50","","","1","0","-1","甲党","乙党",""'));
+ assert.ok(csv.includes('"县市长","全部","2009","2014"'));
+});
