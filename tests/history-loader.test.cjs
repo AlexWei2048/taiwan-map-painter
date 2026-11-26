@@ -92,3 +92,30 @@ test('failed trend module can be retried without reloading the archive',async()=
  await assert.rejects(loader.loadTrends(),/network/);
  await loader.loadTrends();assert.deepEqual(calls,[...HISTORY_SCRIPTS,TREND_SCRIPTS[0],...TREND_SCRIPTS]);
 });
+
+test('legislative candidate metadata is isolated from ordinary history and trends',async()=>{
+ const {createHistoryLoader,HISTORY_SCRIPTS,TREND_SCRIPTS,LEGISLATIVE_CANDIDATES}=require('../history-loader.js');
+ const calls=[];let data=null,release;
+ const gate=new Promise(resolve=>{release=resolve});
+ const loader=createHistoryLoader({loadStyle:async()=>{},loadScript:async path=>{
+  calls.push(path);if(path===LEGISLATIVE_CANDIDATES){await gate;data={2024:{candidates:{}}}}
+ },getView:()=>({activate(){}}),getCandidates:()=>data});
+ await loader.loadTrends();
+ assert.deepEqual(calls,[...HISTORY_SCRIPTS,...TREND_SCRIPTS]);
+ assert.ok(!calls.includes(LEGISLATIVE_CANDIDATES));
+ const first=loader.loadLegislativeCandidates(),second=loader.loadLegislativeCandidates();
+ assert.equal(first,second);release();
+ assert.equal(await first,data);assert.equal(await second,data);
+ assert.equal(await loader.loadLegislativeCandidates(),data);
+ assert.equal(calls.filter(path=>path===LEGISLATIVE_CANDIDATES).length,1);
+});
+test('legislative candidate metadata can retry after a download failure',async()=>{
+ const {createHistoryLoader,LEGISLATIVE_CANDIDATES}=require('../history-loader.js');
+ let attempts=0,data=null;
+ const loader=createHistoryLoader({loadStyle:async()=>{},loadScript:async path=>{
+  assert.equal(path,LEGISLATIVE_CANDIDATES);if(++attempts===1)throw Error('network');data={2024:{}};
+ },getView:()=>({activate(){}}),getCandidates:()=>data});
+ await assert.rejects(loader.loadLegislativeCandidates(),/network/);
+ assert.equal(await loader.loadLegislativeCandidates(),data);
+ assert.equal(attempts,2);
+});

@@ -562,11 +562,14 @@
   if(loads.has(year))return loads.get(year);
   const promise=(async()=>{
    const [response,local]=await Promise.all([
+
     fetcher('assets/history-legislative-'+year+'.json?v=20261124-vote-reconciliation-v4',{cache:'default'}),
     [1992,2001].includes(year)?fetcher('assets/history-legislative-'+year+'-local.json?v='+(year===1992?'3':'1')).then(response=>{
      if(!response.ok)throw Error(year+'年地方得票资料 HTTP '+response.status);
      return response.json();
-    }):null
+    }):null,
+    // Candidate metadata is legislative-only; start its download alongside the results.
+    root.HistoryLoader?.loadLegislativeCandidates?.()
    ]);
    if(!response.ok)throw Error(year+'年立法机构民代历史数据 HTTP '+response.status);
    const shard=await response.json();
