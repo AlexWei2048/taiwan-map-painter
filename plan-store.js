@@ -1,0 +1,38 @@
+/* Named, local-only map plans. A single storage write commits all plan changes. */
+(function(root){
+ 'use strict';
+ const KEY='island-palette-plans-v1',MAX=12;
+ const clone=x=>JSON.parse(JSON.stringify(x));
+ function name(value){const n=String(value||'').trim();if(!n||n.length>40)throw Error('方案名称须为1至40个字符');return n}
+ function validate(bundle){
+  if(bundle?.version!==1||!Array.isArray(bundle.plans)||!bundle.plans.length||bundle.plans.length>MAX)throw Error('多方案文件格式不正确');
+  const ids=new Set();
+  for(const p of bundle.plans){if(typeof p.id!=='string'||!p.id||ids.has(p.id)||!p.project||p.project.version!==1)throw Error('方案编号或内容无效');name(p.name);ids.add(p.id)}
+  if(!ids.has(bundle.activeId))throw Error('找不到当前方案');
+  return bundle;
+ }
+ function initial(project){return {version:1,activeId:'original',plans:[{id:'original',name:'原有方案',project:clone(project)}]}}
+ function capture(bundle,project){const next=clone(validate(bundle));next.plans.find(p=>p.id===next.activeId).project=clone(project);return next}
+ function change(bundle,project,action){
+  const next=capture(bundle,project),current=next.plans.find(p=>p.id===next.activeId);
+  if(action.type==='create'||action.type==='copy'){
+   if(next.plans.length>=MAX)throw Error('最多保存'+MAX+'个方案，请先下载备份');
+   if(next.plans.some(p=>p.id===action.id))throw Error('方案编号重复');
+   next.plans.push({id:action.id,name:name(action.name),project:clone(action.type==='copy'?current.project:action.project)});next.activeId=action.id;
+  }else if(action.type==='switch'){
+   if(!next.plans.some(p=>p.id===action.id))throw Error('方案不存在');next.activeId=action.id;
+  }else if(action.type==='rename'){current.name=name(action.name)}
+  else if(action.type==='delete'){
+   if(next.plans.length===1)throw Error('至少保留一个方案');
+   if(!next.plans.some(p=>p.id===action.id))throw Error('方案不存在');
+   next.plans=next.plans.filter(p=>p.id!==action.id);if(next.activeId===action.id)next.activeId=next.plans[0].id;
+  }else throw Error('未知方案操作');
+  return validate(next);
+ }
+ function commit(storage,expected,bundle){
+  if(storage.getItem(KEY)!==expected)throw Error('另一标签页已修改方案，请先下载当前备份，再刷新页面');
+  const raw=JSON.stringify(validate(bundle));storage.setItem(KEY,raw);return raw;
+ }
+ const api={KEY,MAX,validate,initial,capture,change,commit};
+ if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.MapPlanStore=api;
+})(typeof globalThis!=='undefined'?globalThis:this);
