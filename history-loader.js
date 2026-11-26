@@ -19,7 +19,7 @@
  ];
  const LEGISLATIVE_CANDIDATES='assets/history-legislative-candidates.js';
  const TREND_SCRIPTS=['history-trends.js','history-trend-summary.js','history-trends-ui.js'];
- const versions={'history-legislative.js':'20261126-performance-v103','history-trends-ui.js':'20261126-performance-v104','history-trends.js':'20261126-performance-v104','history-trend-summary.js':'20261126-performance-v102','history-presidential.js':'20261126-performance-v102','history-local.js':'20261126-performance-v101','history-workspace.js':'20261126-performance-v100','history-2022.js':'20261126-performance-v100'};
+ const versions={'history-legislative.js':'20261126-performance-v103','history-trends-ui.js':'20261126-p1-v105','history-trends.js':'20261126-performance-v104','history-trend-summary.js':'20261126-performance-v102','history-presidential.js':'20261126-performance-v102','history-local.js':'20261126-performance-v101','history-workspace.js':'20261126-p1-v105','history-2022.js':'20261126-p1-v105'};
  const tagged=path=>path+(path.includes('?')?'&':'?')+'v='+(versions[path]||'20261126-merged-layout-v97');
  // Preload downloads in parallel; the existing sequential loader retains execution order and retry semantics.
  function domScriptPreloader(document){return paths=>{for(const path of paths){const href=tagged(path);if(document.querySelector('link[data-history-preload="'+href+'"]')||document.querySelector('script[data-history-asset="'+path+'"]'))continue;const link=document.createElement('link');link.rel='preload';link.as='script';link.href=href;link.dataset.historyPreload=href;link.onerror=()=>link.remove();document.head.append(link)}}}
