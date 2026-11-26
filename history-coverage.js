@@ -24,9 +24,10 @@
   const pair=renamedPairs.find(p=>p[2]===name);
   return pair?(year<pair[3]?pair[0]:pair[1]):name;
  };
+ const aggregateName=name=>/^(?:全部地区(?:（含金门、马祖）)?|全国|全台|台闽地区|台湾地区|台湾省|福建省|不分区|全国不分区)$/.test(name);
  function countyRows(results){
   const names=new Set(COUNTY_ORDER);
-  for(const r of results)for(const c of r?.counties||[])if(c.county&&c.county!=='全部地区')names.add(c.county);
+  for(const r of results)for(const c of r?.counties||[])if(c.county&&!aggregateName(c.county))names.add(c.county);
   return [...names].sort((a,b)=>(order.get(a)??Infinity)-(order.get(b)??Infinity)||a.localeCompare(b,'zh-CN'));
  }
  function applicability(name,year,office){
@@ -52,8 +53,8 @@
  function analyze(snapshot,office,normalize=defaultNorm){
   const norm=v=>normalize(defaultNorm(v)),buckets=new Map(),ids=new Set((snapshot.elections||[]).filter(e=>e.office===office).map(e=>e.election_id));
   const create=county=>({county,contests:0,candidates:0,countyRows:0,townRows:0,towns:0,missingVotes:0,missingWinners:0,missingNumber:0,missingGender:0,missingParty:0,missingIncumbent:0,unreconciled:0,missingFields:Object.fromEntries(Object.keys(fields).map(f=>[f,0])),partialArchives:0,declared:false,notApplicable:false});
-  const all=create('全部地区'),get=county=>{county=countyKey(norm(county),Number(snapshot.year));if(!county)return null;if(!buckets.has(county))buckets.set(county,create(county));return buckets.get(county)};
-  const contestById=new Map(),members=new Map(),townSets=new Map();
+  const all=create('全部地区'),get=county=>{county=countyKey(norm(county),Number(snapshot.year));if(!county||aggregateName(county))return null;if(!buckets.has(county))buckets.set(county,create(county));return buckets.get(county)};
+  const contestById=new Map(),members=new Map(),townSets=new Map(),electionById=new Map((snapshot.elections||[]).map(e=>[e.election_id,e]));
   for(const c of snapshot.contests||[]){if(!ids.has(c.election_id)){if(office==='township')get(c.county_name);continue}contestById.set(c.contest_id,c);get(c.county_name)}
   for(const e of snapshot.elections||[])if(ids.has(e.election_id)){
    for(const county of Array.isArray(e.counties)?e.counties:[]){const b=get(county);if(b)b.declared=true}
@@ -61,14 +62,14 @@
   }
   for(const c of snapshot.candidacies||[]){if(!contestById.has(c.contest_id))continue;const rows=members.get(c.contest_id)||[];rows.push(c);members.set(c.contest_id,rows)}
   for(const [id,c] of contestById){
-   const rows=members.get(id)||[],b=get(c.county_name);
+   const rows=members.get(id)||[],b=get(c.county_name),partyBallot=office==='legislative'&&(c.electorate||electionById.get(c.election_id)?.electorate)==='party';
    for(const x of [all,b].filter(Boolean)){
     x.contests++;x.candidates+=rows.length;
-    for(const [f] of Object.entries(fields))if(!valid(c[f]))x.missingFields[f]++;
+    for(const [f] of Object.entries(fields))if(!valid(c[f])&&!(partyBallot&&Number(snapshot.year)<2008))x.missingFields[f]++;
     if(!rows.length||rows.some(r=>!valid(r.votes)))x.missingVotes++;
     if(['mayor','council','township'].includes(office)&&(!rows.length||rows.some(r=>typeof r.elected_official!=='boolean')||valid(c.seats)&&rows.filter(r=>r.elected_official===true).length!==c.seats))x.missingWinners++;
     if(valid(c.valid_votes)&&rows.length&&rows.every(r=>valid(r.votes))&&rows.reduce((n,r)=>n+r.votes,0)!==c.valid_votes)x.unreconciled++;
-    for(const r of rows){if(!String(r.ballot_number??'').trim())x.missingNumber++;if(!['男','女','男性','女性'].includes(r.gender))x.missingGender++;if(!String(r.party_name??'').trim()||/缺失|未知|待核/.test(r.party_name))x.missingParty++;if(typeof r.incumbent_at_election!=='boolean')x.missingIncumbent++}
+    for(const r of rows){if(!partyBallot&&!String(r.ballot_number??'').trim())x.missingNumber++;if(!partyBallot&&!['男','女','男性','女性'].includes(r.gender))x.missingGender++;if(!String(r.party_name??'').trim()||/缺失|未知|待核/.test(r.party_name))x.missingParty++;if(!partyBallot&&typeof r.incumbent_at_election!=='boolean')x.missingIncumbent++}
    }
   }
   for(const r of snapshot.rows||[]){if(r.type!==office||!['county','town'].includes(r.level))continue;const b=get(r.county);if(!b)continue;

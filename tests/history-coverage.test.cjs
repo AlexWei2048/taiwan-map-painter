@@ -48,3 +48,8 @@ test('A partial election does not make every recorded county partial',()=>{
  const s={year:1994,elections:[{office:'township',election_id:'t',coverage:'partial'}],contests:[{election_id:'t',contest_id:'a',county_name:'花莲县',seats:1,registered_voters:12,ballots_cast:10,valid_votes:9,invalid_votes:1}],candidacies:[{contest_id:'a',votes:9,elected_official:true,ballot_number:'1',gender:'女',party_name:'无党籍',incumbent_at_election:false}],rows:[]};
  const r=C.analyze(s,'township');assert.equal(r.all.status,'partial');assert.equal(r.counties[0].status,'recorded');
 });
+
+test('Party-list ballots do not require individual gender or incumbency; national aggregates are not county rows',()=>{
+ const s={year:2004,elections:[{office:'legislative',election_id:'p',electorate:'party'}],contests:[{election_id:'p',contest_id:'p1',county_name:'全部地区',electorate:'party',valid_votes:100}],candidacies:[{contest_id:'p1',party_name:'甲党',votes:100}],rows:[]};
+ const r=C.analyze(s,'legislative');assert.equal(r.all.missingGender,0);assert.equal(r.all.missingIncumbent,0);assert.equal(r.all.missingNumber,0);assert.equal(r.counties.length,0);assert.equal(r.all.status,'recorded');
+});
