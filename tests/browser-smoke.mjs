@@ -2882,12 +2882,11 @@ test('Published-only 2026 results can load in history, switch offices and return
  t.after(()=>context.close());
  const page=await context.newPage(),errors=[];
  page.on('pageerror',err=>errors.push(err.message));
- await page.route('**/assets/history-2026-availability.json*',route=>route.fulfill({contentType:'application/json',body:JSON.stringify({
-  schemaVersion:1,year:2026,status:'published',candidateCount:2049,districtCount:447,sha256:'a'.repeat(64)
- })}));
+ await page.route('**/assets/history-2026-availability.json*',route=>route.fulfill({contentType:'application/json',body:JSON.stringify({schemaVersion:1,year:2026,status:'awaiting_results'})}));
  await page.goto(base);
  await page.locator('#regions path[data-region]').first().waitFor();
  await page.locator('#categoryHistory').click();
+ await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
  const fake=await page.evaluate(()=>{
   const ds=candidateDatabase.districts,cs=candidateDatabase.candidates,byDistrict=new Map(ds.map(d=>[d.id,d]));
   const elections=['mayor','council','township'].map(office=>({
@@ -2921,11 +2920,12 @@ test('Published-only 2026 results can load in history, switch offices and return
  assert.equal(fake.contests.length,447);
  assert.equal(fake.candidacies.length,2049);
  const body=JSON.stringify(fake),sha256=(await import('node:crypto')).createHash('sha256').update(body).digest('hex');
+ await page.unroute('**/assets/history-2026-availability.json*');
  await page.route('**/assets/history-2026-availability.json*',route=>route.fulfill({contentType:'application/json',body:JSON.stringify({
   schemaVersion:1,year:2026,status:'published',resultStatus:'provisional',file:'assets/history-2026.json',candidateCount:2049,districtCount:447,sha256
  })}));
  await page.route('**/assets/history-2026.json*',route=>route.fulfill({contentType:'application/json',body}));
- await page.evaluate(()=>location.reload());
+ await page.goto(base);
  await page.locator('#regions path[data-region]').first().waitFor();
  await page.locator('#categoryHistory').click();
  await page.waitForFunction(()=>document.querySelector('#historyYear option[value="2026"]'));
