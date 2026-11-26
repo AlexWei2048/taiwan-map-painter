@@ -287,3 +287,32 @@ test('Chiayi City 2022 mayor rerun does not change the date of council election'
  assert.deepEqual(T.electionDates(s,'mayor','嘉义市'),['2022-12-18']);
  assert.deepEqual(T.electionDates(s,'council','嘉义市'),['2022-11-26']);
 });
+
+test('legislative trend cache reuses scopes and list allocation without merging ballots',()=>{
+ const s=require('../assets/history-legislative-2024.json'),P=require('../history-legislative-party.js');
+ let builds=0;const cache=T.createLegislativeTrendCache({buildList:(y,d)=>{builds++;return P.build(y,d)},maxScopes:2});
+ const all={office:'legislative',electorate:'all',county:'',level:'county'};
+ const first=cache.read(s,all);
+ assert.equal(first.seats[0].total,113);
+ assert.deepEqual(first.votes,T.legislativeVoteShares(s,all));
+ assert.strictEqual(cache.read(s,{...all,metric:'votes'}),first);
+ assert.equal(builds,1);
+ assert.deepEqual(cache.read(s,{...all,electorate:'party'}).votes,first.votes);
+ const local={...all,county:'高雄市',electorate:'regional'};
+ const scoped=cache.read(s,local);
+ assert.deepEqual(scoped.seats,T.historicalScopeRows(s,{...local,metric:'party'}));
+ assert.deepEqual(scoped.votes,T.legislativeVoteShares(s,local));
+ assert.notStrictEqual(cache.read(s,all),first);
+ assert.equal(builds,1);
+ cache.clear();assert.deepEqual(cache.read(s,all),first);assert.equal(builds,2);
+});
+test('focused legislative trend rechecks boundaries against its active anchor',()=>{
+ const s=require('../assets/history-legislative-2024.json'),P=require('../history-legislative-party.js');
+ const conf={office:'legislative',electorate:'regional',county:'高雄市',level:'district',focus:'第1选举区'};
+ const cache=T.createLegislativeTrendCache({buildList:P.build});
+ const other={...s,year:2020,rows:[]};
+ const a=cache.read(s,conf,s),b=cache.read(s,conf,other);
+ assert.notStrictEqual(a,b);
+ assert.deepEqual(a.seats,T.historicalScopeRows(s,{...conf,metric:'party'},s));
+ assert.deepEqual(b.votes,T.legislativeVoteShares(s,conf,other));
+});

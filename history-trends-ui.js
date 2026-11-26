@@ -6,6 +6,7 @@ const offices={president:'台湾地区领导人',legislative:'立法机构民代
 const ns='http://www.w3.org/2000/svg';
 let panel=null,request=0,cache=new Map(),summaryCache=new Map(),models=[],activeKey='',selection=null,renderedKey='',loading=false,closed=true,lastRows=[],lastSeries=[],lastTitle='',legislativeExport=null,voteShareExport=null,selectedYears=new Set(),knownYears=[];
 const norm=v=>simplify(String(v||'')).replaceAll('臺','台');
+ const legislativeTrendCache=T.createLegislativeTrendCache({normalize:norm,buildList:(year,snapshot)=>HistoryLegislativeParty.build(year,snapshot)});
 const fmt=(v,pct=false)=>Number.isFinite(v)?pct?v.toFixed(2)+'%':v.toLocaleString('zh-CN',{maximumFractionDigits:2}):'—';
 const node=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n};
 const svg=(tag,attrs={},text)=>{const n=document.createElementNS(ns,tag);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,v);if(text!==undefined)n.textContent=text;return n};
@@ -27,7 +28,7 @@ function create(){
  panel.append(heading,scope,controls,actions,status,output);
  $('trendSelectAll').onclick=()=>{selectedYears=new Set(knownYears);setYears(settings(),false);load();window.dispatchEvent(new Event('site-route-change'))};
  $('trendSelectNone').onclick=()=>{selectedYears.clear();setYears(settings(),false);load();window.dispatchEvent(new Event('site-route-change'))};
- $('trendRetry').onclick=()=>{cache.clear();summaryCache.clear();activeKey='';renderedKey='';load()};
+ $('trendRetry').onclick=()=>{cache.clear();summaryCache.clear();legislativeTrendCache.clear();activeKey='';renderedKey='';load()};
  $('trendCsv').onclick=exportCsv;
 }
 function readSelection(s){
@@ -270,14 +271,14 @@ function renderLegislative(conf,anchor,out){
  const ballot=conf.electorate,national=!conf.county,isLeg=conf.office==='legislative';
  const seatBallot=national||ballot==='all'||ballot==='regional';
  const effective=T.trendEffectiveSelection(conf),allSeats=isLeg&&ballot==='all'&&national;
+ const prepared=isLeg?new Map(models.filter(item=>item.snapshot).map(item=>[item,legislativeTrendCache.read(item.snapshot,conf,anchor)])):null;
  const seatRows=seatBallot?models.flatMap(item=>{
   if(item.summary&&!isLeg)return item.summary[ballot==='all'&&conf.county?'regional':ballot].map(r=>({...r,parties:r.seats}));
   if(!item.snapshot)return[{year:item.year,label:String(item.year),complete:false,reason:item.error,parties:{},values:{}}];
-  const officialBallot=isLeg&&national&&['plains','mountain','party'].includes(ballot);
-  const result=!isLeg?T.councilBallotRows(item.snapshot,{...conf,electorate:ballot==='all'&&conf.county?'regional':ballot}).map(r=>({...r,parties:r.seats})):allSeats?[T.allLegislativeSeats(item.snapshot,HistoryLegislativeParty.build(item.year,item.snapshot),norm)]:officialBallot?[T.aggregate(item.snapshot,{office:'legislative',electorate:ballot,normalize:norm,partySeats:ballot==='party'?HistoryLegislativeParty.build(item.year,item.snapshot):null})].map(r=>({...r,year:item.year,label:String(item.year),parties:Object.fromEntries(Object.entries(r.parties).map(([p,v])=>[p,v.seats||0]))})):T.historicalScopeRows(item.snapshot,{...effective,electorate:ballot==='all'?'regional':ballot,metric:'party'},anchor);
-  return result.map(r=>{if(allSeats||officialBallot)r.dates=T.electionDates(item.snapshot,'legislative','',norm);return r});
+  if(isLeg)return prepared.get(item).seats;
+  return T.councilBallotRows(item.snapshot,{...conf,electorate:ballot==='all'&&conf.county?'regional':ballot}).map(r=>({...r,parties:r.seats}));
  }):[];
- const voteRows=models.flatMap(item=>item.summary&&!isLeg?item.summary[ballot]:item.snapshot?isLeg?T.legislativeVoteShares(item.snapshot,conf,anchor):T.councilBallotRows(item.snapshot,conf):[{year:item.year,label:String(item.year),complete:false,reason:item.error,parties:{},votes:{},valid:null}]);
+ const voteRows=models.flatMap(item=>item.summary&&!isLeg?item.summary[ballot]:item.snapshot?isLeg?prepared.get(item).votes:T.councilBallotRows(item.snapshot,conf):[{year:item.year,label:String(item.year),complete:false,reason:item.error,parties:{},votes:{},valid:null}]);
  const allRows=[...seatRows,...voteRows],missing=allRows.filter(r=>!r.complete);
  $('trendStatus').textContent=models.length+' 届 · '+(allRows.length-missing.length)+' 条完整指标结果'+(missing.length?' · '+missing.map(r=>r.label+(r.scopeLabel?' '+r.scopeLabel:'')+'：'+r.reason).join('；'):'');
  if(T.historicalCountyFamily(conf.county).length>1)out.append(node('p','data-help','升格前的原县、原市分别统计；合并后显示新的直辖市，跨边界不连线。'));

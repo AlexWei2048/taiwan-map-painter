@@ -404,7 +404,34 @@ function majorityBoundary(points){
  const angle=seats===total?0:(points[seats-1].angle+points[seats].angle)/2;
  return {seats,angle};
 }
-const api={summaryAlgorithmVersion:1,aggregate,value,difference,modern,percent,partyTrendValue,candidateTrendTooltip,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,trendChartScopes,historicalScopeRows,legislativeVoteShares,councilBallotRows,localPartyVoteShares,electionDates,trendEffectiveSelection,LEGISLATIVE_TOTALS};
+// Reuse validated legislative trends across redraws; focused districts remain anchor-specific.
+function createLegislativeTrendCache({normalize=String,buildList,maxScopes=64}={}){
+ let cache=new WeakMap(),lists=new WeakMap();
+ function list(s){if(!lists.has(s))lists.set(s,buildList(s.year,s));return lists.get(s)}
+ function calculate(s,conf,anchor){
+  const ballot=conf.electorate,national=!conf.county,selection={...conf,office:'legislative',normalize};
+  const allSeats=ballot==='all'&&national,official=national&&['plains','mountain','party'].includes(ballot);
+  let seats=[];
+  if(national||ballot==='all'||ballot==='regional'){
+   seats=allSeats?[allLegislativeSeats(s,list(s),normalize)]:official?
+    [aggregate(s,{office:'legislative',electorate:ballot,normalize,partySeats:ballot==='party'?list(s):null})].map(r=>({...r,year:s.year,label:String(s.year),parties:Object.fromEntries(Object.entries(r.parties).map(([p,v])=>[p,v.seats||0]))})):
+    historicalScopeRows(s,{...trendEffectiveSelection(selection),electorate:ballot==='all'?'regional':ballot,metric:'party'},anchor);
+   if(allSeats||official)seats=seats.map(r=>({...r,dates:electionDates(s,'legislative','',normalize)}));
+  }
+  return{seats,votes:legislativeVoteShares(s,selection,anchor)};
+ }
+ function read(s,conf,anchor){
+  if(conf.focus)return calculate(s,conf,anchor);
+  let entries=cache.get(s);if(!entries){entries=new Map();cache.set(s,entries)}
+  const key=JSON.stringify([conf.county||'',conf.electorate,conf.level]);
+  if(entries.has(key)){const value=entries.get(key);entries.delete(key);entries.set(key,value);return value}
+  const result=calculate(s,conf,anchor);entries.set(key,result);
+  if(entries.size>maxScopes)entries.delete(entries.keys().next().value);
+  return result;
+ }
+ return{read,clear(){cache=new WeakMap();lists=new WeakMap()}};
+}
+const api={createLegislativeTrendCache,summaryAlgorithmVersion:1,aggregate,value,difference,modern,percent,partyTrendValue,candidateTrendTooltip,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,trendChartScopes,historicalScopeRows,legislativeVoteShares,councilBallotRows,localPartyVoteShares,electionDates,trendEffectiveSelection,LEGISLATIVE_TOTALS};
 if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
 root.HistoryTrends=api;
 })(typeof window==='undefined'?{}:window);
