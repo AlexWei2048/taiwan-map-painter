@@ -16,6 +16,8 @@ jobs:
           node-version: '22'
       - name: Calculation and regression tests
         run: node --test test-ui-contract.cjs test-history-legislative-party.cjs tests/*.test.cjs
+      - name: 2026 official intake Python and browser-data contract
+        run: python3 tests/test_official_2026_contract.py
       - name: Install browser test dependency
         run: npm install --no-save --no-package-lock playwright@1.56.1
       - name: Install Chromium
@@ -25,4 +27,6 @@ jobs:
           python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/map-test-server.log 2>&1 &
           server_pid=$!
           trap 'kill "$server_pid"' EXIT
+          for i in {1..30}; do curl -fsS http://127.0.0.1:8765/ >/dev/null && break; sleep 1; done
+          curl -fsS http://127.0.0.1:8765/ >/dev/null
           node --test tests/browser-smoke.mjs
