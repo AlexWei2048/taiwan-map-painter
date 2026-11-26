@@ -348,6 +348,27 @@
  let indexed=null,currentResult=null,currentOverview=null,overviewContestId='';
  let overviewScope='all',overviewCounty='',overviewArea='',overviewInitialized=false,overviewContext='',overviewMapCounty='';
  let overviewSidebarKey='',overviewSyncingFromStatistics=false;
+ // Snapshot-scoped memoization: a metric or tab change does not alter election totals.
+ const workspaceMemo=new Map(),choicesMemo=new Map();
+ let choicesTowns=null,renderedOverview=null,renderedOverviewContext='';
+ function memo(map,key,build){
+  if(map.has(key)){const value=map.get(key);map.delete(key);map.set(key,value);return value}
+  const value=build();map.set(key,value);if(map.size>16)map.delete(map.keys().next().value);return value;
+ }
+ function resetWorkspaceMemo(){
+  workspaceMemo.clear();choicesMemo.clear();choicesTowns=null;renderedOverview=null;renderedOverviewContext='';
+ }
+ function replaceOptionsIfChanged(select,options){
+  if(!select)return;
+  if(select.options.length!==options.length||options.some(([value,label],i)=>select.options[i].value!==String(value)||select.options[i].textContent!==String(label)))
+   select.replaceChildren(...options.map(([value,label])=>new Option(label,value)));
+ }
+ function cachedChoices(selection){
+  const towns=selection.towns||null;
+  if(towns&&towns!==choicesTowns){choicesMemo.clear();choicesTowns=towns}
+  const key=JSON.stringify([selection.year,selection.office,selection.electorate,selection.county||'',selection.scope||'',!!towns]);
+  return memo(choicesMemo,key,()=>overviewRegionChoices(indexed,selection));
+ }
 
  function overviewContextKey(){
   return state.office+'|'+state.year+
@@ -404,21 +425,21 @@
   const available=legislative?(Number(state.year)===1992&&['plains','mountain'].includes(state.electorate)?
     ['all']:['all',...(root.HistoryLegislative?.levels(state.year,state.electorate)||[]).map(([id])=>id)]):['all','county',level];
   if(!available.includes(overviewScope))overviewScope='all';
-  const {counties}=overviewRegionChoices(indexed,{year:state.year,office:state.office,electorate:state.electorate});
+  const {counties}=cachedChoices({year:state.year,office:state.office,electorate:state.electorate});
   if(overviewScope!=='all'&&!counties.includes(overviewCounty))
    overviewCounty=counties.includes(state.county)?state.county:counties[0]||'';
   const towns=root.History2022View?.allTowns?.()||[];
-  const choices=overviewRegionChoices(indexed,{year:state.year,office:state.office,electorate:state.electorate,county:overviewCounty,towns,scope:overviewScope});
+  const choices=cachedChoices({year:state.year,office:state.office,electorate:state.electorate,county:overviewCounty,towns,scope:overviewScope});
   const scopeSelect=el('historyOverviewScope');
   if(scopeSelect){
    const opts=[['all','全部地区（含金门、马祖）'],['county','县市'],['district',legislative?'选举区':'议员选区'],['town','乡镇市区']]
     .filter(([value])=>available.includes(value));
-   scopeSelect.replaceChildren(...opts.map(([value,text])=>new Option(text,value)));
+   replaceOptionsIfChanged(scopeSelect,opts);
    scopeSelect.value=overviewScope;
   }
   const countySelect=el('historyOverviewCounty');
   if(countySelect){
-   countySelect.replaceChildren(...counties.map(county=>new Option(county,county)));
+   replaceOptionsIfChanged(countySelect,counties.map(county=>[county,county]));
    countySelect.value=overviewCounty;
   }
   const countyBox=el('historyOverviewCountyBox');
@@ -434,8 +455,7 @@
   overviewContestId=overviewScope===level&&['council','township'].includes(state.office)?
    overviewArea:'';
   if(areaSelect){
-   areaSelect.replaceChildren(...choices.areas.map(area=>
-    new Option([overviewCounty,area.label].filter(Boolean).join(' · '),area.value)));
+   replaceOptionsIfChanged(areaSelect,choices.areas.map(area=>[area.value,[overviewCounty,area.label].filter(Boolean).join(' · ')]));
    areaSelect.value=overviewArea;
   }
  }
@@ -568,13 +588,22 @@
  function emit(){
   root.dispatchEvent(new CustomEvent('historyselectionchange',{detail:{...state}}));
  }
- function resultForSelection(){
+ function fullSelectionData(){
   if(!indexed||!root.HistoryCore||Number(indexed.snapshot?.year)!==state.year||
      !indexed.snapshot?.elections?.some(e=>e.office===state.office))return null;
-  const contests=[...indexed.contestsById.values()],countyId=state.county?contests.find(contest=>contest.county_name===state.county)?.county_id:'';
-  if(state.office==='legislative')return root.HistoryLegislativeData?.localResult(indexed,{year:state.year,electorate:state.electorate,scope:state.county?'county':'all',county:state.county})?.result||null;
-   return root.HistoryCore.filter(indexed,{year:state.year,office:state.office,electorate:state.electorate,countyId});
+  const key=JSON.stringify(['full',state.year,state.office,state.electorate,state.county]);
+  return memo(workspaceMemo,key,()=>{
+   if(state.office==='legislative'){
+    const data=root.HistoryLegislativeData?.localResult(indexed,{year:state.year,electorate:state.electorate,scope:state.county?'county':'all',county:state.county});
+    const result=data?.result||null;
+    return {result,overview:state.electorate==='all'&&data?.overview?data.overview:result?root.HistoryCore.overview(result):null};
+   }
+   const countyId=state.county?[...indexed.contestsById.values()].find(contest=>contest.county_name===state.county)?.county_id:'';
+   const result=root.HistoryCore.filter(indexed,{year:state.year,office:state.office,electorate:state.electorate,countyId});
+   return {result,overview:root.HistoryCore.overview(result)};
+  });
  }
+ function resultForSelection(){return fullSelectionData()?.result||null}
  function renderOverviewCharts(){
   const rootNode=el('historyOverviewCharts');if(!rootNode)return;
   rootNode.replaceChildren();
@@ -644,6 +673,9 @@
  }
  function renderTurnoutCards(){
   const rootNode=el('historyOverviewCards');if(!rootNode)return;
+  const context=overviewContextKey();
+  if(renderedOverview===currentOverview&&renderedOverviewContext===context&&rootNode.childElementCount)return;
+  renderedOverview=currentOverview;renderedOverviewContext=context;
   rootNode.replaceChildren();
   if(!currentOverview){
    const note=doc.createElement('p');note.className='history-overview-placeholder';
@@ -694,11 +726,11 @@
   state=readSelection();
   chooseOverviewOnMapChange();
   syncOverviewControls();
-  const fullResult=resultForSelection();
-  const scoped=state.view==='overview'?overviewRegionData(indexed,{
-   year:state.year,office:state.office,electorate:state.electorate,scope:overviewScope,county:overviewCounty,area:overviewArea}):null;
-  currentResult=scoped?.result||fullResult;
-  currentOverview=scoped?.overview||(state.office==='legislative'&&state.electorate==='all'&&indexed?root.HistoryLegislativeData?.localResult(indexed,{year:state.year,electorate:'all',scope:state.county?'county':'all',county:state.county})?.overview:null)||(currentResult&&root.HistoryCore?root.HistoryCore.overview(currentResult):null);
+  const full=fullSelectionData();
+  const scoped=state.view==='overview'&&indexed?memo(workspaceMemo,JSON.stringify(['scope',state.year,state.office,state.electorate,overviewScope,overviewCounty,overviewArea]),()=>overviewRegionData(indexed,{
+   year:state.year,office:state.office,electorate:state.electorate,scope:overviewScope,county:overviewCounty,area:overviewArea})):null;
+  currentResult=scoped?.result||full?.result||null;
+  currentOverview=scoped?.overview||full?.overview||null;
   renderOverviewScope(scoped);
    const electorateBox=el('historyElectorateBox');if(electorateBox)electorateBox.hidden=!['council','legislative'].includes(state.office);
   const electorate=el('historyElectorate');if(electorate){
@@ -762,7 +794,7 @@
  el('historyOverviewContest')?.addEventListener('change',event=>{overviewArea=event.target.value||'';changeOverviewMap()});
  for(const [view,id] of [['candidates','historyViewCandidates'],['overview','historyViewOverview'],['trends','historyViewTrends']])el(id)?.addEventListener('click',()=>setView(state.view===view?'map':view));
  for(const id of ['workspacePrediction','workspaceFree'])el(id)?.addEventListener('click',()=>{active=false});
- function setSnapshot(snapshot){try{indexed=root.HistoryCore.index(snapshot);render();return true}catch(error){if(el('historyLoadStatus')){el('historyLoadStatus').hidden=false;el('historyLoadStatus').textContent='历史数据版本不兼容，请重新载入。'};if(el('historyRetry'))el('historyRetry').hidden=false;return false}}
+ function setSnapshot(snapshot){try{indexed=root.HistoryCore.index(snapshot);resetWorkspaceMemo();render();return true}catch(error){if(el('historyLoadStatus')){el('historyLoadStatus').hidden=false;el('historyLoadStatus').textContent='历史数据版本不兼容，请重新载入。'};if(el('historyRetry'))el('historyRetry').hidden=false;return false}}
  root.addEventListener('historysnapshotready',event=>setSnapshot(event.detail.snapshot));
  const existing=root.History2022View?.snapshot?.();if(existing)setSnapshot(existing);
  const heading=el('historyResultSection')?.querySelector('.history-result-heading');if(heading&&!el('historyExportCsv')){const button=doc.createElement('button');button.type='button';button.id='historyExportCsv';button.className='button quiet';button.textContent='导出当前结果 CSV';button.onclick=exportCsv;heading.append(button)}
