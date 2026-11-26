@@ -3376,3 +3376,23 @@ test('Restoring unchanged trend years preserves checkbox nodes and chart',async 
  await page.locator('#trendCharts svg').first().waitFor({timeout:60000});
  assert.equal(await page.locator('#trendSelectNone').isDisabled(),false);
 });
+
+
+test('Historical trend point opens the correct year and county on the map',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ await page.locator('#categoryHistory').click();
+ await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
+ await page.locator('#historyCounty').selectOption('台北市');
+ await page.locator('#historyViewTrends').click();
+ await page.locator('#trendYears').waitFor();
+ await page.locator('#trendSelectNone').click();
+ await page.locator('#trendYears input[value="2018"]').check();
+ const point=page.locator('#trendCharts svg [role="button"][aria-label^="2018"]').first();
+ await point.waitFor({timeout:60000});
+ await point.press('Enter');
+ await page.locator('#trendPointReadout').getByRole('button',{name:'查看该届结果'}).click();
+ await page.waitForFunction(()=>History2022View.snapshot()?.year===2018&&History2022View.routeSelection().county==='台北市'&&HistoryWorkspace.selection().view==='map');
+ assert.equal(await page.locator('#historyTrendsPanel').isVisible(),false);
+ assert.equal(await page.locator('#historyCounty').inputValue(),'台北市');
+ assert.equal(await page.locator('#historyYear').inputValue(),'2018');
+});
