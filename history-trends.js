@@ -163,6 +163,33 @@ function historicalScopeRows(snapshot,selection,anchor){
   return result;
  });
 }
+// Party shares come from one ballot and one geographic grain. The combined
+// national view uses the party-list allocation vote, never adds four ballots.
+function legislativeVoteShares(snapshot,selection,anchor){
+ const county=selection.county||'',year=Number(snapshot.year),ballot=selection.electorate==='all'?'party':selection.electorate;
+ const norm=v=>selection.normalize?selection.normalize(String(v||'')):String(v||'');
+ const family=historicalCountyFamily(county),merged=MERGE_FAMILIES.some(g=>g.includes(county));
+ return historicalCountyScopes(snapshot,{...selection,office:'legislative'}).map(actualCounty=>{
+  const dates=electionDates(snapshot,'legislative',actualCounty,selection.normalize||String),years=[...new Set(dates.map(d=>d.slice(0,4)))];
+  const oldPair=merged&&(family.length>1&&actualCounty===family[0]||year<2010);
+  const base={year,label:years.join('/')||String(year),dates,county:actualCounty,scopeLabel:family.length>1?actualCounty:'',
+   scopeSeries:merged?(oldPair?'旧'+actualCounty:'合并后'+actualCounty):family[0],oldPartyVote:ballot==='party'&&year<2008};
+  const empty=reason=>({...base,complete:false,reason,parties:{},votes:{},valid:null});
+  const focus=ballot==='regional'?selection.focus||'':'';
+  if(focus&&anchor){const check=mapTrend(snapshot,{...selection,county:actualCounty,anchorCounty:county,electorate:'regional',metric:'party'},anchor);if(!check.complete)return empty(check.reason)}
+  const level=!county?'national':focus?'district':'county';
+  const rows=(snapshot.rows||[]).filter(r=>r.type==='legislative'&&r.electorate===ballot&&r.level===level&&
+   (!actualCounty||norm(r.county)===actualCounty)&&(!focus||Core.districtNumber(r.district)===Core.districtNumber(focus)));
+  if(!rows.length)return empty('该票种当前范围没有可核实的得票记录');
+  if(rows.some(r=>!Number.isFinite(r.votes)||r.votes<0))return empty('该票种得票资料不完整');
+  const valid=rows.reduce((n,r)=>n+r.votes,0);
+  if(!valid)return empty('该票种有效票为零');
+  const votes=Object.create(null);
+  for(const r of rows){const party=keyParty(norm(r.party));votes[party]=(votes[party]||0)+r.votes}
+  const parties=Object.fromEntries(Object.entries(votes).map(([p,v])=>[p,v/valid*100]));
+  return {...base,complete:true,reason:'',parties,votes,valid};
+ });
+}
 function mapTrend(snapshot,selection,anchor){
  const {office,electorate='regional',county='',anchorCounty=county,level='county',focus='',metric='party',candidateScope='top',candidate=null,party='',normalize=String}=selection;
  const norm=v=>normalize(String(v||''));
@@ -291,7 +318,7 @@ function majorityBoundary(points){
  const angle=seats===total?0:(points[seats-1].angle+points[seats].angle)/2;
  return {seats,angle};
 }
-const api={aggregate,value,difference,modern,percent,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,historicalScopeRows,electionDates,trendEffectiveSelection,LEGISLATIVE_TOTALS};
+const api={aggregate,value,difference,modern,percent,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,historicalScopeRows,legislativeVoteShares,electionDates,trendEffectiveSelection,LEGISLATIVE_TOTALS};
 if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
 root.HistoryTrends=api;
 })(typeof window==='undefined'?{}:window);
