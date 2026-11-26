@@ -87,18 +87,34 @@ function description(conf){
 }
 function exportFile(content,name,mime){const url=URL.createObjectURL(new Blob([content],{type:mime}));const a=node('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),2000)}
 async function chartExport(graph,title,png){
- const copy=graph.cloneNode(true);copy.setAttribute('xmlns',ns);const full=graph.getAttribute('data-trend-export-viewbox');if(full){copy.setAttribute('viewBox',full);copy.removeAttribute('data-trend-export-viewbox')}const box=copy.viewBox.baseVal;copy.setAttribute('width',box.width);copy.setAttribute('height',box.height);
- // Bundled emblems are already data URLs; inline any local file reference so
- // downloaded SVG and canvas-rendered PNG never depend on the site URL.
- try{await Promise.all([...copy.querySelectorAll('image[href]')].map(async image=>{const href=image.getAttribute('href');if(!href||href.startsWith('data:'))return;const response=await fetch(href);if(!response.ok)throw Error('党徽读取失败');const blob=await response.blob();const data=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=reject;reader.readAsDataURL(blob)});image.setAttribute('href',data)}))}catch(e){$('trendStatus').textContent='党徽未能读取，请重新载入后导出。';return}
- const source=new XMLSerializer().serializeToString(copy),name='历史趋势-'+offices[settings().office]+'-'+title;
- if(!png){exportFile(source,name+'.svg','image/svg+xml;charset=utf-8');return}
- const url=URL.createObjectURL(new Blob([source],{type:'image/svg+xml'})),img=new Image();
- img.onload=()=>{const canvas=node('canvas');canvas.width=box.width*2;canvas.height=box.height*2;const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,0,0,canvas.width,canvas.height);URL.revokeObjectURL(url);canvas.toBlob(b=>{if(b){const a=node('a');a.href=URL.createObjectURL(b);a.download=name+'.png';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000)}},'image/png')};img.onerror=()=>{URL.revokeObjectURL(url);$('trendStatus').textContent='PNG导出失败，可使用SVG导出。'};img.src=url
+ const office=offices[settings().office],name=('历史趋势-'+office+'-'+title).replace(/[\\/:*?"<>|]/g,'_');
+ const copy=graph.cloneNode(true);copy.setAttribute('xmlns',ns);const full=graph.getAttribute('data-trend-export-viewbox');if(full){copy.setAttribute('viewBox',full);copy.removeAttribute('data-trend-export-viewbox')}
+ const {width,height}=copy.viewBox.baseVal;copy.setAttribute('width',width);copy.setAttribute('height',height);
+ // One request per distinct emblem, even when many years share the same logo.
+ const logos=new Map();let url;
+ try{
+  await Promise.all([...copy.querySelectorAll('image[href]')].map(async image=>{
+   const href=image.getAttribute('href');if(!href||href.startsWith('data:'))return;
+   if(!logos.has(href))logos.set(href,(async()=>{const response=await fetch(href);if(!response.ok)throw Error('党徽读取失败');const blob=await response.blob();return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(Error('党徽读取失败'));reader.readAsDataURL(blob)})})());
+   image.setAttribute('href',await logos.get(href));
+  }));
+  const source=new XMLSerializer().serializeToString(copy);
+  if(!png){exportFile(source,name+'.svg','image/svg+xml;charset=utf-8');return}
+  if(!Number.isFinite(width)||!Number.isFinite(height)||width<=0||height<=0)throw Error('图表尺寸无效');
+  const scale=Math.min(2,Math.floor(16000/Math.max(width,height)),Math.floor(Math.sqrt(55000000/(width*height))));
+  if(scale<1)throw Error('图表过大，请使用 SVG 矢量图导出');
+  url=URL.createObjectURL(new Blob([source],{type:'image/svg+xml'}));const img=new Image();
+  await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=()=>reject(Error('图表读取失败，请使用 SVG 导出'));img.src=url});
+  const canvas=node('canvas');canvas.width=Math.ceil(width*scale);canvas.height=Math.ceil(height*scale);
+  const ctx=canvas.getContext('2d');if(!ctx)throw Error('设备无法创建图片画布，请使用 SVG 导出');
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,0,0,canvas.width,canvas.height);
+  const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));if(!blob)throw Error('PNG生成失败，请使用 SVG 导出');
+  const a=node('a');a.href=URL.createObjectURL(blob);a.download=name+'.png';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+ }catch(e){$('trendStatus').textContent=e.message||'图表导出失败，请重试。'}finally{if(url)URL.revokeObjectURL(url)}
 }
 function card(title,description,graph,exportTitle=title){
  const c=node('article','trend-card'),h=node('div','trend-card-heading'),buttons=node('div','trend-card-actions');h.append(node('h4','',title),buttons);
- if(graph)for(const ext of ['SVG','PNG']){const b=node('button','button quiet',ext);b.type='button';b.onclick=()=>chartExport(graph,exportTitle,ext==='PNG');buttons.append(b)}
+ if(graph)for(const ext of ['SVG','PNG']){const b=node('button','button quiet',ext);b.type='button';b.onclick=async()=>{for(const button of buttons.querySelectorAll('button'))button.disabled=true;try{await chartExport(graph,exportTitle,ext==='PNG')}finally{for(const button of buttons.querySelectorAll('button'))button.disabled=false}};buttons.append(b)}
  c.append(h);if(description)c.append(node('p','data-help',description));if(graph)c.append(graph);return c
 }
 function appendTrendCharts(out,rows,series,title,note,options,county){
