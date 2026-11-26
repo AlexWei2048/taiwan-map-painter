@@ -3284,3 +3284,22 @@ test('Returning to the same historical trend preserves its rendered graph',async
  await page.locator('#trendCharts svg').first().waitFor({timeout:60000});
  assert.equal(await page.evaluate(()=>window.__trendReuseGraph===document.querySelector('#trendCharts svg')),true);
 });
+
+
+test('Changing historical map metric preserves unchanged dropdown options',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ await page.locator('#categoryHistory').click();
+ await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
+ await page.locator('#historyCounty').selectOption('台北市');
+ const before=await page.evaluate(()=>{
+  window.__p1ScaleOption=document.querySelector('#historyScale option');
+  window.__p1CountyOption=document.querySelector('#historyCounty option');
+  window.__p1MetricOption=document.querySelector('#historyMetric option');
+  return [window.__p1ScaleOption,window.__p1CountyOption,window.__p1MetricOption].every(Boolean);
+ });
+ assert.equal(before,true);
+ await page.locator('#historyMetric').selectOption('share');
+ assert.equal(await page.evaluate(()=>window.__p1ScaleOption===document.querySelector('#historyScale option')&&window.__p1CountyOption===document.querySelector('#historyCounty option')&&window.__p1MetricOption===document.querySelector('#historyMetric option')),true);
+ await page.locator('#historyMetric').selectOption('votes');
+ assert.equal(await page.evaluate(()=>window.__p1MetricOption===document.querySelector('#historyMetric option')),true);
+});
