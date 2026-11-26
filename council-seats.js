@@ -21,10 +21,11 @@ function historicalLegislativeSeatMode(){
 const baseCouncilScene=sceneSpec;
 // Matching council and historical multi-member constituencies share one
 // fixed-size canvas so their logos, callouts, and font sizes have the same scale.
-sceneSpec=function(){return councilCountyPresentation()||historicalLegislativeSeatMode()?
+sceneSpec=function(){if(historicalCombinedMap())return baseCouncilScene();return councilCountyPresentation()||historicalLegislativeSeatMode()?
  {width:1600,height:1450+furnitureFooterHeight(),pad:80,font:26}:baseCouncilScene()};
 const baseCouncilPanels=identityPanelLayouts;
 identityPanelLayouts=function(){
+ if(historicalCombinedMap()){const panels=baseCouncilPanels();return councilSeatMode()?panels.map(prepareCouncilSeatPanel):panels}
  if(!councilCountyPresentation())return baseCouncilPanels();
  const ids=panelIdentities(),spec=sceneSpec(),a=contentArea(spec),gap=28;
  const split=ids.length===3&&ids[0]==='regional';
@@ -177,8 +178,8 @@ function legislativeSeatPlacementFallback(f,n,t,used,items){
  const rect=[x-w/2,y-h/2,x+w/2,y+h/2];used.push(rect);
  return{x,y,w,h,cols,rows,rect,anchor,size,pitch,outside:true};
 }
-function drawHistoricalLegislativeSeats(group,t,interactive=false){
- const all=currentItems().filter(f=>f.center&&f.d);
+function drawHistoricalLegislativeSeats(group,t,interactive=false,items=currentItems()){
+ const all=items.filter(f=>f.center&&f.d);
  const sorted=all.map(f=>({f,
    seats:[...History2022View.legislativeSeatRows(f)].sort((a,b)=>
     state.palette.findIndex(p=>p.id===predictionParty(a.party).id)-
