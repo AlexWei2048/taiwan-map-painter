@@ -81,6 +81,14 @@ function applyPlanAction(action){
  if(switched){state=project;undo=[];redo=[];erase=false;view=null;baseView=null;electionResultCache.clear();syncInputs();render()}
  updateHistory();refreshPlanManager();persist();toast('已保存：'+currentPlanName());
 }
+function importPlanBundle(imported){
+ if(!data||window.History2022View?.active())throw Error('请先返回岛屿画布');
+ if(planStorageBlocked||!planBundle&&legacyStorageBlocked)throw Error('本地存储无法读取，请先保留原始备份');
+ if(!planBundle&&localStorage.getItem(KEY)!==legacyRaw)throw Error('另一标签页已修改原有方案，请刷新');
+ const next=MapPlanStore.merge(planBundle||MapPlanStore.initial(state),state,imported,cleanProject);
+ const raw=MapPlanStore.commit(localStorage,planRaw,next);
+ clearTimeout(persistTimer);planBundle=next;planRaw=raw;refreshPlanManager();persist();toast('已合并备份，原有方案保留');
+}
 function toast(s){$('toast').textContent=s;$('toast').classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('visible'),2600)}
 function pushHistory(){undo.push(clone(state));if(undo.length>100)undo.shift();redo=[];updateHistory()}
 function updateHistory(){$('undo').disabled=!undo.length;$('redo').disabled=!redo.length}
