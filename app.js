@@ -1802,8 +1802,61 @@ function paint(f){if(freeNationwideDistrictMap()){pushHistory();state.county=f.c
 function zoom(factor,anchor){if(!view)return;const next=view.w*factor;if(next<baseView.w/16||next>baseView.w*2)return;const a=anchor||[.5,.5];view={x:view.x+view.w*a[0]*(1-factor),y:view.y+view.h*a[1]*(1-factor),w:next,h:view.h*factor};applyView();if(state.labels&&['council','legislative'].includes(state.level))scheduleNavigationLabels()}
 $('county').onchange=()=>{state.county=$('county').value;state.villageTown='';syncVillageControls();render();persist()};for(const [id,level]of [['townLevel','towns'],['countyLevel','counties'],['councilLevel','council'],['legislativeLevel','legislative']])$(id).onclick=()=>{if(state.level===level)return;state.level=level;if(state.fillMode==='prediction'&&state.predictionOffice==='mayor'&&state.predictionScale==='town'&&['towns','counties'].includes(level))state.predictionScale='district';if(typeof predictionLevelChanged==='function')predictionLevelChanged(level);syncInputs();render();persist();toast('各地图图层的填色和数据分别保存')};$('showLabels').onchange=()=>{state.labels=$('showLabels').checked;render();persist()};$('search').oninput=renderList;for(const [id,key]of [['mapTitle','title'],['legendTitle','legendTitle']]){let editing=false;$(id).onfocus=()=>editing=false;$(id).oninput=()=>{if(!editing){pushHistory();editing=true}state[key]=simplify($(id).value);if(key==='legendTitle')renderLegend();persist()};}$('eraser').onclick=()=>{erase=!erase;renderPalette();updateBrush()};$('undo').onclick=()=>restore('undo');$('redo').onclick=()=>restore('redo');$('zoomIn').onclick=()=>zoom(.8);$('zoomOut').onclick=()=>zoom(1.25);$('fit').onclick=fit;
 $('map').addEventListener('wheel',e=>{if(!view)return;e.preventDefault();flushView();const p=new DOMPoint(e.clientX,e.clientY).matrixTransform($('map').getScreenCTM().inverse());zoom(e.deltaY>0?1.1:1/1.1,[(p.x-view.x)/view.w,(p.y-view.y)/view.h])},{passive:false});
-$('map').addEventListener('pointerdown',e=>{if(e.button!==0)return;moved=false;drag={x:e.clientX,y:e.clientY,v:{...view},pointer:e.pointerId,matrix:$('map').getScreenCTM()?.inverse()}});
-window.addEventListener('pointermove',e=>{if(!drag||!drag.matrix)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.hypot(dx,dy)>5){moved=true;$('tooltip').hidden=true;const p1=new DOMPoint(drag.x,drag.y).matrixTransform(drag.matrix),p2=new DOMPoint(e.clientX,e.clientY).matrixTransform(drag.matrix);view={...drag.v,x:drag.v.x-(p2.x-p1.x),y:drag.v.y-(p2.y-p1.y)};applyView()}});window.addEventListener('pointerup',()=>drag=null);window.addEventListener('pointercancel',()=>{drag=null;moved=true});
+// Touch gestures share the SVG viewBox and never trigger a region paint.
+const mapPointers=new Map();let mapPinch=null,gestureConsumed=false;
+function pinchView(initial,base,startDistance,distance,startPoint,point){
+ if(!(startDistance>0&&distance>0&&base.w>0&&initial.w>0))return null;
+ const width=Math.max(base.w/16,Math.min(base.w*2,initial.w*startDistance/distance)),factor=width/initial.w;
+ return {x:startPoint.x-(point.x-initial.x)*factor,y:startPoint.y-(point.y-initial.y)*factor,w:width,h:initial.h*factor};
+}
+function pointerPair(){return [...mapPointers.values()].slice(0,2)}
+function beginMapPinch(){
+ if(!view||!baseView||mapPointers.size<2)return;
+ flushView();const matrix=$('map').getScreenCTM()?.inverse();if(!matrix)return;
+ const [a,b]=pointerPair(),distance=Math.hypot(a.x-b.x,a.y-b.y);
+ if(distance<1)return;
+ const center=new DOMPoint((a.x+b.x)/2,(a.y+b.y)/2).matrixTransform(matrix);
+ mapPinch={initial:{...view},base:{...baseView},matrix,distance,center};drag=null;moved=gestureConsumed=true;$('tooltip').hidden=true;
+}
+$('map').addEventListener('pointerdown',e=>{
+ if(e.button!==0||!view)return;
+ if(e.pointerType==='touch'){
+  if(!mapPointers.size){gestureConsumed=false;moved=false}
+  mapPointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(mapPointers.size>=2){beginMapPinch();return}
+ }else{if(mapPointers.size)return;gestureConsumed=false;moved=false}
+ drag={x:e.clientX,y:e.clientY,v:{...view},pointer:e.pointerId,matrix:$('map').getScreenCTM()?.inverse()};
+});
+window.addEventListener('pointermove',e=>{
+ if(mapPointers.has(e.pointerId)){
+  mapPointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(mapPointers.size>=2){
+   if(!mapPinch)beginMapPinch();
+   if(mapPinch){
+    const [a,b]=pointerPair(),distance=Math.hypot(a.x-b.x,a.y-b.y);
+    const point=new DOMPoint((a.x+b.x)/2,(a.y+b.y)/2).matrixTransform(mapPinch.matrix);
+    const next=pinchView(mapPinch.initial,mapPinch.base,mapPinch.distance,distance,mapPinch.center,point);
+    if(next){view=next;applyView();if(state.labels&&['council','legislative'].includes(state.level))scheduleNavigationLabels()}
+   }
+   return;
+  }
+  if(gestureConsumed)return;
+ }
+ if(!drag||drag.pointer!==e.pointerId||!drag.matrix)return;
+ const dx=e.clientX-drag.x,dy=e.clientY-drag.y;
+ if(Math.hypot(dx,dy)>5){moved=gestureConsumed=true;$('tooltip').hidden=true;const p1=new DOMPoint(drag.x,drag.y).matrixTransform(drag.matrix),p2=new DOMPoint(e.clientX,e.clientY).matrixTransform(drag.matrix);view={...drag.v,x:drag.v.x-(p2.x-p1.x),y:drag.v.y-(p2.y-p1.y)};applyView()}
+});
+function endMapPointer(e){
+ if(mapPointers.delete(e.pointerId)){
+  if(mapPinch){mapPinch=null;moved=gestureConsumed=true;if(mapPointers.size>=2)beginMapPinch()}
+  if(e.type==='pointercancel')moved=gestureConsumed=true;
+ }
+ if(drag?.pointer===e.pointerId){drag=null;if(e.type==='pointercancel')moved=gestureConsumed=true}
+}
+window.addEventListener('pointerup',endMapPointer);window.addEventListener('pointercancel',endMapPointer);
+$('map').addEventListener('click',e=>{if(gestureConsumed&&e.detail!==0){e.preventDefault();e.stopImmediatePropagation()}},true);
+window.addEventListener('blur',()=>{drag=null;mapPointers.clear();mapPinch=null;moved=gestureConsumed=true});
+
 window.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))return;if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'){e.preventDefault();restore(e.shiftKey?'redo':'undo')}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='y'){e.preventDefault();restore('redo')}});
 function clearCurrentMapData(){
  const items=currentItems(),deletes=[],queued=new Set(),touchedLocal=new Set();
