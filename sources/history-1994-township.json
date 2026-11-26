@@ -4137,11 +4137,12 @@
       "county": "臺東縣",
       "election_date": "1994-01-29",
       "source_url": "https://www.cs.gov.tw/home/index.php/list-of-townships",
-      "source_locator": "池上鄉公所歷任鄉長名錄，第12屆",
+      "source_locator": "池上鄉公所歷任鄉長表，第11屆79.03.01–83.03.01，第12屆83.03.01–87.03.01；投票時在任。",
       "winners": [
         {
           "town": "池上鄉",
-          "name": "林慶堂"
+          "name": "林慶堂",
+          "incumbent_at_election": true
         }
       ]
     },
@@ -4201,11 +4202,12 @@
       "county": "苗栗縣",
       "election_date": "1994-01-29",
       "source_url": "https://www.tongluo.gov.tw/cp.aspx?n=3343",
-      "source_locator": "銅鑼鄉公所歷任鄉長，第十二屆（83.03.01–87.03.01），第十一屆葉東維",
+      "source_locator": "銅鑼鄉公所歷任鄉長表，第11屆葉東維，第12屆黃芳椿83.03.01就職；投票時非現任。",
       "winners": [
         {
           "town": "銅鑼鄉",
-          "name": "黃芳椿"
+          "name": "黃芳椿",
+          "incumbent_at_election": false
         }
       ]
     },
@@ -4453,6 +4455,62 @@
           "town": "芬園鄉",
           "name": "洪慶章",
           "gender": "男"
+        }
+      ]
+    },
+    {
+      "county": "苗栗縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://www.toufen.gov.tw/cp.aspx?n=2892",
+      "source_locator": "頭份市公所歷屆鎮長表：第十一屆張真臺至83.02.28，第十二屆徐耀昌83.03.01至87.02.28；新聞獨立確認1994首次當選。",
+      "corroboration_url": "https://newtalk.tw/news/view/2026-11-12/1070783",
+      "winners": [
+        {
+          "town": "頭份鎮",
+          "name": "徐耀昌",
+          "gender": "男",
+          "incumbent_at_election": false
+        }
+      ]
+    },
+    {
+      "county": "苗栗縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://www.nanchuang.gov.tw/News.aspx?PageSize=20&n=3391&page=4&sms=10635",
+      "source_locator": "南庄鄉公所大事紀：民國83年3月2日葉弘俊當選就任第十二屆南庄鄉鄉長。",
+      "winners": [
+        {
+          "town": "南庄鄉",
+          "name": "葉弘俊"
+        }
+      ]
+    },
+    {
+      "county": "苗栗縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://zh.wikipedia.org/wiki/苗栗市市長",
+      "source_locator": "歷任首長表：郭豐煊連任第4、5屆，1990.03.01–1998.03.01；苗栗縣政府新聞證實曾任苗栗市長。次級任期名錄，未取得當屆選舉結果清冊。",
+      "corroboration_url": "https://www.miaoli.gov.tw/News_Content2.aspx?n=285&s=282418",
+      "winners": [
+        {
+          "town": "苗栗市",
+          "name": "郭豐煊",
+          "incumbent_at_election": true
+        }
+      ]
+    },
+    {
+      "county": "苗栗縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://zh.wikipedia.org/wiki/竹南鎮",
+      "source_locator": "歷任首長表引用竹南鎮公所舊檔，列第12、13屆葉財益；1998年臺灣記憶新聞檔案及1999年遠見雜誌佐證任職。尚無當屆選票清冊。",
+      "corroboration_url": "https://tm.ncl.edu.tw/article?u=017_092_0000842424",
+      "winners": [
+        {
+          "town": "竹南鎮",
+          "name": "葉財益",
+          "gender": "男",
+          "incumbent_at_election": false
         }
       ]
     }
