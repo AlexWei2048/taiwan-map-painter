@@ -3159,6 +3159,15 @@ test('Historical council trends resolve former names and show pre-merger county 
  assert.deepEqual(await group.locator('.trend-card-heading h4').allTextContents(),['原高雄市','原高雄县','合并后高雄市']);
  assert.equal(await group.locator('.trend-card > .data-help').count(),0);
  assert.equal(await group.locator('svg[data-trend-export-viewbox]').count(),3);
+ const mergedGraphs=group.locator('svg[data-trend-export-viewbox]');
+ const axes=await mergedGraphs.evaluateAll(graphs=>graphs.map(g=>[...g.querySelectorAll('[data-trend-axis-tick]')].map(t=>t.textContent)));
+ assert.deepEqual(axes[0],axes[1]);assert.deepEqual(axes[1],axes[2]);
+ const legend=group.locator('[data-trend-legend][role="button"]').first();
+ const party=await legend.getAttribute('data-trend-legend');
+ await legend.press('Enter');
+ const visibleMarks=()=>group.locator('[data-trend-series]').evaluateAll((marks,name)=>marks.filter(m=>m.getAttribute('data-trend-series')===name).map(m=>m.getAttribute('display')),party);
+ assert.ok((await visibleMarks()).every(v=>v==='none'));
+ await legend.press('Enter');assert.ok((await visibleMarks()).every(v=>v===null));
  const layout=page.locator('.trend-merge-layout').filter({has:page.locator('[data-trend-scope="合并后高雄市"]')}).last();
  assert.deepEqual(await layout.locator('[data-trend-scope]').evaluateAll(cards=>cards.map(card=>card.dataset.trendScope)),['原高雄市','原高雄县','合并后高雄市']);
  assert.equal(await layout.locator('[data-trend-scope="合并后高雄市"] svg').getAttribute('viewBox').then(v=>Number(v.split(' ')[3])>600),true);
@@ -3214,4 +3223,20 @@ test('Archive maps do not fetch trend scripts before the trend view is selected'
  await page.locator('#trendYears').waitFor({timeout:60000});
  assert.equal(await page.evaluate(()=>!!window.HistoryTrendsUI),true);
  assert.ok(requested.some(path=>path.endsWith('/history-trends-ui.js')));
+});
+
+
+test('Fixed election choices are hidden and restored when choices become available',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ await page.locator('#categoryHistory').click();
+ await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
+ await page.locator('#historyOffice').selectOption('legislative');
+ await page.waitForFunction(()=>History2022View.office()==='legislative'&&document.querySelector('#historyElectorate').value==='all');
+ await page.waitForFunction(()=>document.querySelector('#historyScale').hasAttribute('data-election-fixed-choice')&&document.querySelector('#historyMetric').hasAttribute('data-election-fixed-choice'));
+ assert.equal(await page.locator('#historyScale').isVisible(),false);
+ assert.equal(await page.locator('#historyMetric').isVisible(),false);
+ await page.locator('#historyElectorate').selectOption('regional');
+ await page.waitForFunction(()=>!document.querySelector('#historyScale').hasAttribute('data-election-fixed-choice')&&!document.querySelector('#historyMetric').hasAttribute('data-election-fixed-choice'));
+ assert.equal(await page.locator('#historyScale').isVisible(),true);
+ assert.equal(await page.locator('#historyMetric').isVisible(),true);
 });
