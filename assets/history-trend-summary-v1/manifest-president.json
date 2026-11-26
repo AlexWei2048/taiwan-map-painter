@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "yearsByOffice": {
+    "president": [
+      1996,
+      2000,
+      2004,
+      2008,
+      2012,
+      2016,
+      2020,
+      2024
+    ]
+  },
+  "sourceVersion": "[\"assets/history-president-1996.json?v=20261115-cec-all-towns-v3\",\"assets/history-president-2000.json?v=20261115-cec-all-towns-v3\",\"assets/history-president-2004.json?v=20261115-cec-all-towns-v3\",\"assets/history-president-2008.json?v=20261115-cec-all-towns-v3\",\"assets/history-president-2012.json?v=20261115-cec-all-towns-v3\",\"assets/history-president-2016.json?v=20261115-cec-all-towns-v3\",\"assets/history-president-2020.json?v=20261115-cec-all-towns-v3\",\"assets/history-president-2024.json?v=20261115-cec-all-towns-v3\"]",
+  "algorithmVersion": 1,
+  "sources": {
+    "assets/history-president-1996.json": "882d40af307e8bc80fbeb0ae0c4e425332d7c7a9",
+    "assets/history-president-2000.json": "d663693b69dbc4d7e1954db3d71d7c8b9ac569c5",
+    "assets/history-president-2004.json": "55ed16aa3c18690fbb70e6b56a89607fe57abc1e",
+    "assets/history-president-2008.json": "7ee8dc54cc81b3666e74e7a8dd3865b0503f9dc4",
+    "assets/history-president-2012.json": "ec97b9f0420a315f158a5c78ec38f44c1bbb3137",
+    "assets/history-president-2016.json": "c638498c9e235410dfac2e814bc68286ec69813c",
+    "assets/history-president-2020.json": "d6ac5235478e45722e5074c9a64dec38a4c7b5b5",
+    "assets/history-president-2024.json": "ecf05fbd1f1e79dab44a91d6345a50a5b5863fe1"
+  }
+}
