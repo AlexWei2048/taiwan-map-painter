@@ -55,6 +55,19 @@
   }
   return {all,counties};
  }
- const api={KEY,MAX,validate,initial,capture,change,commit,progress};
+ // Merge a backup without overwriting an existing plan or changing the current selection.
+ function merge(bundle,project,imported,clean){
+  const next=capture(bundle,project),source=validate(imported);
+  if(next.plans.length+source.plans.length>MAX)throw Error('合并后超过'+MAX+'个方案，请先备份并删除不需要的方案');
+  const ids=new Set(next.plans.map(p=>p.id));
+  for(const p of source.plans){
+   let id=p.id,i=1;
+   while(ids.has(id))id=p.id+'-import-'+i++;
+   ids.add(id);
+   next.plans.push({id,name:name(p.name),project:clone(clean(p.project))});
+  }
+  return validate(next);
+ }
+ const api={KEY,MAX,validate,initial,capture,change,commit,progress,merge};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.MapPlanStore=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
