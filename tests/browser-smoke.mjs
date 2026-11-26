@@ -3442,3 +3442,26 @@ test('Named local plans migrate the original, copy independently and survive rel
  assert.equal(await page.evaluate(()=>JSON.stringify(state.predictions)),original);
  assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('island-palette-plans-v1')).plans.length),3);
 });
+
+
+test('Historical two-year comparison synchronizes maps, county selection and party change',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ await page.locator('#categoryHistory').click();
+ await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
+ await page.locator('#historyCompareOpen').click();
+ await page.locator('#compareOffice').selectOption('president');
+ await page.locator('#compareMapA path').first().waitFor({timeout:90000});
+ assert.ok(await page.locator('#compareMapB path').count()>=22);
+ const before=await page.locator('#compareMapA').getAttribute('viewBox');
+ await page.locator('#compareZoomIn').click();
+ assert.notEqual(await page.locator('#compareMapA').getAttribute('viewBox'),before);
+ assert.equal(await page.locator('#compareMapA').getAttribute('viewBox'),await page.locator('#compareMapB').getAttribute('viewBox'));
+ await page.locator('#compareCounty').selectOption('台北市');
+ await page.locator('#compareParty').selectOption('中国国民党');
+ await page.locator('#compareDifference').check();
+ assert.match(await page.locator('#compareMapTitleB').textContent(),/得票率变化/);
+ assert.match(await page.locator('#compareTable').textContent(),/台北市/);
+ assert.match(await page.locator('#compareLegend').textContent(),/百分点变化/);
+ await page.locator('#historyCompareDialog').getByRole('button',{name:'关闭',exact:true}).click();
+ assert.equal(await page.locator('#historyYear').inputValue(),'2022');
+});
