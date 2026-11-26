@@ -58,7 +58,7 @@ async function loadSummary(conf){
 async function load(){
  if(!selection||panel.hidden)return;
  const conf=settings(),ys=range(conf),key=trendDataKey(conf),token=++request;
- activeKey=key;loading=true;models=[];lastRows=[];lastSeries=[];voteShareExport=null;
+ activeKey=key;renderedKey='';loading=true;models=[];lastRows=[];lastSeries=[];voteShareExport=null;
  $('trendStatus').textContent='正在载入所选范围的历届正式结果…';$('trendCharts').replaceChildren();$('trendCsv').disabled=true;
  if(!ys.length){loading=false;$('trendStatus').textContent='请至少勾选一个届次。';return}
  try{
@@ -126,8 +126,14 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
  const width=Math.max(compact?520:tall?620:700,rows.length*(compact?72:rows.some(r=>r.scopeLabel)?79:65)+100),l=compact?52:64,r=width-20,top=48,bottom=compact?280:tall?550:270;
  const showScope=!grouped||new Set(rows.map(r=>r.scopeLabel||'')).size>1;
  const legendStart=grouped?bottom+(showScope?70:52):338,legend=[];
- let lx=20,ly=legendStart;for(const [i,s] of series.entries()){const name=s.name.length>16?s.name.slice(0,16)+'…':s.name;if(grouped){const span=Math.min(width-40,Math.max(92,30+Array.from(name).reduce((n,ch)=>n+(/[^\x00-\x7f]/.test(ch)?13:7),0)));if(lx>20&&lx+span>width-20){lx=20;ly+=23}legend.push({xx:lx,yy:ly,name});lx+=span}else legend.push({xx:20+(i%4)*(width-40)/4,yy:338+Math.floor(i/4)*24,name})}
- const height=grouped?Math.max(tall?650:0,(legend.at(-1)?.yy||legendStart)+18):346+Math.ceil(series.length/4)*24,g=baseSvg(title,width,height);
+ let lx=20,ly=legendStart;
+ for(const s of series){
+  const name=s.name.length>16?s.name.slice(0,16)+'…':s.name;
+  const span=Math.min(width-40,Math.max(92,30+Array.from(name).reduce((n,ch)=>n+(/[^\x00-\x7f]/.test(ch)?(grouped?13:11):7),0)));
+  if(lx>20&&lx+span>width-20){lx=20;ly+=25}
+  legend.push({xx:lx,yy:ly,name,span});lx+=span;
+ }
+ const height=Math.max(tall?650:0,(legend.at(-1)?.yy||legendStart)+20),g=baseSvg(title,width,height);
  if(grouped){g.setAttribute('data-trend-export-viewbox','0 0 '+width+' '+height);g.setAttribute('viewBox','0 30 '+width+' '+(height-30));}
  const vals=rows.flatMap((row,i)=>stack?[series.reduce((n,s)=>n+(s.get(row)||0),0)]:series.map(s=>s.get(row))).filter(Number.isFinite);
  const magnitude=axisMax??Math.max(1,...vals);
@@ -153,7 +159,7 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
   const tooltip=detail?(row.label||row.year)+(row.scopeLabel?' · '+row.scopeLabel:'')+(row.dates?.length?' · '+row.dates.join(' / '):'')+'\n'+detail:summary;
   p.append(svg('title',{},tooltip));
   p.setAttribute('tabindex','0');p.setAttribute('role','button');p.setAttribute('aria-label',tooltip.replaceAll('\n','；'));
-  const click=()=>showYear(row.year,row.county,row.label);p.addEventListener('click',click);p.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();click()}})
+  const click=()=>showYear(row.year,row.county,row.label,summary,detail);p.addEventListener('click',click);p.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();click()}})
  };
  if(stack){
   const labelColor=fill=>{const m=/^#([0-9a-f]{6})$/i.exec(fill||'');if(!m)return'#fff';const c=m[1].match(/../g).map(v=>parseInt(v,16));return(c[0]*.299+c[1]*.587+c[2]*.114)>150?'#17352b':'#fff'};
@@ -190,11 +196,12 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
  }
  if(breakOld){const i=rows.findIndex(r=>!r.oldPartyVote);if(i>0){const xx=(x(i-1)+x(i))/2;g.append(svg('line',{x1:xx,x2:xx,y1:top,y2:bottom,stroke:'#8a938d','stroke-dasharray':'4 4'}),svg('text',{x:xx+4,y:top-7,'font-size':10},'2008制度改革'))}}
  series.forEach((s,i)=>{
-  const {xx,yy,name}=legend[i],entry=svg('g',{'data-trend-legend':s.name});
+  const {xx,yy,name,span}=legend[i],entry=svg('g',{'data-trend-legend':s.name});
   entry.append(s.dash?svg('line',{x1:xx,x2:xx+12,y1:yy-5,y2:yy-5,stroke:s.color,'stroke-width':2,'stroke-dasharray':'4 2'}):svg('rect',{x:xx,y:yy-10,width:11,height:11,rx:2,fill:s.color}),svg('text',{x:xx+16,y:yy,'font-size':grouped?13:11},name));
   // Do not hide parts of stacked seat totals: the original total must remain visible.
   if(!stack&&series.length>1){
    entry.setAttribute('role','button');entry.setAttribute('tabindex','0');entry.setAttribute('aria-pressed','true');entry.setAttribute('aria-label','切换 '+s.name+' 曲线');entry.style.cursor='pointer';
+   entry.prepend(svg('rect',{x:xx-4,y:yy-19,width:span-3,height:24,rx:3,fill:'transparent','data-trend-legend-hit':'true','pointer-events':'all'}));
    entry.append(svg('title',{},'点击显示或隐藏 '+s.name));
    const toggle=()=>{
     const scope=g.closest('.trend-merge-layout')||g,visible=entry.getAttribute('aria-pressed')!=='true';
@@ -208,9 +215,9 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
  return g
 }
 
-function showYear(year,county,actualLabel){
+function showYear(year,county,actualLabel,summary='',detail=''){
  const readout=$('trendPointReadout');if(!readout)return;
- readout.replaceChildren(node('strong','',(actualLabel||label(year,settings().office))+' · '+(county||settings().county||'全部地区')+' '));
+ readout.replaceChildren(node('strong','',summary||((actualLabel||label(year,settings().office))+' · '+(county||settings().county||'全部地区'))));
  const b=node('button','button quiet','查看该届结果');b.type='button';
  b.onclick=()=>{
   const y=$('historyYear'),office=settings().office;
@@ -225,7 +232,8 @@ function showYear(year,county,actualLabel){
   else{y.value=String(year);y.dispatchEvent(new Event('change',{bubbles:true}))}
   if($('historyViewTrends').getAttribute('aria-pressed')==='true')$('historyViewTrends').click()
  };
- readout.append(b)
+ readout.append(b);
+ if(detail){const disclosure=node('details','trend-point-details');disclosure.append(node('summary','','候选人明细'),node('p','',detail));readout.append(disclosure)}
 }
 function parliamentSvg(row,conf,totalLeg){
   const parties=T.parliamentOrder(Object.entries(row.parties||{}).filter(([,n])=>Number.isSafeInteger(n)&&n>0));
@@ -419,7 +427,7 @@ window.HistoryTrendsUI={routeYears:()=>knownYears.filter(y=>selectedYears.has(y)
   request++;loading=false;activeKey='';renderedKey='';models=[];lastRows=[];$('trendCharts').replaceChildren();$('trendCsv').disabled=true;$('trendStatus').textContent='正在等待左侧选举数据载入…';return
  }
  const dataKey=trendDataKey(conf),key=JSON.stringify([conf.office,conf.year,conf.electorate,conf.county,conf.level,conf.focus,conf.metric,conf.party,conf.candidateScope,conf.candidate,range(conf).join(',')]);
- if(dataKey!==activeKey||range(conf).length&&!models.length&&!loading)load();else if(!loading&&(closed||key!==renderedKey))render();
+ if(dataKey!==activeKey||range(conf).length&&!models.length&&!loading)load();else if(!loading&&(key!==renderedKey||(closed&&!$('trendCharts').childElementCount&&models.length)))render();
  closed=false;
 },close(){closed=true},render,exportCsv};
 })();
