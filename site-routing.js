@@ -4,7 +4,7 @@
  const offices=['president','legislative','mayor','council','township'];
  const futureOffices=['mayor','council','township'];
  const layers=['county','town','council','legislative'];
- const historyKeys=['level','metric','electorate','candidateScope','candidate','party','focus','view','scope','overviewCounty','overviewArea','area','detailCounty','identity','contest','years'];
+ const historyKeys=['level','metric','electorate','candidateScope','candidate','party','focus','view','scope','overviewCounty','overviewArea','area','detailCounty','identity','contest','years','analysis'];
  const predictionKeys=['level','display','metric','electorate','candidate','district','scope','fill'];
  const freeKeys=['electorate'];
  const choose=(v,allowed,fallback)=>allowed.includes(v)?v:fallback;
@@ -63,7 +63,7 @@
  function read(){
   if(root.History2022View?.active()){
    const r=root.History2022View.routeSelection();
-   return {...r,mode:'history'};
+   return {...r,mode:'history',analysis:r.view==='trends'&&root.HistoryObservation?.tab()!=='trends'?root.HistoryObservation?.tab():undefined};
   }
   if(state.workspaceMode==='free')return{mode:'free',level:futureLevel[state.level]||'county',county:state.county,electorate:state.level==='council'?state.electorate.council:undefined};
   if(state.workspaceMode!=='prediction')return null;

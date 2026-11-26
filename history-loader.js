@@ -15,7 +15,7 @@
   'assets/party-logos-archive.js','history-core.js','history-presidential-turnout.js',
   'history-presidential.js','history-legislative.js','history-legislative-party.js',
   'history-legislative-turnout.js','history-legislative-data.js','history-local.js',
-  'history-workspace.js','history-2022.js','history-coverage.js','history-compare.js'
+  'history-workspace.js','history-2022.js','history-coverage.js','history-compare.js','history-observation-core.js','history-observation-ui.js'
  ];
  const LEGISLATIVE_CANDIDATES='assets/history-legislative-candidates.js';
  const TREND_SCRIPTS=['history-trends.js','history-trend-summary.js','history-trends-ui.js'];

@@ -26,7 +26,7 @@
    const view=await window.HistoryLoader.load();
    if(request!==navigation||!isCurrent())return false;
    select(desired);
-   if(route){await view.restoreRoute(route,()=>request===navigation&&isCurrent());return request===navigation&&isCurrent()&&view.routeReady(route)}
+   if(route){await view.restoreRoute(route,()=>request===navigation&&isCurrent());if(request===navigation&&isCurrent()&&route.view==='trends')window.HistoryObservation?.choose(route.analysis||'trends',false);return request===navigation&&isCurrent()&&view.routeReady(route)}
    view.activate();
    window.HistoryWorkspace?.restoreRouteView?.({view:desired==='analysis'?'trends':'map'});
    return true;
