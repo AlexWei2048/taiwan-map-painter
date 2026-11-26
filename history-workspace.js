@@ -745,9 +745,12 @@
   for(const view of VIEWS){const button=el('historyView'+view[0].toUpperCase()+view.slice(1));if(button){const selected=state.view===view;button.classList.toggle('active',selected);button.setAttribute('aria-pressed',String(selected))}}
   syncTrends();
   if(el('historyExportCsv'))el('historyExportCsv').textContent=state.view==='trends'?'导出历史趋势 CSV':'导出当前结果 CSV';
-  renderTurnoutCards();if(el('historyCoverage')&&currentResult){el('historyCoverage').textContent=state.office==='legislative'?'当前票种：'+(root.HistoryLegislative?.ballots(state.year).find(x=>x.value===state.electorate)?.label||'立法机构民代')+' · '+currentResult.contests.length+'个统计区域 · '+currentResult.candidacies.length+'条结果。':'当前范围：'+currentResult.contests.length+'个选举区 · '+currentResult.candidacies.length+'条候选人记录。';
+  renderTurnoutCards();const coverage=el('historyCoverage');
+  if(coverage&&!currentResult)coverage.textContent='正在载入当前选举资料…';
+  if(coverage&&currentResult){coverage.textContent=state.office==='legislative'?'当前票种：'+(root.HistoryLegislative?.ballots(state.year).find(x=>x.value===state.electorate)?.label||'立法机构民代')+' · '+currentResult.contests.length+'个统计区域 · '+currentResult.candidacies.length+'条结果。':'当前范围：'+currentResult.contests.length+'个选举区 · '+currentResult.candidacies.length+'条候选人记录。';
    const missing=currentOverview?[[currentOverview.registeredVoters,'选举人数'],[currentOverview.ballotsCast,'投票人数'],[currentOverview.validVotes,'有效票'],[currentOverview.invalidVotes,'无效票']].filter(([v])=>!Number.isFinite(v)).map(([,name])=>name):[];
-   if(missing.length)el('historyCoverage').append(' 暂无可核实统计：'+missing.join('、')+'。缺值不按0计算。');
+   if(scoped?.noElection)coverage.textContent='该地区当届未举行此类选举，不适用投票统计。';
+   else if(missing.length)coverage.append(' 暂无可核实统计：'+missing.join('、')+'。缺值不按0计算。');
   }emit();return{...state};
  }
  function restoreRouteView(route){
