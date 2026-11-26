@@ -1276,7 +1276,7 @@ test('2022 council uses all historical district geometries and actual elected se
  assert.ok(await page.locator('#historyDialogRows tr').count()>0);assert.equal(await page.locator('#predictionDialog').isVisible(),false);
  await page.locator('#closeHistoryResult').click();
  const svg=await exportSvg(page);assert.match(svg,/data-seat-status="elected"/);assert.match(svg,/id="historySeatBadges"/);assert.match(svg,/data-history-seat-count/);assert.match(svg,/2022/);
- await page.locator('.export-menu summary').click();await page.locator('#returnTaiwanMap').click();assert.equal(await page.locator('#regions path[data-region]').count(),22);
+ await page.locator('.export-menu summary').click();await page.locator('#returnTaiwanMap').click();assert.equal(await page.locator('#regions path[data-region]').count(),66,'return restores all three council ballot maps');
 });
 test('2022 township and mayor maps navigate by county with actual numeric results',async t=>{
  const page=await pageFor(t);await page.locator('#categoryHistory').click();await page.locator('#historyOffice').selectOption('township');
