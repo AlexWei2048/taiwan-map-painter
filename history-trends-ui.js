@@ -12,7 +12,7 @@ const fmt=(v,pct=false)=>Number.isFinite(v)?pct?v.toFixed(2)+'%':v.toLocaleStrin
 const node=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n};
 const svg=(tag,attrs={},text)=>{const n=document.createElementNS(ns,tag);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,v);if(text!==undefined)n.textContent=text;return n};
 const displayParty=p=>/^(连署|連署)$/.test(String(p))?'无党籍（连署）':p;
-const color=p=>p==='并列'?'#9ba69f':p==='其他政党'?'#aebbb2':predictionParty(p).color;
+const color=p=>p==='无党籍'?'#000000':p==='并列'?'#9ba69f':p==='其他政党'?'#aebbb2':predictionParty(p).color;
 // Distinct chart-only fallback colors, not historical official party colors.
 const listFallbackColors={'民主联盟':'#5366B7'};
 const listColor=p=>{const original=color(p);return original.toLowerCase()==='#738772'?(listFallbackColors[p.replace(/[“”]/g,'')]||original):original};
@@ -137,7 +137,7 @@ async function chartExport(graph,title,png){
 function card(title,description,graph,exportTitle=title){
  const c=node('article','trend-card'),h=node('div','trend-card-heading'),buttons=node('div','trend-card-actions');h.append(node('h4','',title),buttons);
  if(graph)for(const ext of ['SVG','PNG']){const b=node('button','button quiet',ext);b.type='button';b.onclick=async()=>{for(const button of buttons.querySelectorAll('button'))button.disabled=true;try{await chartExport(graph,exportTitle,ext==='PNG')}finally{for(const button of buttons.querySelectorAll('button'))button.disabled=false}};buttons.append(b)}
- if(graph?.hasAttribute('data-trend-zoom')){for(const [caption,action,label] of [['＋','in','放大纵轴'],['－','out','缩小纵轴'],['复位','reset','恢复0–60%纵轴']]){const button=node('button','button quiet',caption);button.type='button';button.setAttribute('aria-label',label);button.title=label;button.onclick=()=>graph.dispatchEvent(new Event('trend-zoom-'+action));buttons.prepend(button)}}
+ if(graph?.hasAttribute('data-trend-zoom')){for(const [caption,action,label] of [['＋','in','放大纵轴'],['－','out','缩小纵轴'],['复位','reset','恢复默认纵轴']]){const button=node('button','button quiet',caption);button.type='button';button.setAttribute('aria-label',label);button.dataset.trendZoomAction=action;button.title=label;button.onclick=()=>graph.dispatchEvent(new Event('trend-zoom-'+action));buttons.prepend(button)}}
  c.append(h);if(description)c.append(node('p','data-help',description));if(graph)c.append(graph);return c
 }
 function appendTrendCharts(out,rows,series,title,note,options,county){
@@ -455,10 +455,10 @@ function render(){
  const showCounty=rows.some(r=>r.scopeLabel);
  for(const v of ['届次',...(showCounty?['当届县市']:[]),'投票日期',...series.map(s=>s.name),...(showTotal?['合计']:[])])header.append(node('th','',v));thead.append(header);table.append(thead);
  const body=node('tbody');for(const r of rows){const tr=node('tr');tr.append(node('td','',r.label));if(showCounty)tr.append(node('td','',r.county||conf.county));tr.append(node('td','',r.dates?.join(' / ')||'—'));for(const s of series)tr.append(node('td','',fmt(s.get(r),pct)));if(showTotal)tr.append(node('td','',r.complete?fmt(Object.values(r.parties).reduce((n,v)=>n+v,0)):'—'));body.append(tr)}table.append(body);wrap.append(table);out.append(wrap);
- const voteRows=models.flatMap(item=>item.summary?item.summary[conf.level].voteRows:item.snapshot?T.localPartyVoteShares(item.snapshot,conf):[{year:item.year,label:label(item.year,conf.office),complete:false,reason:item.error,parties:{},valid:null}]);
+ const voteRows=models.flatMap(item=>item.summary?item.summary[conf.level].voteRows:item.snapshot?T.localPartyVoteShares(item.snapshot,conf):[{year:item.year,label:label(item.year,conf.office),complete:false,reason:item.error,parties:{},valid:null}]).map(r=>conf.office==='president'?T.mergePresidentialIndependents(r):r);
  const voteSeries=partySeries(voteRows),voteTitle='候选人票得票率趋势（按所属政党汇总）';
- const voteNote='按当前选举类别和地图范围汇总候选人得票，再除以同范围有效票；同届多组无党籍（连署）候选人合并为同一类别，悬停可查看各候选人。'+(conf.office==='mayor'&&conf.level==='town'&&models.some(item=>item.year===2018)?'2018年台北市区级采用政大刊载的投票日资料，市级采用重计结果。':'');
- appendTrendCharts(out,voteRows,voteSeries,voteTitle,voteNote,{pct:true},conf.county);
+ const voteNote='按当前选举类别和地图范围汇总候选人得票，再除以同范围有效票；同届多组无党籍候选人合并为同一类别，悬停可查看各候选人。'+(conf.office==='president'?'无党籍与连署统一为无党籍，默认纵轴0–60%，滚轮可缩放。':'')+(conf.office==='mayor'&&conf.level==='town'&&models.some(item=>item.year===2018)?'2018年台北市区级采用政大刊载的投票日资料，市级采用重计结果。':'');
+ appendTrendCharts(out,voteRows,voteSeries,voteTitle,voteNote,{pct:true,zoomPercent:conf.office==='president'},conf.county);
  const voteWrap=node('div','history-table-wrap'),voteTable=node('table','history-candidate-table'),voteHead=node('thead'),voteHeader=node('tr');
  for(const heading of ['届次','当届县市','投票日期',...voteSeries.map(s=>s.name),'合计'])voteHeader.append(node('th','',heading));voteHead.append(voteHeader);voteTable.append(voteHead);
  const voteBody=node('tbody');for(const r of voteRows){const tr=node('tr');tr.append(node('td','',r.label),node('td','',r.county||'全部地区'),node('td','',r.dates?.join(' / ')||'—'));for(const s of voteSeries)tr.append(node('td','',fmt(s.get(r),true)));tr.append(node('td','',r.complete?'100.00%':'—'));voteBody.append(tr)}voteTable.append(voteBody);voteWrap.append(node('h4','','候选人票得票率逐届明细（按所属政党汇总）'),voteTable);out.append(voteWrap);

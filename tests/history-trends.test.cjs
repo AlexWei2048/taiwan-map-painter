@@ -174,11 +174,11 @@ test('Independent presidential tickets share one party series and hover lists ea
  for(const [year,names] of [[1996,['林洋港','陈履安']],[2000,['宋楚瑜','许信良']]]){
   const snapshot=require('../assets/history-president-'+year+'.json');
   const row=T.localPartyVoteShares(snapshot,{office:'president',level:'county',normalize:norm})[0];
-  assert.deepEqual(row.candidateDetails['连署'].map(r=>r.name).sort(),names.sort());
-  assert.equal(row.partyMeta['连署'].label,'无党籍（连署）');
-  assert.equal(row.candidateDetails['连署'].reduce((sum,r)=>sum+r.votes,0),row.votes['连署']);
-  const tip=T.candidateTrendTooltip(row,'连署');
-  for(const name of names)assert.match(tip,new RegExp(name+' · 无党籍（连署） · \\d+\\.\\d{2}%'));
+  assert.deepEqual(row.candidateDetails['无党籍'].map(r=>r.name).sort(),names.sort());
+  assert.equal(row.partyMeta['无党籍'].label,'无党籍');
+  assert.equal(row.candidateDetails['无党籍'].reduce((sum,r)=>sum+r.votes,0),row.votes['无党籍']);
+  const tip=T.candidateTrendTooltip(row,'无党籍');
+  for(const name of names)assert.match(tip,new RegExp(name+' · 无党籍 · \\d+\\.\\d{2}%'));
   assert.match(tip,/合计 · \d+\.\d{2}%/);
   assert.ok(Math.abs(Object.values(row.parties).reduce((a,b)=>a+b,0)-100)<1e-8);
  }
@@ -374,4 +374,11 @@ test('Party-list percent zoom uses a bounded pointer-anchored domain and readabl
  assert.deepEqual(T.percentZoomRange([0,60],10,.5),[0,100]);
  assert.deepEqual(T.percentZoomRange([20,30],.001,.5),[24,26]);
  assert.ok(T.percentZoomTicks([24,26]).every(x=>x>=24&&x<=26));
+});
+
+test('Presidential independent aliases merge cached and raw vote rows without altering the denominator',()=>{
+ const norm=require('../assets/opencc.js').Converter({from:'t',to:'cn'});
+ const fake={complete:true,valid:100,parties:{'连署':20,'无党籍':10,'无党籍（连署）':5,'甲':65},votes:{'连署':20,'无党籍':10,'无党籍（连署）':5,'甲':65},partyMeta:{},candidateDetails:{'连署':[{name:'甲',party:'无党籍（连署）',votes:20}],'无党籍':[{name:'乙',party:'无党籍',votes:10}]}};
+ const r=T.mergePresidentialIndependents(fake);assert.equal(r.parties['无党籍'],35);assert.equal(r.votes['无党籍'],35);assert.equal(r.valid,100);assert.equal(r.candidateDetails['无党籍'].length,2);assert.equal(r.partyMeta['无党籍'].label,'无党籍');assert.ok(!Object.hasOwn(r.parties,'连署'));assert.equal(fake.parties['连署'],20);assert.deepEqual(T.mergePresidentialIndependents(r),r);
+ for(const year of [1996,2000,2004,2008,2012,2016,2020,2024]){const row=T.localPartyVoteShares(require('../assets/history-president-'+year+'.json'),{office:'president',level:'county',normalize:norm})[0];assert.ok(row.complete);assert.ok(Math.abs(Object.values(row.parties).reduce((n,v)=>n+v,0)-100)<1e-8);assert.ok(!Object.hasOwn(row.parties,'连署'));assert.equal(Object.values(row.votes).reduce((n,v)=>n+v,0),row.valid);if([1996,2000,2012].includes(year))assert.ok(row.votes['无党籍']>0);}
 });

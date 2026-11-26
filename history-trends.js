@@ -280,6 +280,19 @@ function trendCandidateRows(snapshot,office,grain,county,focus,norm){
   return Number.isInteger(votes)?{...r,votes}: {...r,votes:null};
  });
 }
+// Merge independent presidential tickets only, including older precomputed summary rows.
+function presidentialIndependentKey(p){
+ return /^(?:无党籍|無黨籍|连署|連署)(?:[（(].*[）)])?$/.test(String(p||'').trim())?'无党籍':p;
+}
+function mergePresidentialIndependents(row){
+ if(!row?.complete)return row;
+ const parties={},votes={},partyMeta={},candidateDetails={};
+ for(const [p,v] of Object.entries(row.parties||{})){const k=presidentialIndependentKey(p);parties[k]=(parties[k]||0)+v;partyMeta[k]=k==='无党籍'?{party:k,label:k}:row.partyMeta?.[p]||{party:k,label:k};}
+ for(const [p,v] of Object.entries(row.votes||{})){const k=presidentialIndependentKey(p);votes[k]=(votes[k]||0)+v;}
+ for(const [p,entries] of Object.entries(row.candidateDetails||{})){const k=presidentialIndependentKey(p);(candidateDetails[k]||(candidateDetails[k]=[])).push(...entries.map(r=>({...r,party:presidentialIndependentKey(r.party)})));}
+ for(const entries of Object.values(candidateDetails))entries.sort((a,b)=>b.votes-a.votes||a.name.localeCompare(b.name,'zh'));
+ return {...row,parties,votes,partyMeta,candidateDetails};
+}
 function localPartyVoteShares(snapshot,selection){
  const {office,county='',level='county',focus='',normalize=String}=selection;
  const grain=office==='township'||level==='town'?'town':'county';
@@ -306,7 +319,7 @@ function localPartyVoteShares(snapshot,selection){
   }
   const parties=Object.fromEntries(Object.entries(votes).map(([p,v])=>[p,v/valid*100]));
   const candidateDetails=Object.fromEntries(Object.entries(candidateGroups).map(([p,group])=>[p,[...group.values()].sort((a,b)=>b.votes-a.votes||a.name.localeCompare(b.name,'zh'))]));
-  return{...base,complete:true,reason:'',parties,votes,valid,partyMeta,candidateDetails};
+  const row={...base,complete:true,reason:'',parties,votes,valid,partyMeta,candidateDetails};return office==='president'?mergePresidentialIndependents(row):row;
  });
 }
 function mapTrend(snapshot,selection,anchor){
@@ -463,7 +476,7 @@ function createLegislativeTrendCache({normalize=String,buildList,maxScopes=64}={
  }
  return{read,clear(){cache=new WeakMap();lists=new WeakMap()}};
 }
-const api={percentZoomRange,percentZoomTicks,legislativeSeatTrendParties,partyListTrendKey,partyListTrendGroups,partyListTrendExcluded,PARTY_LIST_TREND_ORDER,createLegislativeTrendCache,summaryAlgorithmVersion:1,aggregate,value,difference,modern,percent,partyTrendValue,candidateTrendTooltip,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,trendChartScopes,historicalScopeRows,legislativeVoteShares,councilBallotRows,localPartyVoteShares,electionDates,trendEffectiveSelection,LEGISLATIVE_TOTALS};
+const api={mergePresidentialIndependents,percentZoomRange,percentZoomTicks,legislativeSeatTrendParties,partyListTrendKey,partyListTrendGroups,partyListTrendExcluded,PARTY_LIST_TREND_ORDER,createLegislativeTrendCache,summaryAlgorithmVersion:1,aggregate,value,difference,modern,percent,partyTrendValue,candidateTrendTooltip,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,trendChartScopes,historicalScopeRows,legislativeVoteShares,councilBallotRows,localPartyVoteShares,electionDates,trendEffectiveSelection,LEGISLATIVE_TOTALS};
 if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
 root.HistoryTrends=api;
 })(typeof window==='undefined'?{}:window);

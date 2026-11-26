@@ -3628,14 +3628,32 @@ test('Party-list trend displays only the ten specified parties plus others and e
  await page.mouse.move(pos.x,pos.y);await page.mouse.wheel(0,-300);
  await page.waitForFunction(()=>{const g=document.querySelector('#trendCharts svg[data-trend-zoom]');return Number(g?.getAttribute('data-trend-y-max'))-Number(g?.getAttribute('data-trend-y-min'))<59});
  assert.notEqual(await first.getAttribute('cy'),original);
- const card=page.locator('.trend-card').filter({has:chart});await card.getByRole('button',{name:'恢复0–60%纵轴'}).click();
+ const card=chart.locator('..');await card.locator('[data-trend-zoom-action="reset"]').click();
  assert.equal(await chart.getAttribute('data-trend-y-min'),'0');assert.equal(await chart.getAttribute('data-trend-y-max'),'60');assert.equal(await first.getAttribute('cy'),original);
- await card.getByRole('button',{name:'缩小纵轴'}).click();assert.ok(Number(await chart.getAttribute('data-trend-y-max'))>60);
- await card.getByRole('button',{name:'恢复0–60%纵轴'}).click();
+ await card.locator('[data-trend-zoom-action="out"]').click();assert.ok(Number(await chart.getAttribute('data-trend-y-max'))>60);
+ await card.locator('[data-trend-zoom-action="reset"]').click();
  const table=page.locator('#trendCharts .history-table-wrap').filter({hasText:'对应票种得票率逐届明细'});
  assert.match(await table.textContent(),/显示合计/);assert.doesNotMatch(await table.locator('thead').textContent(),/无党籍|基进党|绿党/);
  await page.evaluate(()=>HistoryTrendsUI.restoreRouteYears('2024'));
  await page.waitForFunction(()=>document.querySelector('#trendStatus')?.textContent.includes('1 届')&&!!document.querySelector('#trendCharts svg[aria-label*="旧制席次计算票得票率趋势"]'));
  const filtered=(await chart.locator('[data-trend-legend]').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('data-trend-legend')))).map(plain);
  assert.ok(filtered.includes('台湾基进'));assert.ok(filtered.includes('时代力量'));assert.ok(!filtered.includes('民主联盟'));assert.ok(!filtered.includes('无党籍'));
+});
+
+test('Presidential party vote trend merges independents in black with a sixty percent default axis',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ await page.locator('#categoryHistory').click();await page.locator('#historyOffice').selectOption('president');
+ await page.waitForFunction(()=>History2022View.office()==='president'&&History2022View.snapshot()?.year===2024);
+ await page.locator('#categoryAnalysis').click();
+ const chart=page.locator('#trendCharts svg[aria-label*="候选人票得票率趋势"]');await chart.waitFor({timeout:120000});
+ assert.equal(await chart.getAttribute('data-trend-y-max'),'60');
+ const names=await chart.locator('[data-trend-legend]').evaluateAll(ns=>ns.map(n=>n.getAttribute('data-trend-legend')));
+ assert.equal(names.filter(n=>n==='无党籍').length,1);assert.ok(!names.some(n=>n.includes('连署')));
+ const series=chart.locator('[data-trend-series="无党籍"]');
+ assert.equal(await series.locator('path').first().getAttribute('stroke'),'#000000');assert.equal(await series.locator('circle').count(),3);
+ assert.match(await series.locator('circle').first().getAttribute('aria-label'),/林洋港/);
+ assert.match(await series.locator('circle').first().getAttribute('aria-label'),/陈履安/);
+ const table=page.locator('#trendCharts .history-table-wrap').filter({hasText:'候选人票得票率逐届明细'});
+ assert.doesNotMatch(await table.locator('thead').textContent(),/连署/);
+ assert.match(await table.locator('thead').textContent(),/无党籍/);
 });
