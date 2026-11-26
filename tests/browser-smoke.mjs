@@ -317,9 +317,9 @@ test('Recording votes retains chosen winners and exports a complete vote table',
  const page=await pageFor(t);await selectMayor(page);await enterRates(page);
  const svg=await exportSvg(page);assert.doesNotMatch(svg,/预测得票候选人|2022 实际选举结果/);assert.match(svg,/预测得票率/);assert.match(svg,/data-export-party-logo/);
  assert.equal((svg.match(/data-export-winner-entry=/g)||[]).length,6);assert.equal((svg.match(/data-export-winner-row=/g)||[]).length,6);
- await page.locator('#predictionDisplay').selectOption('composition');assert.match(await page.locator('#predictionCoverage').innerText(),/已选当选人 1\/1/);
+ await page.locator('#predictionDisplay').selectOption('composition');assert.match(await page.locator('#predictionCoverage').innerText(),/1\/1 区/);assert.equal(await page.evaluate(()=>Object.values(state.predictions).some(r=>r.winners?.some(id=>candidateById.get(id)?.name==='蒋万安'))),true);
  assert.match(await page.locator('#legend').textContent(),/中国国民党（1席）/);
- await page.reload();await page.locator('#regions path').first().waitFor();assert.match(await page.locator('#predictionCoverage').innerText(),/已选当选人 1\/1/);
+ await page.reload();await page.locator('#regions path').first().waitFor();assert.match(await page.locator('#predictionCoverage').innerText(),/1\/1 区/);assert.equal(await page.evaluate(()=>Object.values(state.predictions).some(r=>r.winners?.some(id=>candidateById.get(id)?.name==='蒋万安'))),true);
 });
 test('Unified forecast selectors and exclusive metric columns work in district and township dialogs',async t=>{
  const page=await pageFor(t);
@@ -527,15 +527,15 @@ async function assertAdministrativeKey(page){
    const obstacles=[...document.querySelectorAll('#labels [data-label],#mapFurniture [data-decoration],#legend > rect')];
    const blocked=!key.hidden&&obstacles.some(el=>overlap(k,el.getBoundingClientRect()));
    return{total:items.length,labelled:labels.length,numbers:labels.filter(el=>el.dataset.numberKey).length,
-    rows:rows.length,bad,inside:key.hidden||(key.parentElement.id==='canvas'&&k.top>=m.top-1&&k.bottom<=m.bottom+1&&k.left>=m.left-1&&k.right<=m.right+1),
+    rows:rows.length,bad,inside:key.hidden||(key.parentElement.id==='mapWithKey'&&k.top>=m.bottom-1&&k.left>=m.left-1&&k.right<=m.right+1),
     unblocked:!blocked};
   });
   assert.equal(r.labelled,r.total);assert.deepEqual(r.bad,[]);assert.equal(r.rows,r.numbers);
-  assert.ok(r.inside,'index must be rendered on the map canvas');
+  assert.ok(r.inside,'index must remain in normal flow below the map without covering geography');
   assert.ok(r.unblocked,'index must avoid all labels, legend and map furniture');
   return r;
 }
-test('Dense administrative names use an on-map index without covering labels or furniture',async t=>{
+test('Dense administrative names use a separate index without covering labels or furniture',async t=>{
  const page=await pageFor(t);await page.locator('#county').selectOption({label:'高雄市'});
  await page.locator('#predictionScale').selectOption('overlay');
  const r=await assertAdministrativeKey(page);assert.equal(r.total,38);assert.ok(r.numbers>0);
@@ -551,7 +551,7 @@ test('Dense administrative names use an on-map index without covering labels or 
  assert.ok(exported.text.includes('行政区索引'));
 });
 
-test('Compact administrative index matches map label typography and stays within right rail',async t=>{
+test('Administrative index fits the responsive map layout with legible text',async t=>{
  const page=await pageFor(t);
  for(const width of [1280,390]){
   await page.setViewportSize({width,height:850});
@@ -567,18 +567,18 @@ test('Compact administrative index matches map label typography and stays within
    const legend=document.querySelector('#legend>rect')?.getBoundingClientRect();
    const north=document.querySelector('#mapFurniture [data-decoration="north-arrow"]')?.getBoundingClientRect();
    const overlap=(a,b)=>!!b&&a.left<b.right-1&&a.right>b.left+1&&a.top<b.bottom-1&&a.bottom>b.top+1;
-   return {width:box.width,height:box.height,indexFont,expected,legendOverlap:overlap(box,legend),northOverlap:overlap(box,north)};
+   return {width:box.width,height:box.height,indexFont,container:document.querySelector('#mapWithKey').getBoundingClientRect().width,scroll:document.querySelector('#mapNumberKey .map-number-key-scroll').clientHeight,legendOverlap:overlap(box,legend),northOverlap:overlap(box,north)};
   });
-  assert.ok(result.width<=135,result.width+'px: index should be compact');
+  assert.ok(result.width<=result.container+1,'index stays within map layout');
   assert.ok(result.width>=60,result.width+'px: index must remain usable');
-  assert.ok(result.height<=190,result.height+'px: index should be a small reference');
-  assert.ok(Math.abs(result.indexFont-result.expected)<.25,'index text follows map text size');
+  assert.ok(result.scroll<=360,'long reference list scrolls independently');
+  assert.ok(result.indexFont>=10&&result.indexFont<=16,'index uses readable real HTML text');
   assert.equal(result.legendOverlap,false,'keep legend clear');
   assert.equal(result.northOverlap,false,'keep north arrow clear');
  }
 });
 
-test('Administrative index zooms and pans in map coordinates and resets with fit',async t=>{
+test('Administrative index stays fixed in normal flow during map zoom and pan',async t=>{
  const page=await pageFor(t);await page.locator('#county').selectOption({value:'高雄市'});
  await page.locator('#predictionScale').selectOption('overlay');
  const measure=()=>page.evaluate(()=>{
@@ -586,30 +586,19 @@ test('Administrative index zooms and pans in map coordinates and resets with fit
   const svg=document.querySelector('#map'),box=svg.getBoundingClientRect();
   return{left:rect.left,top:rect.top,width:rect.width,height:rect.height,
    view:{...view},svg:{width:box.width,height:box.height},
-   style:el.style.transform};
+   style:getComputedStyle(el).transform};
  });
  const initial=await measure();
- assert.ok(initial.width>60,'in-map key should be readable at fit');
- assert.equal(initial.style,'none','index uses layout font sizing, never scaled bitmap text');
- await page.locator('#zoomIn').click();
- await page.waitForFunction(width=>document.querySelector('#mapNumberKey').getBoundingClientRect().width>width*1.05,initial.width);
- const enlarged=await measure();
- const ratio=initial.view.w/enlarged.view.w;
- assert.ok(Math.abs(enlarged.width/initial.width-ratio)<.025,'index width follows SVG zoom scale');
- assert.ok(Math.abs(enlarged.height/initial.height-ratio)<.085,'index height follows SVG zoom scale');
- const crisp=await page.locator('#mapNumberKeyRows .number-key-action').first().evaluate(el=>getComputedStyle(el).fontSize);
- assert.ok(parseFloat(crisp)>0,'scaled index still uses a real layout font');
- const panX=35,panY=50;
- await page.evaluate(({panX,panY})=>{view.x+=panX;view.y+=panY;flushView()}, {panX,panY});
- const shifted=await measure();
- const pxPerUnit=Math.min(shifted.svg.width/shifted.view.w,shifted.svg.height/shifted.view.h);
- assert.ok(Math.abs((shifted.left-enlarged.left)+panX*pxPerUnit)<1.5,'index pans horizontally with map');
- assert.ok(Math.abs((shifted.top-enlarged.top)+panY*pxPerUnit)<1.5,'index pans vertically with map');
- await page.locator('#fit').click();
- const restored=await measure();
- assert.ok(Math.abs(restored.width-initial.width)<1.5,'fit restores index scale');
- assert.ok(Math.abs(restored.left-initial.left)<1.5,'fit restores index placement');
- assert.ok(Math.abs(restored.top-initial.top)<1.5,'fit restores index vertical placement');
+ assert.ok(initial.width>60,'reference index is readable');assert.equal(initial.style,'none');
+ await page.locator('#zoomIn').click();await page.waitForFunction(w=>view.w<w,initial.view.w);
+ const enlarged=await measure();assert.ok(enlarged.view.w<initial.view.w);
+ for(const k of ['left','top','width','height'])assert.ok(Math.abs(enlarged[k]-initial[k])<2,'zoom preserves index '+k);
+ await page.evaluate(()=>{view.x+=35;view.y+=50;flushView()});
+ const shifted=await measure();assert.notEqual(shifted.view.x,enlarged.view.x);
+ for(const k of ['left','top','width','height'])assert.ok(Math.abs(shifted[k]-initial[k])<2,'pan preserves index '+k);
+ await page.locator('#fit').click();await page.waitForFunction(w=>Math.abs(view.w-w)<.01,initial.view.w);
+ const restored=await measure();assert.equal(restored.style,'none');
+ for(const k of ['left','top','width','height'])assert.ok(Math.abs(restored[k]-initial[k])<2,'fit preserves index '+k);
  const svg=await exportSvg(page);
  const exported=await page.evaluate(source=>{
   const doc=new DOMParser().parseFromString(source,'image/svg+xml');
@@ -801,7 +790,7 @@ test('National council overview labels counties while county views retain all of
  assert.equal(await page.locator('#regions path[data-region]').count(),22);
  assert.equal(await page.evaluate(()=>JSON.stringify(state.predictions)),saved);
 });
-test('Mobile administrative keys remain on the map without overlap',async t=>{
+test('Mobile administrative keys remain accessible below the map without overlap',async t=>{
  const page=await pageFor(t,{width:390,height:844});
  await page.locator('#county').selectOption({label:'高雄市'});await page.locator('#predictionScale').selectOption('overlay');
  const r=await assertAdministrativeKey(page);assert.ok(r.numbers>0);
@@ -1254,15 +1243,16 @@ test('2022 council uses all historical district geometries and actual elected se
  assert.equal(await page.locator('#districtReferenceNote').isVisible(),false);
  assert.equal(await page.locator('#districtReferenceSource').isVisible(),false);
  assert.doesNotMatch(await page.locator('#historyCoverage').textContent(),/资料来源：/);
- assert.equal(await page.locator('#regions path[data-region]').count(),22);
- assert.equal(await page.locator('#regions path[data-region]').evaluateAll(nodes=>{
-  const counties=new Map(currentItems().map(feature=>[String(feature.id),feature.county||feature.name]));
-  return nodes.every(node=>{
-   const leader=History2022View.countySeatLeader(counties.get(node.dataset.region));
-   const expected=leader.tied?'#aebdb4':leader.party?predictionParty(leader.party).color:'#edf1e9';
-   return node.getAttribute('fill')===expected;
+ assert.equal(await page.locator('#regions path[data-region]').count(),66);
+ assert.equal(await page.evaluate(()=>{
+  const rows=History2022View.snapshot().rows,items=currentItems(),paths=new Map([...document.querySelectorAll('#regions path[data-region]')].map(p=>[p.dataset.region,p]));
+  return items.every(f=>{
+   const counts=new Map();for(const r of rows){if(r.type!=='council'||r.level!=='district'||!r.elected||simplify(r.county)!==f.county||HistoryCore.identity(r.electorate)!==f.electorate)continue;const p=simplify(r.party).startsWith('无党籍')?'无党籍':simplify(r.party);counts.set(p,(counts.get(p)||0)+1)}
+   const ranked=[...counts].sort((a,b)=>b[1]-a[1]),fill=paths.get(String(f.id))?.getAttribute('fill');if(!ranked.length)return fill==='#edf1e9';
+   const colors=[...new Set(ranked.filter(x=>x[1]===ranked[0][1]).map(x=>predictionParty(x[0]).color))];
+   if(colors.length===1)return fill===colors[0];const pattern=document.getElementById(fill?.match(/^url\(#(.+)\)$/)?.[1]||'');return colors.every(c=>[...pattern?.children||[]].some(p=>p.getAttribute('fill')===c));
   });
- }),true,'nationwide council county colors reflect the most elected seats');
+ }),true,'all three national council panels reflect official seats within each ballot');
  const geometry=await page.evaluate(()=>({count:History2022View.features().length,seats:History2022View.features().reduce((n,f)=>n+f.seats,0),missing:History2022View.features().filter(f=>!f.d).length}));
  assert.deepEqual(geometry,{count:215,seats:910,missing:0});
  let total=0;
@@ -2247,6 +2237,7 @@ test('Legislative redesign: one national map with county names, county drilldown
  const page=await pageFor(t);
  await page.locator('#categoryHistory').click();
  await page.locator('#historyOffice').selectOption('legislative');
+ await page.waitForFunction(()=>History2022View.office()==='legislative'&&!!History2022View.snapshot()?.elections?.some(e=>e.office==='legislative'));await page.locator('#historyElectorate').selectOption('regional');
  await page.waitForFunction(()=>History2022View.office()==='legislative'&&History2022View.snapshot()?.year===2024);
  assert.deepEqual(await page.locator('#historyScale option').evaluateAll(a=>a.map(o=>o.value)),['county','district']);
  const official=['台北市','新北市','桃园市','台中市','台南市','高雄市','新竹县','苗栗县','彰化县','南投县','云林县','嘉义县','屏东县','宜兰县','花莲县','台东县','澎湖县','基隆市','新竹市','嘉义市','金门县','连江县'];
@@ -2274,6 +2265,7 @@ test('Historical regional districts at all-area scope stay nationwide and respec
  const page=await pageFor(t);
  await page.locator('#categoryHistory').click();
  await page.locator('#historyOffice').selectOption('legislative');
+ await page.waitForFunction(()=>History2022View.office()==='legislative'&&!!History2022View.snapshot()?.elections?.some(e=>e.office==='legislative'));await page.locator('#historyElectorate').selectOption('regional');
  await page.waitForFunction(()=>History2022View.office()==='legislative'&&History2022View.year()===2024&&History2022View.snapshot()?.year===2024);
  await page.locator('#historyScale').selectOption('district');
  const nationwide=await page.evaluate(()=>{
@@ -2316,6 +2308,7 @@ test('Legislative redraw: pre-2008 winners use emblems instead of colored party 
  const page=await pageFor(t);
  await page.locator('#categoryHistory').click();
  await page.locator('#historyOffice').selectOption('legislative');
+ await page.waitForFunction(()=>History2022View.office()==='legislative'&&!!History2022View.snapshot()?.elections?.some(e=>e.office==='legislative'));await page.locator('#historyElectorate').selectOption('regional');
  await page.locator('#historyYear').selectOption('2004');
  await page.waitForFunction(()=>History2022View.snapshot()?.year===2004);
  assert.equal(await page.locator('#historyScale').inputValue(),'county');
@@ -2428,6 +2421,7 @@ test('2004 Kaohsiung districts preserve their former city boundaries',async t=>{
  const page=await pageFor(t);
  await page.locator('#categoryHistory').click();
  await page.locator('#historyOffice').selectOption('legislative');
+ await page.waitForFunction(()=>History2022View.office()==='legislative'&&!!History2022View.snapshot()?.elections?.some(e=>e.office==='legislative'));await page.locator('#historyElectorate').selectOption('regional');
  await page.locator('#historyYear').selectOption('2004');
  await page.waitForFunction(()=>History2022View.snapshot()?.year===2004);
  await page.locator('#historyCounty').selectOption('高雄市');
@@ -2448,6 +2442,7 @@ test('Historic legislative nationwide maps label counties instead of constituenc
  const page=await pageFor(t);
  await page.locator('#categoryHistory').click();
  await page.locator('#historyOffice').selectOption('legislative');
+ await page.waitForFunction(()=>History2022View.office()==='legislative'&&!!History2022View.snapshot()?.elections?.some(e=>e.office==='legislative'));await page.locator('#historyElectorate').selectOption('regional');
  await page.waitForFunction(()=>History2022View.office()==='legislative'&&History2022View.year()===2024&&History2022View.snapshot()?.rows?.length>0);
  assert.deepEqual(await page.locator('#historyScale option').allTextContents(),['县市','选举区']);
  await page.waitForFunction(()=>[...document.querySelectorAll('#labels [data-label]')].some(node=>node.textContent.includes('台北')),{timeout:10000});
@@ -2475,7 +2470,7 @@ test('Overview statistical region controls change the corresponding historical m
  await page.locator('#historyViewOverview').click();
  const scope=page.locator('#historyOverviewScope'),county=page.locator('#historyOverviewCounty'),area=page.locator('#historyOverviewContest');
  assert.equal(await page.locator('#historyCounty').inputValue(),'');
- assert.equal(await page.locator('#regions path[data-region]').count(),22,'national council overview uses 22 county polygons');
+ assert.equal(await page.locator('#regions path[data-region]').count(),66,'national council overview uses 22 counties in each of three ballot panels');
  await scope.selectOption('county');
  await county.selectOption('高雄市');
  assert.equal(await page.locator('#historyCounty').inputValue(),'高雄市');
@@ -2486,8 +2481,9 @@ test('Overview statistical region controls change the corresponding historical m
   'selected council district is highlighted on the geographic map');
  await scope.selectOption('all');
  assert.equal(await page.locator('#historyCounty').inputValue(),'');
- assert.equal(await page.locator('#regions path[data-region]').count(),22);
+ assert.equal(await page.locator('#regions path[data-region]').count(),66);
  await page.locator('#historyOffice').selectOption('legislative');
+ await page.waitForFunction(()=>History2022View.office()==='legislative'&&!!History2022View.snapshot()?.elections?.some(e=>e.office==='legislative'));await page.locator('#historyElectorate').selectOption('regional');
  await page.locator('#historyYear').selectOption('2004');
  await page.waitForFunction(()=>History2022View.snapshot()?.year===2004);
  if(await page.locator('#historyOverviewPanel').isHidden())await page.locator('#historyViewOverview').click();
@@ -2507,15 +2503,12 @@ test('Council and historic multi-member legislative nationwide maps use pluralit
  await page.locator('#categoryHistory').click();
  await page.locator('#historyOffice').selectOption('council');
  await page.waitForFunction(()=>History2022View.snapshot()?.year===2022&&History2022View.countySeatLeader('台北市').seats>0);
- const check=await page.evaluate(()=>{
-  const f=currentItems().find(f=>f.name==='台北市'),counts=History2022View.countySeatLeader('台北市'),
-  el=document.querySelector('#regions path[data-region="'+f.id+'"]');
-  return{leader:counts,fill:el.getAttribute('fill'),districts:currentItems().length};
- });
- assert.equal(check.districts,22);
- assert.ok(check.leader.party&&check.leader.seats>0);
+ await page.locator('#historyElectorate').selectOption('regional');
+ const check=await page.evaluate(()=>{const f=currentItems().find(f=>f.name==='台北市'),counts=History2022View.countySeatLeader('台北市'),el=document.querySelector('#regions path[data-region="'+f.id+'"]');return{leader:counts,fill:el.getAttribute('fill'),districts:currentItems().length}});
+ assert.equal(check.districts,22);assert.ok(check.leader.party&&check.leader.seats>0);
  assert.equal(check.fill,await page.evaluate(party=>predictionParty(party).color,check.leader.party));
  await page.locator('#historyOffice').selectOption('legislative');
+ await page.waitForFunction(()=>History2022View.office()==='legislative'&&!!History2022View.snapshot()?.elections?.some(e=>e.office==='legislative'));await page.locator('#historyElectorate').selectOption('regional');
  await page.locator('#historyYear').selectOption('2004');
  await page.waitForFunction(()=>History2022View.snapshot()?.year===2004);
  const historical=await page.evaluate(()=>{
@@ -2528,13 +2521,14 @@ test('Council and historic multi-member legislative nationwide maps use pluralit
  assert.ok(historical.count>=22);
  assert.equal(historical.isCounty,true);
  assert.equal(historical.fill,historical.expected);
- assert.equal(historical.logos,0);
+ assert.equal(historical.logos,0,'regional county overview has no seat cards');
 });
 
 test('2020/2024 legislative overviews show CEC-verified constituency and township turnout',async t=>{
  const page=await pageFor(t);
  await page.locator('#categoryHistory').click();
  await page.locator('#historyOffice').selectOption('legislative');
+ await page.waitForFunction(()=>History2022View.office()==='legislative'&&!!History2022View.snapshot()?.elections?.some(e=>e.office==='legislative'));await page.locator('#historyElectorate').selectOption('regional');
  for(const year of ['2020','2024']){
   await page.locator('#historyYear').selectOption(year);
   await page.waitForFunction(year=>History2022View.snapshot()?.year===Number(year),year);
@@ -2736,6 +2730,7 @@ test('Historic legislative national maps render complete administrative boundari
  const page=await pageFor(t);
  await page.locator('#categoryHistory').click();
  await page.locator('#historyOffice').selectOption('legislative');
+ await page.waitForFunction(()=>History2022View.office()==='legislative'&&!!History2022View.snapshot()?.elections?.some(e=>e.office==='legislative'));await page.locator('#historyElectorate').selectOption('regional');
  await page.waitForFunction(()=>History2022View.office()==='legislative');
  for(const year of ['1992','2004','2008','2012','2024']){
   await page.locator('#historyYear').selectOption(year);
@@ -2760,6 +2755,7 @@ test('Election-period legislative maps have no missing winners, all county names
  const page=await pageFor(t);
  await page.locator('#categoryHistory').click();
  await page.locator('#historyOffice').selectOption('legislative');
+ await page.waitForFunction(()=>History2022View.office()==='legislative'&&!!History2022View.snapshot()?.elections?.some(e=>e.office==='legislative'));await page.locator('#historyElectorate').selectOption('regional');
  await page.waitForFunction(()=>History2022View.office()==='legislative'&&History2022View.year()===2024);
  for(const year of ['2008','2012','2016','2020','2024']){
   await page.locator('#historyYear').selectOption(year);
@@ -2802,6 +2798,7 @@ test('Official Kaohsiung 2008–2016 village splits fill exactly one historic co
  const page=await pageFor(t);
  await page.locator('#categoryHistory').click();
  await page.locator('#historyOffice').selectOption('legislative');
+ await page.waitForFunction(()=>History2022View.office()==='legislative'&&!!History2022View.snapshot()?.elections?.some(e=>e.office==='legislative'));await page.locator('#historyElectorate').selectOption('regional');
  await page.waitForFunction(()=>History2022View.office()==='legislative'&&History2022View.year()===2024);
  for(const year of [2008,2012,2016]){
   await page.locator('#historyYear').selectOption(String(year));
@@ -2823,8 +2820,8 @@ test('Official Kaohsiung 2008–2016 village splits fill exactly one historic co
    }
    const town=document.querySelector('#townBorders path[data-shared-boundary="towns"]');
    const start={exists:!!town,length:town?.getAttribute('d')?.length||0,visible:document.querySelector('#townBorders').style.display!=='none',stroke:town?.getAttribute('stroke')};
-   const check=document.getElementById('historyTownBoundaries');
-   const available=!!check&&document.getElementById('historyTownBoundaryBox')?.hidden===false;
+   const check=document.getElementById('showTownBoundaries');
+   const available=!!check;
    const before=check?.checked;
    if(!before){check.checked=true;check.dispatchEvent(new Event('change',{bubbles:true}));}
    const shown=document.querySelector('#townBorders').style.display!=='none';
@@ -2836,7 +2833,7 @@ test('Official Kaohsiung 2008–2016 village splits fill exactly one historic co
   assert.deepEqual(result.misses,[],year+' official Kaohsiung village-split fills must be disjoint and exhaustive');
   assert.ok(result.scanned>120,year+' village polygons are loaded');
   assert.ok(result.town.exists&&result.town.length>1000,year+' historical township boundary paths exist');
-  assert.equal(result.toggleVisible,true,year+' historical township overlay toggle is visible in sidebar');
+  assert.equal(result.toggleVisible,true,year+' shared township overlay control exists');
   assert.equal(result.shown,true,year+' township overlay visible when enabled');
   assert.equal(result.hidden,true,year+' township overlay hides when disabled');
   assert.equal(result.restored,true,year+' township overlay restores without reloading');
@@ -3042,7 +3039,7 @@ test('The earliest local cycle shows dated council returns and preserves actual 
  await page.locator('#historyPartialCouncilReturns summary').click();
  await page.locator('#historyCounty').selectOption('台北县');
  await page.locator('#returnTaiwanMap').waitFor({state:'visible'});
- assert.match(await page.locator('#scopeTitle').textContent(),/^台北县 · 1993\/1994/);
+ assert.match(await page.locator('#scopeTitle').textContent(),/^台北县 · 1994 县市议员/);
  assert.ok(await page.locator('#historySeatBadges [data-history-seat-badge]').count()>0);
  await page.locator('#regions [data-region="history-1994-council-counties:台北县:regional:第8选举区"]').press('Enter');
  assert.match(await page.locator('#historyDialogTitle').textContent(),/1994年 县市议员选举结果/);
@@ -3070,15 +3067,16 @@ test('All archived mayor and council national maps use official winners and seat
    await page.locator('#historyYear').selectOption(String(year));
    await page.waitForFunction(({office,year})=>History2022View.office()===office&&History2022View.snapshot()?.year===year,{office,year});
    const failures=await page.evaluate(office=>{
-    const winners=new Map();
+    const winners=new Map(),combined=office==='council'&&History2022View.allCouncil();
     for(const row of History2022View.snapshot().rows){
      if(row.type!==office||!row.elected||row.level!==(office==='mayor'?'county':'district'))continue;
      const county=simplify(row.county),raw=simplify(row.party),party=raw.startsWith('无党籍')?'无党籍':raw;
-     if(!winners.has(county))winners.set(county,new Map());
-     const tally=winners.get(county);
+     const key=combined?HistoryCore.identity(row.electorate)+'|'+county:county;
+     if(!winners.has(key))winners.set(key,new Map());
+     const tally=winners.get(key);
      tally.set(party,(tally.get(party)||0)+1);
     }
-    const items=new Map(History2022View.items().map(f=>[f.county,f.id]));
+    const items=new Map(History2022View.items().map(f=>[combined?f.electorate+'|'+f.county:f.county,f.id]));
     const paths=new Map([...document.querySelectorAll('#regions path[data-region]')].map(p=>[p.dataset.region,p.getAttribute('fill')]));
     return [...winners].flatMap(([county,tally])=>{
      const leading=[...tally].sort((a,b)=>b[1]-a[1]);
@@ -3410,8 +3408,9 @@ test('Historical coverage matrix opens on demand and reveals known partial archi
  await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
  await page.locator('#historyCoverageOpen').click();
  await page.locator('#historyCoverageOffice').selectOption('township');
- const button=page.locator('#historyCoverageMatrix').getByRole('button',{name:'金门县 1994 部分缺失',exact:true});
- await button.waitFor({timeout:90000});await button.click();
+ await page.locator('#historyCoverageMatrix table').waitFor({timeout:90000});
+ const real=await page.evaluate(async()=>{const s=await HistoryLocal.loadCycle(1994,'township');return HistoryCoverage.matrixEntry(HistoryCoverage.analyze(s,'township',simplify),'金门县',1994,'township')});assert.equal(real.status,'partial');assert.ok(real.partialArchives>0);
+ const button=page.locator('#historyCoverageMatrix button[aria-label^="金门县 1994 "]');assert.equal(await button.count(),1,await page.locator('#historyCoverageStatus').textContent());assert.equal(await button.getAttribute('data-coverage-status'),'partial');await button.click();
  assert.match(await page.locator('#historyCoverageDetail').textContent(),/部分档案条目/);
  assert.equal(await page.locator('#historyYear').inputValue(),'2022');
  await page.locator('#historyCoverageDialog').getByRole('button',{name:'关闭',exact:true}).click();
