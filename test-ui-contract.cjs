@@ -618,7 +618,7 @@ test('Existing party logos are displayed as circles in every HTML view',()=>{
  assert.match(css,/\.candidate-party img\{[^}]*object-fit:cover;[^}]*border-radius:50%/);
  assert.match(css,/\.party-brush-logo \.party-logo\{[^}]*border-radius:50%/);
  assert.match(index,/上传后自动裁剪为圆形/);
- assert.match(app,/p\.logo=await readLogo\(file\.files\[0\]\)/);
+ assert.match(app,/state\.palette\.push\(\{id,name,color,\.\.\.\(customLogo\?\{logo:customLogo\}:\{\}\)\}\)/);
  assert.match(app,/customLogo=await readLogo\(e\.target\.files\[0\]\)/);
 });
 test('Electoral districts display their own numbers without numeric lookup entries; administrative areas use overflow numbering',()=>{
@@ -803,14 +803,17 @@ test('Administrative lookup is outside canvas and exports every entry',()=>{
  const key=index.indexOf('<aside class="map-number-key"',canvasStart);
  const end=index.indexOf('</aside></div></div>',key);
  assert.ok(canvasStart>=0&&key>canvasStart&&end>key,
-  'Map index is inside the canvas in reserved empty space');
+  'Initial document contains the index, which the renderer moves into normal flow');
  const css=read('style.css');
- assert.match(css,/#mapWithKey>\.canvas>\.map-number-key\{/);
- assert.match(app,/const anchorX=Math\.max\(railStartX,endX-baseWidth\/baseScale\)/);
- assert.match(app,/panel\.style\.setProperty\('--index-font-size',\(textSize\*ratio\)\.toFixed\(2\)\+'px'\)/);
- assert.match(app,/panel\.style\.transform='none'/);
- assert.match(app,/const ratio=zoomScale\/baseScale/);
- assert.match(app,/world=view\|\|fittedView\(\)/);
+ assert.match(css,/#mapWithKey>\.map-number-key\{[^}]*position:relative/);
+ const start=app.indexOf('function positionMapNumberTable(){'),finish=app.indexOf("\nif(typeof window",start);
+ assert.ok(start>=0&&finish>start);
+ const calls=[];const layout={append(panel){calls.push('append');panel.parentElement=this}};
+ const panel={parentElement:{},removeAttribute(name){calls.push(name)},classList:{remove(name){calls.push(name)}}};
+ const position=new Function('$',app.slice(start,finish)+';return positionMapNumberTable')(id=>id==='mapNumberKey'?panel:layout);
+ position();position();
+ assert.equal(panel.parentElement,layout);
+ assert.deepEqual(calls,['append','style','map-number-key--compact','style','map-number-key--compact']);
  assert.match(app,/function mapNumberDisplayName\(/);
  const table=app.slice(app.indexOf('function renderMapNumberTable(){'),app.indexOf('\nfunction mapLabelCandidatePoints('));
  assert.doesNotMatch(table,/number-key-group|th\.colSpan/);
@@ -952,7 +955,8 @@ test('2022 history opens directly from its tab without a redundant sub-button',(
  const categories=read('workspace-categories.js'),history=read('history-2022.js');
  for(const page of ['index.html','map-v60.html'])assert.doesNotMatch(read(page),/id="workspaceHistory"|id="historyModes"|2022 九合一<\/button>/);
  assert.match(categories,/await window\.HistoryLoader\.load\(\)/);
- assert.match(categories,/else view\.activate\(\)/);
+ assert.match(categories,/if\(request!==navigation\|\|!isCurrent\(\)\)return false/);
+ assert.match(categories,/view\.activate\(\);return true/);
  assert.doesNotMatch(categories,/workspaceHistory|historyModes/);
  assert.doesNotMatch(history,/workspaceHistory/);
  assert.doesNotMatch(history,/HistoryAccess/);

@@ -244,7 +244,7 @@ test('The partial 1994 township archive reconciles all 89 contests across eight 
  const extra=shard.partialTownshipReturns.slice(2);
  assert.deepEqual(extra.filter(r=>r.summary_scope==='county').map(r=>r.county),['桃園縣','臺中縣','苗栗縣','彰化縣','臺南縣']);
  assert.deepEqual(extra.flatMap(r=>(r.profiles||[]).map(p=>p.winner_name).filter(Boolean)),
-  ['邱一郎','李仁生','鍾明祥','蘇青山','陳振恭','蘇金煌','簡錦全','林中禮','許裕欽','曾文敬']);
+  ['邱一郎','李仁生','鍾明祥','蘇青山','陳振恭','蘇金煌','簡錦全','林中禮','許裕欽','曾文敬','曾忠義']);
  const luzhu=extra.find(r=>r.county==='桃園縣'&&r.profiles?.some(p=>p.town==='蘆竹鄉'));
  assert.deepEqual(luzhu.profile_totals,[61718,39776,38308,1468]);
  assert.deepEqual(luzhu.profiles.map(p=>[p.candidate_count,p.male_candidates,p.female_candidates,p.winner_name,p.turnout_pct]),[[2,2,0,'曾文敬',64.45]]);
