@@ -192,7 +192,7 @@ let viewFrame=0,navigationLabelTimer=0;
 function flushView(){
  if(viewFrame){cancelAnimationFrame(viewFrame);viewFrame=0}
  if(view)$('map').setAttribute('viewBox',`${view.x} ${view.y} ${view.w} ${view.h}`);
- if(typeof document!=='undefined')positionMapNumberTable();
+ // The index is in normal document flow; map-only viewBox updates need no DOM repositioning.
 }
 function scheduleNavigationLabels(){
  clearTimeout(navigationLabelTimer);
@@ -1523,8 +1523,7 @@ function renderLabels(){
   else if(historicalLegislativeNationalRegional()||historicalLegislativeMultiBadges())drawHistoricalLegislativeRegionalLabels(group,true);
   else if(identityPanelsActive())drawIdentityPanelLabels(group,true,false);
   else if(freeNationwideDistrictMap())drawFreeNationwideDistrictLabels(group);
-  else if(state.level==='villages')drawVillageLabels(group,currentItems(),geometryLayout(currentItems(),true),view,true);
-  else drawLabels(group,currentItems(),geometryLayout(currentItems(),true),sceneSpec().font,true);
+  else {const items=currentItems(),layout=geometryLayout(items,true);if(state.level==='villages')drawVillageLabels(group,items,layout,view,true);else drawLabels(group,items,layout,sceneSpec().font,true)}
  }
  renderMapNumberTable();
 }
