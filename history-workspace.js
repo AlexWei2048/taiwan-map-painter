@@ -217,16 +217,16 @@
  }
  function overviewCards(overview={}){
   const value=n=>Number.isFinite(n)?Number(n).toLocaleString('zh-CN'):'暂无资料';
-  const percent=n=>Number.isFinite(n)?n.toFixed(2)+'%':'暂无资料';
+  const percent=(n,denominator)=>denominator===0?'不适用':Number.isFinite(n)?n.toFixed(2)+'%':'暂无资料';
   // The key metrics show the sum of election records across identities.
   // Separate charts keep their own denominators; this sum is not a distinct-voter count.
   return[
    {label:'选举人数',value:value(overview.registeredVoters),group:'participation',detail:'登记选民（涉及不同类别时为各类别加总）'},
    {label:'投票人数',value:value(overview.ballotsCast),group:'participation',detail:'投票记录数（涉及不同类别时为各类别加总）'},
-   {label:'投票率',value:percent(overview.turnout),group:'participation',detail:'各类别加总投票数／各类别加总选举人数'},
+   {label:'投票率',value:percent(overview.turnout,overview.registeredVoters),group:'participation',detail:'各类别加总投票数／各类别加总选举人数'},
    {label:'有效票',value:value(overview.validVotes),group:'ballots',detail:'各类别候选人有效票合计'},
    {label:'无效票',value:value(overview.invalidVotes),group:'ballots',detail:'各类别无效票合计'},
-   {label:'有效率',value:percent(rate(overview.validVotes,overview.ballotsCast,overview.invalidVotes)),group:'ballots',detail:'各类别合计有效票／合计投票人数'},
+   {label:'有效率',value:percent(rate(overview.validVotes,overview.ballotsCast,overview.invalidVotes),overview.ballotsCast),group:'ballots',detail:'各类别合计有效票／合计投票人数'},
    {label:'候选人数',value:value(overview.candidateCount),group:'people',detail:'本范围候选人'},
    {label:'当选人数',value:value(overview.electedCount),group:'people',detail:'当选人数'}
   ];
@@ -243,7 +243,7 @@
    const valid=Number.isFinite(part)&&Number.isFinite(other)&&Number.isFinite(total)&&
     total>0&&part>=0&&other>=0&&part+other===total;
    return{title,firstLabel,secondLabel,first:valid?part:null,second:valid?other:null,
-    percent:valid?portion(part,total):null};
+    percent:valid?portion(part,total):null,notApplicable:total===0&&part===0&&other===0};
   };
   const result=[];
   if(separated){
@@ -592,7 +592,7 @@
    block.dataset.kind=bar.title==='有效率'?'valid':'turnout';
    const heading=make('div','history-chart-stat-head');
    heading.append(make('span','history-chart-stat-label',bar.title),
-    make('strong','history-chart-stat-value',bar.percent===null?'暂无资料':bar.percent.toFixed(2)+'%'));
+    make('strong','history-chart-stat-value',bar.notApplicable?'不适用':bar.percent===null?'暂无资料':bar.percent.toFixed(2)+'%'));
    block.append(heading);
    if(bar.percent!==null){
     const track=make('div','history-chart-track');
@@ -610,7 +610,7 @@
     }
     block.append(caption);
    }else{
-    block.append(make('p','history-chart-empty','当前范围缺少可核实的投票数据'));
+    block.append(make('p','history-chart-empty',bar.notApplicable?'分母为0，不计算比率':'当前范围缺少可核实的投票数据'));
    }
    container.append(block);
   }
@@ -713,7 +713,10 @@
   for(const view of VIEWS){const button=el('historyView'+view[0].toUpperCase()+view.slice(1));if(button){const selected=state.view===view;button.classList.toggle('active',selected);button.setAttribute('aria-pressed',String(selected))}}
   syncTrends();
   if(el('historyExportCsv'))el('historyExportCsv').textContent=state.view==='trends'?'导出历史趋势 CSV':'导出当前结果 CSV';
-  renderTurnoutCards();if(el('historyCoverage')&&currentResult)el('historyCoverage').textContent=state.office==='legislative'?'当前票种：'+(root.HistoryLegislative?.ballots(state.year).find(x=>x.value===state.electorate)?.label||'立法机构民代')+' · '+currentResult.contests.length+'个统计区域 · '+currentResult.candidacies.length+'条结果。':'当前范围：'+currentResult.contests.length+'个选举区 · '+currentResult.candidacies.length+'条候选人记录。';emit();return{...state};
+  renderTurnoutCards();if(el('historyCoverage')&&currentResult){el('historyCoverage').textContent=state.office==='legislative'?'当前票种：'+(root.HistoryLegislative?.ballots(state.year).find(x=>x.value===state.electorate)?.label||'立法机构民代')+' · '+currentResult.contests.length+'个统计区域 · '+currentResult.candidacies.length+'条结果。':'当前范围：'+currentResult.contests.length+'个选举区 · '+currentResult.candidacies.length+'条候选人记录。';
+   const missing=currentOverview?[[currentOverview.registeredVoters,'选举人数'],[currentOverview.ballotsCast,'投票人数'],[currentOverview.validVotes,'有效票'],[currentOverview.invalidVotes,'无效票']].filter(([v])=>!Number.isFinite(v)).map(([,name])=>name):[];
+   if(missing.length)el('historyCoverage').append(' 暂无可核实统计：'+missing.join('、')+'。缺值不按0计算。');
+  }emit();return{...state};
  }
  function restoreRouteView(route){
   const v=VIEWS.has(route.view)?route.view:'map';
