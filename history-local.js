@@ -13,7 +13,8 @@
   return Number(Object.keys(CYCLES).find(end=>CYCLES[end]===year))||year;
  }
  function yearLabel(year,office,separator='/'){
-  return groupedOffice(office)&&CYCLES[year]?CYCLES[year]+separator+year:String(year);
+  const splitYear=groupedOffice(office)&&CYCLES[year]&&!(office==='council'&&Number(year)<=2002);
+  return splitYear?CYCLES[year]+separator+year:String(year);
  }
  const pending=new Map(),supplementYears=new Set([1994,1998,2002,2005,2006,2009,2010,2014,2018]);
  let supplementRequest;
