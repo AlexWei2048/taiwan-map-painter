@@ -4477,13 +4477,15 @@
       "county": "苗栗縣",
       "election_date": "1994-01-29",
       "source_url": "https://www.nanchuang.gov.tw/News.aspx?PageSize=20&n=3391&page=4&sms=10635",
-      "source_locator": "南庄鄉公所大事紀：民國83年3月2日葉弘俊當選就任第十二屆南庄鄉鄉長。",
+      "source_locator": "南庄鄉公所大事紀：民國83年3月2日葉弘俊當選就任第十二屆南庄鄉鄉長。 客委會典藏《賽夏五福宮—一個合成文化的研究》表二-10：第11屆邱文貴、第12屆葉弘俊，任期自1994年3月1日起。公開文字可讀，原圖未取得。",
       "winners": [
         {
           "town": "南庄鄉",
-          "name": "葉弘俊"
+          "name": "葉弘俊",
+          "incumbent_at_election": false
         }
-      ]
+      ],
+      "corroboration_url": "https://cloud.hakka.gov.tw/Attachment/1/9121417283771.pdf"
     },
     {
       "county": "苗栗縣",
@@ -4511,6 +4513,68 @@
           "name": "葉財益",
           "gender": "男",
           "incumbent_at_election": false
+        }
+      ]
+    },
+    {
+      "county": "苗栗縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://eebulletin.cec.gov.tw/107/09%E8%8B%97%E6%A0%97%E7%B8%A3/02%E7%B8%A3%E8%AD%B0%E5%93%A1/%E8%8B%97%E6%A0%97%E7%B8%A3%E7%AC%AC06%E9%81%B8%E5%8D%80.pdf",
+      "source_locator": "2018年苗栗縣議員選舉公報第三選區第4號，邱紹俊，男，經歷為通霄鎮第12、13屆鎮長。歷任首長表第11屆邱克明任至1994年2月28日，第12屆邱紹俊3月1日就職。PDF文字可讀，原圖未取得；當屆票數與推薦政黨待查。",
+      "corroboration_url": "https://zh.wikipedia.org/wiki/通霄鎮",
+      "winners": [
+        {
+          "town": "通霄鎮",
+          "name": "邱紹俊",
+          "gender": "男",
+          "incumbent_at_election": false
+        }
+      ]
+    },
+    {
+      "county": "苗栗縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://tfai.openmuseum.tw/muse/digi_object/bf46f7d76b3ff48079d85c259f5290fe",
+      "source_locator": "國家電影及視聽文化中心典藏《苗栗穀倉－苑裡鎮》，張榮松任鎮長；1996年5月28日高院85年度上易字1846號判決亦明載當時職務。歷任首長表第11屆張鉦雧、第12屆張榮松。當屆候選人得票未取得。",
+      "corroboration_url": "https://lawbot.tw/judgment/AAAB_85_%E4%B8%8A%E6%98%93%E5%AD%97%E7%AC%AC1846%E8%99%9F_19960528_1",
+      "secondary_source": "https://zh.wikipedia.org/wiki/苑裡鎮",
+      "winners": [
+        {
+          "town": "苑裡鎮",
+          "name": "張榮松",
+          "gender": "男",
+          "incumbent_at_election": false
+        }
+      ]
+    },
+    {
+      "county": "苗栗縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://zh.wikipedia.org/wiki/公館鄉_(台灣)",
+      "source_locator": "歷屆鄉長表第11屆謝傳禎、第12、13屆謝桂麟；中央社2016-06-08明載1994年謝桂麟任公館鄉長，1998選舉資料亦確認其後續當選。當屆票數、號次及推薦政黨未取得。",
+      "corroboration_url": "https://www.cna.com.tw/news/asoc/201606080255.aspx",
+      "winners": [
+        {
+          "town": "公館鄉",
+          "name": "謝桂麟",
+          "gender": "男",
+          "incumbent_at_election": false
+        }
+      ]
+    },
+    {
+      "county": "苗栗縣",
+      "election_date": "1994-01-29",
+      "source_url": "https://zh.wikipedia.org/wiki/後龍鎮_(台灣)",
+      "source_locator": "歷任首長表引《後龍鎮志》頁185，第11、12屆廖紹欽；監察院新聞稿確認1990年在任，1998年最高法院87年度台上字第3081號判決確認廖紹欽卸任、黃丙煌持當選證書繼任。當屆票數、號次及推薦政黨未取得。",
+      "corroboration_url": "https://www.cy.gov.tw/News_Content.aspx?n=124&s=3541",
+      "secondary_source": "https://lawplayer.com/valuable-judgment/646b3133c3e2a9cc78b1a4b2",
+      "winners": [
+        {
+          "town": "後龍鎮",
+          "name": "廖紹欽",
+          "gender": "男",
+          "incumbent_at_election": true
         }
       ]
     }
