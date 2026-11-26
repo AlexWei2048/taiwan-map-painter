@@ -343,6 +343,7 @@ test('All ten archived party-list elections normalize pre-2008 eligible party vo
  const groups=T.partyListTrendGroups(rows);
  assert.deepEqual(groups.individual,['中国国民党','民主进步党','亲民党','新党','台湾团结联盟','台湾民众党','时代力量','台湾基进','无党团结联盟']);
  assert.ok(groups.other.includes('中华社会民主党'));assert.ok(groups.other.includes('民主联盟'));
+ const detailGroups=T.partyListTrendGroups(rows,true);assert.ok(detailGroups.individual.includes('民主联盟'));assert.ok(!detailGroups.other.includes('民主联盟'));assert.ok(T.legislativeSeatTrendParties([{complete:true,parties:{'民主联盟':1}}]).includes('民主联盟'));
  assert.ok(groups.other.includes('绿党'));
  assert.ok(!groups.other.some(T.partyListTrendExcluded));
  for(const r of rows){

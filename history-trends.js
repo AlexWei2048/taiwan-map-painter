@@ -21,10 +21,11 @@ function partyListTrendKey(name){
 // Fixed presentation list for party-list votes only; older calculation votes exclude independents.
 const PARTY_LIST_TREND_ORDER=['中国国民党','民主进步党','亲民党','新党','台湾团结联盟','台湾民众党','时代力量','台湾基进','无党团结联盟'];
 const partyListTrendExcluded=name=>/^(?:无党籍|無黨籍|无党派|無黨派|连署|連署|未[经經]政党推荐|未[经經]政黨推薦)/.test(String(name||'').trim().replace(/^[“”「」『』]/,''));
-function partyListTrendGroups(rows){
+function partyListTrendGroups(rows,retainDemocraticAlliance=false){
+ const order=retainDemocraticAlliance?[...PARTY_LIST_TREND_ORDER,'民主联盟']:PARTY_LIST_TREND_ORDER;
  const present=new Set();
  for(const r of rows||[])if(r.complete)for(const [p,v] of Object.entries(r.parties||{}))if(Number.isFinite(v)&&!partyListTrendExcluded(p))present.add(p);
- return {individual:PARTY_LIST_TREND_ORDER.filter(p=>present.has(p)),other:[...present].filter(p=>!PARTY_LIST_TREND_ORDER.includes(p)).sort((a,b)=>a.localeCompare(b,'zh'))};
+ return {individual:order.filter(p=>present.has(p)),other:[...present].filter(p=>!order.includes(p)).sort((a,b)=>a.localeCompare(b,'zh'))};
 }
 // Legislative seat charts retain every party with a positive official seat count.
 function legislativeSeatTrendParties(rows){

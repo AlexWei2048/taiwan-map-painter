@@ -3637,9 +3637,9 @@ test('Party-list trend displays only the nine specified parties plus others and 
  await card.locator('[data-trend-zoom-action="out"]').click();assert.ok(Number(await chart.getAttribute('data-trend-y-max'))>60);
  await card.locator('[data-trend-zoom-action="reset"]').click();
  const table=page.locator('#trendCharts .history-table-wrap').filter({hasText:'对应票种得票率逐届明细'});
- assert.match(await table.textContent(),/显示合计/);assert.doesNotMatch(await table.locator('thead').textContent(),/无党籍|基进党|绿党|民主联盟/);
+ assert.match(await table.textContent(),/显示合计/);assert.doesNotMatch(await table.locator('thead').textContent(),/无党籍|基进党|绿党/);assert.match(await table.locator('thead').textContent(),/民主联盟/);
  const early=await table.locator('tbody tr').evaluateAll(ns=>ns.filter(n=>Number(n.cells[0].textContent)<2008).map(n=>n.cells[n.cells.length-1].textContent));assert.equal(early.length,5);assert.ok(early.every(v=>v==='100.00%'));
- const download=page.waitForEvent('download');await page.locator('#trendCsv').click();const file=await download;const csv=await readFile(await file.path(),'utf8');assert.doesNotMatch(csv,/"民主联盟"/);assert.match(csv,/"其他政党"/);
+ const download=page.waitForEvent('download');await page.locator('#trendCsv').click();const file=await download;const csv=await readFile(await file.path(),'utf8');assert.match(csv,/"得票率","民主联盟","/);assert.doesNotMatch(csv,/"得票率","其他政党","/);
  await page.evaluate(()=>HistoryTrendsUI.restoreRouteYears('2024'));
  await page.waitForFunction(()=>document.querySelector('#trendStatus')?.textContent.includes('1 届')&&!!document.querySelector('#trendCharts svg[aria-label*="旧制席次计算票得票率趋势"]'));
  const filtered=(await chart.locator('[data-trend-legend]').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('data-trend-legend')))).map(plain);
@@ -3653,6 +3653,7 @@ test('Presidential party vote trend merges independents in black with a sixty pe
  await page.locator('#categoryAnalysis').click();
  const chart=page.locator('#trendCharts svg[aria-label*="候选人票得票率趋势"]');await chart.waitFor({timeout:120000});
  assert.equal(await chart.getAttribute('data-trend-y-max'),'60');
+ assert.equal(await chart.locator('[data-trend-pan-surface]').count(),0,'presidential chart keeps its existing interaction');
  const names=await chart.locator('[data-trend-legend]').evaluateAll(ns=>ns.map(n=>n.getAttribute('data-trend-legend')));
  assert.equal(names.filter(n=>n==='无党籍').length,1);assert.ok(!names.some(n=>n.includes('连署')));
  const series=chart.locator('[data-trend-series="无党籍"]');

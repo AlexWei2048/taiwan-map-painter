@@ -161,7 +161,7 @@ function baseSvg(title,width,height){
  const g=svg('svg',{viewBox:'0 0 '+width+' '+height,role:'img','aria-label':title,'font-family':'Arial, "Microsoft YaHei", sans-serif','font-size':'12',fill:'#31473e'});
  g.append(svg('rect',{x:0,y:0,width,height,fill:'#fff'}),svg('title',{},title),svg('text',{x:18,y:22,'font-weight':700,'font-size':15},title));return g
 }
-function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=false,integer=false,compact=false,tall=false,grouped=false,axisMax=null,zoomPercent=false,seatDetail=false}={}){
+function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=false,integer=false,compact=false,tall=false,grouped=false,axisMax=null,zoomPercent=false,seatDetail=false,panPercent=false}={}){
  const width=Math.max(compact?520:tall?620:700,rows.length*(compact?72:rows.some(r=>r.scopeLabel)?79:65)+100),l=compact?52:64,r=width-20,top=48,bottom=compact?280:tall?550:seatDetail?458:270;
  const showScope=!grouped||new Set(rows.map(r=>r.scopeLabel||'')).size>1;
  const legendStart=grouped?bottom+(showScope?70:52):bottom+68,legend=[];
@@ -256,6 +256,7 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
    const delta=e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?240:1);
    if(zoom(Math.exp(Math.max(-1.2,Math.min(1.2,delta*.002))), (bottom-point.y)/(bottom-top)))e.preventDefault();
   },{passive:false});
+  if(panPercent){
   // Drag the percentage viewport vertically; preserve dates, values and zoom span.
   const plotPoint=e=>{const matrix=g.getScreenCTM();return matrix?new DOMPoint(e.clientX,e.clientY).matrixTransform(matrix.inverse()):null};
   const inside=p=>p&&p.x>=l&&p.x<=r&&p.y>=top&&p.y<=bottom;
@@ -281,6 +282,7 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
   g.addEventListener('pointerup',endDrag);g.addEventListener('pointercancel',endDrag);g.addEventListener('lostpointercapture',endDrag);
   g.addEventListener('pointerleave',e=>{if(drag&&!drag.moved)endDrag(e)});
   g.addEventListener('click',e=>{if(suppressClick){suppressClick=false;e.preventDefault();e.stopImmediatePropagation()}},true);
+  }
   g.addEventListener('trend-zoom-in',()=>zoom(.8));g.addEventListener('trend-zoom-out',()=>zoom(1.25));g.addEventListener('trend-zoom-reset',()=>setDomain([0,60]));
   g.addEventListener('dblclick',e=>{const matrix=g.getScreenCTM();if(!matrix)return;const p=new DOMPoint(e.clientX,e.clientY).matrixTransform(matrix.inverse());if(p.x>=l&&p.x<=r&&p.y>=top&&p.y<=bottom)setDomain([0,60])});
  }
@@ -381,10 +383,10 @@ function renderParliaments(out,rows,conf,totalLeg){
  }
  out.append(section);
 }
-function partySeries(rows,listMode=false,allLegislativeParties=false){
+function partySeries(rows,listMode=false,allLegislativeParties=false,retainDemocraticAlliance=false){
  const totals=new Map();for(const r of rows)for(const [p,v] of Object.entries(r.parties||{}))totals.set(p,(totals.get(p)||0)+v);
  const meta=new Map();for(const r of rows)for(const [p,m] of Object.entries(r.partyMeta||{}))meta.set(p,m);
- const sorted=[...totals].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],'zh')).map(x=>x[0]),groups=listMode?T.partyListTrendGroups(rows):null,top=allLegislativeParties?T.legislativeSeatTrendParties(rows):groups?groups.individual:sorted.slice(0,7),rest=allLegislativeParties?[]:groups?groups.other:sorted.slice(7);
+ const sorted=[...totals].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],'zh')).map(x=>x[0]),groups=listMode?T.partyListTrendGroups(rows,retainDemocraticAlliance):null,top=allLegislativeParties?T.legislativeSeatTrendParties(rows):groups?groups.individual:sorted.slice(0,7),rest=allLegislativeParties?[]:groups?groups.other:sorted.slice(7);
  const series=top.map(p=>({name:displayParty(meta.get(p)?.label||p),color:(allLegislativeParties?seatColor:listMode?listColor:color)(meta.get(p)?.party||p),get:r=>T.partyTrendValue(r,p),tooltip:r=>r.candidateDetails?T.candidateTrendTooltip(r,p):'',party:p}));
  if(rest.length)series.push({name:'其他政党',color:color('其他政党'),get:r=>T.partyTrendValue(r,'',rest),tooltip:r=>r.candidateDetails?rest.map(p=>T.candidateTrendTooltip(r,p)).filter(Boolean).join('\n'):'',parties:rest});
  return series;
@@ -418,7 +420,7 @@ function renderLegislative(conf,anchor,out){
  const voteSubject=ballot==='all'?(isLeg?'不分区民代':'全部议员'):voteType+(isLeg?'民代':'议员');
  const voteTitle=voteSubject+' · '+(isLeg&&(ballot==='all'||ballot==='party')?'政党票／旧制席次计算票得票率趋势':'候选人票得票率趋势（按所属政党汇总）');
  const voteNote=isLeg&&(ballot==='all'||ballot==='party')?'2008年前为各党推荐的区域与少数民族候选人票汇总，用于分配名单席次；2008年起为独立政党票。两种票源分别绘制，不跨制度连线。2008年前以扣除无党籍后的政党得票总数为分母；2008年起按实际政党票计算。滚轮缩放、按住左键上下拖动，双击复位。':!isLeg&&ballot==='all'?'区域和少数民族选票分别统计后汇总党派候选人票，分母为这些票数之和；选民可能投不同类别选票，不代表单一选民支持率。':'每个政党的候选人得票之和除以当前票种、当前范围的有效票；各党占比合计为100%。';
- appendTrendCharts(out,voteRows,voteSeries,voteTitle,voteNote,{pct:true,breakOld:isLeg&&(ballot==='all'||ballot==='party'),zoomPercent:listMode},conf.county);
+ appendTrendCharts(out,voteRows,voteSeries,voteTitle,voteNote,{pct:true,breakOld:isLeg&&(ballot==='all'||ballot==='party'),zoomPercent:listMode,panPercent:listMode},conf.county);
  const valuesTable=(rows,series,pct,title,displayedOnly=false)=>{
   const wrap=node('div','history-table-wrap'),table=node('table','history-candidate-table'),head=node('thead'),tr=node('tr');
   for(const heading of ['届次','当届地区','投票日期',...series.map(s=>s.name),displayedOnly?'显示合计':'合计'])tr.append(node('th','',heading));head.append(tr);table.append(head);
@@ -428,7 +430,7 @@ function renderLegislative(conf,anchor,out){
   table.append(body);wrap.append(node('h4','',title),table);out.append(wrap);
  };
  if(seatBallot)valuesTable(seatRows,seatSeries,false,'当选席次逐届明细');
- valuesTable(voteRows,voteSeries,true,'对应票种得票率逐届明细',listMode);
+ valuesTable(voteRows,listMode?partySeries(voteRows,true,false,true):voteSeries,true,'对应票种得票率逐届明细',listMode);
  const readout=node('div','trend-point-readout','点击图中的数据点查看对应届次。');readout.id='trendPointReadout';out.prepend(readout);
  legislativeExport={seatRows,seatSeries,voteRows,voteSeries,ballot,seatBallot};
  lastRows=allRows;lastTitle='民代席次与得票率趋势';$('trendCsv').disabled=!allRows.length;
@@ -496,9 +498,9 @@ function exportCsv(){
  const conf=settings(),effective=T.trendEffectiveSelection(conf),vote=conf.metric==='share'||conf.metric==='votes',single=vote||conf.metric==='seats';
  const out=[['选举类别','票种','范围','地图层级','届次','投票日期','指标','对象','数值','资料状态']];
  if(legislativeExport){
-  const {seatRows,voteRows,voteSeries,ballot}=legislativeExport;
+  const {seatRows,voteRows,ballot}=legislativeExport;
   for(const [rows,metric] of [[seatRows,'正式当选席次'],[voteRows,'得票率']])for(const r of rows){
-   const entries=r.complete?(metric==='得票率'&&listVoteChart(conf)?voteSeries.map(s=>[s.name,s.get(r)]).filter(([,v])=>Number.isFinite(v)):Object.entries(r.parties)):[['',null]];
+   const entries=r.complete?Object.entries(r.parties).filter(([party])=>!(metric==='得票率'&&listVoteChart(conf)&&T.partyListTrendExcluded(party))):[['',null]];
    for(const [party,value] of entries)out.push([offices[conf.office],metric==='正式当选席次'?(ballot==='all'&&!conf.county?'全部民代类型':ballot==='all'&&conf.county?(conf.office==='legislative'?'区域民代':'区域议员'):ballot):(conf.office==='legislative'&&(ballot==='all'||ballot==='party')?(r.year<2008?'旧制席次计算票':'不分区政党票'):ballot),r.county||'全部地区',metric==='正式当选席次'&&conf.county?'选举区（按县市汇总）':conf.level,r.label,r.dates?.join(' / ')||'',metric,displayParty(party),Number.isFinite(value)?Math.round(value*100)/100:'',r.complete?'完整结果':r.reason]);
   }
   exportFile(C.csv(out),'历史趋势-'+offices[conf.office]+'-席次与得票率.csv','text/csv;charset=utf-8');return;
