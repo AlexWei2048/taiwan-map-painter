@@ -506,7 +506,6 @@ dialog.floating-prediction-dialog > .floating-dialog-scroll{
 body.history-mode .regions-panel{display:block!important}
 /* The history category uses filters, not a second intro heading or description. */
 body.history-mode .intro > h1,body.history-mode .intro > p{display:none!important}
-#historyFromPrediction{margin-top:8px;width:100%}
 #historySearchTools{max-width:380px;margin-bottom:10px}
 #historySearch{width:100%}
 #historyPager{display:flex;align-items:center;gap:12px;margin-top:12px}
@@ -891,7 +890,7 @@ body.history-mode #districtReferenceNote,body.history-mode #districtReferenceSou
 .site-about-card .about-heading{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:0 0 9px}
 .site-about-card .about-heading h2{margin:0;color:#254b3c;font-size:14px;line-height:1.4;font-weight:700}
 .site-about-card .about-heading span{color:#52675e;font-size:11px;line-height:1.5}
-.site-about-card .site-about-description{margin:0;font-size:12px;line-height:1.75;color:#40594e;overflow-wrap:anywhere}
+.site-about-card .site-about-description{display:block;margin:0;font-size:12px;line-height:1.75;color:#40594e;overflow-wrap:anywhere}
 .site-about-card .about-sources{margin:10px 0 0;padding-top:9px;border-top:1px solid #e3ebe4}
 .site-about-card .about-sources h3{margin:0 0 5px;font-size:11.5px;line-height:1.5;color:#315a49;font-weight:700}
 .site-about-card .about-sources ul{list-style:none;margin:0;padding:0;display:grid;gap:4px;font-size:11.5px;line-height:1.55}
