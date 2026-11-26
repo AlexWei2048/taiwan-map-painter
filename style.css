@@ -802,6 +802,12 @@ body.history-mode #districtReferenceNote,body.history-mode #districtReferenceSou
  #mapWithKey>.canvas>.map-number-key tr{gap:calc(2px * var(--index-zoom,1))}
 }
 
+/* Reference numbers remain usable at every zoom level, outside the map. */
+#mapWithKey.has-number-key{display:grid;gap:12px}
+#mapWithKey>.map-number-key{position:relative;inset:auto;width:100%;max-width:none;max-height:none;transform:none;margin:0;font-size:12px}
+#mapWithKey>.map-number-key .map-number-key-scroll{max-height:min(42vh,360px);overflow:auto}
+#historyControls select:disabled{opacity:1;color:#294a3a;background:#f3f7f3;cursor:default}
+
 /* Scoped historical overview: selected constituency stays explicit on mobile. */
 .history-overview-contest-selector{display:flex;align-items:center;gap:12px;flex-wrap:wrap;
  margin:0 0 14px;padding:9px 13px;border:1px solid #dce8df;border-radius:11px;

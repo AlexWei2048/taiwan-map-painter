@@ -92,8 +92,8 @@
    (!selection.county||row.county===selection.county));
  }
  function note(year,electorate){
-  if(Number(year)===2001&&(electorate==='regional'||electorate==='party'))return '2001年新店与汐止按政大逐候选人明细补齐1,447票，乡镇、选区、县市及全区合计均为10,174,005张区域民代有效票。'+(electorate==='party'?' 2008年前无独立不分区政党票。':'');
-  if(electorate==='party'&&Number(year)<2008)return '2008年前无独立不分区政党票；政党席次以政党推荐的区域及少数民族候选人得票按旧制计算，详见下方席次与名单。';
+  if(electorate==='party'&&Number(year)<2008)return '旧制不另发政党票：选民投区域或少数民族候选人一票，各党推荐候选人得票汇总为不分区及侨选的席次计算票（无党籍和未经推荐者不计入）。地图颜色表示当地席次计算票领先的政党，不代表当地另选出一名不分区民代；名单与席次按全区票数分配。'+(Number(year)===2001?'2001年新店与汐止依政大明细补齐1,447票。':'');
+  if(Number(year)===2001&&electorate==='regional')return '2001年新店与汐止按政大逐候选人明细补齐1,447票，乡镇、选区、县市及全区合计均为10,174,005张区域民代有效票。';
   if(Number(year)===1992&&electorate==='regional')return '1992年区域民代乡镇票数与选区归属来自政大选举研究中心；少数地名采用档案所列后期称谓。金门、马祖可查县级结果。';
   if(Number(year)===1992&&electorate==='mountain')return '政大地方明细合计63,829票；全区名单合计63,831票。差额为华加志2票，原档未注明其地方归属。';
   if(Number(year)===1992&&electorate==='plains')return '政大县市与乡镇市区逐级核对至全区49,333票。';

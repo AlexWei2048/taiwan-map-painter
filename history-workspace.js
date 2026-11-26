@@ -15,7 +15,7 @@
  const VIEWS=new Set(['map','candidates','overview','trends']);
  const ELECTORATES=new Set(['all','regional','plains','mountain','indigenous']);
  const METRICS={mayor:new Set(['party','share','votes']),president:new Set(['party','share','votes']),legislative:new Set(['party','seats','share','votes']),council:new Set(['party','seats','share','votes']),township:new Set(['party','share','votes'])};
- const labels={regional:'区域议员',plains:'平地少数民族议员',mountain:'山地少数民族议员',indigenous:'少数民族议员'};
+ const labels={regional:'区域议员',plains:'平地少数民族议员',mountain:'山地少数民族议员',indigenous:'历史合并选区（未分平地／山地）'};
  const legislativeBallotLabel=(year,electorate)=>{
   const key=String(electorate||'').replace(/^legislative:\d{4}:/,'');
   return root.HistoryLegislative?.ballots(Number(year)).find(item=>item.value===key)?.label||
@@ -288,7 +288,7 @@
   const headers=['年份','选举类别','县市','选区',...(council?['选区类型']:[]),presidential?'正领导人候选人':'候选人',...extra,'政党','号次','得票数','得票率','当选'];
   const contests=new Map((result.contests||[]).map(item=>[item.contest_id,item]));
   const offices={mayor:'县市长',council:'县市议员',township:'乡镇市区长',president:'台湾地区领导人',legislative:'立法机构民代'};
-  const identities={regional:'区域',plains:'平地少数民族',mountain:'山地少数民族',indigenous:'少数民族'};
+  const identities={regional:'区域',plains:'平地少数民族',mountain:'山地少数民族',indigenous:'历史合并选区'};
   const ordered=[...(result.candidacies||[])].sort((a,b)=>{
    const ca=contests.get(a.contest_id)||{},cb=contests.get(b.contest_id)||{};
    return Core.compareResultRows({...a,county_name:ca.county_name,district_name:ca.district_name,electorate:ca.electorate},

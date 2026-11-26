@@ -57,7 +57,7 @@ const paletteById=id=>state.palette.find(p=>p.id===id);
 function allLayerItems(level=state.level){return [...(data[level]||[]),...(['council','legislative'].includes(level)?data[level+'Indigenous']||[]:[])]}
 function activeElectorate(){if(regionalLegislativeOnly())return 'regional';return state.electorate?.[state.level]||'regional'}
 const ELECTORATE_ORDER=['regional','plains','mountain'],LEGISLATIVE_FREE_ORDER=['regional','party','plains','mountain'];
-const electorateName=id=>({regional:'区域',party:'不分区政党',plains:'平地少数民族',mountain:'山地少数民族',indigenous:'少数民族'})[id]||id;
+const electorateName=id=>({regional:'区域',party:'不分区政党',plains:'平地少数民族',mountain:'山地少数民族',indigenous:'历史合并选区'})[id]||id;
 const featureElectorate=f=>f.electorate||'regional';
 let exportPanelFilter='';
 function regionalLegislativeOnly(){return state.workspaceMode==='free'&&state.level==='legislative'}
@@ -234,7 +234,7 @@ function identityPanelLayouts(){
  const identities=panelIdentities(),spec=sceneSpec(),area=contentArea(spec),gap=26,left=area.left+8,right=Math.min(area.right-8,spec.width-mapKeyRailWidth(spec)),top=area.top+52,bottom=area.bottom-12,columns=identities.length===4?2:identities.length,rows=Math.ceil(identities.length/columns),panelWidth=(right-left-gap*(columns-1))/columns,panelHeight=(bottom-top-gap*(rows-1))/rows;
  const b=identityPanelBounds();for(const q of activeInsetDefinitions()){b[0]=Math.min(b[0],q.box[0]);b[1]=Math.min(b[1],q.box[1]);b[2]=Math.max(b[2],q.box[2]);b[3]=Math.max(b[3],q.box[3])}
  const mapPad=state.county?90:110,scale=Math.min((panelWidth-mapPad*2)/Math.max(.0001,b[2]-b[0]),(panelHeight-mapPad)/Math.max(.0001,b[3]-b[1]));
- return identities.map((identity,index)=>{const column=index%columns,row=Math.floor(index/columns),x=left+column*(panelWidth+gap),y=top+row*(panelHeight+gap),panelArea={left:x,right:x+panelWidth,top:y,bottom:y+panelHeight};return{identity,label:electorateName(identity),townLevel:legislativeFourPanelsActive()&&identity!=='regional',items:currentItems().filter(f=>featureElectorate(f)===identity),area:panelArea,t:{scale,tx:(panelArea.left+panelArea.right)/2-(b[0]+b[2])/2*scale,ty:(panelArea.top+panelArea.bottom+mapPad)/2-(b[1]+b[3])/2*scale,labelLeft:panelArea.left+8,labelRight:panelArea.right-8,area:panelArea}}})
+ return identities.map((identity,index)=>{const column=index%columns,row=Math.floor(index/columns),x=left+column*(panelWidth+gap),y=top+row*(panelHeight+gap),panelArea={left:x,right:x+panelWidth,top:y,bottom:y+panelHeight};return{identity,label:historicalCombinedMap()&&identity==='party'&&History2022View.year()<2008?'不分区席次计算票':electorateName(identity),townLevel:legislativeFourPanelsActive()&&identity!=='regional',items:currentItems().filter(f=>featureElectorate(f)===identity),area:panelArea,t:{scale,tx:(panelArea.left+panelArea.right)/2-(b[0]+b[2])/2*scale,ty:(panelArea.top+panelArea.bottom+mapPad)/2-(b[1]+b[3])/2*scale,labelLeft:panelArea.left+8,labelRight:panelArea.right-8,area:panelArea}}})
 }
 function identityPanelFor(f){return identityPanelLayouts().find(p=>p.identity===featureElectorate(f))}
 function transformOf(t){return `translate(${t.tx} ${t.ty}) scale(${t.scale})`}
@@ -482,6 +482,7 @@ function mapNumberDisplayName(row,rows){
 function renderMapNumberTable(){
  const panel=$('mapNumberKey'),layout=$('mapWithKey'),body=$('mapNumberKeyRows');
  if(!panel||!layout||!body)return;
+ if(panel.parentElement!==layout)layout.append(panel);
  const rows=state.labels?mapNumberSorted(mapNumberRows):[];
  panel.hidden=!rows.length;layout.classList.toggle('has-number-key',!!rows.length);body.replaceChildren();
  $('mapNumberKeyCount').textContent=rows.length+'项';
@@ -511,65 +512,12 @@ function renderMapNumberTable(){
 }
 
 function positionMapNumberTable(){
- const panel=$('mapNumberKey'),canvas=$('canvas'),map=$('map');
- if(!panel||!canvas||!map)return;
- if(panel.parentElement!==canvas)canvas.append(panel);
- if(panel.hidden||canvas.classList.contains('atlas-mode')){
-  panel.removeAttribute('style');return;
- }
- const frame=canvas.getBoundingClientRect(),svg=map.getBoundingClientRect();
- if(!frame.width||!frame.height||!svg.width||!svg.height)return;
- const spec=sceneSpec(),world=view||fittedView();
- // HTML index is anchored in the *same map coordinates* as the geographic
- // paths. Each viewBox change moves and scales it by the SVG's exact mapping.
- // Do not clamp the transformed screen rectangle, or the index will detach
- // from the map during dragging and zooming.
- const baseScale=Math.min(svg.width/spec.width,svg.height/spec.height);
- const zoomScale=Math.min(svg.width/world.w,svg.height/world.h);
- const baseY0=svg.top-frame.top+(svg.height-spec.height*baseScale)/2;
- const zoomX0=svg.left-frame.left+(svg.width-world.w*zoomScale)/2;
- const zoomY0=svg.top-frame.top+(svg.height-world.h*zoomScale)/2;
- const referenceFont=Number(panel.dataset.referenceFont)||spec.font;
- const textSize=Math.max(7.5,Math.min(11,referenceFont*baseScale));
- const longest=mapNumberRows.reduce((m,row)=>Math.max(m,Array.from(row.name).length),0);
- // A compact, unobtrusive index: labels resemble map captions instead of
- // full-sized application controls. Long names can wrap inside the scroll area.
- const naturalWidth=Math.round(34+Math.min(8,Math.max(5,longest))*textSize);
- const railStartX=spec.width-mapKeyRailWidth(spec)+14;
- const endX=spec.width-27;
- const railPx=(endX-railStartX)*baseScale;
- const baseWidth=Math.min(Math.max(65,railPx),Math.max(85,Math.min(135,naturalWidth)));
- // Right align in the protected map rail; this avoids the north arrow,
- // geographic names and labels on the landward side of the rail.
- const anchorX=Math.max(railStartX,endX-baseWidth/baseScale);
- const controls=$('zoomIn')?.parentElement?.getBoundingClientRect();
- const controlsBottom=controls?controls.bottom-frame.top+10:58;
- const anchorY=Math.max(132,(Math.max(controlsBottom,57)-baseY0)/baseScale);
- const legendRect=$('legend')?.querySelector(':scope > rect');
- const legendY=legendRect?Number(legendRect.getAttribute('y')):NaN;
- const endY=Math.min(spec.height-furnitureFooterHeight()-18,
-  Number.isFinite(legendY)?legendY-16:Infinity);
- const availableWorldHeight=Math.max(48/baseScale,endY-anchorY);
- const maxBaseHeight=Math.max(54,Math.min(availableWorldHeight*baseScale,
-  frame.width<=700?132:184,frame.height*.31));
- const pxLeft=zoomX0+(anchorX-world.x)*zoomScale;
- const pxTop=zoomY0+(anchorY-world.y)*zoomScale;
- // Position and lay out text directly at its FINAL screen resolution.
- // Scaling an already-rasterized HTML panel makes small index text look fuzzy.
- // Reflowing the font and dimensions keeps pixels crisp while preserving the
- // identical world-space anchor, zoom factor and pan motion of the SVG map.
- const ratio=zoomScale/baseScale;
- panel.style.left=Math.round(pxLeft)+'px';
- panel.style.right='auto';
- panel.style.top=Math.round(pxTop)+'px';
- panel.style.bottom='auto';
- panel.style.width=(baseWidth*ratio).toFixed(2)+'px';
- panel.style.maxHeight=(maxBaseHeight*ratio).toFixed(2)+'px';
- panel.style.height='auto';
- panel.style.setProperty('--index-zoom',ratio.toFixed(4));
- panel.style.setProperty('--index-font-size',(textSize*ratio).toFixed(2)+'px');
- panel.style.transform='none';
- panel.classList.toggle('map-number-key--compact',maxBaseHeight<105);
+ const panel=$('mapNumberKey'),layout=$('mapWithKey');
+ if(!panel||!layout)return;
+ // Keep the interactive index in normal flow so zoom never obscures the map.
+ if(panel.parentElement!==layout)layout.append(panel);
+ panel.removeAttribute('style');
+ panel.classList.remove('map-number-key--compact');
 }
 if(typeof window!=='undefined')window.addEventListener('resize',()=>positionMapNumberTable());
 
@@ -1430,7 +1378,7 @@ function drawLabels(group,items,t,font=15,interactive=false,countyNamesOnly=fals
 }
 function drawIdentityPanelLabels(group,interactive=false,exportAll=false){
  group.replaceChildren();
- if(historicalCombinedMap()){for(const panel of identityPanelLayouts()){const layer=svgEl('g',{'data-electorate-labels':panel.identity});group.append(layer);if(History2022View.allLegislative()&&panel.identity==='regional'&&historicalLegislativeMultiBadges()){if(typeof drawHistoricalLegislativeSeats==='function')drawHistoricalLegislativeSeats(layer,panel.t,interactive,panel.items);continue}if(!state.labels)continue;const national=!state.county;const items=national&&panel.identity==='regional'&&History2022View.allLegislative()?History2022View.historicalCountyFeatures():panel.items;const showLabels=panel.identity==='regional'||!national&&panel.items.length<=18; if(showLabels&&items.length)drawLabels(layer,items,panel.t,panel.identity==='regional'?sceneSpec().font:18,interactive&&!national,national); }return}
+ if(historicalCombinedMap()){for(const panel of identityPanelLayouts()){const layer=svgEl('g',{'data-electorate-labels':panel.identity});group.append(layer);if(History2022View.allLegislative()&&panel.identity==='regional'&&historicalLegislativeMultiBadges()){if(typeof drawHistoricalLegislativeSeats==='function')drawHistoricalLegislativeSeats(layer,panel.t,interactive,panel.items);continue}if(!state.labels)continue;const national=!state.county;const items=national&&panel.identity==='regional'&&History2022View.allLegislative()?History2022View.historicalCountyFeatures():panel.items;const showLabels=panel.identity==='regional'; if(showLabels&&items.length)drawLabels(layer,items,panel.t,panel.identity==='regional'?sceneSpec().font:18,interactive&&!national,national); }return}
  const countyOverview=state.level==='council'&&!state.county;
  const condensed=state.level==='legislative'&&!state.county&&!exportAll&&view&&view.w>=sceneSpec().width*.72;
  for(const panel of identityPanelLayouts()){
@@ -1438,7 +1386,7 @@ function drawIdentityPanelLabels(group,interactive=false,exportAll=false){
   const counties=new Set(panel.items.map(f=>f.county));
   const items=countyOverview?data.counties.filter(f=>counties.has(f.name)||panel.items.some(item=>item.statewide)).map(f=>({...f,number:'',electorate:panel.identity})):
    condensed&&panel.identity!=='regional'?data.counties.map(f=>({...f,number:''})):panel.items;
-  if(items.length)drawLabels(layer,items,panel.t,countyOverview||condensed?17:sceneSpec().font,interactive&&!condensed&&!countyOverview,countyOverview)
+  if(panel.identity==='regional'&&items.length)drawLabels(layer,items,panel.t,countyOverview||condensed?17:sceneSpec().font,interactive&&!condensed&&!countyOverview,countyOverview)
  }
 }
 // County-name-only labels without electoral numbers or leader lines, shared by screen and export.

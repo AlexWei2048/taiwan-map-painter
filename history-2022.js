@@ -602,7 +602,7 @@
     th.scope='rowgroup';th.colSpan=headers.length;divider.append(th);body.append(divider);previousArea=area;
    }
    const tr=document.createElement('tr');
-   if(r.elected&&!partyBallot&&(!allLegislative()||r.electorate==='regional'))tr.className='history-elected-row';
+   if(r.elected&&!partyBallot&&r.electorate!=='party')tr.className='history-elected-row';
    const textFields=partyBallot?[area]:[r.level==='national'?'全区':r.county,allLegislative()?electorateName(r.electorate)+' · '+(r.town||r.district||r.county):r.level==='national'?'全区选举':r.level==='town'?r.town:(r.district||r.town||'—'),r.number||'—',displayedCandidateName(r)];
    for(const value of textFields)tr.append(createHistoryElement('td','',value));
    if(!partyBallot){
@@ -613,7 +613,7 @@
    const party=document.createElement('td');appendHistoryParty(party,r.party);tr.append(party);
    tr.append(createHistoryElement('td','history-number',r.votes.toLocaleString('zh-CN')));
    tr.append(createHistoryElement('td','history-number',r._share.toFixed(2)+'%'));
-   if(!partyBallot){const mark=document.createElement('td');if(!allLegislative()||r.electorate==='regional')appendResultMark(mark,r);tr.append(mark)}
+   if(!partyBallot){const mark=document.createElement('td');if(r.electorate!=='party')appendResultMark(mark,r);tr.append(mark)}
    body.append(tr);
   }
   table.append(body);wrap.append(table);root.append(wrap);
@@ -1066,10 +1066,10 @@
   renderPartialCouncilReturns();
   renderLegacyCouncilCountyProfile();
   renderPartialTownshipReturns();
-  el('historyCounty').value=county;el('historyScaleBox').hidden=allLegislative()||kind!=='mayor'&&!legislativeMode;
+  el('historyCounty').value=county;el('historyScaleBox').hidden=false;
   if(legislativeMode){
    const ballot=el('historyElectorate');ballot.replaceChildren(...HistoryLegislative.ballots(legislativeYear).map(item=>new Option(item.label,item.value)));ballot.value=legislativeBallot;
-   const levels=HistoryLegislative.levels(legislativeYear,legislativeBallot),scaleSelect=el('historyScale');scaleSelect.replaceChildren(...levels.map(([value,label])=>new Option(legislativeYear>=2008&&legislativeBallot==='party'&&value==='town'&&!county?'乡镇市区（全台368个）':label,value)));if(!levels.some(([value])=>value===scale))scale=levels[0][0];scaleSelect.value=scale;
+   const levels=HistoryLegislative.levels(legislativeYear,legislativeBallot),scaleSelect=el('historyScale');scaleSelect.replaceChildren(...levels.map(([value,label])=>new Option(legislativeYear>=2008&&legislativeBallot==='party'&&value==='town'&&!county?'乡镇市区（全台368个）':label,value)));if(!levels.some(([value])=>value===scale))scale=levels[0][0];scaleSelect.value=scale;scaleSelect.disabled=levels.length===1;
    const focusBox=el('historyFocusBox'),focusSelect=el('historyFocus'),focusLabel=el('historyFocusLabel');
    if(focusBox&&focusSelect){
     const eligible=!allLegislative()&&!!county&&['district','town'].includes(scale);
@@ -1090,14 +1090,19 @@
     regionalLegislativeTownView()?'按各乡镇市区最高票候选人所属政党着色，点击地区查看逐候选人得票。':legislativeBallot==='regional'?(!county?(scale==='district'?(legislativeYear<2008?'全部地区的选举区地图按当届选区范围显示逐席当选党徽，点击选区可查看详细结果。':'全部地区的单席选举区按各区当选政党分别填色，点击选区查看详细结果。'):(legislativeYear<2008?'全台按各县市区域民代当选席次最多的政党填色；并列最多使用多党斜纹。点击县市进入后，各多席选区逐席显示党徽。':'全台单席选区按当选政党填色，点击选区进入县市查看完整结果。')):scale==='county'?(legislativeYear<2008?'县市图在各多席选区显示当选党徽，点击选区可查看候选人、得票率与当选结果。':'县市图显示当届选区和选区号；点击选区查看完整候选人、得票率与当选结果。'):'选举区图聚焦本区候选人及法定当选席次。'):
     !county?'':scale==='county'?'县市得票分布；选择乡镇市区层级可继续下钻。':'点击乡镇市区查看得票分布。';el('historyLegislativeMapHint').hidden=allLegislative()||!el('historyLegislativeMapHint').textContent;}
 
-  }else{if(el('historyFocusBox'))el('historyFocusBox').hidden=true;if(el('historyLegislativeMapHint'))el('historyLegislativeMapHint').hidden=true;el('historyScale').replaceChildren(new Option('县市','district'),new Option('乡镇市区','town'));el('historyScale').value=scale;if(kind==='council'){
-   const options=[['all','全部类型（分别统计）'],['regional','区域议员'],['plains','平地少数民族议员'],['mountain','山地少数民族议员'],['indigenous','少数民族议员']];
+  }else{if(el('historyFocusBox'))el('historyFocusBox').hidden=true;if(el('historyLegislativeMapHint'))el('historyLegislativeMapHint').hidden=true;
+   const scaleOptions=kind==='council'?[['district','选举区']]:kind==='township'?[['town','乡镇市区']]:[['district','县市'],['town','乡镇市区']];
+   if(!scaleOptions.some(([value])=>value===scale))scale=scaleOptions[0][0];
+   el('historyScale').replaceChildren(...scaleOptions.map(([value,label])=>new Option(label,value)));
+   el('historyScale').value=scale;el('historyScale').disabled=scaleOptions.length===1;
+   if(kind==='council'){
+   const options=[['all','全部类型（分别统计）'],['regional','区域议员'],['plains','平地少数民族议员'],['mountain','山地少数民族议员'],['indigenous','历史合并选区（未分平地／山地）']];
    const available=localGeometry?options.filter(([id])=>id==='all'||db.council.some(row=>row.electorate===id)):options.slice(0,4);
    if(!available.some(([id])=>id===electorate))electorate='all';
    el('historyElectorate').replaceChildren(...available.map(([id,label])=>new Option(label,id)));
   }}
   if(el('historyElectorateBox'))el('historyElectorateBox').hidden=kind!=='council'&&!legislativeMode;if(el('historyElectorate'))el('historyElectorate').value=electorate;
-  if(el('historyLegislativeNote')){el('historyLegislativeNote').hidden=!legislativeMode;el('historyLegislativeNote').textContent=allLegislative()?(legislativeYear<2008?'2008年前无独立政党票；不分区小图仅使用档案已有的席次计算票资料。':'区域显示选区当选结果，其余三图显示各地区最高票政党或候选人。'):HistoryLegislative.note(legislativeYear,legislativeBallot)||(legislativeYear>=2008&&legislativeBallot==='party'?'可按县市及全台368个乡镇市区查看原始政党票得票。得票数字精准对应当届行政区；历史地图边界采用可匹配的现有轮廓。':'2008年起不分区采用独立政党票；区域选举为单一选区一席。')}
+  if(el('historyLegislativeNote')){el('historyLegislativeNote').hidden=!legislativeMode&&!(kind==='council'&&db.council.some(r=>r.electorate==='indigenous'));el('historyLegislativeNote').textContent=!legislativeMode?'少数民族议员分平地、山地两类。早期个别市议员原始档案仅记为合并选区，单列为历史资料，不推定其平地或山地身份。':allLegislative()?(legislativeYear<2008?'旧制不分区及侨选没有独立政党票：选民投区域或少数民族候选人一票，政党推荐候选人的票汇总用于分配各党名单席次。不分区小图显示各地区这一席次计算票的领先政党，并非当地另投的政党票；缺少可核实的地方明细则不着色。':'区域显示选区当选结果，其余三图显示各地区最高票政党或候选人。'):HistoryLegislative.note(legislativeYear,legislativeBallot)||(legislativeYear>=2008&&legislativeBallot==='party'?'可按县市及全台368个乡镇市区查看原始政党票得票。得票数字精准对应当届行政区；历史地图边界采用可匹配的现有轮廓。':'2008年起不分区采用独立政党票；区域选举为单一选区一席。')}
   const legislativeBadges=legislativeMode&&legislativeBallot==='regional'&&legislativeYear<2008&&!regionalLegislativeTownView();
   const metrics=[['party',allLegislative()?'各类型选举结果（分别统计）':kind==='council'||legislativeBadges?'当选席次':presidentialMode?(scale==='town'?'各乡镇市区最高票候选人所属政党':'各县市最高票候选人所属政党'):legislativeMode?(legislativeBallot==='party'?'各地区领先政党':'各地区最高票候选人所属政党'):mayorTownView()?'各乡镇市区最高票候选人':'当选结果']];
   if(kind==='council'||legislativeBadges)metrics.push(['seats','指定政党席次']);
@@ -1108,6 +1113,8 @@
   el('historyPartyBox').hidden=metric!=='seats';
   el('historyParty').replaceChildren(...parties.map(p=>new Option(p,p)));el('historyParty').value=selectedParty;
   const select=el('historyMetric');select.replaceChildren(...metrics.map(([v,l])=>new Option(l,v)));select.value=metric;
+  select.disabled=metrics.length===1;
+  select.title=select.disabled?'当前范围只有这一种地图显示内容':'';
    el('historyCandidateScopeBox').hidden=!voteMetric();el('historyCandidateScope').value=candidateScope;
   const isPartyVote=legislativeMode&&legislativeBallot==='party';
   el('historyCandidateScope').querySelector('option[value="top"]').textContent=isPartyVote?'各地区领先政党':'最高票候选人';
@@ -1147,7 +1154,7 @@
     if(i===3&&r.incumbent==null)td.title='现任资料缺失';
     const logo=i===4||partyBallotDialog&&i===1?logoFor(predictionParty(r.party)):'';
     if(logo){const img=document.createElement('img');img.src=logo;img.alt='';const party=document.createElement('span');party.className='history-party-cell';party.append(img,value);td.append(party)}
-    if(i===7){if(!allLegislative()||f.electorate==='regional')appendResultMark(td,r)}else if(i===3)appendIncumbentTag(td,value);else if(!logo)td.append(value);tr.append(td);
+    if(i===7){if(r.electorate!=='party')appendResultMark(td,r)}else if(i===3)appendIncumbentTag(td,value);else if(!logo)td.append(value);tr.append(td);
    }
    if(!partyBallotDialog)appendMobileCandidateDetails(tr,[['号次',r.number],['性别',displayedGender(r)],['选举时现任',incumbentLabel(r)],['得票率',(r._share||0).toFixed(2)+'%']]);
    body.append(tr);
@@ -1219,7 +1226,7 @@
    .filter(r=>!exportPanelFilter||kind!=='council'||r.electorate===exportPanelFilter);
   const totals=new Map();
   if(countyWinner)for(const row of records)totals.set(row.county,(totals.get(row.county)||0)+row.votes);
-  const ordered=showAll||legislativeMode&&legislativeBallot==='party'?records:records.filter(r=>isOfficialWinner(r)&&(!allLegislative()||r.electorate==='regional'));
+  const ordered=showAll||legislativeMode&&legislativeBallot==='party'?records:records.filter(r=>r.electorate!=='party'&&isOfficialWinner(r));
   ordered.sort((a,b)=>HistoryCore.compareResultRows(a,b,kind));
   return ordered.map(r=>{
    const party=predictionParty(r.party);
