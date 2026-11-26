@@ -941,3 +941,16 @@ body.history-mode #districtReferenceNote,body.history-mode #districtReferenceSou
 #historyPager[hidden]{display:none!important}
 #historyResults>.history-legislative-empty{padding:12px 0;margin:0;color:#567365;line-height:1.6}
 #historyResults>.history-legislative-empty+.button{margin-bottom:8px}
+
+/* On-demand archive coverage: scroll within the matrix, not the page. */
+.history-coverage-dialog{width:min(1120px,94vw);max-height:90dvh;overflow:auto;border:1px solid #dce5df;border-radius:14px;padding:20px;color:#294a3a;background:#fff;box-sizing:border-box}
+.history-coverage-dialog::backdrop{background:#193b3166}
+.coverage-heading,.coverage-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.coverage-heading h2{font-size:20px;margin:0}.coverage-controls{justify-content:flex-start;margin-top:14px}
+.coverage-controls select{width:auto;max-width:100%;margin:0 0 0 8px}.coverage-scroll{max-height:48dvh;overflow:auto;border:1px solid #dce5df;border-radius:8px}
+.coverage-matrix{border-spacing:0;width:100%;font-size:12px;white-space:nowrap;text-align:center}.coverage-matrix th,.coverage-matrix td{padding:5px;border-bottom:1px solid #e5ece7}
+.coverage-matrix thead th{position:sticky;top:0;background:#f2f6f2;z-index:2}.coverage-matrix tbody th{position:sticky;left:0;background:#f8faf8;z-index:1;text-align:left}.coverage-matrix thead th:first-child{left:0;z-index:3}
+.coverage-matrix button{border:1px solid transparent;border-radius:5px;padding:5px 7px;font-size:11px;cursor:pointer;min-width:64px;background:#edf1ef;color:#4c6256}.coverage-matrix button:focus-visible{outline:2px solid #25775a;outline-offset:1px}
+.coverage-matrix [data-coverage-status=recorded]{background:#e1efe5;color:#286143}.coverage-matrix [data-coverage-status=partial]{background:#f9edcf;color:#795418}.coverage-matrix [data-coverage-status=missing]{background:#f7dfdb;color:#863e35}.coverage-matrix [data-coverage-status=error]{background:#f6e2e0;color:#863e35}
+#historyCoverageDetail h4{margin:16px 0 8px}#historyCoverageDetail p{line-height:1.6}#historyCoverageDetail table{max-width:520px;white-space:normal}#historyCoverageDetail th{text-align:left;position:static}#historyCoverageStatus{font-size:12px;color:#567365}
+@media(max-width:600px){.history-coverage-dialog{padding:12px}.coverage-scroll{max-height:42dvh}.coverage-matrix button{min-width:58px;padding:5px}.coverage-heading h2{font-size:17px}}
