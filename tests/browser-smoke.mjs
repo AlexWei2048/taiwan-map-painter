@@ -3154,8 +3154,11 @@ test('Historical council trends resolve former names and show pre-merger county 
  const labels=await page.locator('.trend-parliament-card [data-seat-year]').allTextContents();
  assert.ok(labels.includes('1994 · 高雄县'));assert.ok(labels.includes('1994 · 高雄市'));assert.ok(labels.includes('2010 · 高雄市'));
  assert.equal(labels.filter(x=>x.startsWith('2010')).length,1);
- const titles=await page.locator('.trend-scope-card .trend-card-heading h4').allTextContents();
- for(const suffix of ['原高雄县','原高雄市','合并后高雄市'])assert.ok(titles.some(title=>title.includes('候选人票得票率趋势')&&title.endsWith(suffix)),suffix);
+ const group=page.locator('.trend-merge-section').filter({has:page.locator('.trend-merge-title').filter({hasText:'候选人票得票率趋势'})});
+ assert.equal(await group.count(),1);
+ assert.deepEqual(await group.locator('.trend-card-heading h4').allTextContents(),['原高雄市','原高雄县','合并后高雄市']);
+ assert.equal(await group.locator('.trend-card > .data-help').count(),0);
+ assert.equal(await group.locator('svg[data-trend-export-viewbox]').count(),3);
  const layout=page.locator('.trend-merge-layout').filter({has:page.locator('[data-trend-scope="合并后高雄市"]')}).last();
  assert.deepEqual(await layout.locator('[data-trend-scope]').evaluateAll(cards=>cards.map(card=>card.dataset.trendScope)),['原高雄市','原高雄县','合并后高雄市']);
  assert.equal(await layout.locator('[data-trend-scope="合并后高雄市"] svg').getAttribute('viewBox').then(v=>Number(v.split(' ')[3])>600),true);

@@ -70,7 +70,7 @@ function description(conf){
 }
 function exportFile(content,name,mime){const url=URL.createObjectURL(new Blob([content],{type:mime}));const a=node('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),2000)}
 async function chartExport(graph,title,png){
- const copy=graph.cloneNode(true);copy.setAttribute('xmlns',ns);const box=graph.viewBox.baseVal;copy.setAttribute('width',box.width);copy.setAttribute('height',box.height);
+ const copy=graph.cloneNode(true);copy.setAttribute('xmlns',ns);const full=graph.getAttribute('data-trend-export-viewbox');if(full){copy.setAttribute('viewBox',full);copy.removeAttribute('data-trend-export-viewbox')}const box=copy.viewBox.baseVal;copy.setAttribute('width',box.width);copy.setAttribute('height',box.height);
  // Bundled emblems are already data URLs; inline any local file reference so
  // downloaded SVG and canvas-rendered PNG never depend on the site URL.
  try{await Promise.all([...copy.querySelectorAll('image[href]')].map(async image=>{const href=image.getAttribute('href');if(!href||href.startsWith('data:'))return;const response=await fetch(href);if(!response.ok)throw Error('党徽读取失败');const blob=await response.blob();const data=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=reject;reader.readAsDataURL(blob)});image.setAttribute('href',data)}))}catch(e){$('trendStatus').textContent='党徽未能读取，请重新载入后导出。';return}
@@ -79,10 +79,10 @@ async function chartExport(graph,title,png){
  const url=URL.createObjectURL(new Blob([source],{type:'image/svg+xml'})),img=new Image();
  img.onload=()=>{const canvas=node('canvas');canvas.width=box.width*2;canvas.height=box.height*2;const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,0,0,canvas.width,canvas.height);URL.revokeObjectURL(url);canvas.toBlob(b=>{if(b){const a=node('a');a.href=URL.createObjectURL(b);a.download=name+'.png';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000)}},'image/png')};img.onerror=()=>{URL.revokeObjectURL(url);$('trendStatus').textContent='PNG导出失败，可使用SVG导出。'};img.src=url
 }
-function card(title,description,graph){
+function card(title,description,graph,exportTitle=title){
  const c=node('article','trend-card'),h=node('div','trend-card-heading'),buttons=node('div','trend-card-actions');h.append(node('h4','',title),buttons);
- if(graph)for(const ext of ['SVG','PNG']){const b=node('button','button quiet',ext);b.type='button';b.onclick=()=>chartExport(graph,title,ext==='PNG');buttons.append(b)}
- c.append(h,node('p','data-help',description));if(graph)c.append(graph);return c
+ if(graph)for(const ext of ['SVG','PNG']){const b=node('button','button quiet',ext);b.type='button';b.onclick=()=>chartExport(graph,exportTitle,ext==='PNG');buttons.append(b)}
+ c.append(h);if(description)c.append(node('p','data-help',description));if(graph)c.append(graph);return c
 }
 function appendTrendCharts(out,rows,series,title,note,options,county){
  const scopes=T.trendChartScopes(rows,county);
@@ -90,21 +90,26 @@ function appendTrendCharts(out,rows,series,title,note,options,county){
  for(const section of scopes){
   const scopedTitle=title+(section.label?' · '+section.label:''),scopedSeries=series.filter(s=>section.rows.some(r=>Number.isFinite(s.get(r))));
   const compact=layout!==out&&section.label.startsWith('原'),tall=layout!==out&&section.label.startsWith('合并后');
-  const graphTitle=compact?section.label+' · '+title.replace('（按所属政党汇总）',''):scopedTitle;
-  const graph=scopedSeries.length&&section.rows.some(r=>r.complete)?chart(section.rows,scopedSeries,graphTitle,{...options,compact,tall}):null;
-  const description=graph?(compact?'只统计'+section.label+'当届选举结果。':note):'当前范围没有可绘制的完整结果。';
-  const item=card(scopedTitle,description,graph);
+  const grouped=layout!==out;
+  const graph=scopedSeries.length&&section.rows.some(r=>r.complete)?chart(section.rows,scopedSeries,scopedTitle,{...options,compact,tall,grouped}):null;
+  const description=graph?(grouped?'':note):'当前范围没有可绘制的完整结果。';
+  const item=card(grouped?section.label:scopedTitle,description,graph,scopedTitle);
   if(section.label){item.classList.add('trend-scope-card');item.dataset.trendScope=section.label}
   layout.append(item);
  }
- if(layout!==out)out.append(layout);
+ if(layout!==out){const group=node('section','trend-merge-section'),heading=node('h4','trend-merge-title',title);if(note)heading.title=note;group.append(heading,layout);out.append(group)}
 }
 function baseSvg(title,width,height){
  const g=svg('svg',{viewBox:'0 0 '+width+' '+height,role:'img','aria-label':title,'font-family':'Arial, "Microsoft YaHei", sans-serif','font-size':'12',fill:'#31473e'});
  g.append(svg('rect',{x:0,y:0,width,height,fill:'#fff'}),svg('title',{},title),svg('text',{x:18,y:22,'font-weight':700,'font-size':15},title));return g
 }
-function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=false,integer=false,compact=false,tall=false}={}){
- const width=Math.max(compact?520:700,rows.length*(compact?72:rows.some(r=>r.scopeLabel)?79:65)+100),height=(compact?286:tall?598:346)+Math.ceil(series.length/4)*24,g=baseSvg(title,width,height),l=64,r=width-25,top=48,bottom=compact?215:tall?520:270;
+function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=false,integer=false,compact=false,tall=false,grouped=false}={}){
+ const width=Math.max(compact?520:tall?620:700,rows.length*(compact?72:rows.some(r=>r.scopeLabel)?79:65)+100),l=compact?52:64,r=width-20,top=48,bottom=compact?280:tall?550:270;
+ const showScope=!grouped||new Set(rows.map(r=>r.scopeLabel||'')).size>1;
+ const legendStart=grouped?bottom+(showScope?70:52):338,legend=[];
+ let lx=20,ly=legendStart;for(const [i,s] of series.entries()){const name=s.name.length>16?s.name.slice(0,16)+'…':s.name;if(grouped){const span=Math.min(width-40,Math.max(92,30+Array.from(name).reduce((n,ch)=>n+(/[^\x00-\x7f]/.test(ch)?13:7),0)));if(lx>20&&lx+span>width-20){lx=20;ly+=23}legend.push({xx:lx,yy:ly,name});lx+=span}else legend.push({xx:20+(i%4)*(width-40)/4,yy:338+Math.floor(i/4)*24,name})}
+ const height=grouped?Math.max(tall?650:0,(legend.at(-1)?.yy||legendStart)+18):346+Math.ceil(series.length/4)*24,g=baseSvg(title,width,height);
+ if(grouped){g.setAttribute('data-trend-export-viewbox','0 0 '+width+' '+height);g.setAttribute('viewBox','0 30 '+width+' '+(height-30));}
  const vals=rows.flatMap((row,i)=>stack?[series.reduce((n,s)=>n+(s.get(row)||0),0)]:series.map(s=>s.get(row))).filter(Number.isFinite);
  const ticks=integer?T.integerTicks(Math.max(1,...vals)):null;
  const max=ticks?ticks.at(-1):pct?100:rank?Math.max(3,...vals):Math.max(1,...vals)*1.08;
@@ -114,13 +119,13 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
  const x=i=>l+unit*(.59+centers[i]),y=v=>rank?top+(v-1)/(max-1)*(bottom-top):bottom-v/max*(bottom-top);
  for(const v of ticks||Array.from({length:5},(_,i)=>rank?1+i*(max-1)/4:i*max/4)){
   const yy=y(v);
-  g.append(svg('line',{x1:l,x2:r,y1:yy,y2:yy,stroke:'#e2eae5'}),svg('text',{x:l-9,y:yy+4,'text-anchor':'end','font-size':11,'data-trend-axis-tick':String(v)},integer?String(v):rank?Math.round(v):pct?Math.round(v)+'%':Intl.NumberFormat('zh-CN',{notation:'compact',maximumFractionDigits:1}).format(v)))
+  g.append(svg('line',{x1:l,x2:r,y1:yy,y2:yy,stroke:'#e2eae5'}),svg('text',{x:l-9,y:yy+4,'text-anchor':'end','font-size':grouped?13:11,'data-trend-axis-tick':String(v)},integer?String(v):rank?Math.round(v):pct?Math.round(v)+'%':Intl.NumberFormat('zh-CN',{notation:'compact',maximumFractionDigits:1}).format(v)))
  }
  rows.forEach((row,i)=>{
   const labelText=row.label||String(row.year);
-  g.append(svg('text',{x:x(i),y:bottom+21,'text-anchor':'middle','font-size':11},labelText));
-  if(row.scopeLabel)g.append(svg('text',{x:x(i),y:bottom+37,'text-anchor':'middle','font-size':10},row.scopeLabel));
-  if(!row.complete)g.append(svg('text',{x:x(i),y:bottom+(row.scopeLabel?51:37),'text-anchor':'middle',fill:'#956e51','font-size':10},'缺档'));
+  g.append(svg('text',{x:x(i),y:bottom+21,'text-anchor':'middle','font-size':grouped?13:11},labelText));
+  if(showScope&&row.scopeLabel)g.append(svg('text',{x:x(i),y:bottom+37,'text-anchor':'middle','font-size':10},row.scopeLabel));
+  if(!row.complete)g.append(svg('text',{x:x(i),y:bottom+(showScope&&row.scopeLabel?51:37),'text-anchor':'middle',fill:'#956e51','font-size':10},'缺档'));
  });
  const addPoint=(p,row,s,v)=>{
   const summary=(row.label||row.year)+' '+(row.scopeLabel?row.scopeLabel+' ':'')+s.name+'：'+fmt(v,pct)+(row.dates?.length?' · '+row.dates.join(' / '):'');
@@ -163,7 +168,7 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
   rows.forEach((row,i)=>{const v=s.get(row);if(!Number.isFinite(v))return;const p=svg('circle',{cx:x(i),cy:y(v),r:4.5,fill:s.color,stroke:'#fff','stroke-width':1});addPoint(p,row,s,v);g.append(p)})
  }
  if(breakOld){const i=rows.findIndex(r=>!r.oldPartyVote);if(i>0){const xx=(x(i-1)+x(i))/2;g.append(svg('line',{x1:xx,x2:xx,y1:top,y2:bottom,stroke:'#8a938d','stroke-dasharray':'4 4'}),svg('text',{x:xx+4,y:top-7,'font-size':10},'2008制度改革'))}}
- series.forEach((s,i)=>{const xx=20+(i%4)*(width-40)/4,yy=(compact?278:tall?590:338)+Math.floor(i/4)*24;g.append(s.dash?svg('line',{x1:xx,x2:xx+12,y1:yy-5,y2:yy-5,stroke:s.color,'stroke-width':2,'stroke-dasharray':'4 2'}):svg('rect',{x:xx,y:yy-10,width:11,height:11,rx:2,fill:s.color}),svg('text',{x:xx+16,y:yy,'font-size':11},s.name.length>16?s.name.slice(0,16)+'…':s.name))});
+ series.forEach((s,i)=>{const {xx,yy,name}=legend[i];g.append(s.dash?svg('line',{x1:xx,x2:xx+12,y1:yy-5,y2:yy-5,stroke:s.color,'stroke-width':2,'stroke-dasharray':'4 2'}):svg('rect',{x:xx,y:yy-10,width:11,height:11,rx:2,fill:s.color}),svg('text',{x:xx+16,y:yy,'font-size':grouped?13:11},name))});
  return g
 }
 
