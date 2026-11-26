@@ -72,3 +72,15 @@ $('planRawBackup').onclick=()=>{
  try{raw.legacy=localStorage.getItem(KEY);raw.plans=localStorage.getItem(MapPlanStore.KEY)}catch(e){/* preserve last readable values */}
  download(new Blob([JSON.stringify(raw,null,2)],{type:'application/json'}),'岛屿调色盘-原始存储备份.json');
 };
+
+$('planImportAll').onclick=()=>$('planBundleFile').click();
+$('planBundleFile').onchange=async e=>{
+ const file=e.target.files[0];if(!file)return;
+ try{
+  if(file.size>30000000)throw Error('备份文件过大');
+  const imported=MapPlanStore.validate(JSON.parse(await file.text()));
+  if(!$('planDialog').open)throw Error('请重新打开方案管理');
+  if(!confirm('将备份中的 '+imported.plans.length+' 个方案追加至本机？原有方案保留。'))return;
+  importPlanBundle(imported);$('planError').textContent='';
+ }catch(error){$('planError').textContent=error.message||'无法读取备份'}finally{e.target.value=''}
+};
