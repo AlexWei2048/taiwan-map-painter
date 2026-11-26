@@ -157,6 +157,11 @@
 .trend-parliament-pair{grid-column:span 2}.trend-parliament-pair svg{min-width:560px}@media(max-width:680px){.trend-parliament-pair{grid-column:1/-1}.trend-parliament-pair svg{min-width:520px}}
 
 .trend-parliament-paired-grid{grid-template-columns:1fr}.trend-parliament-paired-grid .trend-parliament-pair{grid-column:1/-1}.trend-parliament-paired-grid .trend-parliament-pair svg{max-width:420px;min-width:0;margin:0 auto}
+.trend-merge-layout{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);grid-template-rows:auto auto;gap:12px;min-width:0}
+.trend-merge-layout .trend-card{min-width:0}.trend-merge-layout .trend-card svg{min-width:0}
+.trend-merge-layout .trend-card[data-trend-scope^="原"]{grid-column:1}
+.trend-merge-layout .trend-card[data-trend-scope^="合并后"]{grid-column:2;grid-row:1/3}
+@media(max-width:900px){.trend-merge-layout{grid-template-columns:minmax(0,1fr);grid-template-rows:auto}.trend-merge-layout .trend-card[data-trend-scope]{grid-column:1;grid-row:auto}}
 
 /* Legislative result tables: preserve the native cell box for party badges
    and balance widths across the actual columns (including incumbency). */

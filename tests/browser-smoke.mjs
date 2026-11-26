@@ -3156,6 +3156,9 @@ test('Historical council trends resolve former names and show pre-merger county 
  assert.equal(labels.filter(x=>x.startsWith('2010')).length,1);
  const titles=await page.locator('.trend-scope-card .trend-card-heading h4').allTextContents();
  for(const suffix of ['原高雄县','原高雄市','合并后高雄市'])assert.ok(titles.some(title=>title.includes('候选人票得票率趋势')&&title.endsWith(suffix)),suffix);
+ const layout=page.locator('.trend-merge-layout').filter({has:page.locator('[data-trend-scope="合并后高雄市"]')}).last();
+ assert.deepEqual(await layout.locator('[data-trend-scope]').evaluateAll(cards=>cards.map(card=>card.dataset.trendScope)),['原高雄市','原高雄县','合并后高雄市']);
+ assert.equal(await layout.locator('[data-trend-scope="合并后高雄市"] svg').getAttribute('viewBox').then(v=>Number(v.split(' ')[3])>600),true);
  const pair=page.locator('.trend-parliament-pair').filter({has:page.locator('[data-seat-year]')}).filter({hasText:'1994'});
  assert.equal(await pair.count(),2);
  assert.deepEqual(await pair.locator('[data-seat-date]').allTextContents(),['1994-01-29','1994-12-03']);

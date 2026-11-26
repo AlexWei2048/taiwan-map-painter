@@ -86,20 +86,25 @@ function card(title,description,graph){
 }
 function appendTrendCharts(out,rows,series,title,note,options,county){
  const scopes=T.trendChartScopes(rows,county);
+ const layout=scopes.some(s=>s.label.startsWith('合并后'))&&scopes.some(s=>s.label.startsWith('原'))?node('div','trend-merge-layout'):out;
  for(const section of scopes){
   const scopedTitle=title+(section.label?' · '+section.label:''),scopedSeries=series.filter(s=>section.rows.some(r=>Number.isFinite(s.get(r))));
-  const graph=scopedSeries.length&&section.rows.some(r=>r.complete)?chart(section.rows,scopedSeries,scopedTitle,options):null;
-  const item=card(scopedTitle,graph?note:'当前范围没有可绘制的完整结果。',graph);
-  if(section.label)item.classList.add('trend-scope-card');
-  out.append(item);
+  const compact=layout!==out&&section.label.startsWith('原'),tall=layout!==out&&section.label.startsWith('合并后');
+  const graphTitle=compact?section.label+' · '+title.replace('（按所属政党汇总）',''):scopedTitle;
+  const graph=scopedSeries.length&&section.rows.some(r=>r.complete)?chart(section.rows,scopedSeries,graphTitle,{...options,compact,tall}):null;
+  const description=graph?(compact?'只统计'+section.label+'当届选举结果。':note):'当前范围没有可绘制的完整结果。';
+  const item=card(scopedTitle,description,graph);
+  if(section.label){item.classList.add('trend-scope-card');item.dataset.trendScope=section.label}
+  layout.append(item);
  }
+ if(layout!==out)out.append(layout);
 }
 function baseSvg(title,width,height){
  const g=svg('svg',{viewBox:'0 0 '+width+' '+height,role:'img','aria-label':title,'font-family':'Arial, "Microsoft YaHei", sans-serif','font-size':'12',fill:'#31473e'});
  g.append(svg('rect',{x:0,y:0,width,height,fill:'#fff'}),svg('title',{},title),svg('text',{x:18,y:22,'font-weight':700,'font-size':15},title));return g
 }
-function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=false,integer=false}={}){
- const width=Math.max(700,rows.length*(rows.some(r=>r.scopeLabel)?79:65)+100),height=346+Math.ceil(series.length/4)*24,g=baseSvg(title,width,height),l=64,r=width-25,top=48,bottom=270;
+function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=false,integer=false,compact=false,tall=false}={}){
+ const width=Math.max(compact?520:700,rows.length*(compact?72:rows.some(r=>r.scopeLabel)?79:65)+100),height=(compact?286:tall?598:346)+Math.ceil(series.length/4)*24,g=baseSvg(title,width,height),l=64,r=width-25,top=48,bottom=compact?215:tall?520:270;
  const vals=rows.flatMap((row,i)=>stack?[series.reduce((n,s)=>n+(s.get(row)||0),0)]:series.map(s=>s.get(row))).filter(Number.isFinite);
  const ticks=integer?T.integerTicks(Math.max(1,...vals)):null;
  const max=ticks?ticks.at(-1):pct?100:rank?Math.max(3,...vals):Math.max(1,...vals)*1.08;
@@ -158,7 +163,7 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
   rows.forEach((row,i)=>{const v=s.get(row);if(!Number.isFinite(v))return;const p=svg('circle',{cx:x(i),cy:y(v),r:4.5,fill:s.color,stroke:'#fff','stroke-width':1});addPoint(p,row,s,v);g.append(p)})
  }
  if(breakOld){const i=rows.findIndex(r=>!r.oldPartyVote);if(i>0){const xx=(x(i-1)+x(i))/2;g.append(svg('line',{x1:xx,x2:xx,y1:top,y2:bottom,stroke:'#8a938d','stroke-dasharray':'4 4'}),svg('text',{x:xx+4,y:top-7,'font-size':10},'2008制度改革'))}}
- series.forEach((s,i)=>{const xx=20+(i%4)*(width-40)/4,yy=338+Math.floor(i/4)*24;g.append(s.dash?svg('line',{x1:xx,x2:xx+12,y1:yy-5,y2:yy-5,stroke:s.color,'stroke-width':2,'stroke-dasharray':'4 2'}):svg('rect',{x:xx,y:yy-10,width:11,height:11,rx:2,fill:s.color}),svg('text',{x:xx+16,y:yy,'font-size':11},s.name.length>16?s.name.slice(0,16)+'…':s.name))});
+ series.forEach((s,i)=>{const xx=20+(i%4)*(width-40)/4,yy=(compact?278:tall?590:338)+Math.floor(i/4)*24;g.append(s.dash?svg('line',{x1:xx,x2:xx+12,y1:yy-5,y2:yy-5,stroke:s.color,'stroke-width':2,'stroke-dasharray':'4 2'}):svg('rect',{x:xx,y:yy-10,width:11,height:11,rx:2,fill:s.color}),svg('text',{x:xx+16,y:yy,'font-size':11},s.name.length>16?s.name.slice(0,16)+'…':s.name))});
  return g
 }
 

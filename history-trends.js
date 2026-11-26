@@ -131,7 +131,7 @@ function historicalCountyFamily(county){
 function trendChartScopes(rows,county){
  if(!MERGE_FAMILIES.some(group=>group[1]===county))return[{label:'',rows}];
  const [oldCounty,oldCity]=historicalCountyFamily(county);
- const order=[['原'+oldCounty,'旧'+oldCounty],['原'+oldCity,'旧'+oldCity],['合并后'+oldCity,'合并后'+oldCity]];
+ const order=[['原'+oldCity,'旧'+oldCity],['原'+oldCounty,'旧'+oldCounty],['合并后'+oldCity,'合并后'+oldCity]];
  const sections=order.map(([label,key])=>({label,rows:rows.filter(r=>r.scopeSeries===key)})).filter(section=>section.rows.length);
  const unmatched=rows.filter(r=>!order.some(([,key])=>r.scopeSeries===key));
  if(unmatched.length)sections.push({label:'未能归属当届县市',rows:unmatched});

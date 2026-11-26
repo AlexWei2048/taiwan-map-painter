@@ -215,8 +215,8 @@ test('Pre-merger county and city form separate mayor and council trend branches'
   assert.equal(newer[0].scopeSeries,'合并后高雄市');
   assert.ok(old.every(r=>r.complete));assert.equal(newer[0].complete,true);
   const sections=T.trendChartScopes([...old,...newer],'高雄市');
-  assert.deepEqual(sections.map(s=>s.label),['原高雄县','原高雄市','合并后高雄市']);
-  assert.deepEqual(sections.map(s=>s.rows.map(r=>r.label)),[['2005'],['2006'],['2010']]);
+  assert.deepEqual(sections.map(s=>s.label),['原高雄市','原高雄县','合并后高雄市']);
+  assert.deepEqual(sections.map(s=>s.rows.map(r=>r.label)),[['2006'],['2005'],['2010']]);
  }
  assert.equal(T.trendChartScopes([{year:2022,scopeSeries:'台北县'}],'新北市').length,1);
 });
