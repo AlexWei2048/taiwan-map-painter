@@ -1840,7 +1840,7 @@ window.addEventListener('pointermove',e=>{
    }
    return;
   }
-  if(gestureConsumed)return;
+  if(gestureConsumed&&!drag)return;
  }
  if(!drag||drag.pointer!==e.pointerId||!drag.matrix)return;
  const dx=e.clientX-drag.x,dy=e.clientY-drag.y;
