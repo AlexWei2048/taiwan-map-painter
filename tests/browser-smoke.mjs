@@ -3340,3 +3340,17 @@ test('Mobile legislative candidate results retain essential columns and expandab
  assert.equal(await row.locator('td').nth(0).isVisible(),true);
  assert.equal(await detail.isVisible(),false);
 });
+
+
+test('Exported administrative index wraps long names without clipping or dropping rows',async t=>{
+ const page=await pageFor(t);
+ const result=await page.evaluate(()=>{
+  const entries=Array.from({length:8},(_,i)=>({number:String(i+1),name:'同名选区',group:'高雄市 · 山地少数民族 · 历史选举区',town:'很长的行政区名称'+i}));
+  const metrics=numberTableExportMetrics(entries,2),root=svgEl('svg',{xmlns:NS});
+  appendNumberTableExport(root,entries,0,0,2);
+  const texts=[...root.querySelectorAll('[data-map-number-key] text')].filter(t=>t.querySelector('tspan'));
+  return {rowHeight:metrics.rowHeight,lines:metrics.nameLines.map(x=>x.length),names:texts.map(t=>t.textContent),expected:mapNumberSorted(entries).map(r=>mapNumberDisplayName(r,entries))};
+ });
+ assert.ok(result.rowHeight>34);assert.ok(result.lines.every(n=>n>1));
+ assert.deepEqual(result.names,result.expected);
+});
