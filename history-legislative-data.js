@@ -10,7 +10,7 @@
   if(indexed?.snapshot?.office!=='legislative')return{counties:[],areas:[]};
   const s=indexed.snapshot,electorate=selection.electorate||'regional';
   const valid=new Set(s.rows.filter(r=>r.electorate==='regional'&&r.level==='county').map(r=>r.county));
-  const counties=[...new Set(s.rows.filter(r=>r.electorate===electorate&&r.level==='county'&&valid.has(r.county)).map(r=>r.county))]
+  const counties=[...new Set(s.rows.filter(r=>(electorate==='all'||r.electorate===electorate)&&r.level==='county'&&valid.has(r.county)).map(r=>r.county))]
    .sort((a,b)=>compare({county_name:a},{county_name:b}));
   const county=selection.county||'';
   const areas=electorate==='regional'&&selection.scope!=='town'?s.contests.filter(c=>c.electorate==='regional'&&c.county_name===county)
@@ -28,7 +28,7 @@
    const ids=['regional','party','plains','mountain'],parts=ids.map(id=>localResult(indexed,{...selection,electorate:id,scope:county?'county':'all',area:''})).filter(Boolean);
    if(!parts.length)return null;
    const result={index:indexed,selection:{year,office:'legislative',electorate:'all',countyId:county||''},contests:parts.flatMap(p=>p.result.contests),candidacies:parts.flatMap(p=>p.result.candidacies),summaries:parts.flatMap(p=>p.result.summaries)};
-   const groups=parts.flatMap(p=>p.overview.turnoutGroups||[]),overview={...Core.overview(result),registeredVoters:null,ballotsCast:null,validVotes:null,invalidVotes:null,turnout:null,turnoutGroups:groups,electedCount:county?parts[0]?.overview.electedCount??null:parts.filter(p=>p.result.selection.electorate!=='party').reduce((n,p)=>n+(p.overview.electedCount||0),0)};
+   const groups=parts.flatMap(p=>p.overview.turnoutGroups||[]),overview={...Core.overview(result),registeredVoters:null,ballotsCast:null,validVotes:null,invalidVotes:null,turnout:null,turnoutGroups:groups,electedCount:county?parts.find(p=>p.result.selection.electorate==='regional')?.overview.electedCount??null:parts.filter(p=>p.result.selection.electorate!=='party').reduce((n,p)=>n+(p.overview.electedCount||0),0)};
    return{result,overview,scope:county?'county':'all',county,area:''};
   }
   if(scope==='all'||scope==='national'){
@@ -95,7 +95,8 @@
    level=electorate==='regional'&&selection.level!=='town'?'district':year===1992&&!selection.county&&selection.level!=='town'&&['plains','mountain'].includes(electorate)?'national':selection.level==='national'?'national':
     selection.level==='town'?'town':'county',county=selection.county||'';
   if(electorate==='all'){
-   const records=snapshot.rows.filter(r=>['regional','party','plains','mountain'].includes(r.electorate)&&(!county||r.county===county)&&r.level===(r.electorate==='regional'?'district':county&&snapshot.rows.some(s=>s.electorate===r.electorate&&s.county===county&&s.level==='town')?'town':'county'));
+   const ids=['regional','party','plains','mountain'],levels=Object.fromEntries(ids.map(id=>[id,id==='regional'?'district':county&&snapshot.rows.some(s=>s.electorate===id&&s.county===county&&s.level==='town')?'town':'county']));
+   const records=snapshot.rows.filter(r=>ids.includes(r.electorate)&&(!county||r.county===county)&&r.level===levels[r.electorate]);
    const key=r=>[r.electorate,r.county,r.level==='district'?r.district:r.level==='town'?r.town:''].join('|'),totals=new Map();
    for(const r of records)totals.set(key(r),(totals.get(key(r))||0)+Number(r.votes||0));
    records.sort((a,b)=>['regional','party','plains','mountain'].indexOf(a.electorate)-['regional','party','plains','mountain'].indexOf(b.electorate)||key(a).localeCompare(key(b),'zh',{numeric:true})||b.votes-a.votes);
