@@ -161,10 +161,10 @@ function baseSvg(title,width,height){
  const g=svg('svg',{viewBox:'0 0 '+width+' '+height,role:'img','aria-label':title,'font-family':'Arial, "Microsoft YaHei", sans-serif','font-size':'12',fill:'#31473e'});
  g.append(svg('rect',{x:0,y:0,width,height,fill:'#fff'}),svg('title',{},title),svg('text',{x:18,y:22,'font-weight':700,'font-size':15},title));return g
 }
-function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=false,integer=false,compact=false,tall=false,grouped=false,axisMax=null,zoomPercent=false}={}){
- const width=Math.max(compact?520:tall?620:700,rows.length*(compact?72:rows.some(r=>r.scopeLabel)?79:65)+100),l=compact?52:64,r=width-20,top=48,bottom=compact?280:tall?550:270;
+function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=false,integer=false,compact=false,tall=false,grouped=false,axisMax=null,zoomPercent=false,seatDetail=false}={}){
+ const width=Math.max(compact?520:tall?620:700,rows.length*(compact?72:rows.some(r=>r.scopeLabel)?79:65)+100),l=compact?52:64,r=width-20,top=48,bottom=compact?280:tall?550:seatDetail?458:270;
  const showScope=!grouped||new Set(rows.map(r=>r.scopeLabel||'')).size>1;
- const legendStart=grouped?bottom+(showScope?70:52):338,legend=[];
+ const legendStart=grouped?bottom+(showScope?70:52):bottom+68,legend=[];
  let lx=20,ly=legendStart;
  for(const s of series){
   const name=s.name.length>16?s.name.slice(0,16)+'…':s.name;
@@ -173,6 +173,7 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
   legend.push({xx:lx,yy:ly,name,span});lx+=span;
  }
  const height=Math.max(tall?650:0,(legend.at(-1)?.yy||legendStart)+20),g=baseSvg(title,width,height);
+ if(seatDetail)g.setAttribute('data-trend-seat-plot-height',String(bottom-top));
  if(grouped){g.setAttribute('data-trend-export-viewbox','0 0 '+width+' '+height);g.setAttribute('viewBox','0 30 '+width+' '+(height-30));}
  const vals=rows.flatMap((row,i)=>stack?[series.reduce((n,s)=>n+(s.get(row)||0),0)]:series.map(s=>s.get(row))).filter(Number.isFinite);
  const magnitude=axisMax??Math.max(1,...vals);
@@ -216,21 +217,21 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
    let acc=0;const annotations=[];
    for(const s of series){
     const v=s.get(row);if(!Number.isFinite(v)||v<=0)continue;
-    const h=v/max*(bottom-top),middle=y(acc+v/2),p=svg('rect',{x:x(i)-barWidth/2,y:y(acc+v),width:barWidth,height:h,fill:s.color,stroke:'#fff','stroke-width':.5});
+    const h=v/max*(bottom-top),middle=y(acc+v/2),p=svg('rect',{x:x(i)-barWidth/2,y:y(acc+v),width:barWidth,height:h,fill:s.color,stroke:'#fff','stroke-width':seatDetail?.18:.5,...(seatDetail?{'data-trend-seat-segment':s.name,'data-trend-seat-count':v,'data-trend-seat-year':row.year}:{})});
     addPoint(p,row,s,v);g.append(p);
     if(integer){
-     const textValue=fmt(v),inside=h>=13&&barWidth>=textValue.length*6+8;
+     const textValue=fmt(v),inside=h>=(seatDetail?15:13)&&barWidth>=textValue.length*6+8;
      annotations.push({value:textValue,middle,inside,color:s.color,name:s.name,series:s,seats:v});
     }
     acc+=v;
    }
    const seatLabel=(a,attrs)=>{const text=svg('text',{...attrs,'pointer-events':'all',cursor:'pointer','data-trend-seat-label':a.name,'data-trend-seat-year':row.year,'data-trend-seat-position':a.inside?'inside':'outside'},a.value);addPoint(text,row,a.series,a.seats);g.append(text)};
-   for(const a of annotations.filter(a=>a.inside))seatLabel(a,{x:x(i),y:a.middle+3,'text-anchor':'middle','font-size':10,'font-weight':700,fill:labelColor(a.color)});
+   for(const a of annotations.filter(a=>a.inside))seatLabel(a,{x:x(i),y:a.middle+3,'text-anchor':'middle','font-size':seatDetail?11:10,'font-weight':700,fill:labelColor(a.color)});
    let last=top-4;
    for(const a of annotations.filter(a=>!a.inside).sort((a,b)=>a.middle-b.middle)){
-    const baseline=Math.max(a.middle+3,last+11,top+7);last=baseline;
+    const baseline=Math.max(a.middle+3,last+(seatDetail?14:11),top+7);last=baseline;
     const edge=x(i)+barWidth/2;
-    g.append(svg('line',{x1:edge,x2:edge+6,y1:a.middle,y2:baseline-3,stroke:a.color,'stroke-width':1,'pointer-events':'none'}));seatLabel(a,{x:edge+7,y:baseline,'font-size':9,'font-weight':700,fill:'#213b31'});
+    g.append(svg('line',{x1:edge,x2:edge+6,y1:a.middle,y2:baseline-3,stroke:a.color,'stroke-width':seatDetail?1.5:1,'pointer-events':'none'}));seatLabel(a,{x:edge+7,y:baseline,'font-size':seatDetail?10.5:9,'font-weight':700,fill:'#213b31',...(seatDetail?{'paint-order':'stroke','stroke':'#fff','stroke-width':1.6,'stroke-linejoin':'round'}:{})});
    }
    if(row.complete)g.append(svg('text',{x:x(i),y:y(acc)-6,'text-anchor':'middle','font-size':11,'font-weight':700,'data-trend-total':String(acc)},fmt(acc)));
   })
@@ -384,7 +385,7 @@ function renderLegislative(conf,anchor,out){
   const seatType=allSeats?'全部民代':ballot==='all'?(national?'全部议员':isLeg?'区域民代':'区域议员'):({regional:isLeg?'区域民代':'区域议员',plains:'平地少数民族',mountain:'山地少数民族',party:'不分区',indigenous:'原住民'}[ballot]||ballot);
   const title=(isLeg?'立法机构':'县市议员')+' · '+seatType+' · 政党当选席次趋势';
   const note=allSeats?'区域、平地与山地少数民族、不分区及旧制侨选的正式当选席次合计。':national?'仅计所选民代类别在全部地区正式当选的席次。':isLeg?'仅计该范围区域民代的正式当选席次；其余类型不分摊到县市。':'仅计该范围可归属的议员席次。';
-  appendTrendCharts(out,seatRows,seatSeries,title,note,{stack:true,integer:true},conf.county);
+  appendTrendCharts(out,seatRows,seatSeries,title,note,{stack:true,integer:true,seatDetail:allSeats},conf.county);
   if(seatRows.some(r=>r.complete))renderParliaments(out,seatRows,{...effective,metric:'party'},allSeats);
  }
  const listMode=listVoteChart(conf);

@@ -3146,6 +3146,10 @@ test('Legislative seat trends default to all years and show complete integer par
  const plain=p=>p.replace(/[“”]/g,'');
  const legends=(await graph.locator('[data-trend-legend]').evaluateAll(ns=>ns.map(n=>n.getAttribute('data-trend-legend')))).map(plain);
  assert.deepEqual(legends,expected.parties.map(plain));assert.ok(!legends.includes('其他政党'));
+ assert.equal(await graph.getAttribute('data-trend-seat-plot-height'),'410');
+ const segments=await graph.locator('[data-trend-seat-segment]').evaluateAll(ns=>ns.map(n=>({count:Number(n.getAttribute('data-trend-seat-count')),height:Number(n.getAttribute('height'))})));
+ assert.ok(segments.some(s=>s.count===1));assert.ok(segments.every(s=>Math.abs(s.height/s.count-410/300)<1e-8),'every seat retains exactly the same scale');
+ assert.ok(segments.filter(s=>s.count===1).every(s=>s.height>1.3),'one-seat parties receive more visible area');
  const labels=await graph.locator('[data-trend-seat-label]').evaluateAll(ns=>ns.map(n=>({year:Number(n.getAttribute('data-trend-seat-year')),party:n.getAttribute('data-trend-seat-label'),value:Number(n.firstChild.textContent),title:n.querySelector('title')?.textContent,aria:n.getAttribute('aria-label')})));
  const expectedLabels=expected.rows.flatMap(r=>Object.entries(r.parties).filter(([,v])=>v>0).map(([p,v])=>r.year+'|'+plain(p)+'|'+v)).sort();
  assert.deepEqual(labels.map(l=>l.year+'|'+plain(l.party)+'|'+l.value).sort(),expectedLabels);
@@ -3619,6 +3623,7 @@ test('Party-list trend displays only the ten specified parties plus others and e
  assert.equal(await chart.locator('[data-trend-series] path').first().getAttribute('stroke-width'),'1.4');
  assert.equal(await chart.locator('[data-trend-series] circle').first().getAttribute('r'),'2.8');
  const first=chart.locator('[data-trend-series] circle').first(),original=await first.getAttribute('cy');
+ await chart.scrollIntoViewIfNeeded();
  const pos=await chart.evaluate(g=>{const p=new DOMPoint(350,160).matrixTransform(g.getScreenCTM());return {x:p.x,y:p.y}});
  await page.mouse.move(pos.x,pos.y);await page.mouse.wheel(0,-300);
  await page.waitForFunction(()=>{const g=document.querySelector('#trendCharts svg[data-trend-zoom]');return Number(g?.getAttribute('data-trend-y-max'))-Number(g?.getAttribute('data-trend-y-min'))<59});
