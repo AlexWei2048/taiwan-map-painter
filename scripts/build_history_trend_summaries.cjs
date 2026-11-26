@@ -29,6 +29,13 @@ async function build({Local,Trends,Summary,OpenCC,read,Presidential,Presidential
   }
   for(const {path,payload} of outputs)files.set(path,JSON.stringify(payload)+'\n');
  }
+ // The loader memoizes validated years across calls. Still record each required
+ // input explicitly, even when a preceding build populated its in-memory cache.
+ if(offices.length===1&&offices[0]==='township'){
+  for(const year of yearsByOffice.township)await fetcher('assets/history-local-'+year+'.json');
+  await fetcher('assets/history-local-council-supplement.json');
+ }
+ if(offices.length===1&&offices[0]==='president')for(const year of yearsByOffice.president)await fetcher('assets/history-president-'+year+'.json');
  const sources={};for(const path of [...inputs.keys()].sort())sources[path]=(await inputs.get(path)).sha;
  const manifestName=offices.join(',')==='council,mayor'?'manifest':'manifest-'+offices.join('-');
  files.set('assets/history-trend-summary-v1/'+manifestName+'.json',JSON.stringify({schemaVersion:1,yearsByOffice,sourceVersion:(offices.length===1&&offices[0]==='president'?Presidential:Local).trendSummarySourceVersion(),algorithmVersion:Trends.summaryAlgorithmVersion,sources},null,2)+'\n');
