@@ -17,6 +17,7 @@ const optionText=id=>$(id)?.selectedOptions?.[0]?.textContent||'';
 function settings(){return selection||{}}
 function create(){
  if(panel)return;panel=$('historyTrendsPanel');if(!panel)return;
+ $('historyTrendModuleStatus')?.remove();
  const heading=node('div','trend-heading');heading.append(node('h3','','跨届选举趋势'),node('p','','按左侧选举类别、民代类别及地图范围展示所选届次。'));
  const scope=node('p','data-help');scope.id='trendScope';
  const controls=node('div','trend-year-controls');controls.id='trendYearControls';const yearTitle=node('div','trend-year-title');yearTitle.append(node('strong','','比较届次'));for(const [id,text] of [['trendSelectAll','全选'],['trendSelectNone','清空']]){const b=node('button','button quiet',text);b.type='button';b.id=id;yearTitle.append(b)}const years=node('div','trend-year-picker');years.id='trendYears';controls.append(yearTitle,years);
@@ -38,6 +39,8 @@ function setYears(conf,reset){
  const host=$('trendYears');host.replaceChildren();for(const y of ys){const l=node('label','trend-year'),input=node('input');input.type='checkbox';input.value=String(y);input.checked=selectedYears.has(y);input.onchange=()=>{if(input.checked)selectedYears.add(y);else selectedYears.delete(y);renderedKey='';load();window.dispatchEvent(new Event('site-route-change'))};l.append(input,node('span','',label(y,conf.office)));host.append(l)}
 }
 async function snapshot(office,year){
+ const active=History2022View.snapshot?.();
+ if(active?.year===year&&active.elections?.some(e=>e.office===office))return active;
  if(office==='president')return HistoryPresidential.load(year);
  if(office==='legislative')return HistoryLegislative.load(year);
  if(year===2022||year===2026)return History2022View.trendSnapshot(year);

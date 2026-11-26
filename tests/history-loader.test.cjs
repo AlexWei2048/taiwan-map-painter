@@ -77,3 +77,18 @@ test('initial document defers history-only resources until the history tab is op
  assert.doesNotMatch(html,/src="history-access\.js/);
  }
 });
+
+test('trend assets are loaded only on demand, once, in dependency order',async()=>{
+ const {createHistoryLoader,HISTORY_SCRIPTS,TREND_SCRIPTS}=require('../history-loader.js');
+ const calls=[];const loader=createHistoryLoader({loadStyle:async()=>{},loadScript:async path=>calls.push(path),getView:()=>({activate(){}})});
+ await loader.load();assert.deepEqual(calls,HISTORY_SCRIPTS);
+ assert.ok(!calls.some(path=>TREND_SCRIPTS.includes(path)));
+ await Promise.all([loader.loadTrends(),loader.loadTrends()]);
+ assert.deepEqual(calls,[...HISTORY_SCRIPTS,...TREND_SCRIPTS]);
+});
+test('failed trend module can be retried without reloading the archive',async()=>{
+ const {createHistoryLoader,TREND_SCRIPTS,HISTORY_SCRIPTS}=require('../history-loader.js');
+ const calls=[];let fail=true;const loader=createHistoryLoader({loadStyle:async()=>{},loadScript:async path=>{calls.push(path);if(path===TREND_SCRIPTS[0]&&fail){fail=false;throw Error('network')}},getView:()=>({activate(){}})});
+ await assert.rejects(loader.loadTrends(),/network/);
+ await loader.loadTrends();assert.deepEqual(calls,[...HISTORY_SCRIPTS,TREND_SCRIPTS[0],...TREND_SCRIPTS]);
+});

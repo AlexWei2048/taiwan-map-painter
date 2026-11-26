@@ -679,6 +679,17 @@
   const note=el('historyOverviewNote');
   if(note)note.hidden=!(currentOverview.turnoutGroups?.length>1);
  }
+ let trendLoading=null;
+ function syncTrends(){
+  if(state.view!=='trends'){root.HistoryTrendsUI?.close();return}
+  if(root.HistoryTrendsUI){el('historyTrendModuleStatus')?.remove();root.HistoryTrendsUI.open(state);return}
+  if(trendLoading)return;
+  const panel=el('historyTrendsPanel');if(!panel)return;
+  const status=document.createElement('div');status.id='historyTrendModuleStatus';status.className='data-help';status.setAttribute('role','status');status.textContent='正在载入历史趋势模块…';panel.replaceChildren(status);
+  trendLoading=root.HistoryLoader.loadTrends().then(()=>{
+   status.remove();if(state.view==='trends'&&root.History2022View?.active()){root.HistoryTrendsUI.open(state);root.dispatchEvent(new Event('site-route-change'))}
+  }).catch(error=>{status.textContent='历史趋势模块载入失败：'+error.message+' ';const retry=document.createElement('button');retry.type='button';retry.className='button quiet';retry.textContent='重试';retry.onclick=()=>syncTrends();status.append(retry)}).finally(()=>{trendLoading=null});
+ }
  function render(){
   state=readSelection();
   chooseOverviewOnMapChange();
@@ -700,7 +711,7 @@
   const panels={map:'historyMapPanel',candidates:'historyCandidatesPanel',overview:'historyOverviewPanel',trends:'historyTrendsPanel'};
   for(const [view,id] of Object.entries(panels)){const node=el(id);if(node)node.hidden=state.view!==view}
   for(const view of VIEWS){const button=el('historyView'+view[0].toUpperCase()+view.slice(1));if(button){const selected=state.view===view;button.classList.toggle('active',selected);button.setAttribute('aria-pressed',String(selected))}}
-  if(state.view==='trends')root.HistoryTrendsUI?.open(state);else root.HistoryTrendsUI?.close();
+  syncTrends();
   if(el('historyExportCsv'))el('historyExportCsv').textContent=state.view==='trends'?'导出历史趋势 CSV':'导出当前结果 CSV';
   renderTurnoutCards();if(el('historyCoverage')&&currentResult)el('historyCoverage').textContent=state.office==='legislative'?'当前票种：'+(root.HistoryLegislative?.ballots(state.year).find(x=>x.value===state.electorate)?.label||'立法机构民代')+' · '+currentResult.contests.length+'个统计区域 · '+currentResult.candidacies.length+'条结果。':'当前范围：'+currentResult.contests.length+'个选举区 · '+currentResult.candidacies.length+'条候选人记录。';emit();return{...state};
  }

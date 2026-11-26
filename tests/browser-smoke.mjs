@@ -3202,3 +3202,16 @@ test('Shareable URL restores history and future query settings',async t=>{
  await page.locator('#workspaceFree').click();
  await page.waitForFunction(()=>location.hash.startsWith('#/free/'));
 });
+
+test('Archive maps do not fetch trend scripts before the trend view is selected',async t=>{
+ const page=await pageFor(t);const requested=[];
+ page.on('request',req=>requested.push(new URL(req.url()).pathname));
+ await page.locator('#categoryHistory').click();
+ await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
+ assert.equal(await page.evaluate(()=>!!window.HistoryTrendsUI),false);
+ assert.ok(!requested.some(path=>/history-trends(?:-ui)?\.js$/.test(path)));
+ await page.locator('#historyViewTrends').click();
+ await page.locator('#trendYears').waitFor({timeout:60000});
+ assert.equal(await page.evaluate(()=>!!window.HistoryTrendsUI),true);
+ assert.ok(requested.some(path=>path.endsWith('/history-trends-ui.js')));
+});

@@ -14,9 +14,10 @@
   'assets/party-logos-archive.js','history-core.js','history-presidential-turnout.js',
   'history-presidential.js','assets/history-legislative-candidates.js','history-legislative.js','history-legislative-party.js',
   'history-legislative-turnout.js','history-legislative-data.js','history-local.js',
-  'history-workspace.js','history-2022.js','history-trends.js','history-trends-ui.js'
+  'history-workspace.js','history-2022.js'
  ];
- const versions={'history-trends-ui.js':'20261126-performance-v98'};
+ const TREND_SCRIPTS=['history-trends.js','history-trends-ui.js'];
+ const versions={'history-trends-ui.js':'20261126-performance-v100','history-workspace.js':'20261126-performance-v100','history-2022.js':'20261126-performance-v100'};
  const tagged=path=>path+(path.includes('?')?'&':'?')+'v='+(versions[path]||'20261126-merged-layout-v97');
  // Preload downloads in parallel; the existing sequential loader retains execution order and retry semantics.
  function domScriptPreloader(document){return paths=>{for(const path of paths){const href=tagged(path);if(document.querySelector('link[data-history-preload="'+href+'"]')||document.querySelector('script[data-history-asset="'+path+'"]'))continue;const link=document.createElement('link');link.rel='preload';link.as='script';link.href=href;link.dataset.historyPreload=href;link.onerror=()=>link.remove();document.head.append(link)}}}
@@ -33,7 +34,7 @@
   script.onload=()=>{script.dataset.loaded='true';resolve()};script.onerror=()=>{script.remove();reject(Error('历史资料载入失败：'+src))};document.body.append(script)
  })}
  function createHistoryLoader({loadStyle,loadScript,getView,preloadScripts=()=>{}}){
-  let pending=null;
+  let pending=null,trendPending=null;
   function load(){
    if(!pending)pending=(async()=>{
     preloadScripts(HISTORY_SCRIPTS);
@@ -45,7 +46,14 @@
    return pending
   }
   async function activate(){const view=await load();view.activate()}
-  return{load,activate}
+  function loadTrends(){
+   if(!trendPending)trendPending=(async()=>{
+    await load();preloadScripts(TREND_SCRIPTS);
+    for(const src of TREND_SCRIPTS)await loadScript(src);
+   })().catch(error=>{trendPending=null;throw error});
+   return trendPending;
+  }
+  return{load,activate,loadTrends}
  }
- return{HISTORY_STYLES,HISTORY_SCRIPTS,createHistoryLoader,domStyleLoader,domScriptLoader,domScriptPreloader}
+ return{HISTORY_STYLES,HISTORY_SCRIPTS,TREND_SCRIPTS,createHistoryLoader,domStyleLoader,domScriptLoader,domScriptPreloader}
 });

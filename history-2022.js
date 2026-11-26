@@ -1351,6 +1351,7 @@
   metric=['party','seats','share','votes'].includes(route.metric)?route.metric:'party';
   candidateScope=route.candidateScope==='candidate'?'candidate':'top';selectedCandidate=route.candidate||'';selectedParty=route.party||'';
   resultPage=0;switchMode();render();
+  if(route.view==='trends'){await window.HistoryLoader.loadTrends();if(!isCurrent())return false}
   window.HistoryWorkspace?.restoreRouteView?.(route);
   if(route.view==='trends'&&route.years!==undefined)window.HistoryTrendsUI?.restoreRouteYears?.(route.years);
   if(!isCurrent())return false;
