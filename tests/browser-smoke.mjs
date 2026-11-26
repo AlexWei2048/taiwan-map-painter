@@ -3402,3 +3402,18 @@ test('Historical trend point opens the correct year and county on the map',async
  assert.equal(await page.locator('#historyCounty').inputValue(),'台北市');
  assert.equal(await page.locator('#historyYear').inputValue(),'2018');
 });
+
+
+test('Historical coverage matrix opens on demand and reveals known partial archives',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ await page.locator('#categoryHistory').click();
+ await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
+ await page.locator('#historyCoverageOpen').click();
+ await page.locator('#historyCoverageOffice').selectOption('township');
+ const button=page.locator('#historyCoverageMatrix').getByRole('button',{name:'金门县 1994 部分缺失',exact:true});
+ await button.waitFor({timeout:90000});await button.click();
+ assert.match(await page.locator('#historyCoverageDetail').textContent(),/部分档案条目/);
+ assert.equal(await page.locator('#historyYear').inputValue(),'2022');
+ await page.locator('#historyCoverageDialog').getByRole('button',{name:'关闭',exact:true}).click();
+ assert.equal(await page.locator('#historyCoverageDialog').isVisible(),false);
+});
