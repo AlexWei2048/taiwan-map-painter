@@ -7,7 +7,7 @@
  let presidentialMode=false,presidentialYear=2024,presidentialGeometry=null;
  let legislativeMode=false,legislativeYear=2024,legislativeBallot='regional',legislativeGeometry=[],legislativeAreaGeometry=null,legislativeFocus='';
  let history2022Snapshot=null,loadingPresidentialId=0,localGeometry=null;
- let localYear=2022,history2026Manifest=null,history2026Snapshot=null,history2026Pending=null,original2022DistrictMetadata=[];
+ let localYear=2022,history2026Manifest=null,history2026Snapshot=null,history2026Pending=null,retry2026Office='',original2022DistrictMetadata=[];
  const yearLabel=()=>presidentialMode?String(presidentialYear):legislativeMode?String(legislativeYear):HistoryLocal.yearLabel(localYear,kind);
  // Use the source contest's actual polling year for a local result, not its display cycle.
  function contestYear(contest){
@@ -165,6 +165,7 @@
  async function activateLocalYear(year,office=el('historyOffice').value){
   if(!active)return;
   const token=++loadingPresidentialId,indicator=el('historyLoadStatus');
+  retry2026Office='';
   if(year!==2026){
    const label=HistoryLocal.yearLabel(year,office);
    indicator.hidden=false;indicator.textContent='正在载入 '+label+' 年地方选举结果…';el('historyRetry').hidden=true;
@@ -192,7 +193,7 @@
    el('historyYear').value=String(localYear);
    toast('2026年正式得票尚未发布');return;
   }
-  indicator.hidden=false;indicator.textContent='正在核对2026年正式结果数据…';
+  indicator.hidden=false;indicator.textContent='正在核对2026年正式结果数据…';el('historyRetry').hidden=true;
   try{
    await snapshot();
    const verified=await loadOfficial2026();
@@ -202,7 +203,7 @@
   }catch(error){
    if(token!==loadingPresidentialId)return;
    indicator.hidden=false;indicator.textContent='2026年官方结果载入失败：'+error.message;
-   el('historyRetry').hidden=false;el('historyYear').value=String(localYear);
+   retry2026Office=office;el('historyRetry').hidden=false;el('historyYear').value=String(localYear);
   }
  }
  check2026Availability();
@@ -1083,7 +1084,7 @@
   if(legislativeMode)el('historyBoundaryNote').textContent=legislativePartyTownView()?'政党票票数均为当届乡镇市区的实际统计值，完整对账至县市与全区；2008及2012年的行政区名称遵循当届，轮廓采用对应现行乡镇市区图形，并不保证还原每一处历史边界。':legislativeYear===1992?(legislativeBallot==='regional'?'1992年区域选区主要按政大当届乡镇归属显示，轮廓采用现行底图近似。金门和马祖选区仍使用参考范围。':'1992年少数民族民代地方票数来自政大逐乡镇档案。行政区名称沿用资料库，部分名称为后来升格后的用法。'):legislativeYear<2008?'1995—2004年区域选区按当届选区归属重建，使用现行乡镇市区轮廓近似绘制；县市内部分界或旧村里界线可能不精确，点选选区可查看具体说明。':legislativeYear>=2008&&legislativeYear<2020?
    '2008—2016年立法机构区域选区依当届归属显示；2020年调整的台中、台南、高雄、新竹县、屏东按当届乡镇市区选区资料重建。村里内部划分缺少可核历史界线时仅近似展示。':
    '历史选区按当届县市、乡镇市区归属重建；底图几何使用现行行政区近似，无法精确还原的旧里界不作推算。';
-  else if(localYear===2026)el('historyBoundaryNote').textContent='2026年正式结果仅在中选会或地方选委会资料逐项核对、选区得票与席次校验通过后发布；预测与官方结果分开保存。未核实的乡镇得票不推算。';
+  else if(localYear===2026)el('historyBoundaryNote').textContent='2026年'+(snapshotData?.publicationStatus==='certified'?'正式公告结果':'官方开票结果（尚未正式公告）')+'；预测与官方结果分开保存。未核实的乡镇得票不推算。';
   else if(!presidentialMode&&localGeometry){
    const cycle=snapshotData?.cycleYears&&yearLabel().includes('/')?'按选举批次合并显示，各地实际投票日期见选区结果。':'按实际投票年显示。';
    const scope=partialTownship()?snapshotData.elections.find(e=>e.office==='township'):null;
@@ -1429,7 +1430,7 @@
  if(el('historyResultParty'))el('historyResultParty').onchange=()=>{resultPage=0;if(currentResult)showRows(currentResult)};
  el('historyPrev').onclick=()=>{if(!currentResult||resultPage<=0)return;resultPage--;showRows(currentResult)};
  el('historyNext').onclick=()=>{if(!currentResult||el('historyNext').disabled)return;resultPage++;showRows(currentResult)};
- if(el('historyRetry'))el('historyRetry').onclick=()=>{if(el('historyOffice').value==='president'){activatePresidential(Number(el('historyYear').value));return}if(el('historyOffice').value==='legislative'){activateLegislative(Number(el('historyYear').value));return}activateLocalYear(Number(el('historyYear').value))};
+ if(el('historyRetry'))el('historyRetry').onclick=()=>{if(el('historyOffice').value==='president'){activatePresidential(Number(el('historyYear').value));return}if(el('historyOffice').value==='legislative'){activateLegislative(Number(el('historyYear').value));return}activateLocalYear(retry2026Office===el('historyOffice').value?2026:Number(el('historyYear').value))};
  el('historyScale').onchange=()=>{resultPage=0;scale=el('historyScale').value;if(legislativeMode){legislativeFocus='';el('historyCounty').value=county}switchMode();render()};
  if(el('historyFocus'))el('historyFocus').onchange=()=>{legislativeFocus=el('historyFocus').value;resultPage=0;switchMode();render()};
  el('historyCandidateScope').onchange=()=>{candidateScope=el('historyCandidateScope').value;render()};
