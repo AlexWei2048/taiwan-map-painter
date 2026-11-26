@@ -2866,6 +2866,7 @@ test('Candidate directory keeps all candidates and marks missing numbers without
 
 test('Local 2026 results remain hidden until an official fully reconciled data release is published',async t=>{
  const page=await pageFor(t);
+ await page.route('**/assets/history-2026-availability.json*',route=>route.fulfill({contentType:'application/json',body:JSON.stringify({schemaVersion:1,year:2026,status:'awaiting_results'})}));
  await page.locator('#categoryHistory').click();
  await page.locator('#historyOffice').selectOption('mayor');
  assert.equal(await page.locator('#historyYear option[value="2026"]').count(),0);
@@ -2887,7 +2888,6 @@ test('Published-only 2026 results can load in history, switch offices and return
  await page.goto(base);
  await page.locator('#regions path[data-region]').first().waitFor();
  await page.locator('#categoryHistory').click();
- await page.waitForFunction(()=>window.HISTORY_2026_RESULTS_AVAILABLE===true);
  const fake=await page.evaluate(()=>{
   const ds=candidateDatabase.districts,cs=candidateDatabase.candidates,byDistrict=new Map(ds.map(d=>[d.id,d]));
   const elections=['mayor','council','township'].map(office=>({
@@ -2898,7 +2898,7 @@ test('Published-only 2026 results can load in history, switch offices and return
    contest_id:d.id,election_id:'2026-'+d.type,county_id:d.county,county_name:d.county,
    district_name:d.type==='township'?d.name.replace(d.county,''):d.name,
    electorate:HistoryCore.identity(d.electorate),seats:d.seats||1,reserved_seats:d.womenReserved||0,
-   registered_voters:null,ballots_cast:null,valid_votes:250000,invalid_votes:null
+   registered_voters:null,ballots_cast:null,valid_votes:ds.find(x=>x.id===d.id).candidateIds.reduce((n,id)=>n+1000+Number(cs.find(c=>c.id===id).number||0),0),invalid_votes:null
   }));
   const candidacies=cs.map(c=>{
    const d=byDistrict.get(c.districtId);return{
@@ -2912,7 +2912,7 @@ test('Published-only 2026 results can load in history, switch offices and return
    return{type:c.type,level:c.type==='mayor'?'county':c.type==='council'?'district':'town',
     electorate:HistoryCore.identity(d.electorate),county:c.county,
     district:c.type==='council'?d.name:'',town:c.type==='township'?d.name.replace(c.county,''):'',
-    name:c.nameSimplified||c.name,party:c.party,number:String(c.number),gender:c.gender,
+    name:c.nameSimplified||c.name,party:c.party,number:String(c.number),gender:c.gender,candidateId:c.id,
     votes:1000+Number(c.number||0),elected:d.candidateIds.slice(0,d.seats||1).includes(c.id)}
   });
   return{schemaVersion:2,year:2026,completeness:'full',publicationStatus:'provisional',
@@ -2920,7 +2920,13 @@ test('Published-only 2026 results can load in history, switch offices and return
  });
  assert.equal(fake.contests.length,447);
  assert.equal(fake.candidacies.length,2049);
- await page.route('**/assets/history-2026.json*',route=>route.fulfill({contentType:'application/json',body:JSON.stringify(fake)}));
+ const body=JSON.stringify(fake),sha256=(await import('node:crypto')).createHash('sha256').update(body).digest('hex');
+ await page.route('**/assets/history-2026-availability.json*',route=>route.fulfill({contentType:'application/json',body:JSON.stringify({
+  schemaVersion:1,year:2026,status:'published',resultStatus:'provisional',file:'assets/history-2026.json',candidateCount:2049,districtCount:447,sha256
+ })}));
+ await page.route('**/assets/history-2026.json*',route=>route.fulfill({contentType:'application/json',body}));
+ await page.evaluate(()=>location.reload());
+ await page.locator('#regions path[data-region]').first().waitFor();
  await page.locator('#categoryHistory').click();
  await page.waitForFunction(()=>document.querySelector('#historyYear option[value="2026"]'));
  await page.locator('#historyYear').selectOption('2026');
