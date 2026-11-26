@@ -475,22 +475,25 @@ function mapNumberRecord(f,number){
  if(!dest.some(r=>r.id===record.id&&r.group===record.group))dest.push(record);
 }
 function mapNumberSorted(rows){return [...rows].sort((a,b)=>Number(a.number)-Number(b.number)||a.name.localeCompare(b.name,'zh'))}
-function mapNumberDisplayName(row,rows){
- if(rows.filter(other=>other.name===row.name).length<=1)return row.name;
+function mapNumberNameCounts(rows){
+ const counts=new Map();for(const row of rows)counts.set(row.name,(counts.get(row.name)||0)+1);return counts;
+}
+function mapNumberDisplayName(row,rows,nameCounts=mapNumberNameCounts(rows)){
+ if((nameCounts.get(row.name)||0)<=1)return row.name;
  return [row.group,row.town,row.name].filter(Boolean).join(' · ');
 }
 function renderMapNumberTable(){
  const panel=$('mapNumberKey'),layout=$('mapWithKey'),body=$('mapNumberKeyRows');
  if(!panel||!layout||!body)return;
  if(panel.parentElement!==layout)layout.append(panel);
- const rows=state.labels?mapNumberSorted(mapNumberRows):[];
+ const rows=state.labels?mapNumberSorted(mapNumberRows):[],nameCounts=mapNumberNameCounts(rows);
  panel.hidden=!rows.length;layout.classList.toggle('has-number-key',!!rows.length);body.replaceChildren();
  $('mapNumberKeyCount').textContent=rows.length+'项';
  for(const row of rows){
   const tr=document.createElement('tr'),code=document.createElement('th'),name=document.createElement('td');
   code.scope='row';code.className='number-key-number';code.textContent=row.number;
   const button=document.createElement('button');button.type='button';
-  button.className='number-key-action';button.textContent=mapNumberDisplayName(row,rows);
+  button.className='number-key-action';button.textContent=mapNumberDisplayName(row,rows,nameCounts);
   button.setAttribute('aria-label','查看或编辑'+button.textContent);
   name.append(button);tr.dataset.region=row.id;
   const feature=row.feature;
@@ -1297,16 +1300,13 @@ function toggleLabelRegionHighlight(f,active){
  const featureId=String(f.id),focused=document.activeElement;
  // Moving focus into the lower index scrolls the page, which can dispatch a
  // pointerleave *after* focusin. Keyboard focus must remain authoritative.
- const focusedInKey=!!focused&&!!key&&[...key.querySelectorAll('tr[data-region]')]
-  .some(row=>row.dataset.region===featureId&&row.contains(focused));
- const focusedInMap=!!focused&&!!layer&&[...layer.querySelectorAll('path[data-region]')]
-  .some(path=>path.dataset.region===featureId&&path===focused);
+ const focusedRow=focused?.closest?.('tr[data-region]');
+ const focusedInKey=!!focusedRow&&!!key&&key.contains(focusedRow)&&focusedRow.dataset.region===featureId;
+ const focusedInMap=!!focused&&!!layer&&layer.contains(focused)&&focused.tagName.toLowerCase()==='path'&&focused.dataset.region===featureId;
  const highlighted=active||focusedInKey||focusedInMap;
- for(const path of layer.querySelectorAll('path[data-region]')){
-  if(path.dataset.region===featureId)path.classList.toggle('label-region-highlighted',highlighted);
- }
- if(key)for(const row of key.querySelectorAll('tr[data-region]'))
-  if(row.dataset.region===featureId)row.classList.toggle('number-key-highlighted',highlighted);
+ const selector='[data-region="'+CSS.escape(featureId)+'"]';
+ for(const path of layer.querySelectorAll('path'+selector))path.classList.toggle('label-region-highlighted',highlighted);
+ if(key)for(const row of key.querySelectorAll('tr'+selector))row.classList.toggle('number-key-highlighted',highlighted);
 }
 
 function drawLabels(group,items,t,font=15,interactive=false,countyNamesOnly=false,omitLeaderLines=false){
@@ -1579,7 +1579,7 @@ $('skipMap').onclick=event=>{
  event.preventDefault();
  $('afterMap').focus();
 };
-function regionPath(f){const identity=identityPanelsActive()?' · '+electorateName(featureElectorate(f)):'';const p=svgEl('path',{d:f.d,fill:fillColor(f),stroke:'none','stroke-width':0,'vector-effect':'non-scaling-stroke','fill-rule':f.fillRule||(typeof History2022View!=='undefined'&&History2022View.active()&&History2022View.office?.()==='legislative'&&History2022View.legislativeBallot?.()==='regional'?'nonzero':'evenodd'),'data-region':f.id,'data-electorate':featureElectorate(f),tabindex:-1,role:'button','aria-label':`${f.county}${f.name===f.county?'':f.name}${identity}，${regionDetail(f)}`});const title=svgEl('title');title.textContent=f.county+(f.name===f.county?'':f.name)+identity;p.append(title);p.addEventListener('click',()=>{if(!moved)paint(f)});p.onkeydown=e=>handleMapRegionKey(e,p,f);p.onpointermove=e=>{if(drag)return;const tip=$('tooltip'),r=$('canvas').getBoundingClientRect();tip.replaceChildren();const label=document.createElement('span');label.textContent=f.name;const sub=document.createElement('small');sub.textContent=f.county+(f.town?' · '+f.town:'')+identity+' · '+regionDetail(f);tip.append(label,sub);tip.hidden=false;tip.style.left=Math.min(e.clientX-r.left+15,r.width-165)+'px';tip.style.top=Math.max(45,e.clientY-r.top-48)+'px'};p.addEventListener('pointerenter',()=>toggleLabelRegionHighlight(f,true));p.onpointerleave=()=>{$('tooltip').hidden=true;toggleLabelRegionHighlight(f,false)};p.addEventListener('focus',()=>{setMapKeyboardRegion(p);toggleLabelRegionHighlight(f,true)});p.addEventListener('blur',()=>toggleLabelRegionHighlight(f,false));return p}
+function regionPath(f){const identity=identityPanelsActive()?' · '+electorateName(featureElectorate(f)):'';const p=svgEl('path',{d:f.d,fill:fillColor(f),stroke:'none','stroke-width':0,'vector-effect':'non-scaling-stroke','fill-rule':f.fillRule||(typeof History2022View!=='undefined'&&History2022View.active()&&History2022View.office?.()==='legislative'&&History2022View.legislativeBallot?.()==='regional'?'nonzero':'evenodd'),'data-region':f.id,'data-electorate':featureElectorate(f),tabindex:-1,role:'button','aria-label':`${f.county}${f.name===f.county?'':f.name}${identity}，${regionDetail(f)}`});const title=svgEl('title');title.textContent=f.county+(f.name===f.county?'':f.name)+identity;p.append(title);p.addEventListener('click',()=>{if(!moved)paint(f)});p.onkeydown=e=>handleMapRegionKey(e,p,f);p.onpointermove=e=>{if(drag)return;const tip=$('tooltip'),r=$('canvas').getBoundingClientRect();const signature=p.getAttribute('aria-label')||'';if(tip.hidden||tip.dataset.region!==String(f.id)||tip.dataset.signature!==signature){const label=document.createElement('span');label.textContent=f.name;const sub=document.createElement('small');sub.textContent=f.county+(f.town?' · '+f.town:'')+identity+' · '+regionDetail(f);tip.replaceChildren(label,sub);tip.dataset.region=String(f.id);tip.dataset.signature=signature}tip.hidden=false;tip.style.left=Math.max(0,Math.min(e.clientX-r.left+15,r.width-165))+'px';tip.style.top=Math.max(45,e.clientY-r.top-48)+'px'};p.addEventListener('pointerenter',()=>toggleLabelRegionHighlight(f,true));p.onpointerleave=()=>{$('tooltip').hidden=true;toggleLabelRegionHighlight(f,false)};p.addEventListener('focus',()=>{setMapKeyboardRegion(p);toggleLabelRegionHighlight(f,true)});p.addEventListener('blur',()=>toggleLabelRegionHighlight(f,false));return p}
 
 // Nationwide views show shared internal borders only; county views restore
 // complete polygon outlines, including coastal and isolated-island edges.
@@ -1703,7 +1703,7 @@ function appendSharedBorders(group,level,identity='regional',filterTown=false){
 
 function render(){
  syncCouncilExportScopeVisibility();
- if(!data)return;resetSeatTiePatterns();ensureMapDetails();syncMapLayerStatus();$('canvas').classList.toggle('nationwide-mode',isNationwide());$('canvas').classList.toggle('county-mode',state.level==='counties'||mayorTownBoundaryOverlay());
+ if(!data)return;$('tooltip').hidden=true;resetSeatTiePatterns();ensureMapDetails();syncMapLayerStatus();$('canvas').classList.toggle('nationwide-mode',isNationwide());$('canvas').classList.toggle('county-mode',state.level==='counties'||mayorTownBoundaryOverlay());
  $('canvas').classList.toggle('council-overview-mode',councilCountyOverview());
  $('canvas').classList.toggle('history-combined-mode',historicalCombinedMap());
  const regionGroup=$('regions'),borderGroup=$('borders'),districtGroup=$('districtBorders'),townGroup=$('townBorders');
@@ -2169,7 +2169,7 @@ function numberTableExportMetrics(entries,columns=1){
 }
 function appendNumberTableExport(root,entries,x,y,columns=1){
  const rows=mapNumberSorted(entries);if(!rows.length)return 0;
- const m=numberTableExportMetrics(rows,columns);
+ const m=numberTableExportMetrics(rows,columns),nameCounts=mapNumberNameCounts(rows);
  const panel=svgEl('g',{'data-map-number-key':'true','data-export-layout':'separate-sidebar'});
  panel.append(svgEl('rect',{x,y,width:m.width,height:m.height,rx:14,fill:'#fff',stroke:'#dce5df','stroke-width':1.15}));
  panel.append(svgEl('rect',{x:x+1,y:y+1,width:m.width-2,height:4,rx:2,fill:'#2a805d'}));
@@ -2184,7 +2184,7 @@ function appendNumberTableExport(root,entries,x,y,columns=1){
   const num=svgEl('text',{x:bx+24,y:by+19,'text-anchor':'middle','font-size':16,'font-weight':700,fill:'#2b664e'});
   num.textContent=row.number;panel.append(num);
   const value=svgEl('text',{x:bx+51,y:by+19,'font-size':16,'font-weight':550,fill:'#365344'});
-  value.textContent=mapNumberDisplayName(row,rows);panel.append(value);
+  value.textContent=mapNumberDisplayName(row,rows,nameCounts);panel.append(value);
  }
  root.append(panel);return m.height;
 }
