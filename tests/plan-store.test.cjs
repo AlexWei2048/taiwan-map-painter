@@ -32,3 +32,18 @@ test('Prediction completion distinguishes votes, winners, blank and incomplete d
  const partial=P.progress(directory,{predictions:{d:{winners:['a'],estimates:{a:{share:60}}}}},'mayor',C).all;
  assert.equal(partial.winners,1);assert.equal(partial.votes,0);
 });
+
+test('Full backup merge retains unsaved edits, selection and all existing IDs',()=>{
+ const a=P.initial(project()),draft=project();draft.predictions.d.winners=['b'];
+ const imported=P.initial(project());
+ const next=P.merge(a,draft,imported,x=>x);
+ assert.equal(next.activeId,'original');assert.equal(next.plans.length,2);
+ assert.equal(next.plans[0].project.predictions.d.winners[0],'b');
+ assert.equal(next.plans[1].project.predictions.d.winners[0],'a');
+ assert.notEqual(next.plans[0].id,next.plans[1].id);
+ assert.equal(a.plans.length,1);
+ assert.throws(()=>P.merge(a,draft,imported,()=>{throw Error('invalid project')}),/invalid project/);
+ assert.equal(a.plans.length,1);
+ const full={version:1,activeId:'original',plans:Array.from({length:12},(_,i)=>({id:i?'p'+i:'original',name:'方案'+i,project:project()}))};
+ assert.throws(()=>P.merge(full,draft,imported,x=>x),/超过12/);
+});
