@@ -72,21 +72,5 @@
     9549818,
     9375608,
     174210
-  ],
-  "mountain_national_crosscheck": {
-    "source_url": "https://vote.nccu.edu.tw/cec/B1992005.PDF",
-    "source_locator": "政大选研中心据中选会资料制表，山地原住行",
-    "national_valid_votes": 63831,
-    "national_party_votes": {
-      "kmt": 47128,
-      "dpp": 3769,
-      "other": 12934
-    },
-    "local_candidate_sum": 63829,
-    "local_candidate_Hua_Jiazhi": 16782,
-    "national_candidate_Hua_Jiazhi": 16784,
-    "difference": 2,
-    "status": "unresolved_local_allocation",
-    "note": "政大政党汇总支持全国有效票63831；尚不能确定少2票的乡镇或投票所，保留原始明细。PDF截图读取失败，依据可检索表格文字。"
-  }
+  ]
 }
