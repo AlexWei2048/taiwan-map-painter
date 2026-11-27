@@ -3222,7 +3222,7 @@ test('Historical trends follow sidebar election, year, scope and metric with mat
  await page.locator('#categoryAnalysis').click();await page.locator('#historyTrendsPanel').waitFor({state:'visible'});assert.equal(await page.locator('#historyTrendsPanel').isVisible(),true);
 });
 
-test('Mayor party seat trends omit pre-entry years but preserve zero for participating non-winners',async t=>{
+test('Mayor party seat trends omit years before the party enters the election',async t=>{
  const page=await pageFor(t,{width:1440,height:950});
  await page.locator('#categoryHistory').click();
  await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
