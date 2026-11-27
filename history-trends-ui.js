@@ -110,7 +110,7 @@ function description(conf){
 function exportFile(content,name,mime){const url=URL.createObjectURL(new Blob([content],{type:mime}));const a=node('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),2000)}
 async function chartExport(graph,title,png){
  const office=offices[settings().office],name=('历史趋势-'+office+'-'+title).replace(/[\\/:*?"<>|]/g,'_');
- const copy=graph.cloneNode(true);for(const mark of copy.querySelectorAll('[data-trend-series]'))mark.removeAttribute('opacity');copy.setAttribute('xmlns',ns);const full=graph.getAttribute('data-trend-export-viewbox');if(full){copy.setAttribute('viewBox',full);copy.removeAttribute('data-trend-export-viewbox')}
+ const copy=graph.cloneNode(true);for(const mark of copy.querySelectorAll('[data-trend-series]')){mark.removeAttribute('opacity');for(const path of mark.querySelectorAll('path'))path.setAttribute('stroke-width','1.4')}copy.setAttribute('xmlns',ns);const full=graph.getAttribute('data-trend-export-viewbox');if(full){copy.setAttribute('viewBox',full);copy.removeAttribute('data-trend-export-viewbox')}
  const {width,height}=copy.viewBox.baseVal;copy.setAttribute('width',width);copy.setAttribute('height',height);
  // One request per distinct emblem, even when many years share the same logo.
  const logos=new Map();let url;
@@ -141,7 +141,7 @@ function card(title,description,graph,exportTitle=title){
  if(graph?.hasAttribute('data-trend-line-chart')){
   const filters=node('div','trend-line-controls');filters.append(node('span','', '政党／曲线'));
   for(const [text,action] of [['全部显示','show'],['全部隐藏','hide']]){const b=node('button','button quiet',text);b.type='button';b.dataset.trendSeriesAction=action;b.onclick=()=>graph.dispatchEvent(new Event('trend-'+action+'-all'));filters.append(b)}
-  filters.append(node('span','data-help','点击图例显示或隐藏，悬停突出曲线'));c.append(filters);
+  filters.append(node('span','data-help','勾选下方图例显示曲线，滚轮缩放、拖动平移，双击复位'));c.append(filters);
  }
  c.prepend(h);if(description)c.append(node('p','data-help',description));if(graph)c.append(graph);return c
 }
@@ -166,15 +166,15 @@ function baseSvg(title,width,height){
  const g=svg('svg',{viewBox:'0 0 '+width+' '+height,role:'img','aria-label':title,'font-family':'Arial, "Microsoft YaHei", sans-serif','font-size':'12',fill:'#31473e'});
  g.append(svg('rect',{x:0,y:0,width,height,fill:'#fff'}),svg('title',{},title),svg('text',{x:18,y:22,'font-weight':700,'font-size':15},title));return g
 }
-function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=false,integer=false,compact=false,tall=false,grouped=false,axisMax=null,zoomPercent=false,seatDetail=false,panPercent=false}={}){
- if(pct&&!stack){zoomPercent=true;panPercent=true}
+function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=false,integer=false,compact=false,tall=false,grouped=false,axisMax=null,seatDetail=false}={}){
+ const zoomable=!stack;
  const width=Math.max(compact?520:tall?620:700,rows.length*(compact?72:rows.some(r=>r.scopeLabel)?79:65)+100),l=compact?52:64,r=width-20,top=48,bottom=compact?280:tall?550:seatDetail?458:270;
  const showScope=!grouped||new Set(rows.map(r=>r.scopeLabel||'')).size>1;
  const legendStart=grouped?bottom+(showScope?70:52):bottom+68,legend=[];
  let lx=20,ly=legendStart;
  for(const s of series){
   const name=s.name.length>16?s.name.slice(0,16)+'…':s.name;
-  const span=Math.min(width-40,Math.max(92,30+Array.from(name).reduce((n,ch)=>n+(/[^\x00-\x7f]/.test(ch)?(grouped?13:11):7),0)));
+  const span=Math.min(width-40,Math.max(92,(stack?30:56)+Array.from(name).reduce((n,ch)=>n+(/[^\x00-\x7f]/.test(ch)?(grouped?13:11):7),0)));
   if(lx>20&&lx+span>width-20){lx=20;ly+=25}
   legend.push({xx:lx,yy:ly,name,span});lx+=span;
  }
@@ -184,24 +184,25 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
  const vals=rows.flatMap((row,i)=>stack?[series.reduce((n,s)=>n+(s.get(row)||0),0)]:series.map(s=>s.get(row))).filter(Number.isFinite);
  const magnitude=axisMax??Math.max(1,...vals);
  const ticks=integer?T.integerTicks(magnitude):null;
+ if(zoomable&&ticks&&ticks.at(-1)<=magnitude)ticks.push(ticks.at(-1)+(ticks[1]-ticks[0]));
  const max=ticks?ticks.at(-1):pct?T.percentAxisMax([magnitude]):rank?Math.max(3,magnitude):magnitude*1.08;
  const slots=rows.map((row,i)=>i&&rows[i-1].year===row.year?0.72:1.18);
  const centers=[];let offset=0;for(let i=0;i<rows.length;i++){if(i)offset+=slots[i];centers.push(offset)}
  const unit=(r-l)/Math.max(1,offset+1.18),barWidth=Math.min(58,unit*.66);
- const defaultDomain=[0,max],ceiling=Math.max(100,max);
+ const defaultDomain=[0,max],ceiling=pct?Math.max(100,max):max;
  let domain=[...defaultDomain];const x=i=>l+unit*(.59+centers[i]),y=v=>rank?top+(v-1)/(max-1)*(bottom-top):bottom-(v-domain[0])/(domain[1]-domain[0])*(bottom-top);
  const axis=svg('g',{'data-trend-y-axis':'true'});g.append(axis);
  function drawAxis(){
   axis.replaceChildren();
-  for(const v of zoomPercent?(domain[0]===0&&domain[1]===max?Array.from({length:max/10+1},(_,i)=>i*10):T.percentZoomTicks(domain)):ticks||Array.from({length:5},(_,i)=>rank?1+i*(max-1)/4:i*max/4)){
+  for(const v of zoomable?(domain[0]===0&&domain[1]===max?(pct?Array.from({length:max/10+1},(_,i)=>i*10):(ticks||T.percentZoomTicks(domain))):T.percentZoomTicks(domain).filter(v=>!integer||Number.isInteger(v))):ticks||Array.from({length:5},(_,i)=>rank?1+i*(max-1)/4:i*max/4)){
    const yy=y(v);
-   axis.append(svg('line',{x1:l,x2:r,y1:yy,y2:yy,stroke:'#e2eae5'}),svg('text',{x:l-9,y:yy+4,'text-anchor':'end','font-size':grouped?13:11,'data-trend-axis-tick':String(v)},integer?String(v):rank?Math.round(v):pct?(zoomPercent?Number(v.toFixed(2)):Math.round(v))+'%':Intl.NumberFormat('zh-CN',{notation:'compact',maximumFractionDigits:1}).format(v)));
+   axis.append(svg('line',{x1:l,x2:r,y1:yy,y2:yy,stroke:'#e2eae5'}),svg('text',{x:l-9,y:yy+4,'text-anchor':'end','font-size':grouped?13:11,'data-trend-axis-tick':String(v)},integer?String(v):rank?Math.round(v):pct?(zoomable?Number(v.toFixed(2)):Math.round(v))+'%':Intl.NumberFormat('zh-CN',{notation:'compact',maximumFractionDigits:1}).format(v)));
   }
   g.setAttribute('data-trend-y-min',String(domain[0]));g.setAttribute('data-trend-y-max',String(domain[1]));
  }
  drawAxis();
  const plotUpdates=[];let clipId='';
- if(zoomPercent){clipId='trend-vote-clip-'+(++zoomClipId);const defs=svg('defs'),clip=svg('clipPath',{id:clipId});clip.append(svg('rect',{x:l,y:top,width:r-l,height:bottom-top}));defs.append(clip);g.append(defs);g.setAttribute('data-trend-zoom','percent');}
+ if(zoomable){clipId='trend-vote-clip-'+(++zoomClipId);const defs=svg('defs'),clip=svg('clipPath',{id:clipId});clip.append(svg('rect',{x:l,y:top,width:r-l,height:bottom-top}));defs.append(clip);g.append(defs);g.setAttribute('data-trend-zoom',pct?'percent':'count');}
 
  rows.forEach((row,i)=>{
   const labelText=row.label||String(row.year);
@@ -249,11 +250,11 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
    if(breakOld&&state.previous&&state.previous.oldPartyVote!==row.oldPartyVote)state.previous=null;
    state.points.push({i,v,move:!state.previous});state.previous=row;branches.set(k,state);
   });
-  for(const {points} of branches.values()){const path=svg('path',{fill:'none',stroke:s.color,'stroke-width':zoomPercent?1.4:2.5,'stroke-linejoin':'round',...(s.dash?{'stroke-dasharray':'6 4'}:{})});const update=()=>path.setAttribute('d',points.map(p=>(p.move?'M':'L')+x(p.i)+' '+y(p.v)).join(' '));update();if(zoomPercent)plotUpdates.push(update);marks.append(path)}
-  rows.forEach((row,i)=>{const v=s.get(row);if(!Number.isFinite(v))return;const p=svg('circle',{'data-trend-value':String(v),'data-trend-year':String(row.year),cx:x(i),cy:y(v),r:zoomPercent?2.8:4.5,fill:s.color,stroke:'#fff','stroke-width':zoomPercent?.6:1});addPoint(p,row,s,v);if(zoomPercent){const update=()=>{p.setAttribute('cy',y(v));p.setAttribute('tabindex',v>=domain[0]&&v<=domain[1]?'0':'-1')};update();plotUpdates.push(update)}marks.append(p)})
+  for(const {points} of branches.values()){const path=svg('path',{fill:'none',stroke:s.color,'stroke-width':zoomable?1.4:2.5,'stroke-linejoin':'round',...(s.dash?{'stroke-dasharray':'6 4'}:{})});const update=()=>path.setAttribute('d',points.map(p=>(p.move?'M':'L')+x(p.i)+' '+y(p.v)).join(' '));update();if(zoomable)plotUpdates.push(update);marks.append(path)}
+  rows.forEach((row,i)=>{const v=s.get(row);if(!Number.isFinite(v))return;const p=svg('circle',{'data-trend-value':String(v),'data-trend-year':String(row.year),cx:x(i),cy:y(v),r:zoomable?2.8:4.5,fill:s.color,stroke:'#fff','stroke-width':zoomable?.6:1});addPoint(p,row,s,v);if(zoomable){const update=()=>{p.setAttribute('cy',y(v));p.setAttribute('tabindex',v>=domain[0]&&v<=domain[1]?'0':'-1')};update();plotUpdates.push(update)}marks.append(p)})
 
  }
- if(zoomPercent){
+ if(zoomable){
   function setDomain(next){if(Math.abs(next[0]-domain[0])<1e-8&&Math.abs(next[1]-domain[1])<1e-8)return false;domain=next;drawAxis();for(const update of plotUpdates)update();return true}
   const zoom=(scale,anchor=.5)=>setDomain(T.percentZoomRange(domain,scale,anchor,ceiling));
   g.addEventListener('wheel',e=>{
@@ -263,8 +264,8 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
    const delta=e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?240:1);
    if(zoom(Math.exp(Math.max(-1.2,Math.min(1.2,delta*.002))), (bottom-point.y)/(bottom-top)))e.preventDefault();
   },{passive:false});
-  if(panPercent){
-  // Drag the percentage viewport vertically; preserve dates, values and zoom span.
+  {
+  // Drag the viewport vertically; preserve dates, values and zoom span.
   const plotPoint=e=>{const matrix=g.getScreenCTM();return matrix?new DOMPoint(e.clientX,e.clientY).matrixTransform(matrix.inverse()):null};
   const inside=p=>p&&p.x>=l&&p.x<=r&&p.y>=top&&p.y<=bottom;
   // A transparent hit area behind the data enables dragging empty plotting space.
@@ -297,25 +298,26 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
  function setVisible(name,visible){
   const scope=g.closest('.trend-merge-layout')||g;
   for(const mark of scope.querySelectorAll('[data-trend-series]'))if(!name||mark.getAttribute('data-trend-series')===name){if(visible)mark.removeAttribute('display');else mark.setAttribute('display','none')}
-  for(const item of scope.querySelectorAll('[data-trend-legend][role=button]'))if(!name||item.getAttribute('data-trend-legend')===name){item.setAttribute('aria-pressed',String(visible));item.setAttribute('opacity',visible?'1':'.35')}
+  for(const item of scope.querySelectorAll('[data-trend-legend][role=checkbox]'))if(!name||item.getAttribute('data-trend-legend')===name){item.setAttribute('aria-checked',String(visible));item.querySelector('[data-trend-checkbox-tick]').setAttribute('display',visible?'inline':'none');item.querySelector('[data-trend-checkbox-box]').setAttribute('fill',visible?'#287963':'#fff');item.querySelector('[data-trend-legend-label]').setAttribute('opacity',visible?'1':'.5')}
  }
  if(!stack){
-  g.setAttribute('data-trend-line-chart','true');
+  g.setAttribute('data-trend-line-chart','true');g.setAttribute('role','group');
   g.addEventListener('trend-show-all',()=>setVisible(null,true));g.addEventListener('trend-hide-all',()=>setVisible(null,false));
  }
  series.forEach((s,i)=>{
-  const {xx,yy,name,span}=legend[i],entry=svg('g',{'data-trend-legend':s.name});
-  entry.append(s.dash?svg('line',{x1:xx,x2:xx+12,y1:yy-5,y2:yy-5,stroke:s.color,'stroke-width':2,'stroke-dasharray':'4 2'}):svg('rect',{x:xx,y:yy-10,width:11,height:11,rx:2,fill:s.color}),svg('text',{x:xx+16,y:yy,'font-size':grouped?13:11},name));
+  const {xx,yy,name,span}=legend[i],entry=svg('g',{'data-trend-legend':s.name}),swatchX=xx+(stack?0:24);
+  entry.append(s.dash?svg('line',{x1:swatchX,x2:swatchX+12,y1:yy-5,y2:yy-5,stroke:s.color,'stroke-width':2,'stroke-dasharray':'4 2'}):svg('rect',{x:swatchX,y:yy-10,width:11,height:11,rx:2,fill:s.color}),svg('text',{x:swatchX+16,y:yy,'font-size':grouped?13:11,'data-trend-legend-label':'true'},name));
   // Do not hide parts of stacked seat totals: the original total must remain visible.
   if(!stack){
-   entry.setAttribute('role','button');entry.setAttribute('tabindex','0');entry.setAttribute('aria-pressed','true');entry.setAttribute('aria-label','切换 '+s.name+' 曲线');entry.style.cursor='pointer';
+   entry.setAttribute('role','checkbox');entry.setAttribute('tabindex','0');entry.setAttribute('aria-checked','true');entry.setAttribute('aria-label','显示 '+s.name+' 曲线');entry.style.cursor='pointer';
    entry.prepend(svg('rect',{x:xx-4,y:yy-19,width:span-3,height:24,rx:3,fill:'transparent','data-trend-legend-hit':'true','pointer-events':'all'}));
-   entry.append(svg('title',{},'点击显示或隐藏 '+s.name));
-   const toggle=()=>setVisible(s.name,entry.getAttribute('aria-pressed')!=='true');
+   entry.append(svg('rect',{x:xx,y:yy-14,width:16,height:16,rx:3,fill:'#287963',stroke:'#526f62','stroke-width':1.2,'data-trend-checkbox-box':'true'}),svg('path',{d:'M'+(xx+3)+' '+(yy-6)+' l3 3 l7 -8',fill:'none',stroke:'#fff','stroke-width':2,'stroke-linecap':'round','stroke-linejoin':'round','data-trend-checkbox-tick':'true'}),svg('title',{},'勾选显示、取消勾选隐藏 '+s.name));
+   const toggle=()=>setVisible(s.name,entry.getAttribute('aria-checked')!=='true');
    entry.addEventListener('click',toggle);entry.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle()}});
   }
   if(!stack){
-   const emphasize=active=>{for(const mark of (g.closest('.trend-merge-layout')||g).querySelectorAll('[data-trend-series]'))mark.setAttribute('opacity',!active||mark.getAttribute('data-trend-series')===s.name?'1':'.18')};
+   const emphasize=active=>{for(const mark of (g.closest('.trend-merge-layout')||g).querySelectorAll('[data-trend-series]')){const selected=active&&mark.getAttribute('data-trend-series')===s.name;mark.setAttribute('opacity',!active||selected?'1':'.18');for(const path of mark.querySelectorAll('path'))path.setAttribute('stroke-width',selected?'2.4':'1.4')}};
+   for(const mark of g.querySelectorAll('[data-trend-series]'))if(mark.getAttribute('data-trend-series')===s.name){mark.addEventListener('pointerenter',()=>emphasize(true));mark.addEventListener('pointerleave',()=>emphasize(false));mark.addEventListener('focusin',()=>emphasize(true));mark.addEventListener('focusout',()=>emphasize(false))}
    entry.addEventListener('pointerenter',()=>emphasize(true));entry.addEventListener('pointerleave',()=>emphasize(false));entry.addEventListener('focus',()=>emphasize(true));entry.addEventListener('blur',()=>emphasize(false));
   }
   g.append(entry);
@@ -435,8 +437,8 @@ function renderLegislative(conf,anchor,out){
  const voteSeries=partySeries(voteRows,listMode),voteType=ballot==='all'?(isLeg?'不分区':'全部议员'):({regional:'区域',plains:'平地少数民族',mountain:'山地少数民族',party:'不分区',indigenous:'原住民'}[ballot]||ballot);
  const voteSubject=ballot==='all'?(isLeg?'不分区民代':'全部议员'):voteType+(isLeg?'民代':'议员');
  const voteTitle=voteSubject+' · '+(isLeg&&(ballot==='all'||ballot==='party')?'政党票／旧制席次计算票得票率趋势':'候选人票得票率趋势（按所属政党汇总）');
- const voteNote=isLeg&&(ballot==='all'||ballot==='party')?'2008年前为各党推荐的区域与少数民族候选人票汇总，用于分配名单席次；2008年起为独立政党票。两种票源分别绘制，不跨制度连线。2008年前以扣除无党籍后的政党得票总数为分母；2008年起按实际政党票计算。滚轮缩放、按住左键上下拖动，双击复位。':!isLeg&&ballot==='all'?'区域和少数民族选票分别统计后汇总党派候选人票，分母为这些票数之和；选民可能投不同类别选票，不代表单一选民支持率。':'每个政党的候选人得票之和除以当前票种、当前范围的有效票；各党占比合计为100%。';
- appendTrendCharts(out,voteRows,voteSeries,voteTitle,voteNote,{pct:true,breakOld:isLeg&&(ballot==='all'||ballot==='party'),zoomPercent:listMode,panPercent:listMode},conf.county);
+ const voteNote=isLeg&&(ballot==='all'||ballot==='party')?'2008年前为各党推荐的区域与少数民族候选人票汇总，用于分配名单席次；2008年起为独立政党票。两种票源分别绘制，不跨制度连线。2008年前以扣除无党籍后的政党得票总数为分母；2008年起按实际政党票计算。':!isLeg&&ballot==='all'?'区域和少数民族选票分别统计后汇总党派候选人票，分母为这些票数之和；选民可能投不同类别选票，不代表单一选民支持率。':'每个政党的候选人得票之和除以当前票种、当前范围的有效票；各党占比合计为100%。';
+ appendTrendCharts(out,voteRows,voteSeries,voteTitle,voteNote,{pct:true,breakOld:isLeg&&(ballot==='all'||ballot==='party')},conf.county);
  const valuesTable=(rows,series,pct,title,displayedOnly=false)=>{
   const wrap=node('div','history-table-wrap'),table=node('table','history-candidate-table'),head=node('thead'),tr=node('tr');
   for(const heading of ['届次','当届地区','投票日期',...series.map(s=>s.name),displayedOnly?'显示合计':'合计'])tr.append(node('th','',heading));head.append(tr);table.append(head);
@@ -501,7 +503,7 @@ function render(){
  const voteRows=models.flatMap(item=>item.summary?item.summary[conf.level].voteRows:item.snapshot?T.localPartyVoteShares(item.snapshot,conf):[{year:item.year,label:label(item.year,conf.office),complete:false,reason:item.error,parties:{},valid:null}]).map(T.mergePresidentialIndependents);
  const voteSeries=partySeries(voteRows),voteTitle='候选人票得票率趋势（按所属政党汇总）';
  const voteNote='按当前选举类别和地图范围汇总候选人得票，再除以同范围有效票；同届多组无党籍候选人合并为同一类别，悬停可查看各候选人。'+(conf.office==='president'?'无党籍与连署统一为无党籍。':'')+(conf.office==='mayor'&&conf.level==='town'&&models.some(item=>item.year===2018)?'2018年台北市区级采用政大刊载的投票日资料，市级采用重计结果。':'');
- appendTrendCharts(out,voteRows,voteSeries,voteTitle,voteNote,{pct:true,zoomPercent:conf.office==='president'},conf.county);
+ appendTrendCharts(out,voteRows,voteSeries,voteTitle,voteNote,{pct:true},conf.county);
  const voteWrap=node('div','history-table-wrap'),voteTable=node('table','history-candidate-table'),voteHead=node('thead'),voteHeader=node('tr');
  for(const heading of ['届次','当届县市','投票日期',...voteSeries.map(s=>s.name),'合计'])voteHeader.append(node('th','',heading));voteHead.append(voteHeader);voteTable.append(voteHead);
  const voteBody=node('tbody');for(const r of voteRows){const tr=node('tr');tr.append(node('td','',r.label),node('td','',r.county||'全部地区'),node('td','',r.dates?.join(' / ')||'—'));for(const s of voteSeries)tr.append(node('td','',fmt(s.get(r),true)));tr.append(node('td','',r.complete?'100.00%':'—'));voteBody.append(tr)}voteTable.append(voteBody);voteWrap.append(node('h4','','候选人票得票率逐届明细（按所属政党汇总）'),voteTable);out.append(voteWrap);

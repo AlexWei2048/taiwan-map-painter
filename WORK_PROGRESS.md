@@ -341,3 +341,8 @@ Latest source revision: 20261030-no-offline-v11.
 - Added source-backed 2051-candidate blank official review CSV to CEC monitoring workflow. Qualification review remains distinct from November 17 candidate and ballot-number announcements.
 - Added verified mayoral ward/town turnout CSV ingestion with candidate-vote and ballot reconciliations. Unavailable local turnout is not inferred.
 - The 2026 historical result publication manifest remains awaiting_results; existing owner-only history permission and user predictions remain unchanged.
+
+## 2026-11-27：v128 折线图图例与交互
+- 图例增加可键盘操作的勾选框及显式勾选状态；同组历史县市子图联动。
+- 全站折线共用纵轴缩放、拖动、复位和悬停突出逻辑，覆盖得票率、得票数和指定政党席次。计数默认上限留白并保留整数刻度。
+- 导出保留当前显隐与勾选状态，移除临时悬停淡化及加粗。

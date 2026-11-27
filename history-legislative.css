@@ -190,8 +190,8 @@
 #historyResults .history-legislative-table[data-ballot="party"] .legislative-col-share{width:17%}
 
 /* Larger hit areas for trend legends; don't outline the text itself. */
-.trend-card svg [data-trend-legend][role=button]:focus{stroke:none;stroke-width:0}
-.trend-card svg [data-trend-legend][role=button]:focus-visible [data-trend-legend-hit]{stroke:#d38b25;stroke-width:1.5;fill:#f7f3e6;fill-opacity:.45}
+.trend-card svg [data-trend-legend][role=checkbox]:focus{stroke:none;stroke-width:0}
+.trend-card svg [data-trend-legend][role=checkbox]:focus-visible [data-trend-legend-hit]{stroke:#d38b25;stroke-width:1.5;fill:#f7f3e6;fill-opacity:.45}
 .trend-point-details{flex-basis:100%;min-width:0;font-size:12px;color:#315948}
 .trend-point-details summary{cursor:pointer;width:fit-content}
 .trend-point-details p{white-space:pre-line;overflow-wrap:anywhere;line-height:1.6;margin:6px 0 0}
@@ -224,5 +224,5 @@
 .trend-line-controls{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:8px 0;color:#31473e;font-size:12px}
 .trend-line-controls .button{padding:5px 9px;min-height:32px;font-size:12px}
 .trend-line-controls .data-help{margin:0 0 0 4px}
-.trend-card svg [data-trend-series] path{pointer-events:none}
+.trend-card svg [data-trend-series] path{pointer-events:stroke}
 .trend-card svg [data-trend-series] circle:hover,.trend-card svg [data-trend-series] circle:focus-visible{stroke:#31473e;stroke-width:1.5}
