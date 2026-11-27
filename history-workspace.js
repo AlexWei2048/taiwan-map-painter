@@ -136,7 +136,7 @@
   if(year===1994&&office==='council'&&scope==='county'){
    const profile=(indexed.snapshot.verifiedCouncilCountyProfiles||[]).find(p=>
     p.county===county||p.county===countyContest?.county_name_official);
-   if(profile&&result.contests.length===8&&overview.validVotes===profile.valid_votes&&
+   if(profile&&result.contests.length===8&&result.contests.every(c=>c.electorate==='regional')&&overview.validVotes===profile.valid_votes&&
       result.candidacies.length===profile.candidate_count&&
       result.candidacies.filter(c=>c.elected_official).length===profile.elected_count&&
       Number.isSafeInteger(profile.registered_voters)&&
