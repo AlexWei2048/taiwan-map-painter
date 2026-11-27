@@ -51,3 +51,38 @@ test('Every static dialog has an accessible heading; help and correction guide i
  assert.match(guide[1],/href="https:\/\/github\.com\/AlexWei2048\/taiwan-map-painter\/issues"/);
  assert.match(html,/<button\b[^>]*id="siteSearchOpen"[^>]*aria-keyshortcuts="Control\+K Meta\+K"/);
 });
+
+
+test('Map export rejects changed scope, changed plan and unfinished historical results',async()=>{
+ const app=read('app.js'),start=app.indexOf('function exportContextKey(){'),end=app.indexOf('let mapPromise',start);
+ assert.ok(start>=0&&end>start);
+ const source=app.slice(start,end);
+ function harness(){
+  let resolve;const pending=new Promise(ok=>{resolve=ok});
+  const context={state:{workspaceMode:'free',level:'council',county:'台北市',electorate:{council:'regional'},exportSettings:{winnerTable:false}},
+   data:{council:Array(161),councilIndigenous:Array(60)},detailRequests:{'议员选区':pending},
+   ensureMapDetails(){},currentItems:()=>[{}],localPredictionActive:()=>false};
+  vm.runInNewContext(source,context);
+  return {context,resolve,run:()=>context.ensureExportMapReady()};
+ }
+ for(const mode of ['unchanged','county','plan','history-loading','history-metric']){
+  const {context,resolve,run}=harness();
+  let historicalRoute={office:'council',year:2022,county:'台北市',metric:'party',level:'district',electorate:'all'};
+  if(mode.startsWith('history'))context.History2022View={active:()=>true,routeSelection:()=>historicalRoute,routeReady:()=>mode!=='history-loading'};
+  const result=run();
+  if(mode==='county')context.state.county='高雄市';
+  if(mode==='plan')context.state={...context.state};
+  if(mode==='history-metric')historicalRoute={...historicalRoute,metric:'share'};
+  resolve(true);
+  if(mode==='unchanged')await result;
+  else await assert.rejects(result,mode==='history-loading'?/历史资料尚未载入完成/:/地图范围或方案已变更/);
+ }
+});
+
+test('Regression workflow cancels superseded runs and waits for the performance server',()=>{
+ const workflow=read('.github/workflows/checks.yml');
+ assert.match(workflow,/concurrency:\s*\n\s*group: \$\{\{ github\.workflow \}\}-\$\{\{ github\.ref \}\}\s*\n\s*cancel-in-progress: true/);
+ const performance=workflow.slice(workflow.indexOf('  performance:'));
+ assert.match(performance,/npx playwright install --with-deps chromium/);
+ assert.match(performance,/curl -fsS http:\/\/127\.0\.0\.1:8765\/ >\/dev\/null\s*\n\s*MAP_PERF_REPEAT/);
+});
