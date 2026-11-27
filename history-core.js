@@ -254,6 +254,11 @@
   return rings.join('');
  }
  // A publication checksum detects stale/corrupt data; it is not a source signature.
+ // Label the actual verified snapshot, never the newest manifest alone.
+ function official2026Label(snapshot){
+  if(snapshot?.year!==2026)return '';
+  return snapshot.publicationStatus==='certified'?'正式公告结果':snapshot.publicationStatus==='provisional'?'开票结果（尚待正式公告）':'';
+ }
  function official2026Manifest(manifest,directory){
   return manifest?.schemaVersion===1&&manifest.year===2026&&manifest.status==='published'&&
    manifest.file==='assets/history-2026.json'&&['provisional','certified'].includes(manifest.resultStatus)&&
@@ -331,6 +336,6 @@
   if(hex!==manifest.sha256.toLowerCase())throw Error('2026正式结果文件校验值不一致，请重新载入');
   return validateOfficial2026(JSON.parse(new TextDecoder().decode(bytes)),manifest,directory);
  }
- const api={official2026Manifest,validateOfficial2026,decodeOfficial2026,identity,districtNumber,compareResultRows,key,sameScope,councilScope,legislativeScopeIndex,legislativeScope,csv,index,filter,contestSummary,overview,councilBadges,mergePaths};
+ const api={official2026Label,official2026Manifest,validateOfficial2026,decodeOfficial2026,identity,districtNumber,compareResultRows,key,sameScope,councilScope,legislativeScopeIndex,legislativeScope,csv,index,filter,contestSummary,overview,councilBadges,mergePaths};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.HistoryCore=api;
 })(typeof window==='undefined'?{}:window);
