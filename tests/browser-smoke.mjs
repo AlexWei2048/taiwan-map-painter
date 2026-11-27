@@ -3886,3 +3886,15 @@ test('Township executive comparison supports town grain and retains map nodes wh
  await page.locator('#workspacePrediction').click();await page.locator('#predictionOffice').selectOption('township');await page.waitForFunction(()=>document.querySelector('#regions path[data-map-status="no-election"]'));
  assert.equal(await page.locator('#regions path[data-map-status="no-election"]').first().getAttribute('fill'),'#ffffff');
  });
+
+ test('Sidebar separates common map controls and collapsed data tools without removing existing actions',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ assert.equal(await page.locator('#predictionDataTools').evaluate(e=>e.open),false);
+ assert.equal(await page.locator('#importPredictions').isVisible(),false);
+ await page.locator('#predictionDataTools summary').click();assert.equal(await page.locator('#importPredictions').isVisible(),true);assert.equal(await page.locator('#downloadPredictionTemplate').isVisible(),true);
+ await page.locator('#predictionDataTools summary').click();
+ assert.equal(await page.locator('#showLabels').isVisible(),true);assert.equal(await page.locator('#boundaryColor').isVisible(),false);
+ await page.locator('#mapAdvancedAppearance>summary').click();assert.equal(await page.locator('#boundaryColor').isVisible(),true);
+ await page.locator('#workspaceFree').click();assert.equal(await page.locator('#predictionModeChoices').isVisible(),false);assert.equal(await page.locator('#bulkPaintOpen').isVisible(),true);
+ await page.locator('#workspacePrediction').click();assert.equal(await page.locator('#predictionModeChoices').isVisible(),true);
+ });

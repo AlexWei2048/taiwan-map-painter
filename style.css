@@ -1072,3 +1072,20 @@ body.analysis-mode #historyTownBoundaryBox{display:none!important}
 
 /* Legend hover/focus follows actual party identities, not RGB values. */
 #legend [data-party-link]{cursor:pointer}#legend [data-party-link].party-linked-highlight text{font-weight:700;fill:#164a36}#legend [data-party-link].party-linked-highlight>rect:first-child{stroke:#174d39;stroke-width:2.5;vector-effect:non-scaling-stroke}#legend [data-party-link]:focus-visible{outline:2px solid #267657;outline-offset:3px}
+
+/* Keep routine map controls visible, and place data transfer and rare
+   appearance controls in labelled native disclosures. */
+#predictionModeChoices[hidden]{display:none!important}
+.sidebar .sidebar-tools{margin:9px 0 0;border:1px solid #dce6df;border-radius:8px;padding:0 10px;background:#fafcf9}
+.sidebar .sidebar-tools>summary{cursor:pointer;padding:10px 0;color:#315e4c;font-size:12px;font-weight:600;line-height:1.5}
+.sidebar .sidebar-tools[open]>summary{border-bottom:1px solid #e2eae3;margin-bottom:8px}
+#predictionDataTools .data-actions{display:grid!important;grid-template-columns:1fr;gap:6px;margin:8px 0 10px}
+#predictionDataTools .data-actions button{min-height:34px;text-align:left}
+.map-common-appearance .check{min-height:30px;margin:5px 0!important}
+.settings-panel>#mapAdvancedAppearance{padding-top:8px;margin-top:8px}
+#mapAdvancedAppearance>summary{padding:6px 0;font-weight:600;color:#315e4c}
+#mapAdvancedAppearance>.boundary-settings>summary{display:none}
+#mapAdvancedAppearance>.boundary-settings{margin-top:0}
+#regionSearchTools .count{float:right;font-size:11px;font-weight:400;color:#617b6b}
+#regionSearchTools .region-list{max-height:210px;overflow:auto}
+@media(max-width:700px){.sidebar #predictionDataTools .data-actions button{min-height:44px}.sidebar .sidebar-tools>summary,#mapAdvancedAppearance>summary{min-height:40px;padding:10px 0}.map-common-appearance .check{min-height:36px}}
