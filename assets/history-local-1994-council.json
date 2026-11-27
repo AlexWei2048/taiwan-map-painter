@@ -5393,6 +5393,18 @@
           "original_name": "林傳國",
           "ballot_number": 21,
           "votes": 5909
+        },
+        "26": {
+          "value": true,
+          "source_url": "https://eebulletin.cec.gov.tw/107/04%E6%A1%83%E5%9C%92%E5%B8%82/02%E5%B8%82%E8%AD%B0%E5%93%A1/%E6%A1%83%E5%9C%92%E5%B8%82%E7%AC%AC07%E9%81%B8%E8%89%89%E5%8D%80.pdf",
+          "source_locator": "2018年中壢第7選區1號履歷明載第12、13、15、16、17屆縣議員。公報文字可讀，頁面截圖未取得。",
+          "election_date": "1994-01-29",
+          "method": "documented_previous_term_election_bulletin",
+          "confidence": "published_election_bulletin",
+          "limitation": "依公開履歷推定，未取得投票日逐日任免名冊。",
+          "original_name": "張運炳",
+          "ballot_number": 26,
+          "votes": 7611
         }
       }
     },
@@ -5688,7 +5700,22 @@
           "女",
           true
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "3": {
+          "value": false,
+          "source_url": "https://lawmaker.twreporter.org/council/taoyuan/lawmaker/chang-chao-liang-taoyuan",
+          "source_locator": "報導者履歷列改制前第16、17屆議員；歷屆選舉資料顯示1998、2002均未當選，2005當選。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "依公開履歷推定，未取得投票日逐日任免名冊。",
+          "original_name": "張肇良",
+          "ballot_number": 3,
+          "votes": 5209,
+          "corroboration_url": "https://govtw.org/candidate/%E5%BC%B5%E8%82%87%E8%89%AF"
+        }
+      }
     },
     {
       "county": "桃園縣",
