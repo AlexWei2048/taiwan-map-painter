@@ -21618,13 +21618,32 @@
           "winner_name": "蘇金煌",
           "male_candidates": 2,
           "female_candidates": 0,
-          "previous_election_winner": "蘇金煌"
+          "previous_election_winner": "蘇金煌",
+          "turnout_pct": 63.96
         }
       ],
       "source_sha256": "066e33a9eaad9b02da2e7aad98336d19c0c3147bc99cec8885ccb65dac6b6e99",
       "profile_detail_source": {
         "source_url": "https://ws.yunlin.gov.tw/Download.ashx?icon=..pdf&n=MTA55bm057Wx6KiI5bm05aCxLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNTAzL3JlbGZpbGUvMTM5NTQvMzg3ODkxLzYwOTg0M2Y0LWI3OWMtNDNjMS04MjI3LTMwNGJkZDExZjcwOS5wZGY%3D",
         "source_locator": "109年四湖鄉統計年報表3-6，頁42–43（公開文字表格；頁面影像未能取得）"
+      },
+      "winners": [
+        {
+          "town": "四湖鄉",
+          "name": "蘇金煌",
+          "gender": "男",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_election_winner_inference",
+          "previous_term_holder": "蘇金煌",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://ws.yunlin.gov.tw/Download.ashx?icon=..pdf&n=MTA55bm057Wx6KiI5bm05aCxLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNTAzL3JlbGZpbGUvMTM5NTQvMzg3ODkxLzYwOTg0M2Y0LWI3OWMtNDNjMS04MjI3LTMwNGJkZDExZjcwOS5wZGY%3D"
+        }
+      ],
+      "supplementary_verification": {
+        "source_url": "https://ws.yunlin.gov.tw/Download.ashx?icon=..pdf&n=MTA55bm057Wx6KiI5bm05aCxLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNTAzL3JlbGZpbGUvMTM5NTQvMzg3ODkxLzYwOTg0M2Y0LWI3OWMtNDNjMS04MjI3LTMwNGJkZDExZjcwOS5wZGY%3D",
+        "source_locator": "109年四湖鄉統計年報表3-6，頁42–43；第11、12屆當選人同為蘇金煌；第12屆兩名候選人均為男性；投票率63.96%。公開文字表格可讀，截圖未取得；現任按相鄰兩屆當選人推定，未核逐日任免。"
       }
     },
     {
@@ -26153,6 +26172,105 @@
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/大城鄉"
+        }
+      ]
+    },
+    {
+      "county": "雲林縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/虎尾鎮",
+      "source_locator": "1993年3月日記明載虎尾鎮長張世和；歷任首長表第11、12任姓名合併列。",
+      "evidence_tier": "secondary_term_roster_with_identity_corroboration",
+      "validation_note": "非當屆開票表。第12屆姓名依歷任首長表合併欄推定，現任依相鄰任期推定，待原始選舉實錄複核；票數、號次及當屆推薦政黨留空。",
+      "corroboration_url": "https://books.masterhsingyun.org/ArticleDetail/artcle2381",
+      "additional_corroboration_url": "https://tcmb.culture.tw/zh-tw/detail?id=159740&indexCode=Culture_Invisible",
+      "winners": [
+        {
+          "town": "虎尾鎮",
+          "name": "張世和",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "張世和",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/虎尾鎮",
+          "corroboration_url": "https://books.masterhsingyun.org/ArticleDetail/artcle2381"
+        }
+      ]
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/田中鎮",
+      "source_locator": "彰化縣議會第11屆議員名錄載田中鎮謝友吉為男性；歷任鎮長表第11、12屆姓名合併列。",
+      "evidence_tier": "secondary_term_roster_with_identity_corroboration",
+      "validation_note": "非當屆開票表。第12屆姓名依歷任首長表合併欄推定，現任依相鄰任期推定，待原始選舉實錄複核；票數、號次及當屆推薦政黨留空。",
+      "corroboration_url": "https://www.chcc.gov.tw/form/Details.aspx?Parser=2,4,34,,,,35",
+      "winners": [
+        {
+          "town": "田中鎮",
+          "name": "謝友吉",
+          "gender": "男",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "謝友吉",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/田中鎮",
+          "corroboration_url": "https://www.chcc.gov.tw/form/Details.aspx?Parser=2,4,34,,,,35"
+        }
+      ]
+    },
+    {
+      "county": "南投縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/國姓鄉",
+      "source_locator": "國姓鄉歷屆代表名錄載莫健明為男性；歷任鄉長表第11、12任姓名合併列。",
+      "evidence_tier": "secondary_term_roster_with_identity_corroboration",
+      "validation_note": "非當屆開票表。第12屆姓名依歷任首長表合併欄推定，現任依相鄰任期推定，待原始選舉實錄複核；票數、號次及當屆推薦政黨留空。",
+      "corroboration_url": "https://www.guoshing.gov.tw/gstc/TownshipCouncilManagementSystem/tcms/representative-list/history-detail/13",
+      "winners": [
+        {
+          "town": "國姓鄉",
+          "name": "莫健明",
+          "gender": "男",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "莫健明",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/國姓鄉",
+          "corroboration_url": "https://www.guoshing.gov.tw/gstc/TownshipCouncilManagementSystem/tcms/representative-list/history-detail/13"
+        }
+      ]
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/左鎮區",
+      "source_locator": "歷任鄉長表轉引《左鎮鄉志》頁345–346，第11、12屆姓名合併列，1994年1月29日為第12屆投票日期；未取得原書頁面。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆開票表。第12屆姓名依歷任首長表合併欄推定，現任依相鄰任期推定，待原始選舉實錄複核；票數、號次及當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "左鎮鄉",
+          "name": "楊子祥",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "楊子祥",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/左鎮區"
         }
       ]
     }
