@@ -1,0 +1,34 @@
+{
+  "county": "新竹市",
+  "election_date": "1994-01-29",
+  "term": "第四屆",
+  "registered_voters": 215724,
+  "ballots_cast": 146139,
+  "valid_votes": 143247,
+  "invalid_votes": 2892,
+  "candidate_count": 49,
+  "male_candidates": 42,
+  "female_candidates": 7,
+  "elected_count": 26,
+  "male_elected": 23,
+  "female_elected": 3,
+  "source_url": "https://web.cec.gov.tw/api/file/5405a8b6-a012-4cc9-8d73-6cd3efbad85d.pdf",
+  "source_locator": "新竹市議會歷屆議員選舉概況統計表，第四屆，83.01.29；官方表列選舉人數、投票人數、投票率67.74%、當選26名。",
+  "level": "county",
+  "method": "official_county_overview_crosscheck_with_five_constituencies",
+  "official_fields": [
+    "registered_voters",
+    "ballots_cast",
+    "elected_count"
+  ],
+  "derived_fields": [
+    "valid_votes",
+    "invalid_votes",
+    "candidate_count",
+    "male_candidates",
+    "female_candidates",
+    "male_elected",
+    "female_elected"
+  ],
+  "limitations": "其他欄位來自倉庫既有五選區的合計，非官方表獨立提供；官方表文字可讀、截圖未取得。不得將市級資料分攤至選區。"
+}

@@ -23906,7 +23906,20 @@
           "男",
           true
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "15": {
+          "value": true,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/107%E5%B9%B4/21%E6%96%B0%E7%AB%B9%E5%B8%82/%E6%96%B0%E7%AB%B9%E5%B8%82%E7%AC%AC01%E9%81%B8%E5%8D%80%E5%B8%82%E8%AD%B0%E5%93%A1.pdf",
+          "source_locator": "2018年第一選區14號，經歷欄明載第三至八屆市議員；已核公報頁面。",
+          "method": "documented_consecutive_term_biography",
+          "evidence": "同縣市唯一姓名精確匹配；履歷明載上一屆任職。任期資料不等於逐日任免紀錄。",
+          "election_date": "1994-01-29",
+          "original_name": "鍾淑英",
+          "ballot_number": 15,
+          "votes": 3132
+        }
+      }
     },
     {
       "county": "新竹市",
@@ -23970,7 +23983,20 @@
           "男",
           true
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "4": {
+          "value": true,
+          "source_url": "https://eebulletin.cec.gov.tw/103/22%E6%96%B0%E7%AB%B9%E5%B8%82/%E5%B8%82%E8%AD%B0%E5%93%A1/%E6%96%B0%E7%AB%B9%E5%B8%82%E7%AC%AC2%E9%81%B8%E8%88%89%E5%8D%80.pdf",
+          "source_locator": "2014年第二選區4號，經歷欄明載第二至八屆市議員。",
+          "method": "documented_consecutive_term_biography",
+          "evidence": "同縣市唯一姓名精確匹配；履歷明載上一屆任職。任期資料不等於逐日任免紀錄。",
+          "election_date": "1994-01-29",
+          "original_name": "徐信芳",
+          "ballot_number": 4,
+          "votes": 3117
+        }
+      }
     },
     {
       "county": "新竹市",
@@ -24160,6 +24186,17 @@
           "original_name": "李黃錦燕",
           "ballot_number": 10,
           "votes": 4380
+        },
+        "11": {
+          "value": true,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/098%E5%B9%B4/10%E6%96%B0%E7%AB%B9%E5%B8%82/%E6%96%B0%E7%AB%B9%E5%B8%82%E7%AC%AC4%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "source_locator": "2009年第四選區4號，經歷欄明載第二至六屆市議員；已核公報頁面。",
+          "method": "documented_consecutive_term_biography",
+          "evidence": "同縣市唯一姓名精確匹配；履歷明載上一屆任職。任期資料不等於逐日任免紀錄。",
+          "election_date": "1994-01-29",
+          "original_name": "彭昆耀",
+          "ballot_number": 11,
+          "votes": 4723
         }
       }
     },
@@ -24251,7 +24288,31 @@
           "男",
           false
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "2": {
+          "value": true,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/098%E5%B9%B4/10%E6%96%B0%E7%AB%B9%E5%B8%82/%E6%96%B0%E7%AB%B9%E5%B8%82%E7%AC%AC5%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "source_locator": "2009年第五選區7號，經歷欄明載第三屆市議員；公開文字可讀，截圖未取得。",
+          "method": "documented_consecutive_term_biography",
+          "evidence": "同縣市唯一姓名精確匹配；履歷明載上一屆任職。任期資料不等於逐日任免紀錄。",
+          "election_date": "1994-01-29",
+          "original_name": "張憲堂",
+          "ballot_number": 2,
+          "votes": 2154
+        },
+        "4": {
+          "value": true,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/098%E5%B9%B4/10%E6%96%B0%E7%AB%B9%E5%B8%82/%E6%96%B0%E7%AB%B9%E5%B8%82%E7%AC%AC5%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "source_locator": "2009年第五選區2號，經歷欄記第一至七屆市議員；另見選委會合訂本 https://web.cec.gov.tw/api/file/59832bed-4a85-47a6-8333-470043e5ea26.pdf。",
+          "method": "documented_consecutive_term_biography",
+          "evidence": "同縣市唯一姓名精確匹配；履歷明載上一屆任職。任期資料不等於逐日任免紀錄。",
+          "election_date": "1994-01-29",
+          "original_name": "鄭成光",
+          "ballot_number": 4,
+          "votes": 4189
+        }
+      }
     },
     {
       "county": "臺中市",
@@ -27296,6 +27357,17 @@
           "ballot_number": 8,
           "votes": 5695,
           "additional_source": "https://tncc.digital.th.gov.tw/display.php?code=135251pQHmV"
+        },
+        "10": {
+          "value": true,
+          "source_url": "https://collections.nmth.gov.tw/CollectionContent.aspx?a=132&rno=2006.002.1358",
+          "source_locator": "台灣歷史博物館藏品說明明載曾任第8至13屆市議員；議會官方新聞另證連任七屆。",
+          "method": "documented_consecutive_term_biography",
+          "evidence": "同縣市唯一姓名精確匹配；履歷明載上一屆任職。任期資料不等於逐日任免紀錄。",
+          "election_date": "1994-01-29",
+          "original_name": "黃玉雲",
+          "ballot_number": 10,
+          "votes": 5419
         }
       },
       "gender_sources": {
@@ -27803,6 +27875,40 @@
       "election_date": "1994-01-29",
       "term": "第十三屆",
       "level": "county"
+    },
+    {
+      "county": "新竹市",
+      "election_date": "1994-01-29",
+      "term": "第四屆",
+      "registered_voters": 215724,
+      "ballots_cast": 146139,
+      "valid_votes": 143247,
+      "invalid_votes": 2892,
+      "candidate_count": 49,
+      "male_candidates": 42,
+      "female_candidates": 7,
+      "elected_count": 26,
+      "male_elected": 23,
+      "female_elected": 3,
+      "source_url": "https://web.cec.gov.tw/api/file/5405a8b6-a012-4cc9-8d73-6cd3efbad85d.pdf",
+      "source_locator": "新竹市議會歷屆議員選舉概況統計表，第四屆，83.01.29；官方表列選舉人數、投票人數、投票率67.74%、當選26名。",
+      "level": "county",
+      "method": "official_county_overview_crosscheck_with_five_constituencies",
+      "official_fields": [
+        "registered_voters",
+        "ballots_cast",
+        "elected_count"
+      ],
+      "derived_fields": [
+        "valid_votes",
+        "invalid_votes",
+        "candidate_count",
+        "male_candidates",
+        "female_candidates",
+        "male_elected",
+        "female_elected"
+      ],
+      "limitations": "其他欄位來自倉庫既有五選區的合計，非官方表獨立提供；官方表文字可讀、截圖未取得。不得將市級資料分攤至選區。"
     }
   ]
 }

@@ -1,0 +1,67 @@
+{
+  "date": "2026-11-27",
+  "baseline": "a70b93988dc4243a9d2f8c2735049ed11e86fbfd",
+  "method": "previous-term documented biography; no negative inference from missing biographical terms",
+  "records": [
+    {
+      "county": "新竹市",
+      "name": "鍾淑英",
+      "number": 1,
+      "ballot": 15,
+      "votes": 3132,
+      "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/107%E5%B9%B4/21%E6%96%B0%E7%AB%B9%E5%B8%82/%E6%96%B0%E7%AB%B9%E5%B8%82%E7%AC%AC01%E9%81%B8%E5%8D%80%E5%B8%82%E8%AD%B0%E5%93%A1.pdf",
+      "source_locator": "2018年第一選區14號，經歷欄明載第三至八屆市議員；已核公報頁面。"
+    },
+    {
+      "county": "新竹市",
+      "name": "彭昆耀",
+      "number": 4,
+      "ballot": 11,
+      "votes": 4723,
+      "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/098%E5%B9%B4/10%E6%96%B0%E7%AB%B9%E5%B8%82/%E6%96%B0%E7%AB%B9%E5%B8%82%E7%AC%AC4%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+      "source_locator": "2009年第四選區4號，經歷欄明載第二至六屆市議員；已核公報頁面。"
+    },
+    {
+      "county": "新竹市",
+      "name": "鄭成光",
+      "number": 5,
+      "ballot": 4,
+      "votes": 4189,
+      "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/098%E5%B9%B4/10%E6%96%B0%E7%AB%B9%E5%B8%82/%E6%96%B0%E7%AB%B9%E5%B8%82%E7%AC%AC5%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+      "source_locator": "2009年第五選區2號，經歷欄記第一至七屆市議員；另見選委會合訂本 https://web.cec.gov.tw/api/file/59832bed-4a85-47a6-8333-470043e5ea26.pdf。"
+    },
+    {
+      "county": "新竹市",
+      "name": "張憲堂",
+      "number": 5,
+      "ballot": 2,
+      "votes": 2154,
+      "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/098%E5%B9%B4/10%E6%96%B0%E7%AB%B9%E5%B8%82/%E6%96%B0%E7%AB%B9%E5%B8%82%E7%AC%AC5%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+      "source_locator": "2009年第五選區7號，經歷欄明載第三屆市議員；公開文字可讀，截圖未取得。"
+    },
+    {
+      "county": "新竹市",
+      "name": "徐信芳",
+      "number": 2,
+      "ballot": 4,
+      "votes": 3117,
+      "source_url": "https://eebulletin.cec.gov.tw/103/22%E6%96%B0%E7%AB%B9%E5%B8%82/%E5%B8%82%E8%AD%B0%E5%93%A1/%E6%96%B0%E7%AB%B9%E5%B8%82%E7%AC%AC2%E9%81%B8%E8%88%89%E5%8D%80.pdf",
+      "source_locator": "2014年第二選區4號，經歷欄明載第二至八屆市議員。"
+    },
+    {
+      "county": "臺南市",
+      "name": "黃玉雲",
+      "number": 5,
+      "ballot": 10,
+      "votes": 5419,
+      "source_url": "https://collections.nmth.gov.tw/CollectionContent.aspx?a=132&rno=2006.002.1358",
+      "source_locator": "台灣歷史博物館藏品說明明載曾任第8至13屆市議員；議會官方新聞另證連任七屆。"
+    }
+  ],
+  "unresolved_leads": [
+    {
+      "url": "https://tcmb.culture.tw/zh-tw/detail?id=167276&indexCode=Culture_Object",
+      "note": "續修新竹市志頁895–904；掃描頁未取到，不當作完整名冊。"
+    }
+  ]
+}
