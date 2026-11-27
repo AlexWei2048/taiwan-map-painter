@@ -1710,6 +1710,8 @@ function refreshRegionPath(p,f){
  const attrs=regionPathAttributes(f,identity);
  // Preserve keyboard focus and existing event listeners; border styling is applied below.
  delete attrs.tabindex;delete attrs.stroke;delete attrs['stroke-width'];
+ // History's final semantic attributes are set by paintHistory, not the modern renderer.
+ if(typeof History2022View!=='undefined'&&History2022View.active())for(const key of ['data-map-link','data-party-keys','data-map-status','aria-label'])delete attrs[key];
  for(const [key,value] of Object.entries(attrs)){const text=String(value);if(p.getAttribute(key)!==text)p.setAttribute(key,text)}
  const title=p.querySelector('title'),name=f.county+(f.name===f.county?'':f.name)+identity;
  if(title&&title.textContent!==name)title.textContent=name;
@@ -1898,7 +1900,7 @@ function render(){
  const paths=[...regionGroup.querySelectorAll('[data-region]')];
  const keyboardPath=paths.find(path=>path.dataset.region===mapKeyboardRegion)||paths[0];
  setMapKeyboardRegion(keyboardPath);
- if(restoreMapFocus&&!document.querySelector('dialog[open]'))keyboardPath?.focus({preventScroll:true});
+ if(restoreMapFocus&&!document.querySelector('dialog[open]')){keyboardPath?.focus({preventScroll:true});const f=keyboardPath&&renderedRegionFeatures.get(keyboardPath);if(f)toggleLabelRegionHighlight(f,true)}
 }
 function recolor(){if(state.fillMode==='prediction'){render();return}const features=new Map(currentItems().map(f=>[String(f.id),f]));if(state.fillMode==='gradient'){for(const p of $('regions').querySelectorAll('path')){const f=features.get(p.dataset.region);if(!f)continue;p.dataset.partyKeys=JSON.stringify(mapPartyKeys(f));p.dataset.mapStatus=modernMapStatus(f);p.setAttribute('fill',fillColor(f));p.setAttribute('aria-label',f.county+(f.name===f.county?'':f.name)+'，'+regionDetail(f));}return;}for(const p of $('regions').querySelectorAll('path')){const f=features.get(p.dataset.region);if(!f)continue;p.dataset.partyKeys=JSON.stringify(mapPartyKeys(f));p.dataset.mapStatus=modernMapStatus(f);const pal=paletteById(featureFillId(f));p.setAttribute('fill',fillColor(f));p.setAttribute('aria-label',f.county+(f.name===f.county?'':f.name)+'，'+(pal?.name||'未填色'))}}
 function paint(f){if(freeNationwideDistrictMap()){pushHistory();state.county=f.county;state.villageTown='';$('tooltip').hidden=true;syncInputs();render();persist();return}if(freeCountyOverview()){pushHistory();state.county=f.county||f.name;state.villageTown='';$('tooltip').hidden=true;syncInputs();render();persist();return}if((councilCountyOverview()||townshipCountyOverview())&&typeof openPredictionRegion==='function'){openPredictionRegion(f);return}if(noTownshipElection(f))return toast('本区域不举行乡镇市区长选举');if(state.fillMode==='prediction'&&typeof openPredictionRegion==='function'){openPredictionRegion(f);return}if(state.fillMode==='gradient'){if(erase){pushHistory();delete state.elections[state.level][f.id];afterElectionEdit();return;}openVoteEditor(f);return;}const id=erase?undefined:state.selected,store=f.legislativeTown?state.legislativeTownFills[featureElectorate(f)]:state.fills[state.level],key=f.legislativeTown?f.sourceId:f.id;if(store[key]===id)return;pushHistory();if(id)store[key]=id;else delete store[key];recolor();renderPalette();renderLegend();renderList();updateProgress();persist()}
