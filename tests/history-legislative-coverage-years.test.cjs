@@ -28,6 +28,19 @@ test('Legislative historical coverage uses verified separate turnout files in al
   assert.ok(summary.countyRows>0,year+' missing county vote records');
   assert.equal(summary.missingVotes,0,year+' must not have missing candidate votes');
   assert.equal(summary.unreconciled,0,year+' candidate valid-vote sums must reconcile');
+  assert.equal(summary.missingWinner,0,year+' elected candidates must reconcile with seats');
+  assert.equal(summary.missingParty,0,year+' party must be known');
+  assert.equal(summary.missingNumber,0,year+' ballot numbers must be available');
+  if(year===1992){
+   assert.equal(summary.status,'partial','1992 mountain-indigenous national turnout remains unverified');
+   assert.equal(summary.missingTurnout,1,'Only the 1992 mountain-indigenous national turnout remains unknown');
+   assert.equal(summary.missingIncumbent,1,'1992 one candidate incumbent attribute remains unknown');
+   assert.equal(summary.countyPartial,0,'County candidate returns are available');
+  }else{
+   assert.equal(summary.status,'recorded',year+' principal election data must be complete');
+   assert.equal(summary.missingTurnout,0,year+' separate turnout profiles must be verified');
+   assert.equal(summary.countyPartial,0,year+' county constituency results must be complete');
+  }
  }
  console.log('LEGISLATIVE_COVERAGE_VERIFIED',JSON.stringify(summaries));
 });
