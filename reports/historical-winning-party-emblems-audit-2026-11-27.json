@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 1,
+  "auditDate": "2026-11-27",
+  "scope": "Historical elected legislative and county/city council party names in site datasets (1992–2024). Nonpartisan is included only as an existing UI symbol.",
+  "existing": [
+    {
+      "name": "中国国民党",
+      "status": "existing_verified_asset",
+      "lookup": "blue"
+    },
+    {
+      "name": "民主进步党",
+      "status": "existing_verified_asset",
+      "lookup": "green"
+    },
+    {
+      "name": "无党籍",
+      "status": "existing_verified_asset",
+      "lookup": "gray"
+    },
+    {
+      "name": "中华社会民主党",
+      "status": "existing_verified_asset",
+      "lookup": "csdp"
+    },
+    {
+      "name": "新党",
+      "status": "existing_verified_asset",
+      "lookup": "np"
+    },
+    {
+      "name": "亲民党",
+      "status": "existing_verified_asset",
+      "lookup": "pfp"
+    },
+    {
+      "name": "无党团结联盟",
+      "status": "existing_verified_asset",
+      "lookup": "npsu"
+    },
+    {
+      "name": "台湾团结联盟",
+      "status": "existing_verified_asset",
+      "lookup": "tsu"
+    },
+    {
+      "name": "时代力量",
+      "status": "existing_verified_asset",
+      "lookup": "npp"
+    },
+    {
+      "name": "台湾基进",
+      "status": "existing_verified_asset",
+      "lookup": "tsp"
+    },
+    {
+      "name": "劳动党",
+      "status": "existing_verified_asset",
+      "lookup": "lpt"
+    },
+    {
+      "name": "台湾第一民族党",
+      "status": "existing_verified_asset",
+      "lookup": "tfnp"
+    },
+    {
+      "name": "树党",
+      "status": "existing_verified_asset",
+      "lookup": "tp"
+    },
+    {
+      "name": "绿党",
+      "status": "existing_verified_asset",
+      "lookup": "gpt"
+    },
+    {
+      "name": "台湾民众党",
+      "status": "existing_verified_asset",
+      "lookup": "aqua"
+    },
+    {
+      "name": "社会民主党",
+      "status": "existing_verified_asset",
+      "lookup": "sdp"
+    },
+    {
+      "name": "民国党",
+      "status": "existing_verified_asset",
+      "lookup": "mkt"
+    },
+    {
+      "name": "中华民族致公党",
+      "status": "existing_verified_asset",
+      "lookup": "historical_name"
+    },
+    {
+      "name": "新国家连线",
+      "status": "existing_verified_asset",
+      "lookup": "historical_name"
+    }
+  ],
+  "unverified": [
+    {
+      "name": "建国党",
+      "status": "unverified_original_emblem",
+      "action": "do_not_substitute_unrelated_party_logo_or_fabricate"
+    },
+    {
+      "name": "全国民主非政党联盟",
+      "status": "unverified_original_emblem",
+      "action": "do_not_substitute_unrelated_party_logo_or_fabricate"
+    },
+    {
+      "name": "民主联盟",
+      "status": "unverified_original_emblem",
+      "action": "do_not_substitute_unrelated_party_logo_or_fabricate"
+    },
+    {
+      "name": "台湾吾党",
+      "status": "unverified_original_emblem",
+      "action": "do_not_substitute_unrelated_party_logo_or_fabricate"
+    },
+    {
+      "name": "中国台湾原住民党",
+      "status": "unverified_original_emblem",
+      "action": "do_not_substitute_unrelated_party_logo_or_fabricate"
+    }
+  ],
+  "importantNotes": [
+    "建国党 is distinct from 台湾建国党 and 台澎国际法法理建国党; never reuse their logos.",
+    "中国台湾原住民党 is the canonical display name; 中国台湾少数民族党 is a legacy erroneous display alias.",
+    "Sources for existing logos: assets/party-logos.js, assets/party-logos-sourced.js, assets/party-logos-archive.js, reports/official-party-logos-import.json.",
+    "Official registration pages may say 未上传党徽. In that case the absent original emblem is not to be replaced with a fabricated logo.",
+    "1992 mountain candidates total 63831 votes, but township-level Hua Jia-zhi rows sum 16782 while independent Stanford source and CEC-derived national rows give 16784. Preserve the 2-vote discrepancy pending location-level proof."
+  ],
+  "sources": [
+    "https://fsi-live.s3.us-west-1.amazonaws.com/s3fs-public/cddrl-wps-templeman-abelecs.20150811.pdf",
+    "https://web.cec.gov.tw/api/file/fe5b4aa2-5a85-44d1-9a1e-f3382ab85388.pdf",
+    "https://party.moi.gov.tw/",
+    "https://www2.nsysu.edu.tw/politics/liu/conferencepresentations/20190510_presentation_TaiwanVoterIdentity_FCSLIU_KUL.pdf"
+  ]
+}
