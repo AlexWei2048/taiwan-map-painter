@@ -36,6 +36,34 @@
       "source": "https://www.kmdn.gov.tw/1117/1271/1272/108008/?cprint=pt",
       "corroboration": "https://votetw.com/data/candidate/%E6%9D%8E%E6%96%87%E4%BF%8A",
       "note": "2002年交接报道确认原任乡长吴怡跑连任两届，新任李文俊；候选人翁自然非现任。"
+    },
+    {
+      "id": "2002-council:台南县:regional:第1选举区:6",
+      "name": "杨振基",
+      "votes": 505,
+      "office": "council",
+      "county": "台南县",
+      "district": "第1选举区",
+      "number": 6,
+      "source": "https://votetw.com/data/candidate/%E9%BB%83%E9%87%91%E9%8F%9E",
+      "corroboration": "https://whoareyou.readr.tw/election?area=%E8%87%BA%E5%8D%97%E7%B8%A3&type=%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1&year=1998",
+      "original_source": "https://vote.nccu.edu.tw/cec/vote3.asp?pass1=O%3A88%3A8%3E%3A99888888iii%28%28",
+      "original_incumbency_code": "M",
+      "method": "secondary_crosscheck_prior_election",
+      "note": "2002年候选人表号次6、1937年出生、505票一致；政大现任代码M异常，votetw显示否；READr前届完整参选表无此人。按交叉资料补非现任，非投票日原件直接确认。"
+    },
+    {
+      "id": "2002-council:花莲县:regional:第4选举区:8",
+      "name": "郭远华",
+      "votes": 511,
+      "office": "council",
+      "county": "花莲县",
+      "district": "第4选举区",
+      "number": 8,
+      "source": "https://votetw.com/data/candidate/%E9%99%B3%E6%A6%AE%E8%B2%A1",
+      "corroboration": "https://zh.wikipedia.org/wiki/%E8%8A%B1%E8%93%AE%E7%B8%A3%E8%AD%B0%E6%9C%83%E7%AC%AC%E5%8D%81%E5%9B%9B%E5%B1%86%E8%AD%B0%E5%93%A1%E5%88%97%E8%A1%A8",
+      "method": "secondary_crosscheck_prior_election",
+      "note": "同一资料页列2002年8号1956年出生511票且非现任，1998年同区完整候选人及当选人名单均无此人；前届名单交叉验证，非投票日原件直接确认。"
     }
   ],
   "withdrawal": {
