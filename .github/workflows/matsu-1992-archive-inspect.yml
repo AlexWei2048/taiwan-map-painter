@@ -13,5 +13,5 @@ jobs:
       - uses: actions/checkout@v4
       - name: Read publicly accessible archive metadata and text
         run: |
-          python -m pip install -q beautifulsoup4
+          python -m pip install -q beautifulsoup4 pymupdf
           python -u scripts/inspect_matsu_1992_archive.py

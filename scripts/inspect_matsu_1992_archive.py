@@ -1,5 +1,6 @@
 """One-time read-only archival discovery; never modifies election data."""
-import urllib.request, urllib.parse, subprocess, tempfile, pathlib, hashlib
+import urllib.request, urllib.parse, tempfile, pathlib, hashlib
+import pymupdf
 from bs4 import BeautifulSoup
 base='https://data.matsu-news.gov.tw/main.php'
 def fetch(url, data=None, limit=2_000_000):
@@ -22,9 +23,9 @@ try:
         p=pathlib.Path(tmp)/'archive.pdf'
         p.write_bytes(fetch(url,limit=70_000_000))
         print('PDF_BYTES',p.stat().st_size,'SHA256',hashlib.sha256(p.read_bytes()).hexdigest(),flush=True)
-        print(subprocess.check_output(['pdfinfo',str(p)],text=True)[:3000],flush=True)
-        result=subprocess.check_output(['pdftotext','-layout',str(p),'-']).decode('utf-8','replace')
-        pages=result.split('\f')
+        with pymupdf.open(p) as doc:
+            print('PDF_PAGES',len(doc),flush=True)
+            pages=[page.get_text(sort=True) for page in doc]
         print('TEXT_PAGE_LENGTHS',[(i+1,len(s.strip())) for i,s in enumerate(pages)],flush=True)
         for i,s in enumerate(pages):
             if ('曹爾忠' in s or '曹原彰' in s or '立委' in s or '立法委員' in s) and len(s.strip())>30:
