@@ -268,6 +268,9 @@ def dispatch(action,data,db):
         if not order or type(offset) is not int or not 0<=offset<=10000:
             raise Problem("无效分页")
         return rows(db.execute("SELECT "+PUBLIC+" FROM messages m WHERE m.visibility='approved' AND m.private=0 AND (?='' OR m.category=?) AND (?='' OR m.progress=?) AND (?='' OR instr(lower(m.title||' '||m.body||' '||m.nickname),lower(?))>0) ORDER BY m.pinned DESC,"+order+" LIMIT 20 OFFSET ?",(category,category,progress,progress,search,search,offset)))
+    if action == "guestbook_my_updates":
+        digest=owner(data.get("p_secret"))
+        return rows(db.execute("SELECT id,revision,visibility,progress,CASE WHEN reply!='' THEN 1 ELSE 0 END AS has_reply FROM messages WHERE owner_hash=? ORDER BY created_epoch DESC,id DESC LIMIT 100",(digest,)))
     if action == "guestbook_mine":
         digest=owner(data.get("p_secret"))
         return rows(db.execute("SELECT "+PUBLIC+",m.visibility,m.private,c.contact,EXISTS(SELECT 1 FROM attachments a WHERE a.message_id=m.id) AS has_attachment FROM messages m LEFT JOIN contacts c ON m.id=c.message_id WHERE m.owner_hash=? ORDER BY m.created_epoch DESC,m.id DESC LIMIT 100",(digest,)))
@@ -432,7 +435,7 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
     def do_GET(self):
         if self.path=="/health":
-            return self.reply(200,{"ok":True,"version":2,"features":["edit","detail","progress-filter","admin-search","attachment","admin-counts"]})
+            return self.reply(200,{"ok":True,"version":2,"features":["edit","detail","progress-filter","admin-search","attachment","admin-counts","own-updates"]})
         self.reply(404,{"message":"接口不存在"})
     def do_POST(self):
         try:
@@ -442,7 +445,7 @@ class Handler(BaseHTTPRequestHandler):
             if not self.path.startswith(prefix):
                 raise Problem("接口不存在",404)
             action=self.path[len(prefix):]
-            if action not in {"guestbook_submit","guestbook_public","guestbook_mine","guestbook_remove_contact","guestbook_withdraw","guestbook_vote","guestbook_votes","guestbook_admin_list","guestbook_admin_update","guestbook_admin_delete","guestbook_edit","guestbook_detail","guestbook_attachment","guestbook_remove_attachment","guestbook_admin_counts"}:
+            if action not in {"guestbook_submit","guestbook_public","guestbook_mine","guestbook_remove_contact","guestbook_withdraw","guestbook_vote","guestbook_votes","guestbook_admin_list","guestbook_admin_update","guestbook_admin_delete","guestbook_edit","guestbook_detail","guestbook_attachment","guestbook_remove_attachment","guestbook_admin_counts","guestbook_my_updates"}:
                 raise Problem("接口不存在",404)
             if self.headers.get_content_type()!="application/json":
                 raise Problem("请求格式错误",415)
