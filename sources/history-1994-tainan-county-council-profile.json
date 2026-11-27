@@ -1,0 +1,20 @@
+{
+  "county": "臺南縣",
+  "election_date": "1994-01-29",
+  "term": "第十三屆",
+  "registered_voters": 707461,
+  "ballots_cast": 566668,
+  "valid_votes": 556192,
+  "invalid_votes": 10476,
+  "candidate_count": 97,
+  "male_candidates": 83,
+  "female_candidates": 14,
+  "elected_count": 50,
+  "male_elected": 43,
+  "female_elected": 7,
+  "source_url": "https://w3fs.tainan.gov.tw/001/Upload/2/attachment/9370/107/1010718stat001.pdf",
+  "source_locator": "《99年臺南縣統計要覽》（第62期）表3-9「縣議員選舉概況」，第十三屆83/01/29，印刷頁3-24至3-25，資料來源：台南市選委會",
+  "level": "county",
+  "method": "official_statistical_yearbook_county_totals_reconciled_with_ten_constituencies",
+  "limitations": "僅作縣級官方數據獨立核驗；不改寫已核實的十選區投票人數、選民數或逐人資料。"
+}
