@@ -57,7 +57,7 @@ function extra(archive,kinmen,availability){
  const full=new Set(["臺北縣","高雄縣","新竹縣","連江縣","宜蘭縣"]);
  for(const county of ["臺北縣","宜蘭縣","桃園縣","新竹縣","苗栗縣","臺中縣","彰化縣","南投縣","雲林縣","嘉義縣","臺南縣","高雄縣","屏東縣","臺東縣","花蓮縣","澎湖縣","金門縣","連江縣"])if(!full.has(county))add(1994,"township",county,"","partial","candidate_results","sources/history-1994-township.json",`${archive.counties.filter(c=>c.county===county).reduce((a,c)=>a+c.contest_count,0)}区已有结果；待查当届完整行政区名录`);
  add(1994,"council","金門縣","","partial",["candidate_results","turnout",...(Number.isInteger(kinmen.reserved_seats)?[]:["reserved_seats"])].join(";"),"sources/history-1994-kinmen-partial.json",`${kinmen.candidate_count}参选；${kinmen.elected_count}当选；其他候选人部分资料${kinmen.other_candidates.length}人`);
- add(1992,"legislative","","","conflict","national_vs_local_votes","assets/history-legislative-1992-local.json","山地少数民族票差2票；华加志","national");
+ add(1992,"legislative","","","partial","unassigned_local_votes","assets/history-legislative-1992-local.json","全区63,831票经官方及学术来源交叉核对；地方63,829票，华加志2票地理归属未载","national");
  for(const y of [1996,2000])add(y,"president","台南市","中区、西区","unverified","historical_boundary","history-presidential.js","采用合并后轮廓","town");
  add(1992,"legislative","","","unverified","historical_boundary","history-legislative.js","金门和马祖仍采用参考年份归属，其他选区采用政大当届乡镇归属及现行近似轮廓","map");
  add(2026,"local","","",availability.status==="awaiting_results"?"not_yet_available":"unscanned","official_results","assets/history-2026-availability.json","选举结果未发布或须另行扫描","year");
