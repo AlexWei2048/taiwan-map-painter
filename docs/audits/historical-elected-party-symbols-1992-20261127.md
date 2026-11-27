@@ -50,3 +50,12 @@
 - 新的1992数据来源线索：黄纪教授TPGIS 2.0（https://tpgis2.nccu.edu.tw/ ）；建库报告 https://ah.lib.nccu.edu.tw/bitstream/140.119/133375/1/411.pdf 正文第4页明确说明早期数据系人工查核纸质选举实录后录入，并记载2014年由ICPSR收录（编号35189）。本轮网站及ICPSR入口均未成功打开，报告文本可读但原页截图获取失败，尚未实际取得可用于候选人核对的TPGIS表。另据政大《原住民参选立法委员之研究》参考文献 https://thesis.lib.nccu.edu.tw/thesis/detail/647b0a3e980bd94dc1f37c42f5370de3/ ，有1992南投县选务总报告与1993出版的屏东县选举实录两个地方纸本来源，尚未取得正文扫描。
 - 历史徽旗：新北选委会原始公报入口1998 https://web.cec.gov.tw/tpcec/article/11895 、2001 https://web.cec.gov.tw/tpcec/article/11896 。1998不分区公报 https://web.cec.gov.tw/api/file/b0c41421-3c3f-4999-ba7c-7c8f3684099f.pdf 因文件大小超过在线读取限制未打开，1998少数民族公报 https://web.cec.gov.tw/api/file/22fd933a-f533-4ee3-a0ca-f4d5060a9000.pdf 获取失败，2001少数民族公报 https://web.cec.gov.tw/api/file/d0708334-5933-4c2a-ba47-52a039b6d031.pdf 无可提取文字且原页截图获取失败。不能断定公报包含或不包含徽旗。文化记忆库1998年文宣藏品 https://tcmb.culture.tw/zh-tw/detail?id=732900&indexCode=Culture_Object 的说明独立佐证民主联盟4席及全国民主非政党联盟3席，但其文宣属于建国党候选人，不能用来认定两党徽旗。图片检索命中的2024原民党正式标志亦不能冒用给历史中国台湾原住民党。
 - 本轮无经充分核证的新增党徽或2票的地理归属，仅更新证据记录；不修改选票、地图及徽旗文件。
+
+## 七、续查：馆藏索书号、公报替代入口及党籍图标排除
+
+- 马祖文献中心馆藏目录 https://client.matsu.idv.tw/literature/literature-5-2.php 第328项列中选会《第二届立法委员选举实录》（81.12），索书号 573.3 / 8687 / v.2。Google Books 的既有记录 https://books.google.com/books?id=aeXmnMrIP-kC 进一步提供 ISBN 9789570035063、1067页、威斯康星大学麦迪逊分校原藏本（2017年数字化），另有书目记录 https://books.google.com/books?id=cVx30AEACAAJ 。这些是馆藏定位信息，不代表已获取计票表。
+- 马祖当年原始报道：连江县选委会撰〈二届立委选举圆满成功〉，《今日马祖》第55期，9–13页，馆藏目录 https://twlld.nmth.gov.tw/literal-detail/304/7/1 。目录标示1992-12-01，早于12月19日投票，刊期与实际成文日可能不同，正文尚未取得，不引用其票数。马祖县志转录 https://board.matsu.idv.tw/board_view.php?board=142&link=69967&pid=69967&start=14 仅提供区域民代选务及计票，不能证明山地选区在马祖为零票。
+- 中选会另有独立公报档案网站 https://bulletin.cec.gov.tw/index2.php?action=sitemap ，已确认索引含1992金门、马祖区域公报、1998不分区公报及2001平地山地少数民族公报。1998索引页面可访问，但2001对应索引正文读取失败，未取得可验证的徽旗图。公报本身不能用作1992年计票来源。
+- 政大研究发展处的介绍 https://ord.nccu.edu.tw/files/news/2597_59fad12a.pdf 确认TPGIS以村里为基本地理单位保存1991年以来选举资料；政大台灣政經傳播研究中心 https://tigcr.nccu.edu.tw/tw/ 提供TPGIS 2.0数据引用说明，是后续申请早期历史选举明细的明确机构入口。本轮尚未成功获取ICPSR 35189数据文件；政大现有山地县市明细网址亦未成功重新打开。不得把研究中心介绍当成实际票数来源。
+- 台湾吾党图标排除：立法机构第五届瓦历斯·贝林个人页 https://www.ly.gov.tw/Pages/List.aspx?nodeid=1097 使用无党团结联盟徽章，不能将其当作2001年台湾吾党的徽章；应按选举当时推荐政党而非任内变更后的党籍确定图标。另有官方候选人名册 https://web.cec.gov.tw/api/file/9255d5fb-ee03-4533-88b2-9dcce3cbef04.pdf 的搜索索引确认其第7号、台湾吾党推荐，但未核原页图像，不能作为党徽图片来源。2001成立报道的另一百科转载 https://www.jendow.com.tw/wiki/台灣吾黨 文字与既有线索重复，并非独立证据。
+- 本轮未取得可以解决票数差额或补齐四个历史党徽的直接证据。下一步优先调阅上述书目与公报原页，不再将相同二次百科的不同转载计算为新证据；维持选票数据和网站图标不变。
