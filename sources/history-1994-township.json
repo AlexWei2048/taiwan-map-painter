@@ -5614,6 +5614,108 @@
           "corroboration_url": "https://zh.wikipedia.org/wiki/達仁鄉"
         }
       ]
+    },
+    {
+      "county": "臺東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E5%8D%91%E5%8D%97%E9%84%89",
+      "source_locator": "歷任首長表第10–11屆邱慶華、第12–13屆張卓然；1998年選舉資料列張卓然為男性、現任、當選，並與1998年官方會見鄉鎮市長名單相符。",
+      "corroboration_url": "https://votetw.com/data/candidate/%E5%BC%B5%E5%8D%93%E7%84%B6",
+      "evidence_tier": "secondary_roster_and_subsequent_election",
+      "validation_note": "非當屆原始開票表；當選人及現任按任期名錄推定，未知字段保留空值。",
+      "winners": [
+        {
+          "town": "卑南鄉",
+          "name": "張卓然",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "邱慶華",
+          "gender": "男",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E5%8D%91%E5%8D%97%E9%84%89",
+          "corroboration_url": "https://votetw.com/data/candidate/%E5%BC%B5%E5%8D%93%E7%84%B6"
+        }
+      ]
+    },
+    {
+      "county": "臺東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E5%BB%B6%E5%B9%B3%E9%84%89",
+      "source_locator": "歷任首長表第11–12屆1990.03–1998.02；1991年新聞數位典藏及1997年最高法院86年度台上字第2350號民事判決均列邱勝英為延平鄉公所首長或法定代理人；1998年議員結果列男性。",
+      "corroboration_url": "https://lawplayer.com/valuable-judgment/646b30e5c3e2a9cc78b19dba",
+      "evidence_tier": "term_roster_and_contemporary_judgment",
+      "validation_note": "非當屆原始開票表；當選人及現任按任期名錄推定，未知字段保留空值。",
+      "additional_source": "https://catalog.digitalarchives.tw/item/00/31/e6/dc.html",
+      "winners": [
+        {
+          "town": "延平鄉",
+          "name": "邱勝英",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "邱勝英",
+          "gender": "男",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E5%BB%B6%E5%B9%B3%E9%84%89",
+          "corroboration_url": "https://lawplayer.com/valuable-judgment/646b30e5c3e2a9cc78b19dba"
+        }
+      ]
+    },
+    {
+      "county": "臺東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E9%87%91%E5%B3%B0%E9%84%89_(%E5%8F%B0%E7%81%A3)",
+      "source_locator": "歷任首長表第10–11屆郭福連、第12屆蘇忠春；1998年同鄉候選人名錄及選舉資料列蘇忠春男性、現任。",
+      "corroboration_url": "https://votetw.com/data/candidate?page=304",
+      "evidence_tier": "secondary_roster_and_subsequent_election",
+      "validation_note": "非當屆原始開票表；當選人及現任按任期名錄推定，未知字段保留空值。",
+      "winners": [
+        {
+          "town": "金峰鄉",
+          "name": "蘇忠春",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "郭福連",
+          "gender": "男",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E9%87%91%E5%B3%B0%E9%84%89_(%E5%8F%B0%E7%81%A3)",
+          "corroboration_url": "https://votetw.com/data/candidate?page=304"
+        }
+      ]
+    },
+    {
+      "county": "臺東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E8%87%BA%E6%9D%B1%E5%B8%82",
+      "source_locator": "歷任市長表第6屆李輝芳，下一屆1998年3月1日就任；1994-12-19臺東地院83年度國字第2號判決列李輝芳為市公所法定代理人。第5屆劉宇停職與代理日期未確定，未取得當選清冊，僅依第6屆任期推定當選人，不確認投票日現任。",
+      "corroboration_url": "https://lawbot.tw/judgment/AAAB_83_%E5%9C%8B_2_19941219_1",
+      "evidence_tier": "provisional_term_roster_and_contemporary_judgment",
+      "validation_note": "非當屆原始開票表；當選人及現任按任期名錄推定，未知字段保留空值。第六屆當選尚待原始清冊核實，僅為暫定姓名。",
+      "winners": [
+        {
+          "town": "臺東市",
+          "name": "李輝芳",
+          "incumbent_at_election": null,
+          "incumbent_method": "unresolved_election_day_status",
+          "previous_term_holder": null,
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E8%87%BA%E6%9D%B1%E5%B8%82",
+          "corroboration_url": "https://lawbot.tw/judgment/AAAB_83_%E5%9C%8B_2_19941219_1",
+          "winner_status": "provisional_term_roster_inference"
+        }
+      ]
     }
   ]
 }
