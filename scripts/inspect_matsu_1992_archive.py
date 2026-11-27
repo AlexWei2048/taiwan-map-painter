@@ -26,17 +26,17 @@ try:
         with pymupdf.open(p) as doc:
             print('PDF_PAGES',len(doc),flush=True)
             pages=[page.get_text(sort=True) for page in doc]
-            # Render likely election-day and following-day scans for manual visual verification.
+            # Focused visual extraction from the 1992-12-20 second page.
             import base64
-            for i in (36,37,38,39,40,41):
-                if i>=len(doc): continue
-                pg=doc[i]
-                scale=1600/max(pg.rect.width,pg.rect.height)
-                pix=pg.get_pixmap(matrix=pymupdf.Matrix(scale,scale),colorspace=pymupdf.csGRAY,alpha=False)
-                b64=base64.b64encode(pix.tobytes("jpg",jpg_quality=58)).decode("ascii")
+            pg=doc[38]
+            for name,box in [('matsu',(0.288,0.105,0.50,0.561)),('kinmen',(0.615,0.70,0.982,0.927))]:
+                clip=pymupdf.Rect(box[0]*pg.rect.width,box[1]*pg.rect.height,box[2]*pg.rect.width,box[3]*pg.rect.height)
+                scale=2400/max(clip.width,clip.height)
+                pix=pg.get_pixmap(matrix=pymupdf.Matrix(scale,scale),clip=clip,colorspace=pymupdf.csGRAY,alpha=False)
+                b64=base64.b64encode(pix.tobytes("jpg",jpg_quality=85)).decode("ascii")
                 for n in range(0,len(b64),2000):
-                    print("PAGEIMG",i+1,n//2000,b64[n:n+2000],flush=True)
-                print("PAGEEND",i+1,len(b64),flush=True)
+                    print("CROPIMG",name,n//2000,b64[n:n+2000],flush=True)
+                print("CROPEND",name,len(b64),flush=True)
 
         print('TEXT_PAGE_LENGTHS',[(i+1,len(s.strip())) for i,s in enumerate(pages)],flush=True)
         for i,s in enumerate(pages):
