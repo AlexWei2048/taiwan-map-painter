@@ -492,8 +492,8 @@ function render(){
  else {
   const totals=new Map();for(const r of rows)for(const [p,n] of Object.entries(r.parties))totals.set(p,(totals.get(p)||0)+n);
   const parties=[...totals].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],'zh')).map(x=>x[0]),top=parties.slice(0,7),rest=parties.slice(7);
-  series=top.map(p=>({name:displayParty(p),color:color(p),get:r=>r.complete?r.parties[p]||0:null}));
-  if(rest.length)series.push({name:'其他政党',color:color('其他政党'),get:r=>r.complete?rest.reduce((n,p)=>n+(r.parties[p]||0),0):null});
+  series=top.map(p=>({name:displayParty(p),color:color(p),get:r=>T.partyTrendValue(r,p)}));
+  if(rest.length)series.push({name:'其他政党',color:color('其他政党'),get:r=>T.partyTrendValue(r,'',rest)});
  }
  const note=totalLeg?'全类型原始当选席次：区域、平地及山地少数民族、不分区，以及旧制侨选。各届合计与法定总席次核对；县市层级不分摊全区名单席次。':combinedCounty?'全部类型地图并列展示多个票种；此县市趋势仅按区域民代正式当选席次统计。不分区与少数民族民代由全区选出，不分摊到县市；切换左侧选举类型可查看各地得票领先趋势。':voteMetric?(selected?'按左侧指定对象筛选；未核实匹配的届次不连线。候选人按姓名、政党及适用的选区记录匹配，不代表已完成个人身份沿革核验。':'各地区最高票候选人的票数合计；得票率为该合计除以所选范围的有效票合计，不是各地区得票率的简单平均。'):conf.metric==='seats'?'只显示左侧指定政党的当选席次。':leading?'与地图一致，按各统计地区最高票所属政党计数，不等同于当选席次。':'按当届正式当选席次统计；其余政党合并展示，CSV保留完整政党明细。';
  if(conf.focus&&conf.level==='district')out.append(node('p','data-help','跨届选区须确认乡镇归属相同且无无法核实的部分里；否则保留缺值。'));
