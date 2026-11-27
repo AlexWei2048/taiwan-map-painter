@@ -28,7 +28,7 @@ class GuestbookTests(unittest.TestCase):
         self.assertEqual(self.call("mine",{"p_secret":self.secret})[0]["contact"],self.data["p_contact"])
         self.db.execute("UPDATE messages SET visibility='approved' WHERE id=?",(self.mid,))
         public=self.call("public",{})[0]
-        self.assertEqual(set(public),{"id","nickname","category","body","created_at","reply"})
+        self.assertEqual(set(public),{"id","nickname","category","title","body","created_at","reply","progress","pinned","context","replied_at","votes"})
         self.assertNotIn(self.data["p_contact"],str(public))
         self.assertFalse(self.call("remove_contact",{"p_id":self.mid,"p_secret":self.other}))
         self.assertTrue(self.call("remove_contact",{"p_id":self.mid,"p_secret":self.secret}))
@@ -50,5 +50,34 @@ class GuestbookTests(unittest.TestCase):
     def test_invalid_credential(self):
         with self.assertRaises(server.Problem):
             self.call("mine",{"p_secret":"guess"})
+    def test_private_and_admin(self):
+        old=server.ADMIN_TOKEN
+        server.ADMIN_TOKEN="test-admin-"+"z"*40
+        try:
+            self.call("submit",dict(self.data,p_private=True,p_title="私密建议"))
+            self.db.execute("UPDATE messages SET visibility='approved' WHERE id=?",(self.mid,))
+            self.assertEqual(self.call("public",{}),[])
+            with self.assertRaises(server.Problem):
+                self.call("admin_list",{"p_admin":"wrong"})
+            admin=self.call("admin_list",{"p_admin":server.ADMIN_TOKEN,"p_filter":"all"})
+            self.assertEqual(admin["records"][0]["contact"],self.data["p_contact"])
+            self.assertTrue(self.call("admin_update",dict(p_admin=server.ADMIN_TOKEN,p_id=self.mid,p_visibility="approved",p_progress="working",p_reply="已收到",p_pinned=True)))
+            self.assertEqual(self.call("mine",{"p_secret":self.secret})[0]["progress"],"working")
+            self.assertEqual(self.call("public",{}),[])
+            self.assertFalse(self.call("withdraw",{"p_id":self.mid,"p_secret":self.other}))
+            self.assertTrue(self.call("withdraw",{"p_id":self.mid,"p_secret":self.secret}))
+        finally:
+            server.ADMIN_TOKEN=old
+    def test_search_votes_and_changed_retry(self):
+        self.call("submit",dict(self.data,p_title="地图功能"))
+        with self.assertRaises(server.Problem) as err:
+            self.call("submit",dict(self.data,p_title="修改后的标题"))
+        self.assertEqual(err.exception.code,409)
+        self.db.execute("UPDATE messages SET visibility='approved' WHERE id=?",(self.mid,))
+        self.assertEqual(len(self.call("public",{"p_search":"地图功能"})),1)
+        self.assertEqual(self.call("public",{"p_search":"不存在"}),[])
+        for _ in range(2):
+            self.assertEqual(self.call("vote",dict(p_id=self.mid,p_secret=self.other,p_desired=True))["votes"],1)
+        self.assertEqual(self.call("vote",dict(p_id=self.mid,p_secret=self.other,p_desired=False))["votes"],0)
 if __name__=="__main__":
     unittest.main()
