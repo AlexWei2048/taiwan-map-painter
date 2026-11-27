@@ -7,7 +7,7 @@
  let presidentialMode=false,presidentialYear=2024,presidentialGeometry=null;
  let legislativeMode=false,legislativeYear=2024,legislativeBallot='regional',legislativeGeometry=[],legislativeAreaGeometry=null,legislativeFocus='';
  let history2022Snapshot=null,loadingPresidentialId=0,localGeometry=null;
- let localYear=2022,history2026Manifest=null,history2026Snapshot=null,history2026Pending=null,retry2026Office='',original2022DistrictMetadata=[];
+ let localYear=2022,history2026Manifest=null,history2026Snapshot=null,history2026Pending=null,history2026AvailabilityPending=null,retry2026Office='',original2022DistrictMetadata=[];
  const yearLabel=()=>presidentialMode?String(presidentialYear):legislativeMode?String(legislativeYear):HistoryLocal.yearLabel(localYear,kind);
  // Use the source contest's actual polling year for a local result, not its display cycle.
  function contestYear(contest){
@@ -114,18 +114,31 @@
    electorate:HistoryCore.identity(d.electorate)
   }));
  }
- async function check2026Availability(){
-  try{
-   const response=await fetch('assets/history-2026-availability.json?v=20261116-polling-gate',{cache:'no-store'});
-   if(!response.ok)return;
-   const manifest=await response.json();
-   if(!HistoryCore.official2026Manifest(manifest,candidateDatabase))return;
-   if(history2026Manifest?.sha256!==manifest.sha256){history2026Snapshot=null;history2026Pending=null}
-   history2026Manifest=manifest;
-   window.HISTORY_2026_RESULTS_AVAILABLE=true;
-   if(!['president','legislative'].includes(el('historyOffice').value))updateYearOptions();
-   window.HistoryWorkspace?.render?.();
-  }catch(error){console.warn('2026结果发布状态暂不可用',error.message)}
+ function check2026Availability(){
+  if(history2026AvailabilityPending)return history2026AvailabilityPending;
+  const pending=(async()=>{
+   try{
+    const response=await fetch('assets/history-2026-availability.json?v=20261116-polling-gate',{cache:'no-store'});
+    if(!response.ok)throw Error('2026发布清单 HTTP '+response.status);
+    const manifest=await response.json();
+    if(!HistoryCore.official2026Manifest(manifest,candidateDatabase))return false;
+    if(history2026Manifest?.resultStatus==='certified'&&manifest.resultStatus!=='certified')throw Error('正式公告版本不得降级');
+    const version=manifest.sha256.toLowerCase();
+    const changed=history2026Manifest?.sha256!==version;
+    if(changed){history2026Snapshot=null;history2026Pending=null}
+    history2026Manifest={...manifest,sha256:version};
+    window.HISTORY_2026_RESULTS_AVAILABLE=true;
+    window.HISTORY_2026_RESULT_VERSION=version;
+    if(changed){
+     if(!['president','legislative'].includes(el('historyOffice').value))updateYearOptions();
+     window.HistoryWorkspace?.render?.();
+    }
+    return true;
+   }catch(error){console.warn('2026结果发布状态暂不可用',error.message);return false}
+  })();
+  history2026AvailabilityPending=pending;
+  pending.then(()=>{if(history2026AvailabilityPending===pending)history2026AvailabilityPending=null});
+  return pending;
  }
  async function loadOfficial2026(){
   const manifest=history2026Manifest;
@@ -133,7 +146,7 @@
   if(history2026Snapshot)return history2026Snapshot;
   if(!history2026Pending){
    const pending=(async()=>{
-    const response=await fetch(manifest.file+'?v='+manifest.sha256);
+    const response=await fetch(manifest.file+'?v='+manifest.sha256,{cache:'reload'});
     if(!response.ok)throw Error('2026官方结果 HTTP '+response.status);
     const shard=await HistoryCore.decodeOfficial2026(await response.arrayBuffer(),manifest,candidateDatabase,window.crypto);
     if(history2026Manifest?.sha256!==manifest.sha256)throw Error('正式结果版本已更新，请重新载入');
@@ -189,13 +202,16 @@
    }
    return;
   }
+  await check2026Availability();
+  if(token!==loadingPresidentialId||!active)return;
   if(history2026Manifest?.status!=='published'){
-   el('historyYear').value=String(localYear);
+   indicator.hidden=true;indicator.textContent='';el('historyYear').value=String(localYear);
    toast('2026年正式得票尚未发布');return;
   }
   indicator.hidden=false;indicator.textContent='正在核对2026年正式结果数据…';el('historyRetry').hidden=true;
   try{
-   await snapshot();
+   if(!await snapshot())throw Error('历史工作台暂时不可用');
+   if(token!==loadingPresidentialId||!active)return;
    const verified=await loadOfficial2026();
    if(token!==loadingPresidentialId||!active||['president','legislative'].includes(el('historyOffice').value))return;
    showLocalSnapshot(verified,office);
@@ -822,7 +838,7 @@
   if(kind!=='council'&&!(legislativeMode&&legislativeBallot==='regional'&&legislativeYear<2008)&&metric==='seats')metric='party';el('historyMetric').value=metric;currentResult=loaded?analyze():null;
  }
  function activate(){
-  if(!active)savedMapScope=clone(state);
+  if(!active){savedMapScope=clone(state);check2026Availability()}
   active=true;document.body.classList.add('history-mode');
   el('historyControls').hidden=false;el('mapSettings').hidden=true;
   
@@ -1458,7 +1474,7 @@
   const year=available.includes(target)?target:['president','legislative'].includes(office)?2024:2022;
   el('historyYear').value=String(year);
   const previous=routeSelection();
-  if(previous.office!==office||previous.year!==year||snapshotData?.year!==year||!snapshotData?.elections?.some(e=>e.office===office)){
+  if(previous.office!==office||previous.year!==year||snapshotData?.year!==year||!snapshotData?.elections?.some(e=>e.office===office)||(year===2026&&snapshotData!==history2026Snapshot)){
    if(office==='president')await activatePresidential(year);
    else if(office==='legislative')await activateLegislative(year);
    else await activateLocalYear(year,office);
