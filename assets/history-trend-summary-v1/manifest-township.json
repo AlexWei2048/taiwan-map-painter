@@ -14,7 +14,7 @@
   "sourceVersion": "[\"assets/history-local-1993.json?v=20261126-municipal-roster-v5\",\"assets/history-local-1994.json?v=20261126-municipal-roster-v40\",\"assets/history-local-1997.json?v=20261126-municipal-roster-v5\",\"assets/history-local-1998.json?v=20261126-municipal-roster-v5\",\"assets/history-local-2001.json?v=20261126-municipal-roster-v5\",\"assets/history-local-2002.json?v=20261126-municipal-roster-v6\",\"assets/history-local-2005.json?v=20261126-municipal-roster-v5\",\"assets/history-local-2006.json?v=20261126-municipal-roster-v5\",\"assets/history-local-2009.json?v=20261126-municipal-roster-v5\",\"assets/history-local-2010.json?v=20261126-municipal-roster-v5\",\"assets/history-local-2014.json?v=20261126-municipal-roster-v5\",\"assets/history-local-2018.json?v=20261126-municipal-roster-v7\",\"assets/history-local-1994-council.json?v=30\",\"sources/history-1994-changhua-council-profile.json?v=1\",\"assets/history-local-council-supplement.json?v=20261126-statutory-quota-v6\"]",
   "algorithmVersion": 1,
   "sources": {
-    "assets/history-local-1994.json": "ca90b15004454fdd66f9019e4c2163626555235b",
+    "assets/history-local-1994.json": "74d64a0ca1c27734863b67594bada5ccbef7f4c3",
     "assets/history-local-1998.json": "c48d770280f510f24869cc3ca72f2f878215abdc",
     "assets/history-local-2002.json": "b403e21132fb4cb8caeaea03170e8cf208cc08f7",
     "assets/history-local-2005.json": "4c86be7e87201f5334503a177874580bc9040bc5",
