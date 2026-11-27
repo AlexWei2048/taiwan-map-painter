@@ -22841,6 +22841,154 @@
           "corroboration_url": "https://penghu.info/OB3A00ACB8E76C6C7C3E"
         }
       ]
+    },
+    {
+      "county": "花蓮縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://web.cec.gov.tw/api/file/9255d5fb-ee03-4533-88b2-9dcce3cbef04.pdf",
+      "source_locator": "2001年選舉實錄印刷頁662，候選人經歷明載第11、12屆萬榮鄉長；性別男。文字表可讀，PDF截圖因檔案過大失敗。",
+      "corroboration_url": "https://zh.wikipedia.org/wiki/萬榮鄉",
+      "evidence_tier": "term_roster_and_public_record_crosscheck",
+      "validation_note": "非當屆原始開票表；任期及相鄰屆次推定現任，未取得逐日任免紀錄。票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "萬榮鄉",
+          "name": "何信軍",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "何信軍",
+          "gender": "男",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://web.cec.gov.tw/api/file/9255d5fb-ee03-4533-88b2-9dcce3cbef04.pdf",
+          "corroboration_url": "https://zh.wikipedia.org/wiki/萬榮鄉"
+        }
+      ]
+    },
+    {
+      "county": "花蓮縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://web.cec.gov.tw/api/file/c729e26b-88ba-4db5-a9bb-824895ebae47.pdf",
+      "source_locator": "2012年臺南市選舉實錄候選人履歷明載秀林鄉長二屆八年；1990年《天下雜誌》確認當時在任；歷任名錄第11、12屆。",
+      "corroboration_url": "https://www.cw.com.tw/article/5104476",
+      "evidence_tier": "term_roster_and_public_record_crosscheck",
+      "validation_note": "非當屆原始開票表；任期及相鄰屆次推定現任，未取得逐日任免紀錄。票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "秀林鄉",
+          "name": "李繼生",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "李繼生",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://web.cec.gov.tw/api/file/c729e26b-88ba-4db5-a9bb-824895ebae47.pdf",
+          "corroboration_url": "https://www.cw.com.tw/article/5104476"
+        }
+      ]
+    },
+    {
+      "county": "花蓮縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/豐濱鄉",
+      "source_locator": "歷任首長表第11屆劉永靜、第12屆李啟誠；1997年7月7日中國時報轉錄確認李啟誠任鄉長。",
+      "corroboration_url": "https://e-info.org.tw/node/74179",
+      "evidence_tier": "term_roster_and_public_record_crosscheck",
+      "validation_note": "非當屆原始開票表；任期及相鄰屆次推定現任，未取得逐日任免紀錄。票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "豐濱鄉",
+          "name": "李啟誠",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "劉永靜",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/豐濱鄉",
+          "corroboration_url": "https://e-info.org.tw/node/74179"
+        }
+      ]
+    },
+    {
+      "county": "花蓮縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://kmfinance.kinmen.gov.tw/news.aspx?Create=1&PageSize=20&n=55FDE4EAE7CDA1E6&page=20760&sms=4FEFD09995C4BB81",
+      "source_locator": "金門縣政府網站轉載《金門日報》報導，明載許榮盛當選第11、12屆鄉長。",
+      "evidence_tier": "term_roster_and_public_record_crosscheck",
+      "validation_note": "非當屆原始開票表；任期及相鄰屆次推定現任，未取得逐日任免紀錄。票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "瑞穗鄉",
+          "name": "許榮盛",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "許榮盛",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://kmfinance.kinmen.gov.tw/news.aspx?Create=1&PageSize=20&n=55FDE4EAE7CDA1E6&page=20760&sms=4FEFD09995C4BB81"
+        }
+      ]
+    },
+    {
+      "county": "花蓮縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/玉里鎮",
+      "source_locator": "歷任鎮長表第11、12屆林惠敏（1990–1998），地方人物資料及1993年星雲日記交叉確認。",
+      "corroboration_url": "https://books.masterhsingyun.org/ArticleDetail/artcle2380",
+      "evidence_tier": "term_roster_and_public_record_crosscheck",
+      "validation_note": "非當屆原始開票表；任期及相鄰屆次推定現任，未取得逐日任免紀錄。票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "玉里鎮",
+          "name": "林惠敏",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "林惠敏",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/玉里鎮",
+          "corroboration_url": "https://books.masterhsingyun.org/ArticleDetail/artcle2380"
+        }
+      ]
+    },
+    {
+      "county": "花蓮縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/鳳林鎮_(台灣)",
+      "source_locator": "歷任鎮長表第11屆張乾倉、第12屆陳新發；國家電影及視聽文化中心典藏《林木蔥鬱 人文薈萃－鳳林》文字稿確認陳新發任鎮長、男性。",
+      "corroboration_url": "https://tfai.openmuseum.tw/muse/digi_object/dd1136d4878f638ea3f4dba9d6b20071",
+      "evidence_tier": "term_roster_and_public_record_crosscheck",
+      "validation_note": "非當屆原始開票表；任期及相鄰屆次推定現任，未取得逐日任免紀錄。票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "鳳林鎮",
+          "name": "陳新發",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "張乾倉",
+          "gender": "男",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/鳳林鎮_(台灣)",
+          "corroboration_url": "https://tfai.openmuseum.tw/muse/digi_object/dd1136d4878f638ea3f4dba9d6b20071"
+        }
+      ]
     }
   ]
 }
