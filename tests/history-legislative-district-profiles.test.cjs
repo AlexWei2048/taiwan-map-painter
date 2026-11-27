@@ -60,15 +60,10 @@ for (const [year, expected] of [[1995, 2], [1998, 4], [2001, 3], [2004, 5]]) {
       }
       assert.deepEqual(sums, record);
       assert.equal(record[2], contest.valid_votes);
+      // The verified 2001 Taipei County 2nd/3rd constituency records are now
+      // stored in the canonical turnout asset. Do not append them a second time.
       const districts = Object.values(profiles.district[county]);
-      let parent = profiles.county[county];
-      if (year === 2001 && county === '台北县') {
-        const correction = JSON.parse(fs.readFileSync(path.join(root, '..', 'sources/history-legislative-2001-vote-reconciliation.json'), 'utf8'));
-        districts.push(correction.profiles.find(p=>p.scope==='district' && p.county===county && p.area==='2').profile,
-          correction.district3OfficialTotals.profiles.district);
-        parent = correction.district3OfficialTotals.profiles.county;
-      }
-      assert.deepEqual([0,1,2,3].map(i=>districts.reduce((n,p)=>n+p[i],0)), parent);
+      assert.deepEqual([0,1,2,3].map(i=>districts.reduce((n,p)=>n+p[i],0)), profiles.county[county]);
     }
   });
 }
