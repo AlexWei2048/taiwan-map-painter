@@ -1035,3 +1035,7 @@ body.analysis-mode #historyTownBoundaryBox{display:none!important}
 .search-recent{margin:0 0 10px;padding:8px 0;border-top:1px solid #dce8df}
 .search-recent[hidden]{display:none!important}.search-recent-heading{display:flex;justify-content:space-between;align-items:center;font-size:12px}
 @media(max-width:700px){.workspace-tab-hint{font-size:10px}.workspace-categories button{min-height:54px}.search-shortcuts .button,.latest-election-link{min-height:44px;box-sizing:border-box}.search-shortcuts .button{flex:1 1 110px}}
+
+/* Keep the reset action visibly separate from destructive canvas reset. */
+.history-reset-filters{width:100%;margin-top:10px;min-height:34px;color:#216b54;background:#f6faf6;border:1px solid #dce8df;border-radius:7px}
+@media(max-width:700px){#historyControls .history-reset-filters{grid-column:1/-1;min-height:44px}}

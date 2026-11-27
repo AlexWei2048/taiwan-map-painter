@@ -3782,3 +3782,18 @@ test('Township executive comparison supports town grain and retains map nodes wh
  await page.locator('#latestElectionLink').click();await page.waitForFunction(()=>window.History2022View?.active()&&window.History2022View?.snapshot()?.year===2022&&document.querySelector('#historyLoadStatus').hidden);
  assert.equal(await page.locator('#historyYear option[value="2026"]').count(),0);assert.equal(await page.locator('#historyYear').inputValue(),'2022');
 });
+
+ test('Workspace queries remember independent filters and return to an unchanged free canvas',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ await page.locator('#workspaceFree').click();await page.locator('#townLevel').click();
+ await page.locator('#county').selectOption('台北市');
+ await page.locator('#categoryHistory').click();await page.waitForFunction(()=>History2022View.snapshot()?.year===2022&&document.querySelector('#historyLoadStatus').hidden);
+ await page.locator('#historyCounty').selectOption('台北市');await page.locator('#historyMetric').selectOption('share');
+ await page.locator('#historyOpenTrends').click();await page.locator('#historyTrendsPanel').waitFor({state:'visible'});
+ assert.equal(await page.locator('#historyCounty').inputValue(),'台北市');
+ await page.locator('#historyCounty').selectOption('高雄市');await page.locator('#historyMetric').selectOption('votes');
+ await page.locator('#categoryHistory').click();await page.waitForFunction(()=>History2022View.routeSelection().county==='台北市'&&History2022View.routeSelection().metric==='share'&&document.querySelector('#categoryHistory').getAttribute('aria-selected')==='true');
+ await page.locator('#categoryAnalysis').click();await page.waitForFunction(()=>History2022View.routeSelection().county==='高雄市'&&History2022View.routeSelection().metric==='votes'&&document.querySelector('#categoryAnalysis').getAttribute('aria-selected')==='true');
+ await page.locator('#historyResetFilters').click();await page.waitForFunction(()=>History2022View.routeSelection().county===''&&History2022View.routeSelection().metric==='party');assert.equal(await page.locator('#historyYear').inputValue(),'2022');
+ await page.locator('#categoryFuture').click();assert.equal(await page.locator('#workspaceFree').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('#county').inputValue(),'台北市');
+});
