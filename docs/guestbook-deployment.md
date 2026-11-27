@@ -1,8 +1,9 @@
-# 留言板上线与维护（开发者）
-当前默认关闭，普通访客不会看到未连接后台的按钮。使用网站地址附加 ?guestbook-preview=1 可预览界面，提交禁用。无需改动地图、历史数据或预测方案。
-1. 新建独立 Supabase 项目，执行 docs/guestbook.sql。不要将 guestbook_private 加入 API exposed schemas。只使用独立项目，避免与其他系统的业务数据共享权限。
-2. 验收：以 anon key 调用 guestbook_submit（随机 UUID、64位随机十六进制凭证）创建一条含虚拟联系方式的待审核测试留言。guestbook_public 必须无该记录；用不同随机凭证调用 guestbook_mine 必须没有记录。用原凭证查询须返回私密联系方式。直接访问两张私表必须拒绝。SQL 编辑器审核通过后，公开 RPC 只能返回明确列出的公开字段，不包含 contact、owner_hash、恢复码或私密字段。验证本人删除联系方式、重复提交同一 UUID、频率限制及 XSS 文本显示。删除测试记录。
-3. 仅验收通过后，将 guestbook-config.js 中 url 设置为实际 HTTPS 项目地址、anonKey 设置为公开 anon/publishable key、enabled 设为 true；同时更新 index.html 的 config 文件版本号。绝不能写入 service_role key、secret key 或数据库密码。
-4. 管理者通过 Supabase SQL editor（需要开发者登录）查看待审核内容和私密联系方式、更新 visibility/reply。见 SQL 文件尾部示例。审核前检查正文/昵称是否误含私人信息，回复也不能包含联系方式。
-5. 公开留言仅在审核通过后显示；未登录用户通过本机生成的高熵恢复码查询本人留言和删除私密联系信息。恢复码本地保存，清除浏览器数据前应手动备份。丢失后不能根据昵称找回。不要把恢复码放进 URL 或公开渠道。
-6. 数据库限速是基础防护，恶意流量仍可能耗尽全局额度。对外开放前测试实际网络可达性和负载；若出现滥用，应增加 Edge Function/服务端 CAPTCHA 与防刷、限制直接提交 RPC，再开放。不得在日志、公共导出或公开仓库存放真实联系方式。
+# 独立留言板部署与维护（不依赖任何数据库云服务）
+留言板前端已在网站中集成，后台使用 Python 3.11+ 标准库和 SQLite，无第三方依赖，无需 Supabase。
+- 本地测试：进入 guestbook-backend，运行 python -m unittest -v test_guestbook。
+- 运行：设置 GUESTBOOK_DB 为网站静态目录之外的持久化私密路径（如 /var/lib/island-guestbook/guestbook.sqlite3），设置 GUESTBOOK_ORIGIN 为实际网站 origin（默认 https://alexwei2048.github.io），运行 python server.py serve --host 127.0.0.1 --port 8787。以独立非 root 服务账户运行。SQLite 文件须持久化备份，含私人信息，不可提交到仓库。
+- 公网部署：使用已有服务器上的 HTTPS 反向代理，限制请求体和并发、设置限速和超时；禁止公网直接访问内部 HTTP 端口。代理只转发 /api/guestbook/ 和 /health，不开放数据库或服务器文件目录。不要记录请求正文、凭证或联系方式。前端必须使用 HTTPS 地址。
+- 管理者在服务器上运行 python server.py list --status pending 查看待审核留言（含私密联系方式）；python server.py review <留言UUID> approved --reply "感谢建议" 公开留言并回复。rejected 为不公开。审核前检查昵称、正文和回复是否含个人信息。
+- 上线验收：运行测试，实际 HTTPS 访问验证 CORS、跨设备持有凭证查询、错误凭证隔离、公开字段、联系方式删除、审核、频率限制与 XSS；删除测试记录。确认大陆访问情况，再修改 guestbook-config.js，填入 HTTPS 服务 origin，将 enabled 改为 true 并更新 index.html 缓存版本号。
+- 没有后端地址时默认关闭留言入口，?guestbook-preview=1 仅显示不可提交的预览。不得用本机存储模拟公共留言，也不允许将联系方式写入公开仓库。
+- 防刷：每个凭证10分钟3条，全站10分钟50条，仍需反向代理的请求频率/并发控制以抵抗恶意流量。不要把浏览器身份凭证当作真人验证。后端不记录访客 IP 和请求体。
