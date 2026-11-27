@@ -4,6 +4,7 @@ import argparse
 import base64
 import binascii
 import hashlib
+import secrets
 import hmac
 import threading
 import json
@@ -94,6 +95,11 @@ def initialize():
             message_id TEXT PRIMARY KEY REFERENCES messages(id) ON DELETE CASCADE,
             image BLOB NOT NULL, size INTEGER NOT NULL CHECK(size>0)
         )""")
+        db.execute("""CREATE TABLE IF NOT EXISTS admin_sessions (
+            token_hash TEXT PRIMARY KEY, master_hash TEXT NOT NULL,
+            created_epoch INTEGER NOT NULL, expires_epoch INTEGER NOT NULL
+        )""")
+        db.execute("DELETE FROM admin_sessions WHERE expires_epoch<=?",(int(time.time()),))
     DB.chmod(0o600)
 
 def decode_screenshot(value):
@@ -129,7 +135,7 @@ def decode_screenshot(value):
 def attachment_owner(db,data):
     mid=msg_id(data.get("p_id"))
     if data.get("p_admin"):
-        require_admin(data)
+        require_admin(data,db)
     else:
         digest=owner(data.get("p_secret"))
         if not db.execute("SELECT 1 FROM messages WHERE id=? AND owner_hash=?",(mid,digest)).fetchone():
@@ -177,8 +183,22 @@ def record_write(db,digest,kind,now,per_owner,global_limit):
         raise Problem("操作过于频繁，请稍后重试",429)
     db.execute("INSERT INTO write_events VALUES(?,?,?)",(digest,kind,now))
 
-def require_admin(data):
+def master_hash():
+    return hashlib.sha256(ADMIN_TOKEN.encode("utf-8")).hexdigest()
+
+def session_hash(token):
+    return hashlib.sha256(token.encode("ascii")).hexdigest()
+
+def require_admin(data,db,master_only=False):
     token=data.get("p_admin","")
+    if not ADMIN_TOKEN or len(ADMIN_TOKEN)<32:
+        raise Problem("管理功能尚未配置",503)
+    if not master_only and isinstance(token,str) and re.fullmatch(r"gb1\.[0-9a-f]{64}",token):
+        row=db.execute("SELECT master_hash,expires_epoch FROM admin_sessions WHERE token_hash=?",(session_hash(token),)).fetchone()
+        if not row or row["expires_epoch"]<=int(time.time()) or not hmac.compare_digest(row["master_hash"],master_hash()):
+            raise Problem("管理员登录已过期，请重新验证",403)
+        return
+
     with ADMIN_LOCK:
         now=time.monotonic()
         ADMIN_FAILURES[:]=[x for x in ADMIN_FAILURES if now-x<60]
@@ -212,8 +232,31 @@ def rows(cursor):
     return [dict(r) for r in cursor]
 
 def dispatch(action,data,db):
+    if action == "guestbook_admin_login":
+        require_admin(data,db,master_only=True)
+        remember=data.get("p_remember",True)
+        if type(remember) is not bool: raise Problem("无效登录选项")
+        now=int(time.time())
+        expiry=now+(30*86400 if remember else 12*3600)
+        token="gb1."+secrets.token_hex(32)
+        db.execute("BEGIN IMMEDIATE")
+        try:
+            db.execute("DELETE FROM admin_sessions WHERE expires_epoch<=? OR master_hash!=?",(now,master_hash()))
+            # Retain at most ten active sessions. Oldest devices are retired first.
+            db.execute("DELETE FROM admin_sessions WHERE token_hash IN (SELECT token_hash FROM admin_sessions ORDER BY created_epoch DESC,token_hash DESC LIMIT -1 OFFSET 9)")
+            db.execute("INSERT INTO admin_sessions VALUES(?,?,?,?)",(session_hash(token),master_hash(),now,expiry))
+            db.execute("COMMIT")
+        except BaseException:
+            if db.in_transaction: db.execute("ROLLBACK")
+            raise
+        return {"session":token,"expires_at":expiry}
+    if action == "guestbook_admin_logout":
+        token=data.get("p_admin","")
+        if isinstance(token,str) and re.fullmatch(r"gb1\.[0-9a-f]{64}",token):
+            db.execute("DELETE FROM admin_sessions WHERE token_hash=?",(session_hash(token),))
+        return True
     if action == "guestbook_admin_counts":
-        require_admin(data)
+        require_admin(data,db)
         return admin_counts(db)
     if action == "guestbook_attachment":
         mid=attachment_owner(db,data)
@@ -312,7 +355,7 @@ def dispatch(action,data,db):
         digest=owner(data.get("p_secret"))
         return [r[0] for r in db.execute("SELECT message_id FROM votes WHERE owner_hash=? LIMIT 2000",(digest,))]
     if action == "guestbook_admin_list":
-        require_admin(data)
+        require_admin(data,db)
         filt=field(data,"p_filter",24,"pending")
         work=field(data,"p_progress",24)
         search=field(data,"p_search",100)
@@ -326,7 +369,7 @@ def dispatch(action,data,db):
         records=rows(db.execute("SELECT "+PUBLIC+",m.visibility,m.private,c.contact,EXISTS(SELECT 1 FROM attachments a WHERE a.message_id=m.id) AS has_attachment FROM messages m LEFT JOIN contacts c ON m.id=c.message_id WHERE (?='all' OR (?='private' AND m.private=1) OR (?='todo' AND m.progress IN ('new','accepted','working') AND m.visibility!='rejected') OR m.visibility=?) AND (?='' OR m.progress=?) AND (?='' OR instr(lower(m.title||' '||m.body||' '||m.nickname),lower(?))>0) ORDER BY m.created_epoch DESC,m.id DESC LIMIT 50 OFFSET ?",(filt,filt,filt,filt,work,work,search,search,offset)))
         return {"counts":counts,"records":records}
     if action == "guestbook_admin_update":
-        require_admin(data)
+        require_admin(data,db)
         mid=msg_id(data.get("p_id"))
         visibility=field(data,"p_visibility",24)
         progress=field(data,"p_progress",24)
@@ -346,7 +389,7 @@ def dispatch(action,data,db):
         if updated.rowcount!=1: raise Problem("留言已变化，请刷新后再审核",409)
         return True
     if action == "guestbook_admin_delete":
-        require_admin(data)
+        require_admin(data,db)
         mid=msg_id(data.get("p_id"))
         expected=data.get("p_revision")
         if expected is None:
@@ -435,7 +478,7 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
     def do_GET(self):
         if self.path=="/health":
-            return self.reply(200,{"ok":True,"version":2,"features":["edit","detail","progress-filter","admin-search","attachment","admin-counts","own-updates"]})
+            return self.reply(200,{"ok":True,"version":2,"features":["edit","detail","progress-filter","admin-search","attachment","admin-counts","own-updates","admin-session"]})
         self.reply(404,{"message":"接口不存在"})
     def do_POST(self):
         try:
@@ -445,7 +488,7 @@ class Handler(BaseHTTPRequestHandler):
             if not self.path.startswith(prefix):
                 raise Problem("接口不存在",404)
             action=self.path[len(prefix):]
-            if action not in {"guestbook_submit","guestbook_public","guestbook_mine","guestbook_remove_contact","guestbook_withdraw","guestbook_vote","guestbook_votes","guestbook_admin_list","guestbook_admin_update","guestbook_admin_delete","guestbook_edit","guestbook_detail","guestbook_attachment","guestbook_remove_attachment","guestbook_admin_counts","guestbook_my_updates"}:
+            if action not in {"guestbook_submit","guestbook_public","guestbook_mine","guestbook_remove_contact","guestbook_withdraw","guestbook_vote","guestbook_votes","guestbook_admin_list","guestbook_admin_update","guestbook_admin_delete","guestbook_edit","guestbook_detail","guestbook_attachment","guestbook_remove_attachment","guestbook_admin_counts","guestbook_my_updates","guestbook_admin_login","guestbook_admin_logout"}:
                 raise Problem("接口不存在",404)
             if self.headers.get_content_type()!="application/json":
                 raise Problem("请求格式错误",415)
