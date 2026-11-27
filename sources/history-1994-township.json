@@ -5045,6 +5045,110 @@
           "evidence_notes": "相鄰任期及在職記錄交叉佐證；1994投票日原始清冊未取得。"
         }
       ]
+    },
+    {
+      "county": "臺中縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://www.taiping.taichung.gov.tw/981751/981752/981769/1045709",
+      "source_locator": "歷任首長表：余振瑩1990年3月至1998年3月任鄉長及改制後市長。",
+      "corroboration_url": "https://zh.wikipedia.org/wiki/臺中市太平區區長",
+      "validation_note": "歷任首長或履歷證據，非當屆完整選舉結果；現任由相鄰任期推定；未知票數、性別、號次、當屆推薦政黨留空。",
+      "evidence_tier": "official_term_roster",
+      "winners": [
+        {
+          "town": "太平鄉",
+          "name": "余振瑩",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "余振瑩",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://www.taiping.taichung.gov.tw/981751/981752/981769/1045709",
+          "corroboration_url": "https://zh.wikipedia.org/wiki/臺中市太平區區長",
+          "evidence_notes": "第12屆1994-03-01至1996-08-01，任內改制；任期表支持連任，不代表已取得原始票表。"
+        }
+      ]
+    },
+    {
+      "county": "臺中縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://www.shalu.taichung.gov.tw/981075/981076/981078/1023421",
+      "source_locator": "公所歷屆首長表：第11、12任均為陳孟森，1990–1998。",
+      "corroboration_url": "https://www.shalu.taichung.gov.tw/1364583/post",
+      "validation_note": "歷任首長或履歷證據，非當屆完整選舉結果；現任由相鄰任期推定；未知票數、性別、號次、當屆推薦政黨留空。",
+      "evidence_tier": "official_term_roster",
+      "winners": [
+        {
+          "town": "沙鹿鎮",
+          "name": "陳孟森",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "陳孟森",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://www.shalu.taichung.gov.tw/981075/981076/981078/1023421",
+          "corroboration_url": "https://www.shalu.taichung.gov.tw/1364583/post",
+          "evidence_notes": "83年1月鎮志序署名鎮長陳孟森；公所表部分引用維基與鎮志，兩種材料的獨立性有限。"
+        }
+      ]
+    },
+    {
+      "county": "臺中縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://www.lienho.org.tw/foundation/ppl_16.asp",
+      "source_locator": "基金會董事履歷明載臺中縣東勢鎮第11、12屆鎮長。",
+      "corroboration_url": "https://zh.wikipedia.org/wiki/東勢區區長",
+      "validation_note": "歷任首長或履歷證據，非當屆完整選舉結果；現任由相鄰任期推定；未知票數、性別、號次、當屆推薦政黨留空。",
+      "evidence_tier": "biography_plus_term_roster",
+      "winners": [
+        {
+          "town": "東勢鎮",
+          "name": "楊明諭",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "楊明諭",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://www.lienho.org.tw/foundation/ppl_16.asp",
+          "corroboration_url": "https://zh.wikipedia.org/wiki/東勢區區長",
+          "evidence_notes": "任期表列1990-03-01至1998-02-28；另見苗栗縣政府公開履歷 https://www.miaoli.gov.tw/bidding/News_Content.aspx?n=1094&s=420087 。"
+        }
+      ]
+    },
+    {
+      "county": "臺中縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/豐原區區長",
+      "source_locator": "歷任首長表第5屆王阿脾、第6屆陳欽隆1994-03-01至1998-03-01。",
+      "corroboration_url": "https://www.spbook.com.tw/product.php?C1=10&C2=30&C3=0&sid=O_U102807029",
+      "validation_note": "歷任首長或履歷證據，非當屆完整選舉結果；現任由相鄰任期推定；未知票數、性別、號次、當屆推薦政黨留空。",
+      "evidence_tier": "secondary_term_roster_plus_published_biography",
+      "winners": [
+        {
+          "town": "豐原市",
+          "name": "陳欽隆",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "王阿脾",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/豐原區區長",
+          "corroboration_url": "https://www.spbook.com.tw/product.php?C1=10&C2=30&C3=0&sid=O_U102807029",
+          "evidence_notes": "陳彥斌《在威權的天空下：台中篇》書介明載1994當選豐原市長；未核原始推薦政黨，不使用任內或後屆黨籍。"
+        }
+      ]
     }
   ]
 }
