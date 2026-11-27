@@ -66,12 +66,11 @@
  const baseTown=value=>norm(value).replace(/[乡镇市区]$/u,'').replace(/^(?:(?:台|臺)湾省)/u,'');
  const modernCounty=name=>LEGACY_COUNTY[norm(name)]||norm(name);
  const exceptions=new Set(['金门县|乌丘乡','金门县|乌坵乡']);
- const activeLoad=new Map();
- function clearPending(){for(const [year,promise] of activeLoad){if(!promise)activeLoad.delete(year)}}
+ const activeLoad=(root.HistoryQueryCache||(typeof module!=='undefined'&&module.exports?require('./history-query-cache.js'):null)).createCache(4);
+ function clearPending(){/* Failed requests are removed by the bounded cache. */}
  async function load(year,fetcher=root.fetch){
   year=Number(year);if(!YEAR_SET.has(year))throw Error('不支持的选举年份：'+year);
-  if(activeLoad.has(year))return activeLoad.get(year);
-  const promise=(async()=>{
+  return activeLoad.get(year,async()=>{
    const resp=await fetcher(dataUrl(year),{cache:'default'});
    if(!resp.ok)throw Error(year+'年历史数据 HTTP '+resp.status);
    const shard=await resp.json();
@@ -85,9 +84,7 @@
    if(totals!==shard.national.valid_votes)throw Error(year+'年县市与全台得票数不一致');
    const enriched=enrichCandidateProfiles(shard);
    return root.HistoryPresidentialTurnout?.enrich?.(enriched)||enriched;
-  })();
-  activeLoad.set(year,promise);
-  try{return await promise}catch(error){activeLoad.delete(year);throw error}
+  });
  }
  function geometry(shard,map,normalize=s=>s,mergePaths=paths=>paths.join(' ')){
   if(!map||!Array.isArray(map.towns)||!Array.isArray(map.counties))throw Error('地图尚未准备好');

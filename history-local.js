@@ -19,7 +19,7 @@
  const localUrl=year=>'assets/history-local-'+year+'.json?v=20261126-municipal-roster-v'+(year===1994?'40':year===2018?'7':year===2002?'6':'5');
  const legacyCouncilUrl='assets/history-local-1994-council.json?v=30',legacyProfileUrl='sources/history-1994-changhua-council-profile.json?v=1',supplementUrl='assets/history-local-council-supplement.json?v=20261126-statutory-quota-v6';
  const trendSummarySourceVersion=()=>JSON.stringify([...new Set([...YEARS.mayor,...YEARS.council])].filter(y=>y<2022).sort((a,b)=>a-b).map(localUrl).concat([legacyCouncilUrl,legacyProfileUrl,supplementUrl]));
- const pending=new Map(),supplementYears=new Set([1994,1998,2002,2005,2006,2009,2010,2014,2018]);
+ const pending=(root.HistoryQueryCache||(typeof module!=='undefined'&&module.exports?require('./history-query-cache.js'):null)).createCache(8),supplementYears=new Set([1994,1998,2002,2005,2006,2009,2010,2014,2018]);
  let supplementRequest;
  let legacyCouncilRequest;
  function enrichLegacyGender(archive,references){
@@ -204,8 +204,7 @@
  }
  async function load(year,fetcher=root.fetch){
   if(!Object.values(YEARS).some(list=>list.includes(year))||year===2022)throw Error('不支持的地方选举年份');
-  if(pending.has(year))return pending.get(year);
-  const request=(async()=>{
+  return pending.get(year,async()=>{
    const [response,supplement]=await Promise.all([
     year===1994?fetcher(localUrl(year),{cache:'no-cache'}):fetcher(localUrl(year)),
     supplementYears.has(year)?loadSupplement(fetcher):null
@@ -215,9 +214,7 @@
    if(shard.schemaVersion!==2||shard.year!==year||!shard.rows?.length||!shard.candidacies?.length||
       !shard.contests?.length||!shard.elections?.length)throw Error('历史选举数据不完整');
    return enrich2002Incumbency(fillRegionalCouncilQuotas(applyCouncilSupplement(shard,supplement)));
-  })();
-  pending.set(year,request);
-  try{return await request}catch(error){pending.delete(year);throw error}
+  });
  }
  function geometry(shard,map,reference,normalize,mergePaths,modernCounty,baseTown){
   const year=shard.year,modern=reference===null;

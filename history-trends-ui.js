@@ -5,7 +5,7 @@ const T=window.HistoryTrends,C=window.HistoryCore,S=window.HistoryTrendSummary,$
 const offices={president:'台湾地区领导人',legislative:'立法机构民代',mayor:'县市长',council:'县市议员',township:'乡镇市区长'};
 const ns='http://www.w3.org/2000/svg';
 let zoomClipId=0;const hiddenTrendSeries=new Set();
-let panel=null,request=0,cache=new Map(),summaryCache=new Map(),models=[],activeKey='',selection=null,renderedKey='',loading=false,closed=true,lastRows=[],lastSeries=[],lastTitle='',legislativeExport=null,voteShareExport=null,selectedYears=new Set(),knownYears=[];
+let panel=null,request=0,summaryCache=window.HistoryQueryCache.createCache(12),models=[],activeKey='',selection=null,renderedKey='',loading=false,closed=true,lastRows=[],lastSeries=[],lastTitle='',legislativeExport=null,voteShareExport=null,selectedYears=new Set(),knownYears=[];
 const norm=v=>simplify(String(v||'')).replaceAll('臺','台').replace(/^中国台湾少数民族党$/,'中国台湾原住民党');
  const legislativeTrendCache=T.createLegislativeTrendCache({normalize:norm,buildList:(year,snapshot)=>HistoryLegislativeParty.build(year,snapshot)});
 const fmt=(v,pct=false)=>Number.isFinite(v)?pct?v.toFixed(2)+'%':v.toLocaleString('zh-CN',{maximumFractionDigits:2}):'—';
@@ -34,7 +34,7 @@ function create(){
  panel.append(heading,scope,controls,actions,status,output);
  $('trendSelectAll').onclick=()=>changeYears(knownYears);
  $('trendSelectNone').onclick=()=>changeYears([]);$('trendRecent3').onclick=()=>changeYears(knownYears.slice(-3));$('trendRecent5').onclick=()=>changeYears(knownYears.slice(-5));
- $('trendRetry').onclick=()=>{cache.clear();summaryCache.clear();legislativeTrendCache.clear();activeKey='';renderedKey='';load()};
+ $('trendRetry').onclick=()=>{summaryCache.clear();legislativeTrendCache.clear();activeKey='';renderedKey='';load()};
  $('trendCsv').onclick=exportCsv;
 }
 function readSelection(s){
@@ -66,11 +66,10 @@ const listVoteChart=conf=>conf.office==='legislative'&&['all','party'].includes(
 const trendDataKey=conf=>[conf.office,S.key(conf),range(conf).join(',')].join('|');
 async function loadSummary(conf){
  const key=S.key(conf);if(!key)return null;
- if(!summaryCache.has(key))summaryCache.set(key,(async()=>{
+ return summaryCache.get(key,async()=>{
   const response=await fetch('assets/history-trend-summary-v1/'+key+'.json?v='+(['president','township'].includes(conf.office)?'20261126-v102':'20261126-v101'));if(!response.ok)throw Error('summary unavailable');
   const payload=await response.json();return S.compatible(payload,conf,HistoryLocal,T,HistoryPresidential)?payload:null;
- })().catch(()=>null));
- return summaryCache.get(key);
+ }).catch(()=>null);
 }
 async function load(){
  if(!selection||panel.hidden)return;
@@ -83,12 +82,11 @@ async function load(){
   const result=new Array(ys.length);let next=0,finished=0;
   // A bounded work queue avoids waiting for the slowest request in each old batch.
   async function worker(){while(token===request&&next<ys.length){
-   const i=next++,year=ys[i],k=conf.office+'|'+year;
+   const i=next++,year=ys[i];
    try{
     const derived=S.summaryYears(conf.office,[year]).length?summary?.years?.[year]:null;
     if(S.yearValid(derived,conf))result[i]={year,summary:derived};
-    else{if(!cache.has(k)){const pending=Promise.resolve().then(()=>snapshot(conf.office,year));cache.set(k,pending);pending.catch(()=>{if(cache.get(k)===pending)cache.delete(k)})}
-    result[i]={year,snapshot:await cache.get(k)}}
+    else result[i]={year,snapshot:await snapshot(conf.office,year)}
    }catch(e){result[i]={year,error:e.message}}
    if(token!==request)return;
    $('trendStatus').textContent='已载入 '+(++finished)+' / '+ys.length+' 届…';
@@ -138,10 +136,10 @@ function trendPointInspector(graph){
   }
   if(!shown.length)list.append(node('p','data-help','当前届次没有可见曲线数据；请勾选图例。'));
  }
- select.onchange=update;panel.addEventListener('toggle',()=>{if(panel.open)update()});
+ select.onchange=update;summary.addEventListener('click',()=>{if(!panel.open)update()});panel.addEventListener('toggle',()=>{if(panel.open)update()});
  // Listen to plot visibility changes, including linked pre/post-merger charts.
  const observer=new MutationObserver(()=>{if(panel.open)update()});observer.observe(graph,{subtree:true,attributes:true,attributeFilter:['display']});
- update();return panel;
+ return panel;
 }
 function card(title,description,graph,exportTitle=title,context={}){
  const c=node('article','trend-card'),h=node('div','trend-card-heading'),buttons=node('div','trend-card-actions');h.append(node('h4','',title),buttons);

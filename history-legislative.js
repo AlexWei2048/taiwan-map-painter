@@ -1,7 +1,7 @@
 (function(root){
  'use strict';
  const YEARS=[1992,1995,1998,2001,2004,2008,2012,2016,2020,2024];
- const YEAR_SET=new Set(YEARS),loads=new Map();let mapLoad=null;
+ const YEAR_SET=new Set(YEARS),loads=(root.HistoryQueryCache||(typeof module!=='undefined'&&module.exports?require('./history-query-cache.js'):null)).createCache(4);let mapLoad=null;
  const LABELS={regional:'区域民代',plains:'平地少数民族民代',mountain:'山地少数民族民代'};
  function ballots(year){
   const items=[{value:'all',label:'全部类型（分别统计）'},...Object.entries(LABELS).map(([value,label])=>({value,label}))];
@@ -602,8 +602,7 @@
  }
  async function load(year,fetcher=root.fetch){
   year=Number(year);if(!YEAR_SET.has(year))throw Error('不支持的立法机构民代选举年份：'+year);
-  if(loads.has(year))return loads.get(year);
-  const promise=(async()=>{
+  return loads.get(year,async()=>{
    const [response,local]=await Promise.all([
 
     fetcher('assets/history-legislative-'+year+'.json?v=20261124-vote-reconciliation-v4',{cache:'default'}),
@@ -619,9 +618,7 @@
    if(shard.schemaVersion!==2||shard.year!==year||shard.office!=='legislative'||!Array.isArray(shard.rows)||!shard.rows.length)throw Error(year+'年立法机构民代历史数据校验未通过');
    return enrichCandidates(year===1992?apply1992Local(shard,local):
     year===2001?apply2001TownReturns(verified2001(shard),local):shard);
-  })();
-  loads.set(year,promise);
-  try{return await promise}catch(error){loads.delete(year);throw error}
+  });
  }
  async function loadMap(fetcher=root.fetch){
   if(!mapLoad)mapLoad=(async()=>{const response=await fetcher('assets/map-legislative.json?v=20261031-split-v25',{cache:'default'});if(!response.ok)throw Error('立法机构民代选区地图 HTTP '+response.status);const map=await response.json();if(!Array.isArray(map.legislative)||map.legislative.length!==73)throw Error('立法机构民代选区地图校验未通过');return map})().catch(error=>{mapLoad=null;throw error});
