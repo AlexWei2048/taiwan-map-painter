@@ -5716,6 +5716,250 @@
           "winner_status": "provisional_term_roster_inference"
         }
       ]
+    },
+    {
+      "county": "雲林縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/斗六市市長",
+      "source_locator": "第4屆李延敬1990.03–1994.02，第5屆楊鎮文1994.03–1998.02。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆原始開票表；當選人按任期名錄推定，未核逐日任免；無明確證據之欄位保持空值。",
+      "winners": [
+        {
+          "town": "斗六市",
+          "name": "楊鎮文",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "李延敬",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/斗六市市長"
+        }
+      ]
+    },
+    {
+      "county": "雲林縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/土庫鎮",
+      "source_locator": "第11屆顏安樂、第12屆吳欽棋；1998同鎮選舉吳欽棋為現任男性。",
+      "corroboration_url": "https://votetw.com/data/candidate/吳欽棋",
+      "evidence_tier": "term_roster_and_related_record",
+      "validation_note": "非當屆原始開票表；當選人按任期名錄推定，未核逐日任免；無明確證據之欄位保持空值。",
+      "winners": [
+        {
+          "town": "土庫鎮",
+          "name": "吳欽棋",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "顏安樂",
+          "gender": "男",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/土庫鎮",
+          "corroboration_url": "https://votetw.com/data/candidate/吳欽棋"
+        }
+      ]
+    },
+    {
+      "county": "雲林縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/北港鎮_(台灣)",
+      "source_locator": "第11屆詹春泉、第12–13屆蘇晉卿；農業部農業知識入口網所載農會文章確認2000年5月由北港鎮長轉任總幹事。",
+      "corroboration_url": "https://kmweb.moa.gov.tw/redirect_files.php?id=153002",
+      "evidence_tier": "term_roster_and_related_record",
+      "validation_note": "非當屆原始開票表；當選人按任期名錄推定，未核逐日任免；無明確證據之欄位保持空值。",
+      "winners": [
+        {
+          "town": "北港鎮",
+          "name": "蘇晉卿",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "詹春泉",
+          "gender": "男",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/北港鎮_(台灣)",
+          "corroboration_url": "https://kmweb.moa.gov.tw/redirect_files.php?id=153002"
+        }
+      ]
+    },
+    {
+      "county": "雲林縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/古坑鄉",
+      "source_locator": "第11屆黃燦昭、第12屆連任。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆原始開票表；當選人按任期名錄推定，未核逐日任免；無明確證據之欄位保持空值。",
+      "winners": [
+        {
+          "town": "古坑鄉",
+          "name": "黃燦昭",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "黃燦昭",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/古坑鄉"
+        }
+      ]
+    },
+    {
+      "county": "雲林縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/大埤鄉",
+      "source_locator": "第11屆林正彥1990年上任、第12屆易信助1994年上任；新聞明載83年3月起任鄉長（報導屆次與名錄差一屆，僅用任期起始佐證）。",
+      "corroboration_url": "https://www.nownews.com/news/2980351",
+      "evidence_tier": "term_roster_and_related_record",
+      "validation_note": "非當屆原始開票表；當選人按任期名錄推定，未核逐日任免；無明確證據之欄位保持空值。",
+      "winners": [
+        {
+          "town": "大埤鄉",
+          "name": "易信助",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "林正彥",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/大埤鄉",
+          "corroboration_url": "https://www.nownews.com/news/2980351"
+        }
+      ]
+    },
+    {
+      "county": "雲林縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://election.ltn.com.tw/2018/news/New/breakingnews/2539676",
+      "source_locator": "報導明載李合同為第12、13屆崙背鄉長；歷任表一致，第11屆姓名在文字擷取中不明，故現任不推定。",
+      "corroboration_url": "https://zh.wikipedia.org/wiki/崙背鄉",
+      "evidence_tier": "term_roster_and_related_record",
+      "validation_note": "非當屆原始開票表；當選人按任期名錄推定，未核逐日任免；無明確證據之欄位保持空值。",
+      "winners": [
+        {
+          "town": "崙背鄉",
+          "name": "李合同",
+          "incumbent_at_election": null,
+          "incumbent_method": "unresolved_election_day_status",
+          "previous_term_holder": null,
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://election.ltn.com.tw/2018/news/New/breakingnews/2539676",
+          "corroboration_url": "https://zh.wikipedia.org/wiki/崙背鄉"
+        }
+      ]
+    },
+    {
+      "county": "雲林縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/麥寮鄉",
+      "source_locator": "第12屆許茂雄；1998同鄉選舉資料列許茂雄現任、當選，其他同名資料不混用；第11屆姓名不確定。",
+      "corroboration_url": "https://votetw.com/data/candidate/許茂雄",
+      "evidence_tier": "term_roster_and_related_record",
+      "validation_note": "非當屆原始開票表；當選人按任期名錄推定，未核逐日任免；無明確證據之欄位保持空值。",
+      "winners": [
+        {
+          "town": "麥寮鄉",
+          "name": "許茂雄",
+          "incumbent_at_election": null,
+          "incumbent_method": "unresolved_election_day_status",
+          "previous_term_holder": null,
+          "gender": "男",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/麥寮鄉",
+          "corroboration_url": "https://votetw.com/data/candidate/許茂雄"
+        }
+      ]
+    },
+    {
+      "county": "雲林縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/臺西鄉",
+      "source_locator": "第11屆吳國勝、第12屆林金城；1998臺西鄉候選名冊有林金城。",
+      "corroboration_url": "https://ebk.olc.tw/candidates/index/54d9c6f9-b86c-46f6-bb9d-6b30acb5b862",
+      "evidence_tier": "term_roster_and_related_record",
+      "validation_note": "非當屆原始開票表；當選人按任期名錄推定，未核逐日任免；無明確證據之欄位保持空值。",
+      "winners": [
+        {
+          "town": "臺西鄉",
+          "name": "林金城",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "吳國勝",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/臺西鄉",
+          "corroboration_url": "https://ebk.olc.tw/candidates/index/54d9c6f9-b86c-46f6-bb9d-6b30acb5b862"
+        }
+      ]
+    },
+    {
+      "county": "雲林縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/元長鄉",
+      "source_locator": "第12屆李文勝；第11屆姓名在文字擷取中不明，不推定現任。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆原始開票表；當選人按任期名錄推定，未核逐日任免；無明確證據之欄位保持空值。",
+      "winners": [
+        {
+          "town": "元長鄉",
+          "name": "李文勝",
+          "incumbent_at_election": null,
+          "incumbent_method": "unresolved_election_day_status",
+          "previous_term_holder": null,
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/元長鄉"
+        }
+      ]
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/里港鄉",
+      "source_locator": "歷任表第11、12屆林豐精；後續同鄉選舉名冊記林豐精男性。",
+      "corroboration_url": "https://votetw.com/data/candidate/盧文瑞",
+      "evidence_tier": "term_roster_and_related_record",
+      "validation_note": "非當屆原始開票表；當選人按任期名錄推定，未核逐日任免；無明確證據之欄位保持空值。",
+      "winners": [
+        {
+          "town": "里港鄉",
+          "name": "林豐精",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "林豐精",
+          "gender": "男",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/里港鄉",
+          "corroboration_url": "https://votetw.com/data/candidate/盧文瑞"
+        }
+      ]
     }
   ]
 }
