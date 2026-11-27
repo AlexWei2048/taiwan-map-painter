@@ -213,8 +213,9 @@ function electionDates(snapshot,office,county='',normalize=String){
 function partyParticipationValue(row,party,group){
  if(!row?.complete||!Array.isArray(row.participatingParties))return null;
  const participants=new Set(row.participatingParties);
- if(group){if(!group.some(p=>participants.has(p)))return null;return group.reduce((sum,p)=>sum+(row.parties?.[p]||0),0)}
- if(!participants.has(party))return null;
+ const present=p=>participants.has(p)||Object.hasOwn(row.parties||{},p);
+ if(group){if(!group.some(present))return null;return group.reduce((sum,p)=>sum+(row.parties?.[p]||0),0)}
+ if(!present(party))return null;
  return row.parties?.[party]??0;
 }
 function historicalScopeRows(snapshot,selection,anchor){
@@ -316,7 +317,7 @@ function mergePresidentialIndependents(row){
  for(const [p,v] of Object.entries(row.votes||{})){const k=presidentialIndependentKey(p);votes[k]=(votes[k]||0)+v;}
  for(const [p,entries] of Object.entries(row.candidateDetails||{})){const k=presidentialIndependentKey(p);(candidateDetails[k]||(candidateDetails[k]=[])).push(...entries.map(r=>({...r,party:presidentialIndependentKey(r.party)})));}
  for(const entries of Object.values(candidateDetails))entries.sort((a,b)=>b.votes-a.votes||a.name.localeCompare(b.name,'zh'));
- return {...row,parties,votes,partyMeta,candidateDetails,...(row.seats?{seats:Object.entries(row.seats).reduce((acc,[p,v])=>{const k=presidentialIndependentKey(p);acc[k]=(acc[k]||0)+v;return acc},Object.create(null))}:{})};
+ return {...row,parties,votes,partyMeta,candidateDetails,...(Array.isArray(row.participatingParties)?{participatingParties:[...new Set(row.participatingParties.map(presidentialIndependentKey))]}:{}),...(row.seats?{seats:Object.entries(row.seats).reduce((acc,[p,v])=>{const k=presidentialIndependentKey(p);acc[k]=(acc[k]||0)+v;return acc},Object.create(null))}:{})};
 }
 function localPartyVoteShares(snapshot,selection){
  const {office,county='',level='county',focus='',normalize=String}=selection;
