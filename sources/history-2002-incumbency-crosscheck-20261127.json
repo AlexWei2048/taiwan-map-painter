@@ -1,0 +1,47 @@
+{
+  "year": 2002,
+  "records": [
+    {
+      "id": "2002-council:桃园县:regional:第7选举区:21",
+      "name": "黄仁杼",
+      "votes": 5532,
+      "office": "council",
+      "county": "桃园县",
+      "district": "第7选举区",
+      "number": 21,
+      "source": "https://www.ly.gov.tw/Pages/List.aspx?nodeid=1682",
+      "corroboration": "https://votetw.com/data/candidate/%E9%BB%83%E4%BB%81%E6%9D%BC",
+      "note": "官方履历列第12、13、15、16届议员，缺第14届；当届候选人明细明确列非现任。"
+    },
+    {
+      "id": "2002-council:台中县:regional:第2选举区:3",
+      "name": "王加佳",
+      "votes": 6358,
+      "office": "council",
+      "county": "台中县",
+      "district": "第2选举区",
+      "number": 3,
+      "source": "https://news.tvbs.com.tw/politics/332172",
+      "corroboration": "https://votetw.com/data/candidate/%E7%8E%8B%E5%8A%A0%E4%BD%B3",
+      "note": "同期后续报道证实第一次参选即当选；当届为2002年。"
+    },
+    {
+      "id": "2002-township:金门县:regional:金宁乡:2",
+      "name": "翁自然",
+      "votes": 1081,
+      "office": "township",
+      "county": "金门县",
+      "district": "金宁乡",
+      "number": 2,
+      "source": "https://www.kmdn.gov.tw/1117/1271/1272/108008/?cprint=pt",
+      "corroboration": "https://votetw.com/data/candidate/%E6%9D%8E%E6%96%87%E4%BF%8A",
+      "note": "2002年交接报道确认原任乡长吴怡跑连任两届，新任李文俊；候选人翁自然非现任。"
+    }
+  ],
+  "withdrawal": {
+    "id": "2002-council:云林县:regional:第6选举区:1",
+    "status": "withdrawn",
+    "source": "https://query.ey.gov.tw/legisweb/html/8_6_22_31.htm",
+    "note": "中选会正式答复：登记撤销，号次保留；不应补造姓名。"
+  }
+}

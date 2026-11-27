@@ -181,6 +181,27 @@
    councilDistrictGeometry:Object.assign({},...shards.map(shard=>shard.councilDistrictGeometry))
   };
  }
+ // Verified 2002 metadata only; vote totals and candidate IDs are unchanged.
+ const verified2002Incumbency=[{"id":"2002-council:桃园县:regional:第7选举区:21","name":"黄仁杼","votes":5532,"office":"council","county":"桃园县","district":"第7选举区","number":21,"source":"https://www.ly.gov.tw/Pages/List.aspx?nodeid=1682","corroboration":"https://votetw.com/data/candidate/%E9%BB%83%E4%BB%81%E6%9D%BC","note":"官方履历列第12、13、15、16届议员，缺第14届；当届候选人明细明确列非现任。"},{"id":"2002-council:台中县:regional:第2选举区:3","name":"王加佳","votes":6358,"office":"council","county":"台中县","district":"第2选举区","number":3,"source":"https://news.tvbs.com.tw/politics/332172","corroboration":"https://votetw.com/data/candidate/%E7%8E%8B%E5%8A%A0%E4%BD%B3","note":"同期后续报道证实第一次参选即当选；当届为2002年。"},{"id":"2002-township:金门县:regional:金宁乡:2","name":"翁自然","votes":1081,"office":"township","county":"金门县","district":"金宁乡","number":2,"source":"https://www.kmdn.gov.tw/1117/1271/1272/108008/?cprint=pt","corroboration":"https://votetw.com/data/candidate/%E6%9D%8E%E6%96%87%E4%BF%8A","note":"2002年交接报道确认原任乡长吴怡跑连任两届，新任李文俊；候选人翁自然非现任。"}];
+ function enrich2002Incumbency(shard){
+  if(shard.year!==2002)return shard;
+  const fixes=new Map(verified2002Incumbency.map(x=>[x.id,x]));
+  const norm=v=>String(v??'').replaceAll('臺','台').replaceAll('縣','县').replaceAll('選','选').replaceAll('區','区').replaceAll('鄉','乡').replaceAll('黃','黄').replaceAll('寧','宁');
+  const matches=new Map();
+  const candidacies=shard.candidacies.map(c=>{
+   const fix=fixes.get(c.candidacy_id);
+   if(!fix)return c;
+   if(norm(c.candidate_name)!==fix.name||Number(c.ballot_number)!==fix.number||c.votes!==fix.votes||c.incumbent_at_election===true)throw Error('2002年候选人现任资料核验不符：'+fix.id);
+   matches.set(fix.id,fix);
+   return {...c,incumbent_at_election:false,incumbent_source:{method:'contemporaneous_or_official_roster_crosscheck',source_url:fix.source,corroboration_url:fix.corroboration,note:fix.note}};
+  });
+  if(matches.size!==fixes.size)throw Error('2002年候选人补充资料对应不完整');
+  const rows=shard.rows.map(row=>{
+   const fix=[...matches.values()].find(x=>row.type===x.office&&norm(row.county)===x.county&&norm(row.name)===x.name&&Number(row.number)===x.number&&(x.office==='township'?norm(row.town)===x.district: norm(row.district)===x.district||norm(row.district).replace('选举区','选区')===x.district.replace('选举区','选区')));
+   return fix?{...row,incumbent:false}:row;
+  });
+  return {...shard,candidacies,rows};
+ }
  async function load(year,fetcher=root.fetch){
   if(!Object.values(YEARS).some(list=>list.includes(year))||year===2022)throw Error('不支持的地方选举年份');
   if(pending.has(year))return pending.get(year);
@@ -193,7 +214,7 @@
    const shard=await response.json();
    if(shard.schemaVersion!==2||shard.year!==year||!shard.rows?.length||!shard.candidacies?.length||
       !shard.contests?.length||!shard.elections?.length)throw Error('历史选举数据不完整');
-   return fillRegionalCouncilQuotas(applyCouncilSupplement(shard,supplement));
+   return enrich2002Incumbency(fillRegionalCouncilQuotas(applyCouncilSupplement(shard,supplement)));
   })();
   pending.set(year,request);
   try{return await request}catch(error){pending.delete(year);throw error}
@@ -341,7 +362,7 @@
   if(matched.size!==215||seats!==910)throw Error('2022议员名额总数核验失败');
   return {...shard,contests};
  }
- const api={trendSummarySourceVersion,reconcile2022Council,YEARS,years,yearLabel,cycleYear,load,loadCycle,geometry,councilMap,applyCouncilSupplement,fillRegionalCouncilQuotas,correctElectionDates,enrichLegacyGender};
+ const api={trendSummarySourceVersion,reconcile2022Council,YEARS,years,yearLabel,cycleYear,load,loadCycle,geometry,councilMap,applyCouncilSupplement,fillRegionalCouncilQuotas,correctElectionDates,enrichLegacyGender,enrich2002Incumbency};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;
  else root.HistoryLocal=api;
 })(typeof window==='undefined'?{}:window);
