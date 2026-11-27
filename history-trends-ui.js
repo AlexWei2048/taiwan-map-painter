@@ -159,7 +159,8 @@ function appendTrendCharts(out,rows,series,title,note,options,county){
  // Comparable historical jurisdictions use one numerical scale, not independently rescaled axes.
  const axisMax=layout!==out?Math.max(1,...scopes.flatMap(section=>section.rows.flatMap(row=>options.stack?[series.reduce((n,s)=>n+(s.get(row)||0),0)]:series.map(s=>s.get(row))).filter(Number.isFinite))):null;
  for(const section of scopes){
-  const scopedTitle=title+(section.label?' · '+section.label:''),scopedSeries=series.filter(s=>section.rows.some(r=>Number.isFinite(s.get(r))));
+  const publication=section.rows.some(r=>r.year===2026&&r.complete)?C.official2026Label(models.find(item=>item.year===2026)?.snapshot):'';
+  const scopedTitle=title+(section.label?' · '+section.label:'')+(publication?' · 2026 '+publication:''),scopedSeries=series.filter(s=>section.rows.some(r=>Number.isFinite(s.get(r))));
   const compact=layout!==out&&section.label.startsWith('原'),tall=layout!==out&&section.label.startsWith('合并后');
   const grouped=layout!==out;
   const graph=scopedSeries.length&&section.rows.some(r=>r.complete)?chart(section.rows,scopedSeries,scopedTitle,{...options,compact,tall,grouped,axisMax}):null;
