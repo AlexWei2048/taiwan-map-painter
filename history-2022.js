@@ -572,6 +572,9 @@
   const node=document.createElement(tag);if(className)node.className=className;
   if(text!==undefined)node.textContent=text;return node;
  }
+ function archiveAction(text,callback,title){const button=createHistoryElement('button','archive-inline-link',text);button.type='button';button.title=title;button.onclick=callback;return button}
+ function candidateArchiveAction(row,label){return archiveAction(label,()=>window.HistoryDiscovery?.openCandidate(row.name,{office:presidentialMode?'president':legislativeMode?'legislative':kind}),'按姓名查询历届参选记录（同名不代表同一人）')}
+ function partyArchiveAction(row){return archiveAction(row.party,()=>window.HistoryDiscovery?.openParty(row.party,{office:presidentialMode?'president':legislativeMode?'legislative':kind,ballot:legislativeMode?row.electorate:kind==='council'?row.electorate:'all',county:row.county&&row.county!=='全部地区'?row.county:''}),'查询该政党的历届选举档案')}
  function appendHistoryParty(cell,party){
   const p=predictionParty(party),logo=logoFor(p);
   const isTableCell=cell.tagName==='TD'||cell.tagName==='TH';
@@ -698,7 +701,7 @@
    const districtLabel=minority?minority:r.electorate==='party'?(r.town||'不分区政党票'):r.level==='town'?r.town:(r.district||'—');
    const textFields=partyBallot?[area]:[r.level==='national'?'全部地区':r.level==='town'&&minority?[r.county,r.town].filter(Boolean).join(' · '):r.county,districtLabel,r.electorate==='party'?'—':r.number||'—',displayedCandidateName(r),r.electorate==='party'?'—':displayedGender(r)];
    for(const [i,value] of textFields.entries()){
-    const cell=createHistoryElement('td','',value);tr.append(cell);
+    const cell=createHistoryElement('td','',value);if(!partyBallot&&i===3&&r.electorate!=='party'&&r.name)cell.replaceChildren(candidateArchiveAction(r,value));tr.append(cell);
     if(!partyBallot&&i===3){const details=document.createElement('details');details.className='legislative-mobile-details';details.append(createHistoryElement('summary','','详情'));const list=document.createElement('dl');for(const [key,v] of [['号次',r.number||'—'],['性别',r.electorate==='party'?'—':displayedGender(r)],['选举时现任',incumbentLabel(r)||'—']]){list.append(createHistoryElement('dt','',key),createHistoryElement('dd','',v))}details.append(list);cell.append(details)}
    }
    if(!partyBallot){
@@ -706,7 +709,7 @@
     if(r.incumbent==null)current.title='现任资料缺失';
     tr.append(current);
    }
-   const party=document.createElement('td');appendHistoryParty(party,r.party);tr.append(party);
+   const party=document.createElement('td');appendHistoryParty(party,r.party);const name=party.querySelector('.history-party-inline>span');if(name&&r.party)name.replaceWith(partyArchiveAction(r));tr.append(party);
    tr.append(createHistoryElement('td','history-number',r.votes.toLocaleString('zh-CN')));
    tr.append(createHistoryElement('td','history-number',r._share.toFixed(2)+'%'));
    if(!partyBallot){const mark=document.createElement('td');if(r.electorate!=='party')appendResultMark(mark,r);tr.append(mark)}
@@ -759,11 +762,11 @@
    }
    const tr=document.createElement('tr');const link=historyLinkRow(r);if(link)tr.dataset.mapLink=link;tr.dataset.partyKeys=JSON.stringify([partyLinkKey(r.party),partyLinkKey(r.party,r.name)]);
    const values=[r.county,mayorTownView()?r.town:kind==='council'?r.district:kind==='township'?r.town:(r.district||''),r.number||'—',displayedCandidateName(r),displayedGender(r),incumbentLabel(r)];
-   for(const [i,value] of values.entries()){const td=document.createElement('td');if(i===5)appendIncumbentTag(td,value);else td.textContent=value||'—';if(i===5&&r.incumbent==null)td.title='现任资料缺失';tr.append(td)}
+   for(const [i,value] of values.entries()){const td=document.createElement('td');if(i===5)appendIncumbentTag(td,value);else if(i===3&&r.name)td.append(candidateArchiveAction(r,value));else td.textContent=value||'—';if(i===5&&r.incumbent==null)td.title='现任资料缺失';tr.append(td)}
    const partyCell=document.createElement('td');partyCell.className='history-party-cell';
    const party=predictionParty(r.party),logo=logoFor(party);
    if(logo){const img=document.createElement('img');img.src=logo;img.alt='';img.loading='lazy';partyCell.append(img)}
-   const partyName=document.createElement('span');partyName.textContent=r.party;partyCell.append(partyName);tr.append(partyCell);
+   const partyName=partyArchiveAction(r);partyCell.append(partyName);tr.append(partyCell);
    const votes=document.createElement('td');votes.className='history-number';votes.textContent=r.votes.toLocaleString('zh-CN');tr.append(votes);
    const rate=document.createElement('td');rate.className='history-number';rate.textContent=(r._share||0).toFixed(2)+'%';tr.append(rate);
    const status=document.createElement('td');appendResultMark(status,r);tr.append(status);

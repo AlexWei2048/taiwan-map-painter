@@ -125,7 +125,7 @@ function trendPointInspector(graph){
  const points=[...graph.querySelectorAll('circle[data-trend-value][data-trend-slot]')];if(!points.length)return null;
  const panel=node('details','trend-point-inspector'),summary=node('summary','','按届次查看数据'),controls=node('div','trend-inspector-controls'),label=node('label','','选举届次'),select=node('select'),list=node('div','trend-inspector-list'),status=node('p','data-help');
  const slots=new Map();for(const p of points){const key=p.dataset.trendSlot;if(!slots.has(key))slots.set(key,{label:p.dataset.trendSlotLabel,points:[]});slots.get(key).points.push(p)}
- for(const [key,group] of slots)select.append(new Option(group.label,key));select.value=[...slots.keys()].at(-1);
+ const sortedSlots=[...slots].sort((a,b)=>Number(a[0])-Number(b[0]));for(const [key,group] of sortedSlots)select.append(new Option(group.label,key));select.value=sortedSlots.at(-1)[0];
  label.append(select);controls.append(label);panel.append(summary,controls,status,list);
  const fmtPoint=p=>p.getAttribute('aria-label')||p.querySelector('title')?.textContent||'';
  const visible=p=>p.closest('[data-trend-series]')?.getAttribute('display')!=='none';
@@ -141,7 +141,7 @@ function trendPointInspector(graph){
  select.onchange=update;panel.addEventListener('toggle',()=>{if(panel.open)update()});
  // Listen to plot visibility changes, including linked pre/post-merger charts.
  const observer=new MutationObserver(()=>{if(panel.open)update()});observer.observe(graph,{subtree:true,attributes:true,attributeFilter:['display']});
- return panel;
+ update();return panel;
 }
 function card(title,description,graph,exportTitle=title,context={}){
  const c=node('article','trend-card'),h=node('div','trend-card-heading'),buttons=node('div','trend-card-actions');h.append(node('h4','',title),buttons);
