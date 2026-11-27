@@ -221,7 +221,7 @@ const dialog=$('historyCompareDialog'),office=$('compareOffice'),ballot=$('compa
 const node=(tag,t)=>{const e=doc.createElement(tag);if(t!==undefined)e.textContent=t;return e};
 const svg=(tag,attrs={})=>{const e=doc.createElementNS('http://www.w3.org/2000/svg',tag);for(const [k,v]of Object.entries(attrs))e.setAttribute(k,v);return e};
 const normalize=v=>typeof simplify==='function'?simplify(String(v||'')):norm(v);
-let token=0,models=null,baseBox=null,zoom=1,offsetX=0,offsetY=0,chosen='',savedCompare=null;
+let token=0,models=null,baseBox=null,zoom=1,offsetX=0,offsetY=0,chosen='',savedCompare=null,drawnModels=null,drawnMode='',drawnChosen='';
 const cache=new Map();
 const mode=$('compareMode'),level=$('compareLevel');
 const shapeKey=f=>level.value==='town'?normalize(f.county)+'|'+normalize(f.name||f.town):normalize(f.name||f.county);
@@ -295,7 +295,7 @@ function drawMap(model,id,index){
    }
   }
   const path=svg('path',{d:f.d,fill,stroke:name===chosen?'#182d26':'#546f62','stroke-width':name===chosen?2.5:.8,'vector-effect':'non-scaling-stroke','fill-rule':f.fillRule||'evenodd',tabindex:'0',role:'button','aria-label':areaLabel(name)+' '+(changeMode?changeLabel:profileMode?(Number.isFinite(baseProfile)?(mode.value==='turnout'?rate(baseProfile):baseProfile.toLocaleString('zh-CN')+' 人'):'统计待核'):baseVotes?(Number.isFinite(baseVote)?baseVote+' 票':'缺档或未参选'):baseSeats?(Number.isFinite(seats)?seats+' 席':'席次待核'):entry?.complete?(selected?(Number.isFinite(share)?rate(share):metricState(entry,selected)):leaders.join('、')||'席次待核'):model.summary.office==='township'&&model.summary.level==='town'&&!entry?'无直选记录／不适用':metricState(entry,selected))});
-  const title=svg('title');title.textContent=path.getAttribute('aria-label');path.append(title);path.onclick=()=>{chosen=name;county.value=name;render()};path.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();chosen=name;county.value=name;render()}};graph.append(path);
+  path.dataset.compareArea=name;const title=svg('title');title.textContent=path.getAttribute('aria-label');path.append(title);path.onclick=()=>{chosen=name;county.value=name;render()};path.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();chosen=name;county.value=name;render()}};graph.append(path);
  }
 }
 function seatChangeMax(){if(!models||!party.value)return 1;const [a,b]=models.map(x=>x.summary);return Math.max(1,...[...b.counties.keys()].map(c=>Math.abs(countyChange(a,b,c,party.value,'seats')??0)))}
@@ -312,7 +312,9 @@ function render(){
  if(mode.value==='turnover'&&party.value)party.value='';
  const suffix={results:'',share:' · 得票率变化',votes:' · 得票数变化',turnout:' · 投票率变化',registered:' · 选举人数变化',seats:' · 席次变化',turnover:' · 执政权变化'}[mode.value];
  $('compareMapTitleA').textContent=label(as.year,as.office);$('compareMapTitleB').textContent=label(bs.year,bs.office)+suffix;
- drawMap(a,'compareMapA',0);drawMap(b,'compareMapB',1);setBox();
+ const mapMode=JSON.stringify([mode.value,party.value]);
+ if(drawnModels!==models||drawnMode!==mapMode){drawMap(a,'compareMapA',0);drawMap(b,'compareMapB',1);drawnModels=models;drawnMode=mapMode;drawnChosen=chosen}
+ else if(drawnChosen!==chosen){for(const id of ['compareMapA','compareMapB'])for(const path of $(id).querySelectorAll('[data-compare-area]'))if(path.dataset.compareArea===drawnChosen||path.dataset.compareArea===chosen){const active=path.dataset.compareArea===chosen;path.setAttribute('stroke',active?'#182d26':'#546f62');path.setAttribute('stroke-width',active?'2.5':'.8')}drawnChosen=chosen}setBox();
  const available=chosen?comparableCounty(chosen,as,bs)&&as.counties.has(chosen)&&bs.counties.has(chosen):true;
  const x=chosen?as.counties.get(chosen):as.all,y=chosen?bs.counties.get(chosen):bs.all,host=$('compareTable');host.replaceChildren();
  const heading=node('h3',chosen?areaLabel(chosen):as.level==='town'?'全部地区（县级汇总）':'全部地区');host.append(heading);
@@ -325,7 +327,7 @@ function render(){
  }
  if(!chosen&&mode.value==='turnover'){
   const states=[...new Set([...as.counties.keys(),...bs.counties.keys()])].map(c=>countyChange(as,bs,c,'','turnover'));
-  host.append(node('p','可比地区：'+states.filter(Boolean).length+'；党籍易手：'+states.filter(t=>t?.changed).length+'；党籍未变：'+states.filter(t=>t&&!t.changed).length+'；不可比：'+states.filter(t=>!t).length+'。'));
+  host.append(node('p',(as.level==='town'?'可比地区：':'可比县市：')+states.filter(Boolean).length+'；党籍易手：'+states.filter(t=>t?.changed).length+'；党籍未变：'+states.filter(t=>t&&!t.changed).length+'；不可比：'+states.filter(t=>!t).length+'。'));
  }
  const table=node('table');table.className='history-candidate-table compare-data-table';const head=node('thead'),hr=node('tr');
  for(const t of ['政党',label(as.year,as.office)+' 得票率',label(bs.year,bs.office)+' 得票率','变化（百分点）',label(as.year,as.office)+' 席次',label(bs.year,bs.office)+' 席次','席次增减','左届得票数','右届得票数','得票数变化'])hr.append(node('th',t));head.append(hr);table.append(head);
@@ -337,7 +339,7 @@ function render(){
  for(const id of ['compareExportSvg','compareExportCsv','compareExportPng'])$(id).disabled=exporting;
 }
 async function refresh(){
- syncLevel();const my=++token,o=office.value,b=ballot.value,y1=Number(left.value),y2=Number(right.value),grain=level.value;models=null;
+ syncLevel();const my=++token,o=office.value,b=ballot.value,y1=Number(left.value),y2=Number(right.value),grain=level.value;models=null;drawnModels=null;
  $('compareMapA').replaceChildren();$('compareMapB').replaceChildren();$('compareTable').replaceChildren();$('compareLegend').textContent='';for(const id of ['compareExportSvg','compareExportCsv','compareExportPng'])$(id).disabled=true;
  if(y1===y2){status.textContent='请选择不同届次';return}
  status.textContent='正在载入两届正式历史资料…';
@@ -428,6 +430,6 @@ async function exportComparison(format){
  }catch(e){status.textContent=e.message||'导出失败'}finally{if(url)URL.revokeObjectURL(url);exporting=false;buttons.forEach(id=>$(id).disabled=!models)}
 }
 $('compareExportSvg').onclick=()=>exportComparison('svg');$('compareExportCsv').onclick=()=>exportComparison('csv');$('compareExportPng').onclick=()=>exportComparison('png');
-dialog.addEventListener('close',()=>{savedCompare=true;token++;models=null;root.dispatchEvent(new Event('observationdialogchange'))});
+dialog.addEventListener('close',()=>{savedCompare=true;token++;models=null;drawnModels=null;root.dispatchEvent(new Event('observationdialogchange'))});
 $('compareSwap')?.addEventListener('click',()=>{const a=left.value;left.value=right.value;right.value=a;refresh()});
 })(typeof window==='undefined'?globalThis:window);
