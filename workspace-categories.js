@@ -4,10 +4,13 @@
  const future=$c('categoryFuture'),history=$c('categoryHistory'),analysis=$c('categoryAnalysis'),futureModes=$c('futureModes');
  if(!future||!history||!futureModes)return;
  const tabs={future,history,analysis};
+ const tabList=Object.values(tabs).filter(Boolean);
+ // Arrow keys move focus; Enter/Space activate the focused workspace.
+ tabList.forEach((tab,i)=>tab.addEventListener('keydown',event=>{let next;if(event.key==='ArrowRight')next=(i+1)%tabList.length;else if(event.key==='ArrowLeft')next=(i+tabList.length-1)%tabList.length;else if(event.key==='Home')next=0;else if(event.key==='End')next=tabList.length-1;else return;event.preventDefault();tabList[next].focus()}));
  let group='future',navigation=0,transitioning=0;
  function select(next){
   group=next;
-  for(const [key,tab] of Object.entries(tabs))if(tab){tab.classList.toggle('active',key===group);tab.setAttribute('aria-selected',String(key===group))}
+  for(const [key,tab] of Object.entries(tabs))if(tab){tab.classList.toggle('active',key===group);tab.setAttribute('aria-selected',String(key===group));tab.tabIndex=key===group?0:-1}
   futureModes.hidden=group!=='future';
   document.body.classList.toggle('analysis-mode',group==='analysis');
   if($c('analysisViews'))$c('analysisViews').hidden=group!=='analysis';

@@ -1407,6 +1407,7 @@ test('A fresh visitor can open history and loads its resources only when needed'
  await page.locator('#categoryFuture').click();
  assert.equal(await page.locator('#historyControls').isVisible(),false);
  assert.equal(await page.locator('#siteAbout').isVisible(),true);
+ await page.locator('#siteAbout summary').click();
  assert.match(await page.locator('#siteAbout .about-credits').innerText(),/网页开发\s+Alex Wei\s+测试和推广\s+星夜长街/);
  assert.match(await page.locator('#siteAbout .about-sources').innerText(),/数据来源/);
  assert.equal(await page.locator('#siteUpdatedAt').count(),1);
@@ -3225,6 +3226,8 @@ test('Sidebar keeps site information directly above the mode switch and removes 
  assert.equal(await page.locator('#historyControls .section-label').innerText(),'历史选举数据');
  assert.equal(await page.locator('.settings-panel .section-label').innerText(),'外观与工具');
  assert.equal(await page.locator('#siteAbout').isVisible(),true);
+ assert.equal(await page.locator('#siteAbout').evaluate(el=>el.open),false);
+ await page.locator('#siteAbout summary').click();
  assert.equal(await page.locator('#siteAbout .about-sources').isVisible(),true);
  assert.equal(await page.locator('#siteAbout .about-credits').isVisible(),true);
 });
@@ -3765,3 +3768,17 @@ test('Historical party archive separates verified votes, seats and absent record
 test('Mobile history archive retains query selections and keeps dialogs inside the viewport',async t=>{const page=await pageFor(t,{width:390,height:844});await page.locator('#categoryAnalysis').click();await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);await page.locator('#observationPartyOpen').click();await page.locator('#partyArchiveName').fill('中国国民党');await page.locator('#partyArchiveCounty').selectOption('台北市');await page.locator('#partyArchiveOffice').selectOption('council');await page.locator('#partyArchiveDialog').getByRole('button',{name:'关闭',exact:true}).click();await page.locator('#observationPartyOpen').click();assert.equal(await page.locator('#partyArchiveName').inputValue(),'中国国民党');assert.equal(await page.locator('#partyArchiveCounty').inputValue(),'台北市');assert.equal(await page.locator('#partyArchiveOffice').inputValue(),'council');const box=await page.locator('#partyArchiveDialog').boundingBox();assert.ok(box.x>=0&&box.x+box.width<=391);await page.locator('#partyArchiveForm button[type=submit]').click();await page.locator('#partyArchiveResults table').waitFor({timeout:90000});await page.locator('#partyArchiveName').fill('民主进步党');assert.equal(await page.locator('#partyArchiveResults table').count(),0);assert.match(await page.locator('#partyArchiveStatus').textContent(),/查询条件已更新/);});
 
 test('Township executive comparison supports town grain and retains map nodes when selecting a town',async t=>{const page=await pageFor(t,{width:1440,height:950});await page.locator('#categoryAnalysis').click();await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);await page.locator('#historyCompareOpen').click();await page.locator('#compareOffice').selectOption('township');await page.locator('#compareYearA').selectOption('2018');await page.locator('#compareYearB').selectOption('2022');await page.locator('#compareLevel').selectOption('town');await page.waitForFunction(()=>!document.getElementById('compareExportSvg').disabled,{},{timeout:90000});await page.locator('#compareMode').selectOption('turnover');assert.match(await page.locator('#compareTable').textContent(),/可比地区/);const result=await page.evaluate(()=>{const first=document.querySelector('#compareMapA path[data-compare-area]');first.dispatchEvent(new MouseEvent('click',{bubbles:true}));return first===document.querySelector('#compareMapA path[data-compare-area]')});assert.equal(result,true);assert.equal(await page.locator('#compareMapA path[data-compare-area]').first().getAttribute('stroke-width'),'2.5');});
+
+ test('Search shortcuts and workspace hints simplify first-time navigation without publishing unverified results',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ assert.equal(await page.locator('#siteAbout').evaluate(el=>el.open),false);
+ assert.equal(await page.locator('.workspace-tab-hint').count(),3);
+ await page.locator('#categoryFuture').focus();await page.keyboard.press('ArrowRight');assert.equal(await page.evaluate(()=>document.activeElement.id),'categoryHistory');
+ await page.locator('#siteSearchOpen').click();await page.locator('#siteSearchQuery').fill('2022年台北市长');await page.locator('#siteSearchForm button[type=submit]').click();
+ await page.locator('#searchRecentList button').first().waitFor();assert.equal(await page.locator('#searchRecentList button').first().textContent(),'2022年台北市长');
+ await page.locator('#searchRecentClear').click();assert.equal(await page.locator('#searchRecent').isVisible(),false);
+ await page.locator('[data-search-workspace="workspaceFree"]').click();assert.equal(await page.locator('#siteSearchDialog').evaluate(el=>el.open),false);assert.equal(await page.locator('#workspaceFree').getAttribute('aria-pressed'),'true');
+ await page.route('**/assets/history-2026-availability.json*',route=>route.fulfill({contentType:'application/json',body:JSON.stringify({schemaVersion:1,year:2026,status:'awaiting_results'})}));
+ await page.locator('#latestElectionLink').click();await page.waitForFunction(()=>window.History2022View?.active()&&window.History2022View?.snapshot()?.year===2022&&document.querySelector('#historyLoadStatus').hidden);
+ assert.equal(await page.locator('#historyYear option[value="2026"]').count(),0);assert.equal(await page.locator('#historyYear').inputValue(),'2022');
+});
