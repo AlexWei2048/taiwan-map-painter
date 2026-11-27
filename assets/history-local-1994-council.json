@@ -17272,7 +17272,21 @@
           "男",
           true
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "3": {
+          "value": true,
+          "source_url": "https://whoareyou.readr.tw/person/153",
+          "source_locator": "READr政商人物資料庫所錄87年選舉履歷明列臺南縣議會第十一、十二屆議員及第十三屆副議長。搜尋索引文字可讀，完整頁未取得。",
+          "election_date": "1994-01-29",
+          "method": "documented_previous_term_biography",
+          "confidence": "secondary_biographical_record",
+          "limitation": "非投票日逐日任免名冊；履歷未列前屆不等於完整名冊。",
+          "original_name": "周五六",
+          "ballot_number": 3,
+          "votes": 12646
+        }
+      }
     },
     {
       "county": "臺南縣",
@@ -28247,6 +28261,32 @@
           "ballot_number": 5,
           "votes": 2835
         },
+        "6": {
+          "value": false,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/05%E7%9B%B4%E8%BD%84%E5%B8%82%E8%AD%B0%E5%93%A1/107%E5%B9%B4/05%E8%87%BA%E5%8D%97%E5%B8%82/%E7%AC%AC3%E5%B1%86%E5%B8%82%E8%AD%B0%E5%93%A1%E9%81%B8%E8%88%89-%E7%AC%AC09%E9%81%B8%E8%89%89%E5%8D%80.pdf",
+          "source_locator": "2018年第9選區6號，履歷列第14、16屆及合併後第一屆；1998年同市同選區當選。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "非投票日逐日任免名冊；履歷未列前屆不等於完整名冊。",
+          "original_name": "陳進益",
+          "ballot_number": 6,
+          "votes": 4423,
+          "corroboration_url": "https://votetw.com/data/candidate/%E9%99%B3%E9%80%B2%E7%9B%8A"
+        },
+        "7": {
+          "value": false,
+          "source_url": "https://cissearch.kcc.gov.tw/Upload/Attachment/%E5%85%AC%E5%A0%B1%E8%B3%87%E6%96%99/%E9%AB%98%E9%9B%84%E5%B8%82%E8%AD%B0%E6%9C%83/13%E5%8D%B7/1%E6%9C%9F/13%E5%8D%B71%E6%9C%9F08636%E8%B5%B7%E9%A0%8108684%E8%BF%84%E9%A0%81.pdf",
+          "source_locator": "高雄市議會公報第13卷第1期，印刷頁8636，本人明述1994年首次參選台南市議員。原頁截圖未能取得，文字已核對。",
+          "election_date": "1994-01-29",
+          "method": "explicit_first_candidacy",
+          "confidence": "official_transcript",
+          "limitation": "非投票日逐日任免名冊；履歷未列前屆不等於完整名冊。",
+          "original_name": "蕭永達",
+          "ballot_number": 7,
+          "votes": 4392,
+          "corroboration_url": "https://www.peoplemedia.tw/news/8972d952-3283-4f27-b4b9-370cf7845342"
+        },
         "8": {
           "value": true,
           "source_url": "https://tm.ncl.edu.tw/article?u=017_008_0000275667",
@@ -28611,6 +28651,19 @@
           "ballot_number": 2,
           "votes": 4014
         },
+        "6": {
+          "value": false,
+          "source_url": "https://votetw.com/data/candidate/%E6%9D%8E%E9%8C%A6%E6%B3%89",
+          "source_locator": "公開履歷列第15、16屆市議員，1998未當選、2002當選；非現任屬履歷推定。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "非投票日逐日任免名冊；履歷未列前屆不等於完整名冊。",
+          "original_name": "李錦泉",
+          "ballot_number": 6,
+          "votes": 4179,
+          "corroboration_url": "https://govtw.org/candidate/%E6%9D%8E%E9%8C%A6%E6%B3%89"
+        },
         "11": {
           "value": false,
           "source_url": "https://www.moi.gov.tw/LocalOfficial_Content.aspx?TYP=KND0001&_PARENT_ID=ER11112DA00037&_TYP=REP&n=573",
@@ -28775,6 +28828,18 @@
           "original_name": "黃玉雲",
           "ballot_number": 10,
           "votes": 5419
+        },
+        "11": {
+          "value": false,
+          "source_url": "https://tucheng.kenlab.org/encyclopedia/chen-jinyi/",
+          "source_locator": "地方史資料引2010年公報履歷列新順里長及第13、14、15屆市議員，與1994當選相符。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "非投票日逐日任免名冊；履歷未列前屆不等於完整名冊。",
+          "original_name": "陳進義",
+          "ballot_number": 11,
+          "votes": 7133
         }
       },
       "gender_sources": {
@@ -28888,6 +28953,20 @@
           "original_name": "歐炳長",
           "value": "男",
           "confidence": "cross_election_geographic_match"
+        }
+      },
+      "incumbent_sources": {
+        "5": {
+          "value": false,
+          "source_url": "https://councilorwatch.tw/councillor/10/282",
+          "source_locator": "就任歷史自1998年3月1日開始，履歷列第14至16屆市議員。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "非投票日逐日任免名冊；履歷未列前屆不等於完整名冊。",
+          "original_name": "李文正",
+          "ballot_number": 5,
+          "votes": 1887
         }
       }
     },
