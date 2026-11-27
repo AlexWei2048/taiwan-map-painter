@@ -10169,13 +10169,26 @@
       "candidate_name": "古荣耀",
       "candidate_name_official": "古榮耀",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "无党籍",
       "party_name_official": "無黨籍",
       "votes": 7904,
       "vote_share": 100,
       "elected_official": true,
-      "elected_mark": "*"
+      "elected_mark": "*",
+      "incumbent_source": {
+        "name": null,
+        "source_url": "https://www.hchcc.gov.tw/Tw/common/Downloader?id=60d323ae-0baa-40b7-b020-2a25c29f69b8",
+        "source_locator": "《新竹縣志續修》頁75表1-3-1列古榮耀為第12屆縣議員（1990-03-01至1994-03-01）；2012-11-15自由時報回顧明載1994年由縣議員轉任鄉長。",
+        "corroboration_url": "https://n.yam.com/Article/20121115977029",
+        "method": "official_prior_council_term_and_explicit_career_transition",
+        "candidate_name": "古榮耀",
+        "candidate_values": {
+          "1": false
+        },
+        "limitation": "同一縣志頁44鄉鎮首長表與頁75議員名單及報導矛盾，疑似屆期欄位錯置；以明載轉任的報導及第12屆議員名單判斷非現任鄉長，實際前任鄉長姓名待核。原頁截圖未能擷取，不修改計票資料。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:新竹县:regional:北埔乡:1",
@@ -19962,7 +19975,7 @@
       "number": "1",
       "party": "无党籍",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 7904,
       "elected": true,
       "electedMark": "*",
