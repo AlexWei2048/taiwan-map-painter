@@ -1039,3 +1039,12 @@ body.analysis-mode #historyTownBoundaryBox{display:none!important}
 /* Keep the reset action visibly separate from destructive canvas reset. */
 .history-reset-filters{width:100%;margin-top:10px;min-height:34px;color:#216b54;background:#f6faf6;border:1px solid #dce8df;border-radius:7px}
 @media(max-width:700px){#historyControls .history-reset-filters{grid-column:1/-1;min-height:44px}}
+
+/* Search long lists without replacing native selects or their change handlers. */
+.option-finder-trigger{display:block;margin:4px 0 2px auto;padding:4px 7px;border:0;background:transparent;color:#216b54;font-size:11px;text-decoration:underline;text-underline-offset:2px}
+.option-finder-dialog{width:min(470px,calc(100vw - 28px));max-width:none;max-height:82dvh;padding:20px}
+.option-finder-dialog .finder-heading{display:flex;align-items:center;justify-content:space-between;margin:0 0 12px}.finder-heading h2{margin:0;font-size:18px}
+.option-finder-dialog label{display:block;font-size:12px;margin-bottom:6px}.option-finder-dialog .option-finder-results{display:grid;gap:4px;justify-content:stretch;max-height:48dvh;overflow:auto;margin:0}
+.option-finder-item{min-height:36px;text-align:left;border:1px solid #dce8df;border-radius:7px;background:#fff;padding:8px 10px;overflow-wrap:anywhere}.option-finder-item[aria-pressed=true]{background:#e5f2eb;border-color:#83b49d;color:#216b54}
+.export-preview-options .preview-note{flex:1 1 100%;align-items:flex-start;flex-direction:column}.preview-note textarea{width:100%;padding:8px;border:1px solid #dce8df;border-radius:7px;font:inherit;resize:vertical}.export-preview-options label[hidden]{display:none!important}
+@media(max-width:700px){.option-finder-trigger{min-height:36px}.option-finder-item{min-height:44px}.option-finder-dialog input,.preview-note textarea{font-size:16px}.export-preview-options{gap:10px}.export-preview-options label{flex-wrap:wrap}}

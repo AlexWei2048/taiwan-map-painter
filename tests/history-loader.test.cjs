@@ -14,15 +14,15 @@ test('the latest history click wins after navigating away during loading',async(
  }
  let release,opened=0;
  const loading=new Promise(resolve=>{release=resolve});
- const window={HistoryLoader:{load:()=>loading},addEventListener(){}};
+ const window={HistoryLoader:{load:()=>loading},addEventListener(){},dispatchEvent(){}};
  vm.runInNewContext(fs.readFileSync('workspace-categories.js','utf8'),{
-  window,document:{getElementById:id=>buttons.get(id),querySelector:()=>null,body:{classList:{contains:()=>false,toggle(){}}}}
+  window,Event:class Event{},toast(message){throw Error(message)},document:{getElementById:id=>buttons.get(id),querySelector:()=>null,body:{classList:{contains:()=>false,toggle(){}}}}
  });
  const history=buttons.get('categoryHistory');
  const first=history.click();
  buttons.get('categoryFuture').click();
  const second=history.click();
- release({activate(){opened++}});
+ release({active(){return opened>0},activate(){opened++}});
  await Promise.all([first,second]);
  assert.equal(opened,1);
  assert.equal(history.attrs['aria-selected'],'true');

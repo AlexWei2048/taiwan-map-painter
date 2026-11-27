@@ -1,0 +1,17 @@
+'use strict';
+(()=>{
+ const ids=['county','historyCounty','predictionRegion','predictionCountyPicker','historyFocus','historyCandidate','historyParty','localTownSelect','localCandidate','regionArchiveCounty','regionArchiveTown','partyArchiveCounty','compareCounty'];
+ const dialog=document.createElement('dialog');dialog.id='optionFinderDialog';dialog.className='option-finder-dialog';dialog.setAttribute('aria-labelledby','optionFinderTitle');
+ dialog.innerHTML='<div class="finder-heading"><h2 id="optionFinderTitle">查找选项</h2><button type="button" id="optionFinderClose" class="button quiet">关闭</button></div><label for="optionFinderQuery">输入关键词</label><input type="search" id="optionFinderQuery" placeholder="输入地区、选区或姓名" autocomplete="off"><p id="optionFinderStatus" role="status"></p><div id="optionFinderResults" class="option-finder-results"></div>';
+ document.body.append(dialog);
+ const $f=id=>document.getElementById(id),query=$f('optionFinderQuery'),results=$f('optionFinderResults'),status=$f('optionFinderStatus');
+ let select=null,trigger=null,parentDialog=null;
+ const norm=s=>{const v=String(s||'');return (typeof simplify==='function'?simplify(v):v).replace(/臺/g,'台').replace(/縣/g,'县').replace(/\s+/g,'').toLowerCase()};
+ function available(s){return [...s.options].filter(o=>!o.disabled&&!o.hidden&&!o.closest('optgroup')?.disabled)}
+ function render(){if(!select)return;const q=norm(query.value),options=available(select).filter(o=>norm(o.textContent+' '+(o.closest('optgroup')?.label||'')).includes(q));results.replaceChildren();status.textContent=options.length?'找到 '+options.length+' 项'+(options.length>120?'，显示前120项，请继续缩小范围。':''):'没有匹配项，请调整关键词。';
+ for(const o of options.slice(0,120)){const b=document.createElement('button');b.type='button';b.className='option-finder-item';b.textContent=o.textContent;b.setAttribute('aria-pressed',String(o.selected));b.onclick=()=>{const target=select;if(!target||target.disabled||!available(target).includes(o))return;const changed=target.value!==o.value;target.value=o.value;dialog.close();if(changed)target.dispatchEvent(new Event('change',{bubbles:true}))};results.append(b)}}
+ function open(s,b){if(s.disabled||!available(s).length)return;select=s;trigger=b;parentDialog=s.closest('dialog');$f('optionFinderTitle').textContent='查找'+(s.labels?.[0]?.textContent?.trim()||s.getAttribute('aria-label')||'选项');query.value='';dialog.showModal();render();query.focus()}
+ query.addEventListener('input',render);query.addEventListener('keydown',e=>{if(e.key==='ArrowDown'){e.preventDefault();results.querySelector('button')?.focus()}else if(e.key==='Enter'){e.preventDefault();if(results.childElementCount===1)results.firstElementChild.click()}});
+ $f('optionFinderClose').onclick=()=>dialog.close();dialog.addEventListener('close',()=>{if(!dialog.open){const b=trigger;select=null;trigger=null;parentDialog=null;if(b?.isConnected)b.focus()}});
+ for(const id of ids){const s=$f(id);if(!s)continue;const b=document.createElement('button');b.type='button';b.className='option-finder-trigger';b.dataset.findSelect=id;b.textContent='查找选项';b.setAttribute('aria-label','查找'+(s.labels?.[0]?.textContent?.trim()||s.getAttribute('aria-label')||'选项'));b.setAttribute('aria-haspopup','dialog');s.after(b);const update=()=>{b.hidden=s.disabled||available(s).length<15};b.onclick=()=>open(s,b);new MutationObserver(update).observe(s,{childList:true,subtree:true,attributes:true,attributeFilter:['disabled','hidden']});update()}
+})();

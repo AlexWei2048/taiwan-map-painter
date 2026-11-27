@@ -3797,3 +3797,14 @@ test('Township executive comparison supports town grain and retains map nodes wh
  await page.locator('#historyResetFilters').click();await page.waitForFunction(()=>History2022View.routeSelection().county===''&&History2022View.routeSelection().metric==='party');assert.equal(await page.locator('#historyYear').inputValue(),'2022');
  await page.locator('#categoryFuture').click();assert.equal(await page.locator('#workspaceFree').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('#county').inputValue(),'台北市');
 });
+
+ test('Searchable native select and export preview settings reuse existing selection and export logic',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ await page.locator('[data-find-select="county"]').click();await page.locator('#optionFinderQuery').fill('台北市');
+ await page.locator('#optionFinderResults button').filter({hasText:'台北市'}).click();assert.equal(await page.locator('#county').inputValue(),'台北市');assert.equal(await page.locator('#optionFinderDialog').evaluate(e=>e.open),false);
+ await page.locator('.export-menu summary').click();await page.locator('#previewExport').click();await page.waitForFunction(()=>!document.querySelector('#previewExportSvg').disabled);
+ await page.locator('#previewWinnerTable').check();await page.locator('#previewCandidateScope').selectOption('all');await page.locator('#previewNote').fill('测试注释');assert.equal(await page.locator('#previewExportSvg').isDisabled(),true);
+ await page.locator('#refreshExportPreview').click();await page.waitForFunction(()=>!document.querySelector('#previewExportSvg').disabled);
+ assert.equal(await page.locator('#exportCandidateScope').inputValue(),'all');assert.equal(await page.locator('#exportNote').inputValue(),'测试注释');
+ await page.locator('#closeExportPreview').click();
+ });

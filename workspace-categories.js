@@ -8,6 +8,7 @@
  // Arrow keys move focus; Enter/Space activate the focused workspace.
  tabList.forEach((tab,i)=>tab.addEventListener('keydown',event=>{let next;if(event.key==='ArrowRight')next=(i+1)%tabList.length;else if(event.key==='ArrowLeft')next=(i+tabList.length-1)%tabList.length;else if(event.key==='Home')next=0;else if(event.key==='End')next=tabList.length-1;else return;event.preventDefault();tabList[next].focus()}));
  let group='future',navigation=0,transitioning=0;
+ const busyRequests=new Map();
  // Store only validated query selections, never prediction data or open dialog state.
  const remembered={history:null,analysis:null};
  function currentRoute(){
@@ -56,7 +57,7 @@
  async function openHistory(route=null,isCurrent=()=>true,target=null){
   remember();
   const request=++navigation,desired=target||(route?.view==='trends'?'analysis':'history'),tab=tabs[desired]||history;
-  transitioning=request;tab.setAttribute('aria-busy','true');
+  transitioning=request;busyRequests.set(tab,request);tab.setAttribute('aria-busy','true');
   try{
    const view=await window.HistoryLoader.load();
    if(request!==navigation||!isCurrent())return false;
@@ -76,7 +77,7 @@
    notify();
    return true;
   }catch(error){if(request===navigation)toast(error.message||'历史资料载入失败，请稍后重试')}
-  finally{if(transitioning===request){transitioning=0;remember()}tab.removeAttribute('aria-busy')}
+  finally{if(transitioning===request){transitioning=0;remember()}if(busyRequests.get(tab)===request){busyRequests.delete(tab);tab.removeAttribute('aria-busy')}}
  }
  window.SiteWorkspaceCategories={openHistory,group:()=>group};
  $c('historyResetFilters')?.addEventListener('click',async()=>{
