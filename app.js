@@ -1838,24 +1838,43 @@ function appendSharedBorders(group,level,identity='regional',filterTown=false){
 }
 
 
+// Boundary groups contain only SVG groups and paths. Reconcile a fresh geometry
+// description against the live tree; never infer equality from a year or region ID.
+function syncBoundaryTree(live,next){
+ const transform=next.getAttribute('transform');
+ if(transform===null){if(live.hasAttribute('transform'))live.removeAttribute('transform')}
+ else if(live.getAttribute('transform')!==transform)live.setAttribute('transform',transform);
+ const sameShape=(a,b)=>{
+  if(a.localName!==b.localName)return false;
+  const geometry=node=>Array.from(node.attributes).filter(x=>!['transform','stroke','stroke-width','style'].includes(x.name)).map(x=>[x.name,x.value]).sort((x,y)=>x[0].localeCompare(y[0]));
+  return JSON.stringify(geometry(a))===JSON.stringify(geometry(b));
+ };
+ const fresh=Array.from(next.children),existing=Array.from(live.children);
+ for(let i=0;i<fresh.length;i++){
+  const a=existing[i],b=fresh[i];
+  if(a&&sameShape(a,b))syncBoundaryTree(a,b);
+  else if(a)a.replaceWith(b);
+  else live.append(b);
+ }
+ for(let i=fresh.length;i<existing.length;i++)existing[i].remove();
+}
 function render(){
  syncCouncilExportScopeVisibility();
  if(!data)return;$('tooltip').hidden=true;resetSeatTiePatterns();ensureMapDetails();syncMapLayerStatus();$('canvas').classList.toggle('nationwide-mode',isNationwide());$('canvas').classList.toggle('county-mode',state.level==='counties'||mayorTownBoundaryOverlay());
  $('canvas').classList.toggle('council-overview-mode',councilCountyOverview());
  $('canvas').classList.toggle('history-combined-mode',historicalCombinedMap());
- const regionGroup=$('regions'),borderGroup=$('borders'),districtGroup=$('districtBorders'),townGroup=$('townBorders');
+ const regionGroup=$('regions'),liveBorders=$('borders'),liveDistricts=$('districtBorders'),liveTowns=$('townBorders');
+ const borderGroup=svgEl('g'),districtGroup=svgEl('g'),townGroup=svgEl('g');
  const restoreMapFocus=regionGroup.contains(document.activeElement);
  const panelled=identityPanelsActive(),items=panelled?null:currentItems();
  // Reuse only the same ordered feature objects in the same unpanelled scope.
  // New geometry, split panels, or a different scope always use the original rebuild path.
  const reuseRegions=!panelled&&mapViewScope()===renderedMapScope&&regionGroup.children.length===items.length&&
   items.every((f,i)=>renderedRegionFeatures.get(regionGroup.children[i])===f);
- for(const group of [regionGroup,borderGroup,districtGroup,townGroup]){
-  if(group!==regionGroup||!reuseRegions)group.replaceChildren();
-  group.removeAttribute('transform');
- }
+ if(!reuseRegions)regionGroup.replaceChildren();
+ regionGroup.removeAttribute('transform');
  if(identityPanelsActive()){
-  renderTownBorders();
+  renderTownBorders(townGroup);
   for(const panel of identityPanelLayouts()){
    const transform=transformOf(panel.t),regions=svgEl('g',{'data-electorate':panel.identity,transform}),districts=svgEl('g',{'data-electorate':panel.identity,transform}),counties=svgEl('g',{'data-electorate':panel.identity,transform});
    for(const f of panel.items)regions.append(regionPath(f));
@@ -1874,7 +1893,7 @@ function render(){
  }else{
   const transform=transformOf(geometryLayout(currentItems(),state.labels));
   for(const group of [regionGroup,borderGroup,districtGroup,townGroup])group.setAttribute('transform',transform);
-  renderTownBorders();
+  renderTownBorders(townGroup);
   // The nationwide free-paint township overview uses county fill polygons, but
    // its internal borders must be the SAME township mesh as the 2026 map.
    // The separate county-border layer remains above it for county outlines.
@@ -1895,6 +1914,7 @@ function render(){
   }
   if(!historicalCountySeats&&state.level!=='counties'&&!mayorTownBoundaryOverlay()&&!(state.level==='villages'&&state.villageTown))appendSharedBorders(borderGroup,'counties');
  }
+ syncBoundaryTree(liveBorders,borderGroup);syncBoundaryTree(liveDistricts,districtGroup);syncBoundaryTree(liveTowns,townGroup);
  refreshMapView();renderPalette();renderLegend();renderList();updateProgress();updateHistory();applyBorders();renderMapFurniture();
  if(typeof renderPredictionDecorations==='function')renderPredictionDecorations();
  const paths=[...regionGroup.querySelectorAll('[data-region]')];
@@ -2994,8 +3014,8 @@ function drawVillageLabels(group,items,t,v,interactive=false){
 }
 function moveParty(id,direction){const index=state.palette.findIndex(p=>p.id===id),next=index+direction;if(index<0||next<0||next>=state.palette.length)return;pushHistory();const scroll=$('palette').scrollTop;[state.palette[index],state.palette[next]]=[state.palette[next],state.palette[index]];renderPalette();renderLegend();persist();$('palette').scrollTop=scroll;[...$('palette').children].find(row=>row.dataset.party===id)?.querySelector('.party-drag-handle')?.focus({preventScroll:true})}
 
-function renderTownBorders(){
- const group=$('townBorders');group.replaceChildren();if(councilCountyOverview()&&!historicalCombinedMap()||freeCountyOverview())return;
+function renderTownBorders(group=$('townBorders')){
+ group.replaceChildren();if(councilCountyOverview()&&!historicalCombinedMap()||freeCountyOverview())return;
  const historicLegislative=typeof History2022View!=='undefined'&&History2022View.active()&&History2022View.office()==='legislative';
  if(!historicLegislative&&!['legislative','council','villages'].includes(state.level)&&!mayorTownBoundaryOverlay())return;
  if(identityPanelsActive()){
