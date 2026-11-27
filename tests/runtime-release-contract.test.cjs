@@ -142,6 +142,7 @@ test('Generic party trend lines distinguish no participation from participation 
  assert.equal(T.partyParticipationValue(row,'',['乙党','丙党']),0,'other parties preserve zero when a member participated');
  assert.equal(T.partyParticipationValue({...row,complete:false},'乙党'),null,'incomplete records are not zero');
  assert.match(ui,/needsParticipation=conf\.metric==='party'&&\['mayor','president','township'\]\.includes\(conf\.office\)/);
+ assert.match(ui,/conf\.metric==='party'&&\['mayor','president','township'\]\.includes\(conf\.office\)\?'participation':'summary'/);
  assert.match(ui,/!needsParticipation&&S\.summaryYears\(conf\.office,ys\)\.length/);
  assert.match(ui,/get:r=>T\.partyParticipationValue\(r,p\)/);
  assert.match(ui,/get:r=>T\.partyParticipationValue\(r,'',rest\)/);
