@@ -154,6 +154,9 @@
  root.addEventListener('hashchange',navigation);
  document.addEventListener('change',schedule);
  document.addEventListener('click',event=>{
+  // Commit the explicit return-to-overview route before a fast reload can read
+  // the previous county fragment. All other routine changes remain debounced.
+  if(event.target.closest?.('#returnTaiwanMap')){clearTimeout(timer);write(false);return}
   if(event.target.closest?.('#categoryFuture,#categoryHistory,#categoryAnalysis,#workspacePrediction,#workspaceFree,#historyViewCandidates,#historyViewOverview,#historyViewTrends,#trendSelectAll,#trendSelectNone'))schedule();
  });
  function start(){

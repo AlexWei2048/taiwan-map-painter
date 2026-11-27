@@ -952,7 +952,8 @@ test('Council forecasts only offer winners and county overview uses saved party 
  assert.equal(await page.locator('#regions path[aria-label^="台北市"]').getAttribute('fill'),expected.color);
  assert.match(await page.locator('#regions path[aria-label^="台北市"]').getAttribute('aria-label'),/1席/);
  const count=await page.evaluate(id=>predictionPartyCounts()[id],expected.party);assert.equal(count,1);
- await page.reload();
+ await page.waitForFunction(()=>window.SiteRouting.parse(location.hash)?.county==='');
+ await page.reload();await page.waitForFunction(()=>window.SiteRouting.parse(location.hash)?.county===''&&document.querySelector('#regions path[data-region="63000"]'));
  assert.equal(await page.locator('#regions path[aria-label^="台北市"]').getAttribute('fill'),expected.color);
 });
 
@@ -3787,7 +3788,7 @@ test('Township executive comparison supports town grain and retains map nodes wh
  const page=await pageFor(t,{width:1440,height:950});
  await page.locator('#workspaceFree').click();await page.locator('#townLevel').click();
  await page.locator('#county').selectOption('台北市');
- await page.locator('#categoryHistory').click();await page.waitForFunction(()=>History2022View.snapshot()?.year===2022&&document.querySelector('#historyLoadStatus').hidden);
+ await page.locator('#categoryHistory').click();await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022&&document.querySelector('#historyLoadStatus').hidden&&!document.querySelector('#categoryHistory').hasAttribute('aria-busy'));
  await page.locator('#historyCounty').selectOption('台北市');await page.locator('#historyMetric').selectOption('share');
  await page.locator('#historyOpenTrends').click();await page.locator('#historyTrendsPanel').waitFor({state:'visible'});
  assert.equal(await page.locator('#historyCounty').inputValue(),'台北市');
@@ -3807,4 +3808,18 @@ test('Township executive comparison supports town grain and retains map nodes wh
  await page.locator('#refreshExportPreview').click();await page.waitForFunction(()=>!document.querySelector('#previewExportSvg').disabled);
  assert.equal(await page.locator('#exportCandidateScope').inputValue(),'all');assert.equal(await page.locator('#exportNote').inputValue(),'测试注释');
  await page.locator('#closeExportPreview').click();
+ });
+
+ test('Mobile result navigation and dynamic select visibility remain usable with option search',async t=>{
+ const page=await pageFor(t,{width:390,height:844});
+ await page.locator('#mobileResultsJump').click();await page.waitForFunction(()=>Math.abs(document.querySelector('#predictionPanel').getBoundingClientRect().top-76)<16);
+ await page.locator('#mobileSettingsJump').click();
+ await page.locator('#categoryHistory').click();await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022&&document.querySelector('#historyLoadStatus').hidden);
+ await page.locator('#historyOffice').selectOption('council');await page.waitForFunction(()=>window.History2022View?.routeSelection()?.office==='council'&&document.querySelector('#historyLoadStatus').hidden);
+ await page.locator('#historyCounty').selectOption('台北市');await page.locator('#historyMetric').selectOption('seats');
+ await page.locator('#historyParty').waitFor({state:'visible'});
+ assert.equal(await page.locator('#historyPartyBox').getAttribute('data-election-fixed-choice'),null);
+ await page.locator('#historyMetric').selectOption('share');await page.locator('#historyCandidateScope').selectOption('candidate');await page.locator('#historyCandidate').waitFor({state:'visible'});
+ await page.locator('#mobileResultsJump').click();await page.locator('#historyCandidatesPanel').waitFor({state:'visible'});
+ assert.equal(await page.locator('#mobileResultsJump').textContent(),'结果列表');
  });

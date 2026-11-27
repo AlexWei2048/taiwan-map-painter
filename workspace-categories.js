@@ -38,6 +38,7 @@
   if($c('analysisResultSection'))$c('analysisResultSection').hidden=group!=='analysis';
   if($c('historyControlTitle'))$c('historyControlTitle').textContent=group==='analysis'?'观测范围':'历史选举数据';
   if($c('mobileMapJump'))$c('mobileMapJump').textContent=group==='analysis'?'查看分析':'查看地图';
+  if($c('mobileResultsJump')){$c('mobileResultsJump').hidden=group==='analysis';$c('mobileResultsJump').textContent=group==='history'?'结果列表':'填写／填色'}
   const metricLabel=document.querySelector('label[for="historyMetric"]');if(metricLabel)metricLabel.textContent=group==='analysis'?'统计指标':'地图显示内容';
   const countyLabel=document.querySelector('label[for="historyCounty"]');if(countyLabel)countyLabel.textContent=group==='analysis'?'统计范围':'地图范围';
   const scaleLabel=document.querySelector('label[for="historyScale"]');if(scaleLabel)scaleLabel.textContent=group==='analysis'?'统计层级':'地图层级';
