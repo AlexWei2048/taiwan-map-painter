@@ -8808,13 +8808,22 @@
       "candidate_name": "徐志明",
       "candidate_name_official": "徐志明",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "无党籍",
       "party_name_official": "無黨籍",
       "votes": 28968,
       "vote_share": 56.254005,
       "elected_official": true,
-      "elected_mark": "*"
+      "elected_mark": "*",
+      "incumbent_source": {
+        "name": "黃清福",
+        "source_url": "https://zh.wikipedia.org/wiki/大寮區",
+        "source_locator": "歷任首長表第10、11屆黃清福，第12屆徐志明；官方民代履歷明列徐志明為第12屆大寮鄉長。",
+        "corroboration_url": "https://www.ly.gov.tw/Pages/List.aspx?nodeid=1177",
+        "method": "historical_term_roster_inference",
+        "limitation": "任期表為次級來源；官方履歷核對本屆當選人，未取得投票日代理、免職紀錄。其他次級轉載表有歧異，不用以覆蓋原始票數。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:高雄县:regional:大寮乡:2",
@@ -8823,13 +8832,22 @@
       "candidate_name": "简益章",
       "candidate_name_official": "簡益章",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "中国国民党",
       "party_name_official": "中國國民黨",
       "votes": 22527,
       "vote_share": 43.745995,
       "elected_official": false,
-      "elected_mark": ""
+      "elected_mark": "",
+      "incumbent_source": {
+        "name": "黃清福",
+        "source_url": "https://zh.wikipedia.org/wiki/大寮區",
+        "source_locator": "歷任首長表第10、11屆黃清福，第12屆徐志明；官方民代履歷明列徐志明為第12屆大寮鄉長。",
+        "corroboration_url": "https://www.ly.gov.tw/Pages/List.aspx?nodeid=1177",
+        "method": "historical_term_roster_inference",
+        "limitation": "任期表為次級來源；官方履歷核對本屆當選人，未取得投票日代理、免職紀錄。其他次級轉載表有歧異，不用以覆蓋原始票數。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:高雄县:regional:大树乡:1",
@@ -9471,13 +9489,23 @@
       "candidate_name": "陈铳成",
       "candidate_name_official": "陳銃成",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": true,
       "party_name": "中国国民党",
       "party_name_official": "中國國民黨",
       "votes": 12773,
       "vote_share": 51.272479,
       "elected_official": true,
-      "elected_mark": "*"
+      "elected_mark": "*",
+      "incumbent_source": {
+        "name": "陳銃成",
+        "source_url": "https://push.turnnewsapp.com/content/20171001003288-370102",
+        "source_locator": "2017-10-01報導明載前旗山鎮長陳鋕成於1990年參選，連任兩屆共八年；當屆官方選舉清冊文字擷取為陳銃成（旗山鎮1號），既有資料票數12773。",
+        "corroboration_url": "https://web.cec.gov.tw/api/file/76759c27-9c79-446a-9cd1-f8f50e658e06.pdf",
+        "method": "term_history_identity_match_with_name_variant",
+        "name_variant": "陳鋕成",
+        "limitation": "姓名原件影像未能擷取，暫保留既有轉錄姓名；按同職位連續任期及當屆選舉資料比對推定同一人，不改票數或姓名。",
+        "value": true
+      }
     },
     {
       "candidacy_id": "1994-township:高雄县:regional:旗山镇:2",
@@ -9486,13 +9514,23 @@
       "candidate_name": "陈王景",
       "candidate_name_official": "陳王景",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "民主进步党",
       "party_name_official": "民主進步黨",
       "votes": 12139,
       "vote_share": 48.727521,
       "elected_official": false,
-      "elected_mark": ""
+      "elected_mark": "",
+      "incumbent_source": {
+        "name": "陳銃成",
+        "source_url": "https://push.turnnewsapp.com/content/20171001003288-370102",
+        "source_locator": "2017-10-01報導明載前旗山鎮長陳鋕成於1990年參選，連任兩屆共八年；當屆官方選舉清冊文字擷取為陳銃成（旗山鎮1號），既有資料票數12773。",
+        "corroboration_url": "https://web.cec.gov.tw/api/file/76759c27-9c79-446a-9cd1-f8f50e658e06.pdf",
+        "method": "term_history_identity_match_with_name_variant",
+        "name_variant": "陳鋕成",
+        "limitation": "姓名原件影像未能擷取，暫保留既有轉錄姓名；按同職位連續任期及當屆選舉資料比對推定同一人，不改票數或姓名。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:高雄县:regional:美浓镇:1",
@@ -9561,13 +9599,22 @@
       "candidate_name": "陈俊生",
       "candidate_name_official": "陳俊生",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "中国国民党",
       "party_name_official": "中國國民黨",
       "votes": 5320,
       "vote_share": 55.671829,
       "elected_official": true,
-      "elected_mark": "*"
+      "elected_mark": "*",
+      "incumbent_source": {
+        "name": "蕭國輝",
+        "source_url": "https://zh.wikipedia.org/wiki/六龜區",
+        "source_locator": "歷任首長名錄第11屆蕭國輝，第12、13屆陳俊生；次級歷任表轉載也列第10屆陳秀雄、第11屆蕭國輝。",
+        "corroboration_url": "https://wikis.tw/六龜區",
+        "method": "historical_term_roster_inference",
+        "limitation": "次級任期名錄，轉載不算獨立證據；未取得投票日任免原件。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:高雄县:regional:六龟乡:2",
@@ -9576,13 +9623,22 @@
       "candidate_name": "陈秀雄",
       "candidate_name_official": "陳秀雄",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "无党籍",
       "party_name_official": "無黨籍",
       "votes": 4236,
       "vote_share": 44.328171,
       "elected_official": false,
-      "elected_mark": ""
+      "elected_mark": "",
+      "incumbent_source": {
+        "name": "蕭國輝",
+        "source_url": "https://zh.wikipedia.org/wiki/六龜區",
+        "source_locator": "歷任首長名錄第11屆蕭國輝，第12、13屆陳俊生；次級歷任表轉載也列第10屆陳秀雄、第11屆蕭國輝。",
+        "corroboration_url": "https://wikis.tw/六龜區",
+        "method": "historical_term_roster_inference",
+        "limitation": "次級任期名錄，轉載不算獨立證據；未取得投票日任免原件。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:高雄县:regional:甲仙乡:1",
@@ -18754,7 +18810,7 @@
       "number": "1",
       "party": "无党籍",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 28968,
       "elected": true,
       "electedMark": "*",
@@ -18770,7 +18826,7 @@
       "number": "2",
       "party": "中国国民党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 22527,
       "elected": false,
       "electedMark": "",
@@ -19346,7 +19402,7 @@
       "number": "1",
       "party": "中国国民党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": true,
       "votes": 12773,
       "elected": true,
       "electedMark": "*",
@@ -19362,7 +19418,7 @@
       "number": "2",
       "party": "民主进步党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 12139,
       "elected": false,
       "electedMark": "",
@@ -19442,7 +19498,7 @@
       "number": "1",
       "party": "中国国民党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 5320,
       "elected": true,
       "electedMark": "*",
@@ -19458,7 +19514,7 @@
       "number": "2",
       "party": "无党籍",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 4236,
       "elected": false,
       "electedMark": "",
