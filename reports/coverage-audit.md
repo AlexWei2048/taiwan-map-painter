@@ -126,11 +126,11 @@
 这些文字包含诚实显示不可取得数据的情况，不能单凭关键字批量替换。
 
 - `history-observation-core.js`：无可核实 ×1
-- `site-updated.js`：不可用 ×1
+- `history-observation-ui.js`：暂无数据 ×1, 无数据 ×1, 未收录 ×1, 不可用 ×2, 无可核实 ×1
+- `history-trends.js`：无可核实 ×1
 - `history-2022.js`：暂无资料 ×3, 暂无该 ×8, 未收录 ×1, 不可用 ×4, 无可核实 ×1
+- `site-updated.js`：不可用 ×1
 - `history-trends-ui.js`：不可用 ×1
 - `history-workspace.js`：暂无资料 ×4, 暂无该 ×2, 无可核实 ×1
-- `history-trends.js`：无可核实 ×1
-- `history-observation-ui.js`：暂无数据 ×1, 无数据 ×1, 未收录 ×1, 不可用 ×2, 无可核实 ×1
-- `tests/p1-overview.test.cjs`：暂无资料 ×2
 - `tests/history-workspace.test.cjs`：暂无资料 ×5
+- `tests/p1-overview.test.cjs`：暂无资料 ×2
