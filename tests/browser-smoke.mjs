@@ -2950,6 +2950,9 @@ test('Published-only 2026 results can load in history, switch offices and return
  await page.locator('#regions path[data-region]').first().waitFor();
  await page.locator('#categoryHistory').click();
  await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
+ await page.locator('#historyRefresh2026').click();
+ await page.waitForFunction(()=>document.querySelector('#historyRefresh2026Status').textContent.includes('尚未发布'));
+ assert.equal(await page.locator('#historyYear').inputValue(),'2022');
  const fake=await page.evaluate(()=>{
   const ds=candidateDatabase.districts,cs=candidateDatabase.candidates,byDistrict=new Map(ds.map(d=>[d.id,d]));
   const elections=['mayor','council','township'].map(office=>({
@@ -2987,6 +2990,10 @@ test('Published-only 2026 results can load in history, switch offices and return
  await page.route('**/assets/history-2026-availability.json*',route=>route.fulfill({contentType:'application/json',body:JSON.stringify({
   schemaVersion:1,year:2026,status:'published',resultStatus:'provisional',file:'assets/history-2026.json',candidateCount:2049,districtCount:447,sha256
  })}));
+ await page.locator('#historyRefresh2026').click();
+ await page.waitForFunction(()=>document.querySelector('#historyRefresh2026Status').textContent.includes('已发现2026年结果发布清单'));
+ assert.equal(await page.locator('#historyYear').inputValue(),'2022');
+ assert.equal(await page.locator('#historyYear option[value="2026"]').count(),1);
  // Same open page: publish a manifest but temporarily return a mismatched file.
  await page.route('**/assets/history-2026.json*',route=>route.fulfill({contentType:'application/json',body:body+' '}));
  await page.locator('#latestElectionLink').click();
