@@ -14,8 +14,8 @@ test('1994 Yilan incumbency classifications use all 33 winners in the 1990 CEC o
  assert.equal(data.length,69);
  assert.equal(winners.size,33);
  assert.equal(data.filter(x=>x.source?.value===true).length,25);
- assert.equal(data.filter(x=>x.source?.value===false).length,42);
- assert.equal(data.filter(x=>x.source==null).length,2);
+ assert.equal(data.filter(x=>x.source?.value===false).length,44);
+ assert.equal(data.filter(x=>x.source==null).length,0);
  assert.ok(data.filter(x=>x.source?.value===true).every(x=>winners.has(x.c[1])));
  assert.ok(data.filter(x=>x.source?.value===false).every(x=>!winners.has(x.c[1])));
  assert.equal(src.newly_matched_negative_candidates.length,37);
@@ -27,7 +27,7 @@ test('1994 Yilan incumbency classifications use all 33 winners in the 1990 CEC o
   assert.equal(item.source.value,false);
   assert.equal(item.source.source_url,src.source_url);
  }
- assert.deepEqual(data.filter(x=>!x.source).map(x=>x.c[1]).sort(),['林榮木','陳秀暖'].sort());
+ assert.deepEqual(data.filter(x=>x.source?.method==='prior_term_roster_nonmatch_distinct_same_election_candidates').map(x=>x.c[1]).sort(),['林榮木','陳秀暖'].sort());
 });
 test('Yilan official prior-term backfill flows to runtime snapshot without changing candidate votes',async()=>{
  const fetcher=async f=>({ok:true,json:async()=>JSON.parse(fs.readFileSync(path.join(__dirname,'..',f.split('?')[0]),'utf8'))});
@@ -35,8 +35,8 @@ test('Yilan official prior-term backfill flows to runtime snapshot without chang
  const rows=x.candidacies.filter(c=>c.contest_id.startsWith('1994-council-counties:宜兰县:'));
  assert.equal(rows.length,69);
  assert.equal(rows.filter(c=>c.incumbent_at_election===true).length,25);
- assert.equal(rows.filter(c=>c.incumbent_at_election===false).length,42);
- assert.equal(rows.filter(c=>c.incumbent_at_election===null).length,2);
+ assert.equal(rows.filter(c=>c.incumbent_at_election===false).length,44);
+ assert.equal(rows.filter(c=>c.incumbent_at_election===null).length,0);
  for(const r of rows){
   const d=archive.districts.find(x=>x.county==='宜蘭縣'&&r.contest_id.endsWith('第'+x.number+'选举区'));
   assert.ok(d);
