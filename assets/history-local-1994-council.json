@@ -4649,6 +4649,17 @@
           "votes": 5666,
           "corroboration_url": "https://journal.th.gov.tw/intro.php?council=tycc"
         },
+        "17": {
+          "value": true,
+          "source_url": "https://www.moi.gov.tw/LocalOfficial_Content.aspx?TYP=KND0001&_PARENT_ID=ER11112HA00005&_TYP=REP&n=573",
+          "source_locator": "內政部地方公職人員資訊：桃園縣議會第11、12、13、14、15、16、17屆議員",
+          "election_date": "1994-01-29",
+          "method": "official_biography_consecutive_terms",
+          "original_name": "黃婉如",
+          "ballot_number": 17,
+          "votes": 5787,
+          "limitation": "任期履歷非投票日逐日任免資料。"
+        },
         "25": {
           "value": true,
           "source_url": "https://journal.th.gov.tw/intro.php?council=tycc",
