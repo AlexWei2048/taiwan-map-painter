@@ -1,0 +1,17 @@
+name: One-time Matsu 1992 archive inspection
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/matsu-1992-archive-inspect.yml', 'scripts/inspect_matsu_1992_archive.py']
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read publicly accessible archive metadata and text
+        run: |
+          python -m pip install -q beautifulsoup4
+          python -u scripts/inspect_matsu_1992_archive.py
