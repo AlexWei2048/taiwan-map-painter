@@ -20,11 +20,11 @@ ORIGIN = os.environ.get("GUESTBOOK_ORIGIN", "https://alexwei2048.github.io")
 CATEGORIES = {"suggestion", "correction", "feature", "bug", "other"}
 PROGRESS = {"new","accepted","working","done","declined"}
 ADMIN_TOKEN = os.environ.get("GUESTBOOK_ADMIN_TOKEN", "")
-COLUMNS = {"title":"TEXT NOT NULL DEFAULT ''","context":"TEXT NOT NULL DEFAULT ''","private":"INTEGER NOT NULL DEFAULT 0","progress":"TEXT NOT NULL DEFAULT 'new'","pinned":"INTEGER NOT NULL DEFAULT 0","replied_at":"TEXT NOT NULL DEFAULT ''","request_hash":"TEXT NOT NULL DEFAULT ''"}
+COLUMNS = {"title":"TEXT NOT NULL DEFAULT ''","context":"TEXT NOT NULL DEFAULT ''","private":"INTEGER NOT NULL DEFAULT 0","progress":"TEXT NOT NULL DEFAULT 'new'","pinned":"INTEGER NOT NULL DEFAULT 0","replied_at":"TEXT NOT NULL DEFAULT ''","request_hash":"TEXT NOT NULL DEFAULT ''","revision":"INTEGER NOT NULL DEFAULT 0","edited_at":"TEXT NOT NULL DEFAULT ''"}
 ADMIN_LOCK = threading.Lock()
 ADMIN_FAILURES = []
 BACKUP_LOCK = threading.Lock()
-PUBLIC = "m.id,m.nickname,m.category,m.title,m.body,m.created_at,m.reply,m.progress,m.pinned,m.context,m.replied_at,(SELECT COUNT(*) FROM votes v WHERE v.message_id=m.id) AS votes"
+PUBLIC = "m.id,m.nickname,m.category,m.title,m.body,m.created_at,m.reply,m.progress,m.pinned,m.context,m.replied_at,m.edited_at,m.revision,(SELECT COUNT(*) FROM votes v WHERE v.message_id=m.id) AS votes"
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS messages (
  id TEXT PRIMARY KEY, owner_hash TEXT NOT NULL, nickname TEXT NOT NULL,
@@ -49,6 +49,7 @@ def connect():
     db = sqlite3.connect(DB, timeout=10, isolation_level=None)
     db.row_factory = sqlite3.Row
     db.execute("PRAGMA foreign_keys=ON")
+    db.execute("PRAGMA secure_delete=ON")
     return db
 
 def initialize():
@@ -60,7 +61,7 @@ def initialize():
         if not set(COLUMNS).issubset(columns):
             backup_dir=DB.parent/"backups"
             backup_dir.mkdir(mode=0o700,exist_ok=True)
-            before=backup_dir/"before-feedback-v2.sqlite3"
+            before=backup_dir/"before-feedback-v3.sqlite3"
             if not before.exists():
                 with closing(sqlite3.connect(before)) as copy:
                     db.backup(copy)
@@ -79,6 +80,11 @@ def initialize():
             owner_hash TEXT NOT NULL, created_epoch INTEGER NOT NULL,
             PRIMARY KEY(message_id,owner_hash));
             CREATE INDEX IF NOT EXISTS votes_by_owner ON votes(owner_hash,created_epoch);
+        """)
+        db.executescript("""CREATE TABLE IF NOT EXISTS write_events(
+            owner_hash TEXT NOT NULL, kind TEXT NOT NULL, created_epoch INTEGER NOT NULL);
+            CREATE INDEX IF NOT EXISTS write_events_time ON write_events(kind,created_epoch);
+            CREATE INDEX IF NOT EXISTS write_events_owner ON write_events(owner_hash,kind,created_epoch);
         """)
     DB.chmod(0o600)
 
@@ -100,6 +106,20 @@ def daily_backup():
                 old.unlink()
     finally:
         BACKUP_LOCK.release()
+
+def backup_loop():
+    while True:
+        time.sleep(3600)
+        try:
+            daily_backup()
+        except Exception:
+            print("Guestbook backup failed", flush=True)
+
+def record_write(db,digest,kind,now,per_owner,global_limit):
+    db.execute("DELETE FROM write_events WHERE created_epoch<?",(now-86400,))
+    if db.execute("SELECT COUNT(*) FROM write_events WHERE owner_hash=? AND kind=? AND created_epoch>?",(digest,kind,now-600)).fetchone()[0]>=per_owner or db.execute("SELECT COUNT(*) FROM write_events WHERE kind=? AND created_epoch>?",(kind,now-600)).fetchone()[0]>=global_limit:
+        raise Problem("操作过于频繁，请稍后重试",429)
+    db.execute("INSERT INTO write_events VALUES(?,?,?)",(digest,kind,now))
 
 def require_admin(data):
     token=data.get("p_admin","")
@@ -136,9 +156,42 @@ def rows(cursor):
     return [dict(r) for r in cursor]
 
 def dispatch(action,data,db):
+    if action == "guestbook_detail":
+        mid=msg_id(data.get("p_id"))
+        row=db.execute("SELECT "+PUBLIC+" FROM messages m WHERE m.id=? AND m.visibility='approved' AND m.private=0",(mid,)).fetchone()
+        if not row: raise Problem("留言尚未公开或已撤回",404)
+        return dict(row)
+    if action == "guestbook_edit":
+        digest=owner(data.get("p_secret"))
+        mid=msg_id(data.get("p_id"))
+        title=field(data,"p_title",80)
+        body=field(data,"p_body",1500)
+        expected=data.get("p_revision")
+        if type(expected) is not int or expected<0 or len(body)<5:
+            raise Problem("请检查留言内容")
+        db.execute("BEGIN IMMEDIATE")
+        try:
+            row=db.execute("SELECT m.*,c.contact FROM messages m LEFT JOIN contacts c ON m.id=c.message_id WHERE m.id=? AND m.owner_hash=?",(mid,digest)).fetchone()
+            if not row: raise Problem("留言不存在",404)
+            if row["title"]==title and row["body"]==body:
+                db.execute("COMMIT")
+                return {"id":mid,"revision":row["revision"]}
+            if row["revision"]!=expected:
+                raise Problem("留言已变化，请刷新后再编辑",409)
+            if row["contact"] and not row["private"] and any(row["contact"].casefold() in value.casefold() for value in (title,body)):
+                raise Problem("请勿在公开内容中填写联系方式")
+            record_write(db,digest,"edit",int(time.time()),5,100)
+            db.execute("UPDATE messages SET title=?,body=?,visibility='pending',progress='new',reply='',replied_at='',pinned=0,revision=revision+1,edited_at=? WHERE id=?",(title,body,datetime.now(timezone.utc).isoformat(),mid))
+            db.execute("COMMIT")
+            return {"id":mid,"revision":expected+1}
+        except BaseException:
+            if db.in_transaction: db.execute("ROLLBACK")
+            raise
     if action == "guestbook_public":
         category=field(data,"p_category",24)
         search=field(data,"p_search",100)
+        progress=field(data,"p_progress",24)
+        if progress and progress not in PROGRESS: raise Problem("无效处理状态")
         sort=field(data,"p_sort",24,"latest")
         if category and category not in CATEGORIES:
             raise Problem("请检查留言类别")
@@ -146,7 +199,7 @@ def dispatch(action,data,db):
         offset=data.get("p_offset",0)
         if not order or type(offset) is not int or not 0<=offset<=10000:
             raise Problem("无效分页")
-        return rows(db.execute("SELECT "+PUBLIC+" FROM messages m WHERE m.visibility='approved' AND m.private=0 AND (?='' OR m.category=?) AND (?='' OR instr(lower(m.title||' '||m.body||' '||m.nickname),lower(?))>0) ORDER BY m.pinned DESC,"+order+" LIMIT 20 OFFSET ?",(category,category,search,search,offset)))
+        return rows(db.execute("SELECT "+PUBLIC+" FROM messages m WHERE m.visibility='approved' AND m.private=0 AND (?='' OR m.category=?) AND (?='' OR m.progress=?) AND (?='' OR instr(lower(m.title||' '||m.body||' '||m.nickname),lower(?))>0) ORDER BY m.pinned DESC,"+order+" LIMIT 20 OFFSET ?",(category,category,progress,progress,search,search,offset)))
     if action == "guestbook_mine":
         digest=owner(data.get("p_secret"))
         return rows(db.execute("SELECT "+PUBLIC+",m.visibility,m.private,c.contact FROM messages m LEFT JOIN contacts c ON m.id=c.message_id WHERE m.owner_hash=? ORDER BY m.created_epoch DESC,m.id DESC LIMIT 100",(digest,)))
@@ -190,6 +243,9 @@ def dispatch(action,data,db):
     if action == "guestbook_admin_list":
         require_admin(data)
         filt=field(data,"p_filter",24,"pending")
+        work=field(data,"p_progress",24)
+        search=field(data,"p_search",100)
+        if work and work not in PROGRESS: raise Problem("无效处理状态")
         if filt not in {"all","pending","approved","rejected","private"}:
             raise Problem("无效筛选")
         offset=data.get("p_offset",0)
@@ -197,7 +253,9 @@ def dispatch(action,data,db):
             raise Problem("无效分页")
         counts=dict(db.execute("SELECT visibility,COUNT(*) FROM messages GROUP BY visibility").fetchall())
         counts["private"]=db.execute("SELECT COUNT(*) FROM messages WHERE private=1").fetchone()[0]
-        records=rows(db.execute("SELECT "+PUBLIC+",m.visibility,m.private,c.contact FROM messages m LEFT JOIN contacts c ON m.id=c.message_id WHERE (?='all' OR (?='private' AND m.private=1) OR m.visibility=?) ORDER BY m.created_epoch DESC,m.id DESC LIMIT 50 OFFSET ?",(filt,filt,filt,offset)))
+        counts["todo"]=db.execute("SELECT COUNT(*) FROM messages WHERE progress IN ('new','accepted','working') AND visibility!='rejected'").fetchone()[0]
+        counts["done"]=db.execute("SELECT COUNT(*) FROM messages WHERE progress='done'").fetchone()[0]
+        records=rows(db.execute("SELECT "+PUBLIC+",m.visibility,m.private,c.contact FROM messages m LEFT JOIN contacts c ON m.id=c.message_id WHERE (?='all' OR (?='private' AND m.private=1) OR m.visibility=?) AND (?='' OR m.progress=?) AND (?='' OR instr(lower(m.title||' '||m.body||' '||m.nickname),lower(?))>0) ORDER BY m.created_epoch DESC,m.id DESC LIMIT 50 OFFSET ?",(filt,filt,filt,work,work,search,search,offset)))
         return {"counts":counts,"records":records}
     if action == "guestbook_admin_update":
         require_admin(data)
@@ -208,12 +266,16 @@ def dispatch(action,data,db):
         pinned=data.get("p_pinned",False)
         if visibility not in {"pending","approved","rejected"} or progress not in PROGRESS or type(pinned) is not bool:
             raise Problem("无效处理状态")
-        current=db.execute("SELECT m.private,m.reply,c.contact FROM messages m LEFT JOIN contacts c ON m.id=c.message_id WHERE m.id=?",(mid,)).fetchone()
+        expected=data.get("p_revision")
+        current=db.execute("SELECT m.private,m.reply,m.revision,c.contact FROM messages m LEFT JOIN contacts c ON m.id=c.message_id WHERE m.id=?",(mid,)).fetchone()
         if not current: raise Problem("留言不存在",404)
+        if expected is not None and (type(expected) is not int or expected!=current["revision"]):
+            raise Problem("留言已变化，请刷新后再审核",409)
         if current["contact"] and not current["private"] and current["contact"].casefold() in reply.casefold():
             raise Problem("公开回复不得包含联系方式")
         stamp=datetime.now(timezone.utc).isoformat() if reply!=current["reply"] else None
-        db.execute("UPDATE messages SET visibility=?,progress=?,reply=?,pinned=?,replied_at=COALESCE(?,replied_at) WHERE id=?",(visibility,progress,reply,int(pinned and not current["private"]),stamp,mid))
+        updated=db.execute("UPDATE messages SET visibility=?,progress=?,reply=?,pinned=?,replied_at=COALESCE(?,replied_at),revision=revision+1 WHERE id=? AND revision=?",(visibility,progress,reply,int(pinned and not current["private"]),stamp,mid,current["revision"]))
+        if updated.rowcount!=1: raise Problem("留言已变化，请刷新后再审核",409)
         return True
     if action == "guestbook_admin_delete":
         require_admin(data)
@@ -248,6 +310,7 @@ def dispatch(action,data,db):
             return {"id":mid,"visibility":existing["visibility"]}
         if db.execute("SELECT COUNT(*) FROM messages WHERE owner_hash=? AND created_epoch>?",(digest,now-600)).fetchone()[0]>=3 or db.execute("SELECT COUNT(*) FROM messages WHERE created_epoch>?",(now-600,)).fetchone()[0]>=50:
             raise Problem("留言过于频繁，请稍后重试",429)
+        record_write(db,digest,"submit",now,3,50)
         db.execute("INSERT INTO messages(id,owner_hash,nickname,category,body,created_at,created_epoch,title,context,private,request_hash) VALUES(?,?,?,?,?,?,?,?,?,?,?)",(mid,digest,nick,category,body,datetime.now(timezone.utc).isoformat(),now,title,context,int(private),request_hash))
         if contact:
             db.execute("INSERT INTO contacts(message_id,contact) VALUES(?,?)",(mid,contact))
@@ -290,7 +353,7 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
     def do_GET(self):
         if self.path=="/health":
-            return self.reply(200,{"ok":True,"version":2})
+            return self.reply(200,{"ok":True,"version":2,"features":["edit","detail","progress-filter","admin-search"]})
         self.reply(404,{"message":"接口不存在"})
     def do_POST(self):
         try:
@@ -300,7 +363,7 @@ class Handler(BaseHTTPRequestHandler):
             if not self.path.startswith(prefix):
                 raise Problem("接口不存在",404)
             action=self.path[len(prefix):]
-            if action not in {"guestbook_submit","guestbook_public","guestbook_mine","guestbook_remove_contact","guestbook_withdraw","guestbook_vote","guestbook_votes","guestbook_admin_list","guestbook_admin_update","guestbook_admin_delete"}:
+            if action not in {"guestbook_submit","guestbook_public","guestbook_mine","guestbook_remove_contact","guestbook_withdraw","guestbook_vote","guestbook_votes","guestbook_admin_list","guestbook_admin_update","guestbook_admin_delete","guestbook_edit","guestbook_detail"}:
                 raise Problem("接口不存在",404)
             if self.headers.get_content_type()!="application/json":
                 raise Problem("请求格式错误",415)
@@ -316,8 +379,6 @@ class Handler(BaseHTTPRequestHandler):
             with closing(connect()) as db:
                 result=dispatch(action,data,db)
             self.reply(200,result)
-            try: daily_backup()
-            except Exception: pass
         except Problem as e:
             self.reply(e.code,{"message":str(e)})
         except (ValueError,UnicodeError):
@@ -326,6 +387,24 @@ class Handler(BaseHTTPRequestHandler):
             pass
         except Exception:
             self.reply(500,{"message":"留言服务暂时不可用，请重试"})
+
+class BoundedServer(ThreadingHTTPServer):
+    daemon_threads=True
+    slots=threading.BoundedSemaphore(32)
+    def process_request(self,request,client_address):
+        if not self.slots.acquire(blocking=False):
+            self.shutdown_request(request)
+            return
+        try:
+            super().process_request(request,client_address)
+        except BaseException:
+            self.slots.release()
+            raise
+    def process_request_thread(self,request,client_address):
+        try:
+            super().process_request_thread(request,client_address)
+        finally:
+            self.slots.release()
 
 def admin(args):
     # Only local filesystem-authorized server operators can invoke these actions.
@@ -362,7 +441,8 @@ def main():
     initialize()
     if args.command=="serve":
         daily_backup()
-        ThreadingHTTPServer((args.host,args.port),Handler).serve_forever()
+        threading.Thread(target=backup_loop,daemon=True).start()
+        BoundedServer((args.host,args.port),Handler).serve_forever()
     else:
         admin(args)
 if __name__=="__main__":
