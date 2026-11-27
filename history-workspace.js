@@ -280,7 +280,7 @@
  }
  function exportStem(selection={}){
   const offices={mayor:'县市长',council:'县市议员',township:'乡镇市区长',president:'台湾地区领导人',legislative:'立法机构民代'},metrics={party:selection.office==='legislative'?((selection.electorate||'regional')==='regional'?'当选席次':'领先政党'):selection.office==='council'?'当选席次':selection.office==='president'||selection.level==='town'?(selection.level==='town'?'各乡镇市区最高票候选人':'各县市最高票候选人'):'当选政党',seats:'指定政党席次',vote:'得票率',share:'得票率',votes:'得票数'};
-  return[displayYear(selection.year||2022,selection.office,'_'),offices[selection.office]||'历史选举',selection.office==='president'?(selection.level==='town'?'乡镇市区':'县市'):null,selection.county||'全台',metrics[selection.metric]||selection.metric||'结果'].filter(Boolean).join('-').replace(/[\\/:*?"<>|]/g,'_');
+  return[displayYear(selection.year||2022,selection.office,'_'),offices[selection.office]||'历史选举',selection.office==='president'?(selection.level==='town'?'乡镇市区':'县市'):null,selection.county||'全台',metrics[selection.metric]||selection.metric||'结果',Core.official2026Label({year:Number(selection.year),publicationStatus:selection.publicationStatus})].filter(Boolean).join('-').replace(/[\\/:*?"<>|]/g,'_');
  }
  function historyCsv(result={contests:[],candidacies:[]},selection={}){
   const presidential=selection.office==='president',council=['council','legislative'].includes(selection.office);
@@ -494,7 +494,7 @@
   const identity=scoped?.result?.contests?.length===1&&state.office==='council'?
    labels[scoped.result.contests[0].electorate]||'议员':name;
   title.textContent=[displayYear(state.year,state.office)+'年',all?'全部地区（含金门、马祖）':county,district,
-   identity].filter(Boolean).join(' · ')+'选举概况';
+   identity].filter(Boolean).join(' · ')+'选举概况'+(Number(indexed?.snapshot?.year)===state.year&&Core.official2026Label(indexed.snapshot)?' · '+Core.official2026Label(indexed.snapshot):'');
   if(description){
    const fullArea=all?'全部地区（含金门、马祖）':
     [county,district].filter(Boolean).join(' · ');
@@ -787,7 +787,8 @@
    {...state,county:overviewCounty,area:overviewArea}:state):
    state.office==='legislative'?root.HistoryLegislativeData?.exportCsv(indexed?.snapshot||{},{...state,focus:el('historyFocus')?.value||''}):
    state.office==='president'&&state.level==='town'?presidentialTownCsv(indexed?.snapshot||{},state):historyCsv(currentResult,state);
-  const stem=mayorDistricts?exportStem({...state,county:state.view==='overview'?overviewCounty:state.county})+'-乡镇市区':exportStem(state);
+  const exportSelection={...state,publicationStatus:indexed?.snapshot?.year===state.year?indexed.snapshot.publicationStatus:undefined};
+  const stem=mayorDistricts?exportStem({...exportSelection,county:state.view==='overview'?overviewCounty:state.county})+'-乡镇市区':exportStem(exportSelection);
   const blob=new Blob([content],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),link=doc.createElement('a');link.href=url;link.download=stem+'.csv';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
  }
  for(const id of ['historyYear','historyOffice','historyElectorate','historyScale','historyMetric'])el(id)?.addEventListener('change',render);
