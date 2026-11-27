@@ -184,5 +184,24 @@ class GuestbookTests(unittest.TestCase):
                 self.call("admin_counts",{"p_admin":session})
         finally:
             server.ADMIN_TOKEN=old
+    def test_admin_devices_and_filter(self):
+        old=server.ADMIN_TOKEN
+        server.ADMIN_TOKEN="test-admin-"+"z"*40
+        try:
+            a=self.call("admin_login",{"p_admin":server.ADMIN_TOKEN})["session"]
+            b=self.call("admin_login",{"p_admin":server.ADMIN_TOKEN})["session"]
+            self.assertEqual(self.call("admin_devices",{"p_admin":a})["active"],2)
+            with self.assertRaises(server.Problem):
+                self.call("admin_revoke_others",{"p_admin":"wrong"})
+            self.assertEqual(self.call("admin_revoke_others",{"p_admin":a})["active"],1)
+            with self.assertRaises(server.Problem):
+                self.call("admin_counts",{"p_admin":b})
+            self.call("submit",self.data)
+            self.call("submit",dict(self.data,p_id=str(uuid.uuid4()),p_category="correction"))
+            r=self.call("admin_list",{"p_admin":a,"p_filter":"all","p_category":"correction","p_sort":"oldest"})
+            self.assertEqual(r["total"],1)
+            self.assertEqual(r["records"][0]["category"],"correction")
+        finally:
+            server.ADMIN_TOKEN=old
 if __name__=="__main__":
     unittest.main()
