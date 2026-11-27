@@ -21465,9 +21465,14 @@
           "source_url": "https://www.zhongli.tycg.gov.tw/cp.aspx?n=6367",
           "source_locator": "中壢區公所沿革：第七屆1990–1994張勝勛、第八屆1994–1998方力脩（1994-03-01就任）",
           "evidence_type": "official_successive_term_roster",
-          "votes": null,
+          "votes": 49096,
           "party_recommendation": null,
-          "ballot_number": null
+          "ballot_number": null,
+          "votes_source_url": "https://zh.wikipedia.org/wiki/%E6%96%B9%E5%8A%9B%E8%84%A9",
+          "votes_source_locator": "選舉紀錄表1994年第八屆中壢市市長選舉，49,096票、39.74%；引用臺灣省選舉委員會《八十二、八十三年公職人員選舉台灣省選務實錄》（1994），頁654–655。原始票表未取得，屬有明確出處的次級轉引。",
+          "votes_evidence_tier": "secondary_citation_to_official_election_record",
+          "reported_vote_share": 39.74,
+          "reported_vote_share_note": "次級來源所載百分比；有效票總數未知，不反推精確總票數。"
         },
         {
           "town": "大溪鎮",
