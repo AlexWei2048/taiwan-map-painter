@@ -2,6 +2,8 @@
 """Standalone Island Palette guestbook. Python 3.11+, SQLite, no external dependencies."""
 import argparse
 import hashlib
+import hmac
+import threading
 import json
 import os
 import re
@@ -15,8 +17,14 @@ from pathlib import Path
 
 DB = Path(os.environ.get("GUESTBOOK_DB", "private-data/guestbook.sqlite3"))
 ORIGIN = os.environ.get("GUESTBOOK_ORIGIN", "https://alexwei2048.github.io")
-CATEGORIES = {"suggestion", "correction", "feature", "other"}
-PUBLIC = "id,nickname,category,body,created_at,reply"
+CATEGORIES = {"suggestion", "correction", "feature", "bug", "other"}
+PROGRESS = {"new","accepted","working","done","declined"}
+ADMIN_TOKEN = os.environ.get("GUESTBOOK_ADMIN_TOKEN", "")
+COLUMNS = {"title":"TEXT NOT NULL DEFAULT ''","context":"TEXT NOT NULL DEFAULT ''","private":"INTEGER NOT NULL DEFAULT 0","progress":"TEXT NOT NULL DEFAULT 'new'","pinned":"INTEGER NOT NULL DEFAULT 0","replied_at":"TEXT NOT NULL DEFAULT ''","request_hash":"TEXT NOT NULL DEFAULT ''"}
+ADMIN_LOCK = threading.Lock()
+ADMIN_FAILURES = []
+BACKUP_LOCK = threading.Lock()
+PUBLIC = "m.id,m.nickname,m.category,m.title,m.body,m.created_at,m.reply,m.progress,m.pinned,m.context,m.replied_at,(SELECT COUNT(*) FROM votes v WHERE v.message_id=m.id) AS votes"
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS messages (
  id TEXT PRIMARY KEY, owner_hash TEXT NOT NULL, nickname TEXT NOT NULL,
@@ -48,7 +56,64 @@ def initialize():
     with closing(connect()) as db:
         db.execute("PRAGMA journal_mode=WAL")
         db.executescript(SCHEMA)
+        columns={r[1] for r in db.execute("PRAGMA table_info(messages)")}
+        if not set(COLUMNS).issubset(columns):
+            backup_dir=DB.parent/"backups"
+            backup_dir.mkdir(mode=0o700,exist_ok=True)
+            before=backup_dir/"before-feedback-v2.sqlite3"
+            if not before.exists():
+                with closing(sqlite3.connect(before)) as copy:
+                    db.backup(copy)
+                before.chmod(0o600)
+            db.execute("BEGIN IMMEDIATE")
+            try:
+                for key,definition in COLUMNS.items():
+                    if key not in columns:
+                        db.execute("ALTER TABLE messages ADD COLUMN "+key+" "+definition)
+                db.execute("COMMIT")
+            except BaseException:
+                db.execute("ROLLBACK")
+                raise
+        db.executescript("""CREATE TABLE IF NOT EXISTS votes(
+            message_id TEXT NOT NULL REFERENCES messages(id) ON DELETE CASCADE,
+            owner_hash TEXT NOT NULL, created_epoch INTEGER NOT NULL,
+            PRIMARY KEY(message_id,owner_hash));
+            CREATE INDEX IF NOT EXISTS votes_by_owner ON votes(owner_hash,created_epoch);
+        """)
     DB.chmod(0o600)
+
+def daily_backup():
+    # A consistent SQLite copy on the same volume; not a disaster-recovery backup.
+    if not BACKUP_LOCK.acquire(blocking=False):
+        return
+    try:
+        directory=DB.parent/"backups"
+        directory.mkdir(mode=0o700,exist_ok=True)
+        target=directory/("daily-"+datetime.now(timezone.utc).strftime("%Y-%m-%d")+".sqlite3")
+        if not target.exists():
+            tmp=target.with_suffix(".tmp")
+            with closing(connect()) as source, closing(sqlite3.connect(tmp)) as dest:
+                source.backup(dest)
+            tmp.chmod(0o600)
+            tmp.replace(target)
+            for old in sorted(directory.glob("daily-*.sqlite3"),reverse=True)[7:]:
+                old.unlink()
+    finally:
+        BACKUP_LOCK.release()
+
+def require_admin(data):
+    token=data.get("p_admin","")
+    with ADMIN_LOCK:
+        now=time.monotonic()
+        ADMIN_FAILURES[:]=[x for x in ADMIN_FAILURES if now-x<60]
+        if not ADMIN_TOKEN or len(ADMIN_TOKEN)<32:
+            raise Problem("管理功能尚未配置",503)
+        if not isinstance(token,str) or len(token)>256 or not hmac.compare_digest(token.encode("utf-8"),ADMIN_TOKEN.encode("utf-8")):
+            if len(ADMIN_FAILURES)>=20:
+                raise Problem("验证过于频繁，请稍后重试",429)
+            ADMIN_FAILURES.append(now)
+            raise Problem("管理员凭证错误",403)
+
 
 def owner(secret):
     if not isinstance(secret,str) or not re.fullmatch("[0-9a-f]{64}",secret):
@@ -73,17 +138,18 @@ def rows(cursor):
 def dispatch(action,data,db):
     if action == "guestbook_public":
         category=field(data,"p_category",24)
+        search=field(data,"p_search",100)
+        sort=field(data,"p_sort",24,"latest")
         if category and category not in CATEGORIES:
             raise Problem("请检查留言类别")
+        order={"latest":"m.created_epoch DESC,m.id DESC","popular":"votes DESC,m.created_epoch DESC,m.id DESC","reply":"m.replied_at DESC,m.created_epoch DESC,m.id DESC"}.get(sort)
         offset=data.get("p_offset",0)
-        if type(offset) is not int or not 0<=offset<=10000:
+        if not order or type(offset) is not int or not 0<=offset<=10000:
             raise Problem("无效分页")
-        return rows(db.execute("SELECT "+PUBLIC+" FROM messages WHERE visibility='approved' AND (?='' OR category=?) ORDER BY created_epoch DESC,id DESC LIMIT 20 OFFSET ?",(category,category,offset)))
+        return rows(db.execute("SELECT "+PUBLIC+" FROM messages m WHERE m.visibility='approved' AND m.private=0 AND (?='' OR m.category=?) AND (?='' OR instr(lower(m.title||' '||m.body||' '||m.nickname),lower(?))>0) ORDER BY m.pinned DESC,"+order+" LIMIT 20 OFFSET ?",(category,category,search,search,offset)))
     if action == "guestbook_mine":
         digest=owner(data.get("p_secret"))
-        return rows(db.execute("""SELECT m.id,m.nickname,m.category,m.body,m.created_at,m.visibility,m.reply,c.contact
-           FROM messages m LEFT JOIN contacts c ON m.id=c.message_id WHERE m.owner_hash=?
-           ORDER BY m.created_epoch DESC,m.id DESC LIMIT 100""",(digest,)))
+        return rows(db.execute("SELECT "+PUBLIC+",m.visibility,m.private,c.contact FROM messages m LEFT JOIN contacts c ON m.id=c.message_id WHERE m.owner_hash=? ORDER BY m.created_epoch DESC,m.id DESC LIMIT 100",(digest,)))
     if action == "guestbook_remove_contact":
         digest=owner(data.get("p_secret"))
         mid=msg_id(data.get("p_id"))
@@ -91,6 +157,67 @@ def dispatch(action,data,db):
             return False
         db.execute("DELETE FROM contacts WHERE message_id=?",(mid,))
         return True
+    if action == "guestbook_withdraw":
+        digest=owner(data.get("p_secret"))
+        mid=msg_id(data.get("p_id"))
+        return db.execute("DELETE FROM messages WHERE id=? AND owner_hash=?",(mid,digest)).rowcount==1
+    if action == "guestbook_vote":
+        digest=owner(data.get("p_secret"))
+        mid=msg_id(data.get("p_id"))
+        desired=data.get("p_desired",True)
+        if type(desired) is not bool:
+            raise Problem("无效操作")
+        db.execute("BEGIN IMMEDIATE")
+        try:
+            if not db.execute("SELECT 1 FROM messages WHERE id=? AND visibility='approved' AND private=0",(mid,)).fetchone():
+                raise Problem("留言不存在",404)
+            now=int(time.time())
+            if desired:
+                if db.execute("SELECT COUNT(*) FROM votes WHERE owner_hash=? AND created_epoch>?",(digest,now-86400)).fetchone()[0]>=100:
+                    raise Problem("操作过于频繁",429)
+                db.execute("INSERT OR IGNORE INTO votes VALUES(?,?,?)",(mid,digest,now))
+            else:
+                db.execute("DELETE FROM votes WHERE message_id=? AND owner_hash=?",(mid,digest))
+            count=db.execute("SELECT COUNT(*) FROM votes WHERE message_id=?",(mid,)).fetchone()[0]
+            db.execute("COMMIT")
+            return {"votes":count,"voted":desired}
+        except BaseException:
+            if db.in_transaction: db.execute("ROLLBACK")
+            raise
+    if action == "guestbook_votes":
+        digest=owner(data.get("p_secret"))
+        return [r[0] for r in db.execute("SELECT message_id FROM votes WHERE owner_hash=? LIMIT 2000",(digest,))]
+    if action == "guestbook_admin_list":
+        require_admin(data)
+        filt=field(data,"p_filter",24,"pending")
+        if filt not in {"all","pending","approved","rejected","private"}:
+            raise Problem("无效筛选")
+        offset=data.get("p_offset",0)
+        if type(offset) is not int or not 0<=offset<=10000:
+            raise Problem("无效分页")
+        counts=dict(db.execute("SELECT visibility,COUNT(*) FROM messages GROUP BY visibility").fetchall())
+        counts["private"]=db.execute("SELECT COUNT(*) FROM messages WHERE private=1").fetchone()[0]
+        records=rows(db.execute("SELECT "+PUBLIC+",m.visibility,m.private,c.contact FROM messages m LEFT JOIN contacts c ON m.id=c.message_id WHERE (?='all' OR (?='private' AND m.private=1) OR m.visibility=?) ORDER BY m.created_epoch DESC,m.id DESC LIMIT 50 OFFSET ?",(filt,filt,filt,offset)))
+        return {"counts":counts,"records":records}
+    if action == "guestbook_admin_update":
+        require_admin(data)
+        mid=msg_id(data.get("p_id"))
+        visibility=field(data,"p_visibility",24)
+        progress=field(data,"p_progress",24)
+        reply=field(data,"p_reply",1500)
+        pinned=data.get("p_pinned",False)
+        if visibility not in {"pending","approved","rejected"} or progress not in PROGRESS or type(pinned) is not bool:
+            raise Problem("无效处理状态")
+        current=db.execute("SELECT m.private,m.reply,c.contact FROM messages m LEFT JOIN contacts c ON m.id=c.message_id WHERE m.id=?",(mid,)).fetchone()
+        if not current: raise Problem("留言不存在",404)
+        if current["contact"] and not current["private"] and current["contact"].casefold() in reply.casefold():
+            raise Problem("公开回复不得包含联系方式")
+        stamp=datetime.now(timezone.utc).isoformat() if reply!=current["reply"] else None
+        db.execute("UPDATE messages SET visibility=?,progress=?,reply=?,pinned=?,replied_at=COALESCE(?,replied_at) WHERE id=?",(visibility,progress,reply,int(pinned and not current["private"]),stamp,mid))
+        return True
+    if action == "guestbook_admin_delete":
+        require_admin(data)
+        return db.execute("DELETE FROM messages WHERE id=?",(msg_id(data.get("p_id")),)).rowcount==1
     if action != "guestbook_submit":
         raise Problem("接口不存在",404)
     digest=owner(data.get("p_secret"))
@@ -99,22 +226,29 @@ def dispatch(action,data,db):
     category=field(data,"p_category",24)
     body=field(data,"p_body",1500)
     contact=field(data,"p_contact",200)
+    title=field(data,"p_title",80)
+    context=field(data,"p_context",300)
+    private=data.get("p_private",False)
+    if type(private) is not bool: raise Problem("请检查留言内容")
+    request_hash=hashlib.sha256(json.dumps([nick,category,body,contact,title,context,private],ensure_ascii=False,separators=(",",":")).encode()).hexdigest()
     if category not in CATEGORIES or not 5<=len(body)<=1500:
         raise Problem("请检查留言内容和长度")
-    if contact and (contact.casefold() in body.casefold() or contact.casefold() in nick.casefold()):
+    if contact and not private and any(contact.casefold() in value.casefold() for value in (body,nick,title,context)):
         raise Problem("请勿在公开内容中填写联系方式")
     now=int(time.time())
     db.execute("BEGIN IMMEDIATE")
     try:
-        existing=db.execute("SELECT owner_hash,visibility FROM messages WHERE id=?",(mid,)).fetchone()
+        existing=db.execute("SELECT owner_hash,visibility,request_hash FROM messages WHERE id=?",(mid,)).fetchone()
         if existing:
             if existing["owner_hash"]!=digest:
                 raise Problem("无效的留言凭证")
+            if existing["request_hash"] and not hmac.compare_digest(existing["request_hash"],request_hash):
+                raise Problem("留言内容已变化，请重新提交",409)
             db.execute("COMMIT")
             return {"id":mid,"visibility":existing["visibility"]}
         if db.execute("SELECT COUNT(*) FROM messages WHERE owner_hash=? AND created_epoch>?",(digest,now-600)).fetchone()[0]>=3 or db.execute("SELECT COUNT(*) FROM messages WHERE created_epoch>?",(now-600,)).fetchone()[0]>=50:
             raise Problem("留言过于频繁，请稍后重试",429)
-        db.execute("INSERT INTO messages(id,owner_hash,nickname,category,body,created_at,created_epoch) VALUES(?,?,?,?,?,?,?)",(mid,digest,nick,category,body,datetime.now(timezone.utc).isoformat(),now))
+        db.execute("INSERT INTO messages(id,owner_hash,nickname,category,body,created_at,created_epoch,title,context,private,request_hash) VALUES(?,?,?,?,?,?,?,?,?,?,?)",(mid,digest,nick,category,body,datetime.now(timezone.utc).isoformat(),now,title,context,int(private),request_hash))
         if contact:
             db.execute("INSERT INTO contacts(message_id,contact) VALUES(?,?)",(mid,contact))
         db.execute("COMMIT")
@@ -156,7 +290,7 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
     def do_GET(self):
         if self.path=="/health":
-            return self.reply(200,{"ok":True})
+            return self.reply(200,{"ok":True,"version":2})
         self.reply(404,{"message":"接口不存在"})
     def do_POST(self):
         try:
@@ -166,7 +300,7 @@ class Handler(BaseHTTPRequestHandler):
             if not self.path.startswith(prefix):
                 raise Problem("接口不存在",404)
             action=self.path[len(prefix):]
-            if action not in {"guestbook_submit","guestbook_public","guestbook_mine","guestbook_remove_contact"}:
+            if action not in {"guestbook_submit","guestbook_public","guestbook_mine","guestbook_remove_contact","guestbook_withdraw","guestbook_vote","guestbook_votes","guestbook_admin_list","guestbook_admin_update","guestbook_admin_delete"}:
                 raise Problem("接口不存在",404)
             if self.headers.get_content_type()!="application/json":
                 raise Problem("请求格式错误",415)
@@ -182,6 +316,8 @@ class Handler(BaseHTTPRequestHandler):
             with closing(connect()) as db:
                 result=dispatch(action,data,db)
             self.reply(200,result)
+            try: daily_backup()
+            except Exception: pass
         except Problem as e:
             self.reply(e.code,{"message":str(e)})
         except (ValueError,UnicodeError):
@@ -225,6 +361,7 @@ def main():
     args=p.parse_args()
     initialize()
     if args.command=="serve":
+        daily_backup()
         ThreadingHTTPServer((args.host,args.port),Handler).serve_forever()
     else:
         admin(args)
