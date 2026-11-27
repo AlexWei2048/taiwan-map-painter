@@ -4649,6 +4649,18 @@
           "votes": 5666,
           "corroboration_url": "https://journal.th.gov.tw/intro.php?council=tycc"
         },
+        "16": {
+          "value": true,
+          "source_url": "https://eebulletin.cec.gov.tw/107/04%E6%A1%83%E5%9C%92%E5%B8%82/02%E5%B8%82%E8%AD%B0%E5%93%A1/%E6%A1%83%E5%9C%92%E5%B8%82%E7%AC%AC01%E9%81%B8%E8%89%89%E5%8D%80.pdf",
+          "source_locator": "2018年第1選區14號邱德順，公報第3頁，經歷列桃園縣議會第12、13、14屆議員。文字取得，頁面截圖未取得。",
+          "election_date": "1994-01-29",
+          "method": "documented_previous_term_election_bulletin",
+          "confidence": "published_election_bulletin",
+          "limitation": "任期履歷為候選人自行填列，非逐日任免紀錄。",
+          "original_name": "邱德順",
+          "ballot_number": 16,
+          "votes": 6506
+        },
         "17": {
           "value": true,
           "source_url": "https://www.moi.gov.tw/LocalOfficial_Content.aspx?TYP=KND0001&_PARENT_ID=ER11112HA00005&_TYP=REP&n=573",
