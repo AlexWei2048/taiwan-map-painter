@@ -35,7 +35,9 @@ test('Legislative historical coverage uses verified separate turnout files in al
    assert.equal(summary.status,'partial','1992 regional township archives remain partial');
    assert.equal(summary.missingTurnout,0,'1992 national turnout profiles are cross-checked');
    assert.equal(summary.missingIncumbent,0,'1992 candidate incumbent attributes are complete, including a source-graded crosscheck');
-   assert.equal(summary.countyPartial,0,'County candidate returns are available');
+   assert.deepEqual(result.counties.filter(c=>c.status==='partial').map(c=>c.county).sort(),['原高雄市','金门县','连江县'].sort(),'County results are available; only known township archives remain partial');
+   assert.equal(result.all.townProfileGaps,19);
+   assert.equal(result.all.missingVotes,0);
   }else{
    assert.equal(summary.status,'recorded',year+' principal election data must be complete');
    assert.equal(summary.missingTurnout,0,year+' separate turnout profiles must be verified');

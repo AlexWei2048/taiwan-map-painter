@@ -85,9 +85,7 @@ test('1992 NCCU turnout covers 27 reconciled regional constituencies without ove
   const contest=election.contests.find(c=>c.electorate==='regional'&&c.county_name===county&&c.district_name===district);
   assert.ok(contest,county+' '+district);
   assert.equal(contest.valid_votes,record[2]);
-  assert.equal(contest.registered_voters,null);
-  assert.equal(contest.ballots_cast,null);
-  assert.equal(contest.invalid_votes,null);
+  assert.deepEqual([contest.registered_voters,contest.ballots_cast,contest.valid_votes,contest.invalid_votes],record);
   assert.ok(source_url.startsWith('https://'));
   assert.equal(record[1],record[2]+record[3]);
   assert.ok(record[0]>=record[1]);

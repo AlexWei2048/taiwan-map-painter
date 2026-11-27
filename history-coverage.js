@@ -153,7 +153,10 @@
  const button=$('historyCoverageOpen');if(!button)return;
  const dialog=$('historyCoverageDialog'),select=$('historyCoverageOffice'),host=$('historyCoverageMatrix'),detail=$('historyCoverageDetail'),status=$('historyCoverageStatus');
  const element=(tag,text,cls)=>{const n=doc.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n};
- const cache=new Map();let request=0;
+ const cache=new Map();let request=0,lastMatrix=null;
+ const yearFilter=$('coverageYearFilter'),statusFilter=$('coverageStatusFilter'),countyFilter=$('coverageCountyFilter');
+ const matchStatus=(s,v)=>!v||v==='gaps'?(!v||['partial','missing','unknown','error'].includes(s)):s===v;
+ function filteredDraw(){if(!lastMatrix)return;const {office,ys,results}=lastMatrix;const indexes=ys.map((y,i)=>i).filter(i=>!yearFilter.value||String(ys[i])===yearFilter.value);draw(office,indexes.map(i=>ys[i]),indexes.map(i=>results[i]));}
  const years=office=>office==='president'?root.HistoryPresidential.YEARS:office==='legislative'?root.HistoryLegislative.YEARS:root.HistoryLocal.years(office,root.HISTORY_2026_RESULTS_AVAILABLE===true);
  async function load(office,year){
   const key=office+'|'+year;
@@ -177,31 +180,33 @@
   }
   detail.append(element('p','已收录：'+entry.contests+'个选区或票种 / '+entry.candidates+'条候选人、政党记录；县市得票明细 '+entry.countyRows+'条，乡镇市区得票明细 '+entry.townRows+'条（'+entry.towns+'个地区）。'));
   if(office==='legislative')detail.append(element('p','立法机构民代的投票人数等统计另外核对同届、同票种的原始投票概况；旧制不分区计算票不作为独立投票。性别、现任等附加字段仍可待核，但不等于候选人得票、当选结果缺失。','data-help'));
+  const summary=element('div',undefined,'observation-toolbar');for(const [label,ok] of [['候选人得票',!entry.missingVotes&&!entry.unreconciled],['当选结果',!entry.missingWinners],['选区投票概况',!Object.values(entry.missingFields).some(Boolean)],['身份资料',!entry.missingGender&&!entry.missingIncumbent]]){const n=element('span',label+'：'+(ok?'已收录':'待补齐'),'coverage-summary-item');n.dataset.complete=String(ok);summary.append(n)}if(entry.townProfileGaps||entry.partialArchives){const n=element('span','细项档案：部分缺失','coverage-summary-item');n.dataset.complete='false';summary.append(n)}detail.append(summary);
   const table=element('table',undefined,'history-candidate-table'),body=element('tbody');
   for(const [label,value] of [...Object.entries(fields).map(([key,name])=>[name+'缺失选区',entry.missingFields[key]]),['候选人得票缺失选区',entry.missingVotes],['当选标记或席次待核选区',entry.missingWinners],['有效票对账异常选区',entry.unreconciled],['号次缺失记录',entry.missingNumber],['性别缺失记录',entry.missingGender],['政党缺失记录',entry.missingParty],['现任缺失记录',entry.missingIncumbent],['部分档案条目（非完整候选人结果）',entry.partialArchives],['乡镇分票种投票概况缺项',entry.townProfileGaps||0]]){const tr=element('tr');tr.append(element('th',label),element('td',String(value)));body.append(tr)}
   table.append(body);detail.append(table);for(const note of entry.coverageNotes||[])detail.append(element('p',note,'data-help'));detail.append(element('p','以上仅检查本站已收录字段，不证明全部历史选区、候选人或乡镇明细已齐全。','data-help'));
  }
  function draw(office,ys,results){
-  const names=countyRows(results);
+  const q=defaultNorm(countyFilter.value).replaceAll('金门县','金门').replaceAll('连江县','马祖');
+  const names=['全部地区',...countyRows(results)].filter(county=>(!q||defaultNorm(county).replaceAll('金门县','金门').replaceAll('连江县','马祖').includes(q))&&ys.some((y,i)=>matchStatus(matrixEntry(results[i],county,y,office).status,statusFilter.value)));
   const table=element('table',undefined,'coverage-matrix'),head=element('thead'),row=element('tr');row.append(element('th','当届县市'));
   for(const y of ys)row.append(element('th',root.HistoryLocal.yearLabel(y,office)));head.append(row);table.append(head);
   const body=element('tbody');
-  for(const county of ['全部地区',...names]){
+  for(const county of names){
    const tr=element('tr');tr.append(element('th',county));
    ys.forEach((y,i)=>{const cell=matrixEntry(results[i],county,y,office),td=element('td'),b=element('button',labels[cell.status]);b.type='button';b.dataset.coverageStatus=cell.status;b.setAttribute('aria-label',countyLabel(county,y)+' '+root.HistoryLocal.yearLabel(y,office)+' '+labels[cell.status]);b.onclick=()=>showDetail(cell,y,county,office);td.append(b);tr.append(td)});
    body.append(tr);
   }
-  table.append(body);host.replaceChildren(table);
+  table.append(body);host.replaceChildren(table);if(!names.length)host.append(element('p','没有符合筛选条件的记录。'));
  }
  async function refresh(){
   const token=++request,office=select.value,ys=[...years(office)],results=new Array(ys.length);
-  host.replaceChildren();detail.replaceChildren();status.textContent='正在检查 '+officeNames[office]+' 历届档案…';
+  lastMatrix=null;host.replaceChildren();detail.replaceChildren();status.textContent='正在检查 '+officeNames[office]+' 历届档案…';
   let next=0,finished=0;
   async function worker(){while(token===request&&next<ys.length){const i=next++;try{results[i]=await load(office,ys[i])}catch(e){results[i]={error:e.message}}if(token!==request)return;status.textContent='已检查 '+(++finished)+' / '+ys.length+' 届'}}
   await Promise.all(Array.from({length:Math.min(2,ys.length)},worker));
-  if(token!==request)return;draw(office,ys,results);status.textContent='已检查 '+ys.length+' 届'+(results.some(r=>r?.error)?'，部分档案读取失败，可重新检查。':'。');
+  if(token!==request)return;lastMatrix={office,ys,results};const prior=yearFilter.value;yearFilter.replaceChildren(new Option('全部年份',''),...ys.map(y=>new Option(root.HistoryLocal.yearLabel(y,office),String(y))));yearFilter.value=ys.some(y=>String(y)===prior)?prior:'';filteredDraw();status.textContent='已检查 '+ys.length+' 届'+(results.some(r=>r?.error)?'，部分档案读取失败，可重新检查。':'。');
  }
  button.onclick=()=>{select.value=root.History2022View?.office()||'mayor';dialog.showModal();refresh()};
- select.onchange=refresh;$('historyCoverageRetry').onclick=refresh;
+ select.onchange=refresh;$('historyCoverageRetry').onclick=refresh;yearFilter.onchange=statusFilter.onchange=filteredDraw;countyFilter.oninput=filteredDraw;
  dialog.addEventListener('close',()=>{request++});
 })(typeof window==='undefined'?globalThis:window);

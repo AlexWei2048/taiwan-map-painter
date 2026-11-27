@@ -13,3 +13,5 @@
 [data-observation-party]{transition:opacity .12s}.observation-muted{opacity:.22}
 .observation-legend label{display:inline-flex;align-items:center;gap:4px;cursor:pointer;margin:4px 8px 4px 0;font-weight:600}
 @media(max-width:600px){.observation-filter{min-width:calc(50% - 10px)}.observation-toolbar button{min-height:40px}.observation-scroll{overflow-x:auto}}
+
+.coverage-controls{flex-wrap:wrap}.coverage-controls label input[type=search]{min-width:130px;max-width:100%;min-height:34px}.coverage-summary-item{padding:5px 9px;border:1px solid #d7e4dd;border-radius:5px;font-size:13px}.coverage-summary-item[data-complete=false]{border-color:#dbb88a;color:#915b27}
