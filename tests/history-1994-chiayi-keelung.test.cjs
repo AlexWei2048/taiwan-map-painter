@@ -52,8 +52,15 @@ test('1994 Keelung city official council totals reconcile without filling distri
  assert.equal(keelung.ballots_cast,keelung.valid_votes+keelung.invalid_votes);
  assert.equal(keelung.candidate_count,keelung.male_candidates+keelung.female_candidates);
  assert.equal(keelung.elected_count,keelung.male_elected+keelung.female_elected);
- assert.equal(council.verified_county_profiles.length,4);
- assert.deepEqual(council.verified_county_profiles.slice(0,2),[keelung,taoyuan]);
+ const profiles=council.verified_county_profiles;
+ assert.equal(new Set(profiles.map(p=>p.county)).size,profiles.length);
+ for(const expected of [keelung,taoyuan])assert.deepEqual(profiles.find(p=>p.county===expected.county),expected);
+ for(const p of profiles){
+  assert.equal(p.ballots_cast,p.valid_votes+p.invalid_votes,p.county);
+  assert.ok(p.registered_voters>=p.ballots_cast,p.county);
+  const rows=council.districts.filter(d=>d.county===p.county);
+  assert.equal(rows.reduce((n,d)=>n+d.valid_votes,0),p.valid_votes,p.county);
+ }
 });
 test('1994 Changhua official county profile reconciles with eight published constituencies',()=>{
  const districts=council.districts.filter(d=>d.county==='彰化縣');
@@ -71,8 +78,8 @@ test('1994 local council snapshot exposes county-level summary without merging u
   json:async()=>JSON.parse(fs.readFileSync(path.join(__dirname,'..',filename.split('?')[0]),'utf8'))
  });
  const data=await Local.loadCycle(1994,'council',fetcher);
- assert.equal(data.verifiedCouncilCountyProfiles.length,5);
- assert.deepEqual(data.verifiedCouncilCountyProfiles[4],changhua);
+ assert.equal(new Set(data.verifiedCouncilCountyProfiles.map(p=>p.county)).size,data.verifiedCouncilCountyProfiles.length);
+ assert.deepEqual(data.verifiedCouncilCountyProfiles.find(p=>p.county===changhua.county),changhua);
  const indexed=Core.index(data);
  const countyOverview=Workspace.overviewRegionData(indexed,{year:1994,office:'council',scope:'county',county:'彰化县'});
  assert.equal(countyOverview.overview.registeredVoters,changhua.registered_voters);
@@ -81,7 +88,7 @@ test('1994 local council snapshot exposes county-level summary without merging u
  assert.equal(countyOverview.overview.validVotes,changhua.valid_votes);
  const districtOverview=Workspace.overviewRegionData(indexed,{year:1994,office:'council',scope:'district',county:'彰化县',area:countyOverview.result.contests[0].contest_id});
  assert.equal(districtOverview.overview.registeredVoters,null);
- assert.equal(data.verifiedCouncilCountyProfiles[0].county,'基隆市');
+ assert.deepEqual(data.verifiedCouncilCountyProfiles.find(p=>p.county===keelung.county),keelung);
  const keels=data.contests.filter(c=>c.county_name==='基隆市'&&c.election_id==='1994-council-counties');
  assert.equal(keels.length,8);
  assert.ok(keels.every(c=>c.ballots_cast===null&&c.registered_voters===null));
