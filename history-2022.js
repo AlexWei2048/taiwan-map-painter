@@ -421,9 +421,30 @@
   return [...new Set([...result.regions.values()].map(r=>r.top?.party).filter(Boolean))].map(party=>({party,name:''}));
  }
  const historyLegendFont=()=>state.legend.fontSize*(isNationwide()?1.4:1)*(identityPanelsActive()?2:1);
+ function historicalStatus(feature){
+  if(feature.unresolvedHistorical||featureKey(feature)==='__2022_unmatched__')return 'unresolved';
+  if(noElection(feature))return 'no-election';
+  if(!currentResult)return '';
+  const region=currentResult.regions.get(featureKey(feature));
+  if(kind==='council'&&!legislativeMode&&historyOverview()){
+   const counts=allCouncil()?currentResult.panelSeats.get(feature.electorate+'|'+feature.county):currentResult.countySeats.get(feature.county);
+   if(!counts?.size)return 'no-category';
+   return metric==='seats'&&!counts.get(selectedParty)?'no-seat':'result';
+  }
+  if(nationwideHistoricalSeatColors())return currentResult.countySeats.get(feature.county||feature.name)?.size?'result':'no-category';
+  if(!region)return 'missing';
+  if(metric==='seats')return region.partyCounts.get(selectedParty)?'result':'no-seat';
+  if(voteMetric()&&candidateScope==='candidate'&&!region.top)return 'unselected';
+  if(!voteMetric()&&region.tie)return 'tie';
+  return 'result';
+ }
+ function historicalStatusRows(){
+  const found=new Set((historyItems()||[]).map(historicalStatus));
+  return ['missing','unresolved','unselected','no-seat','no-category'].filter(s=>found.has(s));
+ }
  function legendHeight(result){
   const font=historyLegendFont(),gradients=gradientParties(result),entries=legendEntries(result);
-  return 71+(entries.length+(kind==='township'?1:0))*font*2.05+
+  return 71+(entries.length+(kind==='township'&&!partialTownship()?1:0)+historicalStatusRows().length)*font*2.05+
    (gradients.length?gradients.length*font*4.3+font*2.3:0);
  }
  const partyLinkKey=(party,name='')=>name?'history-candidate:'+party+'|'+name:'history-party:'+party;
@@ -444,7 +465,7 @@
  }
  function drawLegend(result){
   const root=el('legend');if(!root)return;root.replaceChildren();delete root.dataset.historyBox;if(!state.legend.show)return;
-  const entries=legendEntries(result).sort((a,b)=>b.count-a.count);if(!entries.length&&kind!=='township')return;
+  const entries=legendEntries(result).sort((a,b)=>b.count-a.count);if(!entries.length&&kind!=='township'&&!historicalStatusRows().length)return;
   const spec=sceneSpec(),font=historyLegendFont(),rowH=font*2.05,width=identityPanelsActive()?560:detailedLegend()?480:isNationwide()?350:300;
   const gradients=gradientParties(result),height=legendHeight(result),x=spec.width-width-25,y=spec.height-furnitureFooterHeight()+20;
   const svg=(tag,attrs)=>{const node=document.createElementNS(NS,tag);for(const [k,v]of Object.entries(attrs||{}))node.setAttribute(k,v);return node};
@@ -497,7 +518,12 @@
    if(logo)appendCircularPartyLogo(group,logo,x+38,rowY,font*1.55);
    const label=svg('text',{x:x+font+48,y:rowY+font+1,'font-size':font,fill:'#426052','data-history-legend-candidate':entry.name||''});label.textContent=allLegislative()?legendLabel(entry):legendLabel(entry)+'（'+count+(areaLeading()?'个地区':'席')+'）';group.append(label);root.append(group);rowY+=rowH;
   }
-  if(kind==='township'){root.append(svg('rect',{x:x+18,y:rowY+3,width:font,height:font,fill:partialTownship()?'#edf1e9':'#fff',stroke:'#9eaaa2'}));const t=svg('text',{x:x+font+48,y:rowY+font+1,'font-size':font,fill:'#426052','data-no-township-election-legend':'true'});t.textContent=partialTownship()?'暂无已核实档案':'无乡镇市区长选举';root.append(t)}
+  if(kind==='township'&&!partialTownship()){root.append(svg('rect',{x:x+18,y:rowY+3,width:font,height:font,fill:'#fff',stroke:'#9eaaa2'}));const t=svg('text',{x:x+font+48,y:rowY+font+1,'font-size':font,fill:'#426052','data-no-township-election-legend':'true'});t.textContent='无乡镇市区长选举';root.append(t);rowY+=rowH}
+  for(const status of historicalStatusRows()){
+   const g=svg('g',{'data-map-status-legend':status});
+   g.append(svg('rect',{x:x+18,y:rowY+3,width:font,height:font,fill:mapStatusFill(status),stroke:'#9eaaa2'}));
+   const t=svg('text',{x:x+font+48,y:rowY+font+1,'font-size':font*.9,fill:'#426052'});t.textContent=MAP_STATUS_STYLES[status].label;g.append(t);root.append(g);rowY+=rowH;
+  }
  }
  // Link rows at the exact current map grain. A county summary is a county,
  // never an invented district; mixed ballot panels retain their own identity.
@@ -522,8 +548,8 @@
   const features=currentItems(),byId=new Map(features.map(f=>[f.id,f]));
   for(const path of document.querySelectorAll('#regions path[data-region]')){
    const f=byId.get(path.dataset.region);if(!f)continue;
-   const key=historyLinkFeature(f);if(key)path.dataset.mapLink=key;else delete path.dataset.mapLink;path.dataset.partyKeys=JSON.stringify(historyPartyKeys(f));
-   path.setAttribute('fill',fillColor(f));path.setAttribute('aria-label',f.county+(f.name===f.county?'':' · '+f.name)+'，'+regionDetail(f));
+   const key=historyLinkFeature(f);if(key)path.dataset.mapLink=key;else delete path.dataset.mapLink;path.dataset.partyKeys=JSON.stringify(historyPartyKeys(f));path.dataset.mapStatus=historicalStatus(f);
+   path.setAttribute('fill',fillColor(f));path.setAttribute('aria-label',f.county+(f.name===f.county?'':' · '+f.name)+'，'+regionDetail(f)+(['missing','unresolved'].includes(path.dataset.mapStatus)?' · '+MAP_STATUS_STYLES[path.dataset.mapStatus].label:''));
   }
   el('scopeTitle').textContent=(county||'全台')+' · '+yearLabel()+' '+officeTitle()+' · '+metricLabel();
   drawLegend(result);
@@ -1508,6 +1534,7 @@
  const formerReturn=el('returnTaiwanMap').onclick;el('returnTaiwanMap').onclick=()=>{if(!active)return formerReturn();const keepTownView=legislativePartyTownView()||regionalLegislativeTownView();county='';legislativeFocus='';if(legislativeMode)scale=keepTownView?'town':'county';el('historyCounty').value='';switchMode();render()};
  const defaultColor=fillColor;fillColor=function(feature){
   if(!active)return defaultColor(feature);
+  const status=historicalStatus(feature);if(status==='missing'||status==='unresolved')return mapStatusFill(status);
   if(allLegislative()){if(feature.unresolvedHistorical)return '#cbd3ce';const region=currentResult?.regions.get(featureKey(feature));if(feature.electorate==='regional'&&legislativeYear<2008)return '#f0f3ed';return region?.party?partyColor(region.party):'#edf1e9'}
   if(allCouncil()&&!county&&metric==='party'){const counts=currentResult?.panelSeats.get(feature.electorate+'|'+feature.county);const leaders=counts?seatTieLeaderColors(counts,partyColor):[];return leaders.length>1?seatTiePatternFill(leaders):leaders[0]?.color||'#edf1e9'}
   // Qianzhen was divided at village level in 2008–2016. Never attribute

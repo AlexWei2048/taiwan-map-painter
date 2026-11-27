@@ -26,8 +26,8 @@
  }
  document.addEventListener('pointerover',e=>{if(e.pointerType==='touch')return;const node=target(e.target);if(node===pointer)return;pointer=node;draw()});
  document.addEventListener('pointerout',e=>{if(e.pointerType==='touch')return;const node=target(e.relatedTarget);if(pointer===node)return;pointer=node;draw()});
- document.addEventListener('focusin',e=>{focus=target(e.target);draw()});
- document.addEventListener('focusout',e=>{focus=target(e.relatedTarget);draw()});
+ document.addEventListener('focusin',e=>{focus=target(e.target);pointer=null;draw()});
+ document.addEventListener('focusout',e=>{focus=target(e.relatedTarget);pointer=null;draw()});
  function prepareRows(){
   const visibleKeys=new Set([...document.querySelectorAll('#regions path[data-map-link]')].map(p=>p.dataset.mapLink));
   for(const root of [$('historyResults'),$('districtTableGroups')]){

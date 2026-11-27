@@ -3875,3 +3875,14 @@ test('Township executive comparison supports town grain and retains map nodes wh
  assert.equal(facts.actual,facts.expected);assert.equal(facts.wrong,0);assert.equal(facts.rows,true);
  await page.locator('#historySearch').focus();assert.equal(await page.locator('#regions path.map-linked-highlight').count(),0);
  });
+
+ test('Map status legend distinguishes manual blank, forecast missing and areas with no township election',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ await page.waitForFunction(()=>document.querySelector('#regions path[data-map-status="unpredicted"]'));
+ assert.match(await page.locator('#legend [data-map-status-legend="unpredicted"]').textContent(),/尚无可用预测/);
+ await page.locator('#workspaceFree').click();
+ const blank=page.locator('#regions path[data-map-status="unpainted"]').first();assert.equal(await blank.getAttribute('fill'),'#f8faf7');assert.match(await page.locator('#legend [data-map-status-legend="unpainted"]').textContent(),/尚未填色/);
+ const id=await blank.getAttribute('data-region');await blank.dispatchEvent('click');assert.equal(await page.locator('#regions path[data-region="'+id+'"]').getAttribute('data-map-status'),'result');
+ await page.locator('#workspacePrediction').click();await page.locator('#predictionOffice').selectOption('township');await page.waitForFunction(()=>document.querySelector('#regions path[data-map-status="no-election"]'));
+ assert.equal(await page.locator('#regions path[data-map-status="no-election"]').first().getAttribute('fill'),'#ffffff');
+ });
