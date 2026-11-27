@@ -3,7 +3,7 @@
   "checked": "2026-11-27",
   "reference_status": "provisional_expected_districts_pending_original_1994_notice",
   "base_archive": "sources/history-1994-township.json",
-  "base_archive_blob": "01ae67c80956b3ea763382127f3bcc5c572881f4",
+  "base_archive_blob": "807388471a4e79e8938e728f597718284899908f",
   "expected": 319,
   "with_candidate_returns": 89,
   "missing_complete_candidate_returns": 230,
@@ -53,6 +53,18 @@
       "url": "https://twlld.nmth.gov.tw/literal-detail/606/8/1",
       "locator": "苗栗文獻第9期第27頁",
       "status": "catalog_only_original_table_not_obtained"
+    },
+    {
+      "county": "屏東縣",
+      "url": "https://ethesys.lis.nsysu.edu.tw/ETD-db/ETD-search-c/view_etd?URN=etd-0209109-091301",
+      "locator": "王樹圍2009年學位論文，第1章第3節高樹鄉長選舉個案（頁33起）；參考文獻載1994年屏東縣第12屆鄉鎮市長選舉選舉結果清冊",
+      "status": "fulltext_download_timeout_original_table_not_obtained"
+    },
+    {
+      "county": "屏東縣",
+      "url": "https://ethesys.lis.nsysu.edu.tw/ETD-db/ETD-search-c/view_etd?URN=etd-0902102-183649",
+      "locator": "學位論文泰武鄉政治參與研究，表4-4歷屆鄉長候選人政黨屬性（頁122）；引用1994年屏東縣第12屆鄉鎮市長選政誌要",
+      "status": "fulltext_download_timeout_original_table_not_obtained"
     }
   ],
   "tasks": [
@@ -3547,8 +3559,12 @@
       "year": 1994,
       "office": "township",
       "status": "missing_complete_candidate_returns",
-      "known": [],
-      "partial_archive_indices": [],
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        102
+      ],
       "required": [
         "complete_candidate_roster",
         "individual_votes",
@@ -3567,8 +3583,12 @@
       "year": 1994,
       "office": "township",
       "status": "missing_complete_candidate_returns",
-      "known": [],
-      "partial_archive_indices": [],
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        103
+      ],
       "required": [
         "complete_candidate_roster",
         "individual_votes",
@@ -3587,8 +3607,12 @@
       "year": 1994,
       "office": "township",
       "status": "missing_complete_candidate_returns",
-      "known": [],
-      "partial_archive_indices": [],
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        104
+      ],
       "required": [
         "complete_candidate_roster",
         "individual_votes",
@@ -3607,8 +3631,12 @@
       "year": 1994,
       "office": "township",
       "status": "missing_complete_candidate_returns",
-      "known": [],
-      "partial_archive_indices": [],
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        105
+      ],
       "required": [
         "complete_candidate_roster",
         "individual_votes",
@@ -3647,8 +3675,12 @@
       "year": 1994,
       "office": "township",
       "status": "missing_complete_candidate_returns",
-      "known": [],
-      "partial_archive_indices": [],
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        106
+      ],
       "required": [
         "complete_candidate_roster",
         "individual_votes",
@@ -3667,8 +3699,12 @@
       "year": 1994,
       "office": "township",
       "status": "missing_complete_candidate_returns",
-      "known": [],
-      "partial_archive_indices": [],
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        107
+      ],
       "required": [
         "complete_candidate_roster",
         "individual_votes",
@@ -3687,8 +3723,12 @@
       "year": 1994,
       "office": "township",
       "status": "missing_complete_candidate_returns",
-      "known": [],
-      "partial_archive_indices": [],
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        108
+      ],
       "required": [
         "complete_candidate_roster",
         "individual_votes",
@@ -3751,8 +3791,12 @@
       "year": 1994,
       "office": "township",
       "status": "missing_complete_candidate_returns",
-      "known": [],
-      "partial_archive_indices": [],
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        109
+      ],
       "required": [
         "complete_candidate_roster",
         "individual_votes",
@@ -3771,8 +3815,12 @@
       "year": 1994,
       "office": "township",
       "status": "missing_complete_candidate_returns",
-      "known": [],
-      "partial_archive_indices": [],
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        110
+      ],
       "required": [
         "complete_candidate_roster",
         "individual_votes",
@@ -3791,8 +3839,12 @@
       "year": 1994,
       "office": "township",
       "status": "missing_complete_candidate_returns",
-      "known": [],
-      "partial_archive_indices": [],
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        111
+      ],
       "required": [
         "complete_candidate_roster",
         "individual_votes",
@@ -3851,8 +3903,12 @@
       "year": 1994,
       "office": "township",
       "status": "missing_complete_candidate_returns",
-      "known": [],
-      "partial_archive_indices": [],
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        112
+      ],
       "required": [
         "complete_candidate_roster",
         "individual_votes",
@@ -3891,8 +3947,12 @@
       "year": 1994,
       "office": "township",
       "status": "missing_complete_candidate_returns",
-      "known": [],
-      "partial_archive_indices": [],
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        113
+      ],
       "required": [
         "complete_candidate_roster",
         "individual_votes",
