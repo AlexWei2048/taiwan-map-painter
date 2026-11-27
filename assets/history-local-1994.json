@@ -9228,13 +9228,22 @@
       "candidate_name": "林懋荣",
       "candidate_name_official": "林懋榮",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": true,
       "party_name": "民主进步党",
       "party_name_official": "民主進步黨",
       "votes": 6756,
       "vote_share": 43.310469,
       "elected_official": false,
-      "elected_mark": ""
+      "elected_mark": "",
+      "incumbent_source": {
+        "name": "林懋榮",
+        "source_url": "https://zh.wikipedia.org/wiki/阿蓮區",
+        "source_locator": "歷任首長第11任林懋榮、第12及13任陳明看；與本屆既有候選人和當選人資料相符。",
+        "corroboration_url": "https://zh.wikipedia.org/wiki/林懋榮",
+        "method": "historical_term_roster_inference",
+        "limitation": "次級任期名錄及人物履歷互核，尚未找到投票日任免原件。",
+        "value": true
+      }
     },
     {
       "candidacy_id": "1994-township:高雄县:regional:阿莲乡:2",
@@ -9243,13 +9252,22 @@
       "candidate_name": "陈明看",
       "candidate_name_official": "陳明看",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "中国国民党",
       "party_name_official": "中國國民黨",
       "votes": 8843,
       "vote_share": 56.689531,
       "elected_official": true,
-      "elected_mark": "*"
+      "elected_mark": "*",
+      "incumbent_source": {
+        "name": "林懋榮",
+        "source_url": "https://zh.wikipedia.org/wiki/阿蓮區",
+        "source_locator": "歷任首長第11任林懋榮、第12及13任陳明看；與本屆既有候選人和當選人資料相符。",
+        "corroboration_url": "https://zh.wikipedia.org/wiki/林懋榮",
+        "method": "historical_term_roster_inference",
+        "limitation": "次級任期名錄及人物履歷互核，尚未找到投票日任免原件。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:高雄县:regional:路竹乡:1",
@@ -9573,13 +9591,22 @@
       "candidate_name": "陈双",
       "candidate_name_official": "陳双",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "中国国民党",
       "party_name_official": "中國國民黨",
       "votes": 3852,
       "vote_share": 100,
       "elected_official": true,
-      "elected_mark": "*"
+      "elected_mark": "*",
+      "incumbent_source": {
+        "name": "劉建芳",
+        "source_url": "https://wikis.pro/甲仙区",
+        "source_locator": "歷任首長表第11屆劉建芳任期1990-03-01至1994-02-28；客家文化資產數位網確認陳双於1994當選第12屆。",
+        "corroboration_url": "https://hch.hakka.gov.tw/reportdetail.asp?ArID=1227&MenuID=9&SubID=27&pageNums=4",
+        "method": "historical_term_roster_with_official_biographical_corroboration",
+        "limitation": "任期表為次級來源，官方文化資產資料確認本屆當選人；未取得原選舉公報。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:高雄县:regional:杉林乡:1",
@@ -9786,13 +9813,22 @@
       "candidate_name": "林国财",
       "candidate_name_official": "林國財",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": false,
       "party_name": "无党籍",
       "party_name_official": "無黨籍",
       "votes": 692,
       "vote_share": 46.380697,
       "elected_official": false,
-      "elected_mark": ""
+      "elected_mark": "",
+      "incumbent_source": {
+        "name": "孫榮顯",
+        "source_url": "https://www.cw.com.tw/article/5116856",
+        "source_locator": "1993-11-15《天下雜誌》〈三民鄉楠梓仙溪　美在溪河歲歲年年〉搜尋索引明載在任鄉長孫榮顯；另歷任名錄第11至12屆均為孫榮顯、第10及13屆林國財。",
+        "corroboration_url": "https://wikis.tw/那瑪夏區",
+        "method": "contemporary_news_and_term_roster_inference",
+        "limitation": "新聞原頁目前502，以索引及歷任表互核，未取得投票日任免原件。",
+        "value": false
+      }
     },
     {
       "candidacy_id": "1994-township:高雄县:regional:三民乡:2",
@@ -9801,13 +9837,22 @@
       "candidate_name": "孙荣显",
       "candidate_name_official": "孫榮顯",
       "gender": "男",
-      "incumbent_at_election": null,
+      "incumbent_at_election": true,
       "party_name": "中国国民党",
       "party_name_official": "中國國民黨",
       "votes": 800,
       "vote_share": 53.619303,
       "elected_official": true,
-      "elected_mark": "*"
+      "elected_mark": "*",
+      "incumbent_source": {
+        "name": "孫榮顯",
+        "source_url": "https://www.cw.com.tw/article/5116856",
+        "source_locator": "1993-11-15《天下雜誌》〈三民鄉楠梓仙溪　美在溪河歲歲年年〉搜尋索引明載在任鄉長孫榮顯；另歷任名錄第11至12屆均為孫榮顯、第10及13屆林國財。",
+        "corroboration_url": "https://wikis.tw/那瑪夏區",
+        "method": "contemporary_news_and_term_roster_inference",
+        "limitation": "新聞原頁目前502，以索引及歷任表互核，未取得投票日任免原件。",
+        "value": true
+      }
     },
     {
       "candidacy_id": "1994-township:新竹县:regional:竹北市:1",
@@ -19061,7 +19106,7 @@
       "number": "1",
       "party": "民主进步党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": true,
       "votes": 6756,
       "elected": false,
       "electedMark": "",
@@ -19077,7 +19122,7 @@
       "number": "2",
       "party": "中国国民党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 8843,
       "elected": true,
       "electedMark": "*",
@@ -19429,7 +19474,7 @@
       "number": "1",
       "party": "中国国民党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 3852,
       "elected": true,
       "electedMark": "*",
@@ -19637,7 +19682,7 @@
       "number": "1",
       "party": "无党籍",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": false,
       "votes": 692,
       "elected": false,
       "electedMark": "",
@@ -19653,7 +19698,7 @@
       "number": "2",
       "party": "中国国民党",
       "gender": "男",
-      "incumbent": null,
+      "incumbent": true,
       "votes": 800,
       "elected": true,
       "electedMark": "*",
