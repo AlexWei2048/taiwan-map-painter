@@ -154,6 +154,26 @@
  const dialog=$('historyCoverageDialog'),select=$('historyCoverageOffice'),host=$('historyCoverageMatrix'),detail=$('historyCoverageDetail'),status=$('historyCoverageStatus');
  const element=(tag,text,cls)=>{const n=doc.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n};
  const cache=new Map();let request=0,lastMatrix=null;
+ const emblemDetails=$('historyEmblemCoverage'),emblemBody=$('historyEmblemCoverageBody');
+ let emblemAudit=null,emblemLoading=false;
+ async function showEmblems(){
+  if(!emblemDetails?.open||emblemLoading)return;
+  emblemLoading=true;emblemBody.replaceChildren(element('p','正在读取党徽审计…','data-help'));
+  try{
+   if(!emblemAudit){const response=await fetch('reports/coverage-audit.json',{cache:'no-cache'});if(!response.ok)throw Error('读取失败');emblemAudit=await response.json()}
+   const records=emblemAudit.priority_party_inventory;if(!Array.isArray(records))throw Error('审计清单尚未更新');
+   const rows=records.map(r=>{let logo='';try{logo=logoFor(predictionParty(r.name))||''}catch(e){}return {...r,logo}}),missing=rows.filter(r=>!r.logo);
+   const title=element('p','本站已收录的曾当选或曾参选县市长的历史党名：'+rows.length+'；已匹配图档 '+(rows.length-missing.length)+'；待补齐 '+missing.length+'。','data-help');
+   const filter=element('label','仅显示待补齐 '),check=element('input');check.type='checkbox';check.checked=true;filter.prepend(check);
+   const table=element('table',undefined,'history-candidate-table'),thead=element('thead'),tr=element('tr'),tbody=element('tbody');
+   for(const label of ['政党','当选记录','县市长参选记录','图档状态'])tr.append(element('th',label));thead.append(tr);table.append(thead,tbody);
+   function draw(){tbody.replaceChildren();for(const r of check.checked?missing:rows){const tr=element('tr'),td=element('td',undefined,'history-party-inline');if(r.logo){const img=element('img');img.src=r.logo;img.alt='';img.width=20;img.height=20;td.append(img)}td.append(element('span',root.NewsWording?.normalize(r.name)||r.name));tr.append(td,element('td',String(r.elected??'—')),element('td',String(r.mayor_candidates??'—')),element('td',r.logo?'已匹配':'待核实'));tbody.append(tr)}if(!tbody.children.length){const tr=element('tr'),td=element('td','没有待补齐记录');td.colSpan=4;tr.append(td);tbody.append(tr)}}
+   check.onchange=draw;const wrap=element('div',undefined,'discovery-table-wrap');wrap.append(table);const source=element('a','查看完整党徽来源记录');source.href='https://github.com/AlexWei2048/taiwan-map-painter/blob/main/reports/official-party-logos-import.json';source.target='_blank';source.rel='noopener noreferrer';
+   emblemBody.replaceChildren(title,filter,wrap,element('p','当选及参选次数仅代表已收录档案；同一政党的历史名称可能分别列出。缺徽不使用他党图样。','data-help'),source);draw()
+  }catch(e){const retry=element('button','重新读取','button quiet');retry.type='button';retry.onclick=()=>{emblemAudit=null;showEmblems()};emblemBody.replaceChildren(element('p','党徽审计暂不可读：'+e.message,'data-help'),retry)}
+  finally{emblemLoading=false}
+ }
+ emblemDetails?.addEventListener('toggle',showEmblems);
  const yearFilter=$('coverageYearFilter'),statusFilter=$('coverageStatusFilter'),countyFilter=$('coverageCountyFilter');
  const matchStatus=(s,v)=>!v||v==='gaps'?(!v||['partial','missing','unknown','error'].includes(s)):s===v;
  function filteredDraw(){if(!lastMatrix)return;const {office,ys,results}=lastMatrix;const indexes=ys.map((y,i)=>i).filter(i=>!yearFilter.value||String(ys[i])===yearFilter.value);draw(office,indexes.map(i=>ys[i]),indexes.map(i=>results[i]));}

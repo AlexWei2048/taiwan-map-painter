@@ -14,7 +14,7 @@ import json
 import re
 import time
 from pathlib import Path
-from urllib.parse import urlparse,quote
+from urllib.parse import urlparse,quote,urljoin
 from collections import Counter
 import requests
 import cairosvg
@@ -294,6 +294,34 @@ for name,traditional,number in [
   supplemental.append({"name":name,"also":[],"urls":[image],
     "source_page":page,"license":"Historical party emblem from matching election profile; rights retained"})
  except requests.RequestException as err:print("ARCHIVE_PROFILE_UNAVAILABLE",name,str(err),flush=True)
+# Contemporary election pages and iVoter's explicitly attributed old archive.
+# Require a unique image with an exact party-name alt/title, not a candidate photo
+# or an unlabelled illustration. Never guess a file path.
+for name,urls,hosts in [
+ ("人民民主阵线",["https://ivoter.tw/about","https://election.ltn.com.tw/2016/party/10"],
+  {"ivoter.tw","www.ivoter.tw","img.ltn.com.tw","election.ltn.com.tw"})]:
+ if name in byname:continue
+ for page in urls:
+  try:
+   resp=session.get(page,timeout=18);resp.raise_for_status()
+   if urlparse(resp.url).hostname not in hosts:continue
+   soup=BeautifulSoup(resp.text,"html.parser")
+   if name not in norm(soup.get_text(" ",strip=True)):continue
+   candidates_exact=set()
+   for img in soup.find_all("img"):
+    label=norm(img.get("alt","") or img.get("title",""))
+    if label not in {name,name+"党徽",name+"党旗",name+"标志",name+"标识",name+"政党标志"}:continue
+    src=urljoin(resp.url,img.get("src") or img.get("data-src") or "")
+    if urlparse(src).scheme!="https" or urlparse(src).hostname not in hosts:continue
+    if not re.search(r"\.(png|jpe?g|webp|gif|svg)(?:\?|$)",src,re.I):continue
+    if re.search(r"(?:default|placeholder|candidate|portrait)",src,re.I):continue
+    candidates_exact.add(src)
+   if len(candidates_exact)!=1:
+    print("ARCHIVE_EMBLEM_NOT_UNIQUE",name,page,len(candidates_exact),flush=True);continue
+   supplemental.append({"name":name,"also":[],"urls":sorted(candidates_exact),
+     "source_page":page,"license":"Named historical emblem from archived election/academic comparison site; rights remain with owner, identification only"})
+   break
+  except requests.RequestException as err:print("ARCHIVE_PROFILE_UNAVAILABLE",name,page,str(err),flush=True)
 for item in supplemental:
  name=norm(item["name"]);pid=lookup.get(name)
  if pid in existing or pid in byid or name in byname:continue

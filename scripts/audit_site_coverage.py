@@ -21,7 +21,7 @@ cc = OpenCC("t2s")
 def normalized(value):
     name=cc.convert(str(value or "")).replace("臺", "台").strip().replace("無黨籍", "无党籍")
     if name in ("无党籍及未经政党推荐", "无党籍及未經政黨推薦"):return "无党籍"
-    return name
+    return {"中国台湾少数民族党":"中国台湾原住民党","全部地区民主非政党联盟":"全国民主非政党联盟"}.get(name,name)
 
 def load_json(path):
     try: return json.loads(path.read_text(encoding="utf-8-sig"))
@@ -93,6 +93,29 @@ def elected_parties():
             wins[name]+=1
             contest=contests.get(row.get("contest_id"),{})
             examples[name].append({"archive":path.name,"contest":row.get("contest_id"),"name":row.get("candidate_name"),"election":contest.get("election_id")})
+    # Legacy 1994 council supplement contains separately verified winners,
+    # including Kinmen partial records. Count only names not already in the
+    # ordinary 1994 council archive, by county/electorate/district/name.
+    base=load_json(ASSETS/"history-local-1994.json")
+    contests={c.get("contest_id"):c for c in base.get("contests",[]) if c.get("election_id")=="1994-council"}
+    known=set()
+    for row in base.get("candidacies",[]):
+        c=contests.get(row.get("contest_id"))
+        if c and row.get("elected_official") is True:
+            known.add((normalized(c.get("county_name")),normalized(row.get("candidate_name"))))
+    legacy=load_json(ASSETS/"history-local-1994-council.json")
+    def legacy_win(county,name,party,district):
+        key=(normalized(county),normalized(name));party=normalized(party)
+        if not all(key) or key in known or party in ("","无党籍","连署","政党资料缺失","无党籍（连署）","其他政党"):return
+        known.add(key);wins[party]+=1
+        examples[party].append({"archive":"history-local-1994-council.json","contest":str(county)+":"+str(district),"name":name,"election":"1994-council"})
+    for d in legacy.get("districts",[]):
+        for row in d.get("candidates",[]):
+            if len(row)>5 and row[5] is True:legacy_win(d.get("county"),row[1],row[3],d.get("number"))
+    for county in legacy.get("partial_returns",[]):
+        for d in county.get("districts",[]):
+            for row in d.get("winners",[]):
+                if len(row)>3:legacy_win(county.get("county"),row[0],row[3],d.get("number"))
     return wins,examples
 
 def mayor_parties():
@@ -138,7 +161,10 @@ def inventory():
     wins,win_examples=elected_parties()
     mayors,mayor_examples=mayor_parties()
     missing=[]
-    for name,count in counter.most_common():
+    # A candidacy can exist even when no geographical tally row has survived.
+    # Include those names in the missing-emblem inventory as well.
+    for name in sorted(set(counter)|set(wins)|set(mayors),key=lambda n:(-counter[n],n)):
+        count=counter[name]
         pid=indexed.get(name)
         # 连署/连署参选 is an independent nomination mechanism, NOT a
         # legally registered party that could possess an official party logo.
