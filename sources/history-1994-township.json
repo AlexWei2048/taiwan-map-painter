@@ -6584,6 +6584,1950 @@
           "source_url": "https://zh.wikipedia.org/wiki/%E7%89%A1%E4%B8%B9%E9%84%89"
         }
       ]
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://web.cec.gov.tw/api/file/fc013024-106e-4395-844f-af5777354458.pdf",
+      "source_locator": "2009年縣議員公報8號候選人經歷明載花壇鄉第12、13屆鄉長；2014年公報一致，縣議會名錄確認男性。原公報文字可讀，截圖未取得。",
+      "evidence_tier": "official_election_biography",
+      "validation_note": "非當屆原始開票表；姓名及現任按任期名錄和相關資料推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "花壇鄉",
+          "name": "唐鎮林",
+          "incumbent_at_election": null,
+          "incumbent_method": null,
+          "previous_term_holder": null,
+          "gender": "男",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://web.cec.gov.tw/api/file/fc013024-106e-4395-844f-af5777354458.pdf",
+          "corroboration_url": "https://www.chcc.gov.tw/form/Details.aspx?Parser=2%2C4%2C34%2C%2C%2C41"
+        }
+      ],
+      "corroboration_url": "https://www.chcc.gov.tw/form/Details.aspx?Parser=2%2C4%2C34%2C%2C%2C41"
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://catalog.digitalarchives.tw/item/00/3a/1b/6b.html",
+      "source_locator": "1996年《水的故鄉－二水》典藏文字稿列二水鄉長鄭阿月、女性；歷任表列第11、12任，分別於1990年及1994年3月到任。",
+      "evidence_tier": "official_cultural_archive_and_term_roster",
+      "validation_note": "非當屆原始開票表；姓名及現任按任期名錄和相關資料推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "二水鄉",
+          "name": "鄭阿月",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "鄭阿月",
+          "gender": "女",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://catalog.digitalarchives.tw/item/00/3a/1b/6b.html",
+          "corroboration_url": "https://zh.wikipedia.org/wiki/二水鄉"
+        }
+      ],
+      "corroboration_url": "https://zh.wikipedia.org/wiki/二水鄉"
+    },
+    {
+      "county": "臺中縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://www.ly.gov.tw/Pages/List.aspx?nodeid=1411",
+      "source_locator": "民代官方履歷記載大肚鄉長連任、先任公所秘書；歷任表列第12、13屆，任期始於1994年；報導明載前任退休後首次參選。",
+      "evidence_tier": "official_legislative_biography",
+      "validation_note": "非當屆原始開票表；姓名及現任按任期名錄和相關資料推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "大肚鄉",
+          "name": "紀國棟",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": null,
+          "gender": "男",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://www.ly.gov.tw/Pages/List.aspx?nodeid=1411",
+          "corroboration_url": "https://zh.wikipedia.org/wiki/大肚區"
+        }
+      ],
+      "corroboration_url": "https://zh.wikipedia.org/wiki/大肚區"
+    },
+    {
+      "county": "南投縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://www.ly.gov.tw/EngPages/List.aspx?nodeid=701",
+      "source_locator": "第三屆民代官方履歷明載南投縣信義鄉第十一、十二屆鄉長，政大《選舉研究》亦記載參選民代前兩任信義鄉長。",
+      "evidence_tier": "official_legislative_biography",
+      "validation_note": "非當屆原始開票表；姓名及現任按任期名錄和相關資料推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "信義鄉",
+          "name": "全文盛",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "全文盛",
+          "gender": "男",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://www.ly.gov.tw/EngPages/List.aspx?nodeid=701",
+          "corroboration_url": "https://votetw.com/data/candidate/全文盛"
+        }
+      ],
+      "corroboration_url": "https://votetw.com/data/candidate/全文盛"
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://wikis.tw/鹽埔鄉",
+      "source_locator": "歷任首長表展開後明列第11及12屆皆為鄭景濃；維基表同一姓名跨列，兩頁為同源轉載，非獨立佐證。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆原始開票表；姓名及現任按任期名錄和相關資料推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "鹽埔鄉",
+          "name": "鄭景濃",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "鄭景濃",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://wikis.tw/鹽埔鄉",
+          "corroboration_url": "https://zh.wikipedia.org/wiki/鹽埔鄉"
+        }
+      ],
+      "corroboration_url": "https://zh.wikipedia.org/wiki/鹽埔鄉"
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://wikis.tw/新埤鄉",
+      "source_locator": "歷任首長表明列第11及12屆皆為曾文昌；維基表同一姓名跨列，兩頁為同源轉載，非獨立佐證。2002年同名參選資料不能證明1994年票數。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆原始開票表；姓名及現任按任期名錄和相關資料推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "新埤鄉",
+          "name": "曾文昌",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "曾文昌",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://wikis.tw/新埤鄉",
+          "corroboration_url": "https://zh.wikipedia.org/wiki/新埤鄉"
+        }
+      ],
+      "corroboration_url": "https://zh.wikipedia.org/wiki/新埤鄉"
+    },
+    {
+      "county": "南投縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/中寮鄉",
+      "source_locator": "歷任首長表明列第11屆廖文章、第12屆陳耀崇；僅次級名錄，未取得獨立原始選舉清冊。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆原始開票表；姓名及現任按任期名錄和相關資料推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "中寮鄉",
+          "name": "陳耀崇",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "廖文章",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/中寮鄉"
+        }
+      ]
+    },
+    {
+      "county": "嘉義縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://web.cec.gov.tw/api/file/b1c8520f-a127-4e8d-963f-5851ffd5d089.pdf",
+      "source_locator": "2009年縣選委會候選人登記冊第1頁（已核對頁面圖像）列男性、曾任第二及第四屆市長；歷任表第二屆1994年3月1日開始，前任侯天龍。",
+      "evidence_tier": "official_election_biography",
+      "validation_note": "非當屆原始開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "太保市",
+          "name": "盧嘉竹",
+          "gender": "男",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "侯天龍",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://web.cec.gov.tw/api/file/b1c8520f-a127-4e8d-963f-5851ffd5d089.pdf",
+          "corroboration_url": "https://zh.wikipedia.org/wiki/太保市市長"
+        }
+      ],
+      "corroboration_url": "https://zh.wikipedia.org/wiki/太保市市長"
+    },
+    {
+      "county": "嘉義縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/朴子市市長",
+      "source_locator": "歷任表第二屆1994-03-01至1998-02-28，前任王朝榮；未取得當屆原件。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆原始開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "朴子市",
+          "name": "吳國禎",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "王朝榮",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/朴子市市長",
+          "corroboration_url": "https://www.jendow.com.tw/wiki/朴子市"
+        }
+      ],
+      "corroboration_url": "https://www.jendow.com.tw/wiki/朴子市"
+    },
+    {
+      "county": "嘉義縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/布袋鎮",
+      "source_locator": "歷任表第11屆蔡啟芳，第12屆蔡長雄1994-03-01至1998-02-28。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆原始開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "布袋鎮",
+          "name": "蔡長雄",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "蔡啟芳",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/布袋鎮"
+        }
+      ]
+    },
+    {
+      "county": "嘉義縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://nhuir.nhu.edu.tw/retrieve/29998/093NHU05699004-001.pdf",
+      "source_locator": "南華大學學位論文表2-7，印刷頁62，轉引大林鎮公所資料；第11屆江宏謙、第12屆簡和清於83年3月1日就任。文字表可讀，截圖未取得。",
+      "evidence_tier": "academic_term_roster",
+      "validation_note": "非當屆原始開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "大林鎮",
+          "name": "簡和清",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "江宏謙",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://nhuir.nhu.edu.tw/retrieve/29998/093NHU05699004-001.pdf"
+        }
+      ]
+    },
+    {
+      "county": "嘉義縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/新港鄉",
+      "source_locator": "歷任表第11、12屆均列鄭友信。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆原始開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "新港鄉",
+          "name": "鄭友信",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "鄭友信",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/新港鄉"
+        }
+      ]
+    },
+    {
+      "county": "嘉義縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/六腳鄉",
+      "source_locator": "歷任表第11屆吳昭輝1993年過世，楊再興補選接任至1994-02-28；第12屆楊再興1994-03-01就任。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆原始開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "六腳鄉",
+          "name": "楊再興",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "楊再興",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/六腳鄉"
+        }
+      ]
+    },
+    {
+      "county": "嘉義縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/竹崎鄉",
+      "source_locator": "歷任表第11、12屆均列游吉森；2026年地方新聞確認民國80年已任鄉長。",
+      "evidence_tier": "secondary_term_roster_plus_independent_corroboration_when_available",
+      "validation_note": "非當屆原始開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "竹崎鄉",
+          "name": "游吉森",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "游吉森",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/竹崎鄉",
+          "corroboration_url": "https://tw.news.yahoo.com/從公所到縣政府共30多年行政歷練-人稱邱祕仔決定参選竹崎鄉長-144731140.html"
+        }
+      ],
+      "corroboration_url": "https://tw.news.yahoo.com/從公所到縣政府共30多年行政歷練-人稱邱祕仔決定参選竹崎鄉長-144731140.html"
+    },
+    {
+      "county": "嘉義縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/東石鄉",
+      "source_locator": "歷任表第11屆李流宋、第12屆蔡炳欽、第13屆李流宋。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆原始開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "東石鄉",
+          "name": "蔡炳欽",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "李流宋",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/東石鄉"
+        }
+      ]
+    },
+    {
+      "county": "嘉義縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/鹿草鄉",
+      "source_locator": "歷任表第11、12屆蔡遜章；第12屆1994-03-01上任，1996年由鄭春波代理，不將代理者列為1994年當選人。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆原始開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "鹿草鄉",
+          "name": "蔡遜章",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "蔡遜章",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/鹿草鄉"
+        }
+      ]
+    },
+    {
+      "county": "嘉義縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://catalog.digitalarchives.tw/item/00/3a/1b/75.html",
+      "source_locator": "1996年《健康學習之鄉－梅山》典藏文字稿明載梅山鄉長林洋一、男；歷任表第11屆林洋一、第12屆姓名跨列，結合1996年在任佐證。",
+      "evidence_tier": "official_cultural_archive_and_term_roster",
+      "validation_note": "非當屆原始開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "梅山鄉",
+          "name": "林洋一",
+          "gender": "男",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "林洋一",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://catalog.digitalarchives.tw/item/00/3a/1b/75.html",
+          "corroboration_url": "https://zh.wikipedia.org/wiki/梅山鄉"
+        }
+      ],
+      "corroboration_url": "https://zh.wikipedia.org/wiki/梅山鄉"
+    },
+    {
+      "county": "嘉義縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/水上鄉",
+      "source_locator": "歷任表第11屆林崑山、第12屆姓名跨列；另一轉載明列林昆山，2026年新聞報導林緗亭父親林琨山曾兩屆水上鄉長。姓名字形存在崑/琨異文，暫依歷任表保留，原件待核。",
+      "evidence_tier": "secondary_term_roster_plus_independent_corroboration_when_available",
+      "validation_note": "非當屆原始開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "水上鄉",
+          "name": "林崑山",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "林崑山",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/水上鄉",
+          "corroboration_url": "https://wikis.pro/水上鄉"
+        }
+      ],
+      "corroboration_url": "https://wikis.pro/水上鄉"
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://w3fs.tainan.gov.tw/001/Upload/47/attachment/8983/4718/52-91%E6%A9%9F%E9%97%9C%E5%9C%98%E9%AB%94.pdf",
+      "source_locator": "《濃濃關廟情》印刷頁57歷任名錄：第11屆王照明，第12屆楊敬昌83年3月至87年2月；文字表可讀，截圖未取得。",
+      "evidence_tier": "official_local_term_roster",
+      "validation_note": "非當屆原始開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "關廟鄉",
+          "name": "楊敬昌",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "王照明",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://w3fs.tainan.gov.tw/001/Upload/47/attachment/8983/4718/52-91%E6%A9%9F%E9%97%9C%E5%9C%98%E9%AB%94.pdf"
+        }
+      ]
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/永靖鄉",
+      "source_locator": "歷任表第11屆詹德發，第12及13屆邱榮昌；1998年同鄉選舉資料列邱榮昌現任及當選，新聞明載1994年第12屆任職。",
+      "evidence_tier": "secondary_term_roster_plus_independent_corroboration_when_available",
+      "validation_note": "非當屆原始開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "永靖鄉",
+          "name": "邱榮昌",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "詹德發",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/永靖鄉",
+          "corroboration_url": "https://votetw.com/data/candidate/邱榮昌"
+        }
+      ],
+      "corroboration_url": "https://votetw.com/data/candidate/邱榮昌"
+    },
+    {
+      "county": "嘉義縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/溪口鄉_(台灣)",
+      "source_locator": "歷任表第12屆劉邦詩，第11屆姓名欄未獨立顯示；2012年聯合報記載1990年當選縣議員，後轉跑道任鄉長。當屆是否現任保留缺值。",
+      "evidence_tier": "secondary_term_roster_plus_independent_corroboration_when_available",
+      "validation_note": "非當屆原始開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "溪口鄉",
+          "name": "劉邦詩",
+          "gender": "男",
+          "incumbent_at_election": null,
+          "incumbent_method": null,
+          "previous_term_holder": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/溪口鄉_(台灣)",
+          "corroboration_url": "https://paper.udn.com/udnpaper/PID0001/220414/web/"
+        }
+      ],
+      "corroboration_url": "https://paper.udn.com/udnpaper/PID0001/220414/web/"
+    },
+    {
+      "county": "嘉義縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/義竹鄉",
+      "source_locator": "歷任表第11、12屆均列陳翁蘭英；2021年校友會報導確認翁壽男二姊陳翁蘭英曾任義竹鄉長。",
+      "evidence_tier": "secondary_term_roster_plus_independent_corroboration_when_available",
+      "validation_note": "非當屆原始開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "義竹鄉",
+          "name": "陳翁蘭英",
+          "gender": "女",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "陳翁蘭英",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/義竹鄉",
+          "corroboration_url": "https://tw.news.yahoo.com/%E7%BF%81%E5%A3%BD%E7%94%B7%E7%95%B6%E9%81%B8%E7%BE%A9%E7%AB%B9%E5%9C%8B%E5%B0%8F%E5%B1%86%E9%A6%96%E6%A0%A1%E5%8F%8B%E6%9C%83%E7%90%86%E4%BA%8B%E9%95%B7-134345189.html"
+        }
+      ],
+      "corroboration_url": "https://tw.news.yahoo.com/%E7%BF%81%E5%A3%BD%E7%94%B7%E7%95%B6%E9%81%B8%E7%BE%A9%E7%AB%B9%E5%9C%8B%E5%B0%8F%E5%B1%86%E9%A6%96%E6%A0%A1%E5%8F%8B%E6%9C%83%E7%90%86%E4%BA%8B%E9%95%B7-134345189.html"
+    },
+    {
+      "county": "嘉義縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/中埔鄉",
+      "source_locator": "歷任表第11屆1990–1994、第12屆1994–1998均為鄭炳琨；2018年公民新聞確認曾任鄉長。",
+      "evidence_tier": "secondary_term_roster_plus_independent_corroboration_when_available",
+      "validation_note": "非當屆原始開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "中埔鄉",
+          "name": "鄭炳琨",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "鄭炳琨",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/中埔鄉",
+          "corroboration_url": "https://www.peopo.org/news/377559"
+        }
+      ],
+      "corroboration_url": "https://www.peopo.org/news/377559"
+    },
+    {
+      "county": "嘉義縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/番路鄉",
+      "source_locator": "歷任表第11、12屆均列游泰山；最高法院89年度台上字第3459號判決轉載確認民國84–86年間任鄉長。",
+      "evidence_tier": "secondary_term_roster_plus_independent_corroboration_when_available",
+      "validation_note": "非當屆原始開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "番路鄉",
+          "name": "游泰山",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "游泰山",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/番路鄉",
+          "corroboration_url": "https://lawplayer.com/valuable-judgment/646b350fc3e2a9cc78b21385"
+        }
+      ],
+      "corroboration_url": "https://lawplayer.com/valuable-judgment/646b350fc3e2a9cc78b21385"
+    },
+    {
+      "county": "嘉義縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/大埔鄉",
+      "source_locator": "歷任表引《大埔鄉志》頁37–38，第11屆許榮松、第12屆許俊昇1994-03-01至1998-02-28；監察院調查報告確認2000年任鄉長，非當屆得票證據。",
+      "evidence_tier": "secondary_gazetteer_transcription_and_official_corroboration",
+      "validation_note": "非當屆原始開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "大埔鄉",
+          "name": "許俊昇",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "許榮松",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/大埔鄉",
+          "corroboration_url": "https://www.cy.gov.tw/CyBsBoxContent.aspx?n=133&s=4609"
+        }
+      ],
+      "corroboration_url": "https://www.cy.gov.tw/CyBsBoxContent.aspx?n=133&s=4609"
+    },
+    {
+      "county": "嘉義縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/阿里山鄉",
+      "source_locator": "歷任表第11及12任均列石信忠；1992年總統府新聞確認時任鄉長。名錄改名年份附註不能作第12屆任期日期，當屆姓名為任期名錄推定。",
+      "evidence_tier": "secondary_term_roster_plus_independent_corroboration_when_available",
+      "validation_note": "非當屆原始開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "阿里山鄉",
+          "name": "石信忠",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "石信忠",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/阿里山鄉",
+          "corroboration_url": "https://www.president.gov.tw/NEWS/22784"
+        }
+      ],
+      "corroboration_url": "https://www.president.gov.tw/NEWS/22784"
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://xinying.tainan.gov.tw/cp.aspx?n=8168",
+      "source_locator": "新營區公所歷任首長：第四屆補選黃金鏞自1992-08-01任職，第五屆1994-03-01至1998-02-28。",
+      "evidence_tier": "official_local_term_roster",
+      "validation_note": "非當屆原始開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "新營市",
+          "name": "黃金鏞",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "黃金鏞",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://xinying.tainan.gov.tw/cp.aspx?n=8168"
+        }
+      ]
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://w3fs.tainan.gov.tw/Download.ashx?icon=.pdf&n=MTQ5OTY3NDM4Ny5wZGY%3D&u=LzAwMS9VcGxvYWQvMTcxL3JlbHBpYy8wLzIwODU2LzY4MjZmMzI0LTAyYzYtNGY5My04OTQ0LWNlNjdhMGJlNGE3My5wZGY%3D",
+      "source_locator": "《白河鎮誌》印刷頁259附近歷任表第11、12屆，1997年12月本人鎮長序亦佐證；PDF文字可讀，原頁截圖未取得。",
+      "evidence_tier": "official_local_gazetteer",
+      "validation_note": "非當屆原始開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "白河鎮",
+          "name": "張自興",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "張自興",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://w3fs.tainan.gov.tw/Download.ashx?icon=.pdf&n=MTQ5OTY3NDM4Ny5wZGY%3D&u=LzAwMS9VcGxvYWQvMTcxL3JlbHBpYy8wLzIwODU2LzY4MjZmMzI0LTAyYzYtNGY5My04OTQ0LWNlNjdhMGJlNGE3My5wZGY%3D"
+        }
+      ]
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://tucheng.kenlab.org/encyclopedia/jiali/",
+      "source_locator": "地方文史資料轉錄2012年《佳里市街區的空間歷史變遷》表4-1-6列第11–12屆黃仙井；1996年影音典藏明載佳里鎮長黃仙井、男。",
+      "evidence_tier": "academic_roster_transcription_and_official_cultural_archive",
+      "validation_note": "非當屆原始開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "佳里鎮",
+          "name": "黃仙井",
+          "gender": "男",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "黃仙井",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://tucheng.kenlab.org/encyclopedia/jiali/",
+          "corroboration_url": "https://catalog.digitalarchives.tw/item/00/3a/1b/6d.html"
+        }
+      ],
+      "corroboration_url": "https://catalog.digitalarchives.tw/item/00/3a/1b/6d.html"
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/新化區",
+      "source_locator": "歷任表第11屆蔡天基病逝後蔡登義補選，第12屆蔡登義；2010年人物報導確認補選後順利連任，任職約七年。",
+      "evidence_tier": "secondary_term_roster_plus_independent_corroboration_when_available",
+      "validation_note": "非當屆原始開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "新化鎮",
+          "name": "蔡登義",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "蔡登義",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/新化區",
+          "corroboration_url": "https://mypaper.pchome.com.tw/yes5902576/post/1326081625"
+        }
+      ],
+      "corroboration_url": "https://mypaper.pchome.com.tw/yes5902576/post/1326081625"
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://web.tainan.gov.tw/anding/cp.aspx?n=5588",
+      "source_locator": "安定區公所歷屆首長，第11屆王維道、第12屆方醫益，83年3月至87年2月。",
+      "evidence_tier": "official_local_term_roster",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "安定鄉",
+          "name": "方醫益",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "王維道",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://web.tainan.gov.tw/anding/cp.aspx?n=5588"
+        }
+      ]
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://w3fs.tainan.gov.tw/Download.ashx?n=5Y2X5YyW5Zyw5Y2A5q235Lu76aaW6ZW35YiX6KGoLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNTkvcmVsZmlsZS85MDMxLzIyODMvZjZkYzdhNTUtMWM2Zi00MTc3LWIwNzQtZWJjMjg1YTViZDkyLnBkZg%3D%3D",
+      "source_locator": "南化地區歷任行政首長列表，第1頁：陳春林75–83年3月、廖西仁83–91年3月。文字表已核對，截圖未取得。",
+      "evidence_tier": "official_local_term_roster",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "南化鄉",
+          "name": "廖西仁",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "陳春林",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://w3fs.tainan.gov.tw/Download.ashx?n=5Y2X5YyW5Zyw5Y2A5q235Lu76aaW6ZW35YiX6KGoLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNTkvcmVsZmlsZS85MDMxLzIyODMvZjZkYzdhNTUtMWM2Zi00MTc3LWIwNzQtZWJjMjg1YTViZDkyLnBkZg%3D%3D"
+        }
+      ]
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E9%BA%BB%E8%B1%86%E5%8D%80",
+      "source_locator": "歷任首長表列陳漢王1990年3月–1994年3月、沈國民1994年3月–2002年3月。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "麻豆鎮",
+          "name": "沈國民",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "陳漢王",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E9%BA%BB%E8%B1%86%E5%8D%80"
+        }
+      ]
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E5%96%84%E5%8C%96%E5%8D%80%E5%8D%80%E9%95%B7",
+      "source_locator": "歷任表第11屆王章、第12屆林碧華；表註來源《善化鎮志》等，原件未取得。",
+      "evidence_tier": "secondary_gazetteer_transcription",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "善化鎮",
+          "name": "林碧華",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "王章",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E5%96%84%E5%8C%96%E5%8D%80%E5%8D%80%E9%95%B7"
+        }
+      ]
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://wikis.tw/%E5%AD%B8%E7%94%B2%E5%8D%80",
+      "source_locator": "搜尋索引摘錄明列第八屆鎮長李育全1994-03-01至1998-02-28；頁面回傳403，前任及現任待核。",
+      "evidence_tier": "secondary_term_roster_search_excerpt",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "學甲鎮",
+          "name": "李育全",
+          "gender": null,
+          "incumbent_at_election": null,
+          "incumbent_method": null,
+          "previous_term_holder": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://wikis.tw/%E5%AD%B8%E7%94%B2%E5%8D%80"
+        }
+      ]
+    },
+    {
+      "county": "臺中縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://www.taichung.gov.tw/media/268294/472514495371.pdf",
+      "source_locator": "《外埔鄉誌》政事篇表6-7，第11、12屆姚應龍，第12屆明載83年1月29日當選；表引用臺中縣選委會原始結果清冊。文字表核對，截圖未取得；未列票數。",
+      "evidence_tier": "official_local_gazetteer_explicit_election",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "外埔鄉",
+          "name": "姚應龍",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "姚應龍",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://www.taichung.gov.tw/media/268294/472514495371.pdf"
+        }
+      ]
+    },
+    {
+      "county": "臺中縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://wikis.tw/%E6%A2%A7%E6%A3%B2%E5%8D%80",
+      "source_locator": "歷任表第12屆尤碧鈴1994-03-01至1998-02-28，引用《梧棲鎮志》207–208頁；第11屆姓名跨列未獨立顯示，現任待核。",
+      "evidence_tier": "secondary_gazetteer_transcription",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "梧棲鎮",
+          "name": "尤碧鈴",
+          "gender": null,
+          "incumbent_at_election": null,
+          "incumbent_method": null,
+          "previous_term_holder": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://wikis.tw/%E6%A2%A7%E6%A3%B2%E5%8D%80"
+        }
+      ]
+    },
+    {
+      "county": "苗栗縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E7%8D%85%E6%BD%AD%E9%84%89",
+      "source_locator": "歷屆鄉長表第11、12任均列黃國光；尚無獨立原件。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "獅潭鄉",
+          "name": "黃國光",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "黃國光",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E7%8D%85%E6%BD%AD%E9%84%89"
+        }
+      ]
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://www.changhua.gov.tw/Content/9",
+      "source_locator": "彰化市公所歷屆市長說明，第11及12屆均葉滿盈先生。",
+      "evidence_tier": "official_local_term_roster",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "彰化市",
+          "name": "葉滿盈",
+          "gender": "男",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "葉滿盈",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://www.changhua.gov.tw/Content/9"
+        }
+      ]
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E6%BA%AA%E6%B9%96%E9%8E%AE%E9%8E%AE%E9%95%B7",
+      "source_locator": "歷任表第11屆黃金地、第12屆楊宗華，表引《溪湖鎮志》253–258、261–262頁。所列黨籍不等於當屆推薦政黨。",
+      "evidence_tier": "secondary_gazetteer_transcription",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "溪湖鎮",
+          "name": "楊宗華",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "黃金地",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E6%BA%AA%E6%B9%96%E9%8E%AE%E9%8E%AE%E9%95%B7"
+        }
+      ]
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E5%92%8C%E7%BE%8E%E9%8E%AE",
+      "source_locator": "搜尋索引摘錄第12屆陳添發，1994-03-01至1998-03-01；原頁逾時，前任待核。",
+      "evidence_tier": "secondary_term_roster_search_excerpt",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "和美鎮",
+          "name": "陳添發",
+          "gender": null,
+          "incumbent_at_election": null,
+          "incumbent_method": null,
+          "previous_term_holder": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E5%92%8C%E7%BE%8E%E9%8E%AE"
+        }
+      ]
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E6%9F%B3%E7%87%9F%E5%8D%80",
+      "source_locator": "歷任鄉長表第11屆邱等鴻、第12及13屆黃國安。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "柳營鄉",
+          "name": "黃國安",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "邱等鴻",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E6%9F%B3%E7%87%9F%E5%8D%80"
+        }
+      ]
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E9%B9%BD%E6%B0%B4%E5%8D%80",
+      "source_locator": "歷任鎮長表第11、12屆邱廖芸華。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "鹽水鎮",
+          "name": "邱廖芸華",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "邱廖芸華",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E9%B9%BD%E6%B0%B4%E5%8D%80"
+        }
+      ]
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E4%B8%8B%E7%87%9F%E5%8D%80",
+      "source_locator": "歷任鄉長表第11屆馮隆誠、第12屆陳賜。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "下營鄉",
+          "name": "陳賜",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "馮隆誠",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E4%B8%8B%E7%87%9F%E5%8D%80"
+        }
+      ]
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E5%BE%8C%E5%A3%81%E5%8D%80",
+      "source_locator": "歷任鄉長表第11屆王發達、第12及13屆葉宣煌。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "後壁鄉",
+          "name": "葉宣煌",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "王發達",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E5%BE%8C%E5%A3%81%E5%8D%80"
+        }
+      ]
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E5%A4%A7%E5%85%A7%E5%8D%80",
+      "source_locator": "歷任鄉長表第11屆陳炳煌、第12及13屆楊炳勳。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "大內鄉",
+          "name": "楊炳勳",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "陳炳煌",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E5%A4%A7%E5%85%A7%E5%8D%80"
+        }
+      ]
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E5%8D%80_(%E8%87%BA%E5%8D%97%E5%B8%82)",
+      "source_locator": "歷任首長表引《東山鄉志》，第11屆吳逢麟至1994年2月，第12屆黃明山自1994年3月起。",
+      "evidence_tier": "secondary_gazetteer_transcription",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "東山鄉",
+          "name": "黃明山",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "吳逢麟",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E5%8D%80_(%E8%87%BA%E5%8D%97%E5%B8%82)"
+        }
+      ]
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://w3fs.tainan.gov.tw/Download.ashx?n=5q235Lu76YSJ6ZW35Y2A6ZW3LnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNDkvcmVsZmlsZS84OTkxLzE5OTYvMzIzNmI4YTMtMzQ3Mi00NjgwLWFkNmYtMTc5ZTBjNDM4MTE2LnBkZg%3D%3D",
+      "source_locator": "官田區公所《官田區歷屆區(鄉)長簡介》民選第11屆鄭國川79.03–83.03；第12屆何正儀83.03–87.03。依官方文字，另有網頁作何正義，原PDF截圖未取得。",
+      "evidence_tier": "official_local_term_roster",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "官田鄉",
+          "name": "何正儀",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "鄭國川",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://w3fs.tainan.gov.tw/Download.ashx?n=5q235Lu76YSJ6ZW35Y2A6ZW3LnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNDkvcmVsZmlsZS84OTkxLzE5OTYvMzIzNmI4YTMtMzQ3Mi00NjgwLWFkNmYtMTc5ZTBjNDM4MTE2LnBkZg%3D%3D"
+        }
+      ]
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://tucheng.kenlab.org/encyclopedia/qigu/",
+      "source_locator": "地方文史資料引王詳閔2023年成大碩士論文頁76註307及《七股鄉志》頁524，記載第12、13屆鄉長陳啟明；未直接取得論文或鄉志原頁。",
+      "evidence_tier": "academic_roster_transcription",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "七股鄉",
+          "name": "陳啟明",
+          "gender": null,
+          "incumbent_at_election": null,
+          "incumbent_method": null,
+          "previous_term_holder": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://tucheng.kenlab.org/encyclopedia/qigu/"
+        }
+      ]
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E8%A5%BF%E6%B8%AF%E5%8D%80",
+      "source_locator": "歷任鄉長表第11屆謝英雄、第12屆卓華民後解職，黃嘉淦補選；只收錄原始任期首任者。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "西港鄉",
+          "name": "卓華民",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "謝英雄",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E8%A5%BF%E6%B8%AF%E5%8D%80"
+        }
+      ]
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E5%B0%87%E8%BB%8D%E5%8D%80",
+      "source_locator": "歷任鄉長表第11屆陳界石、第12屆黃富勝，陳界石為同屆補選者；不混入1994年原始結果。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "將軍鄉",
+          "name": "黃富勝",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "陳界石",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E5%B0%87%E8%BB%8D%E5%8D%80"
+        }
+      ]
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E5%B1%B1%E4%B8%8A%E5%8D%80",
+      "source_locator": "歷任鄉長表第11屆林進煌、第12及13屆戴振芳。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "山上鄉",
+          "name": "戴振芳",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "林進煌",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E5%B1%B1%E4%B8%8A%E5%8D%80"
+        }
+      ]
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://www.newton.com.tw/wiki/%E6%96%B0%E5%B8%82%E5%8D%80/4801124",
+      "source_locator": "歷屆首長表第11及12任李朝塘，第12任辭職由張勝雄代理；不以代理者替代。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "新市鄉",
+          "name": "李朝塘",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "李朝塘",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://www.newton.com.tw/wiki/%E6%96%B0%E5%B8%82%E5%8D%80/4801124"
+        }
+      ]
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://www.mingtong.com.tw/hsienhsi/27.htm",
+      "source_locator": "1999年8月20日線西鄉公所民政課提供之歷屆鄉長表轉載，第11屆黃榮吉、第12屆黃正義83年3月1日至87年2月28日。",
+      "evidence_tier": "local_office_roster_republished",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "線西鄉",
+          "name": "黃正義",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "黃榮吉",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://www.mingtong.com.tw/hsienhsi/27.htm"
+        }
+      ]
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://www.newton.com.tw/wiki/%E4%BC%B8%E6%B8%AF%E9%84%89/2785618",
+      "source_locator": "歷任鄉長表第12屆蔡居男；維基第11屆列蔡居男、第12屆姓名因跨列未顯示，次級來源同源可能。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "伸港鄉",
+          "name": "蔡居男",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "蔡居男",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://www.newton.com.tw/wiki/%E4%BC%B8%E6%B8%AF%E9%84%89/2785618"
+        }
+      ]
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E7%A6%8F%E8%88%88%E9%84%89_(%E5%8F%B0%E7%81%A3)",
+      "source_locator": "歷任鄉長表第11任林聖哲、第12任林進興、第13任陳文福；按民選任期順序推定。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "福興鄉",
+          "name": "林進興",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "林聖哲",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E7%A6%8F%E8%88%88%E9%84%89_(%E5%8F%B0%E7%81%A3)"
+        }
+      ]
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E5%A4%A7%E6%9D%91%E9%84%89_(%E5%8F%B0%E7%81%A3)",
+      "source_locator": "歷任首長表以到任日期而非任次對齊，賴宗炘1990–1994，賴錫卿1994-03-01至1998-02-28（該表任次13）。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "大村鄉",
+          "name": "賴錫卿",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "賴宗炘",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E5%A4%A7%E6%9D%91%E9%84%89_(%E5%8F%B0%E7%81%A3)"
+        }
+      ]
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E5%8C%97%E9%96%80%E5%8D%80%E5%8D%80%E9%95%B7",
+      "source_locator": "歷任表第11屆洪鑾聲、第12屆洪登科1994-03-01至1998-03-01。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "北門鄉",
+          "name": "洪登科",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "洪鑾聲",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E5%8C%97%E9%96%80%E5%8D%80%E5%8D%80%E9%95%B7"
+        }
+      ]
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E7%8E%89%E4%BA%95%E5%8D%80",
+      "source_locator": "歷任首長表第11屆王石龍、第12屆鐘明憲、第13屆江樹人。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "玉井鄉",
+          "name": "鐘明憲",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "王石龍",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E7%8E%89%E4%BA%95%E5%8D%80"
+        }
+      ]
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E6%A5%A0%E8%A5%BF%E5%8D%80",
+      "source_locator": "歷任首長表第11屆郭日財、第12屆謝文長、第13屆郭日財；區公所另有歷屆名冊頁，但本次文字擷取未能核實姓名。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "楠西鄉",
+          "name": "謝文長",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "郭日財",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E6%A5%A0%E8%A5%BF%E5%8D%80"
+        }
+      ]
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E6%AD%B8%E4%BB%81%E5%8D%80",
+      "source_locator": "歷任首長表第11及12任均為黃朝明。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "歸仁鄉",
+          "name": "黃朝明",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "黃朝明",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E6%AD%B8%E4%BB%81%E5%8D%80"
+        }
+      ]
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E9%BE%8D%E5%B4%8E%E5%8D%80",
+      "source_locator": "歷任首長表第11及12屆均為余明春。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "龍崎鄉",
+          "name": "余明春",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "余明春",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E9%BE%8D%E5%B4%8E%E5%8D%80"
+        }
+      ]
+    },
+    {
+      "county": "臺南縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E6%B0%B8%E5%BA%B7%E5%8D%80%E5%8D%80%E9%95%B7",
+      "source_locator": "歷任表第2屆曾文錡1994-03-01至1998-02-28，前任周鴻儒；國立臺灣歷史博物館藏1996年永康市行政區域圖之著錄明載市長曾文錡；1998年同市選舉資料確認男性及現任。",
+      "evidence_tier": "secondary_term_roster_plus_independent_official_archive",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "永康市",
+          "name": "曾文錡",
+          "gender": "男",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "周鴻儒",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E6%B0%B8%E5%BA%B7%E5%8D%80%E5%8D%80%E9%95%B7",
+          "corroboration_url": "https://collections.nmth.gov.tw/CollectionContent.aspx?a=132&rno=2004.008.0059"
+        }
+      ],
+      "corroboration_url": "https://collections.nmth.gov.tw/CollectionContent.aspx?a=132&rno=2004.008.0059"
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://www.cna.com.tw/news/aloc/202503180323.aspx",
+      "source_locator": "中央社2025-03-18報導確認蔡教義連任兩屆鎮長；歷任表第11屆1990–1994及跨列第12屆1994–1998；縣議會名錄確認男性。",
+      "evidence_tier": "independent_news_and_term_roster",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "員林鎮",
+          "name": "蔡教義",
+          "gender": "男",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "蔡教義",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://www.cna.com.tw/news/aloc/202503180323.aspx",
+          "corroboration_url": "https://zh.wikipedia.org/wiki/%E5%93%A1%E6%9E%97%E5%B8%82%E5%B8%82%E9%95%B7"
+        }
+      ],
+      "corroboration_url": "https://zh.wikipedia.org/wiki/%E5%93%A1%E6%9E%97%E5%B8%82%E5%B8%82%E9%95%B7"
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E5%8C%97%E6%96%97%E9%8E%AE_(%E5%8F%B0%E7%81%A3)",
+      "source_locator": "歷任首長表第12屆洪參民，1994年3月至1998年2月；地方歷史資料明列前任卓建國及第12、13屆洪參民；該表1994票數欄空白。",
+      "evidence_tier": "secondary_term_roster_plus_independent_corroboration_when_available",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "北斗鎮",
+          "name": "洪參民",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "卓建國",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E5%8C%97%E6%96%97%E9%8E%AE_(%E5%8F%B0%E7%81%A3)",
+          "corroboration_url": "https://blog.udn.com/article/article_print.jsp?f_ART_ID=2664658&uid=beidou"
+        }
+      ],
+      "corroboration_url": "https://blog.udn.com/article/article_print.jsp?f_ART_ID=2664658&uid=beidou"
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E7%94%B0%E5%B0%BE%E9%84%89",
+      "source_locator": "歷任表第11屆羅坤城、第12屆鄭家吉、第13屆劉淑芳。名錄所列黨籍不當作當屆推薦政黨。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "田尾鄉",
+          "name": "鄭家吉",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "羅坤城",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E7%94%B0%E5%B0%BE%E9%84%89"
+        }
+      ]
+    },
+    {
+      "county": "臺中縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E6%BD%AD%E5%AD%90%E5%8D%80%E5%8D%80%E9%95%B7",
+      "source_locator": "歷任表明列第12屆林森田1994–1998；第11屆姓名擷取時跨列未獨立顯示，現任留空。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "潭子鄉",
+          "name": "林森田",
+          "gender": null,
+          "incumbent_at_election": null,
+          "incumbent_method": null,
+          "previous_term_holder": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E6%BD%AD%E5%AD%90%E5%8D%80%E5%8D%80%E9%95%B7"
+        }
+      ]
+    },
+    {
+      "county": "臺中縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://dayawiki.kyoikuportal.com/wiki/%E5%A4%A7%E9%9B%85%E5%8D%80",
+      "source_locator": "地方維基歷任名錄按到任日期對齊：張瑞琛1990-03-01至1994-02-28，蔡栢林1994-03-01至1998-02-28。原始公所名錄尚待核實。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "大雅鄉",
+          "name": "蔡栢林",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "張瑞琛",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://dayawiki.kyoikuportal.com/wiki/%E5%A4%A7%E9%9B%85%E5%8D%80"
+        }
+      ]
+    },
+    {
+      "county": "臺中縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://www.epb.taichung.gov.tw/70367/post",
+      "source_locator": "臺中市環保局官方建廠摘述明載1994-06-26開工時后里鄉長劉明義；歷任表第11屆劉明義及跨列第12屆1994–1998。",
+      "evidence_tier": "official_contemporaneous_event_retrospective_and_term_roster",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "后里鄉",
+          "name": "劉明義",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "劉明義",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://www.epb.taichung.gov.tw/70367/post",
+          "corroboration_url": "https://zh.wikipedia.org/wiki/%E5%90%8E%E9%87%8C%E5%8D%80%E5%8D%80%E9%95%B7"
+        }
+      ],
+      "corroboration_url": "https://zh.wikipedia.org/wiki/%E5%90%8E%E9%87%8C%E5%8D%80%E5%8D%80%E9%95%B7"
+    },
+    {
+      "county": "臺中縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://nhuir.nhu.edu.tw/retrieve/53640/104NHU00356007-003.pdf",
+      "source_locator": "南華大學學位論文印刷頁20表2-1-2，引用《石岡鄉史》(2006)，第11屆鍾報順，第12屆謝震穎1994-03-01至1998-02-28。文字表核對，截圖請求失敗。",
+      "evidence_tier": "academic_term_roster",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "石岡鄉",
+          "name": "謝震穎",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "鍾報順",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://nhuir.nhu.edu.tw/retrieve/53640/104NHU00356007-003.pdf"
+        }
+      ]
+    },
+    {
+      "county": "臺中縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E5%92%8C%E5%B9%B3%E5%8D%80_(%E5%8F%B0%E7%81%A3)",
+      "source_locator": "歷任表第11屆周吉德1990–1994、第12屆林文生1994–1998；名錄所載黨籍不等於推薦政黨。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "和平鄉",
+          "name": "林文生",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "周吉德",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E5%92%8C%E5%B9%B3%E5%8D%80_(%E5%8F%B0%E7%81%A3)"
+        }
+      ]
+    },
+    {
+      "county": "臺中縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E7%83%8F%E6%97%A5%E5%8D%80",
+      "source_locator": "歷任表陳萬富1986年3月至1994年2月、林榮樺1994年3月至1998年2月。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "烏日鄉",
+          "name": "林榮樺",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "陳萬富",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E7%83%8F%E6%97%A5%E5%8D%80"
+        }
+      ]
+    },
+    {
+      "county": "臺中縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E9%9C%A7%E5%B3%B0%E5%8D%80",
+      "source_locator": "歷任表第12屆黃昇棋；第11屆姓名未獨立顯示，現任待核。2008年地方新聞另確認曾任鄉長。",
+      "evidence_tier": "secondary_term_roster_plus_independent_corroboration_when_available",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "霧峰鄉",
+          "name": "黃昇棋",
+          "gender": null,
+          "incumbent_at_election": null,
+          "incumbent_method": null,
+          "previous_term_holder": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E9%9C%A7%E5%B3%B0%E5%8D%80",
+          "corroboration_url": "https://www.5ch.com.tw/news.php?act=view&id=5157"
+        }
+      ],
+      "corroboration_url": "https://www.5ch.com.tw/news.php?act=view&id=5157"
+    },
+    {
+      "county": "臺中縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://news.ebc.net.tw/news/politics/530248",
+      "source_locator": "東森新聞報導明載劉八郎1990至1998年任神岡鄉長；歷任表引《神岡鄉志》，第11、12屆對應相同任期。",
+      "evidence_tier": "independent_news_and_term_roster",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "神岡鄉",
+          "name": "劉八郎",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "劉八郎",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://news.ebc.net.tw/news/politics/530248",
+          "corroboration_url": "https://zh.wikipedia.org/wiki/%E7%A5%9E%E5%B2%A1%E5%8D%80%E5%8D%80%E9%95%B7"
+        }
+      ],
+      "corroboration_url": "https://zh.wikipedia.org/wiki/%E7%A5%9E%E5%B2%A1%E5%8D%80%E5%8D%80%E9%95%B7"
+    },
+    {
+      "county": "臺中縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://www.daan.taichung.gov.tw/983279/983387/1475684/1480937",
+      "source_locator": "大安區公所官方名錄搜尋索引列第12任吳鶴鵬先生、第10及11屆林火傳先生；原頁逾時，次級名錄列吳鶴鵬1994-03-01至1998-02-28。",
+      "evidence_tier": "official_local_term_roster_search_excerpt",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "大安鄉",
+          "name": "吳鶴鵬",
+          "gender": "男",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "林火傳",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://www.daan.taichung.gov.tw/983279/983387/1475684/1480937",
+          "corroboration_url": "https://zh.100ke.info/wiki/%E8%87%BA%E4%B8%AD%E5%B8%82%E5%A4%A7%E5%AE%89%E5%8D%80%E5%8D%80%E9%95%B7"
+        }
+      ],
+      "corroboration_url": "https://zh.100ke.info/wiki/%E8%87%BA%E4%B8%AD%E5%B8%82%E5%A4%A7%E5%AE%89%E5%8D%80%E5%8D%80%E9%95%B7"
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://www.chcg.gov.tw/TSO/Zhutang/01local/local01.aspx",
+      "source_locator": "竹塘鄉公所官方介紹明列民選第十一、十二屆鄉長劉重華先生。",
+      "evidence_tier": "official_local_term_roster",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "竹塘鄉",
+          "name": "劉重華",
+          "gender": "男",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "劉重華",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://www.chcg.gov.tw/TSO/Zhutang/01local/local01.aspx"
+        }
+      ]
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://www.ly.gov.tw/Pages/List.aspx?nodeid=1659",
+      "source_locator": "民代官方履歷明載社頭鄉第11、12屆鄉長，地方新聞另有相同記載。",
+      "evidence_tier": "official_legislative_biography",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "社頭鄉",
+          "name": "蕭景田",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "蕭景田",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://www.ly.gov.tw/Pages/List.aspx?nodeid=1659",
+          "corroboration_url": "https://tw.news.yahoo.com/%E8%95%AD-%E5%8D%8A%E5%87%BA%E5%90%8D%E4%BA%BA-%E8%95%AD%E8%90%AC%E9%95%B7%E7%95%99%E5%8D%B0%E8%A8%98%E9%A4%A8-201024646.html"
+        }
+      ],
+      "corroboration_url": "https://tw.news.yahoo.com/%E8%95%AD-%E5%8D%8A%E5%87%BA%E5%90%8D%E4%BA%BA-%E8%95%AD%E8%90%AC%E9%95%B7%E7%95%99%E5%8D%B0%E8%A8%98%E9%A4%A8-201024646.html"
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E8%8A%B3%E8%8B%91%E9%84%89",
+      "source_locator": "歷任表第11及12任均明列陳諸讚。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "芳苑鄉",
+          "name": "陳諸讚",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "陳諸讚",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E8%8A%B3%E8%8B%91%E9%84%89"
+        }
+      ]
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E6%BA%AA%E5%B7%9E%E9%84%89",
+      "source_locator": "歷任表第12任曾俊，第11任姓名跨列未獨立顯示，現任待核。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "溪州鄉",
+          "name": "曾俊",
+          "gender": null,
+          "incumbent_at_election": null,
+          "incumbent_method": null,
+          "previous_term_holder": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E6%BA%AA%E5%B7%9E%E9%84%89"
+        }
+      ]
+    },
+    {
+      "county": "臺中縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/大甲區",
+      "source_locator": "歷任首長表列吳弘富1994年3月至1998年3月，前任蔡金福；國家電影及視聽文化中心典藏影片《砧山挺秀 甲水長清－大甲》文字稿確認吳弘富為男性鎮長。",
+      "evidence_tier": "secondary_term_roster_plus_independent_official_archive",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "大甲鎮",
+          "name": "吳弘富",
+          "gender": "男",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "蔡金福",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/大甲區",
+          "corroboration_url": "https://tfai.openmuseum.tw/muse/digi_object/8375e0de777a0b92beeb5a78e9c1e181"
+        }
+      ],
+      "corroboration_url": "https://tfai.openmuseum.tw/muse/digi_object/8375e0de777a0b92beeb5a78e9c1e181"
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/埔心鄉",
+      "source_locator": "民選鄉長表第11屆1990-03-01至1994-02-28及第12屆1994-03-01至1998-02-28均為張榮昌；名錄黨籍不等同當屆推薦政黨。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "埔心鄉",
+          "name": "張榮昌",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "張榮昌",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/埔心鄉"
+        }
+      ]
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/大城鄉",
+      "source_locator": "歷屆鄉長表第11及12任均明列許先助，第13任蔡慈賢。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "大城鄉",
+          "name": "許先助",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "許先助",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/大城鄉"
+        }
+      ]
     }
   ]
 }
