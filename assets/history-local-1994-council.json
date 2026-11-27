@@ -507,10 +507,25 @@
       "confirmed_true": 2,
       "inferred_true": 19,
       "confirmed_false": 0,
-      "unverified": 44,
-      "ambiguous": [],
+      "unverified": 2,
+      "ambiguous": [
+        {
+          "name": "涂振和",
+          "prior_name": "凃振和",
+          "reason": "姓氏異體字，未取得兩屆原公報以確認同一人。2002年資料列涂振和，仍不證明1990–1994年任職。",
+          "corroboration_url": "https://votetw.com/data/candidate/%E6%B6%82%E6%8C%AF%E5%92%8C"
+        },
+        {
+          "name": "趙麗蘭",
+          "prior_name": "趙蘭麗",
+          "reason": "姓名字序不同；1994年當選名錄列趙麗蘭，不能確定前屆同一人。",
+          "corroboration_url": "https://www.cyscc.gov.tw/CP/86/578/"
+        }
+      ],
       "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
-      "method": "1990–1994 official previous term roster, same county unique traditional-name match; 19 new positives plus 2 prior known. Nonmatches unknown."
+      "method": "Prior stored official 37-member roster exact matching; 21 sourced positives, 42 unmatched inferred nonincumbents, two possible variant identities remain unknown. Roster not a complete dated service log.",
+      "inferred_false": 42,
+      "followup_source": "sources/history-1994-chiayi-incumbency-followup-20261127.json"
     }
   ],
   "districts": [
@@ -15032,6 +15047,54 @@
         ]
       ],
       "incumbent_sources": {
+        "1": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "黃大秋",
+          "ballot_number": 1,
+          "votes": 4172,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
+        "2": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "張孟崇",
+          "ballot_number": 2,
+          "votes": 1322,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
+        "3": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "王素嬛",
+          "ballot_number": 3,
+          "votes": 1556,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
+        "4": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "賴俊安",
+          "ballot_number": 4,
+          "votes": 1104,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
         "5": {
           "value": true,
           "source_url": "https://www.cyscc.gov.tw/CP/19/563/",
@@ -15053,6 +15116,42 @@
           "votes": 5466,
           "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
         },
+        "7": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "陳中何",
+          "ballot_number": 7,
+          "votes": 6104,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
+        "8": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "賴春言",
+          "ballot_number": 8,
+          "votes": 110,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
+        "9": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "吳謝暖如",
+          "ballot_number": 9,
+          "votes": 4379,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
         "10": {
           "value": true,
           "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
@@ -15063,6 +15162,18 @@
           "ballot_number": 10,
           "votes": 6589,
           "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
+        },
+        "11": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "黃朝揚",
+          "ballot_number": 11,
+          "votes": 5706,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
         },
         "12": {
           "value": true,
@@ -15085,6 +15196,18 @@
           "ballot_number": 13,
           "votes": 4951,
           "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
+        },
+        "14": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "陳瑞生",
+          "ballot_number": 14,
+          "votes": 3278,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
         }
       },
       "gender_sources": {
@@ -15189,6 +15312,18 @@
         ]
       ],
       "incumbent_sources": {
+        "1": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "賴文星",
+          "ballot_number": 1,
+          "votes": 6301,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
         "2": {
           "value": true,
           "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
@@ -15200,6 +15335,42 @@
           "votes": 8146,
           "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
         },
+        "3": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "陳福成",
+          "ballot_number": 3,
+          "votes": 8965,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
+        "4": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "鄭玉娟",
+          "ballot_number": 4,
+          "votes": 3687,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
+        "5": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "劉蘇斷",
+          "ballot_number": 5,
+          "votes": 847,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
         "6": {
           "value": true,
           "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
@@ -15210,6 +15381,42 @@
           "ballot_number": 6,
           "votes": 5269,
           "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
+        },
+        "7": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "何金松",
+          "ballot_number": 7,
+          "votes": 6911,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
+        "8": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "賴美真",
+          "ballot_number": 8,
+          "votes": 8109,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
+        "9": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "劉武",
+          "ballot_number": 9,
+          "votes": 1218,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
         }
       }
     },
@@ -15331,6 +15538,102 @@
         }
       },
       "incumbent_sources": {
+        "1": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "陳日通",
+          "ballot_number": 1,
+          "votes": 4532,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
+        "2": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "蔡吉輝",
+          "ballot_number": 2,
+          "votes": 5225,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
+        "3": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "柯清添",
+          "ballot_number": 3,
+          "votes": 5530,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
+        "4": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "張能倚",
+          "ballot_number": 4,
+          "votes": 4717,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
+        "5": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "陳蕭素鍈",
+          "ballot_number": 5,
+          "votes": 765,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
+        "6": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "孫義村",
+          "ballot_number": 6,
+          "votes": 1705,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
+        "7": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "簡泰河",
+          "ballot_number": 7,
+          "votes": 4983,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
+        "8": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "張秋夫",
+          "ballot_number": 8,
+          "votes": 109,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
         "9": {
           "value": true,
           "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
@@ -15352,6 +15655,18 @@
           "ballot_number": 10,
           "votes": 4309,
           "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
+        },
+        "11": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "陳保元",
+          "ballot_number": 11,
+          "votes": 6012,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
         }
       }
     },
@@ -15471,6 +15786,18 @@
         ]
       ],
       "incumbent_sources": {
+        "1": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "吳景峰",
+          "ballot_number": 1,
+          "votes": 5861,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
         "2": {
           "value": true,
           "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
@@ -15493,6 +15820,18 @@
           "votes": 7364,
           "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
         },
+        "4": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "陳素英",
+          "ballot_number": 4,
+          "votes": 478,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
         "5": {
           "value": true,
           "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
@@ -15504,6 +15843,54 @@
           "votes": 8449,
           "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
         },
+        "6": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "李財助",
+          "ballot_number": 6,
+          "votes": 281,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
+        "7": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "陳燕熏",
+          "ballot_number": 7,
+          "votes": 650,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
+        "8": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "余政達",
+          "ballot_number": 8,
+          "votes": 7795,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
+        "9": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "侯慶昌",
+          "ballot_number": 9,
+          "votes": 4110,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
         "10": {
           "value": true,
           "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
@@ -15514,6 +15901,18 @@
           "ballot_number": 10,
           "votes": 7927,
           "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
+        },
+        "11": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "黃有利",
+          "ballot_number": 11,
+          "votes": 272,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
         },
         "12": {
           "value": true,
@@ -15620,6 +16019,18 @@
         }
       },
       "incumbent_sources": {
+        "1": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "曾德忠",
+          "ballot_number": 1,
+          "votes": 7497,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
         "2": {
           "value": true,
           "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
@@ -15631,6 +16042,18 @@
           "votes": 6872,
           "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
         },
+        "3": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "蔡寶雄",
+          "ballot_number": 3,
+          "votes": 4396,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
         "4": {
           "value": true,
           "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
@@ -15641,6 +16064,42 @@
           "ballot_number": 4,
           "votes": 7946,
           "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
+        },
+        "5": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "林忠和",
+          "ballot_number": 5,
+          "votes": 853,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
+        "6": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "蔡明宏",
+          "ballot_number": 6,
+          "votes": 7289,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
+        "7": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "蔡守金",
+          "ballot_number": 7,
+          "votes": 245,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
         }
       }
     },
@@ -15768,6 +16227,54 @@
           "votes": 6818,
           "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
         },
+        "3": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "林晃",
+          "ballot_number": 3,
+          "votes": 6460,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
+        "4": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "蕭文傳",
+          "ballot_number": 4,
+          "votes": 6289,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
+        "5": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "簡瑞榮",
+          "ballot_number": 5,
+          "votes": 5686,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
+        "6": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "葉清水",
+          "ballot_number": 6,
+          "votes": 2510,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        },
         "7": {
           "value": true,
           "source_url": "https://www.cyscc.gov.tw/Parliamentary_Content/315/14100/",
@@ -15833,6 +16340,18 @@
           "ballot_number": 1,
           "votes": 968,
           "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
+        },
+        "2": {
+          "value": false,
+          "source_url": "https://www.cyscc.gov.tw/CP/86/577/",
+          "source_locator": "嘉義縣議會第十二屆（1990–1994）37人名錄，倉庫已存完整姓名轉錄；1994年65人候選名單逐名比對。",
+          "method": "official_prior_term_roster_nonmatch_inference",
+          "confidence": "inferred_from_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "梁英偉",
+          "ballot_number": 2,
+          "votes": 965,
+          "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
         }
       }
     },

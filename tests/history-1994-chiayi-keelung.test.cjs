@@ -35,7 +35,7 @@ test('1994 Chiayi previous-term council roster adds 19 sourced positives without
  assert.equal(hits.length,21);
  for(const name of chiayi.already_verified_names)assert.equal(hits.some(c=>c[1]===name),true);
  const audit=council.incumbency_roster_audit.find(a=>a.county==='嘉義縣');
- assert.deepEqual([audit.confirmed_true,audit.inferred_true,audit.unverified],[2,19,44]);
+ assert.deepEqual([audit.confirmed_true,audit.inferred_true,audit.inferred_false,audit.unverified],[2,19,42,2]);
 });
 test('1994 Keelung city official council totals reconcile without filling district turnout from county totals',()=>{
  const districts=council.districts.filter(d=>d.county==='基隆市');
@@ -95,4 +95,14 @@ test('1994 local council snapshot exposes county-level summary without merging u
  const chiayis=data.candidacies.filter(c=>c.contest_id.startsWith('1994-council-counties:嘉义县:'));
  assert.equal(chiayis.length,65);
  assert.equal(chiayis.filter(c=>c.incumbent_at_election===true).length,21);
+ assert.equal(chiayis.filter(c=>c.incumbent_at_election===false).length,42);
+ assert.equal(chiayis.filter(c=>c.incumbent_at_election===null).length,2);
+});
+
+test('Chiayi roster nonmatches remain explicitly inferred; possible name variants stay unknown',()=>{
+ const p=require('../sources/history-1994-chiayi-incumbency-followup-20261127.json');
+ const ds=council.districts.filter(d=>d.county==='嘉義縣');
+ assert.equal(p.records.length,42);assert.equal(p.ambiguous.length,2);
+ for(const r of p.records){const d=ds.find(d=>d.number===r.district_number&&d.electorate===r.electorate);const c=d.candidates.find(c=>c[0]===r.ballot_number);assert.deepEqual([c[1],c[2]],[r.name,r.votes]);assert.ok(!p.roster_names.includes(r.name));const v=d.incumbent_sources[String(r.ballot_number)];assert.equal(v.value,false);assert.equal(v.confidence,'inferred_from_official_roster');assert.equal(v.source_url,p.source_url);}
+ for(const r of p.ambiguous){const d=ds.find(d=>d.candidates.some(c=>c[1]===r.name));const c=d.candidates.find(c=>c[1]===r.name);assert.equal(d.incumbent_sources?.[String(c[0])],undefined);}
 });
