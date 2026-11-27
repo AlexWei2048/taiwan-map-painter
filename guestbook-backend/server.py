@@ -255,6 +255,17 @@ def dispatch(action,data,db):
         if isinstance(token,str) and re.fullmatch(r"gb1\.[0-9a-f]{64}",token):
             db.execute("DELETE FROM admin_sessions WHERE token_hash=?",(session_hash(token),))
         return True
+    if action in {"guestbook_admin_devices","guestbook_admin_revoke_others"}:
+        require_admin(data,db)
+        token=data.get("p_admin","")
+        if not re.fullmatch(r"gb1\.[0-9a-f]{64}",token):
+            raise Problem("请使用设备会话登录",403)
+        digest=session_hash(token)
+        now=int(time.time())
+        if action=="guestbook_admin_revoke_others":
+            db.execute("DELETE FROM admin_sessions WHERE token_hash!=?",(digest,))
+        active=db.execute("SELECT COUNT(*) FROM admin_sessions WHERE master_hash=? AND expires_epoch>?",(master_hash(),now)).fetchone()[0]
+        return {"active":active}
     if action == "guestbook_admin_counts":
         require_admin(data,db)
         return admin_counts(db)
@@ -359,6 +370,11 @@ def dispatch(action,data,db):
         filt=field(data,"p_filter",24,"pending")
         work=field(data,"p_progress",24)
         search=field(data,"p_search",100)
+        category=field(data,"p_category",24)
+        sort=field(data,"p_sort",24,"latest")
+        if category and category not in CATEGORIES: raise Problem("无效留言类别")
+        order={"latest":"m.created_epoch DESC,m.id DESC","oldest":"m.created_epoch ASC,m.id ASC","popular":"votes DESC,m.created_epoch DESC,m.id DESC"}.get(sort)
+        if not order: raise Problem("无效排序")
         if work and work not in PROGRESS: raise Problem("无效处理状态")
         if filt not in {"all","pending","approved","rejected","private","todo"}:
             raise Problem("无效筛选")
@@ -366,8 +382,11 @@ def dispatch(action,data,db):
         if type(offset) is not int or not 0<=offset<=10000:
             raise Problem("无效分页")
         counts=admin_counts(db)
-        records=rows(db.execute("SELECT "+PUBLIC+",m.visibility,m.private,c.contact,EXISTS(SELECT 1 FROM attachments a WHERE a.message_id=m.id) AS has_attachment FROM messages m LEFT JOIN contacts c ON m.id=c.message_id WHERE (?='all' OR (?='private' AND m.private=1) OR (?='todo' AND m.progress IN ('new','accepted','working') AND m.visibility!='rejected') OR m.visibility=?) AND (?='' OR m.progress=?) AND (?='' OR instr(lower(m.title||' '||m.body||' '||m.nickname),lower(?))>0) ORDER BY m.created_epoch DESC,m.id DESC LIMIT 50 OFFSET ?",(filt,filt,filt,filt,work,work,search,search,offset)))
-        return {"counts":counts,"records":records}
+        conditions=" WHERE (?='all' OR (?='private' AND m.private=1) OR (?='todo' AND m.progress IN ('new','accepted','working') AND m.visibility!='rejected') OR m.visibility=?) AND (?='' OR m.progress=?) AND (?='' OR m.category=?) AND (?='' OR instr(lower(m.title||' '||m.body||' '||m.nickname),lower(?))>0)"
+        params=(filt,filt,filt,filt,work,work,category,category,search,search)
+        total=db.execute("SELECT COUNT(*) FROM messages m"+conditions,params).fetchone()[0]
+        records=rows(db.execute("SELECT "+PUBLIC+",m.visibility,m.private,c.contact,EXISTS(SELECT 1 FROM attachments a WHERE a.message_id=m.id) AS has_attachment FROM messages m LEFT JOIN contacts c ON m.id=c.message_id"+conditions+" ORDER BY "+order+" LIMIT 50 OFFSET ?",params+(offset,)))
+        return {"counts":counts,"records":records,"total":total}
     if action == "guestbook_admin_update":
         require_admin(data,db)
         mid=msg_id(data.get("p_id"))
@@ -478,7 +497,7 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
     def do_GET(self):
         if self.path=="/health":
-            return self.reply(200,{"ok":True,"version":2,"features":["edit","detail","progress-filter","admin-search","attachment","admin-counts","own-updates","admin-session"]})
+            return self.reply(200,{"ok":True,"version":2,"features":["edit","detail","progress-filter","admin-search","attachment","admin-counts","own-updates","admin-session","admin-devices","admin-filter-v2"]})
         self.reply(404,{"message":"接口不存在"})
     def do_POST(self):
         try:
@@ -488,7 +507,7 @@ class Handler(BaseHTTPRequestHandler):
             if not self.path.startswith(prefix):
                 raise Problem("接口不存在",404)
             action=self.path[len(prefix):]
-            if action not in {"guestbook_submit","guestbook_public","guestbook_mine","guestbook_remove_contact","guestbook_withdraw","guestbook_vote","guestbook_votes","guestbook_admin_list","guestbook_admin_update","guestbook_admin_delete","guestbook_edit","guestbook_detail","guestbook_attachment","guestbook_remove_attachment","guestbook_admin_counts","guestbook_my_updates","guestbook_admin_login","guestbook_admin_logout"}:
+            if action not in {"guestbook_submit","guestbook_public","guestbook_mine","guestbook_remove_contact","guestbook_withdraw","guestbook_vote","guestbook_votes","guestbook_admin_list","guestbook_admin_update","guestbook_admin_delete","guestbook_edit","guestbook_detail","guestbook_attachment","guestbook_remove_attachment","guestbook_admin_counts","guestbook_my_updates","guestbook_admin_login","guestbook_admin_logout","guestbook_admin_devices","guestbook_admin_revoke_others"}:
                 raise Problem("接口不存在",404)
             if self.headers.get_content_type()!="application/json":
                 raise Problem("请求格式错误",415)
