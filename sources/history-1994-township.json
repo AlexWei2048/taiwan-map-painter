@@ -1567,7 +1567,15 @@
               8843,
               true
             ]
-          ]
+          ],
+          "incumbency_at_election": {
+            "name": "林懋榮",
+            "source_url": "https://zh.wikipedia.org/wiki/阿蓮區",
+            "source_locator": "歷任首長第11任林懋榮、第12及13任陳明看；與本屆既有候選人和當選人資料相符。",
+            "corroboration_url": "https://zh.wikipedia.org/wiki/林懋榮",
+            "method": "historical_term_roster_inference",
+            "limitation": "次級任期名錄及人物履歷互核，尚未找到投票日任免原件。"
+          }
         },
         {
           "town": "路竹鄉",
@@ -1888,7 +1896,15 @@
               3852,
               true
             ]
-          ]
+          ],
+          "incumbency_at_election": {
+            "name": "劉建芳",
+            "source_url": "https://wikis.pro/甲仙区",
+            "source_locator": "歷任首長表第11屆劉建芳任期1990-03-01至1994-02-28；客家文化資產數位網確認陳双於1994當選第12屆。",
+            "corroboration_url": "https://hch.hakka.gov.tw/reportdetail.asp?ArID=1227&MenuID=9&SubID=27&pageNums=4",
+            "method": "historical_term_roster_with_official_biographical_corroboration",
+            "limitation": "任期表為次級來源，官方文化資產資料確認本屆當選人；未取得原選舉公報。"
+          }
         },
         {
           "town": "杉林鄉",
@@ -2075,7 +2091,15 @@
               800,
               true
             ]
-          ]
+          ],
+          "incumbency_at_election": {
+            "name": "孫榮顯",
+            "source_url": "https://www.cw.com.tw/article/5116856",
+            "source_locator": "1993-11-15《天下雜誌》〈三民鄉楠梓仙溪　美在溪河歲歲年年〉搜尋索引明載在任鄉長孫榮顯；另歷任名錄第11至12屆均為孫榮顯、第10及13屆林國財。",
+            "corroboration_url": "https://wikis.tw/那瑪夏區",
+            "method": "contemporary_news_and_term_roster_inference",
+            "limitation": "新聞原頁目前502，以索引及歷任表互核，未取得投票日任免原件。"
+          }
         }
       ]
     },
