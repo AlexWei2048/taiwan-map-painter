@@ -4098,7 +4098,10 @@
       "winners": [
         {
           "town": "清水鎮",
-          "name": "吳金生"
+          "name": "吳金生",
+          "incumbent_at_election": true,
+          "incumbent_source_url": "https://www.taichung.gov.tw/media/270401/551110255171.pdf",
+          "incumbent_source_locator": "《重溯清水鎮志》大事紀1994-03-01記載吳金生連任第12屆鎮長"
         }
       ],
       "source_sha256": "920ce0ae324eecba0f71f457da5f6a4a455e7960edf217c3122b8a0c93855e69"
@@ -4892,6 +4895,26 @@
           "source_url": "https://zh.wikipedia.org/wiki/仁愛鄉",
           "corroboration_url": "https://n.yam.com/Article/20120418391857",
           "evidence_notes": "仁爱乡历任首长表第11、12届同为沈明德；2012新闻明确称第12届乡长沈明德"
+        }
+      ]
+    },
+    {
+      "county": "臺中縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "verified_winners_only",
+      "source_url": "https://www.taichung.gov.tw/media/267771/661416535671.pdf",
+      "source_locator": "臺中市政府公開《龍井鄉志》大事紀印刷第257頁：民國83年1月29日劉瑞龍連任第十二屆龍井鄉長，3月1日就職；民國79年1月20日劉瑞龍當選第十一屆",
+      "validation_note": "官方鄉志只確認當選與連任，沒有1994年所有候選人的姓名、號次、推薦政黨或逐候選得票。不按單一當選人補造完整開票結果。",
+      "winners": [
+        {
+          "town": "龍井鄉",
+          "name": "劉瑞龍",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "official_township_gazette_consecutive_terms",
+          "ballot_number": null,
+          "party_recommendation": null,
+          "votes": null
         }
       ]
     }

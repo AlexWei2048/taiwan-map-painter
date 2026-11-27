@@ -19,3 +19,17 @@ test('1994 Nantou six additional term-roster winners preserve raw-vote uncertain
  assert.equal(published.contests.filter(x=>x.election_id==='1994-township').length,89);
  assert.ok(source.partial_counties.some(x=>x.county==='南投縣'&&x.winners?.some(w=>w.town==='集集鎮'&&w.name==='林明溱')));
 });
+
+test('1994 Taichung Longjing incumbent and Qingshui incumbent have original gazette evidence',()=>{
+ const counties=source.partial_counties.filter(x=>x.county==='臺中縣');
+ const longjing=counties.flatMap(x=>x.winners||[]).find(x=>x.town==='龍井鄉');
+ const qingshui=counties.flatMap(x=>x.winners||[]).find(x=>x.town==='清水鎮');
+ assert.equal(longjing.name,'劉瑞龍');
+ assert.equal(longjing.incumbent_at_election,true);
+ assert.ok(source.partial_counties.some(x=>x.source_url?.includes('taichung.gov.tw/media/267771/')&&x.winners?.some(w=>w.town==='龍井鄉')));
+ for(const k of ['gender','votes','ballot_number','party_recommendation'])assert.equal(longjing[k],null);
+ assert.equal(qingshui.name,'吳金生');
+ assert.equal(qingshui.incumbent_at_election,true);
+ assert.ok(qingshui.incumbent_source_url.includes('taichung.gov.tw'));
+ assert.deepEqual(source.partial_counties,published.partialTownshipReturns);
+});
