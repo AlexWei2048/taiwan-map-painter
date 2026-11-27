@@ -21221,7 +21221,7 @@
         {
           "town": "吉安鄉",
           "name": "徐松海",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "votes": null,
           "ballot_number": null,
@@ -21229,7 +21229,10 @@
           "source_url": "https://cloud.hakka.gov.tw/Attachment/1/842313544171.pdf",
           "source_locator": "行政院客家委員會典藏地方研究，附錄一「吉安鄉歷屆鄉長」印刷頁163，引《吉安鄉志》(2002)頁220–221：第11屆徐永滿(79–83年3月)，第12屆徐松海(83年3月10日–87年3月)。",
           "method": "hakka_council_research_previous_successive_term_roster",
-          "evidence_notes": "1994選舉投票日(83年1月29日)仍由徐永滿擔任第11屆，故徐松海不是在任連任。任期名錄與全縣選舉概況交叉核對；未取得個人得票。"
+          "evidence_notes": "1994選舉投票日(83年1月29日)仍由徐永滿擔任第11屆，故徐松海不是在任連任。任期名錄與全縣選舉概況交叉核對；未取得個人得票。",
+          "gender_source_url": "https://tfai.openmuseum.tw/muse/digi_object/874474c4422c942bce81e7e85a3279b0",
+          "gender_source_locator": "1997年《吉利安和－吉安鄉》影片文字稿明載「吉安鄉長徐松海／男」。",
+          "gender_method": "official_archival_transcript"
         },
         {
           "town": "富里鄉",
@@ -21456,7 +21459,12 @@
           "evidence_type": "official_consecutive_term_roster",
           "votes": null,
           "party_recommendation": null,
-          "ballot_number": null
+          "ballot_number": null,
+          "gender": "男",
+          "gender_source_url": "https://elections.olc.tw/candidates/view/54d9c6c8-0cf0-4e42-8e2c-6b30acb5b862",
+          "gender_source_locator": "2002年桃園市長候選人資料明載男；桃園區公所歷屆首長表確認1990–1998同名市長。",
+          "gender_method": "cross_election_identity",
+          "gender_corroboration_url": "https://www.tao.tycg.gov.tw/cp.aspx?n=6273"
         },
         {
           "town": "中壢市",
@@ -21472,7 +21480,12 @@
           "votes_source_locator": "選舉紀錄表1994年第八屆中壢市市長選舉，49,096票、39.74%；引用臺灣省選舉委員會《八十二、八十三年公職人員選舉台灣省選務實錄》（1994），頁654–655。原始票表未取得，屬有明確出處的次級轉引。",
           "votes_evidence_tier": "secondary_citation_to_official_election_record",
           "reported_vote_share": 39.74,
-          "reported_vote_share_note": "次級來源所載百分比；有效票總數未知，不反推精確總票數。"
+          "reported_vote_share_note": "次級來源所載百分比；有效票總數未知，不反推精確總票數。",
+          "gender": "男",
+          "gender_source_url": "https://zh.wikipedia.org/wiki/%E6%96%B9%E5%8A%9B%E8%84%A9",
+          "gender_source_locator": "人物資料明載男、第8屆中壢市長；中壢區公所沿革核對任期。",
+          "gender_method": "secondary_biography_crosscheck",
+          "gender_corroboration_url": "https://www.zhongli.tycg.gov.tw/cp.aspx?n=6367"
         },
         {
           "town": "大溪鎮",
@@ -21483,10 +21496,14 @@
           "source_locator": "中央社2024-06-07文化部褒揚資料：1990–1998年擔任第11、12屆大溪鎮長；國立臺北教育大學校友錄亦列第11屆連任第12屆。",
           "evidence_type": "ministry_culture_press_release_cna_university_biography",
           "confidence": "high_cross_corroborated",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "party_recommendation": null,
-          "ballot_number": null
+          "ballot_number": null,
+          "gender_source_url": "https://tcmb.culture.tw/zh-tw/detail?id=163143&indexCode=Culture_Object",
+          "gender_source_locator": "文化記憶庫《林熺達先生訪談錄》明確稱先生，且載大溪鎮長兩屆；文化部發布的生平核對1990–1998任期。",
+          "gender_method": "official_archival_biography",
+          "gender_corroboration_url": "https://www.cna.com.tw/news/acul/202406070095.aspx"
         },
         {
           "town": "楊梅鎮",
@@ -21569,10 +21586,13 @@
           "source_locator": "《農傳媒》訪談陳江順本人：「我從民國83年當鄉長到現在...」；歷任首長表列第11屆黃水銀、第12、13屆陳江順。",
           "evidence_type": "first_person_interview_plus_historical_roster",
           "confidence": "interview_cross_corroborated",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "party_recommendation": null,
-          "ballot_number": null
+          "ballot_number": null,
+          "gender_source_url": "https://www.natnews.com.tw/news/news-46289.html",
+          "gender_source_locator": "2018年11月報導明載陳睿生之父陳江順曾任新屋鄉兩屆鄉長；既有任期史料吻合。",
+          "gender_method": "documented_family_relationship_and_term"
         }
       ]
     },
@@ -22026,7 +22046,12 @@
         {
           "town": "銅鑼鄉",
           "name": "黃芳椿",
-          "incumbent_at_election": false
+          "incumbent_at_election": false,
+          "gender": "男",
+          "gender_source_url": "https://eebulletin.cec.gov.tw/107/09%E8%8B%97%E6%A0%97%E7%B8%A3/02%E7%B8%A3%E8%AD%B0%E5%93%A1/%E8%8B%97%E6%A0%97%E7%B8%A3%E7%AC%AC03%E9%81%B8%E5%8D%80.pdf",
+          "gender_source_locator": "2018年第二選區2號候選人欄明載男及第12、14、15屆銅鑼鄉長，文字可讀，截圖未取得。",
+          "gender_method": "later_official_election_bulletin",
+          "gender_corroboration_url": "https://votetw.com/data/candidate/%E9%BB%83%E8%8A%B3%E6%A4%BF"
         }
       ]
     },
@@ -22082,7 +22107,11 @@
         {
           "town": "觀音鄉",
           "name": "郭榮宗",
-          "incumbent_at_election": false
+          "incumbent_at_election": false,
+          "gender": "男",
+          "gender_source_url": "https://www.ly.gov.tw/Pages/List.aspx?nodeid=1445",
+          "gender_source_locator": "第6屆民代官方履歷明載男、桃園縣觀音鄉第12、13屆鄉長。",
+          "gender_method": "official_biography_explicit_gender"
         }
       ]
     },
@@ -22169,7 +22198,11 @@
         {
           "town": "集集鎮",
           "name": "林明溱",
-          "incumbent_at_election": true
+          "incumbent_at_election": true,
+          "gender": "男",
+          "gender_source_url": "https://www.ly.gov.tw/Pages/List.aspx?nodeid=1714",
+          "gender_source_locator": "第8屆民代官方履歷明載男、南投縣集集鎮鎮長兩屆。",
+          "gender_method": "official_biography_explicit_gender"
         }
       ]
     },
@@ -22218,7 +22251,12 @@
         {
           "town": "龜山鄉",
           "name": "曾忠義",
-          "incumbent_at_election": true
+          "incumbent_at_election": true,
+          "gender": "男",
+          "gender_source_url": "https://votetw.com/data/candidate/%E6%9B%BE%E5%BF%A0%E7%BE%A9",
+          "gender_source_locator": "2005年桃園縣第二選區議員候選人資料明載男；同名議長2008年訪談確認曾任龜山鄉長。",
+          "gender_method": "cross_election_identity",
+          "gender_corroboration_url": "https://www.idn.com.tw/news/news_content.aspx?artid=20081219andy004"
         }
       ],
       "profile_totals": [
