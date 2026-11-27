@@ -1097,3 +1097,10 @@ body.analysis-mode #historyTownBoundaryBox{display:none!important}
 @media(max-width:700px){.trend-card-actions button,.trend-line-controls button,.trend-inspector-row button,.trend-point-inspector>summary{min-height:44px}.trend-card-actions{flex-wrap:wrap!important}.trend-inspector-controls select{min-height:44px;font-size:16px}.trend-inspector-text{font-size:13px}.trend-card .trend-line-controls{flex-wrap:wrap}}
 
 .archive-inline-link{border:0;background:none;color:#216b54;font:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:3px 2px;white-space:nowrap}.archive-inline-link:hover,.archive-inline-link:focus-visible{color:#104e39;background:#e7f1e8}.archive-related-select{display:block;max-width:180px;min-height:30px;margin:5px auto;font-size:12px}.discovery-table-wrap .archive-inline-link{display:block;margin:4px auto}@media(max-width:700px){.archive-inline-link,.archive-related-select{min-height:36px}}
+
+
+/* v19: visible keyboard focus for native disclosures and mobile jump destinations. */
+summary:focus-visible{outline:2px solid #176b55;outline-offset:2px;border-radius:4px}
+:is(#scopeTitle,#predictionPanelTitle,#historyWorkspaceTitle,#analysisWorkspaceTitle):focus-visible{outline:2px solid #176b55;outline-offset:3px;border-radius:3px}
+.option-finder-item:focus-visible{outline:2px solid #176b55;outline-offset:-2px;background:#e7f1e8}
+@media(prefers-reduced-motion:reduce){.option-finder-dialog,.option-finder-item,.mobile-map-nav button{transition:none!important;animation:none!important}}
