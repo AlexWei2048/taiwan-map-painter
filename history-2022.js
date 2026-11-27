@@ -689,7 +689,7 @@
    const area=areaKey(r);
    if(area!==previousArea){
     const divider=document.createElement('tr'),heading=document.createElement('th');divider.className='history-district-divider';heading.scope='rowgroup';heading.colSpan=11;
-    heading.textContent=kind==='mayor'?(presidentialMode?(scale==='town'?r.county+' · '+r.town:r.county+' · '+yearLabel()+'年领导人选举'):(mayorTownView()?r.county+' · '+r.town:r.county+' · 县市长选举')):kind==='council'?r.county+' · '+r.district+' · '+(r.electorate==='plains'?'平地少数民族议员':r.electorate==='mountain'?'山地少数民族议员':'区域议员'):r.county+' · '+r.town;
+    heading.textContent=kind==='mayor'?(presidentialMode?(scale==='town'?r.county+' · '+r.town:r.county+' · '+yearLabel()+'年领导人选举'):(mayorTownView()?r.county+' · '+r.town:r.county+' · 县市长选举')):kind==='council'?r.county+' · '+r.district+' · '+(r.electorate==='plains'?'平地少数民族议员':r.electorate==='mountain'?'山地少数民族议员':r.electorate==='indigenous'?'历史合并选区（未分平地／山地）':'区域议员'):r.county+' · '+r.town;
     if(r.tally_basis==='original_opening')heading.append(' · 投票日原始开票');
     else if(r.tally_basis==='certified_recount')heading.append(' · 重计票结果');
     if(snapshotData?.cycleYears){const y=localResultYear({county:r.county,name:kind==='council'?r.district:r.town||r.county,electorate:r.electorate});heading.append(' · '+y+'年')}

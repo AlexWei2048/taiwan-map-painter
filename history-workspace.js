@@ -329,10 +329,10 @@
    totals.set(key,(totals.get(key)||0)+row.votes);
   }
   rows.sort((a,b)=>Core.compareResultRows(a,b,'mayor'));
-  const output=[['年份','选举类别','县市','乡镇市区','候选人','政党','号次','得票数','得票率','县市当选','计票版本']];
+  const output=[['年份','选举类别','县市','乡镇市区','候选人','性别','选举时现任','政党','号次','得票数','得票率','县市当选','计票版本']];
   for(const row of rows){
    const total=totals.get(row.county+'|'+row.town);
-   output.push([selection.year,'县市长',row.county,row.town,row.name,row.party,row.number,row.votes,
+   output.push([selection.year,'县市长',row.county,row.town,row.name,row.gender||'',row.incumbent===true?'现任':'',row.party,row.number,row.votes,
     total?csvPercent(row.votes/total*100):'',row.elected?'是':'',row.tally_basis==='original_opening'?'投票日原始开票':row.tally_basis==='certified_recount'?'重计票结果':'选委会公布']);
   }
   return '\uFEFF'+output.map(row=>row.map(csvCell).join(',')).join('\r\n');

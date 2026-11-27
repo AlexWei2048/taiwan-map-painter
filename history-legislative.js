@@ -447,7 +447,7 @@
   if(!metadata)return shard;
   const contests=new Map(shard.contests.map(contest=>[contest.contest_id,contest]));
   const key=(electorate,district,name,number)=>JSON.stringify([electorate,district,name,Number(number)]);
-  const profiles=new Map();
+  const profiles=new Map(),minorityProfiles=new Map();
   for(const candidate of shard.candidacies){
    const details=metadata.candidates[candidate.candidacy_id];
    if(!details)continue;
@@ -457,12 +457,16 @@
    const contest=contests.get(candidate.contest_id);
    const identity=key(contest.electorate,contest.district_name,candidate.candidate_name,candidate.ballot_number);
    profiles.set(identity,profiles.has(identity)?null:candidate);
+   if(['plains','mountain'].includes(contest.electorate)){
+    const minorityKey=key(contest.electorate,'',candidate.candidate_name,candidate.ballot_number);
+    minorityProfiles.set(minorityKey,minorityProfiles.has(minorityKey)?null:candidate);
+   }
   }
   for(const row of shard.rows){
    if(row.electorate==='party')continue;
-   const candidate=profiles.get(key(row.electorate,row.district,row.name,row.number));
+   const candidate=profiles.get(key(row.electorate,row.district,row.name,row.number))||minorityProfiles.get(key(row.electorate,'',row.name,row.number));
    if(!candidate)continue;
-   row.gender=row.gender??candidate.gender;
+   if(!['男','女'].includes(row.gender))row.gender=candidate.gender??row.gender;
    row.incumbent=row.incumbent??candidate.incumbent_at_election;
   }
   return shard;
