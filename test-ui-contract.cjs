@@ -95,7 +95,7 @@ test('Councillor national scope has single-map choices and remains stored in pro
  assert.match(index,/id="councilViewScope"/);assert.match(app,/councilViewScope:'all'/);
  assert.match(app,/out\.councilViewScope=\['all','regional','plains','mountain'\]/);
  assert.match(app,/function councilVisibleIdentity\(\)/);
- assert.match(app,/state\.councilViewScope=oldCouncilView;state\.labels=oldLabels;render\(\)/);
+ assert.match(app,/state\.councilViewScope=oldCouncilView;state\.labels=oldLabels;view=oldView;baseView=oldBase;renderedMapScope=oldScope;render\(\)/);
 });
 test('Town geography loads only for the corresponding election view',()=>{
  assert.doesNotMatch(index,/<script src="town-areas\.js/);
@@ -709,7 +709,7 @@ test('Export recovers every label omitted by collision-free main map placement, 
  assert.equal(missing.length,1);
  assert.equal(missing[0].value,'第6选区');
  assert.match(app,/oldLabels=state\.labels/);
- assert.match(app,/state\.labels=true;try\{render\(\);return exportSvg\(\)\}finally/);
+ assert.match(app,/state\.labels=true;try\{view=null;baseView=null;render\(\);return exportSvg\(\)\}finally/);
 });
 
 test('Automatic export detail maps show each possible label without overlaps and retain coverage for unplaceable areas',()=>{
