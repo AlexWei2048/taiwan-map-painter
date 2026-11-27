@@ -109,3 +109,17 @@ test('2026 official fetch bounds response body reads and clears its timer on all
   assert.equal(cleared,1);assert.equal(signal.aborted,mode==='timeout');
  }
 });
+
+
+test('2026 publication labels reflect loaded snapshots and leave other election years unchanged',()=>{
+ const C=require('../history-core.js'),W=require('../history-workspace.js');
+ assert.equal(C.official2026Label(null),'');
+ assert.equal(C.official2026Label({year:2026,status:'published',resultStatus:'certified'}),'');
+ assert.equal(C.official2026Label({year:2022,publicationStatus:'certified'}),'');
+ const provisional={year:2026,publicationStatus:'provisional'},certified={year:2026,publicationStatus:'certified'};
+ assert.equal(C.official2026Label(provisional),'开票结果（尚待正式公告）');
+ assert.equal(C.official2026Label(certified),'正式公告结果');
+ assert.match(W.exportStem({...provisional,office:'mayor'}),/开票结果（尚待正式公告）$/);
+ assert.match(W.exportStem({...certified,office:'council'}),/正式公告结果$/);
+ assert.doesNotMatch(W.exportStem({year:2022,office:'mayor',publicationStatus:'certified'}),/正式公告结果/);
+});
