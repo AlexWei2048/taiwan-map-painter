@@ -22989,6 +22989,156 @@
           "corroboration_url": "https://tfai.openmuseum.tw/muse/digi_object/dd1136d4878f638ea3f4dba9d6b20071"
         }
       ]
+    },
+    {
+      "county": "花蓮縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/新城鄉_(台灣)",
+      "source_locator": "歷任首長表第10–11屆陳朝和，第12–13屆傅慶華；TaiwanVotes 1998年當選資料確認傅慶華連任，第12屆未取得原始票表。",
+      "corroboration_url": "https://www.taiwanvotes.tw/花蓮縣/新城鄉/",
+      "evidence_tier": "term_roster_and_public_record_crosscheck",
+      "validation_note": "非當屆原始開票表；現任依前後屆次推定，未取得逐日任免紀錄。票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "新城鄉",
+          "name": "傅慶華",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "陳朝和",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/新城鄉_(台灣)",
+          "corroboration_url": "https://www.taiwanvotes.tw/花蓮縣/新城鄉/"
+        }
+      ]
+    },
+    {
+      "county": "臺東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/成功鎮鎮長",
+      "source_locator": "歷任鎮長表引《成功鎮志》頁14–15，第11屆宋文英至1994-02-28，第12屆侯武成1994-03-01就任；2012年報導明載第12、13屆任期。",
+      "corroboration_url": "https://n.yam.com/Article/20120318311267",
+      "evidence_tier": "term_roster_and_public_record_crosscheck",
+      "validation_note": "非當屆原始開票表；現任依前後屆次推定，未取得逐日任免紀錄。票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "成功鎮",
+          "name": "侯武成",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "宋文英",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/成功鎮鎮長",
+          "corroboration_url": "https://n.yam.com/Article/20120318311267"
+        }
+      ]
+    },
+    {
+      "county": "臺東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://www.cna.com.tw/news/aipl/202311160200.aspx",
+      "source_locator": "中央社明載當選第12、13屆關山鎮長；歷任首長表第11屆王寵懿至1994-02-28，第12屆許瑞貴1994-03-01就任。",
+      "corroboration_url": "https://zh.wikipedia.org/wiki/關山鎮",
+      "evidence_tier": "term_roster_and_public_record_crosscheck",
+      "validation_note": "非當屆原始開票表；現任依前後屆次推定，未取得逐日任免紀錄。票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "關山鎮",
+          "name": "許瑞貴",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "王寵懿",
+          "gender": "男",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://www.cna.com.tw/news/aipl/202311160200.aspx",
+          "corroboration_url": "https://zh.wikipedia.org/wiki/關山鎮"
+        }
+      ]
+    },
+    {
+      "county": "臺東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://tw.news.yahoo.com/%E4%BA%9E%E6%B4%B2%E9%A3%9B%E8%B1%B9%E6%BD%98%E6%A6%AE%E5%AE%97-%E9%87%8D%E6%8C%AF%E5%8F%B0%E6%9D%B1%E7%94%B0%E5%BE%91%E9%AD%82-201000231.html",
+      "source_locator": "新聞明載自1994年起任兩屆長濱鄉長；歷任名錄第11屆江世崇、第12屆潘榮宗。",
+      "corroboration_url": "https://zh.wikipedia.org/wiki/長濱鄉",
+      "evidence_tier": "term_roster_and_public_record_crosscheck",
+      "validation_note": "非當屆原始開票表；現任依前後屆次推定，未取得逐日任免紀錄。票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "長濱鄉",
+          "name": "潘榮宗",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "江世崇",
+          "gender": "男",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://tw.news.yahoo.com/%E4%BA%9E%E6%B4%B2%E9%A3%9B%E8%B1%B9%E6%BD%98%E6%A6%AE%E5%AE%97-%E9%87%8D%E6%8C%AF%E5%8F%B0%E6%9D%B1%E7%94%B0%E5%BE%91%E9%AD%82-201000231.html",
+          "corroboration_url": "https://zh.wikipedia.org/wiki/長濱鄉"
+        }
+      ]
+    },
+    {
+      "county": "臺東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/綠島鄉",
+      "source_locator": "歷任名錄第10–11屆李德良、第12–13屆陳進文；2009年地方訪談文章明載1994年起任兩屆。",
+      "corroboration_url": "https://taichung2050.pixnet.net/blog/posts/10005197951",
+      "evidence_tier": "term_roster_and_public_record_crosscheck",
+      "validation_note": "非當屆原始開票表；現任依前後屆次推定，未取得逐日任免紀錄。票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "綠島鄉",
+          "name": "陳進文",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "李德良",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/綠島鄉",
+          "corroboration_url": "https://taichung2050.pixnet.net/blog/posts/10005197951"
+        }
+      ]
+    },
+    {
+      "county": "臺東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://ihc.cip.gov.tw/EJournal/EJournalCat/281",
+      "source_locator": "《原住民族文獻》記1994年編纂達仁鄉志時王光清擔任鄉長；歷任名錄第10–11屆董進輝、第12–13屆王光清。",
+      "corroboration_url": "https://zh.wikipedia.org/wiki/達仁鄉",
+      "evidence_tier": "term_roster_and_public_record_crosscheck",
+      "validation_note": "非當屆原始開票表；現任依前後屆次推定，未取得逐日任免紀錄。票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "達仁鄉",
+          "name": "王光清",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "董進輝",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://ihc.cip.gov.tw/EJournal/EJournalCat/281",
+          "corroboration_url": "https://zh.wikipedia.org/wiki/達仁鄉"
+        }
+      ]
     }
   ]
 }
