@@ -1104,3 +1104,20 @@ summary:focus-visible{outline:2px solid #176b55;outline-offset:2px;border-radius
 :is(#scopeTitle,#predictionPanelTitle,#historyWorkspaceTitle,#analysisWorkspaceTitle):focus-visible{outline:2px solid #176b55;outline-offset:3px;border-radius:3px}
 .option-finder-item:focus-visible{outline:2px solid #176b55;outline-offset:-2px;background:#e7f1e8}
 @media(prefers-reduced-motion:reduce){.option-finder-dialog,.option-finder-item,.mobile-map-nav button{transition:none!important;animation:none!important}}
+
+/* Keep primary navigation compact; settings live in their existing dialogs. */
+.export-state-controls[hidden],#predictionDataTools[hidden],#historyEmblemCoverage[hidden]{display:none!important}
+.site-plan-trigger{white-space:nowrap}.site-plan-name{display:none}
+body.history-mode .site-plan-trigger{display:none}
+.site-help-dialog{width:min(670px,94vw);max-height:88dvh;overflow:auto}
+.site-help-dialog .site-about-card{margin:10px 0}
+.site-feedback{border-top:1px solid var(--line);margin-top:16px;padding-top:12px}
+.site-feedback form{display:grid;gap:10px}
+.site-feedback label{display:grid;gap:5px;font-weight:600}
+.site-feedback textarea{font:inherit;resize:vertical;width:100%;border:1px solid var(--line);border-radius:8px;padding:9px;background:#fff;color:var(--ink)}
+.site-feedback textarea[readonly]{background:#f3f6f3}
+.sidebar .project-actions{display:block;margin-top:8px}
+.sidebar .project-actions summary{cursor:pointer;color:var(--muted);font-size:12px;padding:6px 0}
+.sidebar .project-actions[open] #reset{margin-top:7px}
+.site-help-trigger,.site-plan-trigger{min-height:38px}
+@media(max-width:700px){.header{height:auto;min-height:64px;flex-wrap:wrap;padding:9px 12px;gap:6px}.header-right{flex-wrap:wrap;justify-content:flex-end;gap:5px}.header-right #saved{display:none}.header-right .button,.header-menu>summary{min-height:40px;padding:8px 10px}.site-help-dialog .dialog-actions{flex-wrap:wrap}.site-feedback textarea{font-size:16px}.site-help-dialog .coverage-heading{position:sticky;top:0;background:var(--paper);z-index:2}.mobile-map-nav button{min-height:44px}.site-help-dialog{max-height:90dvh}}
