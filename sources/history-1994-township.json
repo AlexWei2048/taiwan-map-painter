@@ -3687,13 +3687,51 @@
             "王文祥",
             "王茂三",
             "李印緞"
-          ]
+          ],
+          "male_candidates": 4,
+          "female_candidates": 0,
+          "turnout_pct": 78.96,
+          "previous_election_winner": "楊保雄",
+          "candidate_genders": {
+            "蘇青山": "男",
+            "王文祥": "男",
+            "王茂三": "男",
+            "李印緞": "男"
+          },
+          "candidate_incumbency": {
+            "蘇青山": false,
+            "王文祥": false,
+            "王茂三": false,
+            "李印緞": false
+          }
         }
       ],
       "source_sha256": "97482a3d333ec95a83a18e5b12aababff7c0e8907d1b9deb4725ee571d1080a4",
       "candidate_roster_source": {
         "source_url": "https://ws.yunlin.gov.tw/001/Upload/609/ebook/ebook_366292/pdf/full.pdf",
         "source_locator": "《口湖鄉志》政事篇表3-9-8，第12屆"
+      },
+      "winners": [
+        {
+          "town": "口湖鄉",
+          "name": "蘇青山",
+          "gender": "男",
+          "incumbent_at_election": false,
+          "incumbent_method": "official_term_roster",
+          "previous_term_holder": "楊保雄",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://ws.yunlin.gov.tw/Download.ashx?n=MTEz5bm057Wx6KiI5bm05aCxKOS4jeWQq%2BWwgeiDjCkxMTQxMjA1MDEucGRm&u=LzAwMS9VcGxvYWQvNjA5L3JlbGZpbGUvMC8zNDI4Mi9jYWEzZDBjYi0xMmU4LTQ3NmMtYTNmZC1mNWY4ZjA2ZTNjY2MucGRm",
+          "corroboration_url": "https://ws.yunlin.gov.tw/001/Upload/609/ebook/ebook_366292/pdf/full.pdf"
+        }
+      ],
+      "supplementary_verification": {
+        "source_url": "https://ws.yunlin.gov.tw/Download.ashx?n=MTEz5bm057Wx6KiI5bm05aCxKOS4jeWQq%2BWwgeiDjCkxMTQxMjA1MDEucGRm&u=LzAwMS9VcGxvYWQvNjA5L3JlbGZpbGUvMC8zNDI4Mi9jYWEzZDBjYi0xMmU4LTQ3NmMtYTNmZC1mNWY4ZjA2ZTNjY2MucGRm",
+        "source_locator": "表3-6第十一、十二屆；公開文字表格可讀，截圖未取得；票數等式及投票率核對一致。",
+        "term_source_url": "https://ws.yunlin.gov.tw/001/Upload/609/ebook/ebook_366292/pdf/full.pdf",
+        "term_source_locator": "口湖鄉志表3-2-6，第11屆楊保雄任期1990-03-01至1994-03-01；第12屆蘇青山。",
+        "candidate_gender_source": "口湖鄉志表3-9-7、3-9-8與統計年報一致；4名參選人均男性且均非同職現任。"
       }
     },
     {
@@ -4004,13 +4042,33 @@
           "candidate_count": 3,
           "winner_name": "陳振恭",
           "male_candidates": 2,
-          "female_candidates": 1
+          "female_candidates": 1,
+          "turnout_pct": 78.18,
+          "previous_election_winner": "陳振恭"
         }
       ],
       "source_sha256": "9dc9c5e8d283f723450f19af0c9836c75b5d5f614793ebd1f597be03aa24af60",
       "profile_detail_source": {
         "source_url": "https://ws.yunlin.gov.tw/Download.ashx?n=6I6%2F5qGQ6YSJMTA05bm057Wx6KiI5bm05aCxLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNTE0L3JlbGZpbGUvMTY0MzQvMzQyMTM0LzI5ZmQ3MGJiLWY5MzItNDg4Yi1iMDEyLTNjY2FhMTcwOTkxZS5wZGY%3D",
         "source_locator": "104年莿桐鄉統計年報表3-6，頁42–43（公開文字表格；頁面影像未能取得）"
+      },
+      "winners": [
+        {
+          "town": "莿桐鄉",
+          "name": "陳振恭",
+          "gender": null,
+          "incumbent_at_election": null,
+          "incumbent_method": null,
+          "previous_term_holder": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://ws.yunlin.gov.tw/Download.ashx?n=6I6%2F5qGQ6YSJMTAz5bm057Wx6KiI5bm05aCxLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNTE0L3JlbGZpbGUvMTY0MzQvMzQyMTM0L2IyYTJmYzdhLWY5ZmYtNDVkZi05MzEyLWQwY2I2M2RlYTBiOC5wZGY%3D"
+        }
+      ],
+      "supplementary_verification": {
+        "source_url": "https://ws.yunlin.gov.tw/Download.ashx?n=6I6%2F5qGQ6YSJMTAz5bm057Wx6KiI5bm05aCxLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNTE0L3JlbGZpbGUvMTY0MzQvMzQyMTM0L2IyYTJmYzdhLWY5ZmYtNDVkZi05MzEyLWQwY2I2M2RlYTBiOC5wZGY%3D",
+        "source_locator": "表3-6第十一、十二屆；公開文字表格可讀，截圖未取得；票數等式及投票率核對一致。"
       }
     },
     {
@@ -4063,9 +4121,31 @@
           "invalid_votes": 495,
           "town": "斗南鎮",
           "candidate_count": 3,
-          "winner_name": "簡錦全"
+          "winner_name": "簡錦全",
+          "male_candidates": 3,
+          "female_candidates": 0,
+          "turnout_pct": 78.83,
+          "previous_election_winner": "張勝雄"
         }
-      ]
+      ],
+      "winners": [
+        {
+          "town": "斗南鎮",
+          "name": "簡錦全",
+          "gender": "男",
+          "incumbent_at_election": null,
+          "incumbent_method": null,
+          "previous_term_holder": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://ws.yunlin.gov.tw/Download.ashx?icon=.pdf&n=MTA05bm057Wx6KiI5bm05aCxLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNTA0L3JlbGZpbGUvMTQzNjIvMjk2OTEwLzc2ZDVjODM2LTQ5MmMtNDE2Yy04MWFmLTk2OTI5MDQyYThkMC5wZGY%3D"
+        }
+      ],
+      "supplementary_verification": {
+        "source_url": "https://ws.yunlin.gov.tw/Download.ashx?icon=.pdf&n=MTA05bm057Wx6KiI5bm05aCxLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNTA0L3JlbGZpbGUvMTQzNjIvMjk2OTEwLzc2ZDVjODM2LTQ5MmMtNDE2Yy04MWFmLTk2OTI5MDQyYThkMC5wZGY%3D",
+        "source_locator": "表3-6第十一、十二屆；公開文字表格可讀，截圖未取得；票數等式及投票率核對一致。"
+      }
     },
     {
       "county": "雲林縣",
@@ -4086,9 +4166,31 @@
           "invalid_votes": 341,
           "town": "西螺鎮",
           "candidate_count": 3,
-          "winner_name": "林中禮"
+          "winner_name": "林中禮",
+          "male_candidates": 3,
+          "female_candidates": 0,
+          "turnout_pct": 77.26,
+          "previous_election_winner": "程錦崙"
         }
-      ]
+      ],
+      "winners": [
+        {
+          "town": "西螺鎮",
+          "name": "林中禮",
+          "gender": "男",
+          "incumbent_at_election": null,
+          "incumbent_method": null,
+          "previous_term_holder": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://www.hsilo.gov.tw/class1/%E7%B5%B1%E8%A8%88%E5%B0%88%E5%8D%80/02_%E9%9B%B2%E6%9E%97%E7%B8%A3%E8%A5%BF%E8%9E%BA%E9%8E%AE%E5%85%AC%E6%89%80%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1/%E9%9B%B2%E6%9E%97%E7%B8%A3%E8%A5%BF%E8%9E%BA%E9%8E%AE111%E5%B9%B4%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1%20%281130918%E4%BF%AE%E6%AD%A3%29.pdf"
+        }
+      ],
+      "supplementary_verification": {
+        "source_url": "https://www.hsilo.gov.tw/class1/%E7%B5%B1%E8%A8%88%E5%B0%88%E5%8D%80/02_%E9%9B%B2%E6%9E%97%E7%B8%A3%E8%A5%BF%E8%9E%BA%E9%8E%AE%E5%85%AC%E6%89%80%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1/%E9%9B%B2%E6%9E%97%E7%B8%A3%E8%A5%BF%E8%9E%BA%E9%8E%AE111%E5%B9%B4%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1%20%281130918%E4%BF%AE%E6%AD%A3%29.pdf",
+        "source_locator": "表3-6第十一、十二屆；公開文字表格可讀，截圖未取得；票數等式及投票率核對一致。"
+      }
     },
     {
       "county": "臺中縣",
