@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Standalone Island Palette guestbook. Python 3.11+, SQLite, no external dependencies."""
 import argparse
+import base64
+import binascii
 import hashlib
 import hmac
 import threading
@@ -24,6 +26,8 @@ COLUMNS = {"title":"TEXT NOT NULL DEFAULT ''","context":"TEXT NOT NULL DEFAULT '
 ADMIN_LOCK = threading.Lock()
 ADMIN_FAILURES = []
 BACKUP_LOCK = threading.Lock()
+ATTACHMENT_MAX=180*1024
+ATTACHMENT_TOTAL=12*1024*1024
 PUBLIC = "m.id,m.nickname,m.category,m.title,m.body,m.created_at,m.reply,m.progress,m.pinned,m.context,m.replied_at,m.edited_at,m.revision,(SELECT COUNT(*) FROM votes v WHERE v.message_id=m.id) AS votes"
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS messages (
@@ -86,7 +90,41 @@ def initialize():
             CREATE INDEX IF NOT EXISTS write_events_time ON write_events(kind,created_epoch);
             CREATE INDEX IF NOT EXISTS write_events_owner ON write_events(owner_hash,kind,created_epoch);
         """)
+        db.execute("""CREATE TABLE IF NOT EXISTS attachments (
+            message_id TEXT PRIMARY KEY REFERENCES messages(id) ON DELETE CASCADE,
+            image BLOB NOT NULL, size INTEGER NOT NULL CHECK(size>0)
+        )""")
     DB.chmod(0o600)
+
+def decode_screenshot(value):
+    if value in (None,""): return None
+    if not isinstance(value,str) or len(value)>((ATTACHMENT_MAX+2)//3)*4:
+        raise Problem("截图过大，请压缩后重试",413)
+    try:
+        blob=base64.b64decode(value,validate=True)
+    except (ValueError,binascii.Error):
+        raise Problem("截图格式无效")
+    if not 8<=len(blob)<=ATTACHMENT_MAX or not blob.startswith(b"\xff\xd8\xff") or not blob.endswith(b"\xff\xd9"):
+        raise Problem("仅支持压缩后的 JPEG 截图")
+    return blob
+
+def attachment_owner(db,data):
+    mid=msg_id(data.get("p_id"))
+    if data.get("p_admin"):
+        require_admin(data)
+    else:
+        digest=owner(data.get("p_secret"))
+        if not db.execute("SELECT 1 FROM messages WHERE id=? AND owner_hash=?",(mid,digest)).fetchone():
+            raise Problem("留言不存在",404)
+    return mid
+
+def admin_counts(db):
+    counts=dict(db.execute("SELECT visibility,COUNT(*) FROM messages GROUP BY visibility").fetchall())
+    counts["private"]=db.execute("SELECT COUNT(*) FROM messages WHERE private=1").fetchone()[0]
+    counts["todo"]=db.execute("SELECT COUNT(*) FROM messages WHERE progress IN ('new','accepted','working') AND visibility!='rejected'").fetchone()[0]
+    counts["done"]=db.execute("SELECT COUNT(*) FROM messages WHERE progress='done'").fetchone()[0]
+    counts["latest_pending"]=db.execute("SELECT COALESCE(MAX(created_at),'') FROM messages WHERE visibility='pending'").fetchone()[0]
+    return counts
 
 def daily_backup():
     # A consistent SQLite copy on the same volume; not a disaster-recovery backup.
@@ -156,6 +194,18 @@ def rows(cursor):
     return [dict(r) for r in cursor]
 
 def dispatch(action,data,db):
+    if action == "guestbook_admin_counts":
+        require_admin(data)
+        return admin_counts(db)
+    if action == "guestbook_attachment":
+        mid=attachment_owner(db,data)
+        row=db.execute("SELECT image FROM attachments WHERE message_id=?",(mid,)).fetchone()
+        if not row: raise Problem("截图已删除或不存在",404)
+        return {"image":base64.b64encode(row["image"]).decode("ascii")}
+    if action == "guestbook_remove_attachment":
+        mid=attachment_owner(db,data)
+        db.execute("DELETE FROM attachments WHERE message_id=?",(mid,))
+        return True
     if action == "guestbook_detail":
         mid=msg_id(data.get("p_id"))
         row=db.execute("SELECT "+PUBLIC+" FROM messages m WHERE m.id=? AND m.visibility='approved' AND m.private=0",(mid,)).fetchone()
@@ -202,7 +252,7 @@ def dispatch(action,data,db):
         return rows(db.execute("SELECT "+PUBLIC+" FROM messages m WHERE m.visibility='approved' AND m.private=0 AND (?='' OR m.category=?) AND (?='' OR m.progress=?) AND (?='' OR instr(lower(m.title||' '||m.body||' '||m.nickname),lower(?))>0) ORDER BY m.pinned DESC,"+order+" LIMIT 20 OFFSET ?",(category,category,progress,progress,search,search,offset)))
     if action == "guestbook_mine":
         digest=owner(data.get("p_secret"))
-        return rows(db.execute("SELECT "+PUBLIC+",m.visibility,m.private,c.contact FROM messages m LEFT JOIN contacts c ON m.id=c.message_id WHERE m.owner_hash=? ORDER BY m.created_epoch DESC,m.id DESC LIMIT 100",(digest,)))
+        return rows(db.execute("SELECT "+PUBLIC+",m.visibility,m.private,c.contact,EXISTS(SELECT 1 FROM attachments a WHERE a.message_id=m.id) AS has_attachment FROM messages m LEFT JOIN contacts c ON m.id=c.message_id WHERE m.owner_hash=? ORDER BY m.created_epoch DESC,m.id DESC LIMIT 100",(digest,)))
     if action == "guestbook_remove_contact":
         digest=owner(data.get("p_secret"))
         mid=msg_id(data.get("p_id"))
@@ -251,11 +301,8 @@ def dispatch(action,data,db):
         offset=data.get("p_offset",0)
         if type(offset) is not int or not 0<=offset<=10000:
             raise Problem("无效分页")
-        counts=dict(db.execute("SELECT visibility,COUNT(*) FROM messages GROUP BY visibility").fetchall())
-        counts["private"]=db.execute("SELECT COUNT(*) FROM messages WHERE private=1").fetchone()[0]
-        counts["todo"]=db.execute("SELECT COUNT(*) FROM messages WHERE progress IN ('new','accepted','working') AND visibility!='rejected'").fetchone()[0]
-        counts["done"]=db.execute("SELECT COUNT(*) FROM messages WHERE progress='done'").fetchone()[0]
-        records=rows(db.execute("SELECT "+PUBLIC+",m.visibility,m.private,c.contact FROM messages m LEFT JOIN contacts c ON m.id=c.message_id WHERE (?='all' OR (?='private' AND m.private=1) OR m.visibility=?) AND (?='' OR m.progress=?) AND (?='' OR instr(lower(m.title||' '||m.body||' '||m.nickname),lower(?))>0) ORDER BY m.created_epoch DESC,m.id DESC LIMIT 50 OFFSET ?",(filt,filt,filt,work,work,search,search,offset)))
+        counts=admin_counts(db)
+        records=rows(db.execute("SELECT "+PUBLIC+",m.visibility,m.private,c.contact,EXISTS(SELECT 1 FROM attachments a WHERE a.message_id=m.id) AS has_attachment FROM messages m LEFT JOIN contacts c ON m.id=c.message_id WHERE (?='all' OR (?='private' AND m.private=1) OR m.visibility=?) AND (?='' OR m.progress=?) AND (?='' OR instr(lower(m.title||' '||m.body||' '||m.nickname),lower(?))>0) ORDER BY m.created_epoch DESC,m.id DESC LIMIT 50 OFFSET ?",(filt,filt,filt,work,work,search,search,offset)))
         return {"counts":counts,"records":records}
     if action == "guestbook_admin_update":
         require_admin(data)
@@ -279,7 +326,14 @@ def dispatch(action,data,db):
         return True
     if action == "guestbook_admin_delete":
         require_admin(data)
-        return db.execute("DELETE FROM messages WHERE id=?",(msg_id(data.get("p_id")),)).rowcount==1
+        mid=msg_id(data.get("p_id"))
+        expected=data.get("p_revision")
+        if expected is None:
+            return db.execute("DELETE FROM messages WHERE id=?",(mid,)).rowcount==1
+        if type(expected) is not int: raise Problem("无效版本")
+        if db.execute("DELETE FROM messages WHERE id=? AND revision=?",(mid,expected)).rowcount!=1:
+            raise Problem("留言已变化，请刷新后再删除",409)
+        return True
     if action != "guestbook_submit":
         raise Problem("接口不存在",404)
     digest=owner(data.get("p_secret"))
@@ -292,7 +346,10 @@ def dispatch(action,data,db):
     context=field(data,"p_context",300)
     private=data.get("p_private",False)
     if type(private) is not bool: raise Problem("请检查留言内容")
-    request_hash=hashlib.sha256(json.dumps([nick,category,body,contact,title,context,private],ensure_ascii=False,separators=(",",":")).encode()).hexdigest()
+    screenshot=decode_screenshot(data.get("p_screenshot"))
+    request_fields=[nick,category,body,contact,title,context,private]
+    if screenshot: request_fields.append(hashlib.sha256(screenshot).hexdigest())
+    request_hash=hashlib.sha256(json.dumps(request_fields,ensure_ascii=False,separators=(",",":")).encode()).hexdigest()
     if category not in CATEGORIES or not 5<=len(body)<=1500:
         raise Problem("请检查留言内容和长度")
     if contact and not private and any(contact.casefold() in value.casefold() for value in (body,nick,title,context)):
@@ -310,10 +367,14 @@ def dispatch(action,data,db):
             return {"id":mid,"visibility":existing["visibility"]}
         if db.execute("SELECT COUNT(*) FROM messages WHERE owner_hash=? AND created_epoch>?",(digest,now-600)).fetchone()[0]>=3 or db.execute("SELECT COUNT(*) FROM messages WHERE created_epoch>?",(now-600,)).fetchone()[0]>=50:
             raise Problem("留言过于频繁，请稍后重试",429)
+        if screenshot and db.execute("SELECT COALESCE(SUM(size),0) FROM attachments").fetchone()[0]+len(screenshot)>ATTACHMENT_TOTAL:
+            raise Problem("截图存储已满，请移除截图后提交文字留言",507)
         record_write(db,digest,"submit",now,3,50)
         db.execute("INSERT INTO messages(id,owner_hash,nickname,category,body,created_at,created_epoch,title,context,private,request_hash) VALUES(?,?,?,?,?,?,?,?,?,?,?)",(mid,digest,nick,category,body,datetime.now(timezone.utc).isoformat(),now,title,context,int(private),request_hash))
         if contact:
             db.execute("INSERT INTO contacts(message_id,contact) VALUES(?,?)",(mid,contact))
+        if screenshot:
+            db.execute("INSERT INTO attachments(message_id,image,size) VALUES(?,?,?)",(mid,screenshot,len(screenshot)))
         db.execute("COMMIT")
         return {"id":mid,"visibility":"pending"}
     except BaseException:
@@ -353,7 +414,7 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
     def do_GET(self):
         if self.path=="/health":
-            return self.reply(200,{"ok":True,"version":2,"features":["edit","detail","progress-filter","admin-search"]})
+            return self.reply(200,{"ok":True,"version":2,"features":["edit","detail","progress-filter","admin-search","attachment","admin-counts"]})
         self.reply(404,{"message":"接口不存在"})
     def do_POST(self):
         try:
@@ -363,7 +424,7 @@ class Handler(BaseHTTPRequestHandler):
             if not self.path.startswith(prefix):
                 raise Problem("接口不存在",404)
             action=self.path[len(prefix):]
-            if action not in {"guestbook_submit","guestbook_public","guestbook_mine","guestbook_remove_contact","guestbook_withdraw","guestbook_vote","guestbook_votes","guestbook_admin_list","guestbook_admin_update","guestbook_admin_delete","guestbook_edit","guestbook_detail"}:
+            if action not in {"guestbook_submit","guestbook_public","guestbook_mine","guestbook_remove_contact","guestbook_withdraw","guestbook_vote","guestbook_votes","guestbook_admin_list","guestbook_admin_update","guestbook_admin_delete","guestbook_edit","guestbook_detail","guestbook_attachment","guestbook_remove_attachment","guestbook_admin_counts"}:
                 raise Problem("接口不存在",404)
             if self.headers.get_content_type()!="application/json":
                 raise Problem("请求格式错误",415)
@@ -371,7 +432,8 @@ class Handler(BaseHTTPRequestHandler):
                 n=int(self.headers.get("Content-Length","0"))
             except ValueError:
                 raise Problem("请求格式错误") from None
-            if not 0<n<=16384:
+            limit=270000 if action=="guestbook_submit" else 16384
+            if not 0<n<=limit:
                 raise Problem("请求过大或为空",413)
             data=json.loads(self.rfile.read(n))
             if not isinstance(data,dict):
