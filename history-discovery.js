@@ -41,7 +41,8 @@ function archiveCSV(records,county,town=''){
 function partyArchiveRecord(model,name,n=String){
  const key=normalized(name,n),matches=(model?.parties||[]).filter(p=>normalized(publicParty(p.party),n)===key);
  const known=finite(model?.votes)&&model.votes>0,seatKnown=finite(model?.seats);
- const incomplete=!known&&!seatKnown;
+ const incomplete=!known&&!seatKnown||model?.parties?.some(p=>!p.party||/政党资料缺失|待核|未知/.test(p.party));
+ if(incomplete)return {status:'未核实',votes:null,share:null,seats:null,seatShare:null};
  if(!matches.length)return {status:incomplete?'未核实':'未见参选记录',votes:null,share:null,seats:null,seatShare:null};
  const votes=known&&matches.every(p=>finite(p.votes))?matches.reduce((a,p)=>a+p.votes,0):null;
  const seats=seatKnown&&matches.every(p=>finite(p.seats))?matches.reduce((a,p)=>a+p.seats,0):null;
@@ -149,9 +150,11 @@ if(pd){
    const s=await load(o,y);let m;
    if(o==='legislative'&&ballot==='party'&&!county)m=C.listModel(root.HistoryLegislativeParty.build(y,s));
    else if(o==='legislative'&&ballot==='party'&&county){
-    // County party ballots are not county seats. Require independent town totals to reconcile where available.
-    const x=H.summarize(s,o,ballot,norm).counties.get(county);
-    m=x?.complete?{votes:x.valid,seats:null,parties:Object.entries(x.parties).map(([party,v])=>({party,...v}))}:{votes:null,seats:null,parties:[]}
+    // County party ballots never carry seats. Validate the sum of county party votes against the verified official all-area list first.
+    const summary=H.summarize(s,o,ballot,norm),official=C.listModel(root.HistoryLegislativeParty.build(y,s)),x=summary.counties.get(county);
+    const totals=new Map();for(const entry of summary.counties.values())if(entry.complete)for(const [p,v] of Object.entries(entry.parties))totals.set(p,(totals.get(p)||0)+v.votes);
+    const verified=summary.all.complete&&finite(official.votes)&&summary.all.valid===official.votes&&official.parties.every(p=>totals.get(p.party)===p.votes)&&totals.size===official.parties.length;
+    m=verified&&x?.complete?{votes:x.valid,seats:null,parties:Object.entries(x.parties).map(([party,v])=>({party,...v}))}:{votes:null,seats:null,parties:[]}
    }else m=C.model(s,o,ballot,county,norm);
    if(o==='president'&&!county&&finite(s.national?.valid_votes)&&s.national.valid_votes!==m.votes)m={votes:null,seats:null,parties:m.parties};
    return {office:o,ballot,y,label:label(y,o),...partyArchiveRecord(m,name,norm)}
@@ -167,8 +170,8 @@ if(pd){
   const metric=el('select'),controls=el('div',undefined,'observation-toolbar'),chartHost=el('div',undefined,'region-trend-output'),readout=el('div',undefined,'observation-detail');chartHost.dataset.trendSeriesScope='party-archive';
   const metrics=[['share','得票率'],['votes','得票数'],['seats','当选席次'],['seatShare','席次率']].filter(([k])=>rows.some(row=>finite(row[k])));
   if(!metrics.length)return;metric.replaceChildren(...metrics.map(([k,v])=>new Option(v,k)));const ml=el('label',undefined,'observation-filter');ml.append(el('span','趋势指标'),metric);controls.append(ml);pr.append(controls,chartHost,readout);await root.HistoryLoader.loadTrends();if(!active())return;
-  const engine=root.HistoryTrendCharts;function draw(){if(!active())return;chartHost.replaceChildren();readout.replaceChildren();const kind=metric.value,isPct=kind==='share'||kind==='seatShare',max=Math.max(1,...rows.map(r=>r[kind]).filter(finite));const split=archiveSections(rows.map(r=>({...r,year:r.y,scopeSeries:partition(county,r.y),scopeLabel:partition(county,r.y)})));
-   for(const section of split){if(!section.rows.some(r=>finite(r[kind])))continue;const title=name+' · '+offices[office]+' · '+metrics.find(x=>x[0]===kind)[1]+(section.label?' · '+section.label:'');
+  const engine=root.HistoryTrendCharts;function draw(){if(!active())return;chartHost.replaceChildren();readout.replaceChildren();const kind=metric.value,isPct=kind==='share'||kind==='seatShare',max=Math.max(1,...rows.map(r=>r[kind]).filter(finite));const split=archiveSections(rows.map(r=>({...r,year:r.y,complete:r.status==='已收录'||r.status==='未见参选记录',scopeSeries:partition(county,r.y),scopeLabel:partition(county,r.y)})));
+   for(const section of split){if(!section.rows.some(r=>finite(r[kind])))continue;const title=[name,offices[office],ballotText(ballot),county?displayCounty(county):'已收录地区汇总',metrics.find(x=>x[0]===kind)[1],section.label].filter(Boolean).join(' · ');
     const graph=engine.chart(section.rows,[{name,color:engine.color(name),get:r=>r[kind]}],title,{pct:isPct,integer:!isPct,axisMax:max,hiddenSeries:new Set(),onPoint:(row,summary)=>{readout.replaceChildren(el('strong',summary),route(row))}});
     chartHost.append(engine.card(title,'',graph,title,{prefix:'政党档案',office:offices[office],status:ps}))
    }
