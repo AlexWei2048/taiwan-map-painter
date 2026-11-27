@@ -16481,7 +16481,20 @@
           "男",
           false
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "10": {
+          "value": true,
+          "source_url": "https://w3fs.tainan.gov.tw/001/Upload/47/attachment/8983/4718/52-91%E6%A9%9F%E9%97%9C%E5%9C%98%E9%AB%94.pdf",
+          "source_locator": "《濃濃關廟情 戀戀香洋風》頁63，關廟鄉歷屆縣議員名錄，資料來源：台南縣議會。第十二屆1990-03-01至1994-02-28；第十三屆1994-03-01至1998-02-28。",
+          "election_date": "1994-01-29",
+          "method": "official_council_term_roster_exact_match",
+          "evidence": "第十二屆任期涵蓋投票日，第十三屆同名連任；官方名錄明確記載。文字表已核對，PDF頁面截圖未取得。",
+          "original_name": "陳進財",
+          "ballot_number": 10,
+          "votes": 6382
+        }
+      }
     },
     {
       "county": "臺南縣",
