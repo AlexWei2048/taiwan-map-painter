@@ -2864,7 +2864,7 @@ function logoFor(p){
  if(typeof PARTY_LOGOS!=='undefined'&&PARTY_LOGOS[id])return PARTY_LOGOS[id];
  if(typeof SOURCED_PARTY_LOGOS_BY_ID!=='undefined'&&SOURCED_PARTY_LOGOS_BY_ID[id])
   return SOURCED_PARTY_LOGOS_BY_ID[id];
- const name=simplify(String(p.name||'').replace(/^[“「](.*)[”」]$/,'$1')).replace(/臺/g,'台');
+ const name=simplify(String(p.name||'').replace(/^[“「](.*)[”」]$/,'$1')).replace(/臺/g,'台').replace(/^中国台湾少数民族党$/,'中国台湾原住民党');
  return typeof SOURCED_PARTY_LOGOS_BY_NAME!=='undefined'?
   SOURCED_PARTY_LOGOS_BY_NAME[name]||'':'';
 }

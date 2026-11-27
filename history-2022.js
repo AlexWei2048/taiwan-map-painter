@@ -48,7 +48,7 @@
   const name=String(x||'').trim();
   return protectedCandidateNames.has(name)?name:name.split('乾').map(simplify).join('乾');
  };
- const normalizeParty=name=>{let s=norm(name||'无党籍');if(s.includes('无党籍及未经政党推荐')||s==='无党籍及未经政党推薦')s='无党籍';return s};
+ const normalizeParty=name=>{let s=norm(name||'无党籍').replace(/^中国台湾少数民族党$/,'中国台湾原住民党');if(s.includes('无党籍及未经政党推荐')||s==='无党籍及未经政党推薦')s='无党籍';return s};
  const partyColor=p=>predictionParty(p).color;
  // Different presidential candidate tickets share the “连署” nomination
  // label in 1996/2000; use distinct visualization-only colors for them.

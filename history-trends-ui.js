@@ -6,7 +6,7 @@ const offices={president:'台湾地区领导人',legislative:'立法机构民代
 const ns='http://www.w3.org/2000/svg';
 let zoomClipId=0;
 let panel=null,request=0,cache=new Map(),summaryCache=new Map(),models=[],activeKey='',selection=null,renderedKey='',loading=false,closed=true,lastRows=[],lastSeries=[],lastTitle='',legislativeExport=null,voteShareExport=null,selectedYears=new Set(),knownYears=[];
-const norm=v=>simplify(String(v||'')).replaceAll('臺','台');
+const norm=v=>simplify(String(v||'')).replaceAll('臺','台').replace(/^中国台湾少数民族党$/,'中国台湾原住民党');
  const legislativeTrendCache=T.createLegislativeTrendCache({normalize:norm,buildList:(year,snapshot)=>HistoryLegislativeParty.build(year,snapshot)});
 const fmt=(v,pct=false)=>Number.isFinite(v)?pct?v.toFixed(2)+'%':v.toLocaleString('zh-CN',{maximumFractionDigits:2}):'—';
 const node=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n};
