@@ -8784,6 +8784,175 @@
           "source_url": "https://zh.wikipedia.org/wiki/左鎮區"
         }
       ]
+    },
+    {
+      "county": "臺中縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/新社區",
+      "source_locator": "歷任首長表鄉長時期第11、12屆合併姓名欄，台中市文化局刊物另記陳萬通曾任新社鄉長。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆開票表。第12屆姓名依歷任首長合併欄推定；現任依相鄰任期推定，待原始選舉實錄複核；票數、號次、性別及當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "新社鄉",
+          "name": "陳萬通",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "陳萬通",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/新社區",
+          "corroboration_url": "https://www.culture.taichung.gov.tw/media/1235570/%E6%96%87%E5%8C%96%E8%87%BA%E4%B8%ADno59_%E6%95%B4%E6%9C%AC_%E7%B4%B0%E5%B0%8F_%E8%B7%A8%E9%A0%81.pdf"
+        }
+      ],
+      "corroboration_url": "https://www.culture.taichung.gov.tw/media/1235570/%E6%96%87%E5%8C%96%E8%87%BA%E4%B8%ADno59_%E6%95%B4%E6%9C%AC_%E7%B4%B0%E5%B0%8F_%E8%B7%A8%E9%A0%81.pdf"
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/萬丹鄉",
+      "source_locator": "歷任首長表第11、12屆合併姓名欄，任別6；非原始計票表。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆開票表。第12屆姓名依歷任首長合併欄推定；現任依相鄰任期推定，待原始選舉實錄複核；票數、號次、性別及當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "萬丹鄉",
+          "name": "陳財",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "陳財",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/萬丹鄉"
+        }
+      ]
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/林邊鄉",
+      "source_locator": "歷任首長表第11、12屆合併姓名欄；第13屆為陳長振。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆開票表。第12屆姓名依歷任首長合併欄推定；現任依相鄰任期推定，待原始選舉實錄複核；票數、號次、性別及當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "林邊鄉",
+          "name": "林正一",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "林正一",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/林邊鄉"
+        }
+      ]
+    },
+    {
+      "county": "花蓮縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/卓溪鄉",
+      "source_locator": "歷任首長表第11、12屆合併姓名欄，任期1990–1994及1994–1998；不能與同名校長混同。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆開票表。第12屆姓名依歷任首長合併欄推定；現任依相鄰任期推定，待原始選舉實錄複核；票數、號次、性別及當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "卓溪鄉",
+          "name": "高玉樹",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "高玉樹",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/卓溪鄉"
+        }
+      ]
+    },
+    {
+      "county": "臺東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "official_statistical_profile_winner_only",
+      "source_url": "https://www.donghe.gov.tw/home/attachments/article/592/103%E5%B9%B4%E6%9D%B1%E6%B2%B3%E9%84%89%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1.pdf",
+      "source_locator": "既有官方統計年報第12屆當選者欄；2005年議員公報第3選區2號邱一郎履歷亦載第12、13屆東河鄉長。",
+      "evidence_tier": "official_statistical_yearbook",
+      "validation_note": "官方統計當選姓名獨立同步；不是逐候選人開票表。當屆推薦政黨、號次、個人票數仍空白。現任依既有上屆結果及任期推定，非逐日任免紀錄。",
+      "winners": [
+        {
+          "town": "東河鄉",
+          "name": "邱一郎",
+          "gender": "男",
+          "incumbent_at_election": null,
+          "incumbent_method": null,
+          "previous_term_holder": "葉隆雄",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://www.donghe.gov.tw/home/attachments/article/592/103%E5%B9%B4%E6%9D%B1%E6%B2%B3%E9%84%89%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1.pdf",
+          "corroboration_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/094%E5%B9%B4/24%E8%87%BA%E6%9D%B1%E7%B8%A3/%E8%87%BA%E6%9D%B1%E7%B8%A3%E7%AC%AC3%E3%80%819%E3%80%8110%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf"
+        }
+      ],
+      "corroboration_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/094%E5%B9%B4/24%E8%87%BA%E6%9D%B1%E7%B8%A3/%E8%87%BA%E6%9D%B1%E7%B8%A3%E7%AC%AC3%E3%80%819%E3%80%8110%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf"
+    },
+    {
+      "county": "臺東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "official_statistical_profile_winner_only",
+      "source_url": "https://www.lyee.gov.tw/attachments/article/3350/%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B113%E5%B9%B4%E8%87%BA%E6%9D%B1%E7%B8%A3%E9%B9%BF%E9%87%8E%E9%84%89%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B12024%E7%AC%AC23%E6%9C%9F.pdf",
+      "source_locator": "既有官方統計年報第12屆當選者欄；國家文化記憶庫載1991年任鄉長，與前屆當選者一致。",
+      "evidence_tier": "official_statistical_yearbook",
+      "validation_note": "官方統計當選姓名獨立同步；不是逐候選人開票表。當屆推薦政黨、號次、個人票數仍空白。現任依既有上屆結果及任期推定，非逐日任免紀錄。",
+      "winners": [
+        {
+          "town": "鹿野鄉",
+          "name": "李仁生",
+          "gender": "男",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "李仁生",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://www.lyee.gov.tw/attachments/article/3350/%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B113%E5%B9%B4%E8%87%BA%E6%9D%B1%E7%B8%A3%E9%B9%BF%E9%87%8E%E9%84%89%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B12024%E7%AC%AC23%E6%9C%9F.pdf",
+          "corroboration_url": "https://tcmb.culture.tw/zh-tw/detail?id=263177&indexCode=Culture_Object"
+        }
+      ],
+      "corroboration_url": "https://tcmb.culture.tw/zh-tw/detail?id=263177&indexCode=Culture_Object"
+    },
+    {
+      "county": "臺東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "official_statistical_profile_winner_only",
+      "source_url": "https://dwuu.gov.tw/wp-content/uploads/2022/03/%E8%87%BA%E6%9D%B1%E7%B8%A3%E5%A4%A7%E6%AD%A6%E9%84%89109%E5%B9%B4%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1%E9%9B%BB%E5%AD%90%E6%9B%B8.pdf",
+      "source_locator": "既有109年統計年報第12屆；112年統計年報表3-6第47頁再核對：4,750選民、3,526投票、3,431有效、95無效、3名男性候選人，與既有資料一致；第11、12屆均鍾明祥當選。",
+      "evidence_tier": "official_statistical_yearbook",
+      "validation_note": "官方統計當選姓名獨立同步；不是逐候選人開票表。當屆推薦政黨、號次、個人票數仍空白。現任依既有上屆結果及任期推定，非逐日任免紀錄。",
+      "winners": [
+        {
+          "town": "大武鄉",
+          "name": "鍾明祥",
+          "gender": "男",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "鍾明祥",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://dwuu.gov.tw/wp-content/uploads/2022/03/%E8%87%BA%E6%9D%B1%E7%B8%A3%E5%A4%A7%E6%AD%A6%E9%84%89109%E5%B9%B4%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1%E9%9B%BB%E5%AD%90%E6%9B%B8.pdf",
+          "corroboration_url": "https://dwuu.gov.tw/wp-content/uploads/2024/10/%E8%87%BA%E6%9D%B1%E7%B8%A3%E5%A4%A7%E6%AD%A6%E9%84%89112%E5%B9%B4%E5%BA%A6%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1%E9%9B%BB%E5%AD%90%E6%9B%B8.pdf"
+        }
+      ],
+      "corroboration_url": "https://dwuu.gov.tw/wp-content/uploads/2024/10/%E8%87%BA%E6%9D%B1%E7%B8%A3%E5%A4%A7%E6%AD%A6%E9%84%89112%E5%B9%B4%E5%BA%A6%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1%E9%9B%BB%E5%AD%90%E6%9B%B8.pdf"
     }
   ]
 }
