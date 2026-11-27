@@ -3810,8 +3810,16 @@ test('Township executive comparison supports town grain and retains map nodes wh
 
  test('Searchable native select and export preview settings reuse existing selection and export logic',async t=>{
  const page=await pageFor(t,{width:1440,height:950});
- await page.locator('[data-find-select="county"]').click();await page.locator('#optionFinderQuery').fill('台北市');
- await page.locator('#optionFinderResults button').filter({hasText:'台北市'}).click();assert.equal(await page.locator('#county').inputValue(),'台北市');assert.equal(await page.locator('#optionFinderDialog').evaluate(e=>e.open),false);
+ await page.locator('[data-find-select="county"]').click();
+ const finder=page.locator('#optionFinderQuery');await finder.fill('');
+ await finder.press('ArrowDown');assert.equal(await page.locator('#optionFinderResults button').first().evaluate(e=>e===document.activeElement),true);
+ await page.keyboard.press('End');assert.equal(await page.locator('#optionFinderResults button').last().evaluate(e=>e===document.activeElement),true);
+ await page.keyboard.press('Home');await page.keyboard.press('ArrowUp');assert.equal(await finder.evaluate(e=>e===document.activeElement),true);
+ await finder.fill('台北市');
+ const composing=await finder.evaluate(e=>{const event=new KeyboardEvent('keydown',{key:'Enter',isComposing:true,bubbles:true,cancelable:true});return e.dispatchEvent(event)});assert.equal(composing,true);assert.equal(await page.locator('#optionFinderDialog').evaluate(e=>e.open),true);
+ await finder.press('Enter');assert.equal(await page.locator('#county').inputValue(),'台北市');assert.equal(await page.locator('#optionFinderDialog').evaluate(e=>e.open),false);
+ await page.waitForFunction(()=>document.activeElement?.dataset.findSelect==='county'||document.activeElement?.id==='county');
+ await page.locator('[data-find-select="county"]').click();await page.locator('#optionFinderQuery').press('Escape');await page.locator('#optionFinderDialog').waitFor({state:'hidden'});
  await page.locator('.export-menu summary').click();await page.locator('#previewExport').click();await page.waitForFunction(()=>!document.querySelector('#previewExportSvg').disabled);
  await page.locator('#previewWinnerTable').check();await page.locator('#previewCandidateScope').selectOption('all');await page.locator('#previewNote').fill('测试注释');assert.equal(await page.locator('#previewExportSvg').isDisabled(),true);
  await page.locator('#refreshExportPreview').click();await page.waitForFunction(()=>!document.querySelector('#previewExportSvg').disabled);
@@ -3822,7 +3830,8 @@ test('Township executive comparison supports town grain and retains map nodes wh
  test('Mobile result navigation and dynamic select visibility remain usable with option search',async t=>{
  const page=await pageFor(t,{width:390,height:844});
  await page.locator('#mobileResultsJump').click();await page.waitForFunction(()=>Math.abs(document.querySelector('#predictionPanel').getBoundingClientRect().top-76)<16);
- await page.locator('#mobileSettingsJump').click();
+ assert.equal(await page.evaluate(()=>document.activeElement.id),'predictionPanelTitle');
+ await page.locator('#mobileSettingsJump').click();assert.equal(await page.evaluate(()=>document.activeElement.id),'categoryFuture');
  await page.locator('#categoryHistory').click();await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022&&document.querySelector('#historyLoadStatus').hidden);
  await page.locator('#historyOffice').selectOption('council');await page.waitForFunction(()=>window.History2022View?.routeSelection()?.office==='council'&&document.querySelector('#historyLoadStatus').hidden);
  await page.locator('#historyCounty').selectOption('台北市');await page.locator('#historyMetric').selectOption('seats');
@@ -3830,7 +3839,8 @@ test('Township executive comparison supports town grain and retains map nodes wh
  assert.equal(await page.locator('#historyPartyBox').getAttribute('data-election-fixed-choice'),null);
  await page.locator('#historyMetric').selectOption('share');await page.locator('#historyCandidateScope').selectOption('candidate');await page.locator('#historyCandidate').waitFor({state:'visible'});
  await page.locator('#mobileResultsJump').click();await page.locator('#historyCandidatesPanel').waitFor({state:'visible'});
- assert.equal(await page.locator('#mobileResultsJump').textContent(),'结果列表');
+ assert.equal(await page.locator('#mobileResultsJump').textContent(),'结果列表');assert.equal(await page.evaluate(()=>document.activeElement.id),'historyWorkspaceTitle');
+ await page.locator('#mobileMapJump').click();assert.equal(await page.evaluate(()=>document.activeElement.id),'scopeTitle');
  });
 
  test('Free painting supports county batch fill, protects existing colors and undoes the whole operation',async t=>{
