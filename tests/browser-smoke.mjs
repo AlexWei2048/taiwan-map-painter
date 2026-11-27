@@ -3227,6 +3227,7 @@ test('Mayor party seat trends omit years before the party enters the election',a
  await page.locator('#categoryHistory').click();
  await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
  await page.locator('#historyOffice').selectOption('mayor');
+ await page.locator('#historyCounty').selectOption('');
  await page.locator('#historyMetric').selectOption('party');
  await page.locator('#categoryAnalysis').click();
  await page.locator('#historyTrendsPanel').waitFor({state:'visible'});
@@ -3235,9 +3236,9 @@ test('Mayor party seat trends omit years before the party enters the election',a
  for(const year of [2014,2018,2022])await page.locator('#trendYears input[value="'+year+'"]').check();
  const graph=page.locator('#trendCharts svg[aria-label*="政党当选席次趋势"]').first();
  await graph.waitFor({timeout:120000});
- const series=graph.locator('[data-trend-series="台湾民众党"]');
- await series.waitFor();
- const years=await series.locator('circle[data-trend-year]').evaluateAll(nodes=>nodes.map(node=>Number(node.dataset.trendYear)));
+ const series=graph.locator('[data-trend-seat-label="台湾民众党"]');
+ await series.first().waitFor();
+ const years=await series.evaluateAll(nodes=>nodes.map(node=>Number(node.dataset.trendSeatYear)));
  assert.deepEqual(years,[2022],'the party has no pre-entry points, while its 2022 elected result remains visible');
 });
 test('Legislative seat trends default to all years and show complete integer parliament seats',async t=>{
