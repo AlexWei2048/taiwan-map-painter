@@ -3,7 +3,7 @@
   "checked": "2026-11-27",
   "reference_status": "provisional_expected_districts_pending_original_1994_notice",
   "base_archive": "sources/history-1994-township.json",
-  "base_archive_blob": "e9658cc1b1497236203a11f6ed2f15beae43a7db",
+  "base_archive_blob": "60d4ef4e82cdf8d6dec218b239e0a1c7b6c9c107",
   "expected": 319,
   "with_candidate_returns": 89,
   "missing_complete_candidate_returns": 230,
@@ -4490,8 +4490,12 @@
       "year": 1994,
       "office": "township",
       "status": "missing_complete_candidate_returns",
-      "known": [],
-      "partial_archive_indices": [],
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        91
+      ],
       "required": [
         "complete_candidate_roster",
         "individual_votes",
@@ -4558,8 +4562,12 @@
       "year": 1994,
       "office": "township",
       "status": "missing_complete_candidate_returns",
-      "known": [],
-      "partial_archive_indices": [],
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        88
+      ],
       "required": [
         "complete_candidate_roster",
         "individual_votes",
@@ -4746,8 +4754,12 @@
       "year": 1994,
       "office": "township",
       "status": "missing_complete_candidate_returns",
-      "known": [],
-      "partial_archive_indices": [],
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        89
+      ],
       "required": [
         "complete_candidate_roster",
         "individual_votes",
@@ -4766,8 +4778,12 @@
       "year": 1994,
       "office": "township",
       "status": "missing_complete_candidate_returns",
-      "known": [],
-      "partial_archive_indices": [],
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        90
+      ],
       "required": [
         "complete_candidate_roster",
         "individual_votes",
