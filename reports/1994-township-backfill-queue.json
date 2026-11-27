@@ -3,7 +3,7 @@
   "checked": "2026-11-27",
   "reference_status": "provisional_expected_districts_pending_original_1994_notice",
   "base_archive": "sources/history-1994-township.json",
-  "base_archive_blob": "60d4ef4e82cdf8d6dec218b239e0a1c7b6c9c107",
+  "base_archive_blob": "01ae67c80956b3ea763382127f3bcc5c572881f4",
   "expected": 319,
   "with_candidate_returns": 89,
   "missing_complete_candidate_returns": 230,
@@ -2102,8 +2102,12 @@
       "year": 1994,
       "office": "township",
       "status": "missing_complete_candidate_returns",
-      "known": [],
-      "partial_archive_indices": [],
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        92
+      ],
       "required": [
         "complete_candidate_roster",
         "individual_votes",
@@ -2190,8 +2194,12 @@
       "year": 1994,
       "office": "township",
       "status": "missing_complete_candidate_returns",
-      "known": [],
-      "partial_archive_indices": [],
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        93
+      ],
       "required": [
         "complete_candidate_roster",
         "individual_votes",
@@ -2210,8 +2218,12 @@
       "year": 1994,
       "office": "township",
       "status": "missing_complete_candidate_returns",
-      "known": [],
-      "partial_archive_indices": [],
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        94
+      ],
       "required": [
         "complete_candidate_roster",
         "individual_votes",
@@ -2230,8 +2242,12 @@
       "year": 1994,
       "office": "township",
       "status": "missing_complete_candidate_returns",
-      "known": [],
-      "partial_archive_indices": [],
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        95
+      ],
       "required": [
         "complete_candidate_roster",
         "individual_votes",
@@ -2250,8 +2266,12 @@
       "year": 1994,
       "office": "township",
       "status": "missing_complete_candidate_returns",
-      "known": [],
-      "partial_archive_indices": [],
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        96
+      ],
       "required": [
         "complete_candidate_roster",
         "individual_votes",
@@ -2342,8 +2362,12 @@
       "year": 1994,
       "office": "township",
       "status": "missing_complete_candidate_returns",
-      "known": [],
-      "partial_archive_indices": [],
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        97
+      ],
       "required": [
         "complete_candidate_roster",
         "individual_votes",
@@ -2362,8 +2386,12 @@
       "year": 1994,
       "office": "township",
       "status": "missing_complete_candidate_returns",
-      "known": [],
-      "partial_archive_indices": [],
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        98
+      ],
       "required": [
         "complete_candidate_roster",
         "individual_votes",
@@ -2406,8 +2434,12 @@
       "year": 1994,
       "office": "township",
       "status": "missing_complete_candidate_returns",
-      "known": [],
-      "partial_archive_indices": [],
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        99
+      ],
       "required": [
         "complete_candidate_roster",
         "individual_votes",
@@ -2426,8 +2458,12 @@
       "year": 1994,
       "office": "township",
       "status": "missing_complete_candidate_returns",
-      "known": [],
-      "partial_archive_indices": [],
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        100
+      ],
       "required": [
         "complete_candidate_roster",
         "individual_votes",
@@ -3671,8 +3707,12 @@
       "year": 1994,
       "office": "township",
       "status": "missing_complete_candidate_returns",
-      "known": [],
-      "partial_archive_indices": [],
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        101
+      ],
       "required": [
         "complete_candidate_roster",
         "individual_votes",
