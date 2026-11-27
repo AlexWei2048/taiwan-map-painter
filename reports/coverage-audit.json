@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "total_preset_parties": 49,
+  "total_preset_parties": 50,
   "total_current_logo_ids": 48,
   "original_logo_ids": 30,
   "sourced_preset_logo_ids": 17,
@@ -52,7 +52,7 @@
     {
       "name": "中国台湾原住民党",
       "rows": 2375,
-      "id": null,
+      "id": "ctip",
       "has_logo": false
     },
     {
@@ -944,7 +944,17 @@
       "has_logo": false
     }
   ],
-  "missing_preset_logos": [],
+  "missing_preset_logos": [
+    {
+      "id": "ctip",
+      "name": "中国台湾原住民党",
+      "aliases": [
+        "中国台湾少数民族党",
+        "中國台灣原住民黨",
+        "中國台灣少數民族黨"
+      ]
+    }
+  ],
   "missing_archive_logos": [
     {
       "name": "民主联盟",
@@ -983,7 +993,9 @@
           "name": "徐成焜",
           "election": "legislative:1998:regional"
         }
-      ]
+      ],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "全国民主非政党联盟",
@@ -1018,13 +1030,15 @@
           "name": "叶宪修",
           "election": "legislative:1998:regional"
         }
-      ]
+      ],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "中国台湾原住民党",
       "rows": 2375,
       "total_votes_across_grains": 55288,
-      "known_preset": null,
+      "known_preset": "ctip",
       "sources": [
         "history-legislative-1995.json",
         "history-legislative-1998.json",
@@ -1042,7 +1056,9 @@
           "name": "陈建台",
           "election": "1998-council"
         }
-      ]
+      ],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "台湾吾党",
@@ -1063,7 +1079,9 @@
           "name": "瓦历斯‧贝林",
           "election": "legislative:2001:mountain"
         }
-      ]
+      ],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "大道慈悲济世党",
@@ -1078,7 +1096,9 @@
         "大道慈悲济世党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "人民民主阵线",
@@ -1094,7 +1114,20 @@
         "人民民主阵线"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 2,
+      "mayor_examples": [
+        {
+          "archive": "history-local-2014.json",
+          "contest": "2014-mayor:基隆市:regional:基隆市",
+          "candidate": "何燕堂"
+        },
+        {
+          "archive": "history-local-2014.json",
+          "contest": "2014-mayor:嘉义市:regional:嘉义市",
+          "candidate": "林诗涵"
+        }
+      ]
     },
     {
       "name": "工教联盟",
@@ -1109,7 +1142,9 @@
         "工教联盟"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "泛盟党",
@@ -1123,7 +1158,9 @@
         "泛盟党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "大中华统一阵线",
@@ -1137,7 +1174,9 @@
         "大中华统一阵线"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "台湾革命党",
@@ -1152,7 +1191,9 @@
         "台湾革命党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "绿色本土清新党",
@@ -1167,7 +1208,9 @@
         "绿色本土清新党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "真理党",
@@ -1181,7 +1224,9 @@
         "真理党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "保护台湾大联盟",
@@ -1196,7 +1241,15 @@
         "保护台湾大联盟"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 1,
+      "mayor_examples": [
+        {
+          "archive": "history-local-2006.json",
+          "contest": "2006-mayor:高雄市:regional:高雄市",
+          "candidate": "林志升"
+        }
+      ]
     },
     {
       "name": "共和党",
@@ -1212,7 +1265,15 @@
         "共和黨"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 1,
+      "mayor_examples": [
+        {
+          "archive": "history-2022.json",
+          "contest": "2022-mayor:63000",
+          "candidate": "唐新民"
+        }
+      ]
     },
     {
       "name": "中华台商爱国党",
@@ -1226,7 +1287,9 @@
         "中华台商爱国党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "国家民主党",
@@ -1240,7 +1303,9 @@
         "国家民主党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "中国团结党",
@@ -1254,7 +1319,9 @@
         "中国团结党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "社会改革党",
@@ -1269,7 +1336,15 @@
         "社会改革党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 1,
+      "mayor_examples": [
+        {
+          "archive": "history-local-1997.json",
+          "contest": "1997-mayor:桃园县:regional:桃园县",
+          "candidate": "徐运德"
+        }
+      ]
     },
     {
       "name": "教科文预算保障e联盟",
@@ -1284,7 +1359,20 @@
         "教科文预算保障e联盟"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 2,
+      "mayor_examples": [
+        {
+          "archive": "history-local-2014.json",
+          "contest": "2014-mayor:金门县:regional:金门县",
+          "candidate": "汪成华"
+        },
+        {
+          "archive": "history-local-2018.json",
+          "contest": "2018-mayor:金门县:regional:金门县",
+          "candidate": "汪承桦"
+        }
+      ]
     },
     {
       "name": "三等国民公义人权自救党",
@@ -1298,7 +1386,15 @@
         "三等国民公义人权自救党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 1,
+      "mayor_examples": [
+        {
+          "archive": "history-local-2014.json",
+          "contest": "2014-mayor:台北市:regional:台北市",
+          "candidate": "陈汝斌"
+        }
+      ]
     },
     {
       "name": "正党",
@@ -1315,7 +1411,9 @@
         "正党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "中华文化共和党",
@@ -1329,7 +1427,9 @@
         "中华文化共和党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "兴中同盟会",
@@ -1344,7 +1444,9 @@
         "兴中同盟会"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "中国忠义党",
@@ -1359,7 +1461,9 @@
         "中国忠义党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "圆党",
@@ -1373,7 +1477,9 @@
         "圆党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "中国中青党",
@@ -1387,7 +1493,9 @@
         "中国中青党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "中国全民福利党",
@@ -1401,7 +1509,9 @@
         "中国全民福利党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "中国大同民主党",
@@ -1415,7 +1525,9 @@
         "中国大同民主党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "工党",
@@ -1429,7 +1541,9 @@
         "工党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "洪运忠义党",
@@ -1443,7 +1557,9 @@
         "洪运忠义党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "言论自由联盟",
@@ -1457,7 +1573,9 @@
         "言论自由联盟"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "中华文化复兴在理党",
@@ -1471,7 +1589,9 @@
         "中华文化复兴在理党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "中华民主向日葵宪政改革联盟",
@@ -1485,7 +1605,9 @@
         "中华民主向日葵宪政改革联盟"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "中华民国国政监督联盟",
@@ -1499,7 +1621,9 @@
         "中华民国国政监督联盟"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "中国妇女党",
@@ -1513,7 +1637,9 @@
         "中国妇女党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "中国民主进步党",
@@ -1527,7 +1653,9 @@
         "中国民主进步党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "中国民众党",
@@ -1541,7 +1669,9 @@
         "中国民众党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "全民生活政策党",
@@ -1555,7 +1685,9 @@
         "全民生活政策党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "华声党",
@@ -1569,7 +1701,9 @@
         "华声党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "台湾建国党",
@@ -1583,7 +1717,9 @@
         "台湾建国党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "台湾民族党",
@@ -1597,7 +1733,9 @@
         "台湾民族党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "嘉意公益党",
@@ -1611,7 +1749,9 @@
         "嘉意公益党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "大道人民党",
@@ -1625,7 +1765,9 @@
         "大道人民党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "新华劳动党",
@@ -1639,7 +1781,9 @@
         "新华劳动党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "新政世纪党",
@@ -1653,7 +1797,9 @@
         "新政世纪党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "爱心党",
@@ -1667,7 +1813,9 @@
         "爱心党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "皇君人民政党",
@@ -1681,7 +1829,9 @@
         "皇君人民政党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "联合党",
@@ -1695,7 +1845,9 @@
         "联合党"
       ],
       "confirmed_elected_count": 0,
-      "elected_examples": []
+      "elected_examples": [],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     }
   ],
   "missing_elected_party_logos": [
@@ -1736,7 +1888,9 @@
           "name": "徐成焜",
           "election": "legislative:1998:regional"
         }
-      ]
+      ],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "全国民主非政党联盟",
@@ -1771,13 +1925,15 @@
           "name": "叶宪修",
           "election": "legislative:1998:regional"
         }
-      ]
+      ],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "中国台湾原住民党",
       "rows": 2375,
       "total_votes_across_grains": 55288,
-      "known_preset": null,
+      "known_preset": "ctip",
       "sources": [
         "history-legislative-1995.json",
         "history-legislative-1998.json",
@@ -1795,7 +1951,9 @@
           "name": "陈建台",
           "election": "1998-council"
         }
-      ]
+      ],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
     },
     {
       "name": "台湾吾党",
@@ -1816,47 +1974,523 @@
           "name": "瓦历斯‧贝林",
           "election": "legislative:2001:mountain"
         }
+      ],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
+    }
+  ],
+  "missing_priority_party_logos": [
+    {
+      "name": "民主联盟",
+      "rows": 1175,
+      "total_votes_across_grains": 2625826,
+      "known_preset": null,
+      "sources": [
+        "history-legislative-1998.json"
+      ],
+      "spellings": [
+        "民主联盟"
+      ],
+      "confirmed_elected_count": 4,
+      "elected_examples": [
+        {
+          "archive": "history-legislative-1998.json",
+          "contest": "legislative:1998:regional:台东县:台东县选举区",
+          "name": "徐庆元",
+          "election": "legislative:1998:regional"
+        },
+        {
+          "archive": "history-legislative-1998.json",
+          "contest": "legislative:1998:regional:台北县:台北县第2选区",
+          "name": "林志嘉",
+          "election": "legislative:1998:regional"
+        },
+        {
+          "archive": "history-legislative-1998.json",
+          "contest": "legislative:1998:regional:彰化县:彰化县选举区",
+          "name": "陈进丁",
+          "election": "legislative:1998:regional"
+        },
+        {
+          "archive": "history-legislative-1998.json",
+          "contest": "legislative:1998:regional:苗栗县:苗栗县选举区",
+          "name": "徐成焜",
+          "election": "legislative:1998:regional"
+        }
+      ],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
+    },
+    {
+      "name": "全国民主非政党联盟",
+      "rows": 1261,
+      "total_votes_across_grains": 625338,
+      "known_preset": null,
+      "sources": [
+        "history-legislative-1995.json",
+        "history-legislative-1998.json",
+        "history-legislative-2001.json"
+      ],
+      "spellings": [
+        "全国民主非政党联盟"
+      ],
+      "confirmed_elected_count": 3,
+      "elected_examples": [
+        {
+          "archive": "history-legislative-1998.json",
+          "contest": "legislative:1998:mountain:全部地区（含金门、马祖）:1998年第4届山地原住民立委选举",
+          "name": "瓦历斯‧贝林",
+          "election": "legislative:1998:mountain"
+        },
+        {
+          "archive": "history-legislative-1998.json",
+          "contest": "legislative:1998:plains:全部地区（含金门、马祖）:1998年第4届平地原住民立委选举",
+          "name": "蔡中涵",
+          "election": "legislative:1998:plains"
+        },
+        {
+          "archive": "history-legislative-1998.json",
+          "contest": "legislative:1998:regional:台北县:台北县第1选区",
+          "name": "叶宪修",
+          "election": "legislative:1998:regional"
+        }
+      ],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
+    },
+    {
+      "name": "中国台湾原住民党",
+      "rows": 2375,
+      "total_votes_across_grains": 55288,
+      "known_preset": "ctip",
+      "sources": [
+        "history-legislative-1995.json",
+        "history-legislative-1998.json",
+        "history-legislative-2001.json",
+        "history-local-1998.json"
+      ],
+      "spellings": [
+        "中国台湾原住民党"
+      ],
+      "confirmed_elected_count": 1,
+      "elected_examples": [
+        {
+          "archive": "history-local-1998.json",
+          "contest": "1998-council:台东县:mountain:第12选举区",
+          "name": "陈建台",
+          "election": "1998-council"
+        }
+      ],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
+    },
+    {
+      "name": "台湾吾党",
+      "rows": 812,
+      "total_votes_across_grains": 90419,
+      "known_preset": null,
+      "sources": [
+        "history-legislative-2001.json"
+      ],
+      "spellings": [
+        "台湾吾党"
+      ],
+      "confirmed_elected_count": 1,
+      "elected_examples": [
+        {
+          "archive": "history-legislative-2001.json",
+          "contest": "legislative:2001:mountain:全部地区（含金门、马祖）:2001年第5届山地原住民立委选举",
+          "name": "瓦历斯‧贝林",
+          "election": "legislative:2001:mountain"
+        }
+      ],
+      "mayor_candidate_count": 0,
+      "mayor_examples": []
+    },
+    {
+      "name": "人民民主阵线",
+      "rows": 58,
+      "total_votes_across_grains": 76246,
+      "known_preset": null,
+      "sources": [
+        "history-legislative-2012.json",
+        "history-legislative-2016.json",
+        "history-local-2014.json"
+      ],
+      "spellings": [
+        "人民民主阵线"
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": [],
+      "mayor_candidate_count": 2,
+      "mayor_examples": [
+        {
+          "archive": "history-local-2014.json",
+          "contest": "2014-mayor:基隆市:regional:基隆市",
+          "candidate": "何燕堂"
+        },
+        {
+          "archive": "history-local-2014.json",
+          "contest": "2014-mayor:嘉义市:regional:嘉义市",
+          "candidate": "林诗涵"
+        }
+      ]
+    },
+    {
+      "name": "保护台湾大联盟",
+      "rows": 18,
+      "total_votes_across_grains": 8257,
+      "known_preset": null,
+      "sources": [
+        "history-local-2005.json",
+        "history-local-2006.json"
+      ],
+      "spellings": [
+        "保护台湾大联盟"
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": [],
+      "mayor_candidate_count": 1,
+      "mayor_examples": [
+        {
+          "archive": "history-local-2006.json",
+          "contest": "2006-mayor:高雄市:regional:高雄市",
+          "candidate": "林志升"
+        }
+      ]
+    },
+    {
+      "name": "共和党",
+      "rows": 18,
+      "total_votes_across_grains": 1149,
+      "known_preset": null,
+      "sources": [
+        "history-2022-candidacies",
+        "history-2022.json"
+      ],
+      "spellings": [
+        "共和党",
+        "共和黨"
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": [],
+      "mayor_candidate_count": 1,
+      "mayor_examples": [
+        {
+          "archive": "history-2022.json",
+          "contest": "2022-mayor:63000",
+          "candidate": "唐新民"
+        }
+      ]
+    },
+    {
+      "name": "社会改革党",
+      "rows": 16,
+      "total_votes_across_grains": 11893,
+      "known_preset": null,
+      "sources": [
+        "history-local-1997.json",
+        "history-local-1998.json"
+      ],
+      "spellings": [
+        "社会改革党"
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": [],
+      "mayor_candidate_count": 1,
+      "mayor_examples": [
+        {
+          "archive": "history-local-1997.json",
+          "contest": "1997-mayor:桃园县:regional:桃园县",
+          "candidate": "徐运德"
+        }
+      ]
+    },
+    {
+      "name": "教科文预算保障e联盟",
+      "rows": 14,
+      "total_votes_across_grains": 1612,
+      "known_preset": null,
+      "sources": [
+        "history-local-2014.json",
+        "history-local-2018.json"
+      ],
+      "spellings": [
+        "教科文预算保障e联盟"
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": [],
+      "mayor_candidate_count": 2,
+      "mayor_examples": [
+        {
+          "archive": "history-local-2014.json",
+          "contest": "2014-mayor:金门县:regional:金门县",
+          "candidate": "汪成华"
+        },
+        {
+          "archive": "history-local-2018.json",
+          "contest": "2018-mayor:金门县:regional:金门县",
+          "candidate": "汪承桦"
+        }
+      ]
+    },
+    {
+      "name": "三等国民公义人权自救党",
+      "rows": 13,
+      "total_votes_across_grains": 3248,
+      "known_preset": null,
+      "sources": [
+        "history-local-2014.json"
+      ],
+      "spellings": [
+        "三等国民公义人权自救党"
+      ],
+      "confirmed_elected_count": 0,
+      "elected_examples": [],
+      "mayor_candidate_count": 1,
+      "mayor_examples": [
+        {
+          "archive": "history-local-2014.json",
+          "contest": "2014-mayor:台北市:regional:台北市",
+          "candidate": "陈汝斌"
+        }
       ]
     }
   ],
+  "priority_party_inventory": [
+    {
+      "name": "三等国民公义人权自救党",
+      "elected": 0,
+      "mayor_candidates": 1,
+      "has_logo": false
+    },
+    {
+      "name": "中华民族致公党",
+      "elected": 1,
+      "mayor_candidates": 0,
+      "has_logo": true
+    },
+    {
+      "name": "中华社会民主党",
+      "elected": 1,
+      "mayor_candidates": 0,
+      "has_logo": true
+    },
+    {
+      "name": "中国台湾原住民党",
+      "elected": 1,
+      "mayor_candidates": 0,
+      "has_logo": false
+    },
+    {
+      "name": "中国国民党",
+      "elected": 4776,
+      "mayor_candidates": 194,
+      "has_logo": true
+    },
+    {
+      "name": "亲民党",
+      "elected": 199,
+      "mayor_candidates": 10,
+      "has_logo": true
+    },
+    {
+      "name": "人民民主阵线",
+      "elected": 0,
+      "mayor_candidates": 2,
+      "has_logo": false
+    },
+    {
+      "name": "保护台湾大联盟",
+      "elected": 0,
+      "mayor_candidates": 1,
+      "has_logo": false
+    },
+    {
+      "name": "全国民主非政党联盟",
+      "elected": 3,
+      "mayor_candidates": 0,
+      "has_logo": false
+    },
+    {
+      "name": "共和党",
+      "elected": 0,
+      "mayor_candidates": 1,
+      "has_logo": false
+    },
+    {
+      "name": "劳动党",
+      "elected": 5,
+      "mayor_candidates": 0,
+      "has_logo": true
+    },
+    {
+      "name": "台湾动物保护党",
+      "elected": 0,
+      "mayor_candidates": 1,
+      "has_logo": true
+    },
+    {
+      "name": "台湾吾党",
+      "elected": 1,
+      "mayor_candidates": 0,
+      "has_logo": false
+    },
+    {
+      "name": "台湾团结联盟",
+      "elected": 60,
+      "mayor_candidates": 4,
+      "has_logo": true
+    },
+    {
+      "name": "台湾基进",
+      "elected": 3,
+      "mayor_candidates": 0,
+      "has_logo": true
+    },
+    {
+      "name": "台湾民众党",
+      "elected": 15,
+      "mayor_candidates": 3,
+      "has_logo": true
+    },
+    {
+      "name": "台湾第一民族党",
+      "elected": 2,
+      "mayor_candidates": 0,
+      "has_logo": true
+    },
+    {
+      "name": "台湾维新",
+      "elected": 0,
+      "mayor_candidates": 1,
+      "has_logo": true
+    },
+    {
+      "name": "台澎党",
+      "elected": 0,
+      "mayor_candidates": 1,
+      "has_logo": true
+    },
+    {
+      "name": "天一党",
+      "elected": 0,
+      "mayor_candidates": 1,
+      "has_logo": true
+    },
+    {
+      "name": "客家党",
+      "elected": 0,
+      "mayor_candidates": 1,
+      "has_logo": true
+    },
+    {
+      "name": "建国党",
+      "elected": 2,
+      "mayor_candidates": 3,
+      "has_logo": true
+    },
+    {
+      "name": "教科文预算保障e联盟",
+      "elected": 0,
+      "mayor_candidates": 2,
+      "has_logo": false
+    },
+    {
+      "name": "新党",
+      "elected": 82,
+      "mayor_candidates": 16,
+      "has_logo": true
+    },
+    {
+      "name": "新国家连线",
+      "elected": 1,
+      "mayor_candidates": 0,
+      "has_logo": true
+    },
+    {
+      "name": "无党团结联盟",
+      "elected": 27,
+      "mayor_candidates": 0,
+      "has_logo": true
+    },
+    {
+      "name": "时代力量",
+      "elected": 25,
+      "mayor_candidates": 3,
+      "has_logo": true
+    },
+    {
+      "name": "树党",
+      "elected": 2,
+      "mayor_candidates": 1,
+      "has_logo": true
+    },
+    {
+      "name": "正神名党",
+      "elected": 1,
+      "mayor_candidates": 0,
+      "has_logo": true
+    },
+    {
+      "name": "民主联盟",
+      "elected": 4,
+      "mayor_candidates": 0,
+      "has_logo": false
+    },
+    {
+      "name": "民主进步党",
+      "elected": 2529,
+      "mayor_candidates": 167,
+      "has_logo": true
+    },
+    {
+      "name": "民国党",
+      "elected": 3,
+      "mayor_candidates": 1,
+      "has_logo": true
+    },
+    {
+      "name": "社会改革党",
+      "elected": 0,
+      "mayor_candidates": 1,
+      "has_logo": false
+    },
+    {
+      "name": "社会民主党",
+      "elected": 2,
+      "mayor_candidates": 0,
+      "has_logo": true
+    },
+    {
+      "name": "绿党",
+      "elected": 6,
+      "mayor_candidates": 1,
+      "has_logo": true
+    },
+    {
+      "name": "金门高粱党",
+      "elected": 0,
+      "mayor_candidates": 1,
+      "has_logo": true
+    },
+    {
+      "name": "龙党",
+      "elected": 0,
+      "mayor_candidates": 1,
+      "has_logo": true
+    }
+  ],
   "placeholder_code_locations": {
-    "history-trends.js": [
+    "history-observation-core.js": [
       {
         "phrase": "无可核实",
         "count": 1
       }
     ],
-    "history-trends-ui.js": [
+    "site-updated.js": [
       {
         "phrase": "不可用",
-        "count": 1
-      }
-    ],
-    "history-workspace.js": [
-      {
-        "phrase": "暂无资料",
-        "count": 4
-      },
-      {
-        "phrase": "暂无该",
-        "count": 2
-      },
-      {
-        "phrase": "无可核实",
-        "count": 1
-      }
-    ],
-    "history-observation-ui.js": [
-      {
-        "phrase": "暂无数据",
-        "count": 1
-      },
-      {
-        "phrase": "无数据",
-        "count": 1
-      },
-      {
-        "phrase": "未收录",
         "count": 1
       }
     ],
@@ -1882,13 +2516,49 @@
         "count": 1
       }
     ],
-    "site-updated.js": [
+    "history-trends-ui.js": [
       {
         "phrase": "不可用",
         "count": 1
       }
     ],
-    "history-observation-core.js": [
+    "history-workspace.js": [
+      {
+        "phrase": "暂无资料",
+        "count": 4
+      },
+      {
+        "phrase": "暂无该",
+        "count": 2
+      },
+      {
+        "phrase": "无可核实",
+        "count": 1
+      }
+    ],
+    "history-trends.js": [
+      {
+        "phrase": "无可核实",
+        "count": 1
+      }
+    ],
+    "history-observation-ui.js": [
+      {
+        "phrase": "暂无数据",
+        "count": 1
+      },
+      {
+        "phrase": "无数据",
+        "count": 1
+      },
+      {
+        "phrase": "未收录",
+        "count": 1
+      },
+      {
+        "phrase": "不可用",
+        "count": 2
+      },
       {
         "phrase": "无可核实",
         "count": 1
@@ -1914,6 +2584,18 @@
         "county": 25,
         "town": 0,
         "district": 4
+      },
+      "plains": {
+        "national": true,
+        "county": 0,
+        "town": 0,
+        "district": 0
+      },
+      "mountain": {
+        "national": true,
+        "county": 1,
+        "town": 0,
+        "district": 0
       }
     },
     "1995": {
