@@ -45,7 +45,53 @@ jobs:
           trap 'kill "$server_pid"' EXIT
           for i in {1..30}; do curl -fsS http://127.0.0.1:8765/ >/dev/null && break; sleep 1; done
           curl -fsS http://127.0.0.1:8765/ >/dev/null
-          node --test --test-name-pattern "$BROWSER_PATTERN" tests/browser-smoke.mjs
+          set -o pipefail
+          mkdir -p artifacts/browser-regression
+          node --test --test-name-pattern "$BROWSER_PATTERN" tests/browser-smoke.mjs | tee artifacts/browser-regression/results.tap
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-regression-${{ strategy.job-index }}
+          path: |
+            artifacts/browser-regression/results.tap
+            /tmp/map-test-server.log
+          if-no-files-found: warn
+
+  compatibility:
+    needs: test
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [firefox, webkit]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-package-lock playwright@1.56.1
+      - run: npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Desktop and mobile cross-browser core workflows
+        env:
+          BROWSER_ENGINE: ${{ matrix.engine }}
+        run: |
+          set -o pipefail
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/map-compat-server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid"' EXIT
+          for i in {1..30}; do curl -fsS http://127.0.0.1:8765/ >/dev/null && break; sleep 1; done
+          curl -fsS http://127.0.0.1:8765/ >/dev/null
+          mkdir -p artifacts/browser-compat
+          node --test tests/browser-compat.mjs | tee artifacts/browser-compat/results.tap
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-compat-${{ matrix.engine }}
+          path: |
+            artifacts/browser-compat/results.tap
+            /tmp/map-compat-server.log
+          if-no-files-found: warn
 
   data-audit:
     runs-on: ubuntu-24.04
@@ -97,7 +143,7 @@ jobs:
           if-no-files-found: warn
   release-ready:
     if: always()
-    needs: [test, data-audit, browser, performance]
+    needs: [test, data-audit, browser, performance, compatibility]
     runs-on: ubuntu-24.04
     steps:
       - name: Require successful checks
@@ -106,8 +152,20 @@ jobs:
           AUDIT: ${{ needs.data-audit.result }}
           BROWSER: ${{ needs.browser.result }}
           PERFORMANCE: ${{ needs.performance.result }}
+          COMPATIBILITY: ${{ needs.compatibility.result }}
         run: |
+          {
+            echo '## Release readiness'
+            echo '| Check | Result |'
+            echo '|---|---|'
+            printf '| Calculation and runtime contracts | %s |\n' "$UNIT"
+            printf '| Data provenance | %s |\n' "$AUDIT"
+            printf '| Chromium regression | %s |\n' "$BROWSER"
+            printf '| Firefox and WebKit compatibility | %s |\n' "$COMPATIBILITY"
+            printf '| Performance audit | %s |\n' "$PERFORMANCE"
+          } >> "$GITHUB_STEP_SUMMARY"
           test "$UNIT" = success
           test "$AUDIT" = success
           test "$BROWSER" = success
+          test "$COMPATIBILITY" = success
           test "$PERFORMANCE" = success
