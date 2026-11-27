@@ -391,7 +391,12 @@
               4447,
               false
             ]
-          ]
+          ],
+          "incumbency_review": {
+            "status": "unresolved_acting_officeholder",
+            "source_url": "https://www.yingge.ntpc.gov.tw/home.jsp?id=c20ffc1064376a3a",
+            "source_locator": "官方歷任首長表：詹清火任至1993-12-04，許元和1994-03-01就任，1994-01-29投票日處於未列代理人的空檔。三位候選人是否實際代理未查明，保留null。"
+          }
         },
         {
           "town": "三峽鎮",
@@ -2371,7 +2376,19 @@
             null,
             7904,
             null
-          ]
+          ],
+          "incumbency_at_election": {
+            "name": null,
+            "source_url": "https://www.hchcc.gov.tw/Tw/common/Downloader?id=60d323ae-0baa-40b7-b020-2a25c29f69b8",
+            "source_locator": "《新竹縣志續修》頁75表1-3-1列古榮耀為第12屆縣議員（1990-03-01至1994-03-01）；2012-11-15自由時報回顧明載1994年由縣議員轉任鄉長。",
+            "corroboration_url": "https://n.yam.com/Article/20121115977029",
+            "method": "official_prior_council_term_and_explicit_career_transition",
+            "candidate_name": "古榮耀",
+            "candidate_values": {
+              "1": false
+            },
+            "limitation": "同一縣志頁44鄉鎮首長表與頁75議員名單及報導矛盾，疑似屆期欄位錯置；以明載轉任的報導及第12屆議員名單判斷非現任鄉長，實際前任鄉長姓名待核。原頁截圖未能擷取，不修改計票資料。"
+          }
         },
         {
           "town": "北埔鄉",
