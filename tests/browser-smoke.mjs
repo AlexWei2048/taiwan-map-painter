@@ -3344,6 +3344,29 @@ test('Changing historical map metric preserves unchanged dropdown options',async
 });
 
 
+test('Roster geography index and paged history preserve the original records and ordering',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ const check=await page.evaluate(()=>{
+  const ds=candidateDatabase.districts;
+  const matching=ds.every(d=>directoryDistrictForRegion(d.type,{county:d.county,id:d.mapRegionId})===ds.find(x=>x.type===d.type&&x.county===d.county&&x.mapRegionId===d.mapRegionId));
+  const expected=[...ds].sort((a,b)=>COUNTY_ORDER.indexOf(a.county)-COUNTY_ORDER.indexOf(b.county)).map(d=>d.id);
+  const got=orderedDistricts();got.reverse();
+  const order=JSON.stringify(orderedDistricts().map(d=>d.id))===JSON.stringify(expected);
+  const search=ds.every(d=>directorySearchText(d)===normalizePlace(d.county+d.name+d.scope+directoryCandidates(d).map(c=>candidateDisplayName(c)+c.nameOriginal+c.party).join(' ')));
+  return {matching,order,search};
+ });
+ assert.deepEqual(check,{matching:true,order:true,search:true});
+ await page.locator('#categoryHistory').click();await page.waitForFunction(()=>History2022View?.snapshot()?.year===2022&&document.querySelector('#historyLoadStatus').hidden);
+ await page.locator('#historyOffice').selectOption('council');await page.waitForFunction(()=>History2022View.office()==='council'&&document.querySelector('#historyLoadStatus').hidden);
+ await page.locator('#historyViewCandidates').click();
+ const rows=page.locator('#historyResults tbody tr:not(.history-district-divider)');
+ await rows.first().waitFor();const first=await rows.allTextContents();assert.equal(first.length,100);
+ await page.locator('#historyNext').click();assert.notDeepEqual(await rows.allTextContents(),first);
+ await page.locator('#historyPrev').click();assert.deepEqual(await rows.allTextContents(),first);
+ await page.locator('#historySearch').fill('ZZZ-不存在-987654');assert.match(await page.locator('#historyResults').textContent(),/没有符合当前搜索/);
+ await page.locator('#historyResults').getByRole('button',{name:'清除筛选'}).click();assert.deepEqual(await rows.allTextContents(),first);
+});
+
 test('Historical search distinguishes no matches from missing archives and resets filters',async t=>{
  const page=await pageFor(t,{width:1440,height:950});
  await page.locator('#categoryHistory').click();
