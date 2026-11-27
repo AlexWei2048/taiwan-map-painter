@@ -65,7 +65,7 @@ test('Map export rejects changed scope, changed plan and unfinished historical r
   vm.runInNewContext(source,context);
   return {context,resolve,run:()=>context.ensureExportMapReady()};
  }
- for(const mode of ['unchanged','county','plan','history-loading','history-metric']){
+ for(const mode of ['unchanged','county','plan','history-loading','history-metric','history-year','history-ballot']){
   const {context,resolve,run}=harness();
   let historicalRoute={office:'council',year:2022,county:'台北市',metric:'party',level:'district',electorate:'all'};
   if(mode.startsWith('history'))context.History2022View={active:()=>true,routeSelection:()=>historicalRoute,routeReady:()=>mode!=='history-loading'};
@@ -73,6 +73,8 @@ test('Map export rejects changed scope, changed plan and unfinished historical r
   if(mode==='county')context.state.county='高雄市';
   if(mode==='plan')context.state={...context.state};
   if(mode==='history-metric')historicalRoute={...historicalRoute,metric:'share'};
+  if(mode==='history-year')historicalRoute={...historicalRoute,year:2018};
+  if(mode==='history-ballot')historicalRoute={...historicalRoute,electorate:'plains'};
   resolve(true);
   if(mode==='unchanged')await result;
   else await assert.rejects(result,mode==='history-loading'?/历史资料尚未载入完成/:/地图范围或方案已变更/);
