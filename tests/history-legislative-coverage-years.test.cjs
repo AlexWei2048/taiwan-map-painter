@@ -32,7 +32,7 @@ test('Legislative historical coverage uses verified separate turnout files in al
   assert.equal(summary.missingParty,0,year+' party must be known');
   assert.equal(summary.missingNumber,0,year+' ballot numbers must be available');
   if(year===1992){
-   assert.equal(summary.status,'partial','1992 local vote reconciliation still has unassigned geography');
+   assert.equal(summary.status,'partial','1992 regional township archives remain partial');
    assert.equal(summary.missingTurnout,0,'1992 national turnout profiles are cross-checked');
    assert.equal(summary.missingIncumbent,0,'1992 candidate incumbent attributes are complete, including a source-graded crosscheck');
    assert.equal(summary.countyPartial,0,'County candidate returns are available');

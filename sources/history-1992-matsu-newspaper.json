@@ -1,0 +1,280 @@
+{
+  "source": "https://client.matsu.idv.tw/literature/matsunews/1992_12.pdf#page=39",
+  "sourceSha256": "6c3c87298b2bc80e22660f9f0fde2e078cdc0d56087c22562109ee53b43398cb",
+  "date": "1992-12-20",
+  "newspaper": "马祖日报",
+  "page": 39,
+  "printedPage": 2,
+  "article": "县选委会公布各乡村投开票情形",
+  "raw": [
+    {
+      "town": "南竿乡",
+      "registeredAll": 2218,
+      "castAll": 1721,
+      "invalid": 26,
+      "polls": [
+        [
+          "介寿村",
+          352,
+          298
+        ],
+        [
+          "复兴村",
+          30,
+          262
+        ],
+        [
+          "经泽村",
+          92,
+          110
+        ],
+        [
+          "清水村",
+          44,
+          49
+        ],
+        [
+          "仁爱、津沙村",
+          70,
+          136
+        ],
+        [
+          "马祖、珠螺及四维村",
+          104,
+          146
+        ]
+      ]
+    },
+    {
+      "town": "北竿乡",
+      "registeredAll": 743,
+      "castAll": 534,
+      "invalid": 7,
+      "polls": [
+        [
+          "塘岐、后沃村",
+          171,
+          138
+        ],
+        [
+          "桥仔村",
+          12,
+          37
+        ],
+        [
+          "芹壁村",
+          30,
+          31
+        ],
+        [
+          "坂里、白沙村",
+          69,
+          39
+        ]
+      ]
+    },
+    {
+      "town": "莒光乡",
+      "registeredAll": 327,
+      "castAll": 256,
+      "invalid": 1,
+      "polls": [
+        [
+          "西莒",
+          69,
+          73
+        ],
+        [
+          "东莒",
+          37,
+          76
+        ]
+      ]
+    },
+    {
+      "town": "东引乡",
+      "registeredAll": 454,
+      "castAll": 342,
+      "invalid": 10,
+      "polls": [
+        [
+          "东引",
+          112,
+          220
+        ]
+      ]
+    }
+  ],
+  "countyRegionalOfficial": {
+    "registered": 3739,
+    "cast": 2851,
+    "valid": 2807,
+    "invalid": 44,
+    "candidateVotes": [
+      1159,
+      1648
+    ],
+    "corroboration": "https://web.cec.gov.tw/api/file/e281396e-7e1c-401d-b841-282a2c780a68.pdf"
+  },
+  "rawCandidateTotals": [
+    1192,
+    1615
+  ],
+  "correction": {
+    "method": "unique_single_poll_candidate_transposition",
+    "status": "inferred_pending_independent_poll_table",
+    "poll": {
+      "town": "北竿乡",
+      "poll": "塘岐、后沃村",
+      "change": -33,
+      "raw": [
+        171,
+        138
+      ]
+    },
+    "reason": "唯一一处交换两候选人票数可消除两人各33票的全县对账差额，非官方勘误。"
+  },
+  "regionalTownProfiles": [
+    [
+      "南竿乡",
+      [
+        692,
+        1001
+      ],
+      [
+        null,
+        1719,
+        1693,
+        26
+      ]
+    ],
+    [
+      "北竿乡",
+      [
+        249,
+        278
+      ],
+      [
+        null,
+        534,
+        527,
+        7
+      ]
+    ],
+    [
+      "莒光乡",
+      [
+        106,
+        149
+      ],
+      [
+        null,
+        256,
+        255,
+        1
+      ]
+    ],
+    [
+      "东引乡",
+      [
+        112,
+        220
+      ],
+      [
+        null,
+        342,
+        332,
+        10
+      ]
+    ]
+  ],
+  "mountainCountyProfile": [
+    3,
+    2,
+    2,
+    0
+  ],
+  "mountainTownProfiles": [
+    [
+      "南竿乡",
+      [
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        null,
+        2,
+        2,
+        0
+      ]
+    ],
+    [
+      "北竿乡",
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        null,
+        0,
+        0,
+        0
+      ]
+    ],
+    [
+      "莒光乡",
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        null,
+        0,
+        0,
+        0
+      ]
+    ],
+    [
+      "东引乡",
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        null,
+        0,
+        0,
+        0
+      ]
+    ]
+  ],
+  "registrationNote": "原报乡镇选举人数包括区域与山地；3名山地选举人各乡分布未列，不把混合数当作区域人数。"
+}

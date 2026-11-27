@@ -94,8 +94,8 @@
  function note(year,electorate){
   if(electorate==='party'&&Number(year)<2008)return '旧制不另发政党票：选民投区域或少数民族候选人一票，各党推荐候选人得票汇总为不分区及侨选的席次计算票（无党籍和未经推荐者不计入）。地图颜色表示当地席次计算票领先的政党，不代表当地另选出一名不分区民代；名单与席次按全区票数分配。'+(Number(year)===2001?'2001年新店与汐止依政大明细补齐1,447票。':'');
   if(Number(year)===2001&&electorate==='regional')return '2001年新店与汐止按政大逐候选人明细补齐1,447票，乡镇、选区、县市及全区合计均为10,174,005张区域民代有效票。';
-  if(Number(year)===1992&&electorate==='regional')return '1992年区域民代乡镇票数与选区归属来自政大选举研究中心；少数地名采用档案所列后期称谓。金门、马祖可查县级结果。';
-  if(Number(year)===1992&&electorate==='mountain')return '全区63,831票已由政大所藏中选会统计及斯坦福研究逐候选人票数交叉核对；全区投票统计经整届官方年鉴交叉验证；地方明细63,829票，华加志2票地理归属未载，不分摊至县市或乡镇。';
+  if(Number(year)===1992&&electorate==='regional')return '1992年区域民代乡镇票数与选区归属来自政大选举研究中心；少数地名采用档案所列后期称谓。连江县乡镇得票据1992年12月20日《马祖日报》重建，塘岐、后沃一处候选人票数对调为全县对账推定、待原始票表复核；乡镇选举人数因混合票种不填。金门仅县级结果。';
+  if(Number(year)===1992&&electorate==='mountain')return '全区63,831票已由政大所藏中选会统计及斯坦福研究逐候选人票数交叉核对；全区投票统计经整届官方年鉴交叉验证；马祖原报明确华加志2票，地方明细已与全区63,831票一致；南竿乡归属为投票数差额对账推定，乡镇选举人数仍缺。';
   if(Number(year)===1992&&electorate==='plains')return '全区49,333票已核对；全区投票统计经整届官方年鉴交叉验证，地方统计存在未定位差额，不分摊。';
   return '';
  }
@@ -506,8 +506,9 @@
     const key=county+'|'+town;
     const valid=votes.reduce((sum,n)=>sum+n,0);
     if(!town||seen.has(key)||votes.length!==candidates.length||votes.some(n=>!Number.isSafeInteger(n)||n<0)||
-     !Array.isArray(p)||p.length!==4||p[2]!==valid||!Number.isSafeInteger(p[0])||p[0]<valid||
-     (p[1]===null?p[3]!==null:!Number.isSafeInteger(p[1])||!Number.isSafeInteger(p[3])||p[3]<0||p[0]<p[1]||p[1]!==valid+p[3]))
+     !Array.isArray(p)||p.length!==4||p[2]!==valid||
+     (p[0]===null?batch.sourceType!=='matsu_mixed_ballot_reconstruction':!Number.isSafeInteger(p[0])||p[0]<valid)||
+     (p[1]===null?p[3]!==null:!Number.isSafeInteger(p[1])||!Number.isSafeInteger(p[3])||p[3]<0||(p[0]!==null&&p[0]<p[1])||p[1]!==valid+p[3]))
      throw Error('1992年区域乡镇票数与统计不符：'+key);
     seen.add(key);
     countyProfile[town]=p;
@@ -519,7 +520,7 @@
    if(candidates.some((r,i)=>r.votes!==subtotal[i]))throw Error('1992年区域乡镇票未能逐候选人对账：'+district);
   }
   const coverage={districtCount:districts.length,townCount:seen.size,withoutTownReturns};
-  if(coverage.districtCount!==25||coverage.townCount!==359)throw Error('1992年区域乡镇资料覆盖不符');
+  if(coverage.districtCount!==26||coverage.townCount!==363)throw Error('1992年区域乡镇资料覆盖不符');
   return {...shard,contests,candidacies,rows,regionalTownCoverage:coverage,
    geographicProfiles:{...shard.geographicProfiles,regional:profile}};
  }
@@ -531,7 +532,7 @@
   for(const electorate of ['plains','mountain']){
    const ballot=archive.ballots[electorate];
    const originals=shard.rows.filter(r=>r.level==='national'&&r.electorate===electorate).sort((a,b)=>Number(a.number)-Number(b.number));
-   if(originals.length!==9||Object.keys(ballot.counties).length!==23)throw Error('1992年地方票数资料不全');
+   if(originals.length!==9||Object.keys(ballot.counties).length!==(electorate==='mountain'?24:23))throw Error('1992年地方票数资料不全');
    const national=originals.map(()=>0);
    const local=profiles[electorate]={county:{},town:{}};
    let townCount=0;
@@ -540,7 +541,7 @@
     local.town[county]={};
     for(const [town,votes,profile] of record.towns){
      if(areas.has(town)||votes.length!==originals.length||!votes.every(n=>Number.isSafeInteger(n)&&n>=0)||
-      (profile&&!validProfile(profile,votes.reduce((a,b)=>a+b,0))))throw Error('1992年乡镇得票或统计不一致：'+county+town);
+      (profile&&!validProfile(profile,votes.reduce((a,b)=>a+b,0))&&!(county==='连江县'&&record.townProfileMethod==='mixed_ballot_cast_residual'&&profile[0]===null&&profile[1]===profile[2]&&profile[2]===votes.reduce((a,b)=>a+b,0)&&profile[3]===0)))throw Error('1992年乡镇得票或统计不一致：'+county+town);
      areas.add(town);townCount++;
      if(profile)local.town[county][town]=profile;
      originals.forEach((row,i)=>{subtotal[i]+=votes[i];rows.push({...row,level:'town',county,town,votes:votes[i],elected:false})});
@@ -549,14 +550,14 @@
     local.county[county]=record.profile;
     originals.forEach((row,i)=>{national[i]+=subtotal[i];rows.push({...row,level:'county',county,votes:subtotal[i],elected:false})});
    }
-   if(townCount!==359||originals.some((row,i)=>row.votes-national[i]!==((electorate==='mountain'&&Number(row.number)===2)?2:0))){
+   if(townCount!==(electorate==='mountain'?363:359)||originals.some((row,i)=>row.votes!==national[i])){
     throw Error('1992年地方得票与全区票数的已知差额不符');
    }
   }
   const reconciliation=archive.ballots.mountain.nationalReconciliation;
   if(reconciliation){
    const national=shard.rows.filter(r=>r.level==='national'&&r.electorate==='mountain').sort((a,b)=>Number(a.number)-Number(b.number));
-   if(national.some((r,i)=>r.votes!==reconciliation.candidateVotes[i])||national.reduce((n,r)=>n+r.votes,0)!==reconciliation.nationalValidVotes||reconciliation.nationalValidVotes-reconciliation.localValidVotes!==reconciliation.unassignedVotes||reconciliation.unassignedVotes!==2)throw Error('1992年交叉验证票数不符');
+   if(national.some((r,i)=>r.votes!==reconciliation.candidateVotes[i])||national.reduce((n,r)=>n+r.votes,0)!==reconciliation.nationalValidVotes||reconciliation.nationalValidVotes-reconciliation.localValidVotes!==reconciliation.unassignedVotes||reconciliation.unassignedVotes!==0)throw Error('1992年交叉验证票数不符');
   }
   const fields=['registered_voters','ballots_cast','valid_votes','invalid_votes'];
   const plain=Object.values(profiles.plains.county);
@@ -580,7 +581,7 @@
    const [response,local]=await Promise.all([
 
     fetcher('assets/history-legislative-'+year+'.json?v=20261124-vote-reconciliation-v4',{cache:'default'}),
-    [1992,2001].includes(year)?fetcher('assets/history-legislative-'+year+'-local.json?v='+(year===1992?'5':'1')).then(response=>{
+    [1992,2001].includes(year)?fetcher('assets/history-legislative-'+year+'-local.json?v='+(year===1992?'6':'1')).then(response=>{
      if(!response.ok)throw Error(year+'年地方得票资料 HTTP '+response.status);
      return response.json();
     }):null,

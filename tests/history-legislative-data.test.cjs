@@ -50,9 +50,9 @@ test('1992 NCCU indigenous ballots resolve local results and retain the recorded
  assert.deepEqual(['registeredVoters','ballotsCast','validVotes','invalidVotes'].map(k=>county.overview[k]),[303,102,96,6]);
  assert.equal(town.overview.validVotes,73);
  assert.equal(Data.localResult(indexed,{year:1992,electorate:'mountain',scope:'all'}).overview.validVotes,63831);
- for(const [electorate,total] of [['plains',49333],['mountain',63829]])for(const level of ['county','town']){
+ for(const [electorate,total] of [['plains',49333],['mountain',63831]])for(const level of ['county','town']){
   const rows=s.rows.filter(r=>r.electorate===electorate&&r.level===level);
-  assert.equal(rows.length,(level==='county'?23:359)*9);
+  assert.equal(rows.length,(level==='county'?(electorate==='mountain'?24:23):(electorate==='mountain'?363:359))*9);
   assert.equal(rows.reduce((sum,row)=>sum+row.votes,0),total);
  }
  assert.match(Data.exportCsv(s,{year:1992,electorate:'plains',level:'town'}),/北投区/);
@@ -165,8 +165,8 @@ test('1992 regional township votes reconcile with corrected official returns and
  const archive=require('../assets/history-legislative-1992-local.json');
  const s=Legislative.apply1992Local(shard(1992),archive),indexed=Core.index(s);
  const townRows=s.rows.filter(row=>row.electorate==='regional'&&row.level==='town');
- assert.equal(townRows.length,5097);
- assert.equal(new Set(townRows.map(r=>r.county+'|'+r.town)).size,359);
+ assert.equal(townRows.length,5105);
+ assert.equal(new Set(townRows.map(r=>r.county+'|'+r.town)).size,363);
  assert.equal(townRows.filter(r=>r.name==='陈锡璞').reduce((sum,r)=>sum+r.votes,0),265);
  assert.equal(Data.localResult(indexed,{year:1992,electorate:'regional',scope:'all'}).overview.validVotes,9375608);
  const taipei=Data.localResult(indexed,{year:1992,electorate:'regional',scope:'town',county:'台北市',area:'松山区'});
