@@ -3836,3 +3836,16 @@ test('Township executive comparison supports town grain and retains map nodes wh
  await page.locator('#bulkPaintOpen').click();await page.locator('#bulkPaintParty').selectOption('__clear__');await page.locator('#bulkPaintApply').click();assert.equal(await page.evaluate(ids=>ids.filter(id=>state.fills.towns[id]).length,ids),0);
  await page.locator('#undo').click();assert.equal(await page.evaluate(ids=>ids.filter(id=>state.fills.towns[id]==='green').length,ids),12);
  });
+
+ test('Copying verified historical county colors protects manual fills and preserves prediction records with one undo',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ const before=await page.evaluate(()=>{state.fills.counties['63000']='green';return{fills:JSON.stringify(state.fills),predictions:JSON.stringify(state.predictions),undos:undo.length}});
+ await page.locator('#categoryHistory').click();await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022&&document.querySelector('#historyLoadStatus').hidden&&!document.querySelector('#categoryHistory').hasAttribute('aria-busy'));
+ const source=await page.evaluate(()=>History2022View.copyPaintSource());assert.equal(source.level,'counties');assert.ok(source.rows.length>=20);assert.equal(source.rows.find(x=>x.id==='63000').name,'中国国民党');
+ await page.locator('#historyCopyPaint').click();assert.equal(await page.locator('#copyPaintOverwrite').isChecked(),false);await page.locator('#copyPaintApply').click();
+ assert.equal(await page.locator('#workspaceFree').getAttribute('aria-pressed'),'true');assert.equal(await page.evaluate(()=>state.fills.counties['63000']),'green');assert.equal(await page.evaluate(()=>undo.length),before.undos+1);assert.equal(await page.evaluate(()=>JSON.stringify(state.predictions)),before.predictions);
+ await page.locator('#undo').click();assert.equal(await page.evaluate(()=>JSON.stringify(state.fills)),before.fills);
+ await page.locator('#categoryHistory').click();await page.waitForFunction(()=>window.History2022View?.routeReady(window.History2022View.routeSelection())&&!document.querySelector('#categoryHistory').hasAttribute('aria-busy'));
+ await page.locator('#historyCopyPaint').click();await page.locator('#copyPaintOverwrite').check();await page.locator('#copyPaintApply').click();assert.equal(await page.evaluate(()=>state.fills.counties['63000']),'blue');
+ await page.locator('#undo').click();assert.equal(await page.evaluate(()=>JSON.stringify(state.fills)),before.fills);
+ });

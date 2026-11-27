@@ -1061,3 +1061,5 @@ body.analysis-mode #historyTownBoundaryBox{display:none!important}
 .bulk-paint-dialog{width:min(460px,calc(100vw - 28px));max-width:none;max-height:90dvh;overflow:auto;padding:22px}
 .bulk-paint-dialog h2{margin:0 34px 12px 0}.bulk-paint-dialog>label:not(.check){display:block;font-size:13px;margin:12px 0 5px;color:#466256}.bulk-paint-dialog #bulkPaintStatus{font-weight:600;color:#216b54;background:#f0f6f1;padding:10px;border-radius:7px}.bulk-paint-dialog .dialog-actions{flex-wrap:wrap}
 @media(max-width:700px){#bulkPaintOpen{min-height:44px}.bulk-paint-dialog select{font-size:16px}.bulk-paint-dialog .dialog-actions button{min-height:44px}}
+
+#historyCopyPaint{margin:8px 0 4px;min-height:36px;color:#216b54;background:#f3f8f3}#copyPaintStatus{font-weight:600;color:#216b54;background:#f0f6f1;padding:10px;border-radius:7px}@media(max-width:700px){#historyCopyPaint{min-height:44px}}
