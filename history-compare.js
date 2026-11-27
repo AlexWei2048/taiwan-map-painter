@@ -268,7 +268,7 @@ async function model(o,y,b,grain){
    const reference=y<=2010?await root.HistoryPresidential.load(2008):null;
    const geometry=o==='president'?root.HistoryPresidential.geometry(shard,data,normalize,Core.mergePaths):
     root.HistoryLocal.geometry(shard,data,reference,normalize,Core.mergePaths,root.HistoryPresidential.modernCounty,root.HistoryPresidential.baseTown);
-   const summary=grain==='town'?summarizeTowns(shard,o,b,normalize):summarize(shard,o,b,normalize);return {summary:legislativeProfiles(summary,root.HistoryLegislativeTurnout),shapes:grain==='town'?geometry.towns:geometry.counties};
+   const summary=grain==='town'?summarizeTowns(shard,o,b,normalize):summarize(shard,o,b,normalize);return {summary:legislativeProfiles(summary,root.HistoryLegislativeTurnout),publicationLabel:Core.official2026Label(shard),shapes:grain==='town'?geometry.towns:geometry.counties};
   })();cache.set(key,p);p.catch(()=>{if(cache.get(key)===p)cache.delete(key)});
   if(cache.size>8)cache.delete(cache.keys().next().value);
  }
@@ -351,7 +351,7 @@ function render(){
  if(mode.selectedOptions[0]?.disabled)mode.value='results';
  if(mode.value==='turnover'&&party.value)party.value='';
  const suffix={results:'',share:' · 得票率变化',votes:' · 得票数变化',turnout:' · 投票率变化',registered:' · 选举人数变化',seats:' · 席次变化',turnover:' · 执政权变化'}[mode.value];
- $('compareMapTitleA').textContent=label(as.year,as.office);$('compareMapTitleB').textContent=label(bs.year,bs.office)+suffix;
+ $('compareMapTitleA').textContent=[label(as.year,as.office),a.publicationLabel].filter(Boolean).join(' · ');$('compareMapTitleB').textContent=[label(bs.year,bs.office),b.publicationLabel].filter(Boolean).join(' · ')+suffix;
  const mapMode=JSON.stringify([mode.value,party.value]);
  if(drawnModels!==models||drawnMode!==mapMode){drawMap(a,'compareMapA',0);drawMap(b,'compareMapB',1);drawnModels=models;drawnMode=mapMode;drawnChosen=chosen}
  else if(drawnChosen!==chosen){for(const id of ['compareMapA','compareMapB'])for(const path of $(id).querySelectorAll('[data-compare-area]'))if(path.dataset.compareArea===drawnChosen||path.dataset.compareArea===chosen){const active=path.dataset.compareArea===chosen;path.setAttribute('stroke',active?'#182d26':'#546f62');path.setAttribute('stroke-width',active?'2.5':'.8')}drawnChosen=chosen}setBox();
