@@ -1,0 +1,15 @@
+/* Observation-only interaction and filter affordances. */
+.analysis-mode[data-observation-tab]:not([data-observation-tab="trends"]) #historyControls :is(label[for="historyMetric"],#historyMetric,#historyScaleBox,#historyFocusBox,#historyPartyBox,#historyCandidateScopeBox,#historyCandidateBox,#historyLegislativeMapHint){display:none!important}
+.analysis-mode[data-observation-tab="candidate"] #historyControls :is(label[for="historyOffice"],#historyOffice,label[for="historyYear"],#historyYear,label[for="historyCounty"],#historyCounty,#historyElectorateBox,#historyLoadStatus,#historyRetry){display:none!important}
+.analysis-mode[data-observation-tab="categories"] #historyElectorateBox{display:none!important}
+.analysis-mode[data-observation-tab="candidate"] #historyControls{display:none!important}
+.observation-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin:10px 0}
+.observation-filter{display:flex;flex-direction:column;gap:4px;min-width:140px;flex:1;font-size:13px}
+.observation-filter :is(input,select){min-height:38px;width:100%;box-sizing:border-box}
+.observation-detail{padding:10px 12px;background:#edf5f0;border-radius:7px;margin:8px 0;line-height:1.6}
+.observation-click-row{cursor:pointer}.observation-click-row:hover,.observation-selected-row{background:#e6f2ec!important}
+.observation-map-selected{stroke:#193e33!important;stroke-width:3!important}
+.observation-margin-map{cursor:grab}.observation-margin-map path{cursor:pointer}.observation-margin-map path:focus{outline:none;stroke:#193e33;stroke-width:2.5}
+[data-observation-party]{transition:opacity .12s}.observation-muted{opacity:.22}
+.observation-legend label{display:inline-flex;align-items:center;gap:4px;cursor:pointer;margin:4px 8px 4px 0;font-weight:600}
+@media(max-width:600px){.observation-filter{min-width:calc(50% - 10px)}.observation-toolbar button{min-height:40px}.observation-scroll{overflow-x:auto}}

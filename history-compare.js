@@ -102,7 +102,7 @@ const dialog=$('historyCompareDialog'),office=$('compareOffice'),ballot=$('compa
 const node=(tag,t)=>{const e=doc.createElement(tag);if(t!==undefined)e.textContent=t;return e};
 const svg=(tag,attrs={})=>{const e=doc.createElementNS('http://www.w3.org/2000/svg',tag);for(const [k,v]of Object.entries(attrs))e.setAttribute(k,v);return e};
 const normalize=v=>typeof simplify==='function'?simplify(String(v||'')):norm(v);
-let token=0,models=null,baseBox=null,zoom=1,offsetX=0,offsetY=0,chosen='';
+let token=0,models=null,baseBox=null,zoom=1,offsetX=0,offsetY=0,chosen='',savedCompare=null;
 const cache=new Map();
 const mode=$('compareMode');
 const seatAllowed=summary=>summary.office!=='president'&&summary.ballot!=='party';
@@ -218,7 +218,7 @@ async function refresh(){
   status.textContent='已载入；灰色表示无适用或可核实结果，并非零票。';render();
  }catch(e){if(my===token){models=null;status.textContent='载入失败：'+e.message}}
 }
-open.onclick=()=>{office.value=root.History2022View?.office()||'mayor';chosen='';mode.value='results';setBallots();setYears(root.History2022View?.year());dialog.showModal();refresh()};
+open.onclick=()=>{if(!savedCompare){office.value=root.History2022View?.office()||'mayor';chosen='';mode.value='results';setBallots();setYears(root.History2022View?.year())}dialog.showModal();refresh()};
 office.onchange=()=>{chosen='';setBallots();setYears();refresh()};ballot.onchange=()=>{setYears();refresh()};left.onchange=right.onchange=refresh;party.onchange=()=>{if(mode.value==='turnover')mode.value='results';render()};mode.onchange=render;county.onchange=()=>{chosen=county.value;render()};
 $('compareZoomIn').onclick=()=>{zoom=Math.min(5,zoom*1.25);setBox()};$('compareZoomOut').onclick=()=>{zoom=Math.max(1,zoom/1.25);if(baseBox){const mx=baseBox[2]*(1-1/zoom)/2,my=baseBox[3]*(1-1/zoom)/2;offsetX=Math.max(-mx,Math.min(mx,offsetX));offsetY=Math.max(-my,Math.min(my,offsetY))}setBox()};$('compareFit').onclick=()=>{zoom=1;offsetX=offsetY=0;setBox()};$('compareRetry').onclick=refresh;
 // Pan either map, preserving the same viewBox on the other. Do not turn a drag into a county selection.
@@ -299,5 +299,6 @@ async function exportComparison(format){
  }catch(e){status.textContent=e.message||'导出失败'}finally{if(url)URL.revokeObjectURL(url);exporting=false;buttons.forEach(id=>$(id).disabled=!models)}
 }
 $('compareExportSvg').onclick=()=>exportComparison('svg');$('compareExportCsv').onclick=()=>exportComparison('csv');$('compareExportPng').onclick=()=>exportComparison('png');
-dialog.addEventListener('close',()=>{token++;models=null});
+dialog.addEventListener('close',()=>{savedCompare=true;token++;models=null});
+$('compareSwap')?.addEventListener('click',()=>{const a=left.value;left.value=right.value;right.value=a;refresh()});
 })(typeof window==='undefined'?globalThis:window);

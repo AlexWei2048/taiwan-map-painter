@@ -4,7 +4,7 @@
 const T=window.HistoryTrends,C=window.HistoryCore,S=window.HistoryTrendSummary,$=id=>document.getElementById(id);
 const offices={president:'台湾地区领导人',legislative:'立法机构民代',mayor:'县市长',council:'县市议员',township:'乡镇市区长'};
 const ns='http://www.w3.org/2000/svg';
-let zoomClipId=0;
+let zoomClipId=0;const hiddenTrendSeries=new Set();
 let panel=null,request=0,cache=new Map(),summaryCache=new Map(),models=[],activeKey='',selection=null,renderedKey='',loading=false,closed=true,lastRows=[],lastSeries=[],lastTitle='',legislativeExport=null,voteShareExport=null,selectedYears=new Set(),knownYears=[];
 const norm=v=>simplify(String(v||'')).replaceAll('臺','台').replace(/^中国台湾少数民族党$/,'中国台湾原住民党');
  const legislativeTrendCache=T.createLegislativeTrendCache({normalize:norm,buildList:(year,snapshot)=>HistoryLegislativeParty.build(year,snapshot)});
@@ -27,13 +27,13 @@ function create(){
  $('historyTrendModuleStatus')?.remove();
  const heading=node('div','trend-heading');heading.append(node('h3','','跨届选举趋势'));
  const scope=node('p','data-help');scope.id='trendScope';
- const controls=node('div','trend-year-controls');controls.id='trendYearControls';const yearTitle=node('div','trend-year-title');yearTitle.append(node('strong','','比较届次'));for(const [id,text] of [['trendSelectAll','全选'],['trendSelectNone','清空']]){const b=node('button','button quiet',text);b.type='button';b.id=id;yearTitle.append(b)}const years=node('div','trend-year-picker');years.id='trendYears';controls.append(yearTitle,years);
+ const controls=node('div','trend-year-controls');controls.id='trendYearControls';const yearTitle=node('div','trend-year-title');yearTitle.append(node('strong','','比较届次'));for(const [id,text] of [['trendSelectAll','全选'],['trendRecent3','最近三届'],['trendRecent5','最近五届'],['trendSelectNone','清空']]){const b=node('button','button quiet',text);b.type='button';b.id=id;yearTitle.append(b)}const years=node('div','trend-year-picker');years.id='trendYears';controls.append(yearTitle,years);
  const actions=node('div','trend-actions');for(const [id,title] of [['trendRetry','重新载入'],['trendCsv','导出当前趋势 CSV']]){const b=node('button','button quiet',title);b.type='button';b.id=id;actions.append(b)}
  const status=node('p','data-help');status.id='trendStatus';status.setAttribute('role','status');
  const output=node('div','trend-charts');output.id='trendCharts';
  panel.append(heading,scope,controls,actions,status,output);
  $('trendSelectAll').onclick=()=>changeYears(knownYears);
- $('trendSelectNone').onclick=()=>changeYears([]);
+ $('trendSelectNone').onclick=()=>changeYears([]);$('trendRecent3').onclick=()=>changeYears(knownYears.slice(-3));$('trendRecent5').onclick=()=>changeYears(knownYears.slice(-5));
  $('trendRetry').onclick=()=>{cache.clear();summaryCache.clear();legislativeTrendCache.clear();activeKey='';renderedKey='';load()};
  $('trendCsv').onclick=exportCsv;
 }
@@ -140,7 +140,7 @@ function card(title,description,graph,exportTitle=title){
  if(graph?.hasAttribute('data-trend-zoom')){for(const [caption,action,label] of [['＋','in','放大纵轴'],['－','out','缩小纵轴'],['复位','reset','恢复默认纵轴']]){const button=node('button','button quiet',caption);button.type='button';button.setAttribute('aria-label',label);button.dataset.trendZoomAction=action;button.title=label;button.onclick=()=>graph.dispatchEvent(new Event('trend-zoom-'+action));buttons.prepend(button)}}
  if(graph?.hasAttribute('data-trend-line-chart')){
   const filters=node('div','trend-line-controls');filters.append(node('span','', '政党／曲线'));
-  for(const [text,action] of [['全部显示','show'],['全部隐藏','hide']]){const b=node('button','button quiet',text);b.type='button';b.dataset.trendSeriesAction=action;b.onclick=()=>graph.dispatchEvent(new Event('trend-'+action+'-all'));filters.append(b)}
+  for(const [text,action] of [['全部显示','show'],['主要政党','major'],['全部隐藏','hide']]){const b=node('button','button quiet',text);b.type='button';b.dataset.trendSeriesAction=action;b.onclick=()=>graph.dispatchEvent(new Event('trend-'+action+'-all'));filters.append(b)}
   filters.append(node('span','data-help','勾选下方图例显示曲线，滚轮缩放、拖动平移，双击复位'));c.append(filters);
  }
  c.prepend(h);if(description)c.append(node('p','data-help',description));if(graph)c.append(graph);return c
@@ -296,13 +296,14 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
  }
  if(breakOld){const i=rows.findIndex(r=>!r.oldPartyVote);if(i>0){const xx=(x(i-1)+x(i))/2;g.append(svg('line',{x1:xx,x2:xx,y1:top,y2:bottom,stroke:'#8a938d','stroke-dasharray':'4 4'}),svg('text',{x:xx+4,y:top-7,'font-size':10},'2008制度改革'))}}
  function setVisible(name,visible){
-  const scope=g.closest('.trend-merge-layout')||g;
+  const scope=g.closest('#trendCharts')||g;
+  const names=name?[name]:[...new Set([...scope.querySelectorAll('[data-trend-legend][role=checkbox]')].map(i=>i.getAttribute('data-trend-legend')))];for(const x of names)visible?hiddenTrendSeries.delete(x):hiddenTrendSeries.add(x);
   for(const mark of scope.querySelectorAll('[data-trend-series]'))if(!name||mark.getAttribute('data-trend-series')===name){if(visible)mark.removeAttribute('display');else mark.setAttribute('display','none')}
   for(const item of scope.querySelectorAll('[data-trend-legend][role=checkbox]'))if(!name||item.getAttribute('data-trend-legend')===name){item.setAttribute('aria-checked',String(visible));item.querySelector('[data-trend-checkbox-tick]').setAttribute('display',visible?'inline':'none');item.querySelector('[data-trend-checkbox-box]').setAttribute('fill',visible?'#287963':'#fff');item.querySelector('[data-trend-legend-label]').setAttribute('opacity',visible?'1':'.5')}
  }
  if(!stack){
   g.setAttribute('data-trend-line-chart','true');g.setAttribute('role','group');
-  g.addEventListener('trend-show-all',()=>setVisible(null,true));g.addEventListener('trend-hide-all',()=>setVisible(null,false));
+  g.addEventListener('trend-show-all',()=>setVisible(null,true));g.addEventListener('trend-hide-all',()=>setVisible(null,false));g.addEventListener('trend-major-all',()=>{setVisible(null,false);for(const name of ['中国国民党','国民党','民主进步党','民进党','台湾民众党','民众党','无党籍'])setVisible(name,true)});
  }
  series.forEach((s,i)=>{
   const {xx,yy,name,span}=legend[i],entry=svg('g',{'data-trend-legend':s.name}),swatchX=xx+(stack?0:24);
@@ -322,6 +323,7 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
   }
   g.append(entry);
  });
+ if(!stack)for(const name of hiddenTrendSeries){for(const mark of g.querySelectorAll('[data-trend-series]'))if(mark.getAttribute('data-trend-series')===name)mark.setAttribute('display','none');for(const item of g.querySelectorAll('[data-trend-legend][role=checkbox]'))if(item.getAttribute('data-trend-legend')===name){item.setAttribute('aria-checked','false');item.querySelector('[data-trend-checkbox-tick]').setAttribute('display','none');item.querySelector('[data-trend-checkbox-box]').setAttribute('fill','#fff');item.querySelector('[data-trend-legend-label]').setAttribute('opacity','.5')}}
  return g
 }
 
