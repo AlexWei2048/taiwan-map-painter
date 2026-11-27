@@ -7,3 +7,10 @@
 - 上线验收：运行测试，实际 HTTPS 访问验证 CORS、跨设备持有凭证查询、错误凭证隔离、公开字段、联系方式删除、审核、频率限制与 XSS；删除测试记录。确认大陆访问情况，再修改 guestbook-config.js，填入 HTTPS 服务 origin，将 enabled 改为 true 并更新 index.html 缓存版本号。
 - 没有后端地址时默认关闭留言入口，?guestbook-preview=1 仅显示不可提交的预览。不得用本机存储模拟公共留言，也不允许将联系方式写入公开仓库。
 - 防刷：每个凭证10分钟3条，全站10分钟50条，仍需反向代理的请求频率/并发控制以抵抗恶意流量。不要把浏览器身份凭证当作真人验证。后端不记录访客 IP 和请求体。
+
+## 容器托管方式（推荐仅部署留言后台）
+- 以 guestbook-backend 为服务构建根目录，使用其中的 Dockerfile。构建时自动运行现有四项单元测试。
+- 必须将独立持久化存储卷挂载至 /data；启动器检查实际挂载，避免容器重启后留言丢失。默认数据库为 /data/guestbook.sqlite3。启动阶段初始化目录权限后，后台进程以 UID/GID 10001 运行。
+- 监听平台提供的 PORT（没有则使用 8787），健康检查路径 /health；仅通过平台的 HTTPS 公网入口访问。单实例运行，启用持久化备份和入口限流。
+- Railway 可通过项目设置选中仓库、设置 Root Directory 为 /guestbook-backend，添加 /data 持久卷，设置 GUESTBOOK_ORIGIN=https://alexwei2048.github.io，生成 HTTPS 域名。若平台需要以 root 启动以初始化挂载权限，可设置 RAILWAY_RUN_UID=0；启动器随后降权运行。该流程不需要云数据库。
+- 在 HTTPS 接口实测及持久性测试通过后，才更新公开网站的 guestbook-config.js 启用正式提交。平台未连接时，保留禁用状态。
