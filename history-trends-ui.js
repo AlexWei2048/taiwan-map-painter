@@ -111,7 +111,6 @@ function exportFile(content,name,mime){const url=URL.createObjectURL(new Blob([c
 async function chartExport(graph,title,png,context={}){
  const office=context.office||offices[settings().office]||'',name=((context.prefix||'历史趋势')+'-'+office+'-'+title).replace(/[\\/:*?"<>|]/g,'_');
  const copy=graph.cloneNode(true);for(const mark of copy.querySelectorAll('[data-trend-series]')){mark.removeAttribute('opacity');for(const path of mark.querySelectorAll('path'))path.setAttribute('stroke-width','1.4')}copy.setAttribute('xmlns',ns);const full=graph.getAttribute('data-trend-export-viewbox');if(full){copy.setAttribute('viewBox',full);copy.removeAttribute('data-trend-export-viewbox')}
- const decorated=window.HistoryExport.decorate(copy),width=decorated.width,height=decorated.height;
  // One request per distinct emblem, even when many years share the same logo.
  const logos=new Map();let url;
  try{
@@ -120,6 +119,7 @@ async function chartExport(graph,title,png,context={}){
    if(!logos.has(href))logos.set(href,(async()=>{const response=await fetch(href);if(!response.ok)throw Error('党徽读取失败');const blob=await response.blob();return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(Error('党徽读取失败'));reader.readAsDataURL(blob)})})());
    image.setAttribute('href',await logos.get(href));
   }));
+  const decorated=window.HistoryExport.decorate(copy),width=decorated.width,height=decorated.height;
   const source=new XMLSerializer().serializeToString(decorated.out);
   if(!png){exportFile(source,name+'.svg','image/svg+xml;charset=utf-8');return}
   const blob=await window.HistoryExport.pngBlob(source,width,height);const a=node('a');a.href=URL.createObjectURL(blob);a.download=name+'.png';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),10000);

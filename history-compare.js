@@ -368,7 +368,7 @@ function exportGraph(){
  for(const c of note){line+=c;if([...line].length>=65){lines.push(line);line=''}}
  if(line)lines.push(line);
  let fy=ly+34;for(const l of lines){text(l,pad,fy,17);fy+=24}
- text(root.HistoryExport.SOURCE+'｜历史边界近似展示，离岛为移位示意。',pad,fy+10,16);
+ text(window.HistoryExport.SOURCE+'｜历史边界近似展示，离岛为移位示意。',pad,fy+10,16);
  text('岛屿调色盘',W-pad,fy+38,18,{'text-anchor':'end','font-weight':650});
  const height=Math.max(H,fy+60);root.setAttribute('height',height);root.setAttribute('viewBox','0 0 '+W+' '+height);root.firstChild.setAttribute('height',height);
  return {source:new XMLSerializer().serializeToString(root),width:W,height};

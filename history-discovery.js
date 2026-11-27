@@ -161,7 +161,7 @@ if(pd){
   },(done,total)=>ps.textContent='已查询 '+done+' / '+total+' 届…');if(!active())return;
   const rows=[...out,...fail.map(([o,y])=>({office:o,ballot,y,label:label(y,o),status:'读取失败',votes:null,share:null,seats:null,seatShare:null}))].sort((a,b)=>a.y-b.y);
   ps.textContent=name+' · '+offices[office]+' · '+(county?displayCounty(county):'已收录地区汇总')+'：'+rows.filter(r=>r.status==='已收录').length+' 届有可用指标。';
-  const note=el('p','按当届党名查询；未见参选记录、缺档及不适用指标均留空。汇总仅指已收录档案，不保证早期缺档地区已齐全。县市合并前后分开呈现。','data-help');pr.append(note);if(county){const region=el('button','查看地区档案','button quiet');region.type='button';region.onclick=()=>openRegion(county,{office,ballot});pr.append(region)}
+  const note=el('p','按当届党名查询；未见参选记录、缺档及不适用指标均留空。汇总仅指已收录档案，不保证早期缺档地区已齐全。县市合并前后分开呈现。','data-help');pr.append(note);if(county&&!['plains','mountain'].includes(ballot)){const region=el('button','查看地区档案','button quiet');region.type='button';region.onclick=()=>openRegion(county,{office,ballot});pr.append(region)}
   const dl=el('button','导出 CSV','button quiet');dl.type='button';dl.onclick=()=>saveCSV(partyArchiveCSV(rows,name,county),name+'-'+offices[office]+'-政党档案');pr.append(dl);
   const wrap=el('div',undefined,'discovery-table-wrap'),table=el('table',undefined,'history-candidate-table'),head=el('thead'),hr=el('tr'),body=el('tbody');
   for(const v of ['届次','行政区口径','得票数','得票率','当选席次','席次率','资料状态','查看'])hr.append(el('th',v));head.append(hr);table.append(head,body);
