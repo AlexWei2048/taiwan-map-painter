@@ -210,6 +210,13 @@ function electionDates(snapshot,office,county='',normalize=String){
  const ids=electionIds(snapshot,office);
  return [...new Set((snapshot.contests||[]).filter(c=>ids.has(c.election_id)&&(!county||normalize(String(c.county_name||''))===county)).map(c=>c.election_date).filter(d=>/^\d{4}-\d{2}-\d{2}$/.test(d||'')))].sort();
 }
+function partyParticipationValue(row,party,group){
+ if(!row?.complete||!Array.isArray(row.participatingParties))return null;
+ const participants=new Set(row.participatingParties);
+ if(group){if(!group.some(p=>participants.has(p)))return null;return group.reduce((sum,p)=>sum+(row.parties?.[p]||0),0)}
+ if(!participants.has(party))return null;
+ return row.parties?.[party]??0;
+}
 function historicalScopeRows(snapshot,selection,anchor){
  const {county='',office,normalize=String}=selection;
  const family=historicalCountyFamily(county),merged=MERGE_FAMILIES.some(g=>g.includes(county));
@@ -354,7 +361,7 @@ function mapTrend(snapshot,selection,anchor){
  const ids=electionIds(snapshot,office);
  const localDates=(snapshot.contests||[]).filter(c=>ids.has(c.election_id)&&norm(c.county_name)===county&&(identity(c.electorate)===electorate||electorate==='all')).map(c=>c.election_date?.slice(0,4)).filter(Boolean);
  const displayYear=county&&localDates.length?[...new Set(localDates)].sort().join('/'):String(year);
- const empty=reason=>({year,label:displayYear,complete:false,reason,parties:{},values:{},valid:null,areas:0});
+ const empty=reason=>({year,label:displayYear,complete:false,reason,parties:{},participatingParties:[],values:{},valid:null,areas:0});
  if(isLeg&&electorate==='all')return empty('全部类型没有共同的县市席次口径，请分别选择票种');
  if(office==='council'&&year===1994&&(!county||county==='金门县'))return empty('当届议员完整得票资料缺档');
  if(focus&&grain==='district'&&anchor&&(year!==anchor.year||county!==anchorCounty)){
@@ -375,6 +382,7 @@ function mapTrend(snapshot,selection,anchor){
   rows=(snapshot.rows||[]).filter(r=>r.type===office&&identity(r.electorate)===electorate&&r.level==='national');
  if(!rows.length)return empty('所选范围无可核实的当届记录');
  if(rows.some(r=>!Number.isFinite(r.votes)||r.votes<0))return empty('得票资料不完整');
+ const participatingParties=[...new Set(rows.map(r=>partyName(r.party)).filter(p=>p&&!/缺失|未知|待核/.test(p)))].sort((a,b)=>a.localeCompare(b,'zh-CN'));
  const groups=new Map();
  for(const r of rows){
   const id=[norm(r.county),identity(r.electorate),grain==='district'?Core.districtNumber(r.district)||norm(r.district):grain==='town'?norm(r.town):''].join('|');
@@ -406,10 +414,10 @@ function mapTrend(snapshot,selection,anchor){
  }
  if(candidateMetric){
   const v=selectedFound?(metric==='share'?percent(selectedVotes,valid):selectedVotes):null;
-  return {year,label:displayYear,complete:Number.isFinite(v),reason:Number.isFinite(v)?'':'本届无匹配的指定候选人或政党',parties:{},values:{value:v},valid,areas:groups.size};
+  return {year,label:displayYear,complete:Number.isFinite(v),reason:Number.isFinite(v)?'':'本届无匹配的指定候选人或政党',parties:{},participatingParties,values:{value:v},valid,areas:groups.size};
  }
- if(metric==='seats')return {year,label:displayYear,complete:true,reason:'',parties:selected,values:{value:selected[partyName(party)]||0},valid,areas:groups.size};
- return {year,label:displayYear,complete:true,reason:'',parties:selected,values:{},valid,areas:groups.size};
+ if(metric==='seats')return {year,label:displayYear,complete:true,reason:'',parties:selected,participatingParties,values:{value:participatingParties.includes(partyName(party))?(selected[partyName(party)]||0):null},valid,areas:groups.size};
+ return {year,label:displayYear,complete:true,reason:'',parties:selected,participatingParties,values:{},valid,areas:groups.size};
 }
 // Compare original elected seats, not later replacements or party switches.
 // Full legislative totals: https://www.ly.gov.tw/EngPages/List.aspx?nodeid=338
@@ -494,7 +502,7 @@ function createLegislativeTrendCache({normalize=String,buildList,maxScopes=64}={
  }
  return{read,clear(){cache=new WeakMap();lists=new WeakMap()}};
 }
-const api={percentAxisMax,mergePresidentialIndependents,percentPanRange,percentZoomRange,percentZoomTicks,legislativeSeatTrendParties,partyListTrendKey,partyListTrendGroups,partyListTrendExcluded,PARTY_LIST_TREND_ORDER,createLegislativeTrendCache,summaryAlgorithmVersion:1,aggregate,value,difference,modern,percent,partyTrendValue,candidateTrendTooltip,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,trendChartScopes,historicalScopeRows,legislativeVoteShares,councilBallotRows,localPartyVoteShares,electionDates,trendEffectiveSelection,LEGISLATIVE_TOTALS};
+const api={percentAxisMax,mergePresidentialIndependents,percentPanRange,percentZoomRange,percentZoomTicks,legislativeSeatTrendParties,partyListTrendKey,partyListTrendGroups,partyListTrendExcluded,PARTY_LIST_TREND_ORDER,createLegislativeTrendCache,summaryAlgorithmVersion:1,aggregate,value,difference,modern,percent,partyTrendValue,candidateTrendTooltip,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,trendChartScopes,historicalScopeRows,partyParticipationValue,legislativeVoteShares,councilBallotRows,localPartyVoteShares,electionDates,trendEffectiveSelection,LEGISLATIVE_TOTALS};
 if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
 root.HistoryTrends=api;
 })(typeof window==='undefined'?{}:window);
