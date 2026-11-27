@@ -10811,7 +10811,7 @@
           "陳孟圭",
           1610,
           "中國國民黨",
-          "",
+          "男",
           false
         ],
         [
@@ -11232,6 +11232,16 @@
         }
       },
       "gender_sources": {
+        "12": {
+          "method": "cross_election_exact_unique_name_geographic_match",
+          "source_url": "https://eebulletin.cec.gov.tw/111/10%E5%BD%B0%E5%8C%96%E7%B8%A3/05%E6%9D%91%E9%87%8C%E9%95%B7/%E5%BD%B0%E5%8C%96%E5%B8%82/%E5%BD%B0%E5%8C%96%E5%B8%82%E6%B0%91%E6%AC%8A%E9%87%8C%E9%87%8C%E9%95%B7.pdf",
+          "secondary_source": "https://votetw.com/data/election/20221101S1E1?%E7%9C%81%E5%B8%82=10&%E7%B8%A3%E5%B8%82=007&%E9%84%89%E9%8E%AE%E5%B8%82%E5%8D%80=010",
+          "source_locator": "2022彰化市民權里里長公報第2號，男，出生年1956，與1994彰化市選區唯一同名、參選年齡相容；跨屆身份匹配非1994原公報，截圖未取得。",
+          "original_name": "陳孟圭",
+          "value": "男",
+          "ballot_number": 12,
+          "votes": 1610
+        },
         "21": {
           "method": "cross-election exact historical county and unique name, documented gender",
           "source_url": "https://www.chcc.gov.tw/form/Details.aspx?Parser=2%2C4%2C34%2C%2C%2C%2C35",
@@ -12976,7 +12986,7 @@
           "簡慈慧",
           3358,
           "民主進步黨",
-          "",
+          "女",
           false
         ],
         [
@@ -13120,7 +13130,7 @@
           "林憲廣",
           2329,
           "無黨籍",
-          "",
+          "男",
           false
         ],
         [
@@ -13147,6 +13157,26 @@
           "original_name": "陳聰鑑",
           "value": "男",
           "confidence": "cross_election_geographic_match"
+        },
+        "2": {
+          "method": "cross_election_exact_unique_name_geographic_match",
+          "source_url": "https://vote.nccu.edu.tw/cec/vote3.asp?pass1=K9AA%3EI8888888888iii%28%28",
+          "secondary_source": "https://votetw.com/data/candidate/%E8%94%A1%E7%85%8C%E7%91%AF",
+          "source_locator": "政大1996年國大代表南投縣第一選區2號，女性、民進黨，與1994同縣市唯一姓名及政治活動相符。",
+          "original_name": "簡慈慧",
+          "value": "女",
+          "ballot_number": 2,
+          "votes": 3358
+        },
+        "20": {
+          "method": "cross_election_exact_unique_name_geographic_match",
+          "source_url": "https://db.cec.gov.tw/ElecTable/Election/ElecTickets?areaCode=00&cityCode=008&dataLevel=D&dataType=tickets&deptCode=000&legisId=00&liCode=0000&prvCode=03&subjectId=D2&themeId=32b6dc971e2bcdd8d865fbb37c44012b&typeId=ELC",
+          "secondary_source": "https://web.cec.gov.tw/api/file/2e43ce92-869f-4e9b-8ccc-02f9c293616a.pdf",
+          "source_locator": "中選會鄉鎮市長名間鄉5號林憲廣（男），與1994同名且名間鄉屬第1選區；另有中選會第274次會議登記資料。",
+          "original_name": "林憲廣",
+          "value": "男",
+          "ballot_number": 20,
+          "votes": 2329
         }
       }
     },
@@ -13812,10 +13842,22 @@
           "孔文博",
           2687,
           "中國國民黨",
-          "",
+          "男",
           false
         ]
-      ]
+      ],
+      "gender_sources": {
+        "2": {
+          "method": "cross_election_exact_unique_name_geographic_match",
+          "source_url": "https://eebulletin.cec.gov.tw/103/11%E5%8D%97%E6%8A%95%E7%B8%A3/%E6%9D%91%E9%87%8C%E9%95%B7/%E4%BB%81%E6%84%9B%E9%84%89%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1%E7%AC%AC%E4%BA%8C%E9%81%B8%E5%8D%80%E9%84%89%E9%95%B7%E9%84%89%E6%B0%91%E4%BB%A3%E8%A1%A8%E6%9D%91%E9%95%B7%E6%AD%A3%E9%9D%A2.pdf",
+          "secondary_source": "https://votetw.com/data/candidate/%E5%AD%94%E6%96%87%E5%8D%9A",
+          "source_locator": "2014仁愛鄉鄉長公報第2號明列男性及曾任南投縣議員，地理範圍相符。PDF文字可讀，截圖未取得。",
+          "original_name": "孔文博",
+          "value": "男",
+          "ballot_number": 2,
+          "votes": 2687
+        }
+      }
     },
     {
       "county": "雲林縣",
