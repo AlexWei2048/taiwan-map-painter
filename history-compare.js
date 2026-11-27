@@ -65,8 +65,9 @@ function delta(a,b,party){
 function summarizeTowns(snapshot,office,ballot,normalize=norm){
  const n=v=>normalize(norm(v)),base=summarize(snapshot,office,ballot,normalize),counties=new Map(),all={...base.all,seats:null,leader:null};
  const result={year:snapshot.year,office,ballot,level:'town',all,counties};
- if(!['president','mayor'].includes(office)||snapshot.year<2014)return result;
- const byCounty=new Map(),profiles=new Map(),identity=r=>[n(r.name),String(Number(r.number))].join('|');
+ const partyList=office==='legislative'&&ballot==='party';
+ if(!(['president','mayor'].includes(office)||partyList)||snapshot.year<2014)return result;
+ const byCounty=new Map(),profiles=new Map(),identity=r=>partyList?n(r.party||r.name):[n(r.name),String(Number(r.number))].join('|');
  for(const p of snapshot.townProfiles||[])if(p.office===office)profiles.set(n(p.county)+'|'+n(p.town),p);
  for(const r of snapshot.rows||[]){
   if(r.type!==office||!(ballot==='all'||Core.identity(r.electorate)===ballot)||!['county','town'].includes(r.level)||!r.county||/全部地区|台闽地区|全台|全国/.test(r.county))continue;
@@ -90,6 +91,20 @@ function summarizeTowns(snapshot,office,ballot,normalize=norm){
   }
  }
  return result;
+}
+// Attach only independently verified, same-ballot statistics to comparable results.
+function legislativeProfiles(summary,turnout){
+ if(summary.office!=='legislative'||!['regional','party'].includes(summary.ballot)||!turnout?.enrich||summary.ballot==='party'&&summary.year<2008)return summary;
+ function attach(entry,scope,county='',area=''){
+  if(!entry?.complete||!number(entry.valid))return;
+  const v=turnout.enrich({validVotes:entry.valid},{year:summary.year,electorate:summary.ballot,scope,county,area});
+  const p=verifiedProfile([{contest:{registered_voters:v.registeredVoters,ballots_cast:v.ballotsCast,valid_votes:v.validVotes,invalid_votes:v.invalidVotes}}],entry.valid);
+  if(p&&entry.profile&&['registered','cast','valid','invalid'].some(k=>entry.profile[k]!==p[k]))entry.profile=null;
+  else if(p)entry.profile=p;
+ }
+ attach(summary.all,'all');
+ for(const [key,entry] of summary.counties){const [county,area]=key.split('|');attach(entry,summary.level==='town'?'town':'county',county,area||'')}
+ return summary;
 }
 const changedFamilies=new Set(['台中市','台南市','高雄市']);
 function comparableCounty(county,a,b){
@@ -138,7 +153,7 @@ function comparisonCSV(a,b,scope=''){
  }
  return '\ufeff'+rows.map(row=>row.map(csvCell).join(',')).join('\r\n');
 }
-const api={summarize,summarizeTowns,delta,comparableCounty,turnover,countyChange,comparisonCSV,profileCSV,verifiedProfile,profileChange};
+const api={summarize,summarizeTowns,legislativeProfiles,delta,comparableCounty,turnover,countyChange,comparisonCSV,profileCSV,verifiedProfile,profileChange};
 if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
 root.HistoryCompare=api;
 const doc=root.document,$=id=>doc.getElementById(id),open=$('historyCompareOpen');if(!open)return;
@@ -151,7 +166,7 @@ const cache=new Map();
 const mode=$('compareMode'),level=$('compareLevel');
 const shapeKey=f=>level.value==='town'?normalize(f.county)+'|'+normalize(f.name||f.town):normalize(f.name||f.county);
 const areaLabel=k=>String(k).replace('|',' · ');
-function syncLevel(){const enabled=['mayor','president'].includes(office.value)&&Number(left.value)>=2014&&Number(right.value)>=2014;level.options[1].disabled=!enabled;if(!enabled)level.value='county';}
+function syncLevel(){const enabled=(['mayor','president'].includes(office.value)||office.value==='legislative'&&ballot.value==='party')&&Number(left.value)>=2014&&Number(right.value)>=2014;level.options[1].disabled=!enabled;if(!enabled)level.value='county';}
 const seatAllowed=summary=>summary.level!=='town'&&summary.office!=='president'&&summary.ballot!=='party';
 const label=(year,o)=>root.HistoryLocal.yearLabel(year,o);
 const years=o=>o==='president'?root.HistoryPresidential.YEARS:o==='legislative'?root.HistoryLegislative.YEARS:root.HistoryLocal.years(o,root.HISTORY_2026_RESULTS_AVAILABLE===true);
@@ -174,11 +189,12 @@ async function model(o,y,b,grain){
  if(!cache.has(key)){
   const p=(async()=>{
    const shard=await snapshot(o,y);
+   if(o==='legislative')await root.HistoryLegislativeTurnout.load(y).catch(()=>null);
    if(!data?.counties)throw Error('地图尚未载入');
    const reference=y<=2010?await root.HistoryPresidential.load(2008):null;
    const geometry=o==='president'?root.HistoryPresidential.geometry(shard,data,normalize,Core.mergePaths):
     root.HistoryLocal.geometry(shard,data,reference,normalize,Core.mergePaths,root.HistoryPresidential.modernCounty,root.HistoryPresidential.baseTown);
-   return grain==='town'?{summary:summarizeTowns(shard,o,b,normalize),shapes:geometry.towns}:{summary:summarize(shard,o,b,normalize),shapes:geometry.counties};
+   const summary=grain==='town'?summarizeTowns(shard,o,b,normalize):summarize(shard,o,b,normalize);return {summary:legislativeProfiles(summary,root.HistoryLegislativeTurnout),shapes:grain==='town'?geometry.towns:geometry.counties};
   })();cache.set(key,p);p.catch(()=>{if(cache.get(key)===p)cache.delete(key)});
   if(cache.size>8)cache.delete(cache.keys().next().value);
  }
