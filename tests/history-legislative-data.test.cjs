@@ -35,7 +35,7 @@ test('actual party votes have all-area, county and town map levels without fabri
 test('combined legislative CSV preserves nationally elected minority candidates on their local vote rows',()=>{
  const s=shard(2024),csv=Data.exportCsv(s,{year:2024,electorate:'all',county:'高雄市'});
  const rows=csv.trim().split(/\r?\n/).map(line=>line.replace(/^\uFEFF/,'').match(/(?:"(?:[^"]|"")*"|[^,]+)(?=,|$)/g)?.map(cell=>cell.replace(/^"|"$/g,'').replace(/""/g,'"'))||[]);
- const target=(name)=>rows.find(row=>row[1]==='平地少数民族民代'&&row[2]==='高雄市'&&row[3]==='桃源区'&&row[4]===name);
+ const target=(name)=>rows.find(row=>row[1]==='平地少数民族民代'&&row[2]==='高雄市'&&row[3]==='平地少数民族选区 · 桃源区'&&row[4]===name);
  assert.equal(target('陈莹')?.at(-1),'是');
  assert.equal(target('黄仁')?.at(-1),'是');
  assert.equal(target('郑天财 Sra‧Kacaw')?.at(-1),'是');

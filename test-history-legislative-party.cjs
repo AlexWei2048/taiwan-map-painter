@@ -114,7 +114,7 @@ test('Legislative party district dialogue keeps full party names and resets shar
  assert.match(css,/min-width:175px;text-align:center;white-space:normal/);
  assert.match(css,/history-legislative-table td\.history-party-td\{display:table-cell/);
  assert.match(css,/td>\.history-party-inline\{display:inline-flex;justify-content:center/);
- assert.match(ui,/'候选人','选举时现任','政党'/);
+ assert.match(ui,/'候选人','性别','选举时现任','政党'/);
  assert.match(ui,/else if\(i===3\)appendIncumbentTag\(td,value\)/);
  assert.match(ui,/if\(i===3&&r\.incumbent==null\)td\.title='现任资料缺失'/);
 });

@@ -139,7 +139,7 @@ test('historical CSV uses one simplified column per value, percent text and safe
  const result={contests:[{contest_id:'1',county_name:'台北市',district_name:'台北市',electorate:'regional'}],
   candidacies:[{contest_id:'1',candidate_name:'张甲',party_name:'=危险',ballot_number:'1',votes:500,vote_share:52.345,elected_official:true}]};
  const csv=Workspace.historyCsv(result,{year:2022,office:'mayor'});
- assert.match(csv,/"年份","选举类别","县市","选区","候选人","政党","号次","得票数","得票率","当选"/);
+ assert.match(csv,/"年份","选举类别","县市","选区","候选人","性别","选举时现任","政党","号次","得票数","得票率","当选"/);
  assert.match(csv,/张甲/);assert.match(csv,/52\.35%/);
  assert.match(csv,/"'=危险"/);assert.match(csv,/"是"/);
  assert.doesNotMatch(csv,/规范名称|官方名称|官方当选/);
