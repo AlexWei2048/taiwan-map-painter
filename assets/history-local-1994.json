@@ -25982,6 +25982,77 @@
           "source_url": "https://zh.wikipedia.org/wiki/%E6%BA%AA%E5%B7%9E%E9%84%89"
         }
       ]
+    },
+    {
+      "county": "臺中縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/大甲區",
+      "source_locator": "歷任首長表列吳弘富1994年3月至1998年3月，前任蔡金福；國家電影及視聽文化中心典藏影片《砧山挺秀 甲水長清－大甲》文字稿確認吳弘富為男性鎮長。",
+      "evidence_tier": "secondary_term_roster_plus_independent_official_archive",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "大甲鎮",
+          "name": "吳弘富",
+          "gender": "男",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "蔡金福",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/大甲區",
+          "corroboration_url": "https://tfai.openmuseum.tw/muse/digi_object/8375e0de777a0b92beeb5a78e9c1e181"
+        }
+      ],
+      "corroboration_url": "https://tfai.openmuseum.tw/muse/digi_object/8375e0de777a0b92beeb5a78e9c1e181"
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/埔心鄉",
+      "source_locator": "民選鄉長表第11屆1990-03-01至1994-02-28及第12屆1994-03-01至1998-02-28均為張榮昌；名錄黨籍不等同當屆推薦政黨。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "埔心鄉",
+          "name": "張榮昌",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "張榮昌",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/埔心鄉"
+        }
+      ]
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/大城鄉",
+      "source_locator": "歷屆鄉長表第11及12任均明列許先助，第13任蔡慈賢。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆完整開票表；現任按相鄰任期推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "大城鄉",
+          "name": "許先助",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "許先助",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/大城鄉"
+        }
+      ]
     }
   ]
 }
