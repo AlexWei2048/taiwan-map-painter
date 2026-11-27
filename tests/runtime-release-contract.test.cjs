@@ -88,3 +88,24 @@ test('Regression workflow cancels superseded runs and waits for the performance 
  assert.match(performance,/npx playwright install --with-deps chromium/);
  assert.match(performance,/curl -fsS http:\/\/127\.0\.0\.1:8765\/ >\/dev\/null\s*\n\s*MAP_PERF_REPEAT/);
 });
+
+
+test('2026 official fetch bounds response body reads and clears its timer on all paths',async()=>{
+ const history=read('history-2022.js'),start=history.indexOf(' async function fetchOfficial2026('),end=history.indexOf(" let history2026CheckStatus=",start);
+ assert.ok(start>=0&&end>start);
+ const source=history.slice(start,end);
+ for(const mode of ['success','http-error','body-error','timeout']){
+  let timer,cleared=0,signal;
+  const context={AbortController,setTimeout(fn){timer=fn;return 1},clearTimeout(id){assert.equal(id,1);cleared++},
+   fetch:async(url,options)=>{signal=options.signal;assert.equal(options.cache,'no-store');return {ok:mode!=='http-error',status:503,json:async()=>{
+    if(mode==='timeout'){timer();throw Error('aborted')}
+    if(mode==='body-error')throw Error('bad JSON');
+    return {year:2026}
+   }}}};
+  vm.runInNewContext(source,context);
+  const request=context.fetchOfficial2026('manifest','no-store','json',15000);
+  if(mode==='success')assert.equal((await request).year,2026);
+  else await assert.rejects(request,mode==='timeout'?/载入超时/:mode==='http-error'?/HTTP 503/:/bad JSON/);
+  assert.equal(cleared,1);assert.equal(signal.aborted,mode==='timeout');
+ }
+});
