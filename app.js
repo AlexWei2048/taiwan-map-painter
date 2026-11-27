@@ -1703,7 +1703,18 @@ function modernMapStatus(f){
  }
  const r=regionResult(f);return r.status==='winner'?'result':r.status==='tie'?'tie':'missing';
 }
-function regionPath(f){const identity=identityPanelsActive()?' · '+electorateName(featureElectorate(f)):'';const p=svgEl('path',{d:f.d,fill:fillColor(f),stroke:'none','stroke-width':0,'vector-effect':'non-scaling-stroke','fill-rule':f.fillRule||(typeof History2022View!=='undefined'&&History2022View.active()&&History2022View.office?.()==='legislative'&&History2022View.legislativeBallot?.()==='regional'?'nonzero':'evenodd'),'data-region':f.id,'data-electorate':featureElectorate(f),'data-map-link':'modern|'+f.id+'|'+featureElectorate(f),'data-party-keys':JSON.stringify(mapPartyKeys(f)),'data-map-status':modernMapStatus(f),tabindex:-1,role:'button','aria-label':`${f.county}${f.name===f.county?'':f.name}${identity}，${regionDetail(f)}`});const title=svgEl('title');title.textContent=f.county+(f.name===f.county?'':f.name)+identity;p.append(title);p.addEventListener('click',()=>{if(!moved)paint(f)});p.onkeydown=e=>handleMapRegionKey(e,p,f);p.onpointermove=e=>{if(drag)return;const tip=$('tooltip'),r=$('canvas').getBoundingClientRect();const signature=p.getAttribute('aria-label')||'';if(tip.hidden||tip.dataset.region!==String(f.id)||tip.dataset.signature!==signature){const label=document.createElement('span');label.textContent=f.name;const sub=document.createElement('small');sub.textContent=f.county+(f.town?' · '+f.town:'')+identity+' · '+regionDetail(f);tip.replaceChildren(label,sub);tip.dataset.region=String(f.id);tip.dataset.signature=signature}tip.hidden=false;tip.style.left=Math.max(0,Math.min(e.clientX-r.left+15,r.width-165))+'px';tip.style.top=Math.max(45,e.clientY-r.top-48)+'px'};p.addEventListener('pointerenter',()=>toggleLabelRegionHighlight(f,true));p.onpointerleave=()=>{$('tooltip').hidden=true;toggleLabelRegionHighlight(f,false)};p.addEventListener('focus',()=>{setMapKeyboardRegion(p);toggleLabelRegionHighlight(f,true)});p.addEventListener('blur',()=>toggleLabelRegionHighlight(f,false));return p}
+const renderedRegionFeatures=new WeakMap();
+function regionPathAttributes(f,identity){return {d:f.d,fill:fillColor(f),stroke:'none','stroke-width':0,'vector-effect':'non-scaling-stroke','fill-rule':f.fillRule||(typeof History2022View!=='undefined'&&History2022View.active()&&History2022View.office?.()==='legislative'&&History2022View.legislativeBallot?.()==='regional'?'nonzero':'evenodd'),'data-region':f.id,'data-electorate':featureElectorate(f),'data-map-link':'modern|'+f.id+'|'+featureElectorate(f),'data-party-keys':JSON.stringify(mapPartyKeys(f)),'data-map-status':modernMapStatus(f),tabindex:-1,role:'button','aria-label':`${f.county}${f.name===f.county?'':f.name}${identity}，${regionDetail(f)}`}}
+function refreshRegionPath(p,f){
+ const identity=identityPanelsActive()?' · '+electorateName(featureElectorate(f)):'';
+ const attrs=regionPathAttributes(f,identity);
+ // Preserve keyboard focus and existing event listeners; border styling is applied below.
+ delete attrs.tabindex;delete attrs.stroke;delete attrs['stroke-width'];
+ for(const [key,value] of Object.entries(attrs)){const text=String(value);if(p.getAttribute(key)!==text)p.setAttribute(key,text)}
+ const title=p.querySelector('title'),name=f.county+(f.name===f.county?'':f.name)+identity;
+ if(title&&title.textContent!==name)title.textContent=name;
+}
+function regionPath(f){const identity=identityPanelsActive()?' · '+electorateName(featureElectorate(f)):'';const p=svgEl('path',regionPathAttributes(f,identity));renderedRegionFeatures.set(p,f);const title=svgEl('title');title.textContent=f.county+(f.name===f.county?'':f.name)+identity;p.append(title);p.addEventListener('click',()=>{if(!moved)paint(f)});p.onkeydown=e=>handleMapRegionKey(e,p,f);p.onpointermove=e=>{if(drag)return;const tip=$('tooltip'),r=$('canvas').getBoundingClientRect();const signature=p.getAttribute('aria-label')||'';if(tip.hidden||tip.dataset.region!==String(f.id)||tip.dataset.signature!==signature){const label=document.createElement('span');label.textContent=f.name;const sub=document.createElement('small');sub.textContent=f.county+(f.town?' · '+f.town:'')+identity+' · '+regionDetail(f);tip.replaceChildren(label,sub);tip.dataset.region=String(f.id);tip.dataset.signature=signature}tip.hidden=false;tip.style.left=Math.max(0,Math.min(e.clientX-r.left+15,r.width-165))+'px';tip.style.top=Math.max(45,e.clientY-r.top-48)+'px'};p.addEventListener('pointerenter',()=>toggleLabelRegionHighlight(f,true));p.onpointerleave=()=>{$('tooltip').hidden=true;toggleLabelRegionHighlight(f,false)};p.addEventListener('focus',()=>{setMapKeyboardRegion(p);toggleLabelRegionHighlight(f,true)});p.addEventListener('blur',()=>toggleLabelRegionHighlight(f,false));return p}
 
 // Nationwide views show shared internal borders only; county views restore
 // complete polygon outlines, including coastal and isolated-island edges.
@@ -1832,7 +1843,15 @@ function render(){
  $('canvas').classList.toggle('history-combined-mode',historicalCombinedMap());
  const regionGroup=$('regions'),borderGroup=$('borders'),districtGroup=$('districtBorders'),townGroup=$('townBorders');
  const restoreMapFocus=regionGroup.contains(document.activeElement);
- for(const group of [regionGroup,borderGroup,districtGroup,townGroup]){group.replaceChildren();group.removeAttribute('transform')}
+ const panelled=identityPanelsActive(),items=panelled?null:currentItems();
+ // Reuse only the same ordered feature objects in the same unpanelled scope.
+ // New geometry, split panels, or a different scope always use the original rebuild path.
+ const reuseRegions=!panelled&&mapViewScope()===renderedMapScope&&regionGroup.children.length===items.length&&
+  items.every((f,i)=>renderedRegionFeatures.get(regionGroup.children[i])===f);
+ for(const group of [regionGroup,borderGroup,districtGroup,townGroup]){
+  if(group!==regionGroup||!reuseRegions)group.replaceChildren();
+  group.removeAttribute('transform');
+ }
  if(identityPanelsActive()){
   renderTownBorders();
   for(const panel of identityPanelLayouts()){
@@ -1862,10 +1881,8 @@ function render(){
     History2022View.legislativeBallot()==='regional'&&History2022View.legislativeNationwide();
    if(!historicalCountySeats)
     appendSharedBorders(districtGroup,mayorTownBoundaryOverlay()||councilCountyOverview()?'counties':state.level,'regional',state.level==='villages');
-  for(const f of currentItems()){
-   const path=regionPath(f);
-   regionGroup.append(path);
-  }
+  if(reuseRegions){for(let i=0;i<items.length;i++)refreshRegionPath(regionGroup.children[i],items[i])}
+  else for(const f of items)regionGroup.append(regionPath(f));
   if(historicalCountySeats){
    // applyBorders removes region strokes: place the true historical outlines
    // above the fills instead of relying on per-feature strokes.
