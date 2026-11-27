@@ -159,5 +159,30 @@ class GuestbookTests(unittest.TestCase):
         self.db.execute("UPDATE messages SET revision=revision+1,reply='处理完成',progress='done' WHERE id=?",(self.mid,))
         changed=self.call("my_updates",{"p_secret":self.secret})[0]
         self.assertEqual((changed["revision"],changed["progress"],changed["has_reply"]),(1,"done",1))
+    def test_admin_device_session(self):
+        old=server.ADMIN_TOKEN
+        server.ADMIN_TOKEN="test-admin-"+"z"*40
+        try:
+            with self.assertRaises(server.Problem):
+                self.call("admin_login",{"p_admin":"wrong"})
+            session=self.call("admin_login",{"p_admin":server.ADMIN_TOKEN,"p_remember":True})["session"]
+            self.assertTrue(session.startswith("gb1."))
+            self.assertEqual(self.call("admin_counts",{"p_admin":session})["private"],0)
+            self.assertNotEqual(self.db.execute("SELECT token_hash FROM admin_sessions").fetchone()[0],session)
+            with self.assertRaises(server.Problem):
+                self.call("admin_login",{"p_admin":session})
+            self.call("admin_logout",{"p_admin":session})
+            with self.assertRaises(server.Problem):
+                self.call("admin_counts",{"p_admin":session})
+            session=self.call("admin_login",{"p_admin":server.ADMIN_TOKEN})["session"]
+            self.db.execute("UPDATE admin_sessions SET expires_epoch=0")
+            with self.assertRaises(server.Problem):
+                self.call("admin_counts",{"p_admin":session})
+            session=self.call("admin_login",{"p_admin":server.ADMIN_TOKEN})["session"]
+            server.ADMIN_TOKEN="new-admin-"+"x"*40
+            with self.assertRaises(server.Problem):
+                self.call("admin_counts",{"p_admin":session})
+        finally:
+            server.ADMIN_TOKEN=old
 if __name__=="__main__":
     unittest.main()
