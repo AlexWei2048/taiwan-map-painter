@@ -44,3 +44,5 @@ test('Seat and mayor party changes exclude incomparable geography and unknown wi
 });
 
 test('Absolute vote change requires both verified vote counts',()=>{const a={complete:true,parties:{A:{votes:100,share:40,seats:1}},seats:1},b={complete:true,parties:{A:{votes:125,share:50,seats:1}},seats:1};assert.equal(C.delta(a,b,'A').votes,25);assert.equal(C.delta(a,b,'B').votes,null);assert.equal(C.delta(a,{complete:false},'A').votes,null)});
+
+test('Turnout statistics only use complete reconciled profiles; missing and incompatible regions are not zero',()=>{const profile=C.verifiedProfile([{contest:{registered_voters:200,ballots_cast:120,valid_votes:118,invalid_votes:2}}],118);assert.equal(profile.turnout,60);assert.equal(C.verifiedProfile([{contest:{registered_voters:200,ballots_cast:120,valid_votes:118,invalid_votes:3}}],118),null);assert.equal(C.profileChange({complete:true,profile},{complete:true,profile:{...profile,registered:210,turnout:65}},'turnout'),5);assert.equal(C.profileChange({complete:true,profile},null,'registered'),null)});
