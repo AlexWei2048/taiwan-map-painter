@@ -40,5 +40,5 @@ test('1994 Keelung county summary mixes electorates and must not become a region
  assert.equal(keelung.length,8);
  assert.deepEqual([...new Set(keelung.map(d=>d.electorate))].sort(),['plains','regional']);
  const code=fs.readFileSync(path.join(ROOT,'history-workspace.js'),'utf8');
- assert.match(code,/result\\.contests\\.every\\(c=>c\\.electorate==='regional'\\)/);
+ assert.ok(code.includes("result.contests.every(c=>c.electorate==='regional')"));
 });
