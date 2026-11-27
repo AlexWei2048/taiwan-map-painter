@@ -24964,6 +24964,54 @@
         ]
       ],
       "incumbent_sources": {
+        "1": {
+          "value": false,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/103%E5%B9%B4/08%E6%96%B0%E7%AB%B9%E5%B8%82/%E6%96%B0%E7%AB%B9%E5%B8%82%E7%AC%AC1%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "source_locator": "2014年第1選區5號，經歷列第四至第六屆。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "後屆公報候選人自填履歷；未取得投票日逐日任免名冊。公報文字可讀，原頁截圖未取得。",
+          "original_name": "鄭貴元",
+          "ballot_number": 1,
+          "votes": 3837
+        },
+        "7": {
+          "value": false,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/103%E5%B9%B4/08%E6%96%B0%E7%AB%B9%E5%B8%82/%E6%96%B0%E7%AB%B9%E5%B8%82%E7%AC%AC1%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "source_locator": "2014年第1選區17號，經歷列第四屆議員。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "後屆公報候選人自填履歷；未取得投票日逐日任免名冊。公報文字可讀，原頁截圖未取得。",
+          "original_name": "謝治",
+          "ballot_number": 7,
+          "votes": 2655
+        },
+        "9": {
+          "value": false,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/103%E5%B9%B4/08%E6%96%B0%E7%AB%B9%E5%B8%82/%E6%96%B0%E7%AB%B9%E5%B8%82%E7%AC%AC1%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "source_locator": "2014年第1選區10號，經歷列第七、八屆。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "後屆公報候選人自填履歷；未取得投票日逐日任免名冊。公報文字可讀，原頁截圖未取得。",
+          "original_name": "謝希誠",
+          "ballot_number": 9,
+          "votes": 1775
+        },
+        "14": {
+          "value": false,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/103%E5%B9%B4/08%E6%96%B0%E7%AB%B9%E5%B8%82/%E6%96%B0%E7%AB%B9%E5%B8%82%E7%AC%AC1%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "source_locator": "2014年第1選區6號，經歷列第四至第八屆。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "後屆公報候選人自填履歷；未取得投票日逐日任免名冊。公報文字可讀，原頁截圖未取得。",
+          "original_name": "羅文熾",
+          "ballot_number": 14,
+          "votes": 6354
+        },
         "15": {
           "value": true,
           "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/107%E5%B9%B4/21%E6%96%B0%E7%AB%B9%E5%B8%82/%E6%96%B0%E7%AB%B9%E5%B8%82%E7%AC%AC01%E9%81%B8%E5%8D%80%E5%B8%82%E8%AD%B0%E5%93%A1.pdf",
@@ -25116,7 +25164,45 @@
           "男",
           true
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "2": {
+          "value": false,
+          "source_url": "https://web.cec.gov.tw/api/file/59832bed-4a85-47a6-8333-470043e5ea26.pdf",
+          "source_locator": "2009年第3選區4號，經歷列兩屆里長、第五至第七屆議員。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "後屆公報候選人自填履歷；未取得投票日逐日任免名冊。公報文字可讀，原頁截圖未取得。",
+          "original_name": "呂於台",
+          "ballot_number": 2,
+          "votes": 2849
+        },
+        "5": {
+          "value": false,
+          "source_url": "https://eebulletin.cec.gov.tw/107/22%E6%96%B0%E7%AB%B9%E5%B8%82/02%E5%B8%82%E8%AD%B0%E5%93%A1/%E6%96%B0%E7%AB%B9%E5%B8%82%E7%AC%AC03%E9%81%B8%E5%8D%80%E5%B8%82%E8%AD%B0%E5%93%A1.pdf",
+          "source_locator": "2018年第3選區5號，經歷列第四至第九屆。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "後屆公報候選人自填履歷；未取得投票日逐日任免名冊。公報文字可讀，原頁截圖未取得。",
+          "original_name": "鄭正宗",
+          "ballot_number": 5,
+          "votes": 2877
+        },
+        "6": {
+          "value": true,
+          "source_url": "https://web.cec.gov.tw/api/file/59832bed-4a85-47a6-8333-470043e5ea26.pdf",
+          "source_locator": "2009年第3選區5號，經歷列第一屆及第三至第七屆議員。",
+          "election_date": "1994-01-29",
+          "method": "documented_previous_term_election_bulletin",
+          "confidence": "published_election_bulletin",
+          "limitation": "後屆公報候選人自填履歷；未取得投票日逐日任免名冊。公報文字可讀，原頁截圖未取得。",
+          "original_name": "駱克銘",
+          "ballot_number": 6,
+          "votes": 4929
+        }
+      }
     },
     {
       "county": "新竹市",
@@ -25232,6 +25318,30 @@
           "ballot_number": 1,
           "votes": 4285,
           "secondary_source": "https://www.president.gov.tw/NEWS/21336"
+        },
+        "4": {
+          "value": false,
+          "source_url": "https://web.cec.gov.tw/api/file/f68a8297-1579-49a7-af33-6e50b992b85d.pdf",
+          "source_locator": "2009年第4選區1號，經歷列第四、五屆議員。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "後屆公報候選人自填履歷；未取得投票日逐日任免名冊。公報文字可讀，原頁截圖未取得。",
+          "original_name": "蕭志潔",
+          "ballot_number": 4,
+          "votes": 4644
+        },
+        "5": {
+          "value": false,
+          "source_url": "https://web.cec.gov.tw/api/file/f68a8297-1579-49a7-af33-6e50b992b85d.pdf",
+          "source_locator": "2009年第4選區2號，經歷列第四至第七屆議員。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "後屆公報候選人自填履歷；未取得投票日逐日任免名冊。公報文字可讀，原頁截圖未取得。",
+          "original_name": "謝文進",
+          "ballot_number": 5,
+          "votes": 3717
         },
         "10": {
           "value": true,
@@ -25367,6 +25477,18 @@
           "original_name": "鄭成光",
           "ballot_number": 4,
           "votes": 4189
+        },
+        "5": {
+          "value": false,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/094%E5%B9%B4/10%E6%96%B0%E7%AB%B9%E5%B8%82/%E6%96%B0%E7%AB%B9%E5%B8%82%E7%AC%AC5%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "source_locator": "2005年第5選區5號，經歷列第四、五屆議員及後續任職。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "後屆公報候選人自填履歷；未取得投票日逐日任免名冊。公報文字可讀，原頁截圖未取得。",
+          "original_name": "王明魁",
+          "ballot_number": 5,
+          "votes": 4377
         }
       }
     },
