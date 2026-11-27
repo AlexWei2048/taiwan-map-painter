@@ -22360,6 +22360,18 @@
         ]
       ],
       "incumbent_sources": {
+        "8": {
+          "value": false,
+          "source_url": "https://web.cec.gov.tw/api/file/ef36ce58-e531-48a9-9a7d-1ef7d7d68e38.pdf",
+          "source_locator": "2009年第1選區12號，公報履歷列花蓮市民代表及主席、縣議會第13、14、15屆議員。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "依後屆公開履歷推定；不等同完整前屆名冊。公報文字可讀，原頁截圖取得失敗。",
+          "original_name": "林連明",
+          "ballot_number": 8,
+          "votes": 2885
+        },
         "14": {
           "value": true,
           "source_url": "https://b012.dahan.edu.tw/var/file/12/1012/img/28/449993388.pdf",
@@ -22584,7 +22596,21 @@
           "男",
           true
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "5": {
+          "value": false,
+          "source_url": "https://news.scu.edu.tw/news/2395",
+          "source_locator": "東吳大學2016年轉載報導引客委會說明，從村幹事起步，先後當選第13、14屆縣議員及後續鄉市長。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "依後屆公開履歷推定；不等同完整前屆名冊。公報文字可讀，原頁截圖取得失敗。",
+          "original_name": "田智宣",
+          "ballot_number": 5,
+          "votes": 4296
+        }
+      }
     },
     {
       "county": "花蓮縣",
@@ -22832,7 +22858,45 @@
           "男",
           false
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "1": {
+          "value": false,
+          "source_url": "https://web.cec.gov.tw/api/file/ef36ce58-e531-48a9-9a7d-1ef7d7d68e38.pdf",
+          "source_locator": "2009年第6選區2號，公報履歷列縣議會第13至16屆議員。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "依後屆公開履歷推定；不等同完整前屆名冊。公報文字可讀，原頁截圖取得失敗。",
+          "original_name": "孫永昌",
+          "ballot_number": 1,
+          "votes": 1176
+        },
+        "4": {
+          "value": false,
+          "source_url": "https://web.cec.gov.tw/api/file/ef36ce58-e531-48a9-9a7d-1ef7d7d68e38.pdf",
+          "source_locator": "2009年第6選區1號，公報履歷列縣議會第13至16屆議員。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "依後屆公開履歷推定；不等同完整前屆名冊。公報文字可讀，原頁截圖取得失敗。",
+          "original_name": "楊德金",
+          "ballot_number": 4,
+          "votes": 1119
+        },
+        "5": {
+          "value": false,
+          "source_url": "https://web.cec.gov.tw/api/file/ef36ce58-e531-48a9-9a7d-1ef7d7d68e38.pdf",
+          "source_locator": "2009年第6選區4號，公報履歷列第14、15屆縣議員；未列第12屆。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "依後屆公開履歷推定；不等同完整前屆名冊。公報文字可讀，原頁截圖取得失敗。",
+          "original_name": "林勝智",
+          "ballot_number": 5,
+          "votes": 1038
+        }
+      }
     },
     {
       "county": "花蓮縣",
