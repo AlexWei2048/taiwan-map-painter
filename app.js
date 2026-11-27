@@ -272,7 +272,7 @@ function mapViewScope(){
  const local=!h&&typeof localPredictionActive==='function'&&localPredictionActive();
  return JSON.stringify([state.workspaceMode,state.level,state.county,state.villageTown,
   activeElectorate(),identityPanelsActive()?panelIdentities():null,exportPanelFilter,
-  h?[h.office(),h.year(),h.legislativeBallot(),h.legislativeScale(),h.routeSelection().focus]:null,
+  h?[h.office(),h.year(),h.legislativeBallot(),h.legislativeScale(),h.routeSelection().electorate,h.routeSelection().focus]:null,
   !h&&state.workspaceMode==='prediction'?[state.predictionOffice,state.predictionScale,local?state.predictionRegion:'']:null]);
 }
 function cameraForLayout(previous,oldBase,nextBase){
@@ -2657,16 +2657,32 @@ function ensureMapDetails(){
   detailRequests.villages=Promise.all([1,2,3,4,5].map(n=>fetchMapJson('assets/map-villages-'+n+'.json?v=20261031-split-v25','村里地图第'+n+'部分'))).then(parts=>{const rows=parts.flat();if(rows.length!==data.villageMetadata.count)throw Error('村里边界数据不完整');data.villages=rows;mapLoadState.villages='ready';render();return true}).catch(e=>{delete detailRequests.villages;mapLoadState.villages='error';syncMapLayerStatus();toast(e.message||'村里地图载入失败');return false});
  }
 }
+// Export must not silently switch to a different map while its assets load.
+function exportContextKey(){
+ const h=typeof History2022View!=='undefined'&&History2022View.active()?History2022View.routeSelection():null;
+ const history=h?[h.office,h.year,h.county,h.level,h.metric,h.electorate,h.focus,h.candidateScope,h.candidate,h.party]:null;
+ return JSON.stringify([state.workspaceMode,state.level,state.county,state.villageTown,state.electorate,
+  state.fillMode,state.predictionOffice,state.predictionScale,state.predictionRegion,state.predictionDisplay,
+  state.predictionCandidateScope,state.predictionVoteMetric,state.localDisplayCandidate,state.councilViewScope,history]);
+}
 // Export never uses an incomplete lazy-loaded layer or a blank initial map.
 async function ensureExportMapReady(){
+ const startingState=state,startingKey=exportContextKey();
+ const verify=()=>{
+  if(startingState!==state||startingKey!==exportContextKey())throw Error('地图范围或方案已变更，请重新导出');
+  if(typeof History2022View!=='undefined'&&History2022View.active()&&!History2022View.routeReady(History2022View.routeSelection()))throw Error('历史资料尚未载入完成，请稍后重新导出');
+ };
  if(!data)await mapPromise;
+ verify();
  if(!data)throw Error('地图尚未载入完成，请稍后重试');
  if(typeof localPredictionActive==='function'&&localPredictionActive()&&state.predictionOffice==='council'){
   if(!await ensureTownPredictionAreas())throw Error('议员乡镇地图资料未能载入');
+  verify();
  }
  ensureMapDetails();
  const required=state.level==='council'?['议员选区']:state.level==='legislative'?['立法机构民代选区']:state.level==='villages'?['villages']:[];
  const finished=await Promise.all(required.map(n=>detailRequests[n]||Promise.resolve(true)));
+ verify();
  if(finished.some(ok=>ok!==true))throw Error('地图边界资料载入失败，请重试或刷新页面');
  if(state.level==='council'&&(data.council.length!==161||data.councilIndigenous.length!==60))throw Error('议员选区资料尚未完整载入');
  if(state.level==='legislative'&&(data.legislative.length!==73||data.legislativeIndigenous.length!==2))throw Error('立法机构民代选区资料尚未完整载入');
@@ -2677,6 +2693,7 @@ async function ensureExportMapReady(){
   if(!response.ok)throw Error('当选图标载入失败，请重试');
   const bytes=new Uint8Array(await response.arrayBuffer());
   exportElectedMark='data:image/png;base64,'+btoa(String.fromCharCode(...bytes));
+  verify();
  }
 }
 let mapPromise,mapLoadSequence=0;
