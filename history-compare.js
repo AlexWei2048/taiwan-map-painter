@@ -259,7 +259,7 @@ function setBallots(){
 }
 async function snapshot(o,y){return root.HistoryQuery.snapshot(o,y)}
 async function model(o,y,b,grain){
- const key=[o,y,b,grain].join('|');
+ const key=[o,y,b,grain,Number(y)===2026?root.HISTORY_2026_RESULT_VERSION||'unpublished':''].join('|');
  if(!cache.has(key)){
   const p=(async()=>{
    const shard=await snapshot(o,y);
