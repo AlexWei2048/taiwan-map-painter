@@ -5149,6 +5149,50 @@
           "evidence_notes": "陳彥斌《在威權的天空下：台中篇》書介明載1994當選豐原市長；未核原始推薦政黨，不使用任內或後屆黨籍。"
         }
       ]
+    },
+    {
+      "county": "雲林縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://dsh.yunlin.gov.tw/cp.aspx?n=4179",
+      "source_locator": "東勢鄉公所東勢概況：歷屆鄉長民選部分，第十一屆黃水木、第十二屆林勝國。",
+      "evidence_tier": "official_township_term_roster",
+      "validation_note": "當屆歷任首長名錄，非原始開票結果；得票、號次、性別、推薦政黨保持缺值。前一屆首長與第十二屆不同，現任狀態按任期名錄推定，未取得逐日任免資料。",
+      "winners": [
+        {
+          "town": "東勢鄉",
+          "name": "林勝國",
+          "incumbent_at_election": false,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "gender": null,
+          "source_url": "https://dsh.yunlin.gov.tw/cp.aspx?n=4179",
+          "previous_term_holder": "黃水木"
+        }
+      ]
+    },
+    {
+      "county": "臺東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://www.taimali.gov.tw/home/index.php/organization/56-2020-04-23-03-46-54/143-2020-04-23-04-02-46.html",
+      "source_locator": "太麻里鄉公所歷任鄉長名錄，第11屆程聰明、第12及13屆王樹木。",
+      "evidence_tier": "official_township_term_roster",
+      "validation_note": "當屆歷任首長名錄，非原始開票結果；得票、號次、性別、推薦政黨保持缺值。前一屆首長與第十二屆不同，現任狀態按任期名錄推定，未取得逐日任免資料。",
+      "winners": [
+        {
+          "town": "太麻里鄉",
+          "name": "王樹木",
+          "incumbent_at_election": false,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "gender": null,
+          "source_url": "https://www.taimali.gov.tw/home/index.php/organization/56-2020-04-23-03-46-54/143-2020-04-23-04-02-46.html",
+          "previous_term_holder": "程聰明"
+        }
+      ]
     }
   ]
 }
