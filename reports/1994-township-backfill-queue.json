@@ -1,0 +1,5034 @@
+{
+  "schemaVersion": 1,
+  "checked": "2026-11-27",
+  "reference_status": "provisional_expected_districts_pending_original_1994_notice",
+  "base_archive": "sources/history-1994-township.json",
+  "base_archive_blob": "b21ced9885423e43b22d747dccdd7577ec447f36",
+  "expected": 319,
+  "with_candidate_returns": 89,
+  "missing_complete_candidate_returns": 230,
+  "batches": [
+    {
+      "batch": 1,
+      "count": 51,
+      "counties": [
+        "花蓮縣",
+        "臺東縣",
+        "雲林縣",
+        "金門縣"
+      ]
+    },
+    {
+      "batch": 2,
+      "count": 52,
+      "counties": [
+        "苗栗縣",
+        "臺中縣",
+        "桃園縣"
+      ]
+    },
+    {
+      "batch": 3,
+      "count": 45,
+      "counties": [
+        "彰化縣",
+        "南投縣",
+        "澎湖縣"
+      ]
+    },
+    {
+      "batch": 4,
+      "count": 82,
+      "counties": [
+        "臺南縣",
+        "嘉義縣",
+        "屏東縣"
+      ]
+    }
+  ],
+  "archive_indices_zero_based": true,
+  "source_leads": [
+    {
+      "county": "苗栗縣",
+      "url": "https://twlld.nmth.gov.tw/literal-detail/606/8/1",
+      "locator": "苗栗文獻第9期第27頁",
+      "status": "catalog_only_original_table_not_obtained"
+    }
+  ],
+  "tasks": [
+    {
+      "county": "桃園縣",
+      "town": "桃園市",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        8
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "桃園縣",
+      "town": "中壢市",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        8
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "桃園縣",
+      "town": "平鎮市",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        36
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "桃園縣",
+      "town": "大溪鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        8
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "桃園縣",
+      "town": "楊梅鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        8
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "桃園縣",
+      "town": "蘆竹鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record",
+        "profile_record"
+      ],
+      "partial_archive_indices": [
+        34
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "桃園縣",
+      "town": "大園鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        8
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "桃園縣",
+      "town": "龜山鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record",
+        "profile_record"
+      ],
+      "partial_archive_indices": [
+        35
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "桃園縣",
+      "town": "八德鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        8
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "桃園縣",
+      "town": "龍潭鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        8
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "桃園縣",
+      "town": "新屋鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        8
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "桃園縣",
+      "town": "觀音鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        28
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "桃園縣",
+      "town": "復興鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        8
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "苗栗縣",
+      "town": "苗栗市",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        42
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "苗栗縣",
+      "town": "苑裡鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        45
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "苗栗縣",
+      "town": "通霄鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        44
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "苗栗縣",
+      "town": "竹南鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        43
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "苗栗縣",
+      "town": "頭份鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        40
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "苗栗縣",
+      "town": "後龍鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        47
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "苗栗縣",
+      "town": "卓蘭鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record",
+        "other_candidate_record"
+      ],
+      "partial_archive_indices": [
+        11
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "苗栗縣",
+      "town": "大湖鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        48
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "苗栗縣",
+      "town": "公館鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        46
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "苗栗縣",
+      "town": "銅鑼鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        25
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "苗栗縣",
+      "town": "南庄鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        41
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "苗栗縣",
+      "town": "頭屋鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        49
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "苗栗縣",
+      "town": "三義鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        22
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "苗栗縣",
+      "town": "西湖鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        50
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "苗栗縣",
+      "town": "造橋鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        51
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "苗栗縣",
+      "town": "三灣鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        52
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "苗栗縣",
+      "town": "獅潭鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "unverified_winner_lead"
+      ],
+      "partial_archive_indices": [
+        54
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "苗栗縣",
+      "town": "泰安鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record",
+        "other_candidate_record"
+      ],
+      "partial_archive_indices": [
+        53
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺中縣",
+      "town": "豐原市",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        68
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺中縣",
+      "town": "東勢鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        67
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺中縣",
+      "town": "大甲鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺中縣",
+      "town": "清水鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        17
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺中縣",
+      "town": "沙鹿鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        66
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺中縣",
+      "town": "梧棲鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺中縣",
+      "town": "后里鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺中縣",
+      "town": "神岡鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺中縣",
+      "town": "潭子鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺中縣",
+      "town": "大雅鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺中縣",
+      "town": "新社鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺中縣",
+      "town": "石岡鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺中縣",
+      "town": "外埔鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺中縣",
+      "town": "大安鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺中縣",
+      "town": "烏日鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺中縣",
+      "town": "大肚鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺中縣",
+      "town": "龍井鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        59
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺中縣",
+      "town": "霧峰鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺中縣",
+      "town": "太平鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        65
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺中縣",
+      "town": "大里市",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        19
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺中縣",
+      "town": "和平鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "彰化縣",
+      "town": "彰化市",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "彰化縣",
+      "town": "鹿港鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        38
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "彰化縣",
+      "town": "和美鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "彰化縣",
+      "town": "線西鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "彰化縣",
+      "town": "伸港鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "彰化縣",
+      "town": "福興鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "彰化縣",
+      "town": "秀水鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        23
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "彰化縣",
+      "town": "花壇鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "彰化縣",
+      "town": "芬園鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        39
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "彰化縣",
+      "town": "員林鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "彰化縣",
+      "town": "溪湖鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "彰化縣",
+      "town": "田中鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "彰化縣",
+      "town": "大村鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "彰化縣",
+      "town": "埔鹽鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        29
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "彰化縣",
+      "town": "埔心鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "彰化縣",
+      "town": "永靖鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "彰化縣",
+      "town": "社頭鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "彰化縣",
+      "town": "二水鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "彰化縣",
+      "town": "北斗鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "彰化縣",
+      "town": "二林鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        21
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "彰化縣",
+      "town": "田尾鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "彰化縣",
+      "town": "埤頭鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        37
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "彰化縣",
+      "town": "芳苑鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "彰化縣",
+      "town": "大城鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "彰化縣",
+      "town": "竹塘鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "彰化縣",
+      "town": "溪州鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "南投縣",
+      "town": "南投市",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        58
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "南投縣",
+      "town": "埔里鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        58
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "南投縣",
+      "town": "草屯鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        58
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "南投縣",
+      "town": "竹山鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        58
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "南投縣",
+      "town": "集集鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        33
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "南投縣",
+      "town": "名間鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        63
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "南投縣",
+      "town": "鹿谷鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        58
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "南投縣",
+      "town": "中寮鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "南投縣",
+      "town": "魚池鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        60
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "南投縣",
+      "town": "國姓鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "南投縣",
+      "town": "水里鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        64
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "南投縣",
+      "town": "信義鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "南投縣",
+      "town": "仁愛鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        58
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "雲林縣",
+      "town": "斗六市",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "雲林縣",
+      "town": "斗南鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "profile_record"
+      ],
+      "partial_archive_indices": [
+        15
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "雲林縣",
+      "town": "虎尾鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "雲林縣",
+      "town": "西螺鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "profile_record"
+      ],
+      "partial_archive_indices": [
+        16
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "雲林縣",
+      "town": "土庫鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "雲林縣",
+      "town": "北港鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "雲林縣",
+      "town": "古坑鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "雲林縣",
+      "town": "大埤鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "雲林縣",
+      "town": "莿桐鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "profile_record"
+      ],
+      "partial_archive_indices": [
+        13
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "雲林縣",
+      "town": "林內鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        24
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "雲林縣",
+      "town": "二崙鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        57
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "雲林縣",
+      "town": "崙背鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "雲林縣",
+      "town": "麥寮鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "雲林縣",
+      "town": "東勢鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "雲林縣",
+      "town": "臺西鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "雲林縣",
+      "town": "元長鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "雲林縣",
+      "town": "四湖鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "profile_record"
+      ],
+      "partial_archive_indices": [
+        14
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "雲林縣",
+      "town": "口湖鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "profile_record"
+      ],
+      "partial_archive_indices": [
+        6
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "雲林縣",
+      "town": "水林鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record",
+        "profile_record"
+      ],
+      "partial_archive_indices": [
+        30
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "嘉義縣",
+      "town": "太保市",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "嘉義縣",
+      "town": "朴子市",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "嘉義縣",
+      "town": "布袋鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "嘉義縣",
+      "town": "大林鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "嘉義縣",
+      "town": "民雄鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        61
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "嘉義縣",
+      "town": "溪口鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "嘉義縣",
+      "town": "新港鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "嘉義縣",
+      "town": "六腳鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "嘉義縣",
+      "town": "東石鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "嘉義縣",
+      "town": "義竹鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "嘉義縣",
+      "town": "鹿草鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "嘉義縣",
+      "town": "水上鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "嘉義縣",
+      "town": "中埔鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "嘉義縣",
+      "town": "竹崎鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "嘉義縣",
+      "town": "梅山鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "嘉義縣",
+      "town": "番路鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "嘉義縣",
+      "town": "大埔鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "嘉義縣",
+      "town": "阿里山鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "新營市",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "鹽水鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "白河鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "柳營鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "後壁鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "東山鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "麻豆鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "下營鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "六甲鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        26
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "官田鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "大內鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "佳里鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "學甲鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "西港鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "七股鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "將軍鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "北門鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "新化鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "善化鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "新市鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "安定鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "山上鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "玉井鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "楠西鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "南化鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "左鎮鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "仁德鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        32
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "歸仁鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "關廟鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "龍崎鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺南縣",
+      "town": "永康市",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "屏東市",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "潮州鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "東港鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "恆春鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "萬丹鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "長治鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "麟洛鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "九如鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "里港鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "鹽埔鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "高樹鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "萬巒鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "內埔鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "竹田鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "新埤鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "枋寮鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "新園鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "崁頂鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "林邊鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "南州鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "佳冬鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "琉球鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        55
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "車城鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "滿州鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "枋山鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "三地門鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "霧臺鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "瑪家鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "泰武鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        62
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "來義鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "春日鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "獅子鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "屏東縣",
+      "town": "牡丹鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "花蓮縣",
+      "town": "花蓮市",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "profile_record",
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        1,
+        2
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "花蓮縣",
+      "town": "鳳林鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "profile_record"
+      ],
+      "partial_archive_indices": [
+        1
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "花蓮縣",
+      "town": "玉里鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "profile_record"
+      ],
+      "partial_archive_indices": [
+        1
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "花蓮縣",
+      "town": "新城鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "profile_record"
+      ],
+      "partial_archive_indices": [
+        1
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "花蓮縣",
+      "town": "吉安鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "profile_record",
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        1,
+        2
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "花蓮縣",
+      "town": "壽豐鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "profile_record",
+        "winner_record",
+        "other_candidate_record"
+      ],
+      "partial_archive_indices": [
+        1,
+        56
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "花蓮縣",
+      "town": "豐濱鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "profile_record"
+      ],
+      "partial_archive_indices": [
+        1
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "花蓮縣",
+      "town": "瑞穗鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "profile_record"
+      ],
+      "partial_archive_indices": [
+        1
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "花蓮縣",
+      "town": "富里鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "profile_record",
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        1,
+        2
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "花蓮縣",
+      "town": "秀林鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "profile_record"
+      ],
+      "partial_archive_indices": [
+        1
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "花蓮縣",
+      "town": "萬榮鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "profile_record"
+      ],
+      "partial_archive_indices": [
+        1
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "花蓮縣",
+      "town": "卓溪鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "profile_record"
+      ],
+      "partial_archive_indices": [
+        1
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺東縣",
+      "town": "臺東市",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺東縣",
+      "town": "成功鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺東縣",
+      "town": "關山鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺東縣",
+      "town": "卑南鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺東縣",
+      "town": "鹿野鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "profile_record"
+      ],
+      "partial_archive_indices": [
+        4
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺東縣",
+      "town": "池上鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        20
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺東縣",
+      "town": "東河鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "profile_record"
+      ],
+      "partial_archive_indices": [
+        3
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺東縣",
+      "town": "長濱鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺東縣",
+      "town": "太麻里鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺東縣",
+      "town": "大武鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "profile_record"
+      ],
+      "partial_archive_indices": [
+        5
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺東縣",
+      "town": "綠島鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺東縣",
+      "town": "延平鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺東縣",
+      "town": "金峰鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "臺東縣",
+      "town": "達仁鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "澎湖縣",
+      "town": "馬公市",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "澎湖縣",
+      "town": "湖西鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        31
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "澎湖縣",
+      "town": "白沙鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "澎湖縣",
+      "town": "西嶼鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "澎湖縣",
+      "town": "望安鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "澎湖縣",
+      "town": "七美鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [],
+      "partial_archive_indices": [],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "金門縣",
+      "town": "金城鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        0
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "金門縣",
+      "town": "金湖鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        0
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "金門縣",
+      "town": "金沙鎮",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        0
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "金門縣",
+      "town": "金寧鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        0
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "金門縣",
+      "town": "烈嶼鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        0
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    },
+    {
+      "county": "金門縣",
+      "town": "烏坵鄉",
+      "year": 1994,
+      "office": "township",
+      "status": "missing_complete_candidate_returns",
+      "known": [
+        "winner_record"
+      ],
+      "partial_archive_indices": [
+        0
+      ],
+      "required": [
+        "complete_candidate_roster",
+        "individual_votes",
+        "ballot_numbers",
+        "party_recommendation",
+        "gender",
+        "incumbency_at_election",
+        "elected_status",
+        "district_turnout_profile"
+      ],
+      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
+    }
+  ]
+}
