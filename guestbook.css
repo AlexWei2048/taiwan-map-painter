@@ -43,3 +43,22 @@ dialog#guestbookAdminDialog .guestbook-item-head{gap:6px}
 dialog#guestbookAdminDialog .guestbook-item-head time{margin-left:0;flex-basis:100%}
 dialog#guestbookAdminDialog .guestbook-actions .button{font-size:13px;min-height:40px;padding:8px 10px}
 }
+
+/* v7: compact, self-contained admin workflow and explicit control labels. */
+dialog#guestbookAdminDialog .guestbook-admin-session{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:12px;color:#536e60;padding:6px 0}
+dialog#guestbookAdminDialog .guestbook-device-panel{background:#f4f8f5;border:1px solid #d9e5da;border-radius:8px;padding:10px;margin-bottom:10px}
+dialog#guestbookAdminDialog .guestbook-device-panel p{margin:0 0 8px;font-size:13px}
+dialog#guestbookAdminDialog .guestbook-device-panel button{margin:0 6px 3px 0}
+dialog#guestbookAdminDialog .guestbook-toolbar{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+dialog#guestbookAdminDialog #guestbookAdminSearch{grid-column:1/-1}
+dialog#guestbookAdminDialog .guestbook-toolbar button{min-width:0;white-space:normal;padding:9px 6px}
+dialog#guestbookAdminDialog .guestbook-admin-label{display:grid;gap:5px;font-size:12px;color:#536e60;font-weight:600;min-width:0}
+dialog#guestbookAdminDialog .guestbook-admin-label textarea,dialog#guestbookAdminDialog .guestbook-admin-label select{font-size:14px;font-weight:400}
+dialog#guestbookAdminDialog .guestbook-item .guestbook-actions:empty{display:none}
+dialog#guestbookAdminDialog #guestbookAdminResults{margin:6px 0 0}
+@media(max-width:700px){
+dialog#guestbookAdminDialog .guestbook-toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}
+dialog#guestbookAdminDialog .guestbook-admin-label textarea,dialog#guestbookAdminDialog .guestbook-admin-label select{font-size:16px}
+dialog#guestbookAdminDialog .guestbook-admin-session{font-size:12px}
+dialog#guestbookAdminDialog .guestbook-admin-session .button{min-height:36px}
+}
