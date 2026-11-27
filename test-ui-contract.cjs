@@ -1235,3 +1235,11 @@ test('Historical vote-map browser modules are syntactically valid before deploym
   assert.doesNotThrow(()=>new Function(read(file)),file+' must parse successfully');
  }
 });
+
+
+test('historical results expose CSV exports without a redundant batch JSON download',()=>{
+ assert.doesNotMatch(read('index.html'),/historyBatchDownload|历届数据下载/);
+ assert.doesNotMatch(read('history-observation-ui.js'),/historyBatchDownload|历届历史数据\.json/);
+ assert.match(read('history-observation-ui.js'),/导出 CSV/);
+ assert.match(read('index.html'),/下载备份方案 JSON/);
+});
