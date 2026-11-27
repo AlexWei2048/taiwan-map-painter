@@ -263,13 +263,38 @@
           "name": "翁伸金",
           "district_number": 2,
           "source_url": "https://kinhu.kinmen.gov.tw/cp.aspx?Create=1&n=C4535D8A265F96AD",
-          "source_locator": "民國八十三年一月二十四日及三十日，金湖鎮公所大事記"
+          "source_locator": "民國八十三年一月二十四日及三十日，金湖鎮公所大事記",
+          "gender": "女",
+          "gender_source_url": "https://kmfinance.kinmen.gov.tw/news.aspx?Create=1&PageSize=20&n=55FDE4EAE7CDA1E6&page=23227&sms=4FEFD09995C4BB81",
+          "gender_source_locator": "2002年第三屆金門縣議員登記名冊（縣選委會提供），翁伸金標註女；與1994金湖鎮公所參選名錄同名跨屆核對，尚缺1994原公報。",
+          "gender_evidence": "cross_election_name_match"
         },
         {
           "name": "陳河彬",
           "district_number": 2,
           "source_url": "https://kinhu.kinmen.gov.tw/cp.aspx?Create=1&n=C4535D8A265F96AD",
           "source_locator": "民國八十三年一月二十四日及三十日，金湖鎮公所大事記"
+        },
+        {
+          "name": "石兆瑉",
+          "gender": "男",
+          "elected": false,
+          "source_url": "https://www.kmdn.gov.tw/1117/1271/4189/49195/?cprint=pt",
+          "source_locator": "金門日報回顧1994年第一屆縣議員選舉，列返金參選落選者；原姓名末字缺字。2002年1月29日同報另確認該人曾參選第一屆且任名城董事長。2016年同報文章以完整姓名確認前名城董事長石兆瑉；金城鎮公所歷屆鎮長表及2014年官方當選公告核實姓名。",
+          "corroboration_urls": [
+            "https://www.kmdn.gov.tw/1117/1271/1272/107382",
+            "https://www.kmdn.gov.tw/1117/1271/1275/265195/",
+            "https://jincheng.kinmen.gov.tw/cp.aspx?n=C2339A8CEBE6FB41",
+            "https://web.cec.gov.tw/api/file/57a5e284-d48c-4ba7-a7fc-74a9f13048b1.pdf"
+          ],
+          "name_variants": [
+            "石兆（缺字）",
+            "石兆緡（2002年第三方選舉資料）"
+          ],
+          "identity_method": "cross_source_occupation_and_name_confirmation",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null
         }
       ],
       "reserved_seats": 2,
@@ -293,7 +318,11 @@
         "female": 7
       },
       "candidate_gender_source_url": "https://ws.kinmen.gov.tw/Download.ashx?icon=..pdf&n=56S%2B5pyD5oyH5qiZLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvMzAyL3JlbGZpbGUvMTAwMTAvMzI3ODEzL%2Bekvuacg%2BaMh%2BaomS5wZGY%3D",
-      "candidate_gender_source_locator": "表33，頁100，民國83年1月29日第一屆縣議員；金門縣選委會資料；公開文字表格，截圖未取得。"
+      "candidate_gender_source_locator": "表33，頁100，民國83年1月29日第一屆縣議員；金門縣選委會資料；公開文字表格，截圖未取得。",
+      "registration_count": 63,
+      "registration_count_source_url": "https://cabkc.kinmen.gov.tw/uploads/files/202304/ddcac480-e969-4887-89bb-91898049b65e.pdf",
+      "registration_count_source_locator": "1993年12月27日登記截止條",
+      "registration_count_note": "登記63人，正式參選62人；未取得資格審定或撤回名單，不推定少一人的原因，不修改正式候選人數。"
     }
   ],
   "incumbency_roster_audit": [
