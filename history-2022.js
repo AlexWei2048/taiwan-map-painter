@@ -247,7 +247,7 @@
    if(history2026CheckStatus==='error'){refresh2026Status.textContent='暂时无法核实发布状态，已保留原有资料；请重试。';return}
    if(history2026CheckStatus==='awaiting'){refresh2026Status.textContent='2026年结果尚未发布，仍可查询历届资料。';return}
    const stale=active&&!presidentialMode&&!legislativeMode&&localYear===2026&&snapshotData!==history2026Snapshot;
-   refresh2026Status.textContent=stale?'发现新版发布清单；请点击最新地方选举结果入口重新载入。当前地图未自动切换。':'已发现2026年结果发布清单，可选择2026年；结果须通过文件校验后显示。';
+   refresh2026Status.textContent=stale?'发现新版发布清单；请刷新页面，或切换年份后重新选择2026年。当前地图未自动切换。':'已发现2026年结果发布清单，可选择2026年；结果须通过文件校验后显示。';
   }catch(error){refresh2026Status.textContent=error.message||'检查失败，请重试'}
   finally{refresh2026Button.disabled=false}
  };
