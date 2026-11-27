@@ -1,0 +1,20 @@
+{
+  "county": "花蓮縣",
+  "election_date": "1994-01-29",
+  "term": "第十三屆",
+  "registered_voters": 238125,
+  "ballots_cast": 151724,
+  "valid_votes": 148031,
+  "invalid_votes": 3693,
+  "candidate_count": 84,
+  "male_candidates": 70,
+  "female_candidates": 14,
+  "elected_count": 33,
+  "male_elected": 27,
+  "female_elected": 6,
+  "source_url": "https://ws.hl.gov.tw/Download.ashx?n=6KGoMy0544CB57ij6K2w5ZOh6YG46IiJ5qaC5rOBLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNDM3L3JlbGZpbGUvOTU4MS85NzgxLzhlYWI0MTdlLTk4ZmEtNDc3Ny05Zjc4LTk5ZDVhODMyYzJiNC5wZGY%3D",
+  "source_locator": "花蓮縣統計年報表3-9「縣議員選舉概況」，印刷頁95，第十三屆（83/01/29）；資料來源：花蓮縣選舉委員會",
+  "level": "county",
+  "method": "official_yearbook_county_total_crosschecked_with_ten_constituencies",
+  "limitations": "全縣彙總；十選區分屬區域、平地少數民族及山地少數民族，各選區數字不變，不將全縣統計重複分配給選區。候選人性別總數不推定不明個體。"
+}
