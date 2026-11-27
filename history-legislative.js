@@ -494,7 +494,7 @@
    const votes=c.votes+(match?delta:0);
    return {...c,votes,vote_share:Math.round(votes/total*1e10)/1e8};
   });
-  const profile={town:{}},seen=new Set();
+  const profile={town:{},county:{},district:{},national:null},seen=new Set();
   for(const batch of districts){
    const {county,district,towns,source}=batch;
    const candidates=rows.filter(r=>r.electorate==='regional'&&r.level==='district'&&r.county===county&&r.district===district)
@@ -521,7 +521,33 @@
   }
   const coverage={districtCount:districts.length,townCount:seen.size,withoutTownReturns};
   if(coverage.districtCount!==26||coverage.townCount!==363)throw Error('1992年区域乡镇资料覆盖不符');
-  return {...shard,contests,candidacies,rows,regionalTownCoverage:coverage,
+  // The independently reconciled county/constituency turnout archive is a separate
+  // source from the candidate rows; join only when the corrected votes agree.
+  const summary=archive.summaryProfiles;
+  const fields=['registered_voters','ballots_cast','valid_votes','invalid_votes'];
+  const validProfile=(p,v)=>Array.isArray(p)&&p.length===4&&p.every(x=>Number.isSafeInteger(x)&&x>=0)&&p[0]>=p[1]&&p[1]===p[2]+p[3]&&p[2]===v;
+  let enriched=contests;
+  if(summary){
+   const regionalContests=contests.filter(c=>c.electorate==='regional'),counts=new Map();
+   for(const c of regionalContests)counts.set(c.county_name,(counts.get(c.county_name)||0)+1);
+   enriched=contests.map(c=>{
+    if(c.electorate!=='regional')return c;
+    const p=counts.get(c.county_name)===1?summary.county?.[c.county_name]:summary.district?.[c.county_name]?.[String(districtNumber(c.district_name))];
+    if(!validProfile(p,c.valid_votes))throw Error('1992年选区投票概况未能对账：'+c.district_name);
+    (profile.district[c.county_name]??={})[c.district_name]=p;
+    return {...c,...Object.fromEntries(fields.map((k,i)=>[k,p[i]])),turnout_source:summary.source};
+   });
+   for(const [county,p] of Object.entries(summary.county)){
+    const cs=enriched.filter(c=>c.electorate==='regional'&&c.county_name===county);
+    const sums=fields.map(k=>cs.reduce((n,c)=>n+c[k],0));
+    if(!validProfile(p,sums[2])||p.some((v,i)=>v!==sums[i]))throw Error('1992年县级投票概况未能对账：'+county);
+    profile.county[county]=p;
+   }
+   const cs=enriched.filter(c=>c.electorate==='regional'),sums=fields.map(k=>cs.reduce((n,c)=>n+c[k],0));
+   if(!validProfile(summary.national,sums[2])||summary.national.some((v,i)=>v!==sums[i]))throw Error('1992年区域全区投票概况未能对账');
+   profile.national=summary.national;
+  }
+  return {...shard,contests:enriched,candidacies,rows,regionalTownCoverage:coverage,
    geographicProfiles:{...shard.geographicProfiles,regional:profile}};
  }
  function apply1992Local(shard,archive){
@@ -581,7 +607,7 @@
    const [response,local]=await Promise.all([
 
     fetcher('assets/history-legislative-'+year+'.json?v=20261124-vote-reconciliation-v4',{cache:'default'}),
-    [1992,2001].includes(year)?fetcher('assets/history-legislative-'+year+'-local.json?v='+(year===1992?'6':'1')).then(response=>{
+    [1992,2001].includes(year)?fetcher('assets/history-legislative-'+year+'-local.json?v='+(year===1992?'7':'1')).then(response=>{
      if(!response.ok)throw Error(year+'年地方得票资料 HTTP '+response.status);
      return response.json();
     }):null,

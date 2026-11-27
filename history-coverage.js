@@ -52,7 +52,7 @@
  }
  function analyze(snapshot,office,normalize=defaultNorm,options={}){
   const norm=v=>normalize(defaultNorm(v)),buckets=new Map(),ids=new Set((snapshot.elections||[]).filter(e=>e.office===office).map(e=>e.election_id));
-  const create=county=>({county,contests:0,candidates:0,countyRows:0,townRows:0,towns:0,missingVotes:0,missingWinners:0,missingNumber:0,missingGender:0,missingParty:0,missingIncumbent:0,unreconciled:0,missingFields:Object.fromEntries(Object.keys(fields).map(f=>[f,0])),partialArchives:0,declared:false,notApplicable:false});
+  const create=county=>({county,contests:0,candidates:0,countyRows:0,townRows:0,towns:0,missingVotes:0,missingWinners:0,missingNumber:0,missingGender:0,missingParty:0,missingIncumbent:0,unreconciled:0,missingFields:Object.fromEntries(Object.keys(fields).map(f=>[f,0])),partialArchives:0,townProfileGaps:0,coverageNotes:[],declared:false,notApplicable:false});
   const all=create('全部地区'),get=county=>{county=countyKey(norm(county),Number(snapshot.year));if(!county||aggregateName(county))return null;if(!buckets.has(county))buckets.set(county,create(county));return buckets.get(county)};
   const contestById=new Map(),members=new Map(),townSets=new Map(),electionById=new Map((snapshot.elections||[]).map(e=>[e.election_id,e]));
   for(const c of snapshot.contests||[]){if(!ids.has(c.election_id)){if(office==='township')get(c.county_name);continue}contestById.set(c.contest_id,c);get(c.county_name)}
@@ -121,6 +121,13 @@
   }
   const fragments=office==='township'?snapshot.partialTownshipReturns:office==='council'?snapshot.partialCouncilReturns:[];
   for(const p of Array.isArray(fragments)?fragments:[]){const b=get(p.county||p.county_name);if(!b)continue;b.partialArchives++;all.partialArchives++}
+  if(legislative&&Number(snapshot.year)===1992){
+   for(const [ballot,g] of Object.entries(snapshot.geographicProfiles||{}))for(const [county,areas] of Object.entries(g.town||{}))for(const [town,p] of Object.entries(areas))if(!Array.isArray(p)||p.some(v=>!valid(v))){const b=get(county);if(b)b.townProfileGaps++;all.townProfileGaps++}
+   for(const county of snapshot.regionalTownCoverage?.withoutTownReturns||[]){const b=get(county),note='区域民代乡镇市区得票尚缺原始票表；县级结果完整。';if(b){b.partialArchives++;b.coverageNotes.push(note)}all.partialArchives++;all.coverageNotes.push(county+'：'+note)}
+   const hs=get('高雄市');if(hs)hs.coverageNotes.push('11区已收录选举人数及候选人得票；投票人数、无效票待原档。');
+   const ms=get('连江县');if(ms)ms.coverageNotes.push('四乡已收录区域与山地得票；分票种选举人数尚缺，区域一处票数对调待独立原表复核。');
+   all.coverageNotes.push('区域27个选区、25个县市投票概况已对账。平地与山地候选人有效票均已闭合；地方投票统计尚有未定位差额。');
+  }
   const declaredPartial=(snapshot.elections||[]).some(e=>ids.has(e.election_id)&&e.coverage==='partial');
   for(const x of [all,...buckets.values()]){
    x.towns=townSets.get(x)?.size||0;
@@ -132,7 +139,7 @@
     (legislative?0:x.missingGender)||(legislative?0:x.missingIncumbent)||
     x.missingParty||Object.values(x.missingFields).some(Boolean);
    const na=x===all?null:applicability(x.county,snapshot.year,office);
-   x.status=x.partialArchives||has&&(gaps||x===all&&declaredPartial)?'partial':has?'recorded':x.notApplicable||na?'na':x.declared?'missing':'unknown';
+   x.status=x.partialArchives||has&&(gaps||x.townProfileGaps||x===all&&declaredPartial)?'partial':has?'recorded':x.notApplicable||na?'na':x.declared?'missing':'unknown';
    if(!has&&na)x.reason=na.reason;
   }
   // An explicitly missing county must also be reflected in the whole archive.
@@ -171,8 +178,8 @@
   detail.append(element('p','已收录：'+entry.contests+'个选区或票种 / '+entry.candidates+'条候选人、政党记录；县市得票明细 '+entry.countyRows+'条，乡镇市区得票明细 '+entry.townRows+'条（'+entry.towns+'个地区）。'));
   if(office==='legislative')detail.append(element('p','立法机构民代的投票人数等统计另外核对同届、同票种的原始投票概况；旧制不分区计算票不作为独立投票。性别、现任等附加字段仍可待核，但不等于候选人得票、当选结果缺失。','data-help'));
   const table=element('table',undefined,'history-candidate-table'),body=element('tbody');
-  for(const [label,value] of [...Object.entries(fields).map(([key,name])=>[name+'缺失选区',entry.missingFields[key]]),['候选人得票缺失选区',entry.missingVotes],['当选标记或席次待核选区',entry.missingWinners],['有效票对账异常选区',entry.unreconciled],['号次缺失记录',entry.missingNumber],['性别缺失记录',entry.missingGender],['政党缺失记录',entry.missingParty],['现任缺失记录',entry.missingIncumbent],['部分档案条目（非完整候选人结果）',entry.partialArchives]]){const tr=element('tr');tr.append(element('th',label),element('td',String(value)));body.append(tr)}
-  table.append(body);detail.append(table,element('p','以上仅检查本站已收录字段，不证明全部历史选区、候选人或乡镇明细已齐全。','data-help'));
+  for(const [label,value] of [...Object.entries(fields).map(([key,name])=>[name+'缺失选区',entry.missingFields[key]]),['候选人得票缺失选区',entry.missingVotes],['当选标记或席次待核选区',entry.missingWinners],['有效票对账异常选区',entry.unreconciled],['号次缺失记录',entry.missingNumber],['性别缺失记录',entry.missingGender],['政党缺失记录',entry.missingParty],['现任缺失记录',entry.missingIncumbent],['部分档案条目（非完整候选人结果）',entry.partialArchives],['乡镇分票种投票概况缺项',entry.townProfileGaps||0]]){const tr=element('tr');tr.append(element('th',label),element('td',String(value)));body.append(tr)}
+  table.append(body);detail.append(table);for(const note of entry.coverageNotes||[])detail.append(element('p',note,'data-help'));detail.append(element('p','以上仅检查本站已收录字段，不证明全部历史选区、候选人或乡镇明细已齐全。','data-help'));
  }
  function draw(office,ys,results){
   const names=countyRows(results);
