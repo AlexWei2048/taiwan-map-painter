@@ -5,10 +5,10 @@
 - 已收录预设政党：50
 - 有党徽图档的标识（含无党籍标记）：48
 - 新增官方预设党徽：17
-- 新增官方历史名称图档：58
+- 新增官方历史名称图档：60
 - 已归一化的历史党名种类：156
 - 没有内置党徽的预设政党：1
-- 没有匹配到已收录党徽的历史党名：48
+- 没有匹配到已收录党徽的历史党名：46
 
 ## 缺党徽的预设政党
 
@@ -25,7 +25,6 @@
 | 中国台湾原住民党 | 1 | 0 |
 | 台湾吾党 | 1 | 0 |
 | 人民民主阵线 | 0 | 2 |
-| 保护台湾大联盟 | 0 | 1 |
 | 共和党 | 0 | 1 |
 | 社会改革党 | 0 | 1 |
 | 教科文预算保障e联盟 | 0 | 2 |
@@ -47,7 +46,6 @@
 | 台湾革命党 | 0 | 28 | history-legislative-2020.json |
 | 绿色本土清新党 | 0 | 25 | history-legislative-1998.json |
 | 真理党 | 0 | 20 | history-legislative-1992.json |
-| 保护台湾大联盟 | 0 | 18 | history-local-2005.json |
 | 共和党 | 0 | 18 | history-2022-candidacies |
 | 中华台商爱国党 | 0 | 17 | history-legislative-2012.json |
 | 国家民主党 | 0 | 17 | history-legislative-1998.json |
@@ -74,7 +72,6 @@
 | 中国民众党 | 0 | 1 | history-local-2006.json |
 | 全民生活政策党 | 0 | 1 | history-local-2018.json |
 | 华声党 | 0 | 1 | history-local-2014.json |
-| 台湾建国党 | 0 | 1 | history-local-2014.json |
 | 台湾民族党 | 0 | 1 | history-local-2014.json |
 | 嘉意公益党 | 0 | 1 | election-2026-candidates |
 | 大道人民党 | 0 | 1 | history-local-2014.json |
@@ -128,12 +125,12 @@
 
 这些文字包含诚实显示不可取得数据的情况，不能单凭关键字批量替换。
 
+- `history-workspace.js`：暂无资料 ×4, 暂无该 ×2, 无可核实 ×1
+- `history-trends-ui.js`：不可用 ×1
 - `history-observation-core.js`：无可核实 ×1
 - `site-updated.js`：不可用 ×1
 - `history-2022.js`：暂无资料 ×3, 暂无该 ×8, 未收录 ×1, 不可用 ×4, 无可核实 ×1
-- `history-trends-ui.js`：不可用 ×1
-- `history-workspace.js`：暂无资料 ×4, 暂无该 ×2, 无可核实 ×1
-- `history-trends.js`：无可核实 ×1
 - `history-observation-ui.js`：暂无数据 ×1, 无数据 ×1, 未收录 ×1, 不可用 ×2, 无可核实 ×1
-- `tests/p1-overview.test.cjs`：暂无资料 ×2
+- `history-trends.js`：无可核实 ×1
 - `tests/history-workspace.test.cjs`：暂无资料 ×5
+- `tests/p1-overview.test.cjs`：暂无资料 ×2

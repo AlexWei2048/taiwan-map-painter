@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "count_by_id": 17,
-  "count_by_historical_name": 58,
+  "count_by_historical_name": 60,
   "official_sources": [
     {
       "name": "大爱宪改",
@@ -907,7 +907,35 @@
       "rendered_sha256": "90eb25575a9e7b166800b35acc527663a90e1a5c6f1707c7435100f23b9def33",
       "image_bytes": 34060,
       "license": "Registered party mark, identity-only use; rights remain with party/owner",
-      "identity_note": "This is the Taiwanese registered 中華民族致公黨, not the PRC 中國致公黨, not the separate 中國洪門致公黨."
+      "identity_note": "This is the Taiwanese registered 中華民族致公黨, not the PRC 中國致公黨, not the separate 中國洪門致公黨.",
+      "party_id": null
+    },
+    {
+      "name": "台湾建国党",
+      "party_id": null,
+      "official_registry": "https://party.moi.gov.tw/PartyFinancialChecklistContent.aspx?fs=1362&n=16101&s=261&sms=13073",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2016/ff808081542c937601542d4583e6003c.png",
+      "source_sha256": "e59e7381da3feef08aab21fa9a2a314756686df2fca87b2efc5b862d8f60d19d",
+      "rendered_sha256": "fcfe8c663ec5cb0f8c694e271c2aad089220640f802e86d601a8df6077b37421",
+      "image_bytes": 4137,
+      "size_after_fit": "128x128",
+      "license": "Official registered party emblem; rights remain with the party or owner; identification only"
+    },
+    {
+      "name": "保护台湾大联盟",
+      "party_id": null,
+      "official_registry": "https://zh.wikipedia.org/wiki/保護台灣大聯盟",
+      "official_image": "https://ftpmirror.your.org/pub/wikimedia/images/wikipedia/zh/b/bb/TDA_logo.jpg",
+      "source_sha256": "28d3f34f6085f697881b9ae884d8a10903bcc0eb959db00a4c55616ea2c115c3",
+      "rendered_sha256": "ebcb63e91a4bb97ccaf6802d025f21a4ae7cd8003904392a9ee8184194735db9",
+      "image_bytes": 31105,
+      "size_after_fit": "128x128",
+      "license": "Historical flag identified by name in archived article; original rights retained",
+      "source_alternative": [
+        "https://upload.wikimedia.org/wikipedia/zh/b/bb/TDA_logo.jpg",
+        "https://upload.wikimedia.org/wikipedia/zh/thumb/b/bb/TDA_logo.jpg/250px-TDA_logo.jpg",
+        "https://ftpmirror.your.org/pub/wikimedia/images/wikipedia/zh/b/bb/TDA_logo.jpg"
+      ]
     }
   ],
   "unverified_or_unavailable": [

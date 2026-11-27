@@ -4,7 +4,7 @@
   "total_current_logo_ids": 48,
   "original_logo_ids": 30,
   "sourced_preset_logo_ids": 17,
-  "sourced_historical_logo_names": 58,
+  "sourced_historical_logo_names": 60,
   "total_party_names_in_archives": 156,
   "top_archive_parties": [
     {
@@ -443,7 +443,7 @@
       "name": "保护台湾大联盟",
       "rows": 18,
       "id": null,
-      "has_logo": false
+      "has_logo": true
     },
     {
       "name": "共和党",
@@ -845,7 +845,7 @@
       "name": "台湾建国党",
       "rows": 1,
       "id": null,
-      "has_logo": false
+      "has_logo": true
     },
     {
       "name": "联合党",
@@ -1227,29 +1227,6 @@
       "elected_examples": [],
       "mayor_candidate_count": 0,
       "mayor_examples": []
-    },
-    {
-      "name": "保护台湾大联盟",
-      "rows": 18,
-      "total_votes_across_grains": 8257,
-      "known_preset": null,
-      "sources": [
-        "history-local-2005.json",
-        "history-local-2006.json"
-      ],
-      "spellings": [
-        "保护台湾大联盟"
-      ],
-      "confirmed_elected_count": 0,
-      "elected_examples": [],
-      "mayor_candidate_count": 1,
-      "mayor_examples": [
-        {
-          "archive": "history-local-2006.json",
-          "contest": "2006-mayor:高雄市:regional:高雄市",
-          "candidate": "林志升"
-        }
-      ]
     },
     {
       "name": "共和党",
@@ -1706,22 +1683,6 @@
       "mayor_examples": []
     },
     {
-      "name": "台湾建国党",
-      "rows": 1,
-      "total_votes_across_grains": 81,
-      "known_preset": null,
-      "sources": [
-        "history-local-2014.json"
-      ],
-      "spellings": [
-        "台湾建国党"
-      ],
-      "confirmed_elected_count": 0,
-      "elected_examples": [],
-      "mayor_candidate_count": 0,
-      "mayor_examples": []
-    },
-    {
       "name": "台湾民族党",
       "rows": 1,
       "total_votes_across_grains": 741,
@@ -2137,29 +2098,6 @@
       ]
     },
     {
-      "name": "保护台湾大联盟",
-      "rows": 18,
-      "total_votes_across_grains": 8257,
-      "known_preset": null,
-      "sources": [
-        "history-local-2005.json",
-        "history-local-2006.json"
-      ],
-      "spellings": [
-        "保护台湾大联盟"
-      ],
-      "confirmed_elected_count": 0,
-      "elected_examples": [],
-      "mayor_candidate_count": 1,
-      "mayor_examples": [
-        {
-          "archive": "history-local-2006.json",
-          "contest": "2006-mayor:高雄市:regional:高雄市",
-          "candidate": "林志升"
-        }
-      ]
-    },
-    {
       "name": "共和党",
       "rows": 18,
       "total_votes_across_grains": 1149,
@@ -2304,7 +2242,7 @@
       "name": "保护台湾大联盟",
       "elected": 0,
       "mayor_candidates": 1,
-      "has_logo": false
+      "has_logo": true
     },
     {
       "name": "全国民主非政党联盟",
@@ -2482,6 +2420,26 @@
     }
   ],
   "placeholder_code_locations": {
+    "history-workspace.js": [
+      {
+        "phrase": "暂无资料",
+        "count": 4
+      },
+      {
+        "phrase": "暂无该",
+        "count": 2
+      },
+      {
+        "phrase": "无可核实",
+        "count": 1
+      }
+    ],
+    "history-trends-ui.js": [
+      {
+        "phrase": "不可用",
+        "count": 1
+      }
+    ],
     "history-observation-core.js": [
       {
         "phrase": "无可核实",
@@ -2516,32 +2474,6 @@
         "count": 1
       }
     ],
-    "history-trends-ui.js": [
-      {
-        "phrase": "不可用",
-        "count": 1
-      }
-    ],
-    "history-workspace.js": [
-      {
-        "phrase": "暂无资料",
-        "count": 4
-      },
-      {
-        "phrase": "暂无该",
-        "count": 2
-      },
-      {
-        "phrase": "无可核实",
-        "count": 1
-      }
-    ],
-    "history-trends.js": [
-      {
-        "phrase": "无可核实",
-        "count": 1
-      }
-    ],
     "history-observation-ui.js": [
       {
         "phrase": "暂无数据",
@@ -2564,16 +2496,22 @@
         "count": 1
       }
     ],
-    "tests/p1-overview.test.cjs": [
+    "history-trends.js": [
       {
-        "phrase": "暂无资料",
-        "count": 2
+        "phrase": "无可核实",
+        "count": 1
       }
     ],
     "tests/history-workspace.test.cjs": [
       {
         "phrase": "暂无资料",
         "count": 5
+      }
+    ],
+    "tests/p1-overview.test.cjs": [
+      {
+        "phrase": "暂无资料",
+        "count": 2
       }
     ]
   },
