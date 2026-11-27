@@ -21897,7 +21897,10 @@
           "name": "吳金生",
           "incumbent_at_election": true,
           "incumbent_source_url": "https://www.taichung.gov.tw/media/270401/551110255171.pdf",
-          "incumbent_source_locator": "《重溯清水鎮志》大事紀1994-03-01記載吳金生連任第12屆鎮長"
+          "incumbent_source_locator": "《重溯清水鎮志》大事紀1994-03-01記載吳金生連任第12屆鎮長",
+          "votes": 22567,
+          "votes_source_url": "https://www.taichung.gov.tw/media/270401/551110255171.pdf",
+          "votes_source_locator": "《重溯清水鎮志》表4-1-9「戰後清水鎮歷任鎮長」，第十二屆吳金生22,567票；第十一屆20,218票不可混用。表中第十二屆代表政黨空白；頁面截圖取得失敗。"
         }
       ],
       "source_sha256": "920ce0ae324eecba0f71f457da5f6a4a455e7960edf217c3122b8a0c93855e69"
@@ -21934,7 +21937,13 @@
       "winners": [
         {
           "town": "大里市",
-          "name": "陳彬銓"
+          "name": "陳彬銓",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_term_roster_crosscheck",
+          "previous_term_holder": "周芳村",
+          "incumbent_source_url": "https://www.taichung.gov.tw/media/267661/3368442571.pdf",
+          "incumbent_source_locator": "大里區志政事篇歷任市長及市民代表表：1993年11月1日至1994年2月28日首任市長，陳彬銓為市民代表會主席，1994年3月1日起任第二屆市長。首任姓名在來源中存在周芳村／周村芳異寫，依大事紀記載周芳村；非現任判斷不受影響。截圖未取得。",
+          "incumbent_corroboration_url": "https://www.taichung.gov.tw/media/267665/3351701771.pdf"
         }
       ]
     },
