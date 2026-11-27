@@ -114,14 +114,28 @@
    electorate:HistoryCore.identity(d.electorate)
   }));
  }
+ // Bound the fetch AND response body read; rejected requests remain retryable.
+ async function fetchOfficial2026(url,cache,format,timeout){
+  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeout);
+  try{
+   const response=await fetch(url,{cache,signal:controller.signal});
+   if(!response.ok)throw Error('2026资料 HTTP '+response.status);
+   return await response[format]();
+  }catch(error){
+   if(controller.signal.aborted)throw Error('2026资料载入超时，请重试');
+   throw error;
+  }finally{clearTimeout(timer)}
+ }
+ let history2026CheckStatus='unchecked';
  function check2026Availability(){
   if(history2026AvailabilityPending)return history2026AvailabilityPending;
   const pending=(async()=>{
    try{
-    const response=await fetch('assets/history-2026-availability.json?v=20261116-polling-gate',{cache:'no-store'});
-    if(!response.ok)throw Error('2026发布清单 HTTP '+response.status);
-    const manifest=await response.json();
-    if(!HistoryCore.official2026Manifest(manifest,candidateDatabase))return false;
+    const manifest=await fetchOfficial2026('assets/history-2026-availability.json?v=20261116-polling-gate','no-store','json',15000);
+    if(!HistoryCore.official2026Manifest(manifest,candidateDatabase)){
+     if(manifest?.schemaVersion===1&&manifest.year===2026&&manifest.status==='awaiting_results'&&!history2026Manifest){history2026CheckStatus='awaiting';return false}
+     throw Error('2026发布清单无效或已发布版本暂不可用');
+    }
     if(history2026Manifest?.resultStatus==='certified'&&manifest.resultStatus!=='certified')throw Error('正式公告版本不得降级');
     const version=manifest.sha256.toLowerCase();
     if(history2026Manifest?.sha256===version&&history2026Manifest.resultStatus!==manifest.resultStatus)throw Error('发布状态变化必须对应新的结果文件校验值');
@@ -130,12 +144,13 @@
     history2026Manifest={...manifest,sha256:version};
     window.HISTORY_2026_RESULTS_AVAILABLE=true;
     window.HISTORY_2026_RESULT_VERSION=version;
+    history2026CheckStatus='published';
     if(changed){
      if(!['president','legislative'].includes(el('historyOffice').value))updateYearOptions();
      window.HistoryWorkspace?.render?.();
     }
     return true;
-   }catch(error){console.warn('2026结果发布状态暂不可用',error.message);return false}
+   }catch(error){history2026CheckStatus='error';console.warn('2026结果发布状态暂不可用',error.message);return false}
   })();
   history2026AvailabilityPending=pending;
   pending.then(()=>{if(history2026AvailabilityPending===pending)history2026AvailabilityPending=null});
@@ -147,9 +162,8 @@
   if(history2026Snapshot)return history2026Snapshot;
   if(!history2026Pending){
    const pending=(async()=>{
-    const response=await fetch(manifest.file+'?v='+manifest.sha256,{cache:'reload'});
-    if(!response.ok)throw Error('2026官方结果 HTTP '+response.status);
-    const shard=await HistoryCore.decodeOfficial2026(await response.arrayBuffer(),manifest,candidateDatabase,window.crypto);
+    const bytes=await fetchOfficial2026(manifest.file+'?v='+manifest.sha256,'reload','arrayBuffer',60000);
+    const shard=await HistoryCore.decodeOfficial2026(bytes,manifest,candidateDatabase,window.crypto);
     if(history2026Manifest?.sha256!==manifest.sha256)throw Error('正式结果版本已更新，请重新载入');
     history2026Snapshot=shard;return shard;
    })();
@@ -207,7 +221,7 @@
   if(token!==loadingPresidentialId||!active)return;
   if(history2026Manifest?.status!=='published'){
    indicator.hidden=true;indicator.textContent='';el('historyYear').value=String(localYear);
-   toast('2026年正式得票尚未发布');return;
+   toast(history2026CheckStatus==='error'?'暂时无法核实2026年发布状态，请重新检查':'2026年正式得票尚未发布');return;
   }
   indicator.hidden=false;indicator.textContent='正在核对2026年正式结果数据…';el('historyRetry').hidden=true;
   try{
@@ -224,6 +238,24 @@
   }
  }
  check2026Availability();
+ const refresh2026Button=el('historyRefresh2026'),refresh2026Status=el('historyRefresh2026Status');
+ if(refresh2026Button)refresh2026Button.onclick=async()=>{
+  if(refresh2026Button.disabled)return;
+  const token=loadingPresidentialId;
+  refresh2026Button.disabled=true;refresh2026Status.textContent='正在检查2026年结果发布状态…';
+  try{
+   await check2026Availability();
+   if(history2026CheckStatus==='error'){refresh2026Status.textContent='暂时无法核实发布状态，已保留原有资料；请重试。';return}
+   if(history2026CheckStatus==='awaiting'){refresh2026Status.textContent='2026年结果尚未发布，仍可查询历届资料。';return}
+   if(active&&token===loadingPresidentialId&&!presidentialMode&&!legislativeMode&&localYear===2026&&snapshotData!==history2026Snapshot){
+    // Use the existing route restoration so the selected county and filters survive.
+    const route=routeSelection();
+    await restoreRoute(route,()=>active&&[token,token+1].includes(loadingPresidentialId));
+   }
+   refresh2026Status.textContent='已发现2026年结果发布清单，可选择2026年；结果须通过文件校验后显示。';
+  }catch(error){refresh2026Status.textContent=error.message||'检查失败，请重试'}
+  finally{refresh2026Button.disabled=false}
+ };
 
  function updateHistoricCounties(counties){
   const list=el('historyCounty'),previous=county;
