@@ -123,3 +123,18 @@ test('2026 publication labels reflect loaded snapshots and leave other election 
  assert.match(W.exportStem({...certified,office:'council'}),/正式公告结果$/);
  assert.doesNotMatch(W.exportStem({year:2022,office:'mayor',publicationStatus:'certified'}),/正式公告结果/);
 });
+
+
+test('Generic party trend lines distinguish absent participation from a recorded zero',()=>{
+ const T=require('../history-trends.js'),ui=read('history-trends-ui.js');
+ const absent={complete:true,parties:{'中国国民党':3}},zero={complete:true,parties:{'台湾民众党':0}},incomplete={complete:false,parties:{'台湾民众党':0}};
+ assert.equal(T.partyTrendValue(absent,'台湾民众党'),null,'no candidacy record is a gap, not zero');
+ assert.equal(T.partyTrendValue(zero,'台湾民众党'),0,'an explicit zero remains zero');
+ assert.equal(T.partyTrendValue(incomplete,'台湾民众党'),null,'incomplete archive is not zero');
+ assert.equal(T.partyTrendValue(absent,'', ['台湾民众党','时代力量']),null,'other parties are absent when none participated');
+ assert.equal(T.partyTrendValue({complete:true,parties:{'时代力量':0}},'', ['台湾民众党','时代力量']),0,'other parties preserve a recorded zero');
+ assert.match(ui,/get:r=>T\.partyTrendValue\(r,p\)/);
+ assert.match(ui,/get:r=>T\.partyTrendValue\(r,'',rest\)/);
+ assert.doesNotMatch(ui,/r\.complete\?r\.parties\[p\]\|\|0/);
+ assert.doesNotMatch(ui,/rest\.reduce\(\(n,p\)=>n\+\(r\.parties\[p\]\|\|0\)/);
+});
