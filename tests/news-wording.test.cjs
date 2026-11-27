@@ -142,3 +142,5 @@ test('Independent nomination wording is uniform in visible text and CSV exports'
 });
 
 test('Party proper names are protected in mixed text, DOM labels and CSV; historical aliases remain names, not generic words',()=>{for(const [source,want] of [['中国台湾少数民族党','中国台湾原住民党'],['中國台灣原住民黨','中国台湾原住民党'],['中国台湾原住民党 · 山地原住民','中国台湾原住民党 · 山地少数民族'],['中華民國機車黨','中华民国机车党'],['中华民国台湾基本法连线 · 总统选举','中华民国台湾基本法连线 · 台湾地区领导人选举'],['中国全民福利党','中国全民福利党'],['全民生活政策党','全民生活政策党'],['台灣基進','“台湾基进”'],['台湾团结联盟（台联党）','“台湾团结联盟（台联党）”'],['台湾建国党','台湾建国党'],['绿党社会民主党联盟','绿党社会民主党联盟']]){assert.equal(W.normalize(source),want);assert.equal(W.normalize(want),want)}assert.match(HistoryCore.csv([['中国台湾原住民党','中华民国机车党']]),/中国台湾原住民党.*中华民国机车党/)});
+
+test('Party name protection remains stable for full historical names and quotations',()=>{for(const [a,b] of [['保護台灣大聯盟','“保护台湾大联盟”'],['中国台湾原住民党','中国台湾原住民党'],['人民民主陣線','人民民主阵线'],['全國民主非政黨聯盟','“全国民主非政党联盟”'],['台湾团结联盟（台联党）','“台湾团结联盟（台联党）”']]){assert.equal(W.normalize(a),b);assert.equal(W.normalize(b),b)}});

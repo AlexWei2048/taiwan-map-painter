@@ -976,8 +976,10 @@ test('Historical maps build independent 2022 geography and seat records',()=>{
  assert.doesNotMatch(history,/每个党徽代表一席实际当选席次/);
  assert.match(read('council-seats.js'),/data-history-seat-count':1/);
 });
-test('Main UI language avoids restricted expression',()=>{
- for(const file of ['index.html','app.js','workspace-ui.js','history-2022.js','candidate-directory.js'])assert.equal(read(file).includes('\u5168\u56fd'),false,file);
+test('Main UI language avoids restricted expression without rewriting registered party names',()=>{
+ const W=require('./news-wording.js');
+ for(const file of ['index.html','app.js','workspace-ui.js','history-2022.js','candidate-directory.js'])assert.equal(read(file).replaceAll('全国民主非政党联盟','').includes('\u5168\u56fd'),false,file);
+ assert.equal(W.normalize('全国选举区'),'全部地区选举区');assert.match(W.normalize('全国民主非政党联盟'),/全国民主非政党联盟/);
 });
 
 test('2022 council districts use independent historical boundaries and reconcile to 910 seats',()=>{

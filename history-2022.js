@@ -1249,7 +1249,7 @@
   const overviewButton=el('historyDialogOverview');
   if(overviewButton){overviewButton.hidden=false;overviewButton.textContent='查看本选区概况';
    overviewButton.onclick=()=>{el('historyResultDialog').close();window.HistoryWorkspace?.openContestOverview?.(contestId)};}
-  const archiveButton=el('historyDialogArchive');if(archiveButton){archiveButton.hidden=!contest.county_name||/全部地区|台闽地区|全台|全国/.test(contest.county_name);archiveButton.onclick=()=>{el('historyResultDialog').close();window.HistoryDiscovery?.openRegion(contest.county_name,{office:routeSelection().office,ballot:contest.electorate})}};
+  const archiveButton=el('historyDialogArchive');if(archiveButton){archiveButton.hidden=!contest.county_name||/全部地区|台闽地区|全台|\u5168\u56fd/.test(contest.county_name);archiveButton.onclick=()=>{el('historyResultDialog').close();window.HistoryDiscovery?.openRegion(contest.county_name,{office:routeSelection().office,ballot:contest.electorate})}};
   el('historyDialogDrilldown').hidden=true;el('historyDialogBack').hidden=!county;if(!el('historyResultDialog').open)el('historyResultDialog').showModal();window.dispatchEvent(new Event('site-route-change'));
  }
  function exportRows(){

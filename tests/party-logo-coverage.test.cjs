@@ -23,7 +23,7 @@ test('Registry-sourced emblems are authentic auditable PNG files, not remote pla
  }
  const files=[];
  for(const source of report.official_sources){
-  const id=source.party_id,blob=context.ids[id]||context.names[source.name];
+  const id=source.party_id,blob=(id?context.ids[id]:null)||context.names[source.name];
   assert.ok(blob,'source has an actual installed logo: '+source.name);
   const binary=Buffer.from(blob.split(',')[1],'base64');
   assert.equal(binary.subarray(0,8).toString('hex'),'89504e470d0a1a0a');

@@ -41,7 +41,7 @@ candidates=json.loads((REPORT/"official-party-logo-candidates.json").read_text()
 audit=json.loads((REPORT/"coverage-audit.json").read_text())
 # The registry currently shows a longer name with legal-status parenthetical,
 # hence this party was not an exact-string match in the archived index.
-extra={"中华统一促进党":"https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&s=172&sms=13073", "台湾建国党":"https://party.moi.gov.tw/PartyFinancialChecklistContent.aspx?fs=1362&n=16101&s=261&sms=13073"}
+extra={"中华统一促进党":"https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&s=172&sms=13073", "台湾建国党":"https://party.moi.gov.tw/PartyFinancialChecklistContent.aspx?fs=1362&n=16101&s=261&sms=13073", "教科文预算保障e联盟":"https://party.moi.gov.tw/PartyFinancialChecklistContent.aspx?fs=1326&n=16101&s=255&sms=13073", "台湾吾党":"https://party.moi.gov.tw/PartyFinancialChecklistContent.aspx?fs=810&n=16101&s=156&sms=13073"}
 # These emblem files are explicitly identified on the registry detail pages.
 registry_emblems={
  # 2026 roster: exact current registry image links, not historical aliases.
@@ -62,12 +62,17 @@ for name,url in extra.items():
  try:
   response=session.get(url,timeout=24);response.raise_for_status()
   html=BeautifulSoup(response.text,"html.parser")
+  headings=[norm(h.get_text(strip=True)) for h in html.find_all(["h1","h2","h3","h4","h5","h6"])]
+  if not any(h==name or (name=="中华统一促进党" and h.startswith(name+"（")) for h in headings):
+   print("REGISTRY_IDENTITY_UNVERIFIED",name,headings,flush=True);continue
   imgs=[]
   for tag in html.find_all("img",src=True):
    from urllib.parse import urljoin
    im=urljoin(url,tag["src"])
-   if im.startswith("https://ws.moi.gov.tw/001/Upload/"):
-    imgs.append({"url":im,"alt":tag.get("alt","")})
+   alt=norm(tag.get("alt",""))
+   # Only the named party emblem/flag, never a decorative or financial-report image.
+   if im.startswith("https://ws.moi.gov.tw/001/Upload/") and ("党徽" in alt or "党旗" in alt) and "未上传" not in alt:
+    imgs.append({"url":im,"alt":alt})
   if imgs:candidates[name]={"detail_page":url,"image_candidates":imgs}
  except requests.RequestException as err:print("MANUAL_LOOKUP_FAIL",name,str(err),flush=True)
 
@@ -125,7 +130,7 @@ if prior_js.exists() and prior_json.exists():
    ("SOURCED_PARTY_LOGOS_BY_NAME",byname)):
   match=re.search(r"const "+variable+r"=(\{.*?\});",old,re.S)
   if match:target.update(json.loads(match.group(1)))
- documentation.extend(prior.get("official_sources",[]))
+ documentation.extend({**x,"party_id":x.get("party_id")} for x in prior.get("official_sources",[]))
  skips.extend(prior.get("unverified_or_unavailable",[]))
  print("REUSED_VERIFIED",len(byid),len(byname),len(documentation),flush=True)
 priority_winners={x['name'] for x in audit.get('missing_priority_party_logos',audit.get('missing_elected_party_logos',[]))}|{'民主联盟','全国民主非政党联盟','台湾吾党'}
@@ -257,6 +262,8 @@ supplemental += [
 ]
 # Prefer these independently matched images ahead of prior unavailable URLs.
 supplemental=supplemental[-6:]+supplemental[:-6]
+# The named archive article explicitly identifies this historical party flag.
+supplemental.insert(0,{"name":"保护台湾大联盟","also":[],"urls":wiki_variants("TDA logo.jpg","zh")+[wiki_image("TDA logo.jpg","zh").replace("https://upload.wikimedia.org/wikipedia/","https://ftpmirror.your.org/pub/wikimedia/images/wikipedia/")],"source_page":"https://zh.wikipedia.org/wiki/保護台灣大聯盟","license":"Historical flag identified by name in archived article; original rights retained"})
 # Mirror the exact same Wikimedia file path, not a search-result thumbnail.
 for item in supplemental:
  if item["name"] in {"红党","基进党"}:
@@ -376,7 +383,7 @@ output={"schemaVersion":1,"count_by_id":len(byid),"count_by_historical_name":len
 license_note=["官方登记党徽的来源与授权说明","",
  "党徽仅用于对应政党身份识别，权利归原党或权利人所有，并不受网站 MIT 授权涵盖。原图均来自政党资讯网登记页面及所属公开原始档案。",""]
 for x in documentation:
- license_note.append(f"{x['name']} [{x['party_id'] or '历史名称'}]\n登记：{x['official_registry']}\n原图：{x['official_image']}\n来源SHA256：{x['source_sha256']}\n")
+ license_note.append(f"{x['name']} [{x.get('party_id') or '历史名称'}]\n登记：{x['official_registry']}\n原图：{x['official_image']}\n来源SHA256：{x['source_sha256']}\n")
 (ASSETS/"LICENSE-party-logos-sourced.txt").write_text("\n".join(license_note))
 print("IMPORT_SUMMARY",json.dumps({"byId":len(byid),"byHistoricalName":len(byname),"skipped":len(skips),
  "missingPresetsAfter":[p["name"] for p in presets if p["id"] not in existing and p["id"] not in byid and p["id"] not in ("red","gray","csdp")]},ensure_ascii=False),flush=True)
