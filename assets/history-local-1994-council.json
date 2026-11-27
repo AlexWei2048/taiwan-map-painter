@@ -23670,6 +23670,20 @@
           "value": "男",
           "confidence": "cross_election_geographic_match"
         }
+      },
+      "incumbent_sources": {
+        "5": {
+          "value": true,
+          "source_url": "https://kmfinance.kinmen.gov.tw/News.aspx?Create=1&PageSize=999&n=55FDE4EAE7CDA1E6&page=426&sms=4FEFD09995C4BB81",
+          "source_locator": "金門縣政府網站轉載報導：第十一至十六屆基隆市議員。",
+          "election_date": "1994-01-29",
+          "method": "documented_previous_term_biography",
+          "confidence": "published_biographical_record",
+          "limitation": "依公開履歷及任期推定，非投票日逐日任免名冊。",
+          "original_name": "張通榮",
+          "ballot_number": 5,
+          "votes": 3073
+        }
       }
     },
     {
@@ -23942,6 +23956,20 @@
             "暖暖區"
           ]
         }
+      },
+      "incumbent_sources": {
+        "1": {
+          "value": false,
+          "source_url": "https://www.klc.moj.gov.tw/293105/293191/293157/545831/post",
+          "source_locator": "基隆地檢署2015-08-18新聞稿明載自1994-03-01開始連任第13至17屆；2009選舉公報履歷相符。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "依公開履歷及任期推定，非投票日逐日任免名冊。",
+          "original_name": "黃景泰",
+          "ballot_number": 1,
+          "votes": 2850
+        }
       }
     },
     {
@@ -24125,6 +24153,20 @@
           "original_name": "闕美玉",
           "value": "女",
           "confidence": "cross_election_geographic_match"
+        }
+      },
+      "incumbent_sources": {
+        "1": {
+          "value": false,
+          "source_url": "https://www.cdns.com.tw/articles/1475893",
+          "source_locator": "2026年報導明載由里長出身，自第13至20屆連任共八屆；首屆為第13屆。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "依公開履歷及任期推定，非投票日逐日任免名冊。",
+          "original_name": "張芳麗",
+          "ballot_number": 1,
+          "votes": 3502
         }
       }
     },
