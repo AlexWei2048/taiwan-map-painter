@@ -17,7 +17,7 @@
   return splitYear?CYCLES[year]+separator+year:String(year);
  }
  const localUrl=year=>'assets/history-local-'+year+'.json?v=20261126-municipal-roster-v'+(year===1994?'42':year===2018?'7':year===2002?'6':'5');
- const legacyCouncilUrl='assets/history-local-1994-council.json?v=31',legacyProfileUrl='sources/history-1994-changhua-council-profile.json?v=1',supplementUrl='assets/history-local-council-supplement.json?v=20261126-statutory-quota-v6';
+ const legacyCouncilUrl='assets/history-local-1994-council.json?v=32',legacyProfileUrl='sources/history-1994-changhua-council-profile.json?v=1',supplementUrl='assets/history-local-council-supplement.json?v=20261126-statutory-quota-v6';
  const trendSummarySourceVersion=()=>JSON.stringify([...new Set([...YEARS.mayor,...YEARS.council])].filter(y=>y<2022).sort((a,b)=>a-b).map(localUrl).concat([legacyCouncilUrl,legacyProfileUrl,supplementUrl]));
  const pending=(root.HistoryQueryCache||(typeof module!=='undefined'&&module.exports?require('./history-query-cache.js'):null)).createCache(8),supplementYears=new Set([1994,1998,2002,2005,2006,2009,2010,2014,2018]);
  let supplementRequest;
