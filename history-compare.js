@@ -66,7 +66,23 @@ function summarizeTowns(snapshot,office,ballot,normalize=norm){
  const n=v=>normalize(norm(v)),base=summarize(snapshot,office,ballot,normalize),counties=new Map(),all={...base.all,seats:null,leader:null};
  const result={year:snapshot.year,office,ballot,level:'town',all,counties};
  const partyList=office==='legislative'&&ballot==='party';
- if(!(['president','mayor'].includes(office)||partyList)||snapshot.year<2014)return result;
+ if(snapshot.year<2014)return result;
+ if(office==='township'){
+  const ids=new Set((snapshot.elections||[]).filter(e=>e.office===office).map(e=>e.election_id)),members=new Map(),seen=new Set();
+  for(const r of snapshot.candidacies||[]){if(!members.has(r.contest_id))members.set(r.contest_id,[]);members.get(r.contest_id).push(r)}
+  for(const contest of snapshot.contests||[]){
+   if(!ids.has(contest.election_id)||!contest.county_name||!contest.district_name)continue;
+   const key=n(contest.county_name)+'|'+n(contest.district_name),rs=members.get(contest.contest_id)||[];
+   if(seen.has(key)){counties.set(key,blank('同名乡镇选举区无法唯一匹配'));continue}seen.add(key);
+   if(contest.seats!==1||!number(contest.valid_votes)||!contest.valid_votes||!rs.length||rs.some(r=>!number(r.votes)||!r.party_name||/缺失|待核|未知/.test(r.party_name)||typeof r.elected_official!=='boolean')||rs.reduce((a,r)=>a+r.votes,0)!==contest.valid_votes||rs.filter(r=>r.elected_official).length!==1){counties.set(key,blank('乡镇市区长候选人或当选结果未能核实'));continue}
+   const parties=Object.create(null),valid=contest.valid_votes;
+   for(const r of rs){const p=groupParty(n(r.party_name)),v=parties[p]||(parties[p]={votes:0,share:0,seats:0});v.votes+=r.votes;if(r.elected_official)v.seats++}
+   for(const p of Object.values(parties))p.share=p.votes/valid*100;
+   counties.set(key,{complete:true,reason:'',valid,parties,seats:1,leader:Object.keys(parties).filter(p=>parties[p].seats===1),profile:verifiedProfile([{contest}],valid)});
+  }
+  return result;
+ }
+ if(!(['president','mayor'].includes(office)||partyList))return result;
  const byCounty=new Map(),profiles=new Map(),identity=r=>partyList?n(r.party||r.name):[n(r.name),String(Number(r.number))].join('|');
  for(const p of snapshot.townProfiles||[])if(p.office===office)profiles.set(n(p.county)+'|'+n(p.town),p);
  for(const r of snapshot.rows||[]){
