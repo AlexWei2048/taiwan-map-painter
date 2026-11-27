@@ -124,6 +124,7 @@
     if(!HistoryCore.official2026Manifest(manifest,candidateDatabase))return false;
     if(history2026Manifest?.resultStatus==='certified'&&manifest.resultStatus!=='certified')throw Error('正式公告版本不得降级');
     const version=manifest.sha256.toLowerCase();
+    if(history2026Manifest?.sha256===version&&history2026Manifest.resultStatus!==manifest.resultStatus)throw Error('发布状态变化必须对应新的结果文件校验值');
     const changed=history2026Manifest?.sha256!==version;
     if(changed){history2026Snapshot=null;history2026Pending=null}
     history2026Manifest={...manifest,sha256:version};
