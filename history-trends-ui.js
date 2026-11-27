@@ -298,7 +298,7 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
  function setVisible(name,visible){
   const scope=g.closest('#trendCharts')||g;
   const names=name?[name]:[...new Set([...scope.querySelectorAll('[data-trend-legend][role=checkbox]')].map(i=>i.getAttribute('data-trend-legend')))];for(const x of names)visible?hiddenTrendSeries.delete(x):hiddenTrendSeries.add(x);
-  for(const mark of scope.querySelectorAll('[data-trend-series]'))if(!name||mark.getAttribute('data-trend-series')===name){if(visible)mark.removeAttribute('display');else mark.setAttribute('display','none')}
+  for(const mark of scope.querySelectorAll('[data-trend-line-chart] [data-trend-series]'))if(!name||mark.getAttribute('data-trend-series')===name){if(visible)mark.removeAttribute('display');else mark.setAttribute('display','none')}
   for(const item of scope.querySelectorAll('[data-trend-legend][role=checkbox]'))if(!name||item.getAttribute('data-trend-legend')===name){item.setAttribute('aria-checked',String(visible));item.querySelector('[data-trend-checkbox-tick]').setAttribute('display',visible?'inline':'none');item.querySelector('[data-trend-checkbox-box]').setAttribute('fill',visible?'#287963':'#fff');item.querySelector('[data-trend-legend-label]').setAttribute('opacity',visible?'1':'.5')}
  }
  if(!stack){
