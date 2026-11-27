@@ -2241,6 +2241,17 @@
           "original_name": "吳滄富",
           "ballot_number": 2,
           "votes": 13527
+        },
+        "3": {
+          "value": false,
+          "source_url": "https://zh.wikipedia.org/wiki/雙溪區",
+          "source_locator": "歷任首長表第10、11屆林慶麒，第12屆簡華祥；與倉庫1994年雙溪鄉長任期考證及同縣議員候選人姓名、選區交叉匹配。",
+          "method": "prior_other_office_term_inference",
+          "election_date": "1994-01-29",
+          "original_name": "林慶麒",
+          "ballot_number": 3,
+          "votes": 9622,
+          "limitation": "任期或公開履歷推定，非投票日逐日任免原件。"
         }
       }
     },
@@ -11888,7 +11899,7 @@
           "游國相",
           3882,
           "民主進步黨",
-          "",
+          "男",
           false
         ],
         [
@@ -12167,6 +12178,17 @@
           "original_name": "黃慶賢",
           "value": "男",
           "confidence": "cross_election_geographic_match"
+        },
+        "6": {
+          "method": "cross-election exact official name, same county, township inside 1994 constituency, unique in county",
+          "years": [
+            2002
+          ],
+          "candidacy_ids": [
+            "2002-township:彰化县:regional:员林镇:3"
+          ],
+          "source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "limitations": "跨類別同名同地推定同一人，非1994年原始性別欄；仍可由原公報覆核。"
         },
         "8": {
           "method": "unique official name and same historical county, documented gender",
@@ -13587,7 +13609,7 @@
           "黃炎明",
           3273,
           "無黨籍",
-          "",
+          "男",
           false
         ],
         [
@@ -13654,6 +13676,31 @@
             "魚池鄉",
             "信義鄉"
           ]
+        },
+        "6": {
+          "method": "cross-election exact official name, same county, township inside 1994 constituency, unique in county",
+          "years": [
+            1998
+          ],
+          "candidacy_ids": [
+            "1998-township:南投县:regional:集集镇:1"
+          ],
+          "source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "limitations": "跨類別同名同地推定同一人，非1994年原始性別欄；仍可由原公報覆核。"
+        }
+      },
+      "incumbent_sources": {
+        "6": {
+          "value": false,
+          "source_url": "https://www.ly.gov.tw/Pages/Detail.aspx?nodeid=5408&pid=43391",
+          "secondary_source": "https://zh.wikipedia.org/wiki/集集鎮",
+          "source_locator": "立法機構資料稱前鎮長黃炎明；歷任首長表第10至11屆，接任者林明溱1994年3月1日就任。",
+          "method": "prior_other_office_term_inference",
+          "election_date": "1994-01-29",
+          "original_name": "黃炎明",
+          "ballot_number": 6,
+          "votes": 3273,
+          "limitation": "任期或公開履歷推定，非投票日逐日任免原件。"
         }
       }
     },
@@ -13957,7 +14004,7 @@
           "田長華",
           1001,
           "無黨籍",
-          "",
+          "男",
           false
         ],
         [
@@ -13968,7 +14015,20 @@
           "",
           false
         ]
-      ]
+      ],
+      "gender_sources": {
+        "2": {
+          "method": "cross-election exact official name, same county, township inside 1994 constituency, unique in county",
+          "years": [
+            1998
+          ],
+          "candidacy_ids": [
+            "1998-township:南投县:regional:信义乡:2"
+          ],
+          "source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "limitations": "跨類別同名同地推定同一人，非1994年原始性別欄；仍可由原公報覆核。"
+        }
+      }
     },
     {
       "county": "南投縣",
@@ -17349,6 +17409,18 @@
         ]
       ],
       "incumbent_sources": {
+        "1": {
+          "value": false,
+          "source_url": "https://www.tncc.gov.tw/councilorpage.asp?mainid=E011C49C-9B47-40DB-9E85-3219DCDEF1CB",
+          "secondary_source": "https://www.tncc.gov.tw/councilorpage.asp?mainid=D0001474-2C67-47CE-9D7F-98065BE41CE3",
+          "source_locator": "議會履歷列第13、14、15、16屆臺南縣議員，與1994年第13屆當選紀錄一致，依公開履歷起始屆次推定非現任。",
+          "method": "official_biography_first_listed_term_inference",
+          "election_date": "1994-01-29",
+          "original_name": "陳秋萍",
+          "ballot_number": 1,
+          "votes": 5508,
+          "limitation": "任期或公開履歷推定，非投票日逐日任免原件。"
+        },
         "10": {
           "value": true,
           "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/05%E7%9B%B4%E8%BD%84%E5%B8%82%E8%AD%B0%E5%93%A1/099%E5%B9%B4/04%E8%87%BA%E5%8D%97%E5%B8%82/%E8%87%BA%E5%8D%97%E5%B8%82%E7%AC%AC9%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
