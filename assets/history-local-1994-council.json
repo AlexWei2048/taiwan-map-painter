@@ -5416,6 +5416,17 @@
           "original_name": "張運炳",
           "ballot_number": 26,
           "votes": 7611
+        },
+        "27": {
+          "value": true,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/02%E7%AB%8B%E6%B3%95%E5%A7%94%E5%93%A1/097%E5%B9%B4%E7%AC%AC7%E5%B1%86/04%E8%A3%9C%E9%81%B8/%E6%A1%83%E5%9C%92%E7%B8%A3%E7%AC%AC%E4%B8%89%E9%81%B8%E5%8D%80%E7%AB%8B%E5%A7%94%E8%A3%9C%E9%81%B8.pdf",
+          "source_locator": "2010-02-27第七屆民代桃園縣第三選區補選公報，2號候選人經歷列第12至16屆桃園縣議員；公報文字可讀，截圖未取得。",
+          "election_date": "1994-01-29",
+          "method": "documented_previous_term_election_bulletin",
+          "original_name": "吳餘東",
+          "ballot_number": 27,
+          "votes": 6629,
+          "limitation": "任期履歷非投票日逐日任免資料。"
         }
       }
     },
@@ -5713,6 +5724,17 @@
         ]
       ],
       "incumbent_sources": {
+        "2": {
+          "value": true,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/02%E7%AB%8B%E6%B3%95%E5%A7%94%E5%93%A1/097%E5%B9%B4%E7%AC%AC7%E5%B1%86/04%E8%A3%9C%E9%81%B8/%E6%A1%83%E5%9C%92%E7%B8%A3%E7%AC%AC%E4%B8%89%E9%81%B8%E5%8D%80%E7%AB%8B%E5%A7%94%E8%A3%9C%E9%81%B8.pdf",
+          "source_locator": "同一補選公報3號候選人經歷列桃園縣第12、13、15、16屆議員；公報文字可讀，截圖未取得。",
+          "election_date": "1994-01-29",
+          "method": "documented_previous_term_election_bulletin",
+          "original_name": "黃仁杞",
+          "ballot_number": 2,
+          "votes": 10230,
+          "limitation": "任期履歷非投票日逐日任免資料。"
+        },
         "3": {
           "value": false,
           "source_url": "https://lawmaker.twreporter.org/council/taoyuan/lawmaker/chang-chao-liang-taoyuan",
@@ -14527,6 +14549,19 @@
             "1998-council:云林县:regional:第2选举区:9",
             "2002-council:云林县:regional:第2选举区:7"
           ]
+        }
+      },
+      "incumbent_sources": {
+        "5": {
+          "value": true,
+          "source_url": "https://gukeng.yunlin.gov.tw/cp.aspx?n=4743",
+          "source_locator": "古坑鄉公所鄉長簡介列第12至15屆雲林縣議員。",
+          "election_date": "1994-01-29",
+          "method": "official_biography_consecutive_terms",
+          "original_name": "林慧如",
+          "ballot_number": 5,
+          "votes": 6970,
+          "limitation": "任期履歷非投票日逐日任免資料。"
         }
       }
     },
