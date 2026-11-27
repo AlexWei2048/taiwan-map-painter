@@ -287,7 +287,13 @@
       "elected_gender_counts": {
         "male": 13,
         "female": 3
-      }
+      },
+      "candidate_gender_counts": {
+        "male": 55,
+        "female": 7
+      },
+      "candidate_gender_source_url": "https://ws.kinmen.gov.tw/Download.ashx?icon=..pdf&n=56S%2B5pyD5oyH5qiZLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvMzAyL3JlbGZpbGUvMTAwMTAvMzI3ODEzL%2Bekvuacg%2BaMh%2BaomS5wZGY%3D",
+      "candidate_gender_source_locator": "表33，頁100，民國83年1月29日第一屆縣議員；金門縣選委會資料；公開文字表格，截圖未取得。"
     }
   ],
   "incumbency_roster_audit": [
