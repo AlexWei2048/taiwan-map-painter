@@ -461,14 +461,14 @@
       "county": "臺北縣",
       "complete": false,
       "roster": 65,
-      "confirmed_true": 40,
+      "confirmed_true": 41,
       "confirmed_false": 0,
-      "ambiguous": [
-        "陳一郎"
-      ],
+      "ambiguous": [],
       "source_url": "https://httpchanblogspotcom.blogspot.com/2010/12/blog-post.html?m=0",
       "secondary_source": "https://www.bas.ntpc.gov.tw/uploaddowndoc?file=bas23%2F202110201734080.pdf&filedisplay=109%E5%B9%B4%E6%96%B0%E5%8C%97%E5%B8%82%E7%B5%B1%E8%A8%88%E6%91%98%E8%A6%81.pdf&flag=doc",
-      "method": "Secondary term roster exact unique name, positive matches only. Official aggregate corroborates roster size, not each name; no complete individual departure records. No negative inference."
+      "method": "Secondary term roster exact unique name, positive matches only. Official aggregate corroborates roster size, not each name; no complete individual departure records. No negative inference.",
+      "followup_individual_biography_count": 3,
+      "followup_note": "個別履歷核對；仍不將未見於次級名冊者一律判作非現任。"
     },
     {
       "county": "澎湖縣",
@@ -992,6 +992,19 @@
           "ballot_number": 10,
           "votes": 13971
         },
+        "11": {
+          "value": false,
+          "source_url": "https://zh.wikipedia.org/wiki/%E9%99%B3%E9%8C%A6%E9%8C%A0",
+          "source_locator": "人物條目記載自第13屆臺北縣議會起連任，任期起始1994年3月1日；前屆名錄無此名。次級履歷推定，非原始任免紀錄。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "前屆任職及履歷推定，未取得投票日逐日任免名冊。",
+          "original_name": "陳錦錠",
+          "ballot_number": 11,
+          "votes": 20167,
+          "corroboration_url": "https://httpchanblogspotcom.blogspot.com/2010/12/blog-post.html?m=0"
+        },
         "12": {
           "value": true,
           "source_url": "https://httpchanblogspotcom.blogspot.com/2010/12/blog-post.html?m=0",
@@ -1089,6 +1102,19 @@
         ]
       ],
       "incumbent_sources": {
+        "5": {
+          "value": false,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/05%E7%9B%B4%E8%BD%84%E5%B8%82%E8%AD%B0%E5%93%A1/099%E5%B9%B4/02%E6%96%B0%E5%8C%97%E5%B8%82/%E6%96%B0%E5%8C%97%E5%B8%82%E7%AC%AC6%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "source_locator": "2010年新北市第6選區第6號候選人履歷列第13至16屆臺北縣議員及永和市民代表，前屆名錄無此名。PDF文字可讀，截圖未取得。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "前屆任職及履歷推定，未取得投票日逐日任免名冊。",
+          "original_name": "金介壽",
+          "ballot_number": 5,
+          "votes": 15698,
+          "corroboration_url": "https://httpchanblogspotcom.blogspot.com/2010/12/blog-post.html?m=0"
+        },
         "6": {
           "value": true,
           "source_url": "https://httpchanblogspotcom.blogspot.com/2010/12/blog-post.html?m=0",
@@ -1314,6 +1340,19 @@
         ]
       ],
       "incumbent_sources": {
+        "1": {
+          "value": false,
+          "source_url": "https://www.hakka-portal.ntpc.gov.tw/archive/article/1/pta_1320_9057086_95285.pdf",
+          "source_locator": "新北市客家文化典藏，盧嘉辰大事紀要，印刷第75頁：1987年當選土城鄉民代表，1994年當選第13屆臺北縣議員，1998年當選第14屆。前屆名錄無此名。PDF文字可讀，截圖未取得。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "前屆任職及履歷推定，未取得投票日逐日任免名冊。",
+          "original_name": "盧嘉辰",
+          "ballot_number": 1,
+          "votes": 10498,
+          "corroboration_url": "https://httpchanblogspotcom.blogspot.com/2010/12/blog-post.html?m=0"
+        },
         "2": {
           "value": true,
           "source_url": "https://httpchanblogspotcom.blogspot.com/2010/12/blog-post.html?m=0",
@@ -2361,6 +2400,19 @@
           "original_name": "李碧玉",
           "ballot_number": 2,
           "votes": 2096
+        },
+        "4": {
+          "value": true,
+          "source_url": "https://www.ntpc.gov.tw/ch/home.jsp?dataserno=201807280004&id=28&mcustomize=news_view.jsp&parentpath=0%2C6%2C27",
+          "source_locator": "2018-07-28新北市政府新聞，明載新店陳一郎曾當選第12屆臺北縣議員；與第10選區及前屆名錄一致。",
+          "election_date": "1994-01-29",
+          "method": "official_prior_term_biography",
+          "confidence": "official_biographical_record",
+          "limitation": "前屆任職及履歷推定，未取得投票日逐日任免名冊。",
+          "original_name": "陳一郎",
+          "ballot_number": 4,
+          "votes": 11154,
+          "corroboration_url": "https://httpchanblogspotcom.blogspot.com/2010/12/blog-post.html?m=0"
         },
         "5": {
           "value": true,
