@@ -481,7 +481,7 @@ function render(){
  $('trendStatus').textContent=models.length+' 届 · '+(rows.length-missing.length)+' 条完整地区/届次结果'+(missing.length?' · '+missing.map(r=>r.label+(r.scopeLabel?' '+r.scopeLabel:'')+'：'+r.reason).join('；'):'');
  if(T.historicalCountyFamily(conf.county).length>1)out.append(node('p','data-help','升格前使用当届县名；合并前原县、原市分列，合并后使用直辖市结果。不同辖区不合计、不跨合并边界连线。'));
  const voteMetric=conf.metric==='share'||conf.metric==='votes',pct=conf.metric==='share';
- const leading=!totalLeg&&['president','mayor','township'].includes(effective.office);
+ const leading=!totalLeg&&(effective.office==='president'||effective.office==='mayor'&&effective.level==='town');
  const selected=conf.candidateScope==='candidate'&&voteMetric;
  const name=selected?(conf.office==='legislative'&&conf.electorate==='party'?conf.candidate?.party:conf.candidate?.name)||'指定候选人':voteMetric?'各地区最高票候选人':conf.metric==='seats'?conf.party:'';
  const unit=conf.level==='town'||conf.office==='township'?'乡镇市区':'县市';
@@ -491,7 +491,7 @@ function render(){
  let series=[];
  if(voteMetric||conf.metric==='seats')series=[{name:displayParty(name||metricTitle),color:conf.candidate?.party?color(conf.candidate.party):conf.party?color(conf.party):'#287963',get:r=>r.values?.value??null}];
  else {
-  const totals=new Map();for(const r of rows)for(const [p,n] of Object.entries(r.parties))totals.set(p,(totals.get(p)||0)+n);
+  const totals=new Map();for(const r of rows){if(!r.complete)continue;for(const p of r.participatingParties||[])if(!totals.has(p))totals.set(p,0);for(const [p,n] of Object.entries(r.parties))totals.set(p,(totals.get(p)||0)+n)}
   const parties=[...totals].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],'zh')).map(x=>x[0]),top=parties.slice(0,7),rest=parties.slice(7);
   series=top.map(p=>({name:displayParty(p),color:color(p),get:r=>T.partyParticipationValue(r,p)}));
   if(rest.length)series.push({name:'其他政党',color:color('其他政党'),get:r=>T.partyParticipationValue(r,'',rest)});
