@@ -3845,9 +3845,12 @@ test('Township executive comparison supports town grain and retains map nodes wh
  await page.locator('[data-find-select="county"]').click();await page.locator('#optionFinderQuery').press('Escape');await page.locator('#optionFinderDialog').waitFor({state:'hidden'});
  await page.locator('.export-menu summary').click();await page.locator('#previewExport').click();await page.waitForFunction(()=>!document.querySelector('#previewExportSvg').disabled);
  await page.locator('#previewWinnerTable').check();await page.locator('#previewCandidateScope').selectOption('all');await page.locator('#previewNote').fill('测试注释');assert.equal(await page.locator('#previewExportSvg').isDisabled(),true);
+ assert.equal(await page.locator('#exportPreviewImage').getAttribute('src'),null);
  await page.locator('#refreshExportPreview').click();await page.waitForFunction(()=>!document.querySelector('#previewExportSvg').disabled);
  assert.equal(await page.locator('#exportCandidateScope').inputValue(),'all');assert.equal(await page.locator('#exportNote').inputValue(),'测试注释');
  await page.locator('#closeExportPreview').click();
+ await page.waitForFunction(()=>!document.querySelector('#exportPreviewImage').hasAttribute('src'));
+ assert.equal(await page.locator('#previewExportSvg').isDisabled(),true);
  });
 
  test('Mobile result navigation and dynamic select visibility remain usable with option search',async t=>{
