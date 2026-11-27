@@ -580,6 +580,27 @@ test('Administrative index fits the responsive map layout with legible text',asy
  }
 });
 
+test('Map camera survives same-scope redraw and full export but resets on navigation or Fit',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ await page.locator('#county').selectOption('台北市');
+ const initial=await page.locator('#map').getAttribute('viewBox');
+ await page.locator('#zoomIn').click();
+ await page.waitForFunction(old=>document.querySelector('#map').getAttribute('viewBox')!==old,initial);
+ const result=await page.evaluate(()=>{
+  view={...view,x:view.x+12,y:view.y+8};flushView();
+  const before=document.querySelector('#map').getAttribute('viewBox'),option=document.querySelector('#predictionRegion option');
+  render();const after=document.querySelector('#map').getAttribute('viewBox');
+  const sameOption=option===document.querySelector('#predictionRegion option');
+  const source=preparedExportSvg();
+  return {before,after,afterExport:document.querySelector('#map').getAttribute('viewBox'),sameOption,exported:source.includes('<svg')};
+ });
+ assert.equal(result.after,result.before);assert.equal(result.afterExport,result.before);assert.equal(result.sameOption,true);assert.equal(result.exported,true);
+ await page.locator('#fit').click();assert.equal(await page.locator('#map').getAttribute('viewBox'),initial);
+ await page.locator('#zoomIn').click();await page.waitForFunction(old=>document.querySelector('#map').getAttribute('viewBox')!==old,initial);
+ await page.locator('#county').selectOption('高雄市');
+ assert.equal(await page.evaluate(()=>JSON.stringify(view)===JSON.stringify(baseView)),true);
+});
+
 test('Administrative index stays fixed in normal flow during map zoom and pan',async t=>{
  const page=await pageFor(t);await page.locator('#county').selectOption({value:'高雄市'});
  await page.locator('#predictionScale').selectOption('overlay');
