@@ -9,3 +9,37 @@
 .guestbook-edit{display:grid;gap:8px;margin-top:10px;padding:10px;background:#f4f8f5;border:1px solid #d9e5da;border-radius:8px}.guestbook-edit input,.guestbook-edit textarea,#guestbookAdminSearch{width:100%;box-sizing:border-box;border:1px solid #d9e5da;border-radius:7px;padding:9px;background:#fff;color:#253b33;font:inherit}.guestbook-edit textarea{resize:vertical}#guestbookAdminSearch{flex:1;min-width:140px}#guestbookStatus input{width:100%;padding:8px}#guestbookDetailBack{margin-top:10px}@media(max-width:700px){.guestbook-edit input,.guestbook-edit textarea,#guestbookAdminSearch{font-size:16px}}
 .guestbook-attachment-box{padding:10px 12px;background:#f6f9f7;border:1px solid #d9e5da;border-radius:8px}.guestbook-attachment-box input[type=file]{width:100%;max-width:100%;font-size:13px}.guestbook-attachment-box img,.guestbook-attachment img{display:block;max-width:100%;max-height:380px;object-fit:contain;border:1px solid #d9e5da;border-radius:6px;margin:8px 0}.guestbook-attachment{padding:8px;background:#f6f9f7;border-radius:6px}.guestbook-attachment .button{margin-right:8px}.guestbook-admin-counts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0}.guestbook-stat{display:grid;gap:4px;text-align:left;padding:10px;background:#f2f7f4;border:1px solid #d9e5da;border-radius:8px;color:#253b33;cursor:pointer}.guestbook-stat span{font-size:12px}.guestbook-stat strong{font-size:24px;font-variant-numeric:tabular-nums;color:#147d68}#guestbookAdminAlert{padding:8px 10px;background:#fff4df;border-radius:6px;color:#805a17}@media(max-width:700px){.guestbook-admin-counts{grid-template-columns:repeat(2,minmax(0,1fr))}.guestbook-stat strong{font-size:21px}}
 .guestbook-item-head .guestbook-update{color:#166b48;background:#e5f3e9;padding:3px 7px;border-radius:5px;font-weight:600}.guestbook-dirty{outline:2px solid #c39136;outline-offset:-2px}.guestbook-dirty::before{content:"未保存的处理内容";font-size:12px;color:#87590b;font-weight:600}
+
+/* Isolate guestbook from legacy global dialog>div flex layout. */
+dialog#guestbookAdminDialog,dialog#guestbookDialog{box-sizing:border-box;width:min(880px,calc(100vw - 32px));max-width:none;max-height:calc(100dvh - 32px);margin:auto;padding:20px;overflow:auto;overscroll-behavior:contain;font-size:14px}
+dialog#guestbookAdminDialog>div,dialog#guestbookDialog>div{margin:0;min-width:0;max-width:100%}
+dialog#guestbookAdminDialog>#guestbookAdminContent{display:block;min-width:0;width:100%;margin-top:12px}
+dialog#guestbookAdminDialog>.guestbook-header,dialog#guestbookDialog>.guestbook-header{display:flex;justify-content:space-between;align-items:center;gap:12px;position:sticky;top:-20px;padding:12px 0;background:#fff;z-index:4;border-bottom:1px solid #e4ece5}
+dialog#guestbookDialog>.guestbook-toolbar,dialog#guestbookDialog>.guestbook-filters{display:flex;justify-content:flex-start;margin:12px 0;gap:8px}
+dialog#guestbookAdminDialog #guestbookAdminCounts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;width:100%;margin:8px 0 12px}
+dialog#guestbookAdminDialog .guestbook-stat{min-width:0;min-height:70px;padding:10px;gap:4px;text-align:left;white-space:normal}
+dialog#guestbookAdminDialog .guestbook-stat span{word-break:normal;white-space:normal}
+dialog#guestbookAdminDialog .guestbook-toolbar{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.6fr) auto auto;gap:8px;align-items:center;margin:12px 0}
+dialog#guestbookAdminDialog .guestbook-toolbar select,dialog#guestbookAdminDialog #guestbookAdminSearch{width:100%;min-width:0;max-width:100%;margin:0}
+dialog#guestbookAdminDialog .guestbook-list{display:grid;grid-template-columns:minmax(0,1fr);width:100%;gap:12px}
+dialog#guestbookAdminDialog .guestbook-item{min-width:0;padding:14px;overflow-wrap:anywhere}
+dialog#guestbookAdminDialog .guestbook-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;gap:8px}
+dialog#guestbookAdminDialog .guestbook-fields select{min-width:0;margin:0}
+dialog#guestbookAdminDialog textarea{display:block;min-height:88px;min-width:0;max-width:100%;margin:0}
+dialog#guestbookAdminDialog .guestbook-actions{justify-content:flex-start}
+dialog#guestbookAdminDialog #guestbookAdminAuth{max-width:480px;margin:18px auto}
+dialog#guestbookAdminDialog #guestbookAdminAuth .guestbook-check{display:flex;flex-direction:row;align-items:center;justify-content:flex-start;font-size:13px;line-height:1.5}
+dialog#guestbookAdminDialog #guestbookAdminAuth .guestbook-check input{width:auto;flex:none}
+dialog#guestbookAdminDialog .data-help{white-space:normal;word-break:normal;line-height:1.6}
+@media(max-width:700px){
+dialog#guestbookAdminDialog,dialog#guestbookDialog{width:calc(100vw - 12px);max-height:calc(100dvh - 12px);padding:12px;border-radius:12px}
+dialog#guestbookAdminDialog>.guestbook-header,dialog#guestbookDialog>.guestbook-header{top:-12px;padding:8px 0}
+dialog#guestbookAdminDialog #guestbookAdminCounts{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+dialog#guestbookAdminDialog .guestbook-toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}
+dialog#guestbookAdminDialog #guestbookAdminSearch{grid-column:1/-1}
+dialog#guestbookAdminDialog .guestbook-toolbar select,dialog#guestbookAdminDialog .guestbook-fields select{font-size:14px;min-height:44px}
+dialog#guestbookAdminDialog .guestbook-item{padding:10px}
+dialog#guestbookAdminDialog .guestbook-item-head{gap:6px}
+dialog#guestbookAdminDialog .guestbook-item-head time{margin-left:0;flex-basis:100%}
+dialog#guestbookAdminDialog .guestbook-actions .button{font-size:13px;min-height:40px;padding:8px 10px}
+}
