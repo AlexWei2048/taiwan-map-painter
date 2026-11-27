@@ -262,7 +262,7 @@ function syncWorkspace(){
  $('predictionScopeLabel').textContent=task?'2026 用户预测':'自由填色 · 自行录入数据';
  $('predictionGradientRange').hidden=!(task&&state.fillMode==='prediction'&&predictionUsesGradient()&&!predictionMarginMode());
  if(task&&predictionUsesGradient()){$('predictionRangeMin').value=state.gradient.min;$('predictionRangeMax').value=predictionMarginMode()?(state.gradient.marginManual===true?state.gradient.max:''):state.gradient.max??(predictionIsVotes()?'':100);$('predictionRangeMax').placeholder=predictionMarginMode()?'自动（领先差距）':predictionIsVotes()?'票数自动':'100';$('predictionRangeUnit').textContent=predictionMarginMode()?'百分点':predictionIsVotes()?'票':'%'}
- $('openElectionDirectory').textContent='查看所选区候选人';$('allCandidates').textContent=state.county?'查看本县市全部候选人':'查看全部候选人';
+ $('openElectionDirectory').textContent='候选人查询 · 本选区';$('allCandidates').textContent='候选人查询';
  syncingWorkspace=false;
 }
 let districtTableKey='';
@@ -311,7 +311,7 @@ syncInputs();syncWorkspace();if(data)render();
 // The main renderer now synchronizes region numbers and their adjacent table; do not override it.
 // Navigation label refresh is owned by app.js and coalesced after input settles.
 // CSV tools stay together in the top Export/Plan menus instead of repeating beside the map.
-const planMenu=document.querySelector('.header-menu .menu-popover');
+const planMenu=document.querySelector('#planDialog .plan-backup-actions');
 const templateAction=dirText('button','下载预测名单模板');templateAction.onclick=()=>exportPredictionCSV(true);
 const importAction=dirText('button','导入预测表格 CSV');importAction.onclick=()=>$('predictionCsvFile').click();planMenu.append(templateAction,importAction);
 // Close toolbar menus after an action or a click anywhere outside; opening one menu closes the other.
