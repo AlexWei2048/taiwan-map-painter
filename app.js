@@ -1846,8 +1846,9 @@ function syncBoundaryTree(live,next){
  else if(live.getAttribute('transform')!==transform)live.setAttribute('transform',transform);
  const sameShape=(a,b)=>{
   if(a.localName!==b.localName)return false;
-  const geometry=node=>Array.from(node.attributes).filter(x=>!['transform','stroke','stroke-width','style'].includes(x.name)).map(x=>[x.name,x.value]).sort((x,y)=>x[0].localeCompare(y[0]));
-  return JSON.stringify(geometry(a))===JSON.stringify(geometry(b));
+  const geometry=node=>Array.from(node.attributes).filter(x=>!['transform','stroke','stroke-width','style'].includes(x.name));
+  const attrs=geometry(b);
+  return geometry(a).length===attrs.length&&attrs.every(x=>a.getAttribute(x.name)===x.value);
  };
  const fresh=Array.from(next.children),existing=Array.from(live.children);
  for(let i=0;i<fresh.length;i++){
