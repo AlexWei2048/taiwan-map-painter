@@ -1,29 +1,29 @@
 # 数据完整性审计
 
-数据基准：`21727ab61dccadc3cfe031d3a98d4f6bc7441d8a`。行数为任务记录数，非缺失候选人总数。
+数据基准：`1692da847d4b284db52565f93342b10fd0a5b89b`。行数为任务记录数，非缺失候选人总数。
 
 ## 状态
 
-- unverified: 4
-- conflict: 1
-- missing: 1170
-- not_applicable: 6
+- unverified: 5
 - partial: 16
+- missing: 1164
+- not_applicable: 6
 - not_yet_available: 1
 
 ## 字段
 
-- incumbent_at_election: 990
+- incumbent_at_election: 977
 - gender: 168
-- ballots_cast: 101
-- invalid_votes: 101
-- registered_voters: 80
+- ballots_cast: 100
+- invalid_votes: 100
+- registered_voters: 87
 - candidate_results: 14
 - ballot_number: 7
 - district_scope: 4
 - historical_boundary: 3
-- regional_town_returns: 2
-- national_vs_local_votes: 1
+- regional_town_candidate_transposition: 1
+- local_turnout_residual: 1
+- regional_town_returns: 1
 - turnout: 1
 - reserved_seats: 1
 
@@ -99,9 +99,9 @@
 | 1992 | legislative | plains | 1 | 9 | {} |
 | 1992 | legislative | regional | 27 | 330 | {} |
 | 1992 | legislative | party | 1 | 15 | {} |
-| 1992 | legislative | regional | — | — | {"national":1,"county":25,"district":27,"town":359} |
+| 1992 | legislative | regional | — | — | {"national":1,"county":25,"district":27,"town":363} |
 | 1992 | legislative | plains | — | — | {"national":1,"county":23,"district":1,"town":359} |
-| 1992 | legislative | mountain | — | — | {"national":1,"county":23,"district":1,"town":359} |
+| 1992 | legislative | mountain | — | — | {"national":1,"county":24,"district":1,"town":363} |
 | 1995 | legislative | mountain | 1 | 9 | {} |
 | 1995 | legislative | plains | 1 | 9 | {} |
 | 1995 | legislative | regional | 27 | 314 | {} |
