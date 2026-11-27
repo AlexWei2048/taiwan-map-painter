@@ -88,7 +88,7 @@ test('national legislative turnout is ballot-specific and all available figures 
   assert.ok(stat.turnout>0&&stat.turnout<=100);
  }
  assert.equal(T.national(2004,'party'),null);
- assert.equal(T.overall(1992).ballotsCast,9666020);
+ assert.equal(T.overall(1992).ballotsCast,9666021);
  const regional=Data.localResult(Core.index(shard(2004)),{year:2004,electorate:'regional',scope:'all'});
  assert.equal(regional.overview.registeredVoters,16258979);
  assert.equal(regional.overview.invalidVotes,77336);

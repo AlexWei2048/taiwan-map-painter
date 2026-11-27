@@ -136,7 +136,7 @@
    if(!has&&na)x.reason=na.reason;
   }
   // An explicitly missing county must also be reflected in the whole archive.
-  if([...buckets.values()].some(b=>['partial','missing'].includes(b.status)))all.status='partial';
+  if([...buckets.values()].some(b=>['partial','missing'].includes(b.status))||(legislative&&snapshot.voteReconciliation?.some(x=>x.unassignedVotes>0)))all.status='partial';
   return {year:snapshot.year,office,all,counties:[...buckets.values()]};
  }
  const api={analyze,labels,countyKey,countyLabel,countyRows,applicability,matrixEntry};

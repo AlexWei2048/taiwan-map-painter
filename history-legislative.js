@@ -95,8 +95,8 @@
   if(electorate==='party'&&Number(year)<2008)return '旧制不另发政党票：选民投区域或少数民族候选人一票，各党推荐候选人得票汇总为不分区及侨选的席次计算票（无党籍和未经推荐者不计入）。地图颜色表示当地席次计算票领先的政党，不代表当地另选出一名不分区民代；名单与席次按全区票数分配。'+(Number(year)===2001?'2001年新店与汐止依政大明细补齐1,447票。':'');
   if(Number(year)===2001&&electorate==='regional')return '2001年新店与汐止按政大逐候选人明细补齐1,447票，乡镇、选区、县市及全区合计均为10,174,005张区域民代有效票。';
   if(Number(year)===1992&&electorate==='regional')return '1992年区域民代乡镇票数与选区归属来自政大选举研究中心；少数地名采用档案所列后期称谓。金门、马祖可查县级结果。';
-  if(Number(year)===1992&&electorate==='mountain')return '全区63,831票已由政大所藏中选会统计及斯坦福研究逐候选人票数交叉核对；地方明细63,829票，华加志2票地理归属未载，不分摊至县市或乡镇。';
-  if(Number(year)===1992&&electorate==='plains')return '政大县市与乡镇市区逐级核对至全区49,333票。';
+  if(Number(year)===1992&&electorate==='mountain')return '全区63,831票已由政大所藏中选会统计及斯坦福研究逐候选人票数交叉核对；全区投票统计经整届官方年鉴交叉验证；地方明细63,829票，华加志2票地理归属未载，不分摊至县市或乡镇。';
+  if(Number(year)===1992&&electorate==='plains')return '全区49,333票已核对；全区投票统计经整届官方年鉴交叉验证，地方统计存在未定位差额，不分摊。';
   return '';
  }
  function districtNumber(value){
@@ -560,8 +560,15 @@
   }
   const fields=['registered_voters','ballots_cast','valid_votes','invalid_votes'];
   const plain=Object.values(profiles.plains.county);
-  const contests=shard.contests.map(c=>c.electorate==='plains'?
-   {...c,...Object.fromEntries(fields.map((field,i)=>[field,plain.reduce((sum,row)=>sum+row[i],0)]))}:c);
+  const contests=shard.contests.map(c=>{
+   const national=archive.ballots[c.electorate]?.nationalProfile?.profile;
+   if(national){
+    const valid=shard.rows.filter(r=>r.level==='national'&&r.electorate===c.electorate).reduce((n,r)=>n+r.votes,0);
+    if(!validProfile(national,valid))throw Error('1992年全区投票统计与候选人票数不符');
+    return {...c,...Object.fromEntries(fields.map((field,i)=>[field,national[i]]))};
+   }
+   return c.electorate==='plains'?{...c,...Object.fromEntries(fields.map((field,i)=>[field,plain.reduce((sum,row)=>sum+row[i],0)]))}:c;
+  });
   const originalRows=shard.rows.filter(r=>r.level!=='county'||r.county!=='台闽地区'||!Object.hasOwn(profiles,r.electorate));
   const local={...shard,rows:[...originalRows,...rows],contests,geographicProfiles:profiles,voteReconciliation:reconciliation?[reconciliation]:[]};
   return archive.ballots.regional?apply1992Regional(local,archive.ballots.regional):local;
@@ -573,7 +580,7 @@
    const [response,local]=await Promise.all([
 
     fetcher('assets/history-legislative-'+year+'.json?v=20261124-vote-reconciliation-v4',{cache:'default'}),
-    [1992,2001].includes(year)?fetcher('assets/history-legislative-'+year+'-local.json?v='+(year===1992?'4':'1')).then(response=>{
+    [1992,2001].includes(year)?fetcher('assets/history-legislative-'+year+'-local.json?v='+(year===1992?'5':'1')).then(response=>{
      if(!response.ok)throw Error(year+'年地方得票资料 HTTP '+response.status);
      return response.json();
     }):null,
