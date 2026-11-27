@@ -3849,3 +3849,18 @@ test('Township executive comparison supports town grain and retains map nodes wh
  await page.locator('#historyCopyPaint').click();await page.locator('#copyPaintOverwrite').check();await page.locator('#copyPaintApply').click();assert.equal(await page.evaluate(()=>state.fills.counties['63000']),'blue');
  await page.locator('#undo').click();assert.equal(await page.evaluate(()=>JSON.stringify(state.fills)),before.fills);
  });
+
+ test('Historical result rows and district reference rows link to exact map regions without changing fills',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ await page.locator('#categoryHistory').click();await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022&&document.querySelector('#historyLoadStatus').hidden&&!document.querySelector('#categoryHistory').hasAttribute('aria-busy'));
+ await page.locator('#historyViewCandidates').click();const row=page.locator('#historyResults tr[data-map-link="history|台北市"]').first();await row.waitFor({state:'visible'});
+ const path=page.locator('#regions path[data-map-link="history|台北市"]');const fill=await path.getAttribute('fill');await row.focus();
+ await page.waitForFunction(()=>document.querySelector('#regions path[data-map-link="history|台北市"]').classList.contains('map-linked-highlight'));
+ assert.equal(await path.getAttribute('fill'),fill);assert.equal(await page.locator('#historyResults tr.map-linked-highlight').count(),await page.locator('#historyResults tr[data-map-link="history|台北市"]').count());
+ await page.locator('#historySearch').focus();assert.equal(await path.evaluate(e=>e.classList.contains('map-linked-highlight')),false);
+ await page.locator('#categoryFuture').click();await page.locator('#workspaceFree').click();await page.locator('#councilLevel').click();await page.locator('#county').selectOption('台北市');
+ await page.waitForFunction(()=>document.querySelector('#regions path[data-region="63000-01"]'));
+ const ref=page.locator('#districtTableGroups tr[data-map-link="modern|63000-01|regional"]');await ref.locator('button').first().focus();
+ const district=page.locator('#regions path[data-region="63000-01"]');await page.waitForFunction(()=>document.querySelector('#regions path[data-region="63000-01"]').classList.contains('map-linked-highlight'));
+ assert.equal(await page.locator('#regions path.map-linked-highlight').count(),1);await district.focus();assert.equal(await ref.evaluate(e=>e.classList.contains('map-linked-highlight')),true);
+ });

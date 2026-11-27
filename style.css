@@ -1063,3 +1063,9 @@ body.analysis-mode #historyTownBoundaryBox{display:none!important}
 @media(max-width:700px){#bulkPaintOpen{min-height:44px}.bulk-paint-dialog select{font-size:16px}.bulk-paint-dialog .dialog-actions button{min-height:44px}}
 
 #historyCopyPaint{margin:8px 0 4px;min-height:36px;color:#216b54;background:#f3f8f3}#copyPaintStatus{font-weight:600;color:#216b54;background:#f0f6f1;padding:10px;border-radius:7px}@media(max-width:700px){#historyCopyPaint{min-height:44px}}
+
+/* Linked table and map focus is transient; never alter saved party colors. */
+#regions path.map-linked-highlight{stroke:#174d39!important;stroke-width:2.5!important;stroke-linejoin:round;vector-effect:non-scaling-stroke;filter:drop-shadow(0 0 1px #fff)}
+#districtTableGroups tr.map-linked-highlight>*,#historyResults tr.map-linked-highlight>*{background:#e0f0e5!important;color:#214f3e}
+#districtTableGroups tr.map-linked-highlight> :first-child,#historyResults tr.map-linked-highlight> :first-child{box-shadow:inset 3px 0 #267657}
+#districtTableGroups tr[data-map-link]:focus-visible,#historyResults tr[data-map-link]:focus-visible{outline:2px solid #267657;outline-offset:-2px}
