@@ -50,7 +50,7 @@
   if(existing&&existing.status!=='unknown')return existing;
   return applicability(county,year,office)||existing||{status:'unknown'};
  }
- function analyze(snapshot,office,normalize=defaultNorm){
+ function analyze(snapshot,office,normalize=defaultNorm,options={}){
   const norm=v=>normalize(defaultNorm(v)),buckets=new Map(),ids=new Set((snapshot.elections||[]).filter(e=>e.office===office).map(e=>e.election_id));
   const create=county=>({county,contests:0,candidates:0,countyRows:0,townRows:0,towns:0,missingVotes:0,missingWinners:0,missingNumber:0,missingGender:0,missingParty:0,missingIncumbent:0,unreconciled:0,missingFields:Object.fromEntries(Object.keys(fields).map(f=>[f,0])),partialArchives:0,declared:false,notApplicable:false});
   const all=create('全部地区'),get=county=>{county=countyKey(norm(county),Number(snapshot.year));if(!county||aggregateName(county))return null;if(!buckets.has(county))buckets.set(county,create(county));return buckets.get(county)};
@@ -61,18 +61,62 @@
    for(const county of Array.isArray(e.noElectionCounties)?e.noElectionCounties:[]){const b=get(county);if(b)b.notApplicable=true}
   }
   for(const c of snapshot.candidacies||[]){if(!contestById.has(c.contest_id))continue;const rows=members.get(c.contest_id)||[];rows.push(c);members.set(c.contest_id,rows)}
+  // Legislative turnout is published as a separate, independently reconciled
+  // ballot-level asset. Do not mistake a missing field in the candidate-results
+  // snapshot for an absent ballot statistic. Never allocate a county total to
+  // one district when the county has multiple constituencies.
+  const legislative=office==='legislative',turnout=options.turnout||null;
+  const regionalCount=new Map();
+  if(legislative)for(const c of contestById.values())if(c.electorate==='regional')
+   regionalCount.set(c.county_name,(regionalCount.get(c.county_name)||0)+1);
+  const districtNumber=s=>{
+   const a=String(s||'').match(/第\s*(\d+)\s*选/);if(a)return String(Number(a[1]));
+   const b=String(s||'').match(/第([一二三四五六七八九十]+)选/);if(!b)return'';
+   const m={'一':1,'二':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8,'九':9,'十':10},v=b[1];
+   return String(v==='十'?10:v.startsWith('十')?10+(m[v[1]]||0):v.endsWith('十')?(m[v[0]]||0)*10:m[v]||'');
+  };
+  const completeProfile=(p,v)=>Array.isArray(p)&&p.length===4&&p.every(valid)&&
+   p[0]>=p[1]&&p[1]===p[2]+p[3]&&valid(v)&&p[2]===v;
+  const legislativeProfile=c=>{
+   if(!legislative)return null;
+   const electorate=c.electorate||electionById.get(c.election_id)?.electorate;
+   if(electorate==='party'&&Number(snapshot.year)<2008)return null;
+   const original=Object.keys(fields).map(k=>c[k]);
+   if(completeProfile(original,c.valid_votes))return original;
+   const candidates=turnout?.ballots?.[electorate];
+   let profile=null;
+   if(electorate==='regional'){
+    const count=regionalCount.get(c.county_name)||0,number=districtNumber(c.district_name);
+    profile=count>1?candidates?.district?.[c.county_name]?.[number]:
+     candidates?.county?.[c.county_name];
+   }else profile=candidates?.national;
+   if(completeProfile(profile,c.valid_votes))return profile;
+   if(electorate==='plains'&&Number(snapshot.year)===1992){
+    const county=snapshot.geographicProfiles?.plains?.county||{};
+    const rows=Object.values(county);
+    if(rows.length){
+     const totals=[0,1,2,3].map(i=>rows.reduce((sum,row)=>sum+row[i],0));
+     if(completeProfile(totals,c.valid_votes))return totals;
+    }
+   }
+   return null;
+  };
   for(const [id,c] of contestById){
    const rows=members.get(id)||[],b=get(c.county_name),partyBallot=office==='legislative'&&(c.electorate||electionById.get(c.election_id)?.electorate)==='party';
+   const profile=legislativeProfile(c);
    for(const x of [all,b].filter(Boolean)){
     x.contests++;x.candidates+=rows.length;
-    for(const [f] of Object.entries(fields))if(!valid(c[f])&&!(partyBallot&&Number(snapshot.year)<2008))x.missingFields[f]++;
+    for(const [f] of Object.entries(fields))if(!valid(c[f])&&!profile&&
+     !(partyBallot&&Number(snapshot.year)<2008))x.missingFields[f]++;
     if(!rows.length||rows.some(r=>!valid(r.votes)))x.missingVotes++;
-    if(['mayor','council','township'].includes(office)&&(!rows.length||rows.some(r=>typeof r.elected_official!=='boolean')||valid(c.seats)&&rows.filter(r=>r.elected_official===true).length!==c.seats))x.missingWinners++;
+    if((['mayor','council','township'].includes(office)||legislative&&!partyBallot)&&
+     (!rows.length||rows.some(r=>typeof r.elected_official!=='boolean')||
+     valid(c.seats)&&rows.filter(r=>r.elected_official===true).length!==c.seats))x.missingWinners++;
     if(valid(c.valid_votes)&&rows.length&&rows.every(r=>valid(r.votes))&&rows.reduce((n,r)=>n+r.votes,0)!==c.valid_votes)x.unreconciled++;
     for(const r of rows){if(!partyBallot&&!String(r.ballot_number??'').trim())x.missingNumber++;if(!partyBallot&&!['男','女','男性','女性'].includes(r.gender))x.missingGender++;if(!String(r.party_name??'').trim()||/缺失|未知|待核/.test(r.party_name))x.missingParty++;if(!partyBallot&&typeof r.incumbent_at_election!=='boolean')x.missingIncumbent++}
    }
   }
-  for(const r of snapshot.rows||[]){if(r.type!==office||!['county','town'].includes(r.level))continue;const b=get(r.county);if(!b)continue;
+  for(const r of snapshot.rows||[]){if((r.type!==office&&!(legislative&&r.electorate))||!['county','town'].includes(r.level))continue;const b=get(r.county);if(!b)continue;
    for(const x of [all,b]){if(r.level==='county')x.countyRows++;else{x.townRows++;if(r.town){if(!townSets.has(x))townSets.set(x,new Set());townSets.get(x).add(norm(r.county)+'|'+norm(r.town))}}}
   }
   const fragments=office==='township'?snapshot.partialTownshipReturns:office==='council'?snapshot.partialCouncilReturns:[];
@@ -81,7 +125,12 @@
   for(const x of [all,...buckets.values()]){
    x.towns=townSets.get(x)?.size||0;
    const has=x.contests>0||x.countyRows>0||x.townRows>0;
-   const gaps=x.missingVotes||x.missingWinners||x.unreconciled||x.missingNumber||x.missingGender||x.missingParty||x.missingIncumbent||Object.values(x.missingFields).some(Boolean);
+   // Gender and election-day incumbency enrich the archive, but their
+   // unavailability does not make a certified candidate-vote result incomplete.
+   // They remain separately visible in the detail table.
+   const gaps=x.missingVotes||x.missingWinners||x.unreconciled||x.missingNumber||
+    (legislative?0:x.missingGender)||(legislative?0:x.missingIncumbent)||
+    x.missingParty||Object.values(x.missingFields).some(Boolean);
    const na=x===all?null:applicability(x.county,snapshot.year,office);
    x.status=x.partialArchives||has&&(gaps||x===all&&declaredPartial)?'partial':has?'recorded':x.notApplicable||na?'na':x.declared?'missing':'unknown';
    if(!has&&na)x.reason=na.reason;
@@ -103,8 +152,12 @@
   const key=office+'|'+year;
   if(!cache.has(key)){
    const p=(async()=>{
-    const shard=office==='president'?await root.HistoryPresidential.load(year):office==='legislative'?await root.HistoryLegislative.load(year):[2022,2026].includes(year)?await root.History2022View.trendSnapshot(year):await root.HistoryLocal.loadCycle(year,office);
-    return analyze(shard,office,typeof simplify==='function'?simplify:defaultNorm);
+    const [shard,turnout]=office==='legislative'?
+     await Promise.all([root.HistoryLegislative.load(year),root.HistoryLegislativeTurnout.load(year)]):
+     [office==='president'?await root.HistoryPresidential.load(year):
+      [2022,2026].includes(year)?await root.History2022View.trendSnapshot(year):
+       await root.HistoryLocal.loadCycle(year,office),null];
+    return analyze(shard,office,typeof simplify==='function'?simplify:defaultNorm,{turnout});
    })();
    cache.set(key,p);p.catch(()=>{if(cache.get(key)===p)cache.delete(key)});
   }
@@ -115,7 +168,8 @@
   if(entry.status==='unknown'||entry.status==='error'||entry.status==='na'||entry.status==='missing'){
    detail.append(element('p',entry.status==='unknown'?'该届行政区划下尚无对应记录或明确覆盖声明，需要核实档案。':entry.status==='error'?'资料读取失败，不作为缺档统计。':entry.status==='na'?(entry.reason||'档案明确标记未举行此类选举。'):'档案声明覆盖该地区，但未发现结果记录。'));return;
   }
-  detail.append(element('p','已收录：'+entry.contests+'个选区 / '+entry.candidates+'条候选人记录；县市得票明细 '+entry.countyRows+'条，乡镇市区得票明细 '+entry.townRows+'条（'+entry.towns+'个地区）。'));
+  detail.append(element('p','已收录：'+entry.contests+'个选区或票种 / '+entry.candidates+'条候选人、政党记录；县市得票明细 '+entry.countyRows+'条，乡镇市区得票明细 '+entry.townRows+'条（'+entry.towns+'个地区）。'));
+  if(office==='legislative')detail.append(element('p','立法机构民代的投票人数等统计另外核对同届、同票种的原始投票概况；旧制不分区计算票不作为独立投票。性别、现任等附加字段仍可待核，但不等于候选人得票、当选结果缺失。','data-help'));
   const table=element('table',undefined,'history-candidate-table'),body=element('tbody');
   for(const [label,value] of [...Object.entries(fields).map(([key,name])=>[name+'缺失选区',entry.missingFields[key]]),['候选人得票缺失选区',entry.missingVotes],['当选标记或席次待核选区',entry.missingWinners],['有效票对账异常选区',entry.unreconciled],['号次缺失记录',entry.missingNumber],['性别缺失记录',entry.missingGender],['政党缺失记录',entry.missingParty],['现任缺失记录',entry.missingIncumbent],['部分档案条目（非完整候选人结果）',entry.partialArchives]]){const tr=element('tr');tr.append(element('th',label),element('td',String(value)));body.append(tr)}
   table.append(body);detail.append(table,element('p','以上仅检查本站已收录字段，不证明全部历史选区、候选人或乡镇明细已齐全。','data-help'));
