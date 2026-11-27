@@ -21529,10 +21529,13 @@
           "source_locator": "法務部100.12.26法律字第10000608680號函確認大園鄉前劉姓鄉長擔任第12、13屆；大園區歷任表列第11屆陳秋霖、第12屆劉春生；1998年選舉票表亦列劉春生當選。",
           "evidence_type": "ministry_justice_official_term_record_plus_later_roster",
           "confidence": "corroborated_legal_and_historical",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "party_recommendation": null,
-          "ballot_number": null
+          "ballot_number": null,
+          "gender_source_url": "https://votetw.com/data/candidate/%E5%8A%89%E6%98%A5%E7%94%9F",
+          "gender_source_locator": "1998年大園鄉長當選者，2002年桃園縣議員資料明載男；既有任期證據確認同名同鄉首長。",
+          "gender_method": "cross_election_identity"
         },
         {
           "town": "八德鄉",
@@ -21968,7 +21971,11 @@
           "previous_term_holder": "周芳村",
           "incumbent_source_url": "https://www.taichung.gov.tw/media/267661/3368442571.pdf",
           "incumbent_source_locator": "大里區志政事篇歷任市長及市民代表表：1993年11月1日至1994年2月28日首任市長，陳彬銓為市民代表會主席，1994年3月1日起任第二屆市長。首任姓名在來源中存在周芳村／周村芳異寫，依大事紀記載周芳村；非現任判斷不受影響。截圖未取得。",
-          "incumbent_corroboration_url": "https://www.taichung.gov.tw/media/267665/3351701771.pdf"
+          "incumbent_corroboration_url": "https://www.taichung.gov.tw/media/267665/3351701771.pdf",
+          "gender": "男",
+          "gender_source_url": "https://votetw.com/data/candidate/%E9%99%B3%E5%BD%AC%E9%8A%93",
+          "gender_source_locator": "1998年大里市長選舉2號陳彬銓，男、現任；與1994年當選名及同市任期吻合。",
+          "gender_method": "cross_election_identity"
         }
       ]
     },
@@ -24401,12 +24408,15 @@
           "incumbent_at_election": true,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "簡東明",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://www.ly.gov.tw/Pages/List.aspx?nodeid=1665",
-          "corroboration_url": "https://zh.wikipedia.org/wiki/%E7%8D%85%E5%AD%90%E9%84%89_(%E5%8F%B0%E7%81%A3)"
+          "corroboration_url": "https://zh.wikipedia.org/wiki/%E7%8D%85%E5%AD%90%E9%84%89_(%E5%8F%B0%E7%81%A3)",
+          "gender_source_url": "https://www.ly.gov.tw/Pages/List.aspx?nodeid=1665",
+          "gender_source_locator": "第7屆民代官方履歷明載性別男及獅子鄉第11、12任鄉長。",
+          "gender_method": "official_biography_explicit_gender"
         }
       ]
     },
@@ -26247,7 +26257,7 @@
         {
           "town": "社頭鄉",
           "name": "蕭景田",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": true,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "蕭景田",
@@ -26255,7 +26265,10 @@
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://www.ly.gov.tw/Pages/List.aspx?nodeid=1659",
-          "corroboration_url": "https://tw.news.yahoo.com/%E8%95%AD-%E5%8D%8A%E5%87%BA%E5%90%8D%E4%BA%BA-%E8%95%AD%E8%90%AC%E9%95%B7%E7%95%99%E5%8D%B0%E8%A8%98%E9%A4%A8-201024646.html"
+          "corroboration_url": "https://tw.news.yahoo.com/%E8%95%AD-%E5%8D%8A%E5%87%BA%E5%90%8D%E4%BA%BA-%E8%95%AD%E8%90%AC%E9%95%B7%E7%95%99%E5%8D%B0%E8%A8%98%E9%A4%A8-201024646.html",
+          "gender_source_url": "https://www.ly.gov.tw/Pages/List.aspx?nodeid=1659",
+          "gender_source_locator": "官方履歷明載性別男及社頭鄉第11、12屆鄉長。",
+          "gender_method": "official_biography_explicit_gender"
         }
       ],
       "corroboration_url": "https://tw.news.yahoo.com/%E8%95%AD-%E5%8D%8A%E5%87%BA%E5%90%8D%E4%BA%BA-%E8%95%AD%E8%90%AC%E9%95%B7%E7%95%99%E5%8D%B0%E8%A8%98%E9%A4%A8-201024646.html"
