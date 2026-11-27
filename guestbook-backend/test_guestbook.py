@@ -115,7 +115,7 @@ class GuestbookTests(unittest.TestCase):
         self.assertEqual(err.exception.code,429)
     def test_private_screenshot_access_and_removal(self):
         import base64
-        encoded=base64.b64encode(b"\xff\xd8\xff\x00\x00\x00\xff\xd9").decode()
+        encoded="/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAAEAAQDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAf/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AL+AD//Z"
         p=dict(self.data,p_screenshot=encoded)
         self.call("submit",p)
         self.call("submit",p)
@@ -135,6 +135,7 @@ class GuestbookTests(unittest.TestCase):
         try:
             self.assertEqual(self.call("attachment",dict(p_id=self.mid,p_admin=server.ADMIN_TOKEN))["image"],encoded)
             self.assertEqual(self.call("admin_counts",{"p_admin":server.ADMIN_TOKEN})["approved"],1)
+            self.assertEqual(len(self.call("admin_list",{"p_admin":server.ADMIN_TOKEN,"p_filter":"todo"})["records"]),1)
         finally:
             server.ADMIN_TOKEN=old
         self.assertTrue(self.call("remove_attachment",dict(p_id=self.mid,p_secret=self.secret)))
@@ -144,7 +145,7 @@ class GuestbookTests(unittest.TestCase):
         import base64
         with self.assertRaises(server.Problem):
             self.call("submit",dict(self.data,p_screenshot="not-image"))
-        encoded=base64.b64encode(b"\xff\xd8\xff\x00\x00\x00\xff\xd9").decode()
+        encoded="/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAAEAAQDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAf/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AL+AD//Z"
         self.call("submit",dict(self.data,p_screenshot=encoded))
         self.call("withdraw",dict(p_id=self.mid,p_secret=self.secret))
         self.assertEqual(self.db.execute("SELECT COUNT(*) FROM attachments").fetchone()[0],0)
