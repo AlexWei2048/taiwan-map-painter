@@ -372,18 +372,18 @@
       "complete": true,
       "roster": 55,
       "confirmed_true": 38,
-      "confirmed_false": 70,
+      "confirmed_false": 71,
       "ambiguous": [
         "林耀輝",
         "張瑞陽",
-        "顏清標",
         "陳文洲"
       ],
-      "unverified": 0,
+      "unverified": 3,
       "source_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&zno=160",
       "secondary_source": "https://www.taichung.gov.tw/media/270401/551110255171.pdf",
       "departure_names": [],
-      "method": "Same county exact unique official name; missing from complete roster only; near-name and incomplete roster nonmatches remain unknown. Term roster is historical evidence, not a dated attendance list."
+      "method": "Same county exact unique official name; missing from complete roster only; near-name and incomplete roster nonmatches remain unknown. Term roster is historical evidence, not a dated attendance list.",
+      "followup_source": "sources/history-1994-incumbency-disambiguation-20261127.json"
     },
     {
       "county": "苗栗縣",
@@ -417,15 +417,14 @@
       "complete": true,
       "roster": 29,
       "confirmed_true": 22,
-      "confirmed_false": 38,
-      "ambiguous": [
-        "林礽松"
-      ],
-      "unverified": 1,
+      "confirmed_false": 39,
+      "ambiguous": [],
+      "unverified": 0,
       "source_url": "https://www.hcc.gov.tw/history-member-detail?C=14&program=191",
       "secondary_source": "https://www.hcc.gov.tw/history-member-detail?C=15&program=191",
       "departure_names": [],
-      "method": "Same county and exact unique official name. Term roster evidence; near names and nonmatches from the Taichung City roster remain unknown."
+      "method": "Same county and exact unique official name. Term roster evidence; near names and nonmatches from the Taichung City roster remain unknown.",
+      "followup_source": "sources/history-1994-incumbency-disambiguation-20261127.json"
     },
     {
       "county": "臺中市",
@@ -488,30 +487,18 @@
       "confirmed_true": 0,
       "inferred_true": 19,
       "confirmed_false": 0,
-      "ambiguous": [
-        {
-          "name": "陳秀暖",
-          "candidate_district": "第2選舉區",
-          "similar_prior_winner": "陳淑暖",
-          "note": "一字近似，未確認是否同一人"
-        },
-        {
-          "name": "林榮木",
-          "candidate_district": "第9選舉區",
-          "similar_prior_winner": "林榮星",
-          "note": "一字近似，未確認是否同一人"
-        }
-      ],
+      "ambiguous": [],
       "source_url": "https://web.cec.gov.tw/api/file/0965a18d-e101-4921-bee3-e56b5e0dd062.pdf",
       "secondary_source": "https://web.cec.gov.tw/api/file/8c0c7bea-1128-43b9-aec7-47e7f5c1bfd9.pdf",
       "term_source": "https://web.cec.gov.tw/central/article/18789",
       "method": "1990官方第十二屆選舉結果33名當選人與1994年第十三屆69名參選者比對；25名已驗證當選人沿用舊證，37名精確未匹配者推定非前屆議員，2名一字近似保留未知。",
-      "unverified": 2,
-      "newly_inferred_false": 37,
+      "unverified": 0,
+      "newly_inferred_false": 39,
       "current_candidates": 69,
       "crosschecked_prior_winner_candidates": 25,
       "prior_negative_preexisting": 5,
-      "limitation": "官方1990年選舉清冊並非1990–1994全部遞補、離職名冊，因此未匹配分類屬有來源的推定，不是逐人1994選舉日直接在任證明。"
+      "limitation": "官方1990年選舉清冊並非1990–1994全部遞補、離職名冊，因此未匹配分類屬有來源的推定，不是逐人1994選舉日直接在任證明。",
+      "followup_source": "sources/history-1994-incumbency-disambiguation-20261127.json"
     },
     {
       "county": "嘉義縣",
@@ -3025,6 +3012,19 @@
           "ballot_number": 7,
           "votes": 2416
         },
+        "8": {
+          "value": false,
+          "source_url": "https://web.cec.gov.tw/api/file/0965a18d-e101-4921-bee3-e56b5e0dd062.pdf",
+          "corroboration_url": "https://web.cec.gov.tw/api/file/8c0c7bea-1128-43b9-aec7-47e7f5c1bfd9.pdf",
+          "source_locator": "1990年第二選區清冊無陳秀暖；相似名陳淑暖在1990年第4區當選，1994年第5區5號2677票；陳秀暖另為1994年第2區8號5513票，兩人同次選舉分別列名。",
+          "method": "prior_term_roster_nonmatch_distinct_same_election_candidates",
+          "confidence": "inferred_from_official_roster",
+          "limitation": "1990年當選名冊不含全任期遞補；推定非前屆現任，不是逐日任免證明。兩份PDF文字可讀，頁面影像未取得。",
+          "election_date": "1994-01-29",
+          "original_name": "陳秀暖",
+          "ballot_number": 8,
+          "votes": 5513
+        },
         "9": {
           "value": true,
           "source_url": "https://nccur.lib.nccu.edu.tw/retrieve/79437/100801.pdf",
@@ -4210,6 +4210,19 @@
             "votes": 1380,
             "elected": true
           }
+        },
+        "2": {
+          "value": false,
+          "source_url": "https://web.cec.gov.tw/api/file/0965a18d-e101-4921-bee3-e56b5e0dd062.pdf",
+          "corroboration_url": "https://web.cec.gov.tw/api/file/8c0c7bea-1128-43b9-aec7-47e7f5c1bfd9.pdf",
+          "source_locator": "1990年山地選區當選人為許金虎及江新財；林榮星為1990年第1區當選人，1994年仍為第1區12號3821票；林榮木另為1994年第9區2號811票，兩人同次選舉分別列名。",
+          "method": "prior_term_roster_nonmatch_distinct_same_election_candidates",
+          "confidence": "inferred_from_official_roster",
+          "limitation": "1990年當選名冊不含全任期遞補；推定非前屆現任，不是逐日任免證明。兩份PDF文字可讀，頁面影像未取得。",
+          "election_date": "1994-01-29",
+          "original_name": "林榮木",
+          "ballot_number": 2,
+          "votes": 811
         },
         "3": {
           "value": false,
@@ -5855,6 +5868,18 @@
           "source_url": "https://www.hcc.gov.tw/history-member-detail?C=14&program=191",
           "basis": "列入同縣市第十二屆議會官方任期名冊",
           "roster_term": "1990–1994"
+        },
+        "7": {
+          "value": false,
+          "source_url": "https://laws.gov.taipei/law/Judge/JudgeContent/J,93,訴,444,001",
+          "corroboration_url": "https://www.hcc.gov.tw/history-member-detail?C=14&program=191",
+          "source_locator": "臺北市法規查詢系統所載新竹地院93年度訴字第444號判決，事實第一段明載自民國83年間起任新竹縣議員；第12屆議員名冊亦無此人。",
+          "method": "documented_first_office_year_and_prior_roster",
+          "confidence": "official_document",
+          "election_date": "1994-01-29",
+          "original_name": "林礽松",
+          "ballot_number": 7,
+          "votes": 4285
         },
         "8": {
           "value": false,
@@ -10011,6 +10036,18 @@
           "roster_term": "1990-03-01/1994-02-28",
           "election_date": "1994-01-29",
           "roster_name": null
+        },
+        "4": {
+          "value": false,
+          "source_url": "https://www.thenewslens.com/article/158361",
+          "corroboration_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&zno=160",
+          "source_locator": "2021-11-09歷史專文記1990年當選埔子里長、1994年轉戰縣議員，與原台中縣第12屆議員名錄未列其名相符。",
+          "method": "documented_first_election_and_prior_roster",
+          "confidence": "crosschecked_secondary_and_official_roster",
+          "election_date": "1994-01-29",
+          "original_name": "顏清標",
+          "ballot_number": 4,
+          "votes": 13840
         },
         "5": {
           "value": false,
@@ -21344,7 +21381,31 @@
           "男",
           true
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "14": {
+          "value": true,
+          "source_url": "https://b012.dahan.edu.tw/var/file/12/1012/img/28/449993388.pdf",
+          "source_locator": "大漢技術學院第一屆傑出校友履歷第1頁，記花蓮縣議會第11、12屆副議長、議長；公開文字表，截圖未取得。",
+          "method": "documented_previous_term_biography",
+          "confidence": "institutional_biography",
+          "election_date": "1994-01-29",
+          "original_name": "俞傳旺",
+          "ballot_number": 14,
+          "votes": 2107
+        },
+        "18": {
+          "value": true,
+          "source_url": "https://b012.dahan.edu.tw/var/file/12/1012/img/28/449993388.pdf",
+          "source_locator": "大漢技術學院第一屆傑出校友履歷第1頁，記花蓮縣第12–14屆縣議員及任職12年；公開文字表，截圖未取得。",
+          "method": "documented_consecutive_term_biography",
+          "confidence": "institutional_biography",
+          "election_date": "1994-01-29",
+          "original_name": "盧博基",
+          "ballot_number": 18,
+          "votes": 3934
+        }
+      }
     },
     {
       "county": "花蓮縣",

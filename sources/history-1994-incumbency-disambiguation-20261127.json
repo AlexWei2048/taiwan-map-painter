@@ -1,0 +1,93 @@
+{
+  "date": "2026-11-27",
+  "baseline": "d35836fb60b09d081d04e305ca28abb2a4820565",
+  "records": [
+    {
+      "county": "宜蘭縣",
+      "name": "陳秀暖",
+      "value": false,
+      "source_url": "https://web.cec.gov.tw/api/file/0965a18d-e101-4921-bee3-e56b5e0dd062.pdf",
+      "corroboration_url": "https://web.cec.gov.tw/api/file/8c0c7bea-1128-43b9-aec7-47e7f5c1bfd9.pdf",
+      "source_locator": "1990年第二選區清冊無陳秀暖；相似名陳淑暖在1990年第4區當選，1994年第5區5號2677票；陳秀暖另為1994年第2區8號5513票，兩人同次選舉分別列名。",
+      "method": "prior_term_roster_nonmatch_distinct_same_election_candidates",
+      "confidence": "inferred_from_official_roster",
+      "limitation": "1990年當選名冊不含全任期遞補；推定非前屆現任，不是逐日任免證明。兩份PDF文字可讀，頁面影像未取得。",
+      "district": 2,
+      "ballot_number": 8,
+      "votes": 5513
+    },
+    {
+      "county": "宜蘭縣",
+      "name": "林榮木",
+      "value": false,
+      "source_url": "https://web.cec.gov.tw/api/file/0965a18d-e101-4921-bee3-e56b5e0dd062.pdf",
+      "corroboration_url": "https://web.cec.gov.tw/api/file/8c0c7bea-1128-43b9-aec7-47e7f5c1bfd9.pdf",
+      "source_locator": "1990年山地選區當選人為許金虎及江新財；林榮星為1990年第1區當選人，1994年仍為第1區12號3821票；林榮木另為1994年第9區2號811票，兩人同次選舉分別列名。",
+      "method": "prior_term_roster_nonmatch_distinct_same_election_candidates",
+      "confidence": "inferred_from_official_roster",
+      "limitation": "1990年當選名冊不含全任期遞補；推定非前屆現任，不是逐日任免證明。兩份PDF文字可讀，頁面影像未取得。",
+      "district": 9,
+      "ballot_number": 2,
+      "votes": 811
+    },
+    {
+      "county": "新竹縣",
+      "name": "林礽松",
+      "value": false,
+      "source_url": "https://laws.gov.taipei/law/Judge/JudgeContent/J,93,訴,444,001",
+      "corroboration_url": "https://www.hcc.gov.tw/history-member-detail?C=14&program=191",
+      "source_locator": "臺北市法規查詢系統所載新竹地院93年度訴字第444號判決，事實第一段明載自民國83年間起任新竹縣議員；第12屆議員名冊亦無此人。",
+      "method": "documented_first_office_year_and_prior_roster",
+      "confidence": "official_document",
+      "district": 1,
+      "ballot_number": 7,
+      "votes": 4285
+    },
+    {
+      "county": "臺中縣",
+      "name": "顏清標",
+      "value": false,
+      "source_url": "https://www.thenewslens.com/article/158361",
+      "corroboration_url": "https://www.tccc.gov.tw/wb_history02.asp?cno=152&zno=160",
+      "source_locator": "2021-11-09歷史專文記1990年當選埔子里長、1994年轉戰縣議員，與原台中縣第12屆議員名錄未列其名相符。",
+      "method": "documented_first_election_and_prior_roster",
+      "confidence": "crosschecked_secondary_and_official_roster",
+      "district": 6,
+      "ballot_number": 4,
+      "votes": 13840
+    },
+    {
+      "county": "花蓮縣",
+      "name": "盧博基",
+      "value": true,
+      "source_url": "https://b012.dahan.edu.tw/var/file/12/1012/img/28/449993388.pdf",
+      "source_locator": "大漢技術學院第一屆傑出校友履歷第1頁，記花蓮縣第12–14屆縣議員及任職12年；公開文字表，截圖未取得。",
+      "method": "documented_consecutive_term_biography",
+      "confidence": "institutional_biography",
+      "district": 1,
+      "ballot_number": 18,
+      "votes": 3934
+    },
+    {
+      "county": "花蓮縣",
+      "name": "俞傳旺",
+      "value": true,
+      "source_url": "https://b012.dahan.edu.tw/var/file/12/1012/img/28/449993388.pdf",
+      "source_locator": "大漢技術學院第一屆傑出校友履歷第1頁，記花蓮縣議會第11、12屆副議長、議長；公開文字表，截圖未取得。",
+      "method": "documented_previous_term_biography",
+      "confidence": "institutional_biography",
+      "district": 1,
+      "ballot_number": 14,
+      "votes": 2107
+    }
+  ],
+  "limitations": "Prior term roster nonmatch is inference only; no vote, name or party changes. PDF page images unavailable in this run.",
+  "unresolved_leads": [
+    {
+      "county": "花蓮縣",
+      "name": "林仁德",
+      "url": "https://www.ntl.edu.tw/public/ntl/4216/%E8%8E%8A%E5%98%89%E5%BC%B7%E5%85%A8%E6%96%87.pdf",
+      "note": "1991年議員報導線索；尚待完整任期核對，不寫入身份。"
+    }
+  ]
+}
