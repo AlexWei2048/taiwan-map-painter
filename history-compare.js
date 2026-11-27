@@ -195,11 +195,7 @@ function setBallots(){
  const o=office.value,choices=o==='council'?[['regional','区域议员'],['plains','平地少数民族议员'],['mountain','山地少数民族议员']]:o==='legislative'?[['regional','区域民代'],['party','不分区政党票（2008年起）']]:[['all','全部类型']];
  ballot.replaceChildren(...choices.map(([v,l])=>new Option(l,v)));$('compareBallotBox').hidden=choices.length===1;
 }
-async function snapshot(o,y){
- if(o==='president')return root.HistoryPresidential.load(y);
- if(o==='legislative')return root.HistoryLegislative.load(y);
- return [2022,2026].includes(y)?root.History2022View.trendSnapshot(y):root.HistoryLocal.loadCycle(y,o);
-}
+async function snapshot(o,y){return root.HistoryQuery.snapshot(o,y)}
 async function model(o,y,b,grain){
  const key=[o,y,b,grain].join('|');
  if(!cache.has(key)){

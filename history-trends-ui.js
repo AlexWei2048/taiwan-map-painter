@@ -60,12 +60,7 @@ function changeYears(values,notify=true){
  if(notify)window.dispatchEvent(new Event('site-route-change'));
  return true;
 }
-async function snapshot(office,year){
- if(office==='president')return HistoryPresidential.load(year);
- if(office==='legislative')return HistoryLegislative.load(year);
- if(year===2022||year===2026)return History2022View.trendSnapshot(year);
- return HistoryLocal.loadCycle(year,office);
-}
+async function snapshot(office,year){return window.HistoryQuery.snapshot(office,year)}
 const range=conf=>yearsFor(conf.office).filter(y=>selectedYears.has(y));
 const listVoteChart=conf=>conf.office==='legislative'&&['all','party'].includes(conf.electorate);
 const trendDataKey=conf=>[conf.office,S.key(conf),range(conf).join(',')].join('|');

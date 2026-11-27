@@ -1,0 +1,21 @@
+/* Shared, bounded read-only history query cache. No prediction state or persistent storage. */
+(function(root){
+'use strict';
+function createCache(limit=12){
+ const map=new Map();
+ function trim(){for(const [key,entry] of map){if(map.size<=limit)break;if(entry.done)map.delete(key)}}
+ function get(key,load){if(map.has(key)){const entry=map.get(key);map.delete(key);map.set(key,entry);return entry.promise}
+  const entry={done:false,promise:null};entry.promise=Promise.resolve().then(load).then(value=>{entry.done=true;trim();return value},error=>{if(map.get(key)===entry)map.delete(key);throw error});map.set(key,entry);trim();return entry.promise}
+ return {get,size:()=>map.size}
+}
+function snapshotKey(office,year){year=Number(year);return [2022,2026].includes(year)&&['mayor','council','township'].includes(office)?'local|'+year:office+'|'+year}
+function createQuery(load,records,limit=16){
+ const snapshots=createCache(limit),candidateRows=new WeakMap();
+ async function snapshot(office,year){return snapshots.get(snapshotKey(office,year),()=>load(office,Number(year)))}
+ function candidates(shard,office){let map=candidateRows.get(shard);if(!map){map=new Map();candidateRows.set(shard,map)}if(!map.has(office))map.set(office,records(shard,office));return map.get(office)}
+ return {snapshot,candidates}
+}
+const api={createCache,createQuery,snapshotKey};
+if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
+root.HistoryQuery=createQuery((o,y)=>o==='president'?root.HistoryPresidential.load(y):o==='legislative'?root.HistoryLegislative.load(y):[2022,2026].includes(y)?root.History2022View.trendSnapshot(y):root.HistoryLocal.loadCycle(y,o),(s,o)=>root.HistoryObservationCore.candidateRecords(s,o));
+})(typeof window==='undefined'?globalThis:window);
