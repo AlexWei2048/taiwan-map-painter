@@ -1,0 +1,3 @@
+const test=require('node:test'),assert=require('node:assert/strict'),E=require('../history-export-core.js');
+test('Historical export sizes stay within pixel and dimension bounds',()=>{assert.equal(E.pngScale(700,400),3);assert.equal(E.pngScale(18000,400),0);assert.equal(E.pngScale(0,400),0);assert.equal(E.pngScale(8000,8000),0);for(const [w,h] of [[1440,940],[2200,6500],[500,16000]]){const n=E.pngScale(w,h);assert.ok(n*w<=16000&&n*h<=16000&&n*n*w*h<=55000000)}});
+test('Historical export filenames and Chinese wrapping are safe',()=>{assert.equal(E.filename('历史/图:2022'),'历史_图_2022');assert.deepEqual(E.wrap('历史数据',4),['历史','数据']);assert.equal(E.wrap('A台B',3).join(''),'A台B')});

@@ -111,7 +111,7 @@ function exportFile(content,name,mime){const url=URL.createObjectURL(new Blob([c
 async function chartExport(graph,title,png,context={}){
  const office=context.office||offices[settings().office]||'',name=((context.prefix||'历史趋势')+'-'+office+'-'+title).replace(/[\\/:*?"<>|]/g,'_');
  const copy=graph.cloneNode(true);for(const mark of copy.querySelectorAll('[data-trend-series]')){mark.removeAttribute('opacity');for(const path of mark.querySelectorAll('path'))path.setAttribute('stroke-width','1.4')}copy.setAttribute('xmlns',ns);const full=graph.getAttribute('data-trend-export-viewbox');if(full){copy.setAttribute('viewBox',full);copy.removeAttribute('data-trend-export-viewbox')}
- const {width,height}=copy.viewBox.baseVal;copy.setAttribute('width',width);copy.setAttribute('height',height);
+ const decorated=window.HistoryExport.decorate(copy),width=decorated.width,height=decorated.height;
  // One request per distinct emblem, even when many years share the same logo.
  const logos=new Map();let url;
  try{
@@ -120,18 +120,9 @@ async function chartExport(graph,title,png,context={}){
    if(!logos.has(href))logos.set(href,(async()=>{const response=await fetch(href);if(!response.ok)throw Error('党徽读取失败');const blob=await response.blob();return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(Error('党徽读取失败'));reader.readAsDataURL(blob)})})());
    image.setAttribute('href',await logos.get(href));
   }));
-  const source=new XMLSerializer().serializeToString(copy);
+  const source=new XMLSerializer().serializeToString(decorated.out);
   if(!png){exportFile(source,name+'.svg','image/svg+xml;charset=utf-8');return}
-  if(!Number.isFinite(width)||!Number.isFinite(height)||width<=0||height<=0)throw Error('图表尺寸无效');
-  const scale=Math.min(2,Math.floor(16000/Math.max(width,height)),Math.floor(Math.sqrt(55000000/(width*height))));
-  if(scale<1)throw Error('图表过大，请使用 SVG 矢量图导出');
-  url=URL.createObjectURL(new Blob([source],{type:'image/svg+xml'}));const img=new Image();
-  await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=()=>reject(Error('图表读取失败，请使用 SVG 导出'));img.src=url});
-  const canvas=node('canvas');canvas.width=Math.ceil(width*scale);canvas.height=Math.ceil(height*scale);
-  const ctx=canvas.getContext('2d');if(!ctx)throw Error('设备无法创建图片画布，请使用 SVG 导出');
-  ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,0,0,canvas.width,canvas.height);
-  const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));if(!blob)throw Error('PNG生成失败，请使用 SVG 导出');
-  const a=node('a');a.href=URL.createObjectURL(blob);a.download=name+'.png';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+  const blob=await window.HistoryExport.pngBlob(source,width,height);const a=node('a');a.href=URL.createObjectURL(blob);a.download=name+'.png';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),10000);
  }catch(e){const status=context.status||$('trendStatus');if(status)status.textContent=e.message||'图表导出失败，请重试。';else if(typeof toast==='function')toast(e.message||'图表导出失败，请重试。')}finally{if(url)URL.revokeObjectURL(url)}
 }
 function card(title,description,graph,exportTitle=title,context={}){

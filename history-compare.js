@@ -368,7 +368,7 @@ function exportGraph(){
  for(const c of note){line+=c;if([...line].length>=65){lines.push(line);line=''}}
  if(line)lines.push(line);
  let fy=ly+34;for(const l of lines){text(l,pad,fy,17);fy+=24}
- text('资料来源：岛屿调色盘历史档案（来源详见网站）｜历史边界近似展示，离岛为移位示意。',pad,fy+10,16);
+ text(root.HistoryExport.SOURCE+'｜历史边界近似展示，离岛为移位示意。',pad,fy+10,16);
  text('岛屿调色盘',W-pad,fy+38,18,{'text-anchor':'end','font-weight':650});
  const height=Math.max(H,fy+60);root.setAttribute('height',height);root.setAttribute('viewBox','0 0 '+W+' '+height);root.firstChild.setAttribute('height',height);
  return {source:new XMLSerializer().serializeToString(root),width:W,height};
@@ -383,11 +383,7 @@ async function exportComparison(format){
   if(format==='csv'){const [a,b]=models.map(m=>m.summary);const content=['turnout','registered'].includes(mode.value)?profileCSV(a,b):comparisonCSV(a,b);saveFile(new Blob([content],{type:'text/csv;charset=utf-8'}),name+'.csv');return}
   const graph=exportGraph(),blob=new Blob([graph.source],{type:'image/svg+xml;charset=utf-8'});
   if(format==='svg'){saveFile(blob,name+'.svg');return}
-  url=URL.createObjectURL(blob);const img=new Image();
-  await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=()=>reject(Error('图片生成失败，请改用SVG'));img.src=url});
-  const canvas=node('canvas');canvas.width=graph.width*2;canvas.height=graph.height*2;const ctx=canvas.getContext('2d');
-  if(!ctx)throw Error('当前设备无法创建画布，请改用SVG');ctx.drawImage(img,0,0,canvas.width,canvas.height);
-  const png=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));if(!png)throw Error('PNG生成失败，请改用SVG');saveFile(png,name+'.png');
+  saveFile(await root.HistoryExport.pngBlob(graph.source,graph.width,graph.height),name+'.png');
  }catch(e){status.textContent=e.message||'导出失败'}finally{if(url)URL.revokeObjectURL(url);exporting=false;buttons.forEach(id=>$(id).disabled=!models)}
 }
 $('compareExportSvg').onclick=()=>exportComparison('svg');$('compareExportCsv').onclick=()=>exportComparison('csv');$('compareExportPng').onclick=()=>exportComparison('png');
