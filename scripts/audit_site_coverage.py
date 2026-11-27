@@ -95,7 +95,7 @@ def elected_parties():
             examples[name].append({"archive":path.name,"contest":row.get("contest_id"),"name":row.get("candidate_name"),"election":contest.get("election_id")})
     # Legacy 1994 council supplement contains separately verified winners,
     # including Kinmen partial records. Count only names not already in the
-    # ordinary 1994 council archive, by county/electorate/district/name.
+    # ordinary 1994 council archive, using conservative county/name deduplication.
     base=load_json(ASSETS/"history-local-1994.json")
     contests={c.get("contest_id"):c for c in base.get("contests",[]) if c.get("election_id")=="1994-council"}
     known=set()

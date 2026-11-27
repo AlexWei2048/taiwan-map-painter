@@ -3435,6 +3435,14 @@ test('Historical coverage matrix opens on demand and reveals known partial archi
  const real=await page.evaluate(async()=>{const s=await HistoryLocal.loadCycle(1994,'township');return HistoryCoverage.matrixEntry(HistoryCoverage.analyze(s,'township',simplify),'金门县',1994,'township')});assert.equal(real.status,'partial');assert.ok(real.partialArchives>0);
  const button=page.locator('#historyCoverageMatrix button[aria-label^="金门 1994 "]');assert.equal(await button.count(),1,await page.locator('#historyCoverageStatus').textContent());assert.equal(await button.getAttribute('data-coverage-status'),'partial');await button.click();
  assert.match(await page.locator('#historyCoverageDetail').textContent(),/部分档案条目/);
+ await page.locator('#historyEmblemCoverage summary').click();
+ await page.locator('#historyEmblemCoverageBody table').waitFor({timeout:30000});
+ assert.match(await page.locator('#historyEmblemCoverageBody').textContent(),/待补齐/);
+ assert.match(await page.locator('#historyEmblemCoverageBody table').textContent(),/中国台湾原住民党|没有待补齐记录/);
+ await page.locator('#historyEmblemCoverageBody input[type=checkbox]').uncheck();
+ assert.match(await page.locator('#historyEmblemCoverageBody table').textContent(),/中国国民党/);
+ assert.ok(await page.locator('#historyEmblemCoverageBody img').count()>0);
+
  assert.equal(await page.locator('#historyYear').inputValue(),'2022');
  await page.locator('#historyCoverageDialog').getByRole('button',{name:'关闭',exact:true}).click();
  assert.equal(await page.locator('#historyCoverageDialog').isVisible(),false);
