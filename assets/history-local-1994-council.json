@@ -20079,6 +20079,30 @@
           "original_name": "施蘇貴美",
           "ballot_number": 7,
           "votes": 3065
+        },
+        "9": {
+          "value": false,
+          "source_url": "https://eebulletin.cec.gov.tw/103/14%E5%B1%8F%E6%9D%B1%E7%B8%A3/02%E7%B8%A3%E8%AD%B0%E5%93%A1/%E5%B1%8F%E6%9D%B1%E7%B8%A3%E7%AC%AC01%E9%81%B8%E8%88%89%E5%8D%80.pdf",
+          "source_locator": "2014年第一選區6號，公報列第13至17屆縣議員。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "公報履歷為候選人自填；非逐日任免名冊。PDF公開文字可讀，原頁截圖未取得。",
+          "original_name": "蘇義峰",
+          "ballot_number": 9,
+          "votes": 5099
+        },
+        "24": {
+          "value": false,
+          "source_url": "https://eebulletin.cec.gov.tw/103/14%E5%B1%8F%E6%9D%B1%E7%B8%A3/02%E7%B8%A3%E8%AD%B0%E5%93%A1/%E5%B1%8F%E6%9D%B1%E7%B8%A3%E7%AC%AC01%E9%81%B8%E8%88%89%E5%8D%80.pdf",
+          "source_locator": "2014年第一選區9號，履歷列第13、14、15、17屆縣議員。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "公報履歷為候選人自填；非逐日任免名冊。PDF公開文字可讀，原頁截圖未取得。",
+          "original_name": "林明順",
+          "ballot_number": 24,
+          "votes": 6090
         }
       }
     },
@@ -20404,7 +20428,33 @@
           "男",
           false
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "2": {
+          "value": false,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/094%E5%B9%B4/23%E5%B1%8F%E6%9D%B1%E7%B8%A3/%E5%B1%8F%E6%9D%B1%E7%B8%A3%E7%AC%AC3%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "source_locator": "2005年第三選區20號，履歷列萬巒鄉長及第13至15屆縣議員。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "公報履歷為候選人自填；非逐日任免名冊。PDF公開文字可讀，原頁截圖未取得。",
+          "original_name": "曾勳任",
+          "ballot_number": 2,
+          "votes": 6694
+        },
+        "12": {
+          "value": false,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/094%E5%B9%B4/23%E5%B1%8F%E6%9D%B1%E7%B8%A3/%E5%B1%8F%E6%9D%B1%E7%B8%A3%E7%AC%AC3%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "source_locator": "2005年第三選區17號，履歷列第13至15屆縣議員。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "公報履歷為候選人自填；非逐日任免名冊。PDF公開文字可讀，原頁截圖未取得。",
+          "original_name": "潘長成",
+          "ballot_number": 12,
+          "votes": 6932
+        }
+      }
     },
     {
       "county": "屏東縣",
@@ -20514,6 +20564,19 @@
         ]
       ],
       "incumbent_sources": {
+        "1": {
+          "value": false,
+          "source_url": "https://eebulletin.cec.gov.tw/103/14%E5%B1%8F%E6%9D%B1%E7%B8%A3/02%E7%B8%A3%E8%AD%B0%E5%93%A1/%E5%B1%8F%E6%9D%B1%E7%B8%A3%E7%AC%AC04%E9%81%B8%E8%88%89%E5%8D%80.pdf",
+          "source_locator": "2014年第四選區6號，履歷列第11至13屆鄉民代表及第13至17屆縣議員；2005年第四選區8號履歷一致。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "公報履歷為候選人自填；非逐日任免名冊。PDF公開文字可讀，原頁截圖未取得。",
+          "original_name": "劉水復",
+          "ballot_number": 1,
+          "votes": 10564,
+          "corroboration_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/094%E5%B9%B4/23%E5%B1%8F%E6%9D%B1%E7%B8%A3/%E5%B1%8F%E6%9D%B1%E7%B8%A3%E7%AC%AC4%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf"
+        },
         "2": {
           "value": true,
           "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/094%E5%B9%B4/23%E5%B1%8F%E6%9D%B1%E7%B8%A3/%E5%B1%8F%E6%9D%B1%E7%B8%A3%E7%AC%AC4%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
@@ -20525,6 +20588,18 @@
           "original_name": "林枝讚",
           "ballot_number": 2,
           "votes": 11595
+        },
+        "8": {
+          "value": true,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/094%E5%B9%B4/23%E5%B1%8F%E6%9D%B1%E7%B8%A3/%E5%B1%8F%E6%9D%B1%E7%B8%A3%E7%AC%AC4%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "source_locator": "2005年第四選區11號，履歷列第9至15屆縣議員。",
+          "election_date": "1994-01-29",
+          "method": "documented_previous_term_election_bulletin",
+          "confidence": "published_election_bulletin",
+          "limitation": "公報履歷為候選人自填；非逐日任免名冊。PDF公開文字可讀，原頁截圖未取得。",
+          "original_name": "郭美玉",
+          "ballot_number": 8,
+          "votes": 729
         }
       }
     },
