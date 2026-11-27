@@ -3823,3 +3823,16 @@ test('Township executive comparison supports town grain and retains map nodes wh
  await page.locator('#mobileResultsJump').click();await page.locator('#historyCandidatesPanel').waitFor({state:'visible'});
  assert.equal(await page.locator('#mobileResultsJump').textContent(),'结果列表');
  });
+
+ test('Free painting supports county batch fill, protects existing colors and undoes the whole operation',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});assert.equal(await page.locator('#bulkPaintOpen').isVisible(),false);
+ await page.locator('#workspaceFree').click();await page.locator('#townLevel').click();await page.locator('#county').selectOption('台北市');
+ const ids=await page.evaluate(()=>data.towns.filter(f=>f.county==='台北市').map(f=>f.id));assert.equal(ids.length,12);
+ const before=await page.evaluate(()=>{state.fills.towns[data.towns.find(f=>f.county==='台北市').id]='blue';render();return {predictions:JSON.stringify(state.predictions),fills:JSON.stringify(state.fills),undos:undo.length}});
+ await page.locator('#bulkPaintOpen').click();assert.equal(await page.locator('#bulkPaintCounty').inputValue(),'台北市');await page.locator('#bulkPaintParty').selectOption('green');assert.match(await page.locator('#bulkPaintStatus').textContent(),/11 个区域/);
+ await page.locator('#bulkPaintApply').click();assert.equal(await page.evaluate(ids=>ids.filter(id=>state.fills.towns[id]==='green').length,ids),11);assert.equal(await page.evaluate(ids=>ids.filter(id=>state.fills.towns[id]==='blue').length,ids),1);assert.equal(await page.evaluate(()=>undo.length),before.undos+1);
+ await page.locator('#undo').click();assert.equal(await page.evaluate(()=>JSON.stringify(state.fills)),before.fills);assert.equal(await page.evaluate(()=>JSON.stringify(state.predictions)),before.predictions);
+ await page.locator('#bulkPaintOpen').click();await page.locator('#bulkPaintParty').selectOption('green');await page.locator('#bulkPaintOverwrite').check();assert.match(await page.locator('#bulkPaintStatus').textContent(),/12 个区域/);await page.locator('#bulkPaintApply').click();assert.equal(await page.evaluate(ids=>ids.filter(id=>state.fills.towns[id]==='green').length,ids),12);
+ await page.locator('#bulkPaintOpen').click();await page.locator('#bulkPaintParty').selectOption('__clear__');await page.locator('#bulkPaintApply').click();assert.equal(await page.evaluate(ids=>ids.filter(id=>state.fills.towns[id]).length,ids),0);
+ await page.locator('#undo').click();assert.equal(await page.evaluate(ids=>ids.filter(id=>state.fills.towns[id]==='green').length,ids),12);
+ });
