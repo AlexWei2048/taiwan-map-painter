@@ -149,3 +149,25 @@ test('Generic party trend lines distinguish no participation from participation 
  assert.match(ui,/get:r=>T\.partyParticipationValue\(r,p\)/);
  assert.match(ui,/get:r=>T\.partyParticipationValue\(r,'',rest\)/);
 });
+
+
+test('History asset version keys are unique and current versions are effective',()=>{
+ const source=read('history-loader.js'),block=source.match(/const versions=\{([^}]+)\}/)?.[1];
+ assert.ok(block);
+ const keys=[...block.matchAll(/'([^']+)'\s*:/g)].map(m=>m[1]);
+ assert.equal(keys.length,new Set(keys).size,'duplicate keys silently override cache-busting tags');
+});
+
+test('Party trends retain ties and normalize the participation of independent candidates',()=>{
+ const T=require('../history-trends.js');
+ const snapshot={year:2024,elections:[],contests:[],rows:[
+  {type:'president',level:'county',county:'甲县',electorate:'regional',party:'连署',name:'甲',votes:10},
+  {type:'president',level:'county',county:'甲县',electorate:'regional',party:'乙党',name:'乙',votes:10}
+ ]};
+ const row=T.mergePresidentialIndependents(T.mapTrend(snapshot,{office:'president',electorate:'all',metric:'party'}));
+ assert.equal(T.partyParticipationValue(row,'并列'),1);
+ assert.equal(T.partyParticipationValue(row,'无党籍'),0);
+ assert.equal(T.partyParticipationValue(row,'乙党'),0);
+ assert.equal(T.partyParticipationValue(row,'丙党'),null);
+ assert.equal(T.partyParticipationValue(row,'',['并列','丙党']),1);
+});
