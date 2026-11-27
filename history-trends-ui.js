@@ -108,8 +108,8 @@ function description(conf){
  return [offices[conf.office],conf.office==='legislative'&&conf.electorate==='all'?'全部类型（总席次；不分区票得票率）':['council','legislative'].includes(conf.office)?optionText('historyElectorate'):'',conf.county||'全部地区（含金门、马祖）',optionText('historyScale'),conf.focus,['legislative','council'].includes(conf.office)?'当选席次与得票率':optionText('historyMetric'),conf.metric==='seats'?conf.party:selected?(conf.candidate?.name||conf.candidate?.party||'未指定候选人'):''].filter(Boolean).join(' · ');
 }
 function exportFile(content,name,mime){const url=URL.createObjectURL(new Blob([content],{type:mime}));const a=node('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),2000)}
-async function chartExport(graph,title,png){
- const office=offices[settings().office],name=('历史趋势-'+office+'-'+title).replace(/[\\/:*?"<>|]/g,'_');
+async function chartExport(graph,title,png,context={}){
+ const office=context.office||offices[settings().office]||'',name=((context.prefix||'历史趋势')+'-'+office+'-'+title).replace(/[\\/:*?"<>|]/g,'_');
  const copy=graph.cloneNode(true);for(const mark of copy.querySelectorAll('[data-trend-series]')){mark.removeAttribute('opacity');for(const path of mark.querySelectorAll('path'))path.setAttribute('stroke-width','1.4')}copy.setAttribute('xmlns',ns);const full=graph.getAttribute('data-trend-export-viewbox');if(full){copy.setAttribute('viewBox',full);copy.removeAttribute('data-trend-export-viewbox')}
  const {width,height}=copy.viewBox.baseVal;copy.setAttribute('width',width);copy.setAttribute('height',height);
  // One request per distinct emblem, even when many years share the same logo.
@@ -132,11 +132,11 @@ async function chartExport(graph,title,png){
   ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,0,0,canvas.width,canvas.height);
   const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));if(!blob)throw Error('PNG生成失败，请使用 SVG 导出');
   const a=node('a');a.href=URL.createObjectURL(blob);a.download=name+'.png';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
- }catch(e){$('trendStatus').textContent=e.message||'图表导出失败，请重试。'}finally{if(url)URL.revokeObjectURL(url)}
+ }catch(e){const status=context.status||$('trendStatus');if(status)status.textContent=e.message||'图表导出失败，请重试。';else if(typeof toast==='function')toast(e.message||'图表导出失败，请重试。')}finally{if(url)URL.revokeObjectURL(url)}
 }
-function card(title,description,graph,exportTitle=title){
+function card(title,description,graph,exportTitle=title,context={}){
  const c=node('article','trend-card'),h=node('div','trend-card-heading'),buttons=node('div','trend-card-actions');h.append(node('h4','',title),buttons);
- if(graph)for(const ext of ['SVG','PNG']){const b=node('button','button quiet',ext);b.type='button';b.onclick=async()=>{for(const button of buttons.querySelectorAll('button'))button.disabled=true;try{await chartExport(graph,exportTitle,ext==='PNG')}finally{for(const button of buttons.querySelectorAll('button'))button.disabled=false}};buttons.append(b)}
+ if(graph)for(const ext of ['SVG','PNG']){const b=node('button','button quiet',ext);b.type='button';b.onclick=async()=>{for(const button of buttons.querySelectorAll('button'))button.disabled=true;try{await chartExport(graph,exportTitle,ext==='PNG',context)}finally{for(const button of buttons.querySelectorAll('button'))button.disabled=false}};buttons.append(b)}
  if(graph?.hasAttribute('data-trend-zoom')){for(const [caption,action,label] of [['＋','in','放大纵轴'],['－','out','缩小纵轴'],['复位','reset','恢复默认纵轴']]){const button=node('button','button quiet',caption);button.type='button';button.setAttribute('aria-label',label);button.dataset.trendZoomAction=action;button.title=label;button.onclick=()=>graph.dispatchEvent(new Event('trend-zoom-'+action));buttons.prepend(button)}}
  if(graph?.hasAttribute('data-trend-line-chart')){
   const filters=node('div','trend-line-controls');filters.append(node('span','', '政党／曲线'));
@@ -166,7 +166,7 @@ function baseSvg(title,width,height){
  const g=svg('svg',{viewBox:'0 0 '+width+' '+height,role:'img','aria-label':title,'font-family':'Arial, "Microsoft YaHei", sans-serif','font-size':'12',fill:'#31473e'});
  g.append(svg('rect',{x:0,y:0,width,height,fill:'#fff'}),svg('title',{},title),svg('text',{x:18,y:22,'font-weight':700,'font-size':15},title));return g
 }
-function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=false,integer=false,compact=false,tall=false,grouped=false,axisMax=null,seatDetail=false}={}){
+function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=false,integer=false,compact=false,tall=false,grouped=false,axisMax=null,seatDetail=false,onPoint=null,hiddenSeries=hiddenTrendSeries}={}){
  const zoomable=!stack;
  const width=Math.max(compact?520:tall?620:700,rows.length*(compact?72:rows.some(r=>r.scopeLabel)?79:65)+100),l=compact?52:64,r=width-20,top=48,bottom=compact?280:tall?550:seatDetail?458:270;
  const showScope=!grouped||new Set(rows.map(r=>r.scopeLabel||'')).size>1;
@@ -216,7 +216,7 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
   const tooltip=detail?(row.label||row.year)+(row.scopeLabel?' · '+row.scopeLabel:'')+(row.dates?.length?' · '+row.dates.join(' / '):'')+'\n'+detail:summary;
   p.append(svg('title',{},tooltip));
   p.setAttribute('tabindex','0');p.setAttribute('role','button');p.setAttribute('aria-label',tooltip.replaceAll('\n','；'));
-  const click=()=>showYear(row.year,row.county,row.label,summary,detail);p.addEventListener('click',click);p.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();click()}});
+  const click=()=>onPoint?onPoint(row,summary,detail):showYear(row.year,row.county,row.label,summary,detail);p.addEventListener('click',click);p.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();click()}});
   if(p.hasAttribute('data-trend-seat-label')){p.addEventListener('pointerenter',click);p.addEventListener('focus',click)}
  };
  if(stack){
@@ -296,9 +296,9 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
  }
  if(breakOld){const i=rows.findIndex(r=>!r.oldPartyVote);if(i>0){const xx=(x(i-1)+x(i))/2;g.append(svg('line',{x1:xx,x2:xx,y1:top,y2:bottom,stroke:'#8a938d','stroke-dasharray':'4 4'}),svg('text',{x:xx+4,y:top-7,'font-size':10},'2008制度改革'))}}
  function setVisible(name,visible){
-  const scope=g.closest('#trendCharts')||g;
-  const names=name?[name]:[...new Set([...scope.querySelectorAll('[data-trend-legend][role=checkbox]')].map(i=>i.getAttribute('data-trend-legend')))];for(const x of names)visible?hiddenTrendSeries.delete(x):hiddenTrendSeries.add(x);
-  for(const mark of scope.querySelectorAll('[data-trend-line-chart] [data-trend-series]'))if(!name||mark.getAttribute('data-trend-series')===name){if(visible)mark.removeAttribute('display');else mark.setAttribute('display','none')}
+  const scope=g.closest('[data-trend-series-scope]')||g.closest('#trendCharts')||g;
+  const names=name?[name]:[...new Set([...scope.querySelectorAll('[data-trend-legend][role=checkbox]')].map(i=>i.getAttribute('data-trend-legend')))];for(const x of names)visible?hiddenSeries.delete(x):hiddenSeries.add(x);
+  for(const mark of scope.querySelectorAll('[data-trend-series]'))if(!name||mark.getAttribute('data-trend-series')===name){if(visible)mark.removeAttribute('display');else mark.setAttribute('display','none')}
   for(const item of scope.querySelectorAll('[data-trend-legend][role=checkbox]'))if(!name||item.getAttribute('data-trend-legend')===name){item.setAttribute('aria-checked',String(visible));item.querySelector('[data-trend-checkbox-tick]').setAttribute('display',visible?'inline':'none');item.querySelector('[data-trend-checkbox-box]').setAttribute('fill',visible?'#287963':'#fff');item.querySelector('[data-trend-legend-label]').setAttribute('opacity',visible?'1':'.5')}
  }
  if(!stack){
@@ -317,13 +317,13 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
    entry.addEventListener('click',toggle);entry.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle()}});
   }
   if(!stack){
-   const emphasize=active=>{for(const mark of (g.closest('.trend-merge-layout')||g).querySelectorAll('[data-trend-series]')){const selected=active&&mark.getAttribute('data-trend-series')===s.name;mark.setAttribute('opacity',!active||selected?'1':'.18');for(const path of mark.querySelectorAll('path'))path.setAttribute('stroke-width',selected?'2.4':'1.4')}};
+   const emphasize=active=>{for(const mark of (g.closest('[data-trend-series-scope]')||g.closest('.trend-merge-layout')||g).querySelectorAll('[data-trend-series]')){const selected=active&&mark.getAttribute('data-trend-series')===s.name;mark.setAttribute('opacity',!active||selected?'1':'.18');for(const path of mark.querySelectorAll('path'))path.setAttribute('stroke-width',selected?'2.4':'1.4')}};
    for(const mark of g.querySelectorAll('[data-trend-series]'))if(mark.getAttribute('data-trend-series')===s.name){mark.addEventListener('pointerenter',()=>emphasize(true));mark.addEventListener('pointerleave',()=>emphasize(false));mark.addEventListener('focusin',()=>emphasize(true));mark.addEventListener('focusout',()=>emphasize(false))}
    entry.addEventListener('pointerenter',()=>emphasize(true));entry.addEventListener('pointerleave',()=>emphasize(false));entry.addEventListener('focus',()=>emphasize(true));entry.addEventListener('blur',()=>emphasize(false));
   }
   g.append(entry);
  });
- if(!stack)for(const name of hiddenTrendSeries){for(const mark of g.querySelectorAll('[data-trend-series]'))if(mark.getAttribute('data-trend-series')===name)mark.setAttribute('display','none');for(const item of g.querySelectorAll('[data-trend-legend][role=checkbox]'))if(item.getAttribute('data-trend-legend')===name){item.setAttribute('aria-checked','false');item.querySelector('[data-trend-checkbox-tick]').setAttribute('display','none');item.querySelector('[data-trend-checkbox-box]').setAttribute('fill','#fff');item.querySelector('[data-trend-legend-label]').setAttribute('opacity','.5')}}
+ if(!stack)for(const name of hiddenSeries){for(const mark of g.querySelectorAll('[data-trend-series]'))if(mark.getAttribute('data-trend-series')===name)mark.setAttribute('display','none');for(const item of g.querySelectorAll('[data-trend-legend][role=checkbox]'))if(item.getAttribute('data-trend-legend')===name){item.setAttribute('aria-checked','false');item.querySelector('[data-trend-checkbox-tick]').setAttribute('display','none');item.querySelector('[data-trend-checkbox-box]').setAttribute('fill','#fff');item.querySelector('[data-trend-legend-label]').setAttribute('opacity','.5')}}
  return g
 }
 
@@ -534,6 +534,7 @@ function exportCsv(){
  }
  exportFile(C.csv(out),'历史趋势-'+offices[conf.office]+'-'+lastTitle+'.csv','text/csv;charset=utf-8')
 }
+window.HistoryTrendCharts={chart,card,seatColor,color,displayParty};
 window.HistoryTrendsUI={routeYears:()=>knownYears.filter(y=>selectedYears.has(y)).join(',')||'none',restoreRouteYears(value){if(!selection)return;changeYears(String(value).split(',').map(Number),false)},open(s){
  create();if(!panel)return;
  const conf=readSelection(s),prior=selection;selection=conf;
