@@ -4798,6 +4798,102 @@
           "party_recommendation": null
         }
       ]
+    },
+    {
+      "county": "南投縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/南投市市長",
+      "source_locator": "1994-03-01起第12届乡镇长及南投市第五届市长历史任期表；每人原始来源见逐人source_url",
+      "corroboration_url": "https://twlld.nmth.gov.tw/literal-detail/234/17/1",
+      "validation_note": "六位当选人由历届首长表与可得政府回顾/新闻核对，仅构成任职及当选线索；尚未取得1994年当届逐候选人原始选举结果表。现任属性按相邻任期名录推定，并非投票日独立在职证明。不得填造候选人号次、性别、当届推荐政党或得票数；不得把部分档案算作完整选区。",
+      "evidence_tier": "secondary_term_roster_plus_independent_corroboration_when_available",
+      "winners": [
+        {
+          "town": "南投市",
+          "name": "林俊梧",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "魏清彬",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/南投市市長",
+          "corroboration_url": "https://www.nantou.gov.tw/big5/epaperpreview.asp?mcid=141311",
+          "evidence_notes": "第5届市长于1994-03-01就任；南投县政府回顾文章亦确认曾任南投市长；现任属性来自前后届任期表"
+        },
+        {
+          "town": "草屯鎮",
+          "name": "賴忠政",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "莊萬振",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/草屯鎮",
+          "corroboration_url": "https://web.cec.gov.tw/api/file/5222b71b-5d09-4a9b-a63c-68f2a0387988.pdf",
+          "evidence_notes": "第12届镇长1994-03-01至1998-03-01；2011官方补选结果佐证同名人士，不能反推1994得票或推荐政党"
+        },
+        {
+          "town": "埔里鎮",
+          "name": "張鴻銘",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "蔡和憲",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/埔里鎮",
+          "corroboration_url": "https://www.votetw.com/data/candidate/馬文君",
+          "evidence_notes": "第12届镇长1994–1998，前任蔡和宪；后届1998候选人记录仅作姓名及任职关系佐证"
+        },
+        {
+          "town": "竹山鎮",
+          "name": "許文欽",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "張明雄",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/竹山鎮_(台灣)",
+          "corroboration_url": "https://nhuir.nhu.edu.tw/retrieve/50880/103NHU00025017-001.pdf",
+          "evidence_notes": "乡镇历任表第12届许文钦、前届张明雄；南华大学学位论文另提到1994年镇长许文钦推动地方文化园区"
+        },
+        {
+          "town": "鹿谷鄉",
+          "name": "林民政",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "林民政",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/鹿谷鄉鄉長",
+          "corroboration_url": "https://zh.wikipedia.org/wiki/鹿谷鄉",
+          "evidence_notes": "鹿谷乡长任期表记载1992-10-30补选就任并续任1994-03-01起第12届，1994当届参选时属于前届任期；同一百科页面重定向、非独立二次证据"
+        },
+        {
+          "town": "仁愛鄉",
+          "name": "沈明德",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "沈明德",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/仁愛鄉",
+          "corroboration_url": "https://n.yam.com/Article/20120418391857",
+          "evidence_notes": "仁爱乡历任首长表第11、12届同为沈明德；2012新闻明确称第12届乡长沈明德"
+        }
+      ]
     }
   ]
 }
