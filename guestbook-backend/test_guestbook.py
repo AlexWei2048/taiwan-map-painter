@@ -203,5 +203,28 @@ class GuestbookTests(unittest.TestCase):
             self.assertEqual(r["records"][0]["category"],"correction")
         finally:
             server.ADMIN_TOKEN=old
+    def test_feedback_tools_privacy(self):
+        old=server.ADMIN_TOKEN
+        server.ADMIN_TOKEN="test-admin-"+"z"*40
+        try:
+            self.call("submit",self.data)
+            self.call("admin_update",dict(p_admin=server.ADMIN_TOKEN,p_id=self.mid,p_visibility="approved",p_progress="working",p_reply="",p_admin_note="internal-only",p_priority="high",p_revision=0))
+            page=self.call("public_page",{})
+            self.assertEqual(page["total"],1)
+            self.assertNotIn("admin_note",page["records"][0])
+            self.assertNotIn("priority",page["records"][0])
+            self.assertTrue(self.call("report",dict(p_id=self.mid,p_secret=self.other,p_reason="spam")))
+            self.assertTrue(self.call("report",dict(p_id=self.mid,p_secret=self.other,p_reason="spam")))
+            r=self.call("admin_list",dict(p_admin=server.ADMIN_TOKEN,p_filter="reported"))
+            self.assertEqual(r["records"][0]["reports"],1)
+            self.assertEqual(r["records"][0]["admin_note"],"internal-only")
+            export=self.call("admin_export",{"p_admin":server.ADMIN_TOKEN})
+            self.assertNotIn("contact",export[0])
+            self.assertNotIn("admin_note",export[0])
+            self.assertEqual(self.call("admin_audit",{"p_admin":server.ADMIN_TOKEN})[0]["action"],"update")
+            with self.assertRaises(server.Problem):
+                self.call("admin_export",{"p_admin":"wrong"})
+        finally:
+            server.ADMIN_TOKEN=old
 if __name__=="__main__":
     unittest.main()
