@@ -34,7 +34,7 @@ test('Legislative historical coverage uses verified separate turnout files in al
   if(year===1992){
    assert.equal(summary.status,'partial','1992 mountain-indigenous national turnout remains unverified');
    assert.equal(summary.missingTurnout,1,'Only the 1992 mountain-indigenous national turnout remains unknown');
-   assert.equal(summary.missingIncumbent,1,'1992 one candidate incumbent attribute remains unknown');
+   assert.equal(summary.missingIncumbent,0,'1992 candidate incumbent attributes are complete, including a source-graded crosscheck');
    assert.equal(summary.countyPartial,0,'County candidate returns are available');
   }else{
    assert.equal(summary.status,'recorded',year+' principal election data must be complete');
