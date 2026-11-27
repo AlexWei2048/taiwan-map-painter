@@ -4917,6 +4917,30 @@
           "votes": null
         }
       ]
+    },
+    {
+      "county": "南投縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://www.moi.gov.tw/LocalOfficial_Content.aspx?TYP=KND0002&_PARENT_ID=ER11112MB00011&_TYP=REP&n=574",
+      "source_locator": "謝明謀地方公職人員履歷：魚池鄉第12、13屆鄉長",
+      "corroboration_url": "https://www.ntcc.gov.tw/tw/rep/p02.aspx?district=3&period=20",
+      "validation_note": "官方履歷及歷屆任期表核對任職；未取得1994逐候選人原始選票表，不計入完整選區；1998票數及黨籍不得倒填1994。",
+      "evidence_tier": "official_biography_plus_historical_term_roster",
+      "winners": [
+        {
+          "town": "魚池鄉",
+          "name": "謝明謀",
+          "gender": "男",
+          "incumbent_at_election": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://www.moi.gov.tw/LocalOfficial_Content.aspx?TYP=KND0002&_PARENT_ID=ER11112MB00011&_TYP=REP&n=574",
+          "corroboration_url": "https://zh.wikipedia.org/wiki/魚池鄉_(台灣)",
+          "evidence_notes": "第12屆任期1994-03-01起；2022選舉公報男、曾任第12及13屆鄉長，1998連任結果另見https://votetw.com/data/candidate/謝明謀；前任資料未覆蓋1994投票日，不推定現任。"
+        }
+      ]
     }
   ]
 }
