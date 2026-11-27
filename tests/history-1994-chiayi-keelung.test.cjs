@@ -52,7 +52,8 @@ test('1994 Keelung city official council totals reconcile without filling distri
  assert.equal(keelung.ballots_cast,keelung.valid_votes+keelung.invalid_votes);
  assert.equal(keelung.candidate_count,keelung.male_candidates+keelung.female_candidates);
  assert.equal(keelung.elected_count,keelung.male_elected+keelung.female_elected);
- assert.deepEqual(council.verified_county_profiles,[keelung,taoyuan]);
+ assert.equal(council.verified_county_profiles.length,4);
+ assert.deepEqual(council.verified_county_profiles.slice(0,2),[keelung,taoyuan]);
 });
 test('1994 Changhua official county profile reconciles with eight published constituencies',()=>{
  const districts=council.districts.filter(d=>d.county==='彰化縣');
@@ -70,8 +71,8 @@ test('1994 local council snapshot exposes county-level summary without merging u
   json:async()=>JSON.parse(fs.readFileSync(path.join(__dirname,'..',filename.split('?')[0]),'utf8'))
  });
  const data=await Local.loadCycle(1994,'council',fetcher);
- assert.equal(data.verifiedCouncilCountyProfiles.length,3);
- assert.deepEqual(data.verifiedCouncilCountyProfiles[2],changhua);
+ assert.equal(data.verifiedCouncilCountyProfiles.length,5);
+ assert.deepEqual(data.verifiedCouncilCountyProfiles[4],changhua);
  const indexed=Core.index(data);
  const countyOverview=Workspace.overviewRegionData(indexed,{year:1994,office:'council',scope:'county',county:'彰化县'});
  assert.equal(countyOverview.overview.registeredVoters,changhua.registered_voters);
