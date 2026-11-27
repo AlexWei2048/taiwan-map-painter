@@ -95,6 +95,24 @@ def elected_parties():
             examples[name].append({"archive":path.name,"contest":row.get("contest_id"),"name":row.get("candidate_name"),"election":contest.get("election_id")})
     return wins,examples
 
+def mayor_parties():
+    counts=collections.Counter();examples=collections.defaultdict(list);seen=set()
+    for path in sorted(ASSETS.glob("history-*.json")):
+        if not re.fullmatch(r"history-(?:local-)?\d{4}\.json",path.name):continue
+        data=load_json(path)
+        ids={e.get("election_id") for e in data.get("elections",[]) if e.get("office")=="mayor"}
+        contests={c.get("contest_id"):c for c in data.get("contests",[]) if c.get("election_id") in ids}
+        for row in data.get("candidacies",[]):
+            contest=contests.get(row.get("contest_id"))
+            if not contest:continue
+            name=normalized(row.get("party_name") or row.get("party") or row.get("party_name_official"))
+            if name in ("","无党籍","连署","政党资料缺失","无党籍（连署）","其他政党"):continue
+            key=(row.get("contest_id"),row.get("ballot_number"),row.get("candidate_name"))
+            if key in seen:continue
+            seen.add(key);counts[name]+=1
+            examples[name].append({"archive":path.name,"contest":row.get("contest_id"),"candidate":row.get("candidate_name")})
+    return counts,examples
+
 def inventory():
     presets=parties();baseline=set(logo_keys())
     official_ids,official_names=sourced_logos()
@@ -118,6 +136,7 @@ def inventory():
             counter[n]+=1;raw[n].add(str(name));years[n].add(source)
             votes[n]+=int(row.get("votes",0) or 0)
     wins,win_examples=elected_parties()
+    mayors,mayor_examples=mayor_parties()
     missing=[]
     for name,count in counter.most_common():
         pid=indexed.get(name)
@@ -127,7 +146,8 @@ def inventory():
         if pid and pid in keys or name in official_names:continue
         missing.append({"name":name,"rows":count,"total_votes_across_grains":votes[name],
             "known_preset":pid or None,"sources":sorted(years[name]),"spellings":sorted(raw[name]),
-            "confirmed_elected_count":wins[name],"elected_examples":win_examples[name][:12]})
+            "confirmed_elected_count":wins[name],"elected_examples":win_examples[name][:12],
+            "mayor_candidate_count":mayors[name],"mayor_examples":mayor_examples[name][:12]})
     missing.sort(key=lambda x:(-int(x["confirmed_elected_count"]>0),-x["confirmed_elected_count"],-x["rows"],x["name"]))
     unused=[{"id":p["id"],"name":p["name"],"aliases":p.get("aliases",[])}
         for p in presets if p["id"] not in keys and p["id"] not in ("gray","red")]
@@ -161,6 +181,8 @@ def inventory():
         "missing_preset_logos":unused,
         "missing_archive_logos":missing,
         "missing_elected_party_logos":[x for x in missing if x["confirmed_elected_count"]>0],
+        "missing_priority_party_logos":[x for x in missing if x["confirmed_elected_count"]>0 or x["mayor_candidate_count"]>0],
+        "priority_party_inventory":[{"name":n,"elected":wins[n],"mayor_candidates":mayors[n],"has_logo":bool(indexed.get(n) in keys or n in official_names)} for n in sorted(set(wins)|set(mayors))],
         "placeholder_code_locations":text_sources,
         "historical_legislative_turnout":turnout,
         "archives_scanned":list(elections().keys())}
@@ -184,6 +206,8 @@ def markdown(result):
       "| 名称 | 内部标识 |",
       "|---|---|"]
     lines += [f"| {x['name']} | `{x['id']}` |" for x in result["missing_preset_logos"]]
+    lines += ["","## 优先补齐：曾当选或曾参选县市长的政党","", "| 名称 | 已确认当选次数 | 县市长候选人次数 |","|---|---:|---:|"]
+    lines += [f"| {x['name']} | {x['confirmed_elected_count']} | {x['mayor_candidate_count']} |" for x in result["missing_priority_party_logos"]]
     lines += ["","## 缺党徽的历史及现行党名（曾当选者优先）","",
               "| 名称 | 已确认当选次数 | 数据行数 | 首个来源 |","|---|---:|---:|---|"]
     lines += [f"| {x['name']} | {x['confirmed_elected_count']} | {x['rows']} | {x['sources'][0] if x['sources'] else ''} |"

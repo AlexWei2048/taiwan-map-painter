@@ -41,7 +41,7 @@ candidates=json.loads((REPORT/"official-party-logo-candidates.json").read_text()
 audit=json.loads((REPORT/"coverage-audit.json").read_text())
 # The registry currently shows a longer name with legal-status parenthetical,
 # hence this party was not an exact-string match in the archived index.
-extra={"中华统一促进党":"https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&s=172&sms=13073"}
+extra={"中华统一促进党":"https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&s=172&sms=13073", "台湾建国党":"https://party.moi.gov.tw/PartyFinancialChecklistContent.aspx?fs=1362&n=16101&s=261&sms=13073"}
 # These emblem files are explicitly identified on the registry detail pages.
 registry_emblems={
  # 2026 roster: exact current registry image links, not historical aliases.
@@ -128,7 +128,7 @@ if prior_js.exists() and prior_json.exists():
  documentation.extend(prior.get("official_sources",[]))
  skips.extend(prior.get("unverified_or_unavailable",[]))
  print("REUSED_VERIFIED",len(byid),len(byname),len(documentation),flush=True)
-priority_winners={x['name'] for x in audit.get('missing_elected_party_logos',[])}|{'民主联盟','全国民主非政党联盟','台湾吾党'}
+priority_winners={x['name'] for x in audit.get('missing_priority_party_logos',audit.get('missing_elected_party_logos',[]))}|{'民主联盟','全国民主非政党联盟','台湾吾党'}
 priority_2026={"永久和平自然法","三势团结促进联盟","台湾进步党","更生党"}
 for name,item in sorted(candidates.items(),key=lambda pair: (norm(pair[0]) not in priority_winners, norm(pair[0]) not in priority_2026, norm(pair[0]))):
  name=norm(name)

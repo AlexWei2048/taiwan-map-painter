@@ -87,7 +87,7 @@ test('2502 clauses 49–86 normalize Taiwan-related public wording without disto
   assert.equal(result,wanted,input);
   assert.equal(W.normalize(result),result,'normalization is idempotent: '+input);
  }
- for(const name of ['公民党','民国党','中华统一促进党','台湾民众党','金门','马祖','张国立']){
+ for(const name of ['中国台湾原住民党','台湾原住民党','中华台湾原住民团结党','中华民国台湾基本法连线','中华民国机车党','中华民国国政监督联盟','中国全民福利党','全民生活政策党','台湾第一民族党','公民党','民国党','中华统一促进党','台湾民众党','金门','马祖','张国立']){
   assert.equal(W.normalize(name),name,'preserve registered names and personal names: '+name);
  }
 });
@@ -140,3 +140,5 @@ test('Independent nomination wording is uniform in visible text and CSV exports'
  assert.equal(W.normalize(W.normalize('无党籍（连署）')),'无党籍');
  assert.match(HistoryCore.csv([['无党籍（连署）','連署']]),/"无党籍","无党籍"/);
 });
+
+test('Party proper names are protected in mixed text, DOM labels and CSV; historical aliases remain names, not generic words',()=>{for(const [source,want] of [['中国台湾少数民族党','中国台湾原住民党'],['中國台灣原住民黨','中国台湾原住民党'],['中国台湾原住民党 · 山地原住民','中国台湾原住民党 · 山地少数民族'],['中華民國機車黨','中华民国机车党'],['中华民国台湾基本法连线 · 总统选举','中华民国台湾基本法连线 · 台湾地区领导人选举'],['中国全民福利党','中国全民福利党'],['全民生活政策党','全民生活政策党'],['台灣基進','“台湾基进”'],['台湾团结联盟（台联党）','“台湾团结联盟（台联党）”'],['台湾建国党','台湾建国党'],['绿党社会民主党联盟','绿党社会民主党联盟']]){assert.equal(W.normalize(source),want);assert.equal(W.normalize(want),want)}assert.match(HistoryCore.csv([['中国台湾原住民党','中华民国机车党']]),/中国台湾原住民党.*中华民国机车党/)});
