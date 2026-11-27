@@ -24109,6 +24109,179 @@
           "source_url": "https://zh.wikipedia.org/wiki/%E7%89%A1%E4%B8%B9%E9%84%89"
         }
       ]
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://web.cec.gov.tw/api/file/fc013024-106e-4395-844f-af5777354458.pdf",
+      "source_locator": "2009年縣議員公報8號候選人經歷明載花壇鄉第12、13屆鄉長；2014年公報一致，縣議會名錄確認男性。原公報文字可讀，截圖未取得。",
+      "evidence_tier": "official_election_biography",
+      "validation_note": "非當屆原始開票表；姓名及現任按任期名錄和相關資料推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "花壇鄉",
+          "name": "唐鎮林",
+          "incumbent_at_election": null,
+          "incumbent_method": null,
+          "previous_term_holder": null,
+          "gender": "男",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://web.cec.gov.tw/api/file/fc013024-106e-4395-844f-af5777354458.pdf",
+          "corroboration_url": "https://www.chcc.gov.tw/form/Details.aspx?Parser=2%2C4%2C34%2C%2C%2C41"
+        }
+      ],
+      "corroboration_url": "https://www.chcc.gov.tw/form/Details.aspx?Parser=2%2C4%2C34%2C%2C%2C41"
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://catalog.digitalarchives.tw/item/00/3a/1b/6b.html",
+      "source_locator": "1996年《水的故鄉－二水》典藏文字稿列二水鄉長鄭阿月、女性；歷任表列第11、12任，分別於1990年及1994年3月到任。",
+      "evidence_tier": "official_cultural_archive_and_term_roster",
+      "validation_note": "非當屆原始開票表；姓名及現任按任期名錄和相關資料推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "二水鄉",
+          "name": "鄭阿月",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "鄭阿月",
+          "gender": "女",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://catalog.digitalarchives.tw/item/00/3a/1b/6b.html",
+          "corroboration_url": "https://zh.wikipedia.org/wiki/二水鄉"
+        }
+      ],
+      "corroboration_url": "https://zh.wikipedia.org/wiki/二水鄉"
+    },
+    {
+      "county": "臺中縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://www.ly.gov.tw/Pages/List.aspx?nodeid=1411",
+      "source_locator": "民代官方履歷記載大肚鄉長連任、先任公所秘書；歷任表列第12、13屆，任期始於1994年；報導明載前任退休後首次參選。",
+      "evidence_tier": "official_legislative_biography",
+      "validation_note": "非當屆原始開票表；姓名及現任按任期名錄和相關資料推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "大肚鄉",
+          "name": "紀國棟",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": null,
+          "gender": "男",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://www.ly.gov.tw/Pages/List.aspx?nodeid=1411",
+          "corroboration_url": "https://zh.wikipedia.org/wiki/大肚區"
+        }
+      ],
+      "corroboration_url": "https://zh.wikipedia.org/wiki/大肚區"
+    },
+    {
+      "county": "南投縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://www.ly.gov.tw/EngPages/List.aspx?nodeid=701",
+      "source_locator": "第三屆民代官方履歷明載南投縣信義鄉第十一、十二屆鄉長，政大《選舉研究》亦記載參選民代前兩任信義鄉長。",
+      "evidence_tier": "official_legislative_biography",
+      "validation_note": "非當屆原始開票表；姓名及現任按任期名錄和相關資料推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "信義鄉",
+          "name": "全文盛",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "全文盛",
+          "gender": "男",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://www.ly.gov.tw/EngPages/List.aspx?nodeid=701",
+          "corroboration_url": "https://votetw.com/data/candidate/全文盛"
+        }
+      ],
+      "corroboration_url": "https://votetw.com/data/candidate/全文盛"
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://wikis.tw/鹽埔鄉",
+      "source_locator": "歷任首長表展開後明列第11及12屆皆為鄭景濃；維基表同一姓名跨列，兩頁為同源轉載，非獨立佐證。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆原始開票表；姓名及現任按任期名錄和相關資料推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "鹽埔鄉",
+          "name": "鄭景濃",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "鄭景濃",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://wikis.tw/鹽埔鄉",
+          "corroboration_url": "https://zh.wikipedia.org/wiki/鹽埔鄉"
+        }
+      ],
+      "corroboration_url": "https://zh.wikipedia.org/wiki/鹽埔鄉"
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://wikis.tw/新埤鄉",
+      "source_locator": "歷任首長表明列第11及12屆皆為曾文昌；維基表同一姓名跨列，兩頁為同源轉載，非獨立佐證。2002年同名參選資料不能證明1994年票數。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆原始開票表；姓名及現任按任期名錄和相關資料推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "新埤鄉",
+          "name": "曾文昌",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "曾文昌",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://wikis.tw/新埤鄉",
+          "corroboration_url": "https://zh.wikipedia.org/wiki/新埤鄉"
+        }
+      ],
+      "corroboration_url": "https://zh.wikipedia.org/wiki/新埤鄉"
+    },
+    {
+      "county": "南投縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/中寮鄉",
+      "source_locator": "歷任首長表明列第11屆廖文章、第12屆陳耀崇；僅次級名錄，未取得獨立原始選舉清冊。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆原始開票表；姓名及現任按任期名錄和相關資料推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "中寮鄉",
+          "name": "陳耀崇",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "廖文章",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/中寮鄉"
+        }
+      ]
     }
   ]
 }
