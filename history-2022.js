@@ -565,8 +565,10 @@
   const features=currentItems(),byId=new Map(features.map(f=>[f.id,f]));
   for(const path of document.querySelectorAll('#regions path[data-region]')){
    const f=byId.get(path.dataset.region);if(!f)continue;
-   const key=historyLinkFeature(f);if(key)path.dataset.mapLink=key;else delete path.dataset.mapLink;path.dataset.partyKeys=JSON.stringify(historyPartyKeys(f));path.dataset.mapStatus=historicalStatus(f);
-   path.setAttribute('fill',fillColor(f));path.setAttribute('aria-label',f.county+(f.name===f.county?'':' · '+f.name)+'，'+regionDetail(f)+(['missing','unresolved'].includes(path.dataset.mapStatus)?' · '+MAP_STATUS_STYLES[path.dataset.mapStatus].label:''));
+   const key=historyLinkFeature(f),status=historicalStatus(f);
+   if(key){if(path.dataset.mapLink!==key)path.dataset.mapLink=key}else if(path.hasAttribute('data-map-link'))delete path.dataset.mapLink;
+   const attrs={'data-party-keys':JSON.stringify(historyPartyKeys(f)),'data-map-status':status,fill:fillColor(f),'aria-label':f.county+(f.name===f.county?'':' · '+f.name)+'，'+regionDetail(f)+(['missing','unresolved'].includes(status)?' · '+MAP_STATUS_STYLES[status].label:'')};
+   for(const [name,value] of Object.entries(attrs))if(path.getAttribute(name)!==String(value))path.setAttribute(name,value);
   }
   el('scopeTitle').textContent=(county||'全台')+' · '+yearLabel()+' '+officeTitle()+' · '+metricLabel();
   drawLegend(result);
