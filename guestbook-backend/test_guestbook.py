@@ -149,5 +149,15 @@ class GuestbookTests(unittest.TestCase):
         self.call("submit",dict(self.data,p_screenshot=encoded))
         self.call("withdraw",dict(p_id=self.mid,p_secret=self.secret))
         self.assertEqual(self.db.execute("SELECT COUNT(*) FROM attachments").fetchone()[0],0)
+    def test_owner_update_summary_is_minimal_and_private(self):
+        self.call("submit",dict(self.data,p_private=True))
+        self.assertEqual(self.call("my_updates",{"p_secret":self.other}),[])
+        own=self.call("my_updates",{"p_secret":self.secret})
+        self.assertEqual(len(own),1)
+        self.assertEqual(set(own[0]),{"id","revision","visibility","progress","has_reply"})
+        self.assertEqual(own[0]["has_reply"],0)
+        self.db.execute("UPDATE messages SET revision=revision+1,reply='处理完成',progress='done' WHERE id=?",(self.mid,))
+        changed=self.call("my_updates",{"p_secret":self.secret})[0]
+        self.assertEqual((changed["revision"],changed["progress"],changed["has_reply"]),(1,"done",1))
 if __name__=="__main__":
     unittest.main()
