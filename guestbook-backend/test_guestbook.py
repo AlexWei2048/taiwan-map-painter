@@ -218,10 +218,12 @@ class GuestbookTests(unittest.TestCase):
             r=self.call("admin_list",dict(p_admin=server.ADMIN_TOKEN,p_filter="reported"))
             self.assertEqual(r["records"][0]["reports"],1)
             self.assertEqual(r["records"][0]["admin_note"],"internal-only")
+            self.assertTrue(self.call("admin_clear_reports",dict(p_admin=server.ADMIN_TOKEN,p_id=self.mid)))
+            self.assertEqual(self.call("admin_list",dict(p_admin=server.ADMIN_TOKEN,p_filter="reported"))["total"],0)
             export=self.call("admin_export",{"p_admin":server.ADMIN_TOKEN})
             self.assertNotIn("contact",export[0])
             self.assertNotIn("admin_note",export[0])
-            self.assertEqual(self.call("admin_audit",{"p_admin":server.ADMIN_TOKEN})[0]["action"],"update")
+            self.assertIn("update",[r["action"] for r in self.call("admin_audit",{"p_admin":server.ADMIN_TOKEN})])
             with self.assertRaises(server.Problem):
                 self.call("admin_export",{"p_admin":"wrong"})
         finally:
