@@ -20858,7 +20858,13 @@
           "name": "許金象",
           "gender": "男",
           "party_membership": "中國國民黨",
-          "votes": 5116
+          "votes": 5116,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_term_roster_crosscheck",
+          "previous_term_holder": "許永鎮",
+          "incumbent_source_url": "https://jincheng.kinmen.gov.tw/cp.aspx?n=C2339A8CEBE6FB41",
+          "incumbent_source_locator": "公所歷屆鎮長索引列83年3月1日起任；縣志第283頁列81年3月28日許永鎮補選當選。",
+          "incumbent_corroboration_url": "https://cabkc.kinmen.gov.tw/uploads/files/202304/c035945e-0950-4aa7-aacc-1e2e1d815dc9.pdf#page=63"
         },
         {
           "town": "金湖鎮",
@@ -20872,21 +20878,39 @@
           "name": "黃清壈",
           "gender": "男",
           "party_membership": "中國國民黨",
-          "votes": 2857
+          "votes": 2857,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_term_roster_crosscheck",
+          "previous_term_holder": "陳佳結",
+          "incumbent_source_url": "https://kinsha.kinmen.gov.tw/cp.aspx?n=8F975A25CF6E91F4",
+          "incumbent_source_locator": "公所歷年鎮長索引列83年3月1日起任；縣志第283頁列上屆陳佳結。",
+          "incumbent_corroboration_url": "https://cabkc.kinmen.gov.tw/uploads/files/202304/c035945e-0950-4aa7-aacc-1e2e1d815dc9.pdf#page=63"
         },
         {
           "town": "金寧鄉",
           "name": "吳怡跑",
           "gender": "男",
           "party_membership": "中國國民黨",
-          "votes": 2018
+          "votes": 2018,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_term_roster_crosscheck",
+          "previous_term_holder": "許加發",
+          "incumbent_source_url": "https://www.kmdn.gov.tw/1117/1271/1272/108008/?cprint=pt",
+          "incumbent_source_locator": "2002年卸任報導明載兩任八年；縣志第283頁列上屆許加發。",
+          "incumbent_corroboration_url": "https://cabkc.kinmen.gov.tw/uploads/files/202304/c035945e-0950-4aa7-aacc-1e2e1d815dc9.pdf#page=63"
         },
         {
           "town": "烈嶼鄉",
           "name": "洪國正",
           "gender": "男",
           "party_membership": "中國國民黨",
-          "votes": 1152
+          "votes": 1152,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_term_roster_crosscheck",
+          "previous_term_holder": "林媽端",
+          "incumbent_source_url": "https://kmfinance.kinmen.gov.tw/News.aspx?PageSize=999&n=55FDE4EAE7CDA1E6&page=464&sms=4FEFD09995C4BB81",
+          "incumbent_source_locator": "縣府新聞檔案記載83年3月1日起接掌鄉政；縣志第283頁列上屆林媽端。",
+          "incumbent_corroboration_url": "https://cabkc.kinmen.gov.tw/uploads/files/202304/c035945e-0950-4aa7-aacc-1e2e1d815dc9.pdf#page=63"
         },
         {
           "town": "烏坵鄉",
@@ -20905,7 +20929,19 @@
         "source_locator": "金門縣統計年報表3-11，第6屆，頁111–112",
         "registered_voters": 27385,
         "ballots_cast": 22174,
-        "corroboration_url": "https://ws.kinmen.gov.tw/Download.ashx?icon=..pdf&n=6YeR6ZaA57ij56S%2B5pyD5oyH5qiZ57Wx6KiIKDEwMSkucGRm&u=LzAwMS9VcGxvYWQvMzExL3JlbGZpbGUvMTAwMTAvMzI3NzA4LzFmYmFmZTVmLWVjZjAtNDZiYy04ZTJmLWVhYWYxOWNkY2YxOC5wZGY%3D"
+        "corroboration_url": "https://ws.kinmen.gov.tw/Download.ashx?icon=..pdf&n=6YeR6ZaA57ij56S%2B5pyD5oyH5qiZ57Wx6KiIKDEwMSkucGRm&u=LzAwMS9VcGxvYWQvMzExL3JlbGZpbGUvMTAwMTAvMzI3NzA4LzFmYmFmZTVmLWVjZjAtNDZiYy04ZTJmLWVhYWYxOWNkY2YxOC5wZGY%3D",
+        "male_candidates": 12,
+        "female_candidates": 0,
+        "candidate_gender_source_url": "https://ws.kinmen.gov.tw/Download.ashx?icon=..pdf&n=56S%2B5pyD5oyH5qiZLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvMzAyL3JlbGZpbGUvMTAwMTAvMzI3ODEzL%2Bekvuacg%2BaMh%2BaomS5wZGY%3D",
+        "candidate_gender_source_locator": "表33，頁100，民國83年1月29日第六屆鄉鎮長；金門縣選委會資料；公開文字表格，截圖未取得。"
+      },
+      "incumbency_review_note": {
+        "unresolved": [
+          "金湖鎮：公所歷任鎮長頁記載蔡福祿82年3月1日到任，與縣志83年1月29日當選資料時間口徑有疑義，不推定現任。",
+          "烏坵鄉：已核上屆當選人為楊瑞大；未取得完整逐日任免資料，保留現任未知。"
+        ],
+        "source_url": "https://kinhu.kinmen.gov.tw/cp.aspx?n=B0C5E5929338887B",
+        "gazette_url": "https://cabkc.kinmen.gov.tw/uploads/files/202304/c035945e-0950-4aa7-aacc-1e2e1d815dc9.pdf#page=63"
       }
     },
     {
