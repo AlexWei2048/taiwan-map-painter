@@ -259,6 +259,7 @@ function render(){
  const available=chosen?comparableCounty(chosen,as,bs)&&as.counties.has(chosen)&&bs.counties.has(chosen):true;
  const x=chosen?as.counties.get(chosen):as.all,y=chosen?bs.counties.get(chosen):bs.all,host=$('compareTable');host.replaceChildren();
  const heading=node('h3',chosen?areaLabel(chosen):as.level==='town'?'全部地区（县级汇总）':'全部地区');host.append(heading);
+ if(chosen&&root.HistoryDiscovery?.openRegion){const action=node('button','查看地区档案');action.type='button';action.className='button quiet';action.onclick=()=>{const [county,town]=chosen.split('|');dialog.close();root.HistoryDiscovery.openRegion(county,{office:as.office,ballot:as.ballot,town:town||''})};host.append(action)}
  if(x?.profile||y?.profile){const stats=node('p');stats.textContent='选举人数：'+(x?.profile?.registered?.toLocaleString('zh-CN')??'—')+' → '+(y?.profile?.registered?.toLocaleString('zh-CN')??'—')+'（'+signed(available?profileChange(x,y,'registered'):null,0)+'人）；投票率：'+rate(x?.profile?.turnout)+' → '+rate(y?.profile?.turnout)+'（'+signed(available?profileChange(x,y,'turnout'):null)+'个百分点）';host.append(stats)}
  if(!available)host.append(node('p','当届行政区范围不同或资料不存在，不计算该地区变化值。'));
  if(x&&!x.complete)host.append(node('p',label(as.year,as.office)+'：'+x.reason));if(y&&!y.complete)host.append(node('p',label(bs.year,bs.office)+'：'+y.reason));
@@ -292,7 +293,7 @@ async function refresh(){
   status.textContent='已载入；灰色表示无适用或可核实结果，并非零票。';render();
  }catch(e){if(my===token){models=null;status.textContent='载入失败：'+e.message}}
 }
-open.onclick=()=>{if(!savedCompare){office.value=root.History2022View?.office()||'mayor';chosen='';mode.value='results';setBallots();setYears(root.History2022View?.year())}dialog.showModal();refresh()};
+open.onclick=()=>{if(!savedCompare){office.value=root.History2022View?.office()||'mayor';chosen='';mode.value='results';setBallots();setYears(root.History2022View?.year())}dialog.showModal();root.dispatchEvent(new Event('observationdialogchange'));refresh()};
 office.onchange=()=>{chosen='';setBallots();setYears();refresh()};ballot.onchange=()=>{setYears();refresh()};left.onchange=right.onchange=refresh;level.onchange=()=>{chosen='';refresh()};party.onchange=()=>{if(mode.value==='turnover')mode.value='results';render()};mode.onchange=render;county.onchange=()=>{chosen=county.value;render()};
 $('compareZoomIn').onclick=()=>{zoom=Math.min(5,zoom*1.25);setBox()};$('compareZoomOut').onclick=()=>{zoom=Math.max(1,zoom/1.25);if(baseBox){const mx=baseBox[2]*(1-1/zoom)/2,my=baseBox[3]*(1-1/zoom)/2;offsetX=Math.max(-mx,Math.min(mx,offsetX));offsetY=Math.max(-my,Math.min(my,offsetY))}setBox()};$('compareFit').onclick=()=>{zoom=1;offsetX=offsetY=0;setBox()};$('compareRetry').onclick=refresh;
 // Pan either map, preserving the same viewBox on the other. Do not turn a drag into a county selection.
@@ -374,6 +375,6 @@ async function exportComparison(format){
  }catch(e){status.textContent=e.message||'导出失败'}finally{if(url)URL.revokeObjectURL(url);exporting=false;buttons.forEach(id=>$(id).disabled=!models)}
 }
 $('compareExportSvg').onclick=()=>exportComparison('svg');$('compareExportCsv').onclick=()=>exportComparison('csv');$('compareExportPng').onclick=()=>exportComparison('png');
-dialog.addEventListener('close',()=>{savedCompare=true;token++;models=null});
+dialog.addEventListener('close',()=>{savedCompare=true;token++;models=null;root.dispatchEvent(new Event('observationdialogchange'))});
 $('compareSwap')?.addEventListener('click',()=>{const a=left.value;left.value=right.value;right.value=a;refresh()});
 })(typeof window==='undefined'?globalThis:window);

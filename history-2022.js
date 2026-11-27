@@ -1217,6 +1217,7 @@
     f.county===f.name?'查看本县市概况':'查看本乡镇市区概况';
    overviewButton.onclick=()=>{dialog.close();window.HistoryWorkspace?.openFeatureOverview?.(f)};
   }
+  const archiveButton=el('historyDialogArchive');if(archiveButton){archiveButton.hidden=!f.county;archiveButton.onclick=()=>{const r=routeSelection();dialog.close();window.HistoryDiscovery?.openRegion(f.county,{office:r.office,ballot:allLegislative()?f.electorate:r.electorate,town:(r.level==='town'||r.office==='township')&&f.name!==f.county?f.name:''})}};
   hint.hidden=true;if(!dialog.open)dialog.showModal();window.dispatchEvent(new Event('site-route-change'));
   wrap.scrollLeft=0;wrap.scrollTop=0;
   hint.hidden=wrap.scrollWidth<=wrap.clientWidth;
@@ -1248,6 +1249,7 @@
   const overviewButton=el('historyDialogOverview');
   if(overviewButton){overviewButton.hidden=false;overviewButton.textContent='查看本选区概况';
    overviewButton.onclick=()=>{el('historyResultDialog').close();window.HistoryWorkspace?.openContestOverview?.(contestId)};}
+  const archiveButton=el('historyDialogArchive');if(archiveButton){archiveButton.hidden=!contest.county_name||/全部地区|台闽地区|全台|全国/.test(contest.county_name);archiveButton.onclick=()=>{el('historyResultDialog').close();window.HistoryDiscovery?.openRegion(contest.county_name,{office:routeSelection().office,ballot:contest.electorate})}};
   el('historyDialogDrilldown').hidden=true;el('historyDialogBack').hidden=!county;if(!el('historyResultDialog').open)el('historyResultDialog').showModal();window.dispatchEvent(new Event('site-route-change'));
  }
  function exportRows(){

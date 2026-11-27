@@ -3738,3 +3738,16 @@ test('Historical search opens an exact year and region without editing saved pre
 });
 
 test('Observation evolution changes verified county map by election year and exports the current frame',async t=>{const page=await pageFor(t,{width:1440,height:950});await page.locator('#categoryAnalysis').click();await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);await page.locator('[data-observation="evolution"]').click();await page.locator('.evolution-frame path').first().waitFor({timeout:90000});const prior=await page.locator('#evolutionYear').textContent();await page.locator('#observationContent').getByRole('button',{name:'上一届',exact:true}).click();await page.locator('.evolution-frame path').first().waitFor({timeout:90000});assert.notEqual(await page.locator('#evolutionYear').textContent(),prior);await page.locator('.evolution-frame path').first().focus();await page.locator('.evolution-frame path').first().press('Enter');assert.match(await page.locator('#observationContent .observation-detail').textContent(),/有效票|暂无|缺档|资料/);const download=page.waitForEvent('download');await page.locator('#observationContent').getByRole('button',{name:'导出 SVG',exact:true}).click();assert.match((await download).suggestedFilename(),/政党版图演变.*\.svg$/);await page.locator('#categoryHistory').click();await page.locator('#mapWithKey').waitFor({state:'visible'});});
+
+test('Observation topic selection is exclusive even after history workspace updates and modal close',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});await page.locator('#categoryAnalysis').click();
+ await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022&&window.HistoryObservation);
+ const active=()=>page.locator('#analysisViews button[aria-pressed="true"]').evaluateAll(nodes=>nodes.map(n=>n.id||n.dataset.observation));
+ await page.locator('[data-observation="seats"]').click();assert.deepEqual(await active(),['seats']);
+ await page.evaluate(()=>window.HistoryWorkspace.render());assert.deepEqual(await active(),['seats']);
+ assert.equal(await page.locator('#historyViewTrends').evaluate(n=>n.classList.contains('active')),false);
+ assert.equal(await page.locator('#historyTrendsPanel').isVisible(),false);
+ await page.locator('#historyCompareOpen').click();assert.deepEqual(await active(),['historyCompareOpen']);await page.locator('#historyCompareDialog').evaluate(d=>d.close());await page.waitForFunction(()=>document.querySelector('[data-observation="seats"]').getAttribute('aria-pressed')==='true');assert.deepEqual(await active(),['seats']);
+ await page.locator('#observationRegionOpen').click();assert.deepEqual(await active(),['observationRegionOpen']);await page.locator('#regionArchiveDialog').evaluate(d=>d.close());await page.waitForFunction(()=>document.querySelector('[data-observation="seats"]').getAttribute('aria-pressed')==='true');
+ await page.locator('#historyViewTrends').click();assert.deepEqual(await active(),['historyViewTrends']);
+});

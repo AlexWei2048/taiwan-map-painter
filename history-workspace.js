@@ -713,13 +713,13 @@
  }
  let trendLoading=null;
  function syncTrends(){
-  if(state.view!=='trends'){root.HistoryTrendsUI?.close();return}
+  if(state.view!=='trends'||root.HistoryObservation&&root.HistoryObservation.tab()!=='trends'){root.HistoryTrendsUI?.close();return}
   if(root.HistoryTrendsUI){el('historyTrendModuleStatus')?.remove();root.HistoryTrendsUI.open(state);return}
   if(trendLoading)return;
   const panel=el('historyTrendsPanel');if(!panel)return;
   const status=document.createElement('div');status.id='historyTrendModuleStatus';status.className='data-help';status.setAttribute('role','status');status.textContent='正在载入历史趋势模块…';panel.replaceChildren(status);
   trendLoading=root.HistoryLoader.loadTrends().then(()=>{
-   status.remove();if(state.view==='trends'&&root.History2022View?.active()){root.HistoryTrendsUI.open(state);root.dispatchEvent(new Event('site-route-change'))}
+   status.remove();if(state.view==='trends'&&root.History2022View?.active()&&(!root.HistoryObservation||root.HistoryObservation.tab()==='trends')){root.HistoryTrendsUI.open(state);root.dispatchEvent(new Event('site-route-change'))}
   }).catch(error=>{status.textContent='历史趋势模块载入失败：'+error.message+' ';const retry=document.createElement('button');retry.type='button';retry.className='button quiet';retry.textContent='重试';retry.onclick=()=>syncTrends();status.append(retry)}).finally(()=>{trendLoading=null});
  }
  function render(){
@@ -741,8 +741,8 @@
    }else electorate.value='regional';
   }
   const panels={map:'historyMapPanel',candidates:'historyCandidatesPanel',overview:'historyOverviewPanel',trends:'historyTrendsPanel'};
-  for(const [view,id] of Object.entries(panels)){const node=el(id);if(node)node.hidden=state.view!==view}
-  for(const view of VIEWS){const button=el('historyView'+view[0].toUpperCase()+view.slice(1));if(button){const selected=state.view===view;button.classList.toggle('active',selected);button.setAttribute('aria-pressed',String(selected))}}
+  for(const [view,id] of Object.entries(panels)){const node=el(id);if(node)node.hidden=state.view!==view||view==='trends'&&root.HistoryObservation&&root.HistoryObservation.tab()!=='trends'}
+  for(const view of VIEWS){if(view==='trends'&&root.HistoryObservation)continue;const button=el('historyView'+view[0].toUpperCase()+view.slice(1));if(button){const selected=state.view===view;button.classList.toggle('active',selected);button.setAttribute('aria-pressed',String(selected))}}
   syncTrends();
   if(el('historyExportCsv'))el('historyExportCsv').textContent=state.view==='trends'?'导出历史趋势 CSV':'导出当前结果 CSV';
   renderTurnoutCards();const coverage=el('historyCoverage');
