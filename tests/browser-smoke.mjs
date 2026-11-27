@@ -580,6 +580,29 @@ test('Administrative index fits the responsive map layout with legible text',asy
  }
 });
 
+test('Boundary trees retain identical paths and historical references retain expanded groups',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ await page.locator('#workspaceFree').click();await page.locator('#councilLevel').click();await page.locator('#county').selectOption('台北市');
+ await page.waitForFunction(()=>document.querySelector('#districtBorders path')&&document.querySelector('#townBorders path')&&document.querySelector('#mapLoadingStatus').hidden);
+ const result=await page.evaluate(()=>{
+  const roots=['borders','districtBorders','townBorders'].map(id=>document.getElementById(id));
+  const before=roots.map(r=>[...r.querySelectorAll('path')]),geometry=before.map(ps=>ps.map(p=>p.getAttribute('d')));
+  render();
+  return {count:before.flat().length,unchanged:roots.every((r,i)=>[...r.querySelectorAll('path')].every((p,j)=>p===before[i][j]&&p.getAttribute('d')===geometry[i][j])&&r.querySelectorAll('path').length===before[i].length)};
+ });
+ assert.ok(result.count>0);assert.equal(result.unchanged,true);
+ await page.locator('#categoryHistory').click();await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022&&document.querySelector('#historyLoadStatus').hidden);
+ await page.locator('#historyOffice').selectOption('council');await page.waitForFunction(()=>History2022View.office()==='council'&&document.querySelector('#historyLoadStatus').hidden);
+ await page.locator('#historyCounty').selectOption('');
+ await page.waitForFunction(()=>document.querySelectorAll('#districtTableGroups details[data-reference-county]').length>1);
+ const reference=await page.evaluate(()=>{
+  const groups=document.querySelectorAll('#districtTableGroups details[data-reference-county]'),group=groups[1];
+  group.open=true;render();
+  return {same:document.querySelectorAll('#districtTableGroups details[data-reference-county]')[1]===group,open:group.open};
+ });
+ assert.deepEqual(reference,{same:true,open:true});
+});
+
 test('Map paths keep their identity and update predicted fill in the same scope',async t=>{
  const page=await pageFor(t,{width:1440,height:950});
  await page.locator('#county').selectOption('台北市');
