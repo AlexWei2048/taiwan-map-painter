@@ -2222,7 +2222,7 @@
     },
     {
       "name": "中国国民党",
-      "elected": 4776,
+      "elected": 5306,
       "mayor_candidates": 194,
       "has_logo": true
     },
@@ -2336,7 +2336,7 @@
     },
     {
       "name": "新党",
-      "elected": 82,
+      "elected": 90,
       "mayor_candidates": 16,
       "has_logo": true
     },
@@ -2378,7 +2378,7 @@
     },
     {
       "name": "民主进步党",
-      "elected": 2529,
+      "elected": 2618,
       "mayor_candidates": 167,
       "has_logo": true
     },
@@ -2420,26 +2420,6 @@
     }
   ],
   "placeholder_code_locations": {
-    "history-workspace.js": [
-      {
-        "phrase": "暂无资料",
-        "count": 4
-      },
-      {
-        "phrase": "暂无该",
-        "count": 2
-      },
-      {
-        "phrase": "无可核实",
-        "count": 1
-      }
-    ],
-    "history-trends-ui.js": [
-      {
-        "phrase": "不可用",
-        "count": 1
-      }
-    ],
     "history-observation-core.js": [
       {
         "phrase": "无可核实",
@@ -2474,6 +2454,32 @@
         "count": 1
       }
     ],
+    "history-trends-ui.js": [
+      {
+        "phrase": "不可用",
+        "count": 1
+      }
+    ],
+    "history-workspace.js": [
+      {
+        "phrase": "暂无资料",
+        "count": 4
+      },
+      {
+        "phrase": "暂无该",
+        "count": 2
+      },
+      {
+        "phrase": "无可核实",
+        "count": 1
+      }
+    ],
+    "history-trends.js": [
+      {
+        "phrase": "无可核实",
+        "count": 1
+      }
+    ],
     "history-observation-ui.js": [
       {
         "phrase": "暂无数据",
@@ -2496,22 +2502,16 @@
         "count": 1
       }
     ],
-    "history-trends.js": [
+    "tests/p1-overview.test.cjs": [
       {
-        "phrase": "无可核实",
-        "count": 1
+        "phrase": "暂无资料",
+        "count": 2
       }
     ],
     "tests/history-workspace.test.cjs": [
       {
         "phrase": "暂无资料",
         "count": 5
-      }
-    ],
-    "tests/p1-overview.test.cjs": [
-      {
-        "phrase": "暂无资料",
-        "count": 2
       }
     ]
   },
