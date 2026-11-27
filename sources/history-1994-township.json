@@ -5193,6 +5193,129 @@
           "previous_term_holder": "程聰明"
         }
       ]
+    },
+    {
+      "county": "澎湖縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/馬公市",
+      "source_locator": "歷任市長表第4、5屆，1990–1998；第5屆1994年3月1日就任。",
+      "evidence_tier": "secondary_term_roster",
+      "validation_note": "歷任首長資料，非原始開票結果；任期推定，未核逐日任免。未取得當屆票數、號次、性別與推薦政黨，維持缺值。",
+      "winners": [
+        {
+          "town": "馬公市",
+          "name": "楊國夫",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "楊國夫",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "gender": null,
+          "source_url": "https://zh.wikipedia.org/wiki/馬公市"
+        }
+      ]
+    },
+    {
+      "county": "澎湖縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/白沙鄉_(台灣)",
+      "source_locator": "歷任鄉長表第10、11屆鄭武雄，第12屆魏長源；議會紀錄確認魏曾任兩屆鄉長。",
+      "corroboration_url": "https://www.phcouncil.gov.tw/meet2.php?no=M24090019",
+      "evidence_tier": "secondary_roster_official_biography_crosscheck",
+      "validation_note": "歷任首長資料，非原始開票結果；任期推定，未核逐日任免。未取得當屆票數、號次、性別與推薦政黨，維持缺值。",
+      "winners": [
+        {
+          "town": "白沙鄉",
+          "name": "魏長源",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "鄭武雄",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "gender": null,
+          "source_url": "https://zh.wikipedia.org/wiki/白沙鄉_(台灣)",
+          "corroboration_url": "https://www.phcouncil.gov.tw/meet2.php?no=M24090019"
+        }
+      ]
+    },
+    {
+      "county": "澎湖縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/西嶼鄉",
+      "source_locator": "歷任鄉長表第11、12屆呂正黨；澎湖知識服務平台《西嶼鄉誌》條目確認1995年任職。",
+      "corroboration_url": "https://penghu.info/OBAC204951159436D07D",
+      "evidence_tier": "secondary_roster_local_history_crosscheck",
+      "validation_note": "歷任首長資料，非原始開票結果；任期推定，未核逐日任免。未取得當屆票數、號次、性別與推薦政黨，維持缺值。",
+      "winners": [
+        {
+          "town": "西嶼鄉",
+          "name": "呂正黨",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "呂正黨",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "gender": null,
+          "source_url": "https://zh.wikipedia.org/wiki/西嶼鄉",
+          "corroboration_url": "https://penghu.info/OBAC204951159436D07D"
+        }
+      ]
+    },
+    {
+      "county": "澎湖縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://election.ltn.com.tw/2022/news/breakingnews/4138140",
+      "source_locator": "報導確認第11至14屆許有竹、許龍富交替任職；第12屆名錄一致。",
+      "corroboration_url": "https://zh.wikipedia.org/wiki/望安鄉",
+      "evidence_tier": "news_and_secondary_roster_crosscheck",
+      "validation_note": "歷任首長資料，非原始開票結果；任期推定，未核逐日任免。未取得當屆票數、號次、性別與推薦政黨，維持缺值。",
+      "winners": [
+        {
+          "town": "望安鄉",
+          "name": "許龍富",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "許有竹",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "gender": null,
+          "source_url": "https://election.ltn.com.tw/2022/news/breakingnews/4138140",
+          "corroboration_url": "https://zh.wikipedia.org/wiki/望安鄉"
+        }
+      ]
+    },
+    {
+      "county": "澎湖縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/七美鄉_(台灣)",
+      "source_locator": "歷任鄉長表第11、12屆許福存；澎湖知識服務平台《七美許姓》確認曾任鄉長。",
+      "corroboration_url": "https://penghu.info/OB3A00ACB8E76C6C7C3E",
+      "evidence_tier": "secondary_roster_local_history_crosscheck",
+      "validation_note": "歷任首長資料，非原始開票結果；任期推定，未核逐日任免。未取得當屆票數、號次、性別與推薦政黨，維持缺值。",
+      "winners": [
+        {
+          "town": "七美鄉",
+          "name": "許福存",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "許福存",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "gender": null,
+          "source_url": "https://zh.wikipedia.org/wiki/七美鄉_(台灣)",
+          "corroboration_url": "https://penghu.info/OB3A00ACB8E76C6C7C3E"
+        }
+      ]
     }
   ]
 }
