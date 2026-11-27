@@ -48,7 +48,7 @@ function summarize(snapshot,office,ballot,normalize=norm){
 }
 function delta(a,b,party){
  const p=a?.complete?a.parties[party]:null,q=b?.complete?b.parties[party]:null;
- return {share:p&&q?q.share-p.share:null,votes:p&&q?q.votes-p.votes:null,seats:a?.complete&&b?.complete&&a.seats!==null&&b.seats!==null?(q?.seats||0)-(p?.seats||0):null};
+ return {share:p&&q?q.share-p.share:null,votes:p&&q&&number(p.votes)&&number(q.votes)?q.votes-p.votes:null,seats:a?.complete&&b?.complete&&a.seats!==null&&b.seats!==null?(q?.seats||0)-(p?.seats||0):null};
 }
 const changedFamilies=new Set(['台中市','台南市','高雄市']);
 function comparableCounty(county,a,b){

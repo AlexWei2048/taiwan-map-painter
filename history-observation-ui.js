@@ -12,7 +12,7 @@ let marginMode='party',marginLimit='all',marginSort='asc',categoryMetric='voteSh
 const searchState={office:'all',county:'',party:'',elected:'all',query:'',submitted:'',rows:null,fail:[]},candidateCache=new Map();
 const button=(title,action)=>{const b=el('button',title,'button quiet');b.type='button';b.onclick=action;return b};
 function control(parent,title,options,value,change){const l=el('label',undefined,'observation-filter'),s=el('select');l.append(el('span',title),s);for(const [v,t] of options)s.add(new Option(t,v));s.value=value;s.onchange=()=>change(s.value);parent.append(l);return s}
-function inputControl(parent,title,value,placeholder,change){const l=el('label',undefined,'observation-filter'),i=el('input');i.type='search';i.value=value;i.placeholder=placeholder;i.oninput=()=>change(i.value);l.append(el('span',title),i);parent.append(l);return i}
+function inputControl(parent,title,value,placeholder,change){const l=el('label',undefined,'observation-filter'),i=el('input');i.type=title==='候选人姓名'?'search':'text';i.value=value;i.placeholder=placeholder;i.oninput=()=>change(i.value);l.append(el('span',title),i);parent.append(l);return i}
 function markTab(){document.body.dataset.observationTab=tab}
 function partyFocus(name,on){for(const node of host.querySelectorAll('[data-observation-party]'))node.classList.toggle('observation-muted',on&&node.dataset.observationParty!==name)}
 function markParty(node,name){node.dataset.observationParty=name;node.addEventListener('pointerenter',()=>partyFocus(name,true));node.addEventListener('pointerleave',()=>partyFocus(name,false));node.addEventListener('focusin',()=>partyFocus(name,true));node.addEventListener('focusout',()=>partyFocus(name,false));return node}

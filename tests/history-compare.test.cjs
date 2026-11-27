@@ -12,8 +12,8 @@ test('Known partial township archive is not presented as a full result',()=>{
 });
 test('Vote deltas do not turn nonparticipation into zero, and merged counties are not compared',()=>{
  const a={complete:true,parties:{A:{share:40,seats:1}},seats:1},b={complete:true,parties:{B:{share:100,seats:1}},seats:1};
- assert.deepEqual(C.delta(a,b,'A'),{share:null,seats:-1});
- assert.deepEqual(C.delta(a,{complete:false},'A'),{share:null,seats:null});
+ assert.deepEqual(C.delta(a,b,'A'),{share:null,votes:null,seats:-1});
+ assert.deepEqual(C.delta(a,{complete:false},'A'),{share:null,votes:null,seats:null});
  assert.equal(C.comparableCounty('台中市',{year:2009},{year:2014}),false);
  assert.equal(C.comparableCounty('台北市',{year:2009},{year:2014}),true);
 });
@@ -38,7 +38,9 @@ test('Seat and mayor party changes exclude incomparable geography and unknown wi
  assert.equal(C.turnover(row('甲党',50,2),row('乙党',60,1)),null);
  const csv=C.comparisonCSV(a,b);
  assert.match(csv,/^\ufeff"选举类别"/);
- assert.ok(csv.includes('"台中市","甲党","500","","50","","","1","0","","","","当届行政区范围不同或资料不存在"'));
- assert.ok(csv.includes('"台北市","甲党","500","","50","","","1","0","-1","甲党","乙党",""'));
+ assert.ok(csv.includes('"台中市","甲党","500","","50","","","","1","0","","","","当届行政区范围不同或资料不存在"'));
+ assert.ok(csv.includes('"台北市","甲党","500","","50","","","","1","0","-1","甲党","乙党",""'));
  assert.ok(csv.includes('"县市长","全部","2009","2014"'));
 });
+
+test('Absolute vote change requires both verified vote counts',()=>{const a={complete:true,parties:{A:{votes:100,share:40,seats:1}},seats:1},b={complete:true,parties:{A:{votes:125,share:50,seats:1}},seats:1};assert.equal(C.delta(a,b,'A').votes,25);assert.equal(C.delta(a,b,'B').votes,null);assert.equal(C.delta(a,{complete:false},'A').votes,null)});
