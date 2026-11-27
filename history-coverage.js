@@ -179,7 +179,7 @@
  function filteredDraw(){if(!lastMatrix)return;const {office,ys,results}=lastMatrix;const indexes=ys.map((y,i)=>i).filter(i=>!yearFilter.value||String(ys[i])===yearFilter.value);draw(office,indexes.map(i=>ys[i]),indexes.map(i=>results[i]));}
  const years=office=>office==='president'?root.HistoryPresidential.YEARS:office==='legislative'?root.HistoryLegislative.YEARS:root.HistoryLocal.years(office,root.HISTORY_2026_RESULTS_AVAILABLE===true);
  async function load(office,year){
-  const key=office+'|'+year;
+  const key=office+'|'+year+(Number(year)===2026?'|'+(root.HISTORY_2026_RESULT_VERSION||'unpublished'):'');
   if(!cache.has(key)){
    const p=(async()=>{
     const [shard,turnout]=office==='legislative'?
