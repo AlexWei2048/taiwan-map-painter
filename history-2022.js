@@ -815,19 +815,23 @@
   if(group.reserved===0)return '0席';
   return '第'+group.districts[0]+'—'+group.districts[group.districts.length-1]+'选区共享'+group.reserved+'席'+(group.verification_status==='pending_original_notice'?'（按旧制推算，待核）':'');
  }
+ let historyReferenceCache=null;
  function renderHistoryDistrictReference(){
   const section=el('districtReference');if(!section)return;
   const visible=active&&kind==='council'&&districtMetadata.length>0;
-  section.hidden=!visible;if(!visible)return;
+  section.hidden=!visible;if(!visible){historyReferenceCache=null;return}
   const search=norm(el('districtTableSearch')?.value||'');
+  const root=el('districtTableGroups'),key=JSON.stringify([localYear,yearLabel(),county,electorate,search,[...unmatchedDistricts].sort()]);
+  if(historyReferenceCache?.metadata===districtMetadata&&historyReferenceCache.geometry===hsinchuGeometry&&historyReferenceCache.key===key&&historyReferenceCache.first===root.firstElementChild&&historyReferenceCache.count===root.childElementCount)return;
+  const expanded=new Map(historyReferenceCache?.metadata===districtMetadata&&historyReferenceCache.county===county?[...root.querySelectorAll('details[data-reference-county]')].map(d=>[d.dataset.referenceCounty,d.open]):[]);
   const rows=districtMetadata.filter(d=>(!county||norm(d.county)===county)&&(!search||norm(d.name+d.scope+DistrictCore.identityName(d)).includes(search)));
   const seats=rows.reduce((n,d)=>n+d.seats,0);
   el('districtReferenceTitle').textContent=(county||'全台')+yearLabel()+'议员选区范围与名额';
   el('districtReferenceSummary').textContent=rows.length+'个历史选区 · '+seats+'个应选席次'+(localYear===2022&&!county?' · 全台215个选区、910席':'');
-  const root=el('districtTableGroups');root.replaceChildren();
+  root.replaceChildren();
   const groups=new Map();for(const d of rows){if(!groups.has(d.county))groups.set(d.county,[]);groups.get(d.county).push(d)}
   for(const [name,list]of groups){
-   const details=document.createElement('details');details.className='county-district-group';details.open=!!county||name===rows[0]?.county;
+   const details=document.createElement('details');details.className='county-district-group';details.dataset.referenceCounty=name;details.open=expanded.has(name)?expanded.get(name):!!county||name===rows[0]?.county;
    const summary=document.createElement('summary');summary.textContent=norm(name)+' · '+list.length+'个选区 · '+list.reduce((n,d)=>n+d.seats,0)+'席';details.append(summary);
    const wrap=document.createElement('div');wrap.className='reference-table-wrap';const table=document.createElement('table');table.className='reference-table';
    const caption=document.createElement('caption');caption.textContent=norm(name)+'（'+yearLabel()+'年）议员选区范围与名额';table.append(caption);
@@ -845,6 +849,7 @@
    }
    table.append(tbody);wrap.append(table);details.append(wrap);root.append(details)
   }
+  historyReferenceCache={metadata:districtMetadata,geometry:hsinchuGeometry,key,county,first:root.firstElementChild,count:root.childElementCount};
  }
  function update(){if(!active||!data)return;const result=currentResult;showRows(result);showComparison(result);paintHistory(result);renderHistoryDistrictReference();el('predictionScopeLabel').textContent=yearLabel()+' 历史选举结果';el('brushName').textContent=historyOverview()&&kind==='council'&&metric==='party'?
   '各县市按最多当选席次政党填色 · 点击县市查看议员选区':
@@ -867,7 +872,7 @@
  function deactivate(){
   if(el('historyResultDialog').open)el('historyResultDialog').close();routeDetail=null;
   loadingPresidentialId++;active=false;document.body.classList.remove('history-mode');
-  if(savedMapScope){state=clone(savedMapScope);savedMapScope=null;}currentResult=null;resultTableCache=null;districtTableKey='';el('headerExportPredictions').hidden=false;
+  if(savedMapScope){state=clone(savedMapScope);savedMapScope=null;}currentResult=null;resultTableCache=null;historyReferenceCache=null;districtTableKey='';el('headerExportPredictions').hidden=false;
   el('historyControls').hidden=true;el('historyResultSection').hidden=true;el('mapSettings').hidden=false;
   if(data){syncInputs();render()}
  }
