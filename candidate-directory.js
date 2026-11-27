@@ -8,10 +8,13 @@ const directoryDistrictById=new Map((candidateDatabase?.districts||[]).map(d=>[d
 // The official roster is loaded once per page; index its fixed geography.
 const directoryRegionIndex=new Map();
 for(const d of candidateDatabase?.districts||[]){
- const key=JSON.stringify([d.type,d.county,d.mapRegionId]);
- if(!directoryRegionIndex.has(key))directoryRegionIndex.set(key,d);
+ if(!directoryRegionIndex.has(d.type))directoryRegionIndex.set(d.type,new Map());
+ const counties=directoryRegionIndex.get(d.type);
+ if(!counties.has(d.county))counties.set(d.county,new Map());
+ const regions=counties.get(d.county);
+ if(!regions.has(d.mapRegionId))regions.set(d.mapRegionId,d);
 }
-function directoryDistrictForRegion(type,f){return directoryRegionIndex.get(JSON.stringify([type,f.county,f.id]))}
+function directoryDistrictForRegion(type,f){return directoryRegionIndex.get(type)?.get(f.county)?.get(f.id)}
 const directorySearchIndex=new WeakMap();
 let directoryOrderedCache=null;
 const dirText=(tag,text,className)=>{const n=document.createElement(tag);n.textContent=mainlandTerms(text);if(className)n.className=className;return n};
