@@ -4921,7 +4921,21 @@
           "女",
           true
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "15": {
+          "value": false,
+          "source_url": "https://eebulletin.cec.gov.tw/107/04%E6%A1%83%E5%9C%92%E5%B8%82/02%E5%B8%82%E8%AD%B0%E5%93%A1/%E6%A1%83%E5%9C%92%E5%B8%82%E7%AC%AC03%E9%81%B8%E8%89%89%E5%8D%80.pdf",
+          "source_locator": "2018年第3選區8號履歷列第13至17屆桃園縣議員；文字可讀，截圖取得失敗。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "依公開履歷推定，未取得投票日逐日任免名冊。",
+          "original_name": "劉茂群",
+          "ballot_number": 15,
+          "votes": 5813
+        }
+      }
     },
     {
       "county": "桃園縣",
@@ -5741,7 +5755,21 @@
           "男",
           false
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "3": {
+          "value": true,
+          "source_url": "https://alumnusntue.ntue.edu.tw/p/405-1020-11047%2Cc1881.php?Lang=zh-tw",
+          "source_locator": "大學校友本人自述1990年首次當選第12屆縣議員，1994年連任。",
+          "election_date": "1994-01-29",
+          "method": "documented_previous_term_biography",
+          "confidence": "documented_term_history",
+          "limitation": "依公開履歷推定，未取得投票日逐日任免名冊。",
+          "original_name": "黃金德",
+          "ballot_number": 3,
+          "votes": 10122
+        }
+      }
     },
     {
       "county": "桃園縣",
