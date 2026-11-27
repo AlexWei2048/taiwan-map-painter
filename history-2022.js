@@ -747,12 +747,27 @@
   details.append(list);
   const cell=document.createElement('td');cell.className='history-mobile-details';cell.append(details);row.append(cell);
  }
+ // Reuse the sorted view for searches and page changes of the same analysis.
+ // Keep only one result and one filtered view, not an unbounded query cache.
+ let resultTableCache=null;
+ function resultTableRows(result,office,search,party){
+  if(resultTableCache?.result!==result||resultTableCache.office!==office){
+   resultTableCache={result,office,ordered:result.rows.slice().sort((a,b)=>HistoryCore.compareResultRows(a,b,office)),
+    parties:[...new Set(result.rows.map(r=>r.party))].sort((a,b)=>a.localeCompare(b,'zh')),filtered:null};
+  }
+  const entry=resultTableCache;
+  if(!entry.filtered||entry.filtered.search!==search||entry.filtered.party!==party){
+   entry.filtered={search,party,rows:!search&&!party?entry.ordered:entry.ordered.filter(r=>(!party||r.party===party)&&historySearchMatches(r,search))};
+  }
+  return entry;
+ }
  function showRows(result){
-  if(legislativeMode){showLegislativeRows();return}
+  if(legislativeMode){resultTableCache=null;showLegislativeRows();return}
   const search=normCandidate(el('historySearch').value);
-  const partySelect=el('historyResultParty'),parties=[...new Set(result.rows.map(r=>r.party))].sort((a,b)=>a.localeCompare(b,'zh')),priorParty=partySelect?.value||'';
+  const partySelect=el('historyResultParty'),priorParty=partySelect?.value||'';
+  const {parties}=resultTableRows(result,kind,search,priorParty);
   if(partySelect){syncHistoryOptions(partySelect,[['全部政党',''],...parties.map(p=>[p,p])]);partySelect.value=parties.includes(priorParty)?priorParty:''}
-  const partyFilter=partySelect?.value||'',rows=result.rows.filter(r=>(!partyFilter||r.party===partyFilter)&&historySearchMatches(r,search)).sort((a,b)=>HistoryCore.compareResultRows(a,b,kind));
+  const partyFilter=partySelect?.value||'',rows=resultTableRows(result,kind,search,partyFilter).filtered.rows;
   const root=el('historyResults');root.replaceChildren();
   resultPage=Math.min(resultPage,Math.max(0,Math.ceil(rows.length/100)-1));
   el('historyPage').textContent='';el('historyPrev').disabled=true;el('historyNext').disabled=true;
@@ -850,7 +865,7 @@
  function deactivate(){
   if(el('historyResultDialog').open)el('historyResultDialog').close();routeDetail=null;
   loadingPresidentialId++;active=false;document.body.classList.remove('history-mode');
-  if(savedMapScope){state=clone(savedMapScope);savedMapScope=null;}currentResult=null;districtTableKey='';el('headerExportPredictions').hidden=false;
+  if(savedMapScope){state=clone(savedMapScope);savedMapScope=null;}currentResult=null;resultTableCache=null;districtTableKey='';el('headerExportPredictions').hidden=false;
   el('historyControls').hidden=true;el('historyResultSection').hidden=true;el('mapSettings').hidden=false;
   if(data){syncInputs();render()}
  }
