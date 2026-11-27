@@ -3359,7 +3359,8 @@ test('Mobile legislative candidate results retain essential columns and expandab
  await table.waitFor();
  const row=table.locator('tbody tr:not(.history-district-divider)').first();
  assert.equal(await row.locator('td').nth(0).isVisible(),false);
- for(const i of [3,5,6,7,8])assert.equal(await row.locator('td').nth(i).isVisible(),true);
+ for(const i of [3,6,7,8,9])assert.equal(await row.locator('td').nth(i).isVisible(),true);
+ for(const i of [0,1,2,4,5])assert.equal(await row.locator('td').nth(i).isVisible(),false);
  const detail=row.locator('.legislative-mobile-details');await detail.locator('summary').click();
  assert.match(await detail.locator('dl').innerText(),/号次/);
  await page.setViewportSize({width:1440,height:950});
@@ -3587,7 +3588,7 @@ test('Full plan backup merges without replacing current forecast',async t=>{
  await page.locator('#categoryFuture').click();assert.equal(await page.locator('#categoryFuture').getAttribute('aria-selected'),'true');
  });
 
-test('Observation topics and historical batch download remain isolated from the history map',async t=>{
+test('Observation topics remain isolated from the history map and removed batch download stays absent',async t=>{
  const page=await pageFor(t,{width:1440,height:950});await page.locator('#categoryAnalysis').click();
  await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022);
  await page.locator('[data-observation="seats"]').click();
@@ -3604,7 +3605,7 @@ test('Observation topics and historical batch download remain isolated from the 
  await page.locator('#observationContent table').waitFor({timeout:90000});
  assert.match(await page.locator('#observationContent').textContent(),/蒋万安/);
  await page.locator('#categoryHistory').click();await page.locator('#mapWithKey').waitFor({state:'visible'});assert.equal(await page.locator('#observationContent').isVisible(),false);
- const [file]=await Promise.all([page.waitForEvent('download',{timeout:90000}),page.locator('#historyBatchDownload').click()]);assert.match(file.suggestedFilename(),/历届历史数据\.json$/);
+ assert.equal(await page.locator('#historyBatchDownload').count(),0);
 });
 
 test('Party-list trend displays only the nine specified parties plus others and excludes independents',async t=>{
@@ -3716,4 +3717,19 @@ test('All vote-count lines share checkbox legends, integer headroom, zoom, pan, 
  const rateSeries=rate.locator('[data-trend-series]').filter({has:page.locator('circle')}).last();
  await rateSeries.locator('circle').first().focus();
  assert.equal(await rateSeries.getAttribute('opacity'),'1');assert.equal(await rateSeries.locator('path').first().getAttribute('stroke-width'),'2.4');
+});
+
+test('Historical search opens an exact year and region without editing saved prediction state',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ await page.locator('#siteSearchOpen').click();
+ await page.locator('#siteSearchQuery').fill('2022年台北市长');
+ await page.locator('#siteSearchForm button[type=submit]').click();
+ const result=page.locator('#siteSearchResults a').filter({hasText:'2022'}).first();await result.waitFor({timeout:90000});await result.click();
+ await page.waitForFunction(()=>window.History2022View?.active()&&window.History2022View?.routeSelection().county==='台北市'&&window.History2022View?.year()===2022);
+ await page.locator('#regionArchiveOpen').click();
+ await page.locator('#regionArchiveOffice').selectOption('mayor');
+ await page.locator('#regionArchiveForm button[type=submit]').click();
+ await page.locator('#regionArchiveResults table').first().waitFor({timeout:90000});
+ assert.match(await page.locator('#regionArchiveResults').textContent(),/2022/);
+ assert.match(await page.locator('#regionArchiveResults').textContent(),/蒋万安/);
 });
