@@ -21,7 +21,7 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
       - name: Install source and image verification dependencies
-        run: python -m pip install -q requests beautifulsoup4 pillow
+        run: python -m pip install -q requests beautifulsoup4 pillow opencc-python-reimplemented
       - name: Match exact historic party and verified official registered logo
         run: python scripts/import_verified_seated_party_emblem.py
       - name: Refresh all historic election icon coverage
