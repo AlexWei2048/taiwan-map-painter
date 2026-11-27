@@ -18,8 +18,8 @@ test('Inventory missing party values across all historical snapshot files',()=>{
 test('Kinmen partial results preserve reported non-winner facts separately from complete vote and seat counts',()=>{
  const kinmen=archive.partial_returns[0];
  const nonWinners=kinmen.other_candidates;
- assert.equal(nonWinners.length,18);
- assert.equal(new Set(nonWinners.map(c=>c.name)).size,18);
+ assert.equal(nonWinners.length,19);
+ assert.equal(new Set(nonWinners.map(c=>c.name)).size,19);
  const jinhu=nonWinners.filter(c=>c.source_url===kinmen.other_candidate_sources.jinhu_1994_roster);
  assert.deepEqual(jinhu.map(c=>c.name),['陳森照','陳汶河','蔡顯清','李和平','蔡水游','莊其副','陳應龍','呂炳丁','翁伸金','陳河彬']);
  assert.ok(jinhu.every(c=>c.district_number===2&&c.source_locator&&!Object.hasOwn(c,'votes')&&!Object.hasOwn(c,'ballot_number')&&!Object.hasOwn(c,'membership')));
@@ -27,7 +27,7 @@ test('Kinmen partial results preserve reported non-winner facts separately from 
  assert.ok(nonWinners.every(c=>kinmen.districts.every(d=>!d.winners.some(w=>w[0]===c.name))));
  assert.deepEqual(nonWinners.find(c=>c.name==='陳滄江'),{name:'陳滄江',district_number:4,votes:371,membership:'中國國民黨'});
  assert.deepEqual(nonWinners.find(c=>c.name==='黃積軍'),{name:'黃積軍',district_number:1,votes:93});
- assert.equal(nonWinners.filter(c=>Object.hasOwn(c,'votes')).length,2);
+ assert.equal(nonWinners.filter(c=>Number.isFinite(c.votes)).length,2);
  assert.equal(nonWinners.find(c=>c.name==='李增城').ballot_number,1);
  assert.match(kinmen.other_candidate_sources.reported_returns,/^https:/);
 });
@@ -44,4 +44,6 @@ test('Local council biographies resolve two Lienchiang gender fields without cha
  test('Gender backfill needs two unique, consistent same-district matches and never fills party',()=>{const Local=require('../history-local.js');const a={districts:[{county:'臺南市',number:1,electorate:'regional',candidates:[[1,'測試甲',100,'',null,true],[2,'測試乙',50,'',null,false]]}]};const ref=(year,g)=>({year,elections:[{office:'council',election_id:'e'}],contests:[{election_id:'e',contest_id:'d',county_name:'台南市',district_number:1,electorate:'regional'}],candidacies:[{contest_id:'d',candidacy_id:'a'+year,candidate_name:'測試甲',gender:g}]});const result=Local.enrichLegacyGender(a,[ref(1998,'女'),ref(2002,'女')]);assert.equal(result.districts[0].candidates[0][4],'女');assert.equal(result.districts[0].candidates[0][3],'');assert.equal(result.districts[0].candidates[1][4],null);assert.equal(a.districts[0].candidates[0][4],null);assert.equal(Local.enrichLegacyGender(a,[ref(1998,'女'),ref(2002,'男')]).districts[0].candidates[0][4],null);});
  test('Report gender recovery from historical official snapshots',()=>{const Local=require('../history-local.js');const result=Local.enrichLegacyGender(archive,[require('../assets/history-local-1998.json'),require('../assets/history-local-2002.json')]);const recovered=result.districts.reduce((n,d)=>n+Object.keys(d.gender_sources||{}).length,0);console.log('1994_GENDER_RECOVERED '+recovered);assert.equal(result.districts.length,archive.districts.length);for(let i=0;i<archive.districts.length;i++){const original=archive.districts[i],updated=result.districts[i];assert.deepEqual(updated.candidates.map(c=>[c[0],c[1],c[2],c[3],c[5]]),original.candidates.map(c=>[c[0],c[1],c[2],c[3],c[5]]));}});
 
-test('Additional 1994 archival evidence fills only verified fields',()=>{const k=archive.partial_returns[0],w=k.other_candidates.find(c=>c.name==='翁明志');assert.equal(w.district_number,1);assert.equal(w.votes,undefined);assert.match(k.other_candidate_sources.weng_district,/^https:/);assert.equal(k.candidate_count-k.elected_count-k.other_candidates.length,28);const d=archive.districts.find(d=>d.county==='連江縣'&&d.number===2);assert.deepEqual(d.candidates.find(c=>c[0]===1),[1,'陳鵬舉',108,'','男',false]);assert.match(d.gender_sources[1].source_url,/^https:/);});
+test('Additional 1994 archival evidence fills only verified fields',()=>{const k=archive.partial_returns[0],w=k.other_candidates.find(c=>c.name==='翁明志');assert.equal(w.district_number,1);assert.equal(w.votes,undefined);assert.match(k.other_candidate_sources.weng_district,/^https:/);assert.equal(k.candidate_count-k.elected_count-k.other_candidates.length,27);const d=archive.districts.find(d=>d.county==='連江縣'&&d.number===2);assert.deepEqual(d.candidates.find(c=>c[0]===1),[1,'陳鵬舉',108,'','男',false]);assert.match(d.gender_sources[1].source_url,/^https:/);});
+
+test('Additional Kinmen partial candidate has provenance and no invented vote count',()=>{const k=archive.partial_returns[0],r=k.other_candidates.find(c=>c.name==='石兆瑉');assert.ok(r);assert.equal(r.elected,false);assert.equal(r.votes,null);assert.equal(r.ballot_number,null);assert.match(r.source_url,/^https:/);});
