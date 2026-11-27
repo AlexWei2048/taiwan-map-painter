@@ -31,3 +31,23 @@ test('Every named Chromium browser test belongs to exactly one CI shard',()=>{
  unique(names,'duplicate browser test names');
  for(const name of names)assert.equal(patterns.filter(p=>p.test(name)).length,1,'Uncovered or duplicate browser shard: '+name);
 });
+
+test('Every static dialog has an accessible heading; help and correction guide is discoverable without JavaScript',()=>{
+ for(const page of ['index.html','map-v60.html']){
+  const html=read(page).replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,'');
+  const dialogs=[...html.matchAll(/<dialog\b([^>]*)>([\s\S]*?)<\/dialog>/gi)];
+  assert.ok(dialogs.length>=8,page);
+  for(const [,attrs,body] of dialogs){
+   const name=attrs.match(/\baria-labelledby="([^"]+)"/)?.[1];
+   assert.ok(name,page+' missing accessible dialog name: '+attrs);
+   assert.ok([...body.matchAll(/<h[1-6]\b[^>]*\bid="([^"]+)"[^>]*>/g)].some(m=>m[1]===name),page+' heading not inside dialog: '+name);
+  }
+ }
+ const html=read('index.html');
+ const guide=html.match(/<details\b[^>]*\bid="siteGuide"[^>]*>([\s\S]*?)<\/details>/);
+ assert.ok(guide,'missing guide');
+ assert.match(guide[1],/<summary\b[^>]*>[\s\S]*使用指南与纠错/);
+ for(const phrase of ['岛屿画布','岛屿图鉴','岛屿观测','JSON','缺档','问题反馈','不要上传私人预测方案'])assert.ok(guide[1].includes(phrase),phrase);
+ assert.match(guide[1],/href="https:\/\/github\.com\/AlexWei2048\/taiwan-map-painter\/issues"/);
+ assert.match(html,/<button\b[^>]*id="siteSearchOpen"[^>]*aria-keyshortcuts="Control\+K Meta\+K"/);
+});
