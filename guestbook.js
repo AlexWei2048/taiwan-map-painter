@@ -2,7 +2,8 @@
 (()=>{'use strict';
 const $=id=>document.getElementById(id), config=window.GUESTBOOK_CONFIG||{}, button=$('guestbookOpen'),dialog=$('guestbookDialog');
 let url='';try{const u=new URL(config.url);if(u.protocol==='https:'&&u.pathname==='/'&&!u.search&&!u.hash&&!u.username&&!u.password)url=u.origin}catch{}
-const online=config.enabled===true&&!!url&&typeof config.anonKey==='string'&&!!config.anonKey&&!config.anonKey.startsWith('sb_secret_');
+function publicKey(key){if(typeof key!=='string')return false;if(/^sb_publishable_[A-Za-z0-9_-]+$/.test(key))return true;try{const parts=key.split('.');if(parts.length!==3)return false;const payload=JSON.parse(atob(parts[1].replace(/-/g,'+').replace(/_/g,'/')));return payload.role==='anon'}catch{return false}}
+const online=config.enabled===true&&!!url&&publicKey(config.anonKey);
 const preview=new URLSearchParams(location.search).get('guestbook-preview')==='1';
 if(!online&&!preview)return;
 button.hidden=false;
