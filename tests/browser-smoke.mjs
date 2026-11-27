@@ -580,6 +580,24 @@ test('Administrative index fits the responsive map layout with legible text',asy
  }
 });
 
+test('Map paths keep their identity and update predicted fill in the same scope',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ await page.locator('#county').selectOption('台北市');
+ const result=await page.evaluate(()=>{
+  const path=document.querySelector('#regions path[data-region]'),d=predictionDistrictFor(currentItems()[0]),c=directoryCandidates(d)[0];
+  const geometry=path.getAttribute('d'),before=path.getAttribute('fill');
+  path.focus({preventScroll:true});
+  state.predictions[d.id]={winners:[c.id],estimates:{},method:'manual'};
+  render();
+  const next=document.querySelector('#regions path[data-region]');
+  window.__previousMapPath=next;
+  return {same:next===path,geometry:next.getAttribute('d')===geometry,changed:next.getAttribute('fill')!==before,focus:document.activeElement===next,expected:next.getAttribute('fill')===predictionParty(c.party).color};
+ });
+ assert.deepEqual(result,{same:true,geometry:true,changed:true,focus:true,expected:true});
+ await page.locator('#county').selectOption('高雄市');
+ assert.equal(await page.evaluate(()=>!window.__previousMapPath.isConnected),true);
+});
+
 test('Map camera survives same-scope redraw and full export but resets on navigation or Fit',async t=>{
  const page=await pageFor(t,{width:1440,height:950});
  await page.locator('#county').selectOption('台北市');
