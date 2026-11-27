@@ -278,6 +278,7 @@ function mapViewScope(){
 function cameraForLayout(previous,oldBase,nextBase){
  if(!previous||!oldBase||!(oldBase.w>0&&oldBase.h>0&&previous.w>0&&previous.h>0))return {...nextBase};
  if(previous.x===oldBase.x&&previous.y===oldBase.y&&previous.w===oldBase.w&&previous.h===oldBase.h)return {...nextBase};
+ if(oldBase.x===nextBase.x&&oldBase.y===nextBase.y&&oldBase.w===nextBase.w&&oldBase.h===nextBase.h)return {...previous};
  const ratio=previous.w/oldBase.w,w=nextBase.w*ratio,h=nextBase.h*ratio;
  return{x:nextBase.x+((previous.x+previous.w/2-oldBase.x)/oldBase.w)*nextBase.w-w/2,
   y:nextBase.y+((previous.y+previous.h/2-oldBase.y)/oldBase.h)*nextBase.h-h/2,w,h};
@@ -2562,7 +2563,7 @@ function exportSvg(){
  }finally{exportNumberRows=null}
 }
 
-function preparedExportSvg(){const oldFilter=exportPanelFilter,oldLegend=state.legend.show,oldCouncilView=state.councilViewScope,oldLabels=state.labels,oldView=view&&{...view},oldBase=baseView&&{...baseView},oldScope=renderedMapScope;state.councilViewScope='all';exportPanelFilter=state.level==='council'&&state.exportSettings.councilScope!=='all'?state.exportSettings.councilScope:'';state.legend.show=true;state.labels=true;try{render();return exportSvg()}finally{exportPanelFilter=oldFilter;state.legend.show=oldLegend;state.councilViewScope=oldCouncilView;state.labels=oldLabels;view=oldView;baseView=oldBase;renderedMapScope=oldScope;render()}}
+function preparedExportSvg(){const oldFilter=exportPanelFilter,oldLegend=state.legend.show,oldCouncilView=state.councilViewScope,oldLabels=state.labels,oldView=view&&{...view},oldBase=baseView&&{...baseView},oldScope=renderedMapScope;state.councilViewScope='all';exportPanelFilter=state.level==='council'&&state.exportSettings.councilScope!=='all'?state.exportSettings.councilScope:'';state.legend.show=true;state.labels=true;try{view=null;baseView=null;render();return exportSvg()}finally{exportPanelFilter=oldFilter;state.legend.show=oldLegend;state.councilViewScope=oldCouncilView;state.labels=oldLabels;view=oldView;baseView=oldBase;renderedMapScope=oldScope;render()}}
 function exportElectionType(){
  if(typeof History2022View!=='undefined'&&History2022View.active())return History2022View.yearLabel()+' '+({mayor:'县市长',council:'县市议员',township:'乡镇市区长',president:'台湾地区领导人',legislative:'立法机构民代'}[History2022View.office()]);
  if(state.workspaceMode==='prediction')return '2026 '+directoryOfficeName[state.predictionOffice];
