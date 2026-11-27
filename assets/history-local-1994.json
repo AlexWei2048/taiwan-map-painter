@@ -23485,6 +23485,293 @@
           "corroboration_url": "https://votetw.com/data/candidate/盧文瑞"
         }
       ]
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/屏東市市長",
+      "source_locator": "歷任市長表第12屆，1994-03-01至1998-03-01；前屆表格姓名未獨立顯示，現任不推定。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆原始開票表；除另有明確當選證據外，當選人按任期名錄推定，現任按相鄰屆次推定，未核逐日任免；未核當屆票數、號次、推薦政黨等保持空值。",
+      "winners": [
+        {
+          "town": "屏東市",
+          "name": "黃清漢",
+          "incumbent_at_election": null,
+          "incumbent_method": "unresolved_election_day_status",
+          "previous_term_holder": null,
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/屏東市市長"
+        }
+      ]
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/潮州鎮",
+      "source_locator": "歷屆鎮長表第11、12屆均林宗俉；2018年候選履歷載潮州鎮長，2014年同名選舉資料列男性。",
+      "corroboration_url": "https://www.votetw.com/data/candidate/林宗俉",
+      "evidence_tier": "term_roster_and_related_record",
+      "validation_note": "非當屆原始開票表；除另有明確當選證據外，當選人按任期名錄推定，現任按相鄰屆次推定，未核逐日任免；未核當屆票數、號次、推薦政黨等保持空值。",
+      "winners": [
+        {
+          "town": "潮州鎮",
+          "name": "林宗俉",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "林宗俉",
+          "gender": "男",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/潮州鎮",
+          "corroboration_url": "https://www.votetw.com/data/candidate/林宗俉"
+        }
+      ]
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/東港鎮_(台灣)",
+      "source_locator": "第12屆黃正峰；1998年同鎮候選資料明載男性、現任；第11屆姓名未獨立顯示。",
+      "corroboration_url": "https://votetw.com/data/candidate/黃正峰",
+      "evidence_tier": "term_roster_and_related_record",
+      "validation_note": "非當屆原始開票表；除另有明確當選證據外，當選人按任期名錄推定，現任按相鄰屆次推定，未核逐日任免；未核當屆票數、號次、推薦政黨等保持空值。",
+      "winners": [
+        {
+          "town": "東港鎮",
+          "name": "黃正峰",
+          "incumbent_at_election": null,
+          "incumbent_method": "unresolved_election_day_status",
+          "previous_term_holder": null,
+          "gender": "男",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/東港鎮_(台灣)",
+          "corroboration_url": "https://votetw.com/data/candidate/黃正峰"
+        }
+      ]
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/恆春鎮",
+      "source_locator": "第11屆戴坤霖、第12屆尤春共；國家電影及視聽文化中心典藏文字稿列尤春共為鎮長、男性。",
+      "corroboration_url": "https://tfai.openmuseum.tw/muse/digi_object/60664de393a24cf6c81493521051f03b",
+      "evidence_tier": "term_roster_and_related_record",
+      "validation_note": "非當屆原始開票表；除另有明確當選證據外，當選人按任期名錄推定，現任按相鄰屆次推定，未核逐日任免；未核當屆票數、號次、推薦政黨等保持空值。",
+      "winners": [
+        {
+          "town": "恆春鎮",
+          "name": "尤春共",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "戴坤霖",
+          "gender": "男",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/恆春鎮",
+          "corroboration_url": "https://tfai.openmuseum.tw/muse/digi_object/60664de393a24cf6c81493521051f03b"
+        }
+      ]
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/長治鄉",
+      "source_locator": "第11屆曾雨水、第12屆邱清源。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆原始開票表；除另有明確當選證據外，當選人按任期名錄推定，現任按相鄰屆次推定，未核逐日任免；未核當屆票數、號次、推薦政黨等保持空值。",
+      "winners": [
+        {
+          "town": "長治鄉",
+          "name": "邱清源",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "曾雨水",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/長治鄉"
+        }
+      ]
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/麟洛鄉",
+      "source_locator": "歷任首長列表明載第11、12屆吳國光；公共圖書館資訊服務網記載1993年6月開館時吳國光任鄉長。",
+      "corroboration_url": "https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000442",
+      "evidence_tier": "term_roster_and_related_record",
+      "validation_note": "非當屆原始開票表；除另有明確當選證據外，當選人按任期名錄推定，現任按相鄰屆次推定，未核逐日任免；未核當屆票數、號次、推薦政黨等保持空值。",
+      "winners": [
+        {
+          "town": "麟洛鄉",
+          "name": "吳國光",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "吳國光",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/麟洛鄉",
+          "corroboration_url": "https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000442"
+        }
+      ]
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/九如鄉",
+      "source_locator": "第12屆許世裕；第11屆姓名未獨立顯示，不推定現任。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆原始開票表；除另有明確當選證據外，當選人按任期名錄推定，現任按相鄰屆次推定，未核逐日任免；未核當屆票數、號次、推薦政黨等保持空值。",
+      "winners": [
+        {
+          "town": "九如鄉",
+          "name": "許世裕",
+          "incumbent_at_election": null,
+          "incumbent_method": "unresolved_election_day_status",
+          "previous_term_holder": null,
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/九如鄉"
+        }
+      ]
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/高樹鄉",
+      "source_locator": "第11屆洪華秤、第12屆王樹圍。王樹圍2009年學位論文引用1994年選舉結果清冊，但全文未取得，不當作逐票證據。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆原始開票表；除另有明確當選證據外，當選人按任期名錄推定，現任按相鄰屆次推定，未核逐日任免；未核當屆票數、號次、推薦政黨等保持空值。",
+      "winners": [
+        {
+          "town": "高樹鄉",
+          "name": "王樹圍",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "洪華秤",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/高樹鄉"
+        }
+      ]
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/萬巒鄉",
+      "source_locator": "第11屆曾士忠、第12、13屆林昌德。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆原始開票表；除另有明確當選證據外，當選人按任期名錄推定，現任按相鄰屆次推定，未核逐日任免；未核當屆票數、號次、推薦政黨等保持空值。",
+      "winners": [
+        {
+          "town": "萬巒鄉",
+          "name": "林昌德",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "曾士忠",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/萬巒鄉"
+        }
+      ]
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://eebulletin.cec.gov.tw/111/14%E5%B1%8F%E6%9D%B1%E7%B8%A3/05%E6%9D%91%E9%87%8C%E9%95%B7/%E5%85%A7%E5%9F%94%E9%84%89/%E5%85%A7%E5%9F%94%E9%84%89%E7%AC%AC%E5%9B%9B%E9%81%B8%E8%88%89%E5%8D%80%E9%84%89%E9%95%B7%E4%BB%A3%E8%A1%A8%E6%9D%91%E9%87%8C%E9%95%B7.pdf",
+      "source_locator": "2022年官方選舉公報第3號候選人經歷明載83年當選第十二屆內埔鄉民選鄉長，性別男。歷任表第11屆曾昭仁；2022年自由時報報導印證1994年當選。PDF文字擷取可讀，截圖因檔案過大失敗。",
+      "corroboration_url": "https://election.ltn.com.tw/2022/news/breakingnews/4119489",
+      "additional_source": "https://zh.wikipedia.org/wiki/內埔鄉",
+      "evidence_tier": "official_later_bulletin_explicit_election_and_news",
+      "validation_note": "非當屆原始開票表；除另有明確當選證據外，當選人按任期名錄推定，現任按相鄰屆次推定，未核逐日任免；未核當屆票數、號次、推薦政黨等保持空值。",
+      "winners": [
+        {
+          "town": "內埔鄉",
+          "name": "沈商嶽",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "曾昭仁",
+          "gender": "男",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://eebulletin.cec.gov.tw/111/14%E5%B1%8F%E6%9D%B1%E7%B8%A3/05%E6%9D%91%E9%87%8C%E9%95%B7/%E5%85%A7%E5%9F%94%E9%84%89/%E5%85%A7%E5%9F%94%E9%84%89%E7%AC%AC%E5%9B%9B%E9%81%B8%E8%88%89%E5%8D%80%E9%84%89%E9%95%B7%E4%BB%A3%E8%A1%A8%E6%9D%91%E9%87%8C%E9%95%B7.pdf",
+          "corroboration_url": "https://election.ltn.com.tw/2022/news/breakingnews/4119489"
+        }
+      ]
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/枋寮鄉",
+      "source_locator": "第11屆吳照雄、第12屆陳軍國、第13屆吳照雄。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆原始開票表；除另有明確當選證據外，當選人按任期名錄推定，現任按相鄰屆次推定，未核逐日任免；未核當屆票數、號次、推薦政黨等保持空值。",
+      "winners": [
+        {
+          "town": "枋寮鄉",
+          "name": "陳軍國",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "吳照雄",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/枋寮鄉"
+        }
+      ]
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/崁頂鄉",
+      "source_locator": "第11屆王龍興、第12屆蔡和清。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆原始開票表；除另有明確當選證據外，當選人按任期名錄推定，現任按相鄰屆次推定，未核逐日任免；未核當屆票數、號次、推薦政黨等保持空值。",
+      "winners": [
+        {
+          "town": "崁頂鄉",
+          "name": "蔡和清",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "王龍興",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/崁頂鄉"
+        }
+      ]
     }
   ]
 }
