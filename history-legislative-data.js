@@ -6,6 +6,8 @@
  const Turnout=typeof module!=='undefined'&&module.exports?require('./history-legislative-turnout.js'):root.HistoryLegislativeTurnout;
  const BALLOT_LABELS={regional:'区域民代',plains:'平地少数民族民代',mountain:'山地少数民族民代',party:'不分区政党票'};
  const compare=(a,b)=>Core.compareResultRows(a,b,'council');
+ const minorityDistrict=r=>r.electorate==='plains'?'平地少数民族选区':r.electorate==='mountain'?'山地少数民族选区':'';
+ const displayDistrict=r=>minorityDistrict(r)?minorityDistrict(r)+(r.town?' · '+r.town:''):(r.town||r.district||'');
  function regionChoices(indexed,selection={}){
   if(indexed?.snapshot?.office!=='legislative')return{counties:[],areas:[]};
   const s=indexed.snapshot,electorate=selection.electorate||'regional';
@@ -100,7 +102,7 @@
    const key=r=>[r.electorate,r.county,r.level==='district'?r.district:r.level==='town'?r.town:''].join('|'),totals=new Map();
    for(const r of records)totals.set(key(r),(totals.get(key(r))||0)+Number(r.votes||0));
    records.sort((a,b)=>['regional','party','plains','mountain'].indexOf(a.electorate)-['regional','party','plains','mountain'].indexOf(b.electorate)||key(a).localeCompare(key(b),'zh',{numeric:true})||b.votes-a.votes);
-   return Core.csv([['年份','票种','县市','选区 / 乡镇市区','候选人 / 政党','号次','所属政党','得票数','得票率','当选'],...records.map(r=>[year,BALLOT_LABELS[r.electorate],r.county,r.town||r.district||'',r.name,r.number||'',r.party,r.votes,(totals.get(key(r))?r.votes/totals.get(key(r))*100:0).toFixed(2)+'%',r.electorate!=='party'&&r.elected?'是':''])]);
+   return Core.csv([['年份','票种','县市','选区 / 乡镇市区','候选人 / 政党','号次','性别','选举时现任','所属政党','得票数','得票率','当选'],...records.map(r=>[year,BALLOT_LABELS[r.electorate],r.county,displayDistrict(r),r.name,r.electorate==='party'?'':r.number||'',r.electorate==='party'?'':r.gender||'',r.electorate!=='party'&&r.incumbent===true?'现任':'',r.party,r.votes,(totals.get(key(r))?r.votes/totals.get(key(r))*100:0).toFixed(2)+'%',r.electorate!=='party'&&r.elected?'是':''])]);
   }
   const focus=String(selection.focus||'');
   const records=snapshot.rows.filter(r=>r.electorate===electorate&&r.level===level&&(!county||r.county===county)&&
@@ -112,12 +114,12 @@
   for(const r of records)totals.set(area(r),(totals.get(area(r))||0)+Number(r.votes||0));
   records.sort((a,b)=>compare(a,b)||area(a).localeCompare(area(b),'zh',{numeric:true})||b.votes-a.votes);
   const party=electorate==='party',label=root.HistoryLegislative?.ballots(year).find(x=>x.value===electorate)?.label||BALLOT_LABELS[electorate];
-  const result=[['年份','票种','县市','选区 / 乡镇市区',party?'政党':'候选人',...(party?[]:['号次']),
+  const result=[['年份','票种','县市','选区 / 乡镇市区',party?'政党':'候选人',...(party?[]:['号次','性别','选举时现任']),
    '所属政党','得票数','得票率',...(party?[]:['当选'])]];
   for(const r of records){
    const total=totals.get(area(r))||0;
    result.push([year,label,level==='national'?'全部地区（含金门、马祖）':r.county,
-    level==='national'?'全区':r.town||r.district||'',r.name,...(party?[]:[r.number||'']),r.party,
+    displayDistrict(r)||(level==='national'?'全区':''),r.name,...(party?[]:[r.number||'',r.gender||'',r.incumbent===true?'现任':'']),r.party,
     r.votes,(total?r.votes/total*100:0).toFixed(2)+'%',...(party?[]:[r.elected?'是':''])]);
   }
   return Core.csv(result);

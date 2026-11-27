@@ -176,11 +176,12 @@
 #historyResults .history-legislative-table .history-party-inline img{flex:none;width:20px;height:20px;margin:0}
 #historyResults .history-legislative-table .history-party-inline span{min-width:0;overflow-wrap:anywhere}
 #historyResults .history-legislative-table:not([data-ballot="party"]) .legislative-col-county{width:9%}
-#historyResults .history-legislative-table:not([data-ballot="party"]) .legislative-col-area{width:18%}
+#historyResults .history-legislative-table:not([data-ballot="party"]) .legislative-col-area{width:17%}
 #historyResults .history-legislative-table .legislative-col-number{width:6%}
 #historyResults .history-legislative-table .legislative-col-name{width:12%}
+#historyResults .history-legislative-table .legislative-col-gender{width:5%}
 #historyResults .history-legislative-table .legislative-col-incumbent{width:10%}
-#historyResults .history-legislative-table:not([data-ballot="party"]) .legislative-col-party{width:23%}
+#historyResults .history-legislative-table:not([data-ballot="party"]) .legislative-col-party{width:19%}
 #historyResults .history-legislative-table:not([data-ballot="party"]) .legislative-col-votes{width:9%}
 #historyResults .history-legislative-table:not([data-ballot="party"]) .legislative-col-share{width:8%}
 #historyResults .history-legislative-table .legislative-col-elected{width:5%}
@@ -202,8 +203,8 @@
 #historyResults .legislative-mobile-details{display:none}
 @media(max-width:600px){
  #historyResults .history-legislative-table,#historyResults .history-legislative-table[data-ballot="party"]{min-width:0;table-layout:fixed}
- #historyResults .history-legislative-table:not([data-ballot="party"]) :is(col.legislative-col-county,col.legislative-col-area,col.legislative-col-number,col.legislative-col-incumbent),
- #historyResults .history-legislative-table:not([data-ballot="party"]) tr:not(.history-district-divider)>:is(:nth-child(1),:nth-child(2),:nth-child(3),:nth-child(5)){display:none}
+ #historyResults .history-legislative-table:not([data-ballot="party"]) :is(col.legislative-col-county,col.legislative-col-area,col.legislative-col-number,col.legislative-col-gender,col.legislative-col-incumbent),
+ #historyResults .history-legislative-table:not([data-ballot="party"]) tr:not(.history-district-divider)>:is(:nth-child(1),:nth-child(2),:nth-child(3),:nth-child(5),:nth-child(6)){display:none}
  #historyResults .history-legislative-table:not([data-ballot="party"]) .legislative-col-name{width:29%}
  #historyResults .history-legislative-table:not([data-ballot="party"]) .legislative-col-party{width:27%}
  #historyResults .history-legislative-table:not([data-ballot="party"]) .legislative-col-votes{width:19%}

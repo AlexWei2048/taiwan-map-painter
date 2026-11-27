@@ -376,7 +376,7 @@ function parliamentSvg(row,conf,totalLeg){
   }
   g.append(svg('text',{x:cx,y:cy-12,'text-anchor':'middle','font-size':25,'font-weight':700,'data-seat-total':total},total+'席'));
   if(conf.metric==='seats')g.append(svg('text',{x:cx,y:cy+5,'text-anchor':'middle','font-size':11},conf.party+' '+(row.parties?.[norm(conf.party)]||0)+'席'));
-  parties.forEach(([p,n],i)=>{
+  [...parties].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],'zh')).forEach(([p,n],i)=>{
    const x=16+(i%2)*202,y=263+Math.floor(i/2)*23,fill=conf.metric==='seats'&&p!==norm(conf.party)?'#cbd4ce':(conf.office==='legislative'?seatColor:color)(p);
    g.append(svg('rect',{x,y:y-12,width:8,height:12,rx:2,fill}));
    const logo=logoFor(predictionParty(p));

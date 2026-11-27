@@ -284,7 +284,7 @@
  }
  function historyCsv(result={contests:[],candidacies:[]},selection={}){
   const presidential=selection.office==='president',council=['council','legislative'].includes(selection.office);
-  const extra=presidential?['副领导人候选人','正职性别','副职性别','选举时现任']:[];
+  const extra=presidential?['副领导人候选人','正职性别','副职性别','选举时现任']:['性别','选举时现任'];
   const headers=['年份','选举类别','县市','选区',...(council?['选区类型']:[]),presidential?'正领导人候选人':'候选人',...extra,'政党','号次','得票数','得票率','当选'];
   const contests=new Map((result.contests||[]).map(item=>[item.contest_id,item]));
   const offices={mayor:'县市长',council:'县市议员',township:'乡镇市区长',president:'台湾地区领导人',legislative:'立法机构民代'};
@@ -302,7 +302,7 @@
    const actualYear=result.index?.snapshot?.cycleYears?contest.election_date?.slice(0,4):null;
    rows.push([actualYear||selection.year||2022,offices[selection.office]||selection.office,county,district===county?'':district,
     ...(council?[identities[contest.electorate]||'区域']:[]),item.candidate_name||item.candidate_name_official||'',
-    ...(presidential?[item.deputy_name||'',item.gender||'',item.deputy_gender||'',item.incumbent_at_election===true?'现任':'']:[]),
+    ...(presidential?[item.deputy_name||'',item.gender||'',item.deputy_gender||'',item.incumbent_at_election===true?'现任':'']:[item.gender||'',item.incumbent_at_election===true?'现任':'']),
     item.party_name||item.party_name_official||'',item.ballot_number,item.votes,csvPercent(item.vote_share),item.elected_official?'是':'']);
   }
   return '\uFEFF'+rows.map(row=>row.map(csvCell).join(',')).join('\r\n');
