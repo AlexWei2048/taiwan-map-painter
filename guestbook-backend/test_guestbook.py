@@ -113,5 +113,40 @@ class GuestbookTests(unittest.TestCase):
         with self.assertRaises(server.Problem) as err:
             self.call("submit",self.data)
         self.assertEqual(err.exception.code,429)
+    def test_private_screenshot_access_and_removal(self):
+        import base64
+        encoded=base64.b64encode(b"\xff\xd8\xff\x00\x00\x00\xff\xd9").decode()
+        p=dict(self.data,p_screenshot=encoded)
+        self.call("submit",p)
+        self.call("submit",p)
+        self.db.execute("UPDATE messages SET visibility='approved' WHERE id=?",(self.mid,))
+        public=self.call("detail",{"p_id":self.mid})
+        self.assertNotIn("has_attachment",public)
+        self.assertNotIn("image",public)
+        mine=self.call("mine",{"p_secret":self.secret})[0]
+        self.assertEqual(mine["has_attachment"],1)
+        with self.assertRaises(server.Problem):
+            self.call("attachment",dict(p_id=self.mid,p_secret=self.other))
+        with self.assertRaises(server.Problem):
+            self.call("remove_attachment",dict(p_id=self.mid,p_secret=self.other))
+        self.assertEqual(self.call("attachment",dict(p_id=self.mid,p_secret=self.secret))["image"],encoded)
+        old=server.ADMIN_TOKEN
+        server.ADMIN_TOKEN="test-admin-"+"z"*40
+        try:
+            self.assertEqual(self.call("attachment",dict(p_id=self.mid,p_admin=server.ADMIN_TOKEN))["image"],encoded)
+            self.assertEqual(self.call("admin_counts",{"p_admin":server.ADMIN_TOKEN})["approved"],1)
+        finally:
+            server.ADMIN_TOKEN=old
+        self.assertTrue(self.call("remove_attachment",dict(p_id=self.mid,p_secret=self.secret)))
+        with self.assertRaises(server.Problem):
+            self.call("attachment",dict(p_id=self.mid,p_secret=self.secret))
+    def test_invalid_screenshot_and_cascade(self):
+        import base64
+        with self.assertRaises(server.Problem):
+            self.call("submit",dict(self.data,p_screenshot="not-image"))
+        encoded=base64.b64encode(b"\xff\xd8\xff\x00\x00\x00\xff\xd9").decode()
+        self.call("submit",dict(self.data,p_screenshot=encoded))
+        self.call("withdraw",dict(p_id=self.mid,p_secret=self.secret))
+        self.assertEqual(self.db.execute("SELECT COUNT(*) FROM attachments").fetchone()[0],0)
 if __name__=="__main__":
     unittest.main()
