@@ -28,7 +28,7 @@ class GuestbookTests(unittest.TestCase):
         self.assertEqual(self.call("mine",{"p_secret":self.secret})[0]["contact"],self.data["p_contact"])
         self.db.execute("UPDATE messages SET visibility='approved' WHERE id=?",(self.mid,))
         public=self.call("public",{})[0]
-        self.assertEqual(set(public),{"id","nickname","category","title","body","created_at","reply","progress","pinned","context","replied_at","votes"})
+        self.assertEqual(set(public),{"id","nickname","category","title","body","created_at","reply","progress","pinned","context","replied_at","edited_at","revision","votes"})
         self.assertNotIn(self.data["p_contact"],str(public))
         self.assertFalse(self.call("remove_contact",{"p_id":self.mid,"p_secret":self.other}))
         self.assertTrue(self.call("remove_contact",{"p_id":self.mid,"p_secret":self.secret}))
@@ -79,5 +79,39 @@ class GuestbookTests(unittest.TestCase):
         for _ in range(2):
             self.assertEqual(self.call("vote",dict(p_id=self.mid,p_secret=self.other,p_desired=True))["votes"],1)
         self.assertEqual(self.call("vote",dict(p_id=self.mid,p_secret=self.other,p_desired=False))["votes"],0)
+    def test_edit_requires_owner_and_review(self):
+        self.call("submit",self.data)
+        self.db.execute("UPDATE messages SET visibility='approved',reply='旧回复',progress='done' WHERE id=?",(self.mid,))
+        self.assertEqual(self.call("detail",{"p_id":self.mid})["id"],self.mid)
+        args=dict(p_id=self.mid,p_secret=self.secret,p_revision=0,p_title="更新标题",p_body="这里是修改后的建议")
+        with self.assertRaises(server.Problem):
+            self.call("edit",dict(args,p_secret=self.other))
+        self.assertEqual(self.call("edit",args)["revision"],1)
+        self.assertEqual(self.call("edit",args)["revision"],1)
+        row=self.call("mine",{"p_secret":self.secret})[0]
+        self.assertEqual((row["visibility"],row["progress"],row["reply"]),("pending","new",""))
+        with self.assertRaises(server.Problem):
+            self.call("detail",{"p_id":self.mid})
+        with self.assertRaises(server.Problem) as err:
+            self.call("edit",dict(args,p_title="冲突"))
+        self.assertEqual(err.exception.code,409)
+        self.assertEqual(row["contact"],self.data["p_contact"])
+    def test_detail_private_and_progress(self):
+        self.call("submit",dict(self.data,p_private=True))
+        self.db.execute("UPDATE messages SET visibility='approved',progress='done' WHERE id=?",(self.mid,))
+        with self.assertRaises(server.Problem):
+            self.call("detail",{"p_id":self.mid})
+        self.assertEqual(self.call("public",{"p_progress":"done"}),[])
+        self.db.execute("UPDATE messages SET private=0 WHERE id=?",(self.mid,))
+        self.assertEqual(len(self.call("public",{"p_progress":"done"})),1)
+        self.assertEqual(self.call("public",{"p_progress":"new"}),[])
+    def test_deleted_messages_still_count_towards_rate(self):
+        for _ in range(3):
+            mid=str(uuid.uuid4())
+            self.call("submit",dict(self.data,p_id=mid))
+            self.call("withdraw",dict(p_id=mid,p_secret=self.secret))
+        with self.assertRaises(server.Problem) as err:
+            self.call("submit",self.data)
+        self.assertEqual(err.exception.code,429)
 if __name__=="__main__":
     unittest.main()
