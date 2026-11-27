@@ -4,7 +4,7 @@
   "total_current_logo_ids": 48,
   "original_logo_ids": 30,
   "sourced_preset_logo_ids": 17,
-  "sourced_historical_logo_names": 57,
+  "sourced_historical_logo_names": 58,
   "total_party_names_in_archives": 156,
   "top_archive_parties": [
     {
@@ -506,6 +506,12 @@
       "has_logo": true
     },
     {
+      "name": "政党资料缺失",
+      "rows": 15,
+      "id": null,
+      "has_logo": false
+    },
+    {
       "name": "司法正义党",
       "rows": 14,
       "id": null,
@@ -516,12 +522,6 @@
       "rows": 14,
       "id": "sdp",
       "has_logo": true
-    },
-    {
-      "name": "政党资料缺失",
-      "rows": 14,
-      "id": null,
-      "has_logo": false
     },
     {
       "name": "教科文预算保障e联盟",
@@ -791,7 +791,7 @@
       "name": "中华民族致公党",
       "rows": 3,
       "id": null,
-      "has_logo": false
+      "has_logo": true
     },
     {
       "name": "前进党",
@@ -1062,27 +1062,6 @@
           "contest": "legislative:2001:mountain:全部地区（含金门、马祖）:2001年第5届山地原住民立委选举",
           "name": "瓦历斯‧贝林",
           "election": "legislative:2001:mountain"
-        }
-      ]
-    },
-    {
-      "name": "中华民族致公党",
-      "rows": 3,
-      "total_votes_across_grains": 2729,
-      "known_preset": null,
-      "sources": [
-        "history-local-2018.json"
-      ],
-      "spellings": [
-        "中华民族致公党"
-      ],
-      "confirmed_elected_count": 1,
-      "elected_examples": [
-        {
-          "archive": "history-local-2018.json",
-          "contest": "2018-council:金门县:regional:第2选举区",
-          "name": "蔡春生",
-          "election": "2018-council"
         }
       ]
     },
@@ -1838,33 +1817,46 @@
           "election": "legislative:2001:mountain"
         }
       ]
-    },
-    {
-      "name": "中华民族致公党",
-      "rows": 3,
-      "total_votes_across_grains": 2729,
-      "known_preset": null,
-      "sources": [
-        "history-local-2018.json"
-      ],
-      "spellings": [
-        "中华民族致公党"
-      ],
-      "confirmed_elected_count": 1,
-      "elected_examples": [
-        {
-          "archive": "history-local-2018.json",
-          "contest": "2018-council:金门县:regional:第2选举区",
-          "name": "蔡春生",
-          "election": "2018-council"
-        }
-      ]
     }
   ],
   "placeholder_code_locations": {
     "history-trends.js": [
       {
         "phrase": "无可核实",
+        "count": 1
+      }
+    ],
+    "history-trends-ui.js": [
+      {
+        "phrase": "不可用",
+        "count": 1
+      }
+    ],
+    "history-workspace.js": [
+      {
+        "phrase": "暂无资料",
+        "count": 4
+      },
+      {
+        "phrase": "暂无该",
+        "count": 2
+      },
+      {
+        "phrase": "无可核实",
+        "count": 1
+      }
+    ],
+    "history-observation-ui.js": [
+      {
+        "phrase": "暂无数据",
+        "count": 1
+      },
+      {
+        "phrase": "无数据",
+        "count": 1
+      },
+      {
+        "phrase": "未收录",
         "count": 1
       }
     ],
@@ -1875,7 +1867,7 @@
       },
       {
         "phrase": "暂无该",
-        "count": 5
+        "count": 8
       },
       {
         "phrase": "未收录",
@@ -1896,13 +1888,15 @@
         "count": 1
       }
     ],
-    "history-workspace.js": [
+    "history-observation-core.js": [
+      {
+        "phrase": "无可核实",
+        "count": 1
+      }
+    ],
+    "tests/p1-overview.test.cjs": [
       {
         "phrase": "暂无资料",
-        "count": 4
-      },
-      {
-        "phrase": "暂无该",
         "count": 2
       }
     ],
@@ -1914,12 +1908,20 @@
     ]
   },
   "historical_legislative_turnout": {
+    "1992": {
+      "regional": {
+        "national": true,
+        "county": 25,
+        "town": 0,
+        "district": 4
+      }
+    },
     "1995": {
       "regional": {
         "national": true,
         "county": 25,
         "town": 369,
-        "district": 2
+        "district": 4
       },
       "plains": {
         "national": true,
@@ -1939,7 +1941,7 @@
         "national": true,
         "county": 25,
         "town": 369,
-        "district": 3
+        "district": 7
       },
       "plains": {
         "national": true,
@@ -1956,10 +1958,10 @@
     },
     "2001": {
       "regional": {
-        "national": false,
-        "county": 23,
-        "town": 365,
-        "district": 1
+        "national": true,
+        "county": 25,
+        "town": 369,
+        "district": 7
       },
       "plains": {
         "national": true,
@@ -1978,19 +1980,19 @@
       "regional": {
         "national": true,
         "county": 25,
-        "town": 367,
-        "district": 2
+        "town": 368,
+        "district": 7
       },
       "plains": {
         "national": true,
         "county": 25,
-        "town": 359,
+        "town": 368,
         "district": 0
       },
       "mountain": {
         "national": true,
         "county": 25,
-        "town": 367,
+        "town": 368,
         "district": 0
       }
     },
@@ -1998,19 +2000,19 @@
       "regional": {
         "national": true,
         "county": 25,
-        "town": 355,
-        "district": 25
+        "town": 368,
+        "district": 73
       },
       "plains": {
         "national": true,
         "county": 25,
-        "town": 367,
+        "town": 368,
         "district": 0
       },
       "mountain": {
         "national": true,
         "county": 25,
-        "town": 367,
+        "town": 368,
         "district": 0
       },
       "party": {
@@ -2024,8 +2026,8 @@
       "regional": {
         "national": true,
         "county": 22,
-        "town": 356,
-        "district": 22
+        "town": 368,
+        "district": 73
       },
       "plains": {
         "national": true,
@@ -2050,8 +2052,8 @@
       "regional": {
         "national": true,
         "county": 22,
-        "town": 356,
-        "district": 22
+        "town": 368,
+        "district": 73
       },
       "plains": {
         "national": true,

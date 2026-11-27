@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "count_by_id": 17,
-  "count_by_historical_name": 57,
+  "count_by_historical_name": 58,
   "official_sources": [
     {
       "name": "大爱宪改",
@@ -897,6 +897,17 @@
       "rendered_sha256": "61d645779fa3537703f691a4d8cca6d1a0602dc5bf4ca31fa4276e6a1f117eb8",
       "image_bytes": 9581,
       "license": "Historical election bulletin reproduction, party identification only; original mark rights retained"
+    },
+    {
+      "name": "中华民族致公党",
+      "official_registry": "https://party.moi.gov.tw/PartyMainContent.aspx?n=16100&s=157&sms=13073",
+      "official_image": "https://ws.moi.gov.tw/001/Upload/OldFile_PARTY/2021/ff8080816b88b9f5016bd0204db2045e.jpg",
+      "asset_type": "official registered emblem, as of 2018 party rename",
+      "source_sha256": "6c9a174162fd9f08b83d743e67569481f6830f0bd202a15991f7b780e1a7e979",
+      "rendered_sha256": "90eb25575a9e7b166800b35acc527663a90e1a5c6f1707c7435100f23b9def33",
+      "image_bytes": 34060,
+      "license": "Registered party mark, identity-only use; rights remain with party/owner",
+      "identity_note": "This is the Taiwanese registered 中華民族致公黨, not the PRC 中國致公黨, not the separate 中國洪門致公黨."
     }
   ],
   "unverified_or_unavailable": [

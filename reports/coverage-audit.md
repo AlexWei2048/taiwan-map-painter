@@ -5,10 +5,10 @@
 - 已收录预设政党：49
 - 有党徽图档的标识（含无党籍标记）：48
 - 新增官方预设党徽：17
-- 新增官方历史名称图档：57
+- 新增官方历史名称图档：58
 - 已归一化的历史党名种类：156
 - 没有内置党徽的预设政党：0
-- 没有匹配到已收录党徽的历史党名：49
+- 没有匹配到已收录党徽的历史党名：48
 
 ## 缺党徽的预设政党
 
@@ -23,7 +23,6 @@
 | 全国民主非政党联盟 | 3 | 1261 | history-legislative-1995.json |
 | 中国台湾原住民党 | 1 | 2375 | history-legislative-1995.json |
 | 台湾吾党 | 1 | 812 | history-legislative-2001.json |
-| 中华民族致公党 | 1 | 3 | history-local-2018.json |
 | 大道慈悲济世党 | 0 | 78 | history-legislative-2008.json |
 | 人民民主阵线 | 0 | 58 | history-legislative-2012.json |
 | 工教联盟 | 0 | 49 | history-legislative-2004.json |
@@ -73,27 +72,28 @@
 
 | 年份 | 票种 | 全部地区 | 县市 | 乡镇市区 | 区域选区 |
 |---|---|---|---:|---:|---:|
-| 1995 | regional | 有 | 25 | 369 | 2 |
+| 1992 | regional | 有 | 25 | 0 | 4 |
+| 1995 | regional | 有 | 25 | 369 | 4 |
 | 1995 | plains | 有 | 25 | 369 | 0 |
 | 1995 | mountain | 有 | 25 | 369 | 0 |
-| 1998 | regional | 有 | 25 | 369 | 3 |
+| 1998 | regional | 有 | 25 | 369 | 7 |
 | 1998 | plains | 有 | 25 | 369 | 0 |
 | 1998 | mountain | 有 | 25 | 369 | 0 |
-| 2001 | regional | — | 23 | 365 | 1 |
+| 2001 | regional | 有 | 25 | 369 | 7 |
 | 2001 | plains | 有 | 25 | 369 | 0 |
 | 2001 | mountain | 有 | 25 | 369 | 0 |
-| 2004 | regional | 有 | 25 | 367 | 2 |
-| 2004 | plains | 有 | 25 | 359 | 0 |
-| 2004 | mountain | 有 | 25 | 367 | 0 |
-| 2008 | regional | 有 | 25 | 355 | 25 |
-| 2008 | plains | 有 | 25 | 367 | 0 |
-| 2008 | mountain | 有 | 25 | 367 | 0 |
+| 2004 | regional | 有 | 25 | 368 | 7 |
+| 2004 | plains | 有 | 25 | 368 | 0 |
+| 2004 | mountain | 有 | 25 | 368 | 0 |
+| 2008 | regional | 有 | 25 | 368 | 73 |
+| 2008 | plains | 有 | 25 | 368 | 0 |
+| 2008 | mountain | 有 | 25 | 368 | 0 |
 | 2008 | party | 有 | 25 | 368 | 0 |
-| 2012 | regional | 有 | 22 | 356 | 22 |
+| 2012 | regional | 有 | 22 | 368 | 73 |
 | 2012 | plains | 有 | 22 | 368 | 0 |
 | 2012 | mountain | 有 | 22 | 368 | 0 |
 | 2012 | party | 有 | 22 | 368 | 0 |
-| 2016 | regional | 有 | 22 | 356 | 22 |
+| 2016 | regional | 有 | 22 | 368 | 73 |
 | 2016 | plains | 有 | 22 | 368 | 0 |
 | 2016 | mountain | 有 | 22 | 368 | 0 |
 | 2016 | party | 有 | 22 | 368 | 0 |
@@ -111,7 +111,11 @@
 这些文字包含诚实显示不可取得数据的情况，不能单凭关键字批量替换。
 
 - `history-trends.js`：无可核实 ×1
-- `history-2022.js`：暂无资料 ×3, 暂无该 ×5, 未收录 ×1, 不可用 ×4, 无可核实 ×1
+- `history-trends-ui.js`：不可用 ×1
+- `history-workspace.js`：暂无资料 ×4, 暂无该 ×2, 无可核实 ×1
+- `history-observation-ui.js`：暂无数据 ×1, 无数据 ×1, 未收录 ×1
+- `history-2022.js`：暂无资料 ×3, 暂无该 ×8, 未收录 ×1, 不可用 ×4, 无可核实 ×1
 - `site-updated.js`：不可用 ×1
-- `history-workspace.js`：暂无资料 ×4, 暂无该 ×2
+- `history-observation-core.js`：无可核实 ×1
+- `tests/p1-overview.test.cjs`：暂无资料 ×2
 - `tests/history-workspace.test.cjs`：暂无资料 ×5
