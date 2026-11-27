@@ -63,7 +63,7 @@ function changeYears(values,notify=true){
 async function snapshot(office,year){return window.HistoryQuery.snapshot(office,year)}
 const range=conf=>yearsFor(conf.office).filter(y=>selectedYears.has(y));
 const listVoteChart=conf=>conf.office==='legislative'&&['all','party'].includes(conf.electorate);
-const trendDataKey=conf=>[conf.office,S.key(conf),range(conf).join(',')].join('|');
+const trendDataKey=conf=>[conf.office,S.key(conf),range(conf).join(','),range(conf).includes(2026)?window.HISTORY_2026_RESULT_VERSION||'unpublished':''].join('|');
 async function loadSummary(conf){
  const key=S.key(conf);if(!key)return null;
  return summaryCache.get(key,async()=>{
