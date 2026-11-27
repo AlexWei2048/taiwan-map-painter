@@ -3618,10 +3618,18 @@ test('Party-list trend displays only the nine specified parties plus others and 
  const plain=p=>p.replace(/[“”]/g,'');
  const names=(await chart.locator('[data-trend-legend]').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('data-trend-legend')))).map(plain);
  assert.deepEqual(names,['中国国民党','民主进步党','亲民党','新党','台湾团结联盟','台湾民众党','时代力量','台湾基进','无党团结联盟','其他政党']);
- assert.equal(await chart.getAttribute('data-trend-y-max'),'60');
- assert.deepEqual((await chart.locator('[data-trend-axis-tick]').allTextContents()),['0%','10%','20%','30%','40%','50%','60%']);
+ assert.equal(await chart.getAttribute('data-trend-y-max'),'70');
+ assert.deepEqual((await chart.locator('[data-trend-axis-tick]').allTextContents()),['0%','10%','20%','30%','40%','50%','60%','70%']);
  assert.equal(await chart.locator('[data-trend-series] path').first().getAttribute('stroke-width'),'1.4');
  assert.equal(await chart.locator('[data-trend-series] circle').first().getAttribute('r'),'2.8');
+ const bounds=await chart.locator('[data-trend-value]').evaluateAll(points=>points.map(p=>({v:Number(p.dataset.trendValue),y:Number(p.getAttribute('cy'))})));
+ assert.ok(bounds.every(p=>p.y>48&&p.y<=270));assert.ok(Math.max(...bounds.map(p=>p.v))>60);
+ const legend=chart.locator('[data-trend-legend="中国国民党"]');await legend.click();
+ assert.equal(await chart.locator('[data-trend-series="中国国民党"]').getAttribute('display'),'none');
+ const cardControls=chart.locator('..');await cardControls.locator('[data-trend-series-action="hide"]').click();
+ assert.ok((await chart.locator('[data-trend-series]').evaluateAll(ns=>ns.map(n=>n.getAttribute('display')))).every(v=>v==='none'));
+ await cardControls.locator('[data-trend-series-action="show"]').click();
+ assert.ok((await chart.locator('[data-trend-series]').evaluateAll(ns=>ns.map(n=>n.getAttribute('display')))).every(v=>v===null));
  const first=chart.locator('[data-trend-series] circle').first(),original=await first.getAttribute('cy');
  await chart.scrollIntoViewIfNeeded();
  const pos=await chart.evaluate(g=>{const p=new DOMPoint(350,160).matrixTransform(g.getScreenCTM());return {x:p.x,y:p.y}});
@@ -3633,8 +3641,8 @@ test('Party-list trend displays only the nine specified parties plus others and 
  const after=await chart.evaluate(g=>[Number(g.getAttribute('data-trend-y-min')),Number(g.getAttribute('data-trend-y-max'))]);
  assert.ok(after[0]>before[0]);assert.ok(Math.abs((after[1]-after[0])-(before[1]-before[0]))<1e-7);
  const card=chart.locator('..');await card.locator('[data-trend-zoom-action="reset"]').click();
- assert.equal(await chart.getAttribute('data-trend-y-min'),'0');assert.equal(await chart.getAttribute('data-trend-y-max'),'60');assert.equal(await first.getAttribute('cy'),original);
- await card.locator('[data-trend-zoom-action="out"]').click();assert.ok(Number(await chart.getAttribute('data-trend-y-max'))>60);
+ assert.equal(await chart.getAttribute('data-trend-y-min'),'0');assert.equal(await chart.getAttribute('data-trend-y-max'),'70');assert.equal(await first.getAttribute('cy'),original);
+ await card.locator('[data-trend-zoom-action="out"]').click();assert.ok(Number(await chart.getAttribute('data-trend-y-max'))>70);
  await card.locator('[data-trend-zoom-action="reset"]').click();
  const table=page.locator('#trendCharts .history-table-wrap').filter({hasText:'对应票种得票率逐届明细'});
  assert.match(await table.textContent(),/显示合计/);assert.doesNotMatch(await table.locator('thead').textContent(),/无党籍|基进党|绿党/);assert.match(await table.locator('thead').textContent(),/民主联盟/);
@@ -3646,14 +3654,14 @@ test('Party-list trend displays only the nine specified parties plus others and 
  assert.ok(filtered.includes('台湾基进'));assert.ok(filtered.includes('时代力量'));assert.ok(!filtered.includes('民主联盟'));assert.ok(!filtered.includes('无党籍'));
 });
 
-test('Presidential party vote trend merges independents in black with a sixty percent default axis',async t=>{
+test('Presidential party vote trend merges independents in black with an automatic percentage axis',async t=>{
  const page=await pageFor(t,{width:1440,height:950});
  await page.locator('#categoryHistory').click();await page.locator('#historyOffice').selectOption('president');
  await page.waitForFunction(()=>History2022View.office()==='president'&&History2022View.snapshot()?.year===2024);
  await page.locator('#categoryAnalysis').click();
  const chart=page.locator('#trendCharts svg[aria-label*="候选人票得票率趋势"]');await chart.waitFor({timeout:120000});
  assert.equal(await chart.getAttribute('data-trend-y-max'),'60');
- assert.equal(await chart.locator('[data-trend-pan-surface]').count(),0,'presidential chart keeps its existing interaction');
+ assert.equal(await chart.locator('[data-trend-pan-surface]').count(),1,'percentage charts share drag controls');
  const names=await chart.locator('[data-trend-legend]').evaluateAll(ns=>ns.map(n=>n.getAttribute('data-trend-legend')));
  assert.equal(names.filter(n=>n==='无党籍').length,1);assert.ok(!names.some(n=>n.includes('连署')));
  const series=chart.locator('[data-trend-series="无党籍"]');

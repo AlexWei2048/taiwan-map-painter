@@ -33,17 +33,22 @@ function legislativeSeatTrendParties(rows){
  for(const r of rows||[])if(r.complete)for(const [p,n] of Object.entries(r.parties||{}))if(Number.isSafeInteger(n)&&n>0)totals.set(p,(totals.get(p)||0)+n);
  return [...totals].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],'zh')).map(([p])=>p);
 }
+// Strict headroom, including exact multiples and 100% observations.
+function percentAxisMax(values){
+ const peak=Math.max(0,...values.filter(Number.isFinite));
+ return (Math.floor(peak/10)+1)*10;
+}
 // A bounded percentage axis zoom. Anchor is a fraction from bottom to top.
-function percentZoomRange(range,scale,anchor=.5){
+function percentZoomRange(range,scale,anchor=.5,ceiling=100){
  const [lo,hi]=range;if(!Number.isFinite(lo)||!Number.isFinite(hi)||hi<=lo||!Number.isFinite(scale)||scale<=0)return [0,60];
- const ratio=Math.max(0,Math.min(1,Number.isFinite(anchor)?anchor:.5)),span=Math.max(2,Math.min(100,(hi-lo)*scale));
- const point=lo+(hi-lo)*ratio,min=Math.max(0,Math.min(100-span,point-span*ratio));
+ const ratio=Math.max(0,Math.min(1,Number.isFinite(anchor)?anchor:.5)),span=Math.max(2,Math.min(ceiling,(hi-lo)*scale));
+ const point=lo+(hi-lo)*ratio,min=Math.max(0,Math.min(ceiling-span,point-span*ratio));
  return [min,min+span];
 }
 // Pan by percentage points without changing the current zoom span.
-function percentPanRange(range,delta){
- const [lo,hi]=range;if(!Number.isFinite(lo)||!Number.isFinite(hi)||hi<=lo||hi-lo>100||!Number.isFinite(delta))return [0,60];
- const span=hi-lo,min=Math.max(0,Math.min(100-span,lo+delta));
+function percentPanRange(range,delta,ceiling=100){
+ const [lo,hi]=range;if(!Number.isFinite(lo)||!Number.isFinite(hi)||hi<=lo||hi-lo>ceiling||!Number.isFinite(delta))return [0,60];
+ const span=hi-lo,min=Math.max(0,Math.min(ceiling-span,lo+delta));
  return [min,min+span];
 }
 function percentZoomTicks(range){
@@ -489,7 +494,7 @@ function createLegislativeTrendCache({normalize=String,buildList,maxScopes=64}={
  }
  return{read,clear(){cache=new WeakMap();lists=new WeakMap()}};
 }
-const api={mergePresidentialIndependents,percentPanRange,percentZoomRange,percentZoomTicks,legislativeSeatTrendParties,partyListTrendKey,partyListTrendGroups,partyListTrendExcluded,PARTY_LIST_TREND_ORDER,createLegislativeTrendCache,summaryAlgorithmVersion:1,aggregate,value,difference,modern,percent,partyTrendValue,candidateTrendTooltip,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,trendChartScopes,historicalScopeRows,legislativeVoteShares,councilBallotRows,localPartyVoteShares,electionDates,trendEffectiveSelection,LEGISLATIVE_TOTALS};
+const api={percentAxisMax,mergePresidentialIndependents,percentPanRange,percentZoomRange,percentZoomTicks,legislativeSeatTrendParties,partyListTrendKey,partyListTrendGroups,partyListTrendExcluded,PARTY_LIST_TREND_ORDER,createLegislativeTrendCache,summaryAlgorithmVersion:1,aggregate,value,difference,modern,percent,partyTrendValue,candidateTrendTooltip,mapTrend,allLegislativeSeats,integerTicks,parliamentPoints,parliamentOrder,majorityBoundary,historicalCountyFamily,historicalCountyScopes,trendChartScopes,historicalScopeRows,legislativeVoteShares,councilBallotRows,localPartyVoteShares,electionDates,trendEffectiveSelection,LEGISLATIVE_TOTALS};
 if(typeof module!=='undefined'&&module.exports){module.exports=api;return}
 root.HistoryTrends=api;
 })(typeof window==='undefined'?{}:window);

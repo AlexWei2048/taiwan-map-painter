@@ -402,3 +402,19 @@ test('Percentage drag preserves zoom span and bounds the range to 0–100',()=>{
  assert.deepEqual(T.percentPanRange([10,40],99),[70,100]);
  assert.deepEqual(T.percentPanRange([0,100],30),[0,100]);
 });
+
+
+test('Percentage axes always have strict ten-point headroom, including 100 percent',()=>{
+ for(const [values,expected] of [[[],10],[[null,NaN,Infinity],10],[[0],10],[[9.99],10],[[10],20],[[59.999],60],[[60],70],[[62.8,36],70],[[99.99],100],[[100],110]]){
+  assert.equal(T.percentAxisMax(values),expected);
+  assert.equal(expected%10,0);
+  assert.ok(values.filter(Number.isFinite).every(v=>expected>v));
+ }
+ assert.deepEqual(T.percentZoomRange([0,110],10,.5,110),[0,110]);
+ assert.deepEqual(T.percentPanRange([0,110],20,110),[0,110]);
+ const P=require('../history-legislative-party.js'),norm=require('../assets/opencc.js').Converter({from:'t',to:'cn'});
+ const snapshot=require('../assets/history-legislative-1992.json');
+ const row=T.legislativeVoteShares(snapshot,{office:'legislative',electorate:'party',normalize:norm});
+ const values=row.flatMap(r=>Object.values(r.parties));
+ assert.ok(Math.max(...values)>60);assert.equal(T.percentAxisMax(values),70);
+});

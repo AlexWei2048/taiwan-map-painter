@@ -110,7 +110,7 @@ function description(conf){
 function exportFile(content,name,mime){const url=URL.createObjectURL(new Blob([content],{type:mime}));const a=node('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),2000)}
 async function chartExport(graph,title,png){
  const office=offices[settings().office],name=('历史趋势-'+office+'-'+title).replace(/[\\/:*?"<>|]/g,'_');
- const copy=graph.cloneNode(true);copy.setAttribute('xmlns',ns);const full=graph.getAttribute('data-trend-export-viewbox');if(full){copy.setAttribute('viewBox',full);copy.removeAttribute('data-trend-export-viewbox')}
+ const copy=graph.cloneNode(true);for(const mark of copy.querySelectorAll('[data-trend-series]'))mark.removeAttribute('opacity');copy.setAttribute('xmlns',ns);const full=graph.getAttribute('data-trend-export-viewbox');if(full){copy.setAttribute('viewBox',full);copy.removeAttribute('data-trend-export-viewbox')}
  const {width,height}=copy.viewBox.baseVal;copy.setAttribute('width',width);copy.setAttribute('height',height);
  // One request per distinct emblem, even when many years share the same logo.
  const logos=new Map();let url;
@@ -138,13 +138,18 @@ function card(title,description,graph,exportTitle=title){
  const c=node('article','trend-card'),h=node('div','trend-card-heading'),buttons=node('div','trend-card-actions');h.append(node('h4','',title),buttons);
  if(graph)for(const ext of ['SVG','PNG']){const b=node('button','button quiet',ext);b.type='button';b.onclick=async()=>{for(const button of buttons.querySelectorAll('button'))button.disabled=true;try{await chartExport(graph,exportTitle,ext==='PNG')}finally{for(const button of buttons.querySelectorAll('button'))button.disabled=false}};buttons.append(b)}
  if(graph?.hasAttribute('data-trend-zoom')){for(const [caption,action,label] of [['＋','in','放大纵轴'],['－','out','缩小纵轴'],['复位','reset','恢复默认纵轴']]){const button=node('button','button quiet',caption);button.type='button';button.setAttribute('aria-label',label);button.dataset.trendZoomAction=action;button.title=label;button.onclick=()=>graph.dispatchEvent(new Event('trend-zoom-'+action));buttons.prepend(button)}}
- c.append(h);if(description)c.append(node('p','data-help',description));if(graph)c.append(graph);return c
+ if(graph?.hasAttribute('data-trend-line-chart')){
+  const filters=node('div','trend-line-controls');filters.append(node('span','', '政党／曲线'));
+  for(const [text,action] of [['全部显示','show'],['全部隐藏','hide']]){const b=node('button','button quiet',text);b.type='button';b.dataset.trendSeriesAction=action;b.onclick=()=>graph.dispatchEvent(new Event('trend-'+action+'-all'));filters.append(b)}
+  filters.append(node('span','data-help','点击图例显示或隐藏，悬停突出曲线'));c.append(filters);
+ }
+ c.prepend(h);if(description)c.append(node('p','data-help',description));if(graph)c.append(graph);return c
 }
 function appendTrendCharts(out,rows,series,title,note,options,county){
  const scopes=T.trendChartScopes(rows,county);
  const layout=scopes.some(s=>s.label.startsWith('合并后'))&&scopes.some(s=>s.label.startsWith('原'))?node('div','trend-merge-layout'):out;
  // Comparable historical jurisdictions use one numerical scale, not independently rescaled axes.
- const axisMax=layout!==out&&!options.pct?Math.max(1,...scopes.flatMap(section=>section.rows.flatMap(row=>options.stack?[series.reduce((n,s)=>n+(s.get(row)||0),0)]:series.map(s=>s.get(row))).filter(Number.isFinite))):null;
+ const axisMax=layout!==out?Math.max(1,...scopes.flatMap(section=>section.rows.flatMap(row=>options.stack?[series.reduce((n,s)=>n+(s.get(row)||0),0)]:series.map(s=>s.get(row))).filter(Number.isFinite))):null;
  for(const section of scopes){
   const scopedTitle=title+(section.label?' · '+section.label:''),scopedSeries=series.filter(s=>section.rows.some(r=>Number.isFinite(s.get(r))));
   const compact=layout!==out&&section.label.startsWith('原'),tall=layout!==out&&section.label.startsWith('合并后');
@@ -162,6 +167,7 @@ function baseSvg(title,width,height){
  g.append(svg('rect',{x:0,y:0,width,height,fill:'#fff'}),svg('title',{},title),svg('text',{x:18,y:22,'font-weight':700,'font-size':15},title));return g
 }
 function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=false,integer=false,compact=false,tall=false,grouped=false,axisMax=null,zoomPercent=false,seatDetail=false,panPercent=false}={}){
+ if(pct&&!stack){zoomPercent=true;panPercent=true}
  const width=Math.max(compact?520:tall?620:700,rows.length*(compact?72:rows.some(r=>r.scopeLabel)?79:65)+100),l=compact?52:64,r=width-20,top=48,bottom=compact?280:tall?550:seatDetail?458:270;
  const showScope=!grouped||new Set(rows.map(r=>r.scopeLabel||'')).size>1;
  const legendStart=grouped?bottom+(showScope?70:52):bottom+68,legend=[];
@@ -178,19 +184,20 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
  const vals=rows.flatMap((row,i)=>stack?[series.reduce((n,s)=>n+(s.get(row)||0),0)]:series.map(s=>s.get(row))).filter(Number.isFinite);
  const magnitude=axisMax??Math.max(1,...vals);
  const ticks=integer?T.integerTicks(magnitude):null;
- const max=ticks?ticks.at(-1):pct?100:rank?Math.max(3,magnitude):magnitude*1.08;
+ const max=ticks?ticks.at(-1):pct?T.percentAxisMax([magnitude]):rank?Math.max(3,magnitude):magnitude*1.08;
  const slots=rows.map((row,i)=>i&&rows[i-1].year===row.year?0.72:1.18);
  const centers=[];let offset=0;for(let i=0;i<rows.length;i++){if(i)offset+=slots[i];centers.push(offset)}
  const unit=(r-l)/Math.max(1,offset+1.18),barWidth=Math.min(58,unit*.66);
- let domain=zoomPercent?[0,60]:[0,max];const x=i=>l+unit*(.59+centers[i]),y=v=>rank?top+(v-1)/(max-1)*(bottom-top):bottom-(v-domain[0])/(domain[1]-domain[0])*(bottom-top);
+ const defaultDomain=[0,max],ceiling=Math.max(100,max);
+ let domain=[...defaultDomain];const x=i=>l+unit*(.59+centers[i]),y=v=>rank?top+(v-1)/(max-1)*(bottom-top):bottom-(v-domain[0])/(domain[1]-domain[0])*(bottom-top);
  const axis=svg('g',{'data-trend-y-axis':'true'});g.append(axis);
  function drawAxis(){
   axis.replaceChildren();
-  for(const v of zoomPercent?T.percentZoomTicks(domain):ticks||Array.from({length:5},(_,i)=>rank?1+i*(max-1)/4:i*max/4)){
+  for(const v of zoomPercent?(domain[0]===0&&domain[1]===max?Array.from({length:max/10+1},(_,i)=>i*10):T.percentZoomTicks(domain)):ticks||Array.from({length:5},(_,i)=>rank?1+i*(max-1)/4:i*max/4)){
    const yy=y(v);
    axis.append(svg('line',{x1:l,x2:r,y1:yy,y2:yy,stroke:'#e2eae5'}),svg('text',{x:l-9,y:yy+4,'text-anchor':'end','font-size':grouped?13:11,'data-trend-axis-tick':String(v)},integer?String(v):rank?Math.round(v):pct?(zoomPercent?Number(v.toFixed(2)):Math.round(v))+'%':Intl.NumberFormat('zh-CN',{notation:'compact',maximumFractionDigits:1}).format(v)));
   }
-  if(zoomPercent){g.setAttribute('data-trend-y-min',String(domain[0]));g.setAttribute('data-trend-y-max',String(domain[1]))}
+  g.setAttribute('data-trend-y-min',String(domain[0]));g.setAttribute('data-trend-y-max',String(domain[1]));
  }
  drawAxis();
  const plotUpdates=[];let clipId='';
@@ -243,12 +250,12 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
    state.points.push({i,v,move:!state.previous});state.previous=row;branches.set(k,state);
   });
   for(const {points} of branches.values()){const path=svg('path',{fill:'none',stroke:s.color,'stroke-width':zoomPercent?1.4:2.5,'stroke-linejoin':'round',...(s.dash?{'stroke-dasharray':'6 4'}:{})});const update=()=>path.setAttribute('d',points.map(p=>(p.move?'M':'L')+x(p.i)+' '+y(p.v)).join(' '));update();if(zoomPercent)plotUpdates.push(update);marks.append(path)}
-  rows.forEach((row,i)=>{const v=s.get(row);if(!Number.isFinite(v))return;const p=svg('circle',{cx:x(i),cy:y(v),r:zoomPercent?2.8:4.5,fill:s.color,stroke:'#fff','stroke-width':zoomPercent?.6:1});addPoint(p,row,s,v);if(zoomPercent){const update=()=>{p.setAttribute('cy',y(v));p.setAttribute('tabindex',v>=domain[0]&&v<=domain[1]?'0':'-1')};update();plotUpdates.push(update)}marks.append(p)})
+  rows.forEach((row,i)=>{const v=s.get(row);if(!Number.isFinite(v))return;const p=svg('circle',{'data-trend-value':String(v),'data-trend-year':String(row.year),cx:x(i),cy:y(v),r:zoomPercent?2.8:4.5,fill:s.color,stroke:'#fff','stroke-width':zoomPercent?.6:1});addPoint(p,row,s,v);if(zoomPercent){const update=()=>{p.setAttribute('cy',y(v));p.setAttribute('tabindex',v>=domain[0]&&v<=domain[1]?'0':'-1')};update();plotUpdates.push(update)}marks.append(p)})
 
  }
  if(zoomPercent){
   function setDomain(next){if(Math.abs(next[0]-domain[0])<1e-8&&Math.abs(next[1]-domain[1])<1e-8)return false;domain=next;drawAxis();for(const update of plotUpdates)update();return true}
-  const zoom=(scale,anchor=.5)=>setDomain(T.percentZoomRange(domain,scale,anchor));
+  const zoom=(scale,anchor=.5)=>setDomain(T.percentZoomRange(domain,scale,anchor,ceiling));
   g.addEventListener('wheel',e=>{
    if(!e.deltaY||e.ctrlKey||e.metaKey)return;
    const matrix=g.getScreenCTM();if(!matrix)return;const point=new DOMPoint(e.clientX,e.clientY).matrixTransform(matrix.inverse());
@@ -275,7 +282,7 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
    const p=plotPoint(e);if(!p)return;
    if(!drag.moved&&Math.abs(e.clientY-drag.startClientY)<4)return;
    if(!drag.moved){drag.moved=true;g.setPointerCapture(e.pointerId);g.style.cursor='grabbing';panSurface.setAttribute('cursor','grabbing');}
-   const span=drag.range[1]-drag.range[0];setDomain(T.percentPanRange(drag.range,(p.y-drag.startY)*span/(bottom-top)));
+   const span=drag.range[1]-drag.range[0];setDomain(T.percentPanRange(drag.range,(p.y-drag.startY)*span/(bottom-top),ceiling));
    e.preventDefault();
   });
   const endDrag=e=>{if(!drag||drag.id!==e.pointerId)return;suppressClick=drag.moved;drag=null;g.style.cursor='';panSurface.setAttribute('cursor','grab');if(g.hasPointerCapture(e.pointerId))g.releasePointerCapture(e.pointerId)};
@@ -283,24 +290,33 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
   g.addEventListener('pointerleave',e=>{if(drag&&!drag.moved)endDrag(e)});
   g.addEventListener('click',e=>{if(suppressClick){suppressClick=false;e.preventDefault();e.stopImmediatePropagation()}},true);
   }
-  g.addEventListener('trend-zoom-in',()=>zoom(.8));g.addEventListener('trend-zoom-out',()=>zoom(1.25));g.addEventListener('trend-zoom-reset',()=>setDomain([0,60]));
-  g.addEventListener('dblclick',e=>{const matrix=g.getScreenCTM();if(!matrix)return;const p=new DOMPoint(e.clientX,e.clientY).matrixTransform(matrix.inverse());if(p.x>=l&&p.x<=r&&p.y>=top&&p.y<=bottom)setDomain([0,60])});
+  g.addEventListener('trend-zoom-in',()=>zoom(.8));g.addEventListener('trend-zoom-out',()=>zoom(1.25));g.addEventListener('trend-zoom-reset',()=>setDomain([...defaultDomain]));
+  g.addEventListener('dblclick',e=>{const matrix=g.getScreenCTM();if(!matrix)return;const p=new DOMPoint(e.clientX,e.clientY).matrixTransform(matrix.inverse());if(p.x>=l&&p.x<=r&&p.y>=top&&p.y<=bottom)setDomain([...defaultDomain])});
  }
  if(breakOld){const i=rows.findIndex(r=>!r.oldPartyVote);if(i>0){const xx=(x(i-1)+x(i))/2;g.append(svg('line',{x1:xx,x2:xx,y1:top,y2:bottom,stroke:'#8a938d','stroke-dasharray':'4 4'}),svg('text',{x:xx+4,y:top-7,'font-size':10},'2008制度改革'))}}
+ function setVisible(name,visible){
+  const scope=g.closest('.trend-merge-layout')||g;
+  for(const mark of scope.querySelectorAll('[data-trend-series]'))if(!name||mark.getAttribute('data-trend-series')===name){if(visible)mark.removeAttribute('display');else mark.setAttribute('display','none')}
+  for(const item of scope.querySelectorAll('[data-trend-legend][role=button]'))if(!name||item.getAttribute('data-trend-legend')===name){item.setAttribute('aria-pressed',String(visible));item.setAttribute('opacity',visible?'1':'.35')}
+ }
+ if(!stack){
+  g.setAttribute('data-trend-line-chart','true');
+  g.addEventListener('trend-show-all',()=>setVisible(null,true));g.addEventListener('trend-hide-all',()=>setVisible(null,false));
+ }
  series.forEach((s,i)=>{
   const {xx,yy,name,span}=legend[i],entry=svg('g',{'data-trend-legend':s.name});
   entry.append(s.dash?svg('line',{x1:xx,x2:xx+12,y1:yy-5,y2:yy-5,stroke:s.color,'stroke-width':2,'stroke-dasharray':'4 2'}):svg('rect',{x:xx,y:yy-10,width:11,height:11,rx:2,fill:s.color}),svg('text',{x:xx+16,y:yy,'font-size':grouped?13:11},name));
   // Do not hide parts of stacked seat totals: the original total must remain visible.
-  if(!stack&&series.length>1){
+  if(!stack){
    entry.setAttribute('role','button');entry.setAttribute('tabindex','0');entry.setAttribute('aria-pressed','true');entry.setAttribute('aria-label','切换 '+s.name+' 曲线');entry.style.cursor='pointer';
    entry.prepend(svg('rect',{x:xx-4,y:yy-19,width:span-3,height:24,rx:3,fill:'transparent','data-trend-legend-hit':'true','pointer-events':'all'}));
    entry.append(svg('title',{},'点击显示或隐藏 '+s.name));
-   const toggle=()=>{
-    const scope=g.closest('.trend-merge-layout')||g,visible=entry.getAttribute('aria-pressed')!=='true';
-    for(const mark of scope.querySelectorAll('[data-trend-series]'))if(mark.getAttribute('data-trend-series')===s.name){if(visible)mark.removeAttribute('display');else mark.setAttribute('display','none')}
-    for(const item of scope.querySelectorAll('[data-trend-legend]'))if(item.getAttribute('data-trend-legend')===s.name){item.setAttribute('aria-pressed',String(visible));item.setAttribute('opacity',visible?'1':'.35')}
-   };
+   const toggle=()=>setVisible(s.name,entry.getAttribute('aria-pressed')!=='true');
    entry.addEventListener('click',toggle);entry.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle()}});
+  }
+  if(!stack){
+   const emphasize=active=>{for(const mark of (g.closest('.trend-merge-layout')||g).querySelectorAll('[data-trend-series]'))mark.setAttribute('opacity',!active||mark.getAttribute('data-trend-series')===s.name?'1':'.18')};
+   entry.addEventListener('pointerenter',()=>emphasize(true));entry.addEventListener('pointerleave',()=>emphasize(false));entry.addEventListener('focus',()=>emphasize(true));entry.addEventListener('blur',()=>emphasize(false));
   }
   g.append(entry);
  });
@@ -484,7 +500,7 @@ function render(){
  const body=node('tbody');for(const r of rows){const tr=node('tr');tr.append(node('td','',r.label));if(showCounty)tr.append(node('td','',r.county||conf.county));tr.append(node('td','',r.dates?.join(' / ')||'—'));for(const s of series)tr.append(node('td','',fmt(s.get(r),pct)));if(showTotal)tr.append(node('td','',r.complete?fmt(Object.values(r.parties).reduce((n,v)=>n+v,0)):'—'));body.append(tr)}table.append(body);wrap.append(table);out.append(wrap);
  const voteRows=models.flatMap(item=>item.summary?item.summary[conf.level].voteRows:item.snapshot?T.localPartyVoteShares(item.snapshot,conf):[{year:item.year,label:label(item.year,conf.office),complete:false,reason:item.error,parties:{},valid:null}]).map(T.mergePresidentialIndependents);
  const voteSeries=partySeries(voteRows),voteTitle='候选人票得票率趋势（按所属政党汇总）';
- const voteNote='按当前选举类别和地图范围汇总候选人得票，再除以同范围有效票；同届多组无党籍候选人合并为同一类别，悬停可查看各候选人。'+(conf.office==='president'?'无党籍与连署统一为无党籍，默认纵轴0–60%，滚轮可缩放。':'')+(conf.office==='mayor'&&conf.level==='town'&&models.some(item=>item.year===2018)?'2018年台北市区级采用政大刊载的投票日资料，市级采用重计结果。':'');
+ const voteNote='按当前选举类别和地图范围汇总候选人得票，再除以同范围有效票；同届多组无党籍候选人合并为同一类别，悬停可查看各候选人。'+(conf.office==='president'?'无党籍与连署统一为无党籍。':'')+(conf.office==='mayor'&&conf.level==='town'&&models.some(item=>item.year===2018)?'2018年台北市区级采用政大刊载的投票日资料，市级采用重计结果。':'');
  appendTrendCharts(out,voteRows,voteSeries,voteTitle,voteNote,{pct:true,zoomPercent:conf.office==='president'},conf.county);
  const voteWrap=node('div','history-table-wrap'),voteTable=node('table','history-candidate-table'),voteHead=node('thead'),voteHeader=node('tr');
  for(const heading of ['届次','当届县市','投票日期',...voteSeries.map(s=>s.name),'合计'])voteHeader.append(node('th','',heading));voteHead.append(voteHeader);voteTable.append(voteHead);

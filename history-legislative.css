@@ -219,3 +219,10 @@
  #historyResults .legislative-mobile-details dt{color:#567365}
  #historyResults .legislative-mobile-details dd{margin:0 0 4px}
 }
+
+/* Line charts keep visible, touch-friendly filtering outside the exported SVG. */
+.trend-line-controls{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:8px 0;color:#31473e;font-size:12px}
+.trend-line-controls .button{padding:5px 9px;min-height:32px;font-size:12px}
+.trend-line-controls .data-help{margin:0 0 0 4px}
+.trend-card svg [data-trend-series] path{pointer-events:none}
+.trend-card svg [data-trend-series] circle:hover,.trend-card svg [data-trend-series] circle:focus-visible{stroke:#31473e;stroke-width:1.5}
