@@ -3010,6 +3010,10 @@ test('Published-only 2026 results can load in history, switch offices and return
  await page.locator('#historyRetry').click();
  await page.waitForFunction(()=>History2022View.year()===2026&&History2022View.snapshot()?.year===2026);
  assert.equal(await page.evaluate(()=>window.HISTORY_2026_RESULT_VERSION),revisedHash);
+ assert.match(await page.locator('#scopeTitle').textContent(),/开票结果（尚待正式公告）/);
+ assert.match(await page.evaluate(()=>exportMapTitle()),/开票结果（尚待正式公告）/);
+ assert.match(await page.evaluate(()=>exportFilename()),/开票结果（尚待正式公告）/);
+ assert.equal(await page.evaluate(()=>History2022View.exportMetadata().some(line=>line.includes('taiwanvotes.tw'))),false);
  assert.ok(await page.locator('#regions path[data-region]').count()>0);
  assert.equal(await page.locator('#historyYear').inputValue(),'2026');
  await page.locator('#historyOffice').selectOption('council');
@@ -3025,6 +3029,17 @@ test('Published-only 2026 results can load in history, switch offices and return
  assert.equal(filtered.year,2026);
  assert.deepEqual(filtered.counties,['台北市']);
  assert.ok(filtered.rows>0&&filtered.mapRegions>0,'Published 2026 council results display on scoped map');
+ // A new certified manifest alone must not relabel the verified provisional snapshot.
+ const certifiedBody=JSON.stringify({...fake,publicationStatus:'certified'});
+ const certifiedHash=(await import('node:crypto')).createHash('sha256').update(certifiedBody).digest('hex');
+ await page.unroute('**/assets/history-2026-availability.json*');
+ await page.route('**/assets/history-2026-availability.json*',route=>route.fulfill({contentType:'application/json',body:JSON.stringify({
+  schemaVersion:1,year:2026,status:'published',resultStatus:'certified',file:'assets/history-2026.json',candidateCount:2049,districtCount:447,sha256:certifiedHash
+ })}));
+ await page.locator('#historyRefresh2026').click();
+ await page.waitForFunction(()=>document.querySelector('#historyRefresh2026Status').textContent.includes('发现新版发布清单'));
+ assert.equal(await page.evaluate(()=>History2022View.publicationLabel()),'开票结果（尚待正式公告）');
+ assert.match(await page.evaluate(()=>exportMapTitle()),/开票结果（尚待正式公告）/);
  await page.locator('#historyYear').selectOption('2022');
  await page.waitForFunction(()=>History2022View.year()===2022&&History2022View.snapshot()?.year===2022);
  assert.deepEqual(errors,[],'Switching historic snapshots raises no JS exceptions');
