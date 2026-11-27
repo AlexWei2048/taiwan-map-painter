@@ -5,6 +5,9 @@ import base64
 import binascii
 import hashlib
 import secrets
+import smtplib
+import ssl
+from email.message import EmailMessage
 import hmac
 import threading
 import json
@@ -180,6 +183,39 @@ def daily_backup():
                 old.unlink()
     finally:
         BACKUP_LOCK.release()
+
+def notify_loop():
+    # Opt-in SMTP over TLS; no content, identifiers, contacts or screenshots leave the service.
+    host=os.environ.get("GUESTBOOK_SMTP_HOST","")
+    sender=os.environ.get("GUESTBOOK_SMTP_FROM","")
+    recipient=os.environ.get("GUESTBOOK_SMTP_TO","")
+    if not host or not sender or not recipient:
+        return
+    last_day=""
+    while True:
+        try:
+            today=datetime.now(timezone.utc).strftime("%Y-%m-%d")
+            marker=DB.parent/"notification-day"
+            if marker.exists(): last_day=marker.read_text(encoding="ascii").strip()
+            if today!=last_day:
+                with closing(connect()) as db:
+                    count=db.execute("SELECT COUNT(*) FROM messages WHERE visibility='pending'").fetchone()[0]
+                if count:
+                    msg=EmailMessage()
+                    msg["Subject"]="岛屿调色盘：待审核留言摘要"
+                    msg["From"]=sender
+                    msg["To"]=recipient
+                    msg.set_content("当前待审核留言："+str(count)+" 条。\n管理入口：https://alexwei2048.github.io/taiwan-map-painter/?guestbook-admin=1\n此邮件不包含留言内容或私人资料。")
+                    port=int(os.environ.get("GUESTBOOK_SMTP_PORT","465"))
+                    with smtplib.SMTP_SSL(host,port,timeout=15,context=ssl.create_default_context()) as mail:
+                        username=os.environ.get("GUESTBOOK_SMTP_USER","")
+                        if username: mail.login(username,os.environ.get("GUESTBOOK_SMTP_PASSWORD",""))
+                        mail.send_message(msg)
+                    marker.write_text(today,encoding="ascii")
+                    last_day=today
+        except Exception:
+            print("Guestbook notification unavailable",flush=True)
+        time.sleep(900)
 
 def backup_loop():
     while True:
@@ -397,11 +433,17 @@ def dispatch(action,data,db):
         except BaseException:
             if db.in_transaction: db.execute("ROLLBACK")
             raise
+    if action == "guestbook_admin_clear_reports":
+        require_admin(data,db)
+        mid=msg_id(data.get("p_id"))
+        db.execute("DELETE FROM reports WHERE message_id=?",(mid,))
+        db.execute("INSERT INTO admin_audit(message_id,action,created_at) VALUES(?,?,?)",(mid,"clear_reports",datetime.now(timezone.utc).isoformat()))
+        return True
     if action == "guestbook_admin_maintenance":
         require_admin(data,db)
         import shutil
         files=sorted((DB.parent/"backups").glob("daily-*.sqlite3"),reverse=True)
-        return {"backup_count":len(files),"latest_backup":files[0].name[6:16] if files else "", "free_mb":shutil.disk_usage(DB.parent).free//(1024*1024),"database_mb":round(DB.stat().st_size/1048576,2)}
+        return {"backup_count":len(files),"latest_backup":files[0].name[6:16] if files else "", "free_mb":shutil.disk_usage(DB.parent).free//(1024*1024),"database_mb":round(DB.stat().st_size/1048576,2),"notification_configured":bool(os.environ.get("GUESTBOOK_SMTP_HOST") and os.environ.get("GUESTBOOK_SMTP_FROM") and os.environ.get("GUESTBOOK_SMTP_TO"))}
     if action == "guestbook_admin_audit":
         require_admin(data,db)
         return rows(db.execute("SELECT message_id,action,created_at,visibility,progress FROM admin_audit ORDER BY id DESC LIMIT 50"))
@@ -554,7 +596,7 @@ class Handler(BaseHTTPRequestHandler):
             if not self.path.startswith(prefix):
                 raise Problem("接口不存在",404)
             action=self.path[len(prefix):]
-            if action not in {"guestbook_submit","guestbook_public","guestbook_mine","guestbook_remove_contact","guestbook_withdraw","guestbook_vote","guestbook_votes","guestbook_admin_list","guestbook_admin_update","guestbook_admin_delete","guestbook_edit","guestbook_detail","guestbook_attachment","guestbook_remove_attachment","guestbook_admin_counts","guestbook_my_updates","guestbook_admin_login","guestbook_admin_logout","guestbook_admin_devices","guestbook_admin_revoke_others","guestbook_public_page","guestbook_report","guestbook_admin_maintenance","guestbook_admin_audit","guestbook_admin_export"}:
+            if action not in {"guestbook_submit","guestbook_public","guestbook_mine","guestbook_remove_contact","guestbook_withdraw","guestbook_vote","guestbook_votes","guestbook_admin_list","guestbook_admin_update","guestbook_admin_delete","guestbook_edit","guestbook_detail","guestbook_attachment","guestbook_remove_attachment","guestbook_admin_counts","guestbook_my_updates","guestbook_admin_login","guestbook_admin_logout","guestbook_admin_devices","guestbook_admin_revoke_others","guestbook_public_page","guestbook_report","guestbook_admin_maintenance","guestbook_admin_audit","guestbook_admin_export","guestbook_admin_clear_reports"}:
                 raise Problem("接口不存在",404)
             if self.headers.get_content_type()!="application/json":
                 raise Problem("请求格式错误",415)
@@ -634,6 +676,7 @@ def main():
     if args.command=="serve":
         daily_backup()
         threading.Thread(target=backup_loop,daemon=True).start()
+        threading.Thread(target=notify_loop,daemon=True).start()
         BoundedServer((args.host,args.port),Handler).serve_forever()
     else:
         admin(args)
