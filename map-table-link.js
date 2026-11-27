@@ -1,7 +1,7 @@
 'use strict';
 (()=>{
  const selector='#regions path[data-map-link],#districtTableGroups tr[data-map-link],#historyResults tr[data-map-link],#legend [data-party-link]';
- let pointer=null,focus=null,marked=[],partyMarked=[];
+ let pointer=null,focus=null,marked=[],partyMarked=[],pointerReady=true,lastPointer=null;
  const target=e=>e?.closest?.(selector)||null;
  const keys=node=>{try{return JSON.parse(node?.dataset.partyKeys||'[]')}catch{return []}};
  const matches=(nodes,key)=>nodes.filter(node=>keys(node).includes(key));
@@ -24,10 +24,11 @@
   for(const node of marked)node.classList.add('map-linked-highlight');
   for(const node of partyMarked)node.classList.add('party-linked-highlight');
  }
- document.addEventListener('pointerover',e=>{if(e.pointerType==='touch')return;const node=target(e.target);if(node===pointer)return;pointer=node;draw()});
- document.addEventListener('pointerout',e=>{if(e.pointerType==='touch')return;const node=target(e.relatedTarget);if(pointer===node)return;pointer=node;draw()});
- document.addEventListener('focusin',e=>{focus=target(e.target);pointer=null;draw()});
- document.addEventListener('focusout',e=>{focus=target(e.relatedTarget);pointer=null;draw()});
+ document.addEventListener('pointerover',e=>{if(e.pointerType==='touch'||!pointerReady)return;const node=target(e.target);if(node===pointer)return;pointer=node;draw()});
+ document.addEventListener('pointerout',e=>{if(e.pointerType==='touch'||!pointerReady)return;const node=target(e.relatedTarget);if(pointer===node)return;pointer=node;draw()});
+ document.addEventListener('pointermove',e=>{if(e.pointerType==='touch')return;const pos=[e.clientX,e.clientY],moved=!lastPointer||pos[0]!==lastPointer[0]||pos[1]!==lastPointer[1];lastPointer=pos;if(!moved)return;pointerReady=true;const next=target(e.target);if(next!==pointer){pointer=next;draw()}});
+ document.addEventListener('focusin',e=>{focus=target(e.target);pointer=null;pointerReady=false;draw()});
+ document.addEventListener('focusout',e=>{focus=target(e.relatedTarget);pointer=null;pointerReady=false;draw()});
  function prepareRows(){
   const visibleKeys=new Set([...document.querySelectorAll('#regions path[data-map-link]')].map(p=>p.dataset.mapLink));
   for(const root of [$('historyResults'),$('districtTableGroups')]){

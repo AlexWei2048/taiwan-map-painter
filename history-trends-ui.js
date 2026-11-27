@@ -120,16 +120,39 @@ async function chartExport(graph,title,png,context={}){
   const blob=await window.HistoryExport.pngBlob(source,width,height);const a=node('a');a.href=URL.createObjectURL(blob);a.download=name+'.png';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),10000);
  }catch(e){const status=context.status||$('trendStatus');if(status)status.textContent=e.message||'图表导出失败，请重试。';else if(typeof toast==='function')toast(e.message||'图表导出失败，请重试。')}finally{if(url)URL.revokeObjectURL(url)}
 }
+// An HTML readout avoids tiny SVG hit targets and hover-only interactions.
+function trendPointInspector(graph){
+ const points=[...graph.querySelectorAll('circle[data-trend-value][data-trend-slot]')];if(!points.length)return null;
+ const panel=node('details','trend-point-inspector'),summary=node('summary','','按届次查看数据'),controls=node('div','trend-inspector-controls'),label=node('label','','选举届次'),select=node('select'),list=node('div','trend-inspector-list'),status=node('p','data-help');
+ const slots=new Map();for(const p of points){const key=p.dataset.trendSlot;if(!slots.has(key))slots.set(key,{label:p.dataset.trendSlotLabel,points:[]});slots.get(key).points.push(p)}
+ for(const [key,group] of slots)select.append(new Option(group.label,key));select.value=[...slots.keys()].at(-1);
+ label.append(select);controls.append(label);panel.append(summary,controls,status,list);
+ const fmtPoint=p=>p.getAttribute('aria-label')||p.querySelector('title')?.textContent||'';
+ const visible=p=>p.closest('[data-trend-series]')?.getAttribute('display')!=='none';
+ function update(){
+  const group=slots.get(select.value);list.replaceChildren();if(!group)return;
+  const shown=group.points.filter(visible).sort((a,b)=>Number(b.dataset.trendValue)-Number(a.dataset.trendValue));
+  status.textContent=group.label+' · '+shown.length+' 条当前显示的曲线；隐藏曲线不列入。';
+  for(const p of shown){
+   const row=node('div','trend-inspector-row'),detail=node('div','trend-inspector-text',fmtPoint(p)),go=node('button','button quiet','查看详情');go.type='button';go.onclick=()=>p.dispatchEvent(new MouseEvent('click',{bubbles:true}));row.append(detail,go);list.append(row);
+  }
+  if(!shown.length)list.append(node('p','data-help','当前届次没有可见曲线数据；请勾选图例。'));
+ }
+ select.onchange=update;panel.addEventListener('toggle',()=>{if(panel.open)update()});
+ // Listen to plot visibility changes, including linked pre/post-merger charts.
+ const observer=new MutationObserver(()=>{if(panel.open)update()});observer.observe(graph,{subtree:true,attributes:true,attributeFilter:['display']});
+ return panel;
+}
 function card(title,description,graph,exportTitle=title,context={}){
  const c=node('article','trend-card'),h=node('div','trend-card-heading'),buttons=node('div','trend-card-actions');h.append(node('h4','',title),buttons);
  if(graph)for(const ext of ['SVG','PNG']){const b=node('button','button quiet',ext);b.type='button';b.onclick=async()=>{for(const button of buttons.querySelectorAll('button'))button.disabled=true;try{await chartExport(graph,exportTitle,ext==='PNG',context)}finally{for(const button of buttons.querySelectorAll('button'))button.disabled=false}};buttons.append(b)}
- if(graph?.hasAttribute('data-trend-zoom')){for(const [caption,action,label] of [['＋','in','放大纵轴'],['－','out','缩小纵轴'],['复位','reset','恢复默认纵轴']]){const button=node('button','button quiet',caption);button.type='button';button.setAttribute('aria-label',label);button.dataset.trendZoomAction=action;button.title=label;button.onclick=()=>graph.dispatchEvent(new Event('trend-zoom-'+action));buttons.prepend(button)}}
+ if(graph?.hasAttribute('data-trend-zoom')){for(const [caption,action,label] of [['复位','reset','恢复默认纵轴'],['－','out','缩小纵轴'],['＋','in','放大纵轴']]){const button=node('button','button quiet',caption);button.type='button';button.setAttribute('aria-label',label);button.dataset.trendZoomAction=action;button.title=label;button.onclick=()=>graph.dispatchEvent(new Event('trend-zoom-'+action));buttons.prepend(button)}}
  if(graph?.hasAttribute('data-trend-line-chart')){
   const filters=node('div','trend-line-controls');filters.append(node('span','', '政党／曲线'));
   for(const [text,action] of [['全部显示','show'],['主要政党','major'],['全部隐藏','hide']]){const b=node('button','button quiet',text);b.type='button';b.dataset.trendSeriesAction=action;b.onclick=()=>graph.dispatchEvent(new Event('trend-'+action+'-all'));filters.append(b)}
-  filters.append(node('span','data-help','勾选下方图例显示曲线，滚轮缩放、拖动平移，双击复位'));c.append(filters);
+  filters.append(node('span','data-help','勾选图例显示曲线；电脑可滚轮缩放、拖动平移，手机可用纵轴按钮与按届次查看数据。'));c.append(filters);
  }
- c.prepend(h);if(description)c.append(node('p','data-help',description));if(graph)c.append(graph);return c
+ c.prepend(h);if(description)c.append(node('p','data-help',description));if(graph){c.append(graph);if(graph.hasAttribute('data-trend-line-chart')){const inspector=trendPointInspector(graph);if(inspector)c.append(inspector)}}return c
 }
 function appendTrendCharts(out,rows,series,title,note,options,county){
  const scopes=T.trendChartScopes(rows,county);
@@ -237,7 +260,7 @@ function chart(rows,series,title,{pct=false,stack=false,rank=false,breakOld=fals
    state.points.push({i,v,move:!state.previous});state.previous=row;branches.set(k,state);
   });
   for(const {points} of branches.values()){const path=svg('path',{fill:'none',stroke:s.color,'stroke-width':zoomable?1.4:2.5,'stroke-linejoin':'round',...(s.dash?{'stroke-dasharray':'6 4'}:{})});const update=()=>path.setAttribute('d',points.map(p=>(p.move?'M':'L')+x(p.i)+' '+y(p.v)).join(' '));update();if(zoomable)plotUpdates.push(update);marks.append(path)}
-  rows.forEach((row,i)=>{const v=s.get(row);if(!Number.isFinite(v))return;const p=svg('circle',{'data-trend-value':String(v),'data-trend-year':String(row.year),cx:x(i),cy:y(v),r:zoomable?2.8:4.5,fill:s.color,stroke:'#fff','stroke-width':zoomable?.6:1});addPoint(p,row,s,v);if(zoomable){const update=()=>{p.setAttribute('cy',y(v));p.setAttribute('tabindex',v>=domain[0]&&v<=domain[1]?'0':'-1')};update();plotUpdates.push(update)}marks.append(p)})
+  rows.forEach((row,i)=>{const v=s.get(row);if(!Number.isFinite(v))return;const p=svg('circle',{'data-trend-value':String(v),'data-trend-year':String(row.year),'data-trend-slot':String(i),'data-trend-slot-label':(row.label||row.year)+(row.scopeLabel?' · '+row.scopeLabel:''),cx:x(i),cy:y(v),r:zoomable?2.8:4.5,fill:s.color,stroke:'#fff','stroke-width':zoomable?.6:1});addPoint(p,row,s,v);if(zoomable){const update=()=>{p.setAttribute('cy',y(v));p.setAttribute('tabindex',v>=domain[0]&&v<=domain[1]?'0':'-1')};update();plotUpdates.push(update)}marks.append(p)})
 
  }
  if(zoomable){
