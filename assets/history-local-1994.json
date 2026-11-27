@@ -23772,6 +23772,343 @@
           "source_url": "https://zh.wikipedia.org/wiki/崁頂鄉"
         }
       ]
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E7%AB%B9%E7%94%B0%E9%84%89",
+      "source_locator": "歷屆鄉長表第11屆李國和、第12屆鐘永興（其後停職）；選舉日狀態由屆次推定。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆原始開票表；姓名及現任按任期名錄和相關資料推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "竹田鄉",
+          "name": "鐘永興",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "李國和",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E7%AB%B9%E7%94%B0%E9%84%89"
+        }
+      ]
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E6%96%B0%E5%9C%92%E9%84%89_(%E5%8F%B0%E7%81%A3)",
+      "source_locator": "第11屆陳金義、第12屆周宏勝；政大1998年同鄉候選人資料列周宏勝男性、現任並當選。",
+      "corroboration_url": "https://vote.nccu.edu.tw/cec/vote3.asp?pass1=P9AA%408%3E%3A9%3B888888iii%28%28",
+      "evidence_tier": "term_roster_and_related_record",
+      "validation_note": "非當屆原始開票表；姓名及現任按任期名錄和相關資料推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "新園鄉",
+          "name": "周宏勝",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "陳金義",
+          "gender": "男",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E6%96%B0%E5%9C%92%E9%84%89_(%E5%8F%B0%E7%81%A3)",
+          "corroboration_url": "https://vote.nccu.edu.tw/cec/vote3.asp?pass1=P9AA%408%3E%3A9%3B888888iii%28%28"
+        }
+      ]
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E5%8D%97%E5%B7%9E%E9%84%89",
+      "source_locator": "第12屆林建成；第11屆姓名欄未獨立顯示，現任狀態不推定。司法院調解委員名冊同名且曾任南州地區農會總幹事，性別男；1998年同鄉參選資料印證姓名。",
+      "corroboration_url": "https://www.judicial.gov.tw/tw/cp-2046-309849-0f675-1.html",
+      "evidence_tier": "term_roster_and_related_record",
+      "validation_note": "非當屆原始開票表；姓名及現任按任期名錄和相關資料推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "南州鄉",
+          "name": "林建成",
+          "incumbent_at_election": null,
+          "incumbent_method": "unresolved_election_day_status",
+          "previous_term_holder": null,
+          "gender": "男",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E5%8D%97%E5%B7%9E%E9%84%89",
+          "corroboration_url": "https://www.judicial.gov.tw/tw/cp-2046-309849-0f675-1.html"
+        }
+      ]
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E4%BD%B3%E5%86%AC%E9%84%89",
+      "source_locator": "第11屆林光明、第12及13屆陳啟炳；1998年佳冬鄉候選資料列男性、現任並當選。",
+      "corroboration_url": "https://votetw.com/data/candidate/%E6%A5%8A%E5%98%89%E6%85%B6",
+      "evidence_tier": "term_roster_and_related_record",
+      "validation_note": "非當屆原始開票表；姓名及現任按任期名錄和相關資料推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "佳冬鄉",
+          "name": "陳啟炳",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "林光明",
+          "gender": "男",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E4%BD%B3%E5%86%AC%E9%84%89",
+          "corroboration_url": "https://votetw.com/data/candidate/%E6%A5%8A%E5%98%89%E6%85%B6"
+        }
+      ]
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E8%BB%8A%E5%9F%8E%E9%84%89_(%E5%8F%B0%E7%81%A3)",
+      "source_locator": "歷任首長表引《車城鄉志》，第11屆黃春海至1994-02-28，第12屆張英和1994-03-01至1998-02-28。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆原始開票表；姓名及現任按任期名錄和相關資料推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "車城鄉",
+          "name": "張英和",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "黃春海",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E8%BB%8A%E5%9F%8E%E9%84%89_(%E5%8F%B0%E7%81%A3)"
+        }
+      ]
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E6%BB%BF%E5%B7%9E%E9%84%89",
+      "source_locator": "第11屆高榮昌、第12及13屆熊金郎。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆原始開票表；姓名及現任按任期名錄和相關資料推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "滿州鄉",
+          "name": "熊金郎",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "高榮昌",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E6%BB%BF%E5%B7%9E%E9%84%89"
+        }
+      ]
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E6%9E%8B%E5%B1%B1%E9%84%89",
+      "source_locator": "第11屆溫義春、第12屆洪清隆。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆原始開票表；姓名及現任按任期名錄和相關資料推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "枋山鄉",
+          "name": "洪清隆",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "溫義春",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E6%9E%8B%E5%B1%B1%E9%84%89"
+        }
+      ]
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E4%B8%89%E5%9C%B0%E9%96%80%E9%84%89",
+      "source_locator": "第12屆謝榮祥；《重修屏東縣志》1994-08-19大事紀列其為三地門鄉長，全文因尺寸限制未取得，使用搜尋索引文字；第11屆姓名欄未獨立顯示。",
+      "corroboration_url": "https://digitalarchive.cultural.pthg.gov.tw/muse_download/58e33572b4a91213d50575cc01f00131?download=1",
+      "evidence_tier": "term_roster_and_county_chronicle_index",
+      "validation_note": "非當屆原始開票表；姓名及現任按任期名錄和相關資料推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "三地門鄉",
+          "name": "謝榮祥",
+          "incumbent_at_election": null,
+          "incumbent_method": "unresolved_election_day_status",
+          "previous_term_holder": null,
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E4%B8%89%E5%9C%B0%E9%96%80%E9%84%89",
+          "corroboration_url": "https://digitalarchive.cultural.pthg.gov.tw/muse_download/58e33572b4a91213d50575cc01f00131?download=1"
+        }
+      ]
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E9%9C%A7%E8%87%BA%E9%84%89",
+      "source_locator": "第11屆柯啟川，第12屆姓名欄未獨立顯示；1992年總統府新聞及《重修屏東縣志》1994-08-19大事紀分別列其為霧臺鄉長，支持相鄰屆次推定。縣志全文未取得，使用搜尋索引文字。",
+      "corroboration_url": "https://digitalarchive.cultural.pthg.gov.tw/muse_download/58e33572b4a91213d50575cc01f00131?download=1",
+      "additional_source": "https://www.president.gov.tw/NEWS/22784",
+      "evidence_tier": "term_roster_and_county_chronicle_index",
+      "validation_note": "非當屆原始開票表；姓名及現任按任期名錄和相關資料推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "霧臺鄉",
+          "name": "柯啟川",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "柯啟川",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E9%9C%A7%E8%87%BA%E9%84%89",
+          "corroboration_url": "https://digitalarchive.cultural.pthg.gov.tw/muse_download/58e33572b4a91213d50575cc01f00131?download=1"
+        }
+      ]
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E7%91%AA%E5%AE%B6%E9%84%89",
+      "source_locator": "第11屆馮寶成、第12屆姓名欄未獨立顯示；《重修屏東縣志》1994-08-19大事紀列其為瑪家鄉長，支持連任推定。縣志全文未取得，使用搜尋索引文字。",
+      "corroboration_url": "https://digitalarchive.cultural.pthg.gov.tw/muse_download/58e33572b4a91213d50575cc01f00131?download=1",
+      "evidence_tier": "term_roster_and_county_chronicle_index",
+      "validation_note": "非當屆原始開票表；姓名及現任按任期名錄和相關資料推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "瑪家鄉",
+          "name": "馮寶成",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "馮寶成",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E7%91%AA%E5%AE%B6%E9%84%89",
+          "corroboration_url": "https://digitalarchive.cultural.pthg.gov.tw/muse_download/58e33572b4a91213d50575cc01f00131?download=1"
+        }
+      ]
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E4%BE%86%E7%BE%A9%E9%84%89",
+      "source_locator": "第11屆陳金榜、第12及13屆連正勝。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆原始開票表；姓名及現任按任期名錄和相關資料推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "來義鄉",
+          "name": "連正勝",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "陳金榜",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E4%BE%86%E7%BE%A9%E9%84%89"
+        }
+      ]
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E6%98%A5%E6%97%A5%E9%84%89",
+      "source_locator": "歷屆鄉長、議員表第11屆79–83年、第12屆83–87年均為李清標。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆原始開票表；姓名及現任按任期名錄和相關資料推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "春日鄉",
+          "name": "李清標",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "李清標",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E6%98%A5%E6%97%A5%E9%84%89"
+        }
+      ]
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://www.ly.gov.tw/Pages/List.aspx?nodeid=1665",
+      "source_locator": "立法機構第7屆民代履歷明載第11、12任獅子鄉長；歷任表一致。",
+      "corroboration_url": "https://zh.wikipedia.org/wiki/%E7%8D%85%E5%AD%90%E9%84%89_(%E5%8F%B0%E7%81%A3)",
+      "evidence_tier": "official_legislative_biography",
+      "validation_note": "非當屆原始開票表；姓名及現任按任期名錄和相關資料推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "獅子鄉",
+          "name": "簡東明",
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "簡東明",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://www.ly.gov.tw/Pages/List.aspx?nodeid=1665",
+          "corroboration_url": "https://zh.wikipedia.org/wiki/%E7%8D%85%E5%AD%90%E9%84%89_(%E5%8F%B0%E7%81%A3)"
+        }
+      ]
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/%E7%89%A1%E4%B8%B9%E9%84%89",
+      "source_locator": "第11屆林清良、第12及13屆黃順發。",
+      "evidence_tier": "secondary_term_roster_only",
+      "validation_note": "非當屆原始開票表；姓名及現任按任期名錄和相關資料推定，未核逐日任免；票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "牡丹鄉",
+          "name": "黃順發",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "林清良",
+          "gender": null,
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/%E7%89%A1%E4%B8%B9%E9%84%89"
+        }
+      ]
     }
   ]
 }
