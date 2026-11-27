@@ -125,16 +125,24 @@ test('2026 publication labels reflect loaded snapshots and leave other election 
 });
 
 
-test('Generic party trend lines distinguish absent participation from a recorded zero',()=>{
+test('Generic party trend lines distinguish no participation from participation without a win',()=>{
  const T=require('../history-trends.js'),ui=read('history-trends-ui.js');
- const absent={complete:true,parties:{'中国国民党':3}},zero={complete:true,parties:{'台湾民众党':0}},incomplete={complete:false,parties:{'台湾民众党':0}};
- assert.equal(T.partyTrendValue(absent,'台湾民众党'),null,'no candidacy record is a gap, not zero');
- assert.equal(T.partyTrendValue(zero,'台湾民众党'),0,'an explicit zero remains zero');
- assert.equal(T.partyTrendValue(incomplete,'台湾民众党'),null,'incomplete archive is not zero');
- assert.equal(T.partyTrendValue(absent,'', ['台湾民众党','时代力量']),null,'other parties are absent when none participated');
- assert.equal(T.partyTrendValue({complete:true,parties:{'时代力量':0}},'', ['台湾民众党','时代力量']),0,'other parties preserve a recorded zero');
- assert.match(ui,/get:r=>T\.partyTrendValue\(r,p\)/);
- assert.match(ui,/get:r=>T\.partyTrendValue\(r,'',rest\)/);
- assert.doesNotMatch(ui,/r\.complete\?r\.parties\[p\]\|\|0/);
- assert.doesNotMatch(ui,/rest\.reduce\(\(n,p\)=>n\+\(r\.parties\[p\]\|\|0\)/);
+ const snapshot={year:2022,elections:[{office:'mayor',election_id:'e1',year:2022}],
+  contests:[{election_id:'e1',county_name:'台北市',district_name:'台北市',election_date:'2022-11-26'}],
+  rows:[
+   {type:'mayor',level:'county',county:'台北市',electorate:'regional',votes:100,party:'甲党',name:'甲候选人',elected:true},
+   {type:'mayor',level:'county',county:'台北市',electorate:'regional',votes:90,party:'乙党',name:'乙候选人',elected:false}
+  ]};
+ const row=T.mapTrend(snapshot,{office:'mayor',electorate:'all',county:'台北市',metric:'party',normalize:value=>value});
+ assert.deepEqual(row.participatingParties,['乙党','甲党'].sort((a,b)=>a.localeCompare(b,'zh-CN')));
+ assert.equal(T.partyParticipationValue(row,'甲党'),1,'a participating winner has one seat');
+ assert.equal(T.partyParticipationValue(row,'乙党'),0,'a participating non-winner has a real zero');
+ assert.equal(T.partyParticipationValue(row,'丙党'),null,'a non-participating party has no point');
+ assert.equal(T.partyParticipationValue(row,'',['丙党','丁党']),null,'other parties have no point when none participated');
+ assert.equal(T.partyParticipationValue(row,'',['乙党','丙党']),0,'other parties preserve zero when a member participated');
+ assert.equal(T.partyParticipationValue({...row,complete:false},'乙党'),null,'incomplete records are not zero');
+ assert.match(ui,/needsParticipation=conf\.metric==='party'&&\['mayor','president','township'\]\.includes\(conf\.office\)/);
+ assert.match(ui,/!needsParticipation&&S\.summaryYears\(conf\.office,ys\)\.length/);
+ assert.match(ui,/get:r=>T\.partyParticipationValue\(r,p\)/);
+ assert.match(ui,/get:r=>T\.partyParticipationValue\(r,'',rest\)/);
 });
