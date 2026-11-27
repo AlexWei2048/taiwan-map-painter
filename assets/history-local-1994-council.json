@@ -406,11 +406,12 @@
       "confirmed_true": 17,
       "confirmed_false": 0,
       "ambiguous": [],
-      "unverified": 18,
+      "unverified": 17,
       "source_url": "https://www.cycc.gov.tw/web/UnitStaff/UnitStaff.aspx?c0=3680&p0=1015",
       "secondary_source": null,
       "departure_names": [],
-      "method": "Same county exact unique official name; missing from complete roster only; near-name and incomplete roster nonmatches remain unknown. Term roster is historical evidence, not a dated attendance list."
+      "method": "Same county exact unique official name; missing from complete roster only; near-name and incomplete roster nonmatches remain unknown. Term roster is historical evidence, not a dated attendance list. One candidate inferred using later official bulletin; incomplete roster alone never establishes nonincumbency.",
+      "inferred_false": 1
     },
     {
       "county": "新竹縣",
@@ -478,7 +479,10 @@
       "ambiguous": [],
       "source_url": "https://zh.wikipedia.org/wiki/澎湖縣議會第十二屆議員列表",
       "secondary_source": "https://penghu.info/OBA9521A3A59796F1BC7",
-      "method": "Secondary term roster exact unique name, positive matches only. Official aggregate corroborates roster size, not each name; no complete individual departure records. No negative inference."
+      "method": "Secondary term roster exact unique name, positive matches only. Official aggregate corroborates roster size, not each name; no complete individual departure records. No negative inference. Eight elected nonmatches inferred only after matching published reelection count; non-elected nonmatches remain unknown.",
+      "inferred_false": 8,
+      "unverified": 20,
+      "aggregate_re_elected_source": "https://jestw.nccu.edu.tw/uploads/paper/tw/11-2%E8%94%A1%E6%98%8E%E6%83%A0.pdf"
     },
     {
       "county": "宜蘭縣",
@@ -22900,6 +22904,20 @@
         ]
       ],
       "incumbent_sources": {
+        "2": {
+          "value": false,
+          "source_url": "https://jestw.nccu.edu.tw/uploads/paper/tw/11-2%E8%94%A1%E6%98%8E%E6%83%A0.pdf",
+          "secondary_source": "https://zh.wikipedia.org/wiki/澎湖縣議會第十二屆議員列表",
+          "source_locator": "蔡明惠（2004），《選舉研究》11(2)，表1，頁137：第十三屆42人參選、19席、11人連任、8人更替。第十二屆19人名錄轉錄自1990年選舉總結報告附錄171–172。",
+          "election_date": "1994-01-29",
+          "method": "aggregate_reelected_count_exhaustion_with_prior_roster",
+          "confidence": "inferred_from_aggregate_and_roster",
+          "evidence": "1994年19名當選者中，與前屆名錄精確匹配且原有現任證據者恰為11人，與研究所載連任總數相同；其餘8名當選者推定非現任。",
+          "limitation": "依前屆名錄及連任總數推定，非1994年公報逐人確認；若發現補選、離職或名錄異動須重核。",
+          "original_name": "顏重慶",
+          "ballot_number": 2,
+          "votes": 2190
+        },
         "3": {
           "value": true,
           "source_url": "https://zh.wikipedia.org/wiki/澎湖縣議會第十二屆議員列表",
@@ -22913,6 +22931,20 @@
           "ballot_number": 3,
           "votes": 1922
         },
+        "4": {
+          "value": false,
+          "source_url": "https://jestw.nccu.edu.tw/uploads/paper/tw/11-2%E8%94%A1%E6%98%8E%E6%83%A0.pdf",
+          "secondary_source": "https://zh.wikipedia.org/wiki/澎湖縣議會第十二屆議員列表",
+          "source_locator": "蔡明惠（2004），《選舉研究》11(2)，表1，頁137：第十三屆42人參選、19席、11人連任、8人更替。第十二屆19人名錄轉錄自1990年選舉總結報告附錄171–172。",
+          "election_date": "1994-01-29",
+          "method": "aggregate_reelected_count_exhaustion_with_prior_roster",
+          "confidence": "inferred_from_aggregate_and_roster",
+          "evidence": "1994年19名當選者中，與前屆名錄精確匹配且原有現任證據者恰為11人，與研究所載連任總數相同；其餘8名當選者推定非現任。",
+          "limitation": "依前屆名錄及連任總數推定，非1994年公報逐人確認；若發現補選、離職或名錄異動須重核。",
+          "original_name": "林素妹",
+          "ballot_number": 4,
+          "votes": 1260
+        },
         "9": {
           "value": true,
           "source_url": "https://zh.wikipedia.org/wiki/澎湖縣議會第十二屆議員列表",
@@ -22925,6 +22957,20 @@
           "original_name": "許麗音",
           "ballot_number": 9,
           "votes": 1977
+        },
+        "13": {
+          "value": false,
+          "source_url": "https://jestw.nccu.edu.tw/uploads/paper/tw/11-2%E8%94%A1%E6%98%8E%E6%83%A0.pdf",
+          "secondary_source": "https://zh.wikipedia.org/wiki/澎湖縣議會第十二屆議員列表",
+          "source_locator": "蔡明惠（2004），《選舉研究》11(2)，表1，頁137：第十三屆42人參選、19席、11人連任、8人更替。第十二屆19人名錄轉錄自1990年選舉總結報告附錄171–172。",
+          "election_date": "1994-01-29",
+          "method": "aggregate_reelected_count_exhaustion_with_prior_roster",
+          "confidence": "inferred_from_aggregate_and_roster",
+          "evidence": "1994年19名當選者中，與前屆名錄精確匹配且原有現任證據者恰為11人，與研究所載連任總數相同；其餘8名當選者推定非現任。",
+          "limitation": "依前屆名錄及連任總數推定，非1994年公報逐人確認；若發現補選、離職或名錄異動須重核。",
+          "original_name": "陳百川",
+          "ballot_number": 13,
+          "votes": 1653
         },
         "14": {
           "value": true,
@@ -22971,6 +23017,20 @@
           "method": "documented contemporary office or consecutive term biography",
           "evidence": "county history: 12th and 13th council chair, reelected",
           "election_date": "1994-01-29"
+        },
+        "21": {
+          "value": false,
+          "source_url": "https://jestw.nccu.edu.tw/uploads/paper/tw/11-2%E8%94%A1%E6%98%8E%E6%83%A0.pdf",
+          "secondary_source": "https://zh.wikipedia.org/wiki/澎湖縣議會第十二屆議員列表",
+          "source_locator": "蔡明惠（2004），《選舉研究》11(2)，表1，頁137：第十三屆42人參選、19席、11人連任、8人更替。第十二屆19人名錄轉錄自1990年選舉總結報告附錄171–172。",
+          "election_date": "1994-01-29",
+          "method": "aggregate_reelected_count_exhaustion_with_prior_roster",
+          "confidence": "inferred_from_aggregate_and_roster",
+          "evidence": "1994年19名當選者中，與前屆名錄精確匹配且原有現任證據者恰為11人，與研究所載連任總數相同；其餘8名當選者推定非現任。",
+          "limitation": "依前屆名錄及連任總數推定，非1994年公報逐人確認；若發現補選、離職或名錄異動須重核。",
+          "original_name": "陳記順",
+          "ballot_number": 21,
+          "votes": 1290
         }
       }
     },
@@ -23138,6 +23198,20 @@
           "ballot_number": 3,
           "votes": 1328
         },
+        "4": {
+          "value": false,
+          "source_url": "https://jestw.nccu.edu.tw/uploads/paper/tw/11-2%E8%94%A1%E6%98%8E%E6%83%A0.pdf",
+          "secondary_source": "https://zh.wikipedia.org/wiki/澎湖縣議會第十二屆議員列表",
+          "source_locator": "蔡明惠（2004），《選舉研究》11(2)，表1，頁137：第十三屆42人參選、19席、11人連任、8人更替。第十二屆19人名錄轉錄自1990年選舉總結報告附錄171–172。",
+          "election_date": "1994-01-29",
+          "method": "aggregate_reelected_count_exhaustion_with_prior_roster",
+          "confidence": "inferred_from_aggregate_and_roster",
+          "evidence": "1994年19名當選者中，與前屆名錄精確匹配且原有現任證據者恰為11人，與研究所載連任總數相同；其餘8名當選者推定非現任。",
+          "limitation": "依前屆名錄及連任總數推定，非1994年公報逐人確認；若發現補選、離職或名錄異動須重核。",
+          "original_name": "陳富厚",
+          "ballot_number": 4,
+          "votes": 1328
+        },
         "5": {
           "value": true,
           "source_url": "https://zh.wikipedia.org/wiki/澎湖縣議會第十二屆議員列表",
@@ -23211,6 +23285,20 @@
         ]
       ],
       "incumbent_sources": {
+        "2": {
+          "value": false,
+          "source_url": "https://jestw.nccu.edu.tw/uploads/paper/tw/11-2%E8%94%A1%E6%98%8E%E6%83%A0.pdf",
+          "secondary_source": "https://zh.wikipedia.org/wiki/澎湖縣議會第十二屆議員列表",
+          "source_locator": "蔡明惠（2004），《選舉研究》11(2)，表1，頁137：第十三屆42人參選、19席、11人連任、8人更替。第十二屆19人名錄轉錄自1990年選舉總結報告附錄171–172。",
+          "election_date": "1994-01-29",
+          "method": "aggregate_reelected_count_exhaustion_with_prior_roster",
+          "confidence": "inferred_from_aggregate_and_roster",
+          "evidence": "1994年19名當選者中，與前屆名錄精確匹配且原有現任證據者恰為11人，與研究所載連任總數相同；其餘8名當選者推定非現任。",
+          "limitation": "依前屆名錄及連任總數推定，非1994年公報逐人確認；若發現補選、離職或名錄異動須重核。",
+          "original_name": "莊双喜",
+          "ballot_number": 2,
+          "votes": 1213
+        },
         "3": {
           "value": true,
           "source_url": "https://zh.wikipedia.org/wiki/澎湖縣議會第十二屆議員列表",
@@ -23279,7 +23367,23 @@
           "男",
           false
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "1": {
+          "value": false,
+          "source_url": "https://jestw.nccu.edu.tw/uploads/paper/tw/11-2%E8%94%A1%E6%98%8E%E6%83%A0.pdf",
+          "secondary_source": "https://zh.wikipedia.org/wiki/澎湖縣議會第十二屆議員列表",
+          "source_locator": "蔡明惠（2004），《選舉研究》11(2)，表1，頁137：第十三屆42人參選、19席、11人連任、8人更替。第十二屆19人名錄轉錄自1990年選舉總結報告附錄171–172。",
+          "election_date": "1994-01-29",
+          "method": "aggregate_reelected_count_exhaustion_with_prior_roster",
+          "confidence": "inferred_from_aggregate_and_roster",
+          "evidence": "1994年19名當選者中，與前屆名錄精確匹配且原有現任證據者恰為11人，與研究所載連任總數相同；其餘8名當選者推定非現任。",
+          "limitation": "依前屆名錄及連任總數推定，非1994年公報逐人確認；若發現補選、離職或名錄異動須重核。",
+          "original_name": "許長福",
+          "ballot_number": 1,
+          "votes": 904
+        }
+      }
     },
     {
       "county": "澎湖縣",
@@ -23323,6 +23427,20 @@
         ]
       ],
       "incumbent_sources": {
+        "2": {
+          "value": false,
+          "source_url": "https://jestw.nccu.edu.tw/uploads/paper/tw/11-2%E8%94%A1%E6%98%8E%E6%83%A0.pdf",
+          "secondary_source": "https://zh.wikipedia.org/wiki/澎湖縣議會第十二屆議員列表",
+          "source_locator": "蔡明惠（2004），《選舉研究》11(2)，表1，頁137：第十三屆42人參選、19席、11人連任、8人更替。第十二屆19人名錄轉錄自1990年選舉總結報告附錄171–172。",
+          "election_date": "1994-01-29",
+          "method": "aggregate_reelected_count_exhaustion_with_prior_roster",
+          "confidence": "inferred_from_aggregate_and_roster",
+          "evidence": "1994年19名當選者中，與前屆名錄精確匹配且原有現任證據者恰為11人，與研究所載連任總數相同；其餘8名當選者推定非現任。",
+          "limitation": "依前屆名錄及連任總數推定，非1994年公報逐人確認；若發現補選、離職或名錄異動須重核。",
+          "original_name": "張啟明",
+          "ballot_number": 2,
+          "votes": 989
+        },
         "3": {
           "value": true,
           "source_url": "https://zh.wikipedia.org/wiki/澎湖縣議會第十二屆議員列表",
@@ -26905,6 +27023,20 @@
           "roster_term": "1990-03-01/1994-02-28",
           "election_date": "1994-01-29",
           "roster_name": "戴建三"
+        },
+        "17": {
+          "value": false,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/094%E5%B9%B4/18%E5%98%89%E7%BE%A9%E5%B8%82/%E5%98%89%E7%BE%A9%E5%B8%82%E7%AC%AC1%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "secondary_source": "https://www.cycc.gov.tw/web/UnitStaff/UnitStaff.aspx?c0=3680&p0=1015",
+          "source_locator": "2005年第七屆市議員選舉公報第一選區第5號洪有仁學經歷，列第四、五屆市議員；第三屆官網名錄未見其名。",
+          "method": "later_official_bulletin_and_prior_roster_inference",
+          "confidence": "inferred_from_biography",
+          "election_date": "1994-01-29",
+          "evidence": "1994為第四屆；後續選舉公報記載第四、五屆，與前屆名錄未匹配相符。",
+          "limitation": "候選人自述經歷可能省略早期職務；第三屆官方名錄缺一姓名，非完整任期證明。",
+          "original_name": "洪有仁",
+          "ballot_number": 17,
+          "votes": 5986
         }
       }
     },

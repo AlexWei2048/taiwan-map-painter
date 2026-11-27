@@ -1,0 +1,173 @@
+{
+  "year": 1994,
+  "created": "2026-11-27",
+  "added": [
+    {
+      "county": "澎湖縣",
+      "district": 1,
+      "name": "顏重慶",
+      "ballot": 2,
+      "value": false,
+      "method": "aggregate_reelected_count_exhaustion_with_prior_roster"
+    },
+    {
+      "county": "澎湖縣",
+      "district": 1,
+      "name": "林素妹",
+      "ballot": 4,
+      "value": false,
+      "method": "aggregate_reelected_count_exhaustion_with_prior_roster"
+    },
+    {
+      "county": "澎湖縣",
+      "district": 1,
+      "name": "陳百川",
+      "ballot": 13,
+      "value": false,
+      "method": "aggregate_reelected_count_exhaustion_with_prior_roster"
+    },
+    {
+      "county": "澎湖縣",
+      "district": 1,
+      "name": "陳記順",
+      "ballot": 21,
+      "value": false,
+      "method": "aggregate_reelected_count_exhaustion_with_prior_roster"
+    },
+    {
+      "county": "澎湖縣",
+      "district": 3,
+      "name": "陳富厚",
+      "ballot": 4,
+      "value": false,
+      "method": "aggregate_reelected_count_exhaustion_with_prior_roster"
+    },
+    {
+      "county": "澎湖縣",
+      "district": 4,
+      "name": "莊双喜",
+      "ballot": 2,
+      "value": false,
+      "method": "aggregate_reelected_count_exhaustion_with_prior_roster"
+    },
+    {
+      "county": "澎湖縣",
+      "district": 5,
+      "name": "許長福",
+      "ballot": 1,
+      "value": false,
+      "method": "aggregate_reelected_count_exhaustion_with_prior_roster"
+    },
+    {
+      "county": "澎湖縣",
+      "district": 6,
+      "name": "張啟明",
+      "ballot": 2,
+      "value": false,
+      "method": "aggregate_reelected_count_exhaustion_with_prior_roster"
+    },
+    {
+      "county": "嘉義市",
+      "district": 1,
+      "name": "洪有仁",
+      "ballot": 17,
+      "value": false,
+      "method": "later_official_bulletin_and_prior_roster_inference"
+    }
+  ],
+  "prior_roster": {
+    "county": "澎湖縣",
+    "source": "https://jestw.nccu.edu.tw/uploads/paper/tw/11-2%E8%94%A1%E6%98%8E%E6%83%A0.pdf",
+    "corroborating_county_history": "https://penghu.info/OBA9521A3A59796F1BC7",
+    "original_report_gpn": "27292790062",
+    "original_report_status": "not retrieved; transcribed roster",
+    "names": [
+      "呂春茶",
+      "林敬欽",
+      "洪榮郎",
+      "張再扶",
+      "許南豐",
+      "許麗音",
+      "陳海山",
+      "黃建築",
+      "藍俊昇",
+      "蘇崑雄",
+      "李毓璋",
+      "陳進兩",
+      "劉陳昭玲",
+      "方榮一",
+      "黃宗妙",
+      "許永春",
+      "歐中慨",
+      "許龍富",
+      "陳友志"
+    ],
+    "published_re_elected": 11,
+    "published_replacements": 8,
+    "locator": "表1，頁137",
+    "matched_re_elected_names": [
+      "陳海山",
+      "許麗音",
+      "蘇崑雄",
+      "洪榮郎",
+      "張再扶",
+      "黃建築",
+      "劉陳昭玲",
+      "李毓璋",
+      "陳進兩",
+      "方榮一",
+      "歐中慨"
+    ],
+    "inferred_nonincumbent_names": [
+      "顏重慶",
+      "林素妹",
+      "陳百川",
+      "陳記順",
+      "陳富厚",
+      "莊双喜",
+      "許長福",
+      "張啟明"
+    ]
+  },
+  "conflicts": [
+    {
+      "county": "澎湖縣",
+      "field": "party vote shares",
+      "source": "https://jestw.nccu.edu.tw/uploads/paper/tw/11-2%E8%94%A1%E6%98%8E%E6%83%A0.pdf",
+      "locator": "表6",
+      "published_percent": {
+        "中國國民黨": 65.44,
+        "民主進步黨": 6.63,
+        "新黨": 0.81,
+        "無黨籍及其他": 27.12
+      },
+      "archive_votes": {
+        "無黨籍": 19881,
+        "中國國民黨": 21784,
+        "新黨": 1232,
+        "民主進步黨": 2832
+      },
+      "archive_total": 45729,
+      "archive_percent": {
+        "無黨籍": 43.48,
+        "中國國民黨": 47.64,
+        "新黨": 2.69,
+        "民主進步黨": 6.19
+      },
+      "decision": "Do not overwrite candidate party or vote records; original election report required; source may use different classification or contain transcription errors."
+    },
+    {
+      "county": "嘉義市",
+      "field": "1990 roster completeness",
+      "source": "https://www.cycc.gov.tw/web/UnitStaff/UnitStaff.aspx?c0=3680&p0=1015",
+      "reported_seats": 22,
+      "listed_names": 21,
+      "decision": "No batch inference from missing names; later bulletin supports one specific inference only."
+    }
+  ],
+  "unresolved": {
+    "before": 982,
+    "after": 973
+  },
+  "validation": "All candidate vote, party, gender and elected fields preserved; no new complete returns."
+}
