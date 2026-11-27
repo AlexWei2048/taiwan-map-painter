@@ -14,3 +14,8 @@
 - 监听平台提供的 PORT（没有则使用 8787），健康检查路径 /health；仅通过平台的 HTTPS 公网入口访问。单实例运行，启用持久化备份和入口限流。
 - Railway 可通过项目设置选中仓库、设置 Root Directory 为 /guestbook-backend，添加 /data 持久卷，设置 GUESTBOOK_ORIGIN=https://alexwei2048.github.io，生成 HTTPS 域名。若平台需要以 root 启动以初始化挂载权限，可设置 RAILWAY_RUN_UID=0；启动器随后降权运行。该流程不需要云数据库。
 - 在 HTTPS 接口实测及持久性测试通过后，才更新公开网站的 guestbook-config.js 启用正式提交。平台未连接时，保留禁用状态。
+
+## 留言板 v2
+- 管理员入口位于留言板底部，使用 Railway 服务 Variables 中的 GUESTBOOK_ADMIN_TOKEN；不要将凭证放入仓库或分享。关闭管理窗口清除内存凭证。可审核、回复、标记处理进度、置顶、删除。私密留言永不进入公共接口。
+- 数据库以追加字段方式兼容迁移；迁移前生成 /data/backups/before-feedback-v2.sqlite3，服务启动和收到请求时检查每日一致性备份，保留最近7份日备份。同盘备份不能抵御卷故障，Railway 异地备份仍需单独配置。删除数据后旧备份可能保留历史联系方式；备份只能由服务维护人员访问。
+- 公共端要求 /health 返回 version:2 后才提交，避免新字段在旧版本中被忽略。新增标题、页面关联、私密留言、撤回、搜索、排序和匿名支持票。恢复码依旧兼容。
