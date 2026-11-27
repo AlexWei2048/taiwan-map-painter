@@ -3864,3 +3864,14 @@ test('Township executive comparison supports town grain and retains map nodes wh
  const district=page.locator('#regions path[data-region="63000-01"]');await page.waitForFunction(()=>document.querySelector('#regions path[data-region="63000-01"]').classList.contains('map-linked-highlight'));
  assert.equal(await page.locator('#regions path.map-linked-highlight').count(),1);await district.focus();assert.equal(await ref.evaluate(e=>e.classList.contains('map-linked-highlight')),true);
  });
+
+ test('Legend links actual historical parties to map and result rows without changing their colors',async t=>{
+ const page=await pageFor(t,{width:1440,height:950});
+ await page.locator('#categoryHistory').click();await page.waitForFunction(()=>window.History2022View?.snapshot()?.year===2022&&document.querySelector('#historyLoadStatus').hidden&&!document.querySelector('#categoryHistory').hasAttribute('aria-busy'));
+ await page.locator('#historyViewCandidates').click();
+ const legend=page.locator('#legend [data-party-link="history-party:中国国民党"]').first();await legend.focus();
+ await page.waitForFunction(()=>document.querySelectorAll('#regions path.map-linked-highlight').length>0);
+ const facts=await page.evaluate(()=>{const paths=[...document.querySelectorAll('#regions path[data-party-keys]')],key='history-party:中国国民党',matches=p=>JSON.parse(p.dataset.partyKeys).includes(key);return{expected:paths.filter(matches).length,actual:paths.filter(p=>p.classList.contains('map-linked-highlight')).length,wrong:paths.filter(p=>p.classList.contains('map-linked-highlight')&&!matches(p)).length,rows:[...document.querySelectorAll('#historyResults tr.map-linked-highlight')].every(r=>JSON.parse(r.dataset.partyKeys).includes(key))}});
+ assert.equal(facts.actual,facts.expected);assert.equal(facts.wrong,0);assert.equal(facts.rows,true);
+ await page.locator('#historySearch').focus();assert.equal(await page.locator('#regions path.map-linked-highlight').count(),0);
+ });

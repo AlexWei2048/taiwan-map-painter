@@ -1069,3 +1069,6 @@ body.analysis-mode #historyTownBoundaryBox{display:none!important}
 #districtTableGroups tr.map-linked-highlight>*,#historyResults tr.map-linked-highlight>*{background:#e0f0e5!important;color:#214f3e}
 #districtTableGroups tr.map-linked-highlight> :first-child,#historyResults tr.map-linked-highlight> :first-child{box-shadow:inset 3px 0 #267657}
 #districtTableGroups tr[data-map-link]:focus-visible,#historyResults tr[data-map-link]:focus-visible{outline:2px solid #267657;outline-offset:-2px}
+
+/* Legend hover/focus follows actual party identities, not RGB values. */
+#legend [data-party-link]{cursor:pointer}#legend [data-party-link].party-linked-highlight text{font-weight:700;fill:#164a36}#legend [data-party-link].party-linked-highlight>rect:first-child{stroke:#174d39;stroke-width:2.5;vector-effect:non-scaling-stroke}#legend [data-party-link]:focus-visible{outline:2px solid #267657;outline-offset:3px}

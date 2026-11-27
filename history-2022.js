@@ -426,6 +426,22 @@
   return 71+(entries.length+(kind==='township'?1:0))*font*2.05+
    (gradients.length?gradients.length*font*4.3+font*2.3:0);
  }
+ const partyLinkKey=(party,name='')=>name?'history-candidate:'+party+'|'+name:'history-party:'+party;
+ function historyPartyKeys(f){
+  if(f.unresolvedHistorical||featureKey(f)==='__2022_unmatched__'||noElection(f))return [];
+  let counts=null;
+  const region=currentResult?.regions.get(featureKey(f));
+  if(kind==='council'&&!legislativeMode&&historyOverview())counts=allCouncil()?currentResult?.panelSeats.get(f.electorate+'|'+f.county):currentResult?.countySeats.get(f.county);
+  else if(nationwideHistoricalSeatColors())counts=currentResult?.countySeats.get(f.county);
+  else if(kind==='council'&&!legislativeMode||legislativeMultiView()||allLegislative()&&f.electorate==='regional'&&legislativeYear<2008)counts=region?.partyCounts;
+  if(metric==='seats')return (counts||region?.partyCounts)?.get(selectedParty)>0?[partyLinkKey(selectedParty)]:[];
+  if(counts instanceof Map&&metric==='party')return [...counts].filter(([,n])=>n>0).map(([p])=>partyLinkKey(p));
+  if(!region)return [];
+  if(region.tie&&!voteMetric())return [...region.partyCounts.keys()].map(p=>partyLinkKey(p));
+  if(!region.party)return [];
+  const candidate=voteMetric()?region.top:region.leaders[0]||region.top;
+  return [partyLinkKey(region.party),...(candidate?.name?[partyLinkKey(region.party,candidate.name)]:[])];
+ }
  function drawLegend(result){
   const root=el('legend');if(!root)return;root.replaceChildren();delete root.dataset.historyBox;if(!state.legend.show)return;
   const entries=legendEntries(result).sort((a,b)=>b.count-a.count);if(!entries.length&&kind!=='township')return;
@@ -447,7 +463,7 @@
    const stops=metric==='votes'||metric==='seats'?[0,.5,1]:[0,.25,.5,.75,1];
    for(const [index,entry] of gradients.entries()){
     const party=entry.party;
-    const group=svg('g',{'data-history-gradient-party':party,'data-history-gradient-candidate':entry.name||''});
+    const group=svg('g',{'data-history-gradient-party':party,'data-history-gradient-candidate':entry.name||'','data-party-link':partyLinkKey(party,entry.name),'tabindex':0,'aria-label':legendLabel(entry)+'，聚焦关联地图区域'});
     group.append(svg('rect',{x:bx,y:rowY+3,width:font,height:font,rx:3,fill:ticketMapColor(party,entry.name)}));
     const label=svg('text',{x:bx+font*1.35,y:rowY+font,'font-size':font*.88,'font-weight':600,fill:'#426052'});
     label.textContent=legendLabel(entry);group.append(label);
@@ -476,9 +492,10 @@
   }
   for(const entry of entries){
    const {party,count}=entry,p=predictionParty(party),logo=logoFor(p);
-   root.append(svg('rect',{x:x+18,y:rowY+3,width:font,height:font,rx:3,fill:ticketMapColor(party,entry.name)}));
-   if(logo)appendCircularPartyLogo(root,logo,x+38,rowY,font*1.55);
-   const label=svg('text',{x:x+font+48,y:rowY+font+1,'font-size':font,fill:'#426052','data-history-legend-candidate':entry.name||''});label.textContent=allLegislative()?legendLabel(entry):legendLabel(entry)+'（'+count+(areaLeading()?'个地区':'席')+'）';root.append(label);rowY+=rowH;
+   const group=svg('g',{'data-party-link':partyLinkKey(party,entry.name),'tabindex':0,'aria-label':legendLabel(entry)+'，聚焦关联地图区域'});
+   group.append(svg('rect',{x:x+18,y:rowY+3,width:font,height:font,rx:3,fill:ticketMapColor(party,entry.name)}));
+   if(logo)appendCircularPartyLogo(group,logo,x+38,rowY,font*1.55);
+   const label=svg('text',{x:x+font+48,y:rowY+font+1,'font-size':font,fill:'#426052','data-history-legend-candidate':entry.name||''});label.textContent=allLegislative()?legendLabel(entry):legendLabel(entry)+'（'+count+(areaLeading()?'个地区':'席')+'）';group.append(label);root.append(group);rowY+=rowH;
   }
   if(kind==='township'){root.append(svg('rect',{x:x+18,y:rowY+3,width:font,height:font,fill:partialTownship()?'#edf1e9':'#fff',stroke:'#9eaaa2'}));const t=svg('text',{x:x+font+48,y:rowY+font+1,'font-size':font,fill:'#426052','data-no-township-election-legend':'true'});t.textContent=partialTownship()?'暂无已核实档案':'无乡镇市区长选举';root.append(t)}
  }
@@ -505,7 +522,7 @@
   const features=currentItems(),byId=new Map(features.map(f=>[f.id,f]));
   for(const path of document.querySelectorAll('#regions path[data-region]')){
    const f=byId.get(path.dataset.region);if(!f)continue;
-   const key=historyLinkFeature(f);if(key)path.dataset.mapLink=key;else delete path.dataset.mapLink;
+   const key=historyLinkFeature(f);if(key)path.dataset.mapLink=key;else delete path.dataset.mapLink;path.dataset.partyKeys=JSON.stringify(historyPartyKeys(f));
    path.setAttribute('fill',fillColor(f));path.setAttribute('aria-label',f.county+(f.name===f.county?'':' · '+f.name)+'，'+regionDetail(f));
   }
   el('scopeTitle').textContent=(county||'全台')+' · '+yearLabel()+' '+officeTitle()+' · '+metricLabel();
@@ -649,7 +666,7 @@
     const divider=createHistoryElement('tr','history-district-divider'),th=createHistoryElement('th','',area);
     th.scope='rowgroup';th.colSpan=headers.length;divider.append(th);body.append(divider);previousArea=area;
    }
-   const tr=document.createElement('tr');const link=historyLinkRow(r);if(link)tr.dataset.mapLink=link;
+   const tr=document.createElement('tr');const link=historyLinkRow(r);if(link)tr.dataset.mapLink=link;tr.dataset.partyKeys=JSON.stringify([partyLinkKey(r.party),partyLinkKey(r.party,r.name)]);
    if(r.elected&&!partyBallot&&r.electorate!=='party')tr.className='history-elected-row';
    const minority=r.electorate==='plains'?'平地少数民族选区':r.electorate==='mountain'?'山地少数民族选区':'';
    const districtLabel=minority?minority:r.electorate==='party'?(r.town||'不分区政党票'):r.level==='town'?r.town:(r.district||'—');
@@ -714,7 +731,7 @@
     if(snapshotData?.cycleYears){const y=localResultYear({county:r.county,name:kind==='council'?r.district:r.town||r.county,electorate:r.electorate});heading.append(' · '+y+'年')}
     divider.append(heading);body.append(divider);previousArea=area;
    }
-   const tr=document.createElement('tr');const link=historyLinkRow(r);if(link)tr.dataset.mapLink=link;
+   const tr=document.createElement('tr');const link=historyLinkRow(r);if(link)tr.dataset.mapLink=link;tr.dataset.partyKeys=JSON.stringify([partyLinkKey(r.party),partyLinkKey(r.party,r.name)]);
    const values=[r.county,mayorTownView()?r.town:kind==='council'?r.district:kind==='township'?r.town:(r.district||''),r.number||'—',displayedCandidateName(r),displayedGender(r),incumbentLabel(r)];
    for(const [i,value] of values.entries()){const td=document.createElement('td');if(i===5)appendIncumbentTag(td,value);else td.textContent=value||'—';if(i===5&&r.incumbent==null)td.title='现任资料缺失';tr.append(td)}
    const partyCell=document.createElement('td');partyCell.className='history-party-cell';
