@@ -106,7 +106,25 @@ def decode_screenshot(value):
         raise Problem("截图格式无效")
     if not 8<=len(blob)<=ATTACHMENT_MAX or not blob.startswith(b"\xff\xd8\xff") or not blob.endswith(b"\xff\xd9"):
         raise Problem("仅支持压缩后的 JPEG 截图")
-    return blob
+    # Inspect JPEG frame headers before permitting browser decoding.
+    pos=2
+    while pos+4<=len(blob) and blob[pos]==255:
+        while pos<len(blob) and blob[pos]==255: pos+=1
+        if pos>=len(blob): break
+        marker=blob[pos]; pos+=1
+        if marker in (0xd9,0xda): break
+        if pos+2>len(blob): break
+        length=int.from_bytes(blob[pos:pos+2],"big")
+        if length<2 or pos+length>len(blob): break
+        if marker in (0xc0,0xc1,0xc2):
+            if length<8: break
+            height=int.from_bytes(blob[pos+3:pos+5],"big")
+            width=int.from_bytes(blob[pos+5:pos+7],"big")
+            if not 1<=width<=1600 or not 1<=height<=1600:
+                raise Problem("截图分辨率过大，请缩小后重试")
+            return blob
+        pos+=length
+    raise Problem("JPEG 截图缺少有效图像帧")
 
 def attachment_owner(db,data):
     mid=msg_id(data.get("p_id"))
@@ -296,13 +314,13 @@ def dispatch(action,data,db):
         work=field(data,"p_progress",24)
         search=field(data,"p_search",100)
         if work and work not in PROGRESS: raise Problem("无效处理状态")
-        if filt not in {"all","pending","approved","rejected","private"}:
+        if filt not in {"all","pending","approved","rejected","private","todo"}:
             raise Problem("无效筛选")
         offset=data.get("p_offset",0)
         if type(offset) is not int or not 0<=offset<=10000:
             raise Problem("无效分页")
         counts=admin_counts(db)
-        records=rows(db.execute("SELECT "+PUBLIC+",m.visibility,m.private,c.contact,EXISTS(SELECT 1 FROM attachments a WHERE a.message_id=m.id) AS has_attachment FROM messages m LEFT JOIN contacts c ON m.id=c.message_id WHERE (?='all' OR (?='private' AND m.private=1) OR m.visibility=?) AND (?='' OR m.progress=?) AND (?='' OR instr(lower(m.title||' '||m.body||' '||m.nickname),lower(?))>0) ORDER BY m.created_epoch DESC,m.id DESC LIMIT 50 OFFSET ?",(filt,filt,filt,work,work,search,search,offset)))
+        records=rows(db.execute("SELECT "+PUBLIC+",m.visibility,m.private,c.contact,EXISTS(SELECT 1 FROM attachments a WHERE a.message_id=m.id) AS has_attachment FROM messages m LEFT JOIN contacts c ON m.id=c.message_id WHERE (?='all' OR (?='private' AND m.private=1) OR (?='todo' AND m.progress IN ('new','accepted','working') AND m.visibility!='rejected') OR m.visibility=?) AND (?='' OR m.progress=?) AND (?='' OR instr(lower(m.title||' '||m.body||' '||m.nickname),lower(?))>0) ORDER BY m.created_epoch DESC,m.id DESC LIMIT 50 OFFSET ?",(filt,filt,filt,filt,work,work,search,search,offset)))
         return {"counts":counts,"records":records}
     if action == "guestbook_admin_update":
         require_admin(data)
