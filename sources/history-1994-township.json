@@ -4941,6 +4941,110 @@
           "evidence_notes": "第12屆任期1994-03-01起；2022選舉公報男、曾任第12及13屆鄉長，1998連任結果另見https://votetw.com/data/candidate/謝明謀；前任資料未覆蓋1994投票日，不推定現任。"
         }
       ]
+    },
+    {
+      "county": "嘉義縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/民雄鄉",
+      "source_locator": "歷任首長表第11、12屆；2014年9月報導明載民國83年任民雄鄉長、一屆卸任",
+      "corroboration_url": "https://tw.news.yahoo.com/涂文生宣布參選民雄鄉長-155618403.html",
+      "evidence_tier": "secondary_term_roster_plus_independent_corroboration_when_available",
+      "validation_note": "歷任首長名錄及獨立來源交叉核對；非當屆完整選舉結果。現任欄為相鄰任期推定，待投票日原始資料核實。未知票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "民雄鄉",
+          "name": "涂文生",
+          "gender": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "張松樹",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/民雄鄉",
+          "corroboration_url": "https://tw.news.yahoo.com/涂文生宣布參選民雄鄉長-155618403.html",
+          "evidence_notes": "另有2008年民代公報記載曾任民雄鄉長；任期表推定非現任，非投票日任免原件。"
+        }
+      ]
+    },
+    {
+      "county": "屏東縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/泰武鄉",
+      "source_locator": "歷任首長表第12屆張忠行；政大1998年資料標為男性及現任；國家文化記憶庫顏和條目確認前任民國75至83年",
+      "corroboration_url": "https://vote.nccu.edu.tw/cec/vote3.asp?pass1=P9AA%408%3E%3A9%3B888888iii%28%28",
+      "evidence_tier": "secondary_term_roster_plus_independent_corroboration_when_available",
+      "validation_note": "歷任首長名錄及獨立來源交叉核對；非當屆完整選舉結果。現任欄為相鄰任期推定，待投票日原始資料核實。未知票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "泰武鄉",
+          "name": "張忠行",
+          "gender": "男",
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "顏和",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/泰武鄉",
+          "corroboration_url": "https://vote.nccu.edu.tw/cec/vote3.asp?pass1=P9AA%408%3E%3A9%3B888888iii%28%28",
+          "evidence_notes": "前任證據 https://tcmb.culture.tw/zh-tw/detail?id=560809&indexCode=Culture_People ；1998年推薦政黨、票數及號次不得倒填1994。"
+        }
+      ]
+    },
+    {
+      "county": "南投縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/名間鄉",
+      "source_locator": "歷任首長表第11及12屆同為李柏松；名間鄉民代表會網站轉載2020年報導確認其曾任鄉長、張金娥為後任",
+      "corroboration_url": "https://mjtc.sweb.tw/組織簡介2/",
+      "evidence_tier": "secondary_term_roster_plus_independent_corroboration_when_available",
+      "validation_note": "歷任首長名錄及獨立來源交叉核對；非當屆完整選舉結果。現任欄為相鄰任期推定，待投票日原始資料核實。未知票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "名間鄉",
+          "name": "李柏松",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "李柏松",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/名間鄉",
+          "corroboration_url": "https://mjtc.sweb.tw/組織簡介2/",
+          "evidence_notes": "連任由歷任名錄推定；獨立報導未列當屆票數、任期起止。"
+        }
+      ]
+    },
+    {
+      "county": "南投縣",
+      "election_date": "1994-01-29",
+      "supplement_type": "historical_term_roster_winners_only",
+      "source_url": "https://zh.wikipedia.org/wiki/水里鄉",
+      "source_locator": "歷任鄉長表列沈吉田1990至1994，下一屆同欄延續；1998年1月20日監察部門新聞稿確認沈吉田仍任水里鄉長並記載1996年任內事件",
+      "corroboration_url": "https://multimedia.cy.gov.tw/News_Content.aspx?n=213&s=3279",
+      "evidence_tier": "secondary_term_roster_plus_independent_corroboration_when_available",
+      "validation_note": "歷任首長名錄及獨立來源交叉核對；非當屆完整選舉結果。現任欄為相鄰任期推定，待投票日原始資料核實。未知票數、號次、當屆推薦政黨留空。",
+      "winners": [
+        {
+          "town": "水里鄉",
+          "name": "沈吉田",
+          "gender": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "historical_successive_term_roster_inference",
+          "previous_term_holder": "沈吉田",
+          "votes": null,
+          "ballot_number": null,
+          "party_recommendation": null,
+          "source_url": "https://zh.wikipedia.org/wiki/水里鄉",
+          "corroboration_url": "https://multimedia.cy.gov.tw/News_Content.aspx?n=213&s=3279",
+          "evidence_notes": "相鄰任期及在職記錄交叉佐證；1994投票日原始清冊未取得。"
+        }
+      ]
     }
   ]
 }
