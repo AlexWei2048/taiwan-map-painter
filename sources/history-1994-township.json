@@ -3941,11 +3941,14 @@
           "source_locator": "桃園縣政府公報載民79年3月1日就任第11屆；楊梅區歷任首長表載第12屆續任1994年3月1日至10月，後因案停職。",
           "evidence_type": "official_municipal_gazette_plus_later_term_roster",
           "confidence": "corroborated_with_secondary_roster",
-          "gender": null,
+          "gender": "男",
           "term_note": "1994年10月以後由劉永發代理；與1994年1月29日選舉當選人身分分開。",
           "votes": null,
           "party_recommendation": null,
-          "ballot_number": null
+          "ballot_number": null,
+          "gender_source_url": "https://gazette.tycg.gov.tw/TYBulletin/Home/ViewMain/443",
+          "gender_source_locator": "桃園市政府公報2021-08-30楊梅區公所宋增堂先生紀念獎學金實施要點第一條，以「楊梅鎮第十二任鎮長宋明雄先生」明確指稱。",
+          "gender_method": "official_gazette_honorific"
         },
         {
           "town": "大園鄉",
@@ -4449,7 +4452,11 @@
         {
           "town": "池上鄉",
           "name": "林慶堂",
-          "incumbent_at_election": true
+          "incumbent_at_election": true,
+          "gender": "男",
+          "gender_source_url": "https://eebulletin.cec.gov.tw/107/17%E8%87%BA%E6%9D%B1%E7%B8%A3/04%E9%84%89%E9%8E%AE%E5%B8%82%E6%B0%91%E4%BB%A3%E8%A1%A8/%E6%B1%A0%E4%B8%8A%E9%84%89%E9%84%89%E6%B0%91%E4%BB%A3%E8%A1%A8.pdf",
+          "gender_source_locator": "2018年池上鄉民代表公報2號林慶堂性別男，經歷第十一、十二屆鄉長，與公所任期表一致；PDF文字核對，圖像取得失敗。",
+          "gender_method": "official_later_candidate_biography"
         }
       ]
     },
@@ -4485,7 +4492,11 @@
         {
           "town": "三義鄉",
           "name": "吳振鵬",
-          "incumbent_at_election": true
+          "incumbent_at_election": true,
+          "gender": "男",
+          "gender_source_url": "https://webws.miaoli.gov.tw/Download.ashx?n=MDAx5LiJ576p6YSJ5b%2BX57i96L%2BwMTktMzQucGRm&u=LzAwMS9VcGxvYWQvNDY0L3JlbGZpbGUvMTA3MjMvOTMzMTA2LzhhZjJlNTg0LTVkY2EtNGI1My04NzRkLTgyNDE4NTIyODliZS5wZGY%3D",
+          "gender_source_locator": "《三義鄉志》總述印刷頁21，記兩任鄉長吳振鵬與吳昌源為父子；與第十一、十二屆首長表交叉核對，PDF文字可讀，圖像取得失敗。",
+          "gender_method": "official_local_history_family_relation"
         }
       ]
     },
@@ -4499,7 +4510,11 @@
         {
           "town": "秀水鄉",
           "name": "陳濱樹",
-          "incumbent_at_election": true
+          "incumbent_at_election": true,
+          "gender": "男",
+          "gender_source_url": "https://town.chcg.gov.tw/files/62_1060120_%E7%AC%AC%E4%B8%89%E7%AF%87%20%E6%94%BF%E4%BA%8B%E7%AF%87P174-P292.pdf",
+          "gender_source_locator": "《秀水鄉志》政事篇印刷頁275–276，第十二、十三屆鄉民代表主席名冊性別男，同書第十一、十二屆鄉長履歷一致；PDF文字核對，圖像取得失敗。",
+          "gender_method": "official_local_history_gender_table"
         }
       ]
     },
@@ -8041,14 +8056,17 @@
         {
           "town": "新營市",
           "name": "黃金鏞",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": true,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "黃金鏞",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://xinying.tainan.gov.tw/cp.aspx?n=8168"
+          "source_url": "https://xinying.tainan.gov.tw/cp.aspx?n=8168",
+          "gender_source_url": "https://web.cec.gov.tw/api/file/4a56146c-afa6-41a4-b1fa-f27347513e1b.pdf",
+          "gender_source_locator": "2010年台南市議員選舉公報7號黃金鏞性別男，履歷載新營市第四、五屆市長，與新營區公所歷任首長表一致。PDF文字核對，圖像取得失敗。",
+          "gender_method": "official_later_candidate_biography"
         }
       ]
     },
@@ -9617,7 +9635,7 @@
         {
           "town": "虎尾鎮",
           "name": "張世和",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": true,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "張世和",
@@ -9625,7 +9643,11 @@
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/虎尾鎮",
-          "corroboration_url": "https://books.masterhsingyun.org/ArticleDetail/artcle2381"
+          "corroboration_url": "https://books.masterhsingyun.org/ArticleDetail/artcle2381",
+          "gender_source_url": "https://pilikang.blogspot.com/2013/04/blog-post_9389.html",
+          "gender_source_locator": "地方文史記述援引日本訪客感謝當時鎮長張世和先生；國家文化記憶庫虎尾鎮公所遷移記錄核實同名鎮長。性別依稱謂交叉核實，非當屆公報。",
+          "gender_method": "secondary_honorific_official_identity_crosscheck",
+          "gender_corroboration_url": "https://tcmb.culture.tw/zh-tw/detail?id=159740&indexCode=Culture_Invisible"
         }
       ]
     },
