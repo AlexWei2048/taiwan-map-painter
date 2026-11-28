@@ -21575,10 +21575,20 @@
           "source_locator": "中廣新聞2011-01-02引述游金紱民83年至87年擔任復興鄉長；歷任首長表亦列1994至1998年為游金紱，前一任為陳祥乾。",
           "evidence_type": "contemporary_judicial_reporting_plus_secondary_roster",
           "confidence": "corroborated_with_secondary_roster",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "party_recommendation": null,
-          "ballot_number": null
+          "ballot_number": null,
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：桃園縣復興鄉，1號游金紱，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:桃园县:regional:复兴乡:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1946,
+            "incumbent_at_election": true
+          }
         },
         {
           "town": "新屋鄉",
@@ -21674,9 +21684,19 @@
           "incumbent_at_election": false,
           "ballot_number": null,
           "party_recommendation": null,
-          "gender": null,
+          "gender": "男",
           "source_url": "https://gozhuolan.com.tw/wp-content/uploads/2023/09/13%E4%BA%BA%E7%89%A9%E7%AF%87.pdf",
-          "evidence": "地方鎮志記載民國83年以4,635票擊敗詹豐治而當選第12屆鎮長，前任第10、11屆鎮長為陸慶助。"
+          "evidence": "地方鎮志記載民國83年以4,635票擊敗詹豐治而當選第12屆鎮長，前任第10、11屆鎮長為陸慶助。",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：苗栗縣卓蘭鎮，2號張明豐，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:苗栗县:regional:卓兰镇:2",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1933,
+            "incumbent_at_election": true
+          }
         }
       ],
       "other_candidates": [
@@ -22000,7 +22020,18 @@
       "winners": [
         {
           "town": "二林鎮",
-          "name": "洪仁欽"
+          "name": "洪仁欽",
+          "gender": "男",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：彰化縣二林鎮，1號洪仁欽，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:彰化县:regional:二林镇:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1952,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -22371,7 +22402,18 @@
         {
           "town": "南庄鄉",
           "name": "葉弘俊",
-          "incumbent_at_election": false
+          "incumbent_at_election": false,
+          "gender": "男",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：苗栗縣南庄鄉，1號葉弘俊，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:苗栗县:regional:南庄乡:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1950,
+            "incumbent_at_election": true
+          }
         }
       ],
       "corroboration_url": "https://cloud.hakka.gov.tw/Attachment/1/9121417283771.pdf"
@@ -22521,7 +22563,18 @@
         {
           "town": "造橋鄉",
           "name": "張炳源",
-          "incumbent_at_election": false
+          "incumbent_at_election": false,
+          "gender": "男",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：苗栗縣造橋鄉，1號張炳源，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:苗栗县:regional:造桥乡:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1939,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -22670,7 +22723,7 @@
         {
           "town": "南投市",
           "name": "林俊梧",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "魏清彬",
@@ -22679,12 +22732,22 @@
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/南投市市長",
           "corroboration_url": "https://www.nantou.gov.tw/big5/epaperpreview.asp?mcid=141311",
-          "evidence_notes": "第5届市长于1994-03-01就任；南投县政府回顾文章亦确认曾任南投市长；现任属性来自前后届任期表"
+          "evidence_notes": "第5届市长于1994-03-01就任；南投县政府回顾文章亦确认曾任南投市长；现任属性来自前后届任期表",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：南投縣南投市，2號林俊梧，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:南投县:regional:南投市:2",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1953,
+            "incumbent_at_election": true
+          }
         },
         {
           "town": "草屯鎮",
           "name": "賴忠政",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "莊萬振",
@@ -22693,12 +22756,22 @@
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/草屯鎮",
           "corroboration_url": "https://web.cec.gov.tw/api/file/5222b71b-5d09-4a9b-a63c-68f2a0387988.pdf",
-          "evidence_notes": "第12届镇长1994-03-01至1998-03-01；2011官方补选结果佐证同名人士，不能反推1994得票或推荐政党"
+          "evidence_notes": "第12届镇长1994-03-01至1998-03-01；2011官方补选结果佐证同名人士，不能反推1994得票或推荐政党",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：南投縣草屯鎮，2號賴忠政，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:南投县:regional:草屯镇:2",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1962,
+            "incumbent_at_election": true
+          }
         },
         {
           "town": "埔里鎮",
           "name": "張鴻銘",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "蔡和憲",
@@ -22707,12 +22780,22 @@
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/埔里鎮",
           "corroboration_url": "https://www.votetw.com/data/candidate/馬文君",
-          "evidence_notes": "第12届镇长1994–1998，前任蔡和宪；后届1998候选人记录仅作姓名及任职关系佐证"
+          "evidence_notes": "第12届镇长1994–1998，前任蔡和宪；后届1998候选人记录仅作姓名及任职关系佐证",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：南投縣埔里鎮，2號張鴻銘，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:南投县:regional:埔里镇:2",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1955,
+            "incumbent_at_election": true
+          }
         },
         {
           "town": "竹山鎮",
           "name": "許文欽",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "張明雄",
@@ -22721,7 +22804,17 @@
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/竹山鎮_(台灣)",
           "corroboration_url": "https://nhuir.nhu.edu.tw/retrieve/50880/103NHU00025017-001.pdf",
-          "evidence_notes": "乡镇历任表第12届许文钦、前届张明雄；南华大学学位论文另提到1994年镇长许文钦推动地方文化园区"
+          "evidence_notes": "乡镇历任表第12届许文钦、前届张明雄；南华大学学位论文另提到1994年镇长许文钦推动地方文化园区",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：南投縣竹山鎮，1號許文欽，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:南投县:regional:竹山镇:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1956,
+            "incumbent_at_election": true
+          }
         },
         {
           "town": "鹿谷鄉",
@@ -22810,7 +22903,7 @@
         {
           "town": "民雄鄉",
           "name": "涂文生",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "張松樹",
@@ -22819,7 +22912,17 @@
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/民雄鄉",
           "corroboration_url": "https://tw.news.yahoo.com/涂文生宣布參選民雄鄉長-155618403.html",
-          "evidence_notes": "另有2008年民代公報記載曾任民雄鄉長；任期表推定非現任，非投票日任免原件。"
+          "evidence_notes": "另有2008年民代公報記載曾任民雄鄉長；任期表推定非現任，非投票日任免原件。",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：嘉義縣民雄鄉，1號涂文生，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:嘉义县:regional:民雄乡:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1958,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -23021,9 +23124,19 @@
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "gender": null,
+          "gender": "男",
           "source_url": "https://dsh.yunlin.gov.tw/cp.aspx?n=4179",
-          "previous_term_holder": "黃水木"
+          "previous_term_holder": "黃水木",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：雲林縣東勢鄉，1號林勝國，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:云林县:regional:东势乡:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1945,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -23043,9 +23156,19 @@
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "gender": null,
+          "gender": "男",
           "source_url": "https://www.taimali.gov.tw/home/index.php/organization/56-2020-04-23-03-46-54/143-2020-04-23-04-02-46.html",
-          "previous_term_holder": "程聰明"
+          "previous_term_holder": "程聰明",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：臺東縣太麻里鄉，1號王樹木，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:台东县:regional:太麻里乡:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1952,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -23091,9 +23214,19 @@
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "gender": null,
+          "gender": "男",
           "source_url": "https://zh.wikipedia.org/wiki/白沙鄉_(台灣)",
-          "corroboration_url": "https://www.phcouncil.gov.tw/meet2.php?no=M24090019"
+          "corroboration_url": "https://www.phcouncil.gov.tw/meet2.php?no=M24090019",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：澎湖縣白沙鄉，1號魏長源，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:澎湖县:regional:白沙乡:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1952,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -23141,9 +23274,19 @@
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "gender": null,
+          "gender": "男",
           "source_url": "https://election.ltn.com.tw/2022/news/breakingnews/4138140",
-          "corroboration_url": "https://zh.wikipedia.org/wiki/望安鄉"
+          "corroboration_url": "https://zh.wikipedia.org/wiki/望安鄉",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：澎湖縣望安鄉，2號許龍富，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:澎湖县:regional:望安乡:2",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1950,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -23238,12 +23381,22 @@
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "劉永靜",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/豐濱鄉",
-          "corroboration_url": "https://e-info.org.tw/node/74179"
+          "corroboration_url": "https://e-info.org.tw/node/74179",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：花蓮縣豐濱鄉，1號李啟誠，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:花莲县:regional:丰滨乡:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1949,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -23336,12 +23489,22 @@
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "陳朝和",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/新城鄉_(台灣)",
-          "corroboration_url": "https://www.taiwanvotes.tw/花蓮縣/新城鄉/"
+          "corroboration_url": "https://www.taiwanvotes.tw/花蓮縣/新城鄉/",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：花蓮縣新城鄉，1號傅慶華，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:花莲县:regional:新城乡:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1953,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -23361,12 +23524,22 @@
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "宋文英",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/成功鎮鎮長",
-          "corroboration_url": "https://n.yam.com/Article/20120318311267"
+          "corroboration_url": "https://n.yam.com/Article/20120318311267",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：臺東縣成功鎮，1號侯武成，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:台东县:regional:成功镇:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1956,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -23436,12 +23609,22 @@
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "李德良",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/綠島鄉",
-          "corroboration_url": "https://taichung2050.pixnet.net/blog/posts/10005197951"
+          "corroboration_url": "https://taichung2050.pixnet.net/blog/posts/10005197951",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：臺東縣綠島鄉，1號陳進文，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:台东县:regional:绿岛乡:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1953,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -23461,12 +23644,22 @@
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "董進輝",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://ihc.cip.gov.tw/EJournal/EJournalCat/281",
-          "corroboration_url": "https://zh.wikipedia.org/wiki/達仁鄉"
+          "corroboration_url": "https://zh.wikipedia.org/wiki/達仁鄉",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：臺東縣達仁鄉，1號王光清，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:台东县:regional:达仁乡:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1948,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -23587,11 +23780,21 @@
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "李延敬",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/斗六市市長"
+          "source_url": "https://zh.wikipedia.org/wiki/斗六市市長",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：雲林縣斗六市，2號楊鎮文，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:云林县:regional:斗六市:2",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1951,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -23684,12 +23887,22 @@
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "林正彥",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/大埤鄉",
-          "corroboration_url": "https://www.nownews.com/news/2980351"
+          "corroboration_url": "https://www.nownews.com/news/2980351",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：雲林縣大埤鄉，1號易信助，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:云林县:regional:大埤乡:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1961,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -23709,12 +23922,22 @@
           "incumbent_at_election": null,
           "incumbent_method": "unresolved_election_day_status",
           "previous_term_holder": null,
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://election.ltn.com.tw/2018/news/New/breakingnews/2539676",
-          "corroboration_url": "https://zh.wikipedia.org/wiki/崙背鄉"
+          "corroboration_url": "https://zh.wikipedia.org/wiki/崙背鄉",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：雲林縣崙背鄉，2號李合同，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:云林县:regional:仑背乡:2",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1958,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -23759,12 +23982,22 @@
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "吳國勝",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/臺西鄉",
-          "corroboration_url": "https://ebk.olc.tw/candidates/index/54d9c6f9-b86c-46f6-bb9d-6b30acb5b862"
+          "corroboration_url": "https://ebk.olc.tw/candidates/index/54d9c6f9-b86c-46f6-bb9d-6b30acb5b862",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：雲林縣臺西鄉，1號林金城，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:云林县:regional:台西乡:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1952,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -23783,11 +24016,21 @@
           "incumbent_at_election": null,
           "incumbent_method": "unresolved_election_day_status",
           "previous_term_holder": null,
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/元長鄉"
+          "source_url": "https://zh.wikipedia.org/wiki/元長鄉",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：雲林縣元長鄉，1號李文勝，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:云林县:regional:元长乡:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1963,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -23929,11 +24172,21 @@
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "曾雨水",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/長治鄉"
+          "source_url": "https://zh.wikipedia.org/wiki/長治鄉",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：屏東縣長治鄉，1號邱清源，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:屏东县:regional:长治乡:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1942,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -23977,11 +24230,21 @@
           "incumbent_at_election": null,
           "incumbent_method": "unresolved_election_day_status",
           "previous_term_holder": null,
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/九如鄉"
+          "source_url": "https://zh.wikipedia.org/wiki/九如鄉",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：屏東縣九如鄉，2號許世裕，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:屏东县:regional:九如乡:2",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1955,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -24000,11 +24263,21 @@
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "洪華秤",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/高樹鄉"
+          "source_url": "https://zh.wikipedia.org/wiki/高樹鄉",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：屏東縣高樹鄉，3號王樹圍，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:屏东县:regional:高树乡:3",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1956,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -24023,11 +24296,21 @@
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "曾士忠",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/萬巒鄉"
+          "source_url": "https://zh.wikipedia.org/wiki/萬巒鄉",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：屏東縣萬巒鄉，2號林昌德，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:屏东县:regional:万峦乡:2",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1945,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -24072,11 +24355,21 @@
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "吳照雄",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/枋寮鄉"
+          "source_url": "https://zh.wikipedia.org/wiki/枋寮鄉",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：屏東縣枋寮鄉，1號陳軍國，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:屏东县:regional:枋寮乡:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1947,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -24216,11 +24509,21 @@
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "黃春海",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/%E8%BB%8A%E5%9F%8E%E9%84%89_(%E5%8F%B0%E7%81%A3)"
+          "source_url": "https://zh.wikipedia.org/wiki/%E8%BB%8A%E5%9F%8E%E9%84%89_(%E5%8F%B0%E7%81%A3)",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：屏東縣車城鄉，2號張英和，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:屏东县:regional:车城乡:2",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1932,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -24239,11 +24542,21 @@
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "高榮昌",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/%E6%BB%BF%E5%B7%9E%E9%84%89"
+          "source_url": "https://zh.wikipedia.org/wiki/%E6%BB%BF%E5%B7%9E%E9%84%89",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：屏東縣滿州鄉，2號熊金郎，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:屏东县:regional:满州乡:2",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1940,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -24262,11 +24575,21 @@
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "溫義春",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/%E6%9E%8B%E5%B1%B1%E9%84%89"
+          "source_url": "https://zh.wikipedia.org/wiki/%E6%9E%8B%E5%B1%B1%E9%84%89",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：屏東縣枋山鄉，2號洪清隆，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:屏东县:regional:枋山乡:2",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1929,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -24286,12 +24609,22 @@
           "incumbent_at_election": null,
           "incumbent_method": "unresolved_election_day_status",
           "previous_term_holder": null,
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/%E4%B8%89%E5%9C%B0%E9%96%80%E9%84%89",
-          "corroboration_url": "https://digitalarchive.cultural.pthg.gov.tw/muse_download/58e33572b4a91213d50575cc01f00131?download=1"
+          "corroboration_url": "https://digitalarchive.cultural.pthg.gov.tw/muse_download/58e33572b4a91213d50575cc01f00131?download=1",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：屏東縣三地門鄉，1號謝榮祥，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:屏东县:regional:三地门乡:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1950,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -24361,11 +24694,21 @@
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "陳金榜",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/%E4%BE%86%E7%BE%A9%E9%84%89"
+          "source_url": "https://zh.wikipedia.org/wiki/%E4%BE%86%E7%BE%A9%E9%84%89",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：屏東縣來義鄉，1號連正勝，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:屏东县:regional:来义乡:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1950,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -24435,11 +24778,21 @@
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "林清良",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/%E7%89%A1%E4%B8%B9%E9%84%89"
+          "source_url": "https://zh.wikipedia.org/wiki/%E7%89%A1%E4%B8%B9%E9%84%89",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：屏東縣牡丹鄉，1號黃順發，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:屏东县:regional:牡丹乡:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1948,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -24653,7 +25006,7 @@
         {
           "town": "朴子市",
           "name": "吳國禎",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "王朝榮",
@@ -24661,7 +25014,17 @@
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/朴子市市長",
-          "corroboration_url": "https://www.jendow.com.tw/wiki/朴子市"
+          "corroboration_url": "https://www.jendow.com.tw/wiki/朴子市",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：嘉義縣朴子市，1號吳國禎，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:嘉义县:regional:朴子市:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1960,
+            "incumbent_at_election": true
+          }
         }
       ],
       "corroboration_url": "https://www.jendow.com.tw/wiki/朴子市"
@@ -24678,14 +25041,24 @@
         {
           "town": "布袋鎮",
           "name": "蔡長雄",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "蔡啟芳",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/布袋鎮"
+          "source_url": "https://zh.wikipedia.org/wiki/布袋鎮",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：嘉義縣布袋鎮，2號蔡長雄，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:嘉义县:regional:布袋镇:2",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1946,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -24701,14 +25074,24 @@
         {
           "town": "大林鎮",
           "name": "簡和清",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "江宏謙",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://nhuir.nhu.edu.tw/retrieve/29998/093NHU05699004-001.pdf"
+          "source_url": "https://nhuir.nhu.edu.tw/retrieve/29998/093NHU05699004-001.pdf",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：嘉義縣大林鎮，2號簡和清，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:嘉义县:regional:大林镇:2",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1948,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -24891,14 +25274,24 @@
         {
           "town": "關廟鄉",
           "name": "楊敬昌",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "王照明",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://w3fs.tainan.gov.tw/001/Upload/47/attachment/8983/4718/52-91%E6%A9%9F%E9%97%9C%E5%9C%98%E9%AB%94.pdf"
+          "source_url": "https://w3fs.tainan.gov.tw/001/Upload/47/attachment/8983/4718/52-91%E6%A9%9F%E9%97%9C%E5%9C%98%E9%AB%94.pdf",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：臺南縣關廟鄉，3號楊敬昌，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:台南县:regional:关庙乡:3",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1942,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -24914,7 +25307,7 @@
         {
           "town": "永靖鄉",
           "name": "邱榮昌",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "詹德發",
@@ -24922,7 +25315,17 @@
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/永靖鄉",
-          "corroboration_url": "https://votetw.com/data/candidate/邱榮昌"
+          "corroboration_url": "https://votetw.com/data/candidate/邱榮昌",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：彰化縣永靖鄉，1號邱榮昌，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:彰化县:regional:永靖乡:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1947,
+            "incumbent_at_election": true
+          }
         }
       ],
       "corroboration_url": "https://votetw.com/data/candidate/邱榮昌"
@@ -25039,7 +25442,7 @@
         {
           "town": "大埔鄉",
           "name": "許俊昇",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "許榮松",
@@ -25047,7 +25450,17 @@
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/大埔鄉",
-          "corroboration_url": "https://www.cy.gov.tw/CyBsBoxContent.aspx?n=133&s=4609"
+          "corroboration_url": "https://www.cy.gov.tw/CyBsBoxContent.aspx?n=133&s=4609",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：嘉義縣大埔鄉，1號許俊昇，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:嘉义县:regional:大埔乡:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1951,
+            "incumbent_at_election": true
+          }
         }
       ],
       "corroboration_url": "https://www.cy.gov.tw/CyBsBoxContent.aspx?n=133&s=4609"
@@ -25185,14 +25598,24 @@
         {
           "town": "安定鄉",
           "name": "方醫益",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "王維道",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://web.tainan.gov.tw/anding/cp.aspx?n=5588"
+          "source_url": "https://web.tainan.gov.tw/anding/cp.aspx?n=5588",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：臺南縣安定鄉，2號方醫益，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:台南县:regional:安定乡:2",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1947,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -25208,14 +25631,24 @@
         {
           "town": "南化鄉",
           "name": "廖西仁",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "陳春林",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://w3fs.tainan.gov.tw/Download.ashx?n=5Y2X5YyW5Zyw5Y2A5q235Lu76aaW6ZW35YiX6KGoLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNTkvcmVsZmlsZS85MDMxLzIyODMvZjZkYzdhNTUtMWM2Zi00MTc3LWIwNzQtZWJjMjg1YTViZDkyLnBkZg%3D%3D"
+          "source_url": "https://w3fs.tainan.gov.tw/Download.ashx?n=5Y2X5YyW5Zyw5Y2A5q235Lu76aaW6ZW35YiX6KGoLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNTkvcmVsZmlsZS85MDMxLzIyODMvZjZkYzdhNTUtMWM2Zi00MTc3LWIwNzQtZWJjMjg1YTViZDkyLnBkZg%3D%3D",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：臺南縣南化鄉，2號廖西仁，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:台南县:regional:南化乡:2",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1946,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -25231,14 +25664,24 @@
         {
           "town": "麻豆鎮",
           "name": "沈國民",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "陳漢王",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/%E9%BA%BB%E8%B1%86%E5%8D%80"
+          "source_url": "https://zh.wikipedia.org/wiki/%E9%BA%BB%E8%B1%86%E5%8D%80",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：臺南縣麻豆鎮，1號沈國民，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:台南县:regional:麻豆镇:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1952,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -25277,14 +25720,24 @@
         {
           "town": "學甲鎮",
           "name": "李育全",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": null,
           "incumbent_method": null,
           "previous_term_holder": null,
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://wikis.tw/%E5%AD%B8%E7%94%B2%E5%8D%80"
+          "source_url": "https://wikis.tw/%E5%AD%B8%E7%94%B2%E5%8D%80",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：臺南縣學甲鎮，4號李育全，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:台南县:regional:学甲镇:4",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1958,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -25323,14 +25776,24 @@
         {
           "town": "梧棲鎮",
           "name": "尤碧鈴",
-          "gender": null,
+          "gender": "女",
           "incumbent_at_election": null,
           "incumbent_method": null,
           "previous_term_holder": null,
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://wikis.tw/%E6%A2%A7%E6%A3%B2%E5%8D%80"
+          "source_url": "https://wikis.tw/%E6%A2%A7%E6%A3%B2%E5%8D%80",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：臺中縣梧棲鎮，1號尤碧鈴，性別女，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:台中县:regional:梧栖镇:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1950,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -25392,14 +25855,24 @@
         {
           "town": "溪湖鎮",
           "name": "楊宗華",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "黃金地",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/%E6%BA%AA%E6%B9%96%E9%8E%AE%E9%8E%AE%E9%95%B7"
+          "source_url": "https://zh.wikipedia.org/wiki/%E6%BA%AA%E6%B9%96%E9%8E%AE%E9%8E%AE%E9%95%B7",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：彰化縣溪湖鎮，1號楊宗華，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:彰化县:regional:溪湖镇:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1940,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -25438,14 +25911,24 @@
         {
           "town": "柳營鄉",
           "name": "黃國安",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "邱等鴻",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/%E6%9F%B3%E7%87%9F%E5%8D%80"
+          "source_url": "https://zh.wikipedia.org/wiki/%E6%9F%B3%E7%87%9F%E5%8D%80",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：臺南縣柳營鄉，1號黃國安，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:台南县:regional:柳营乡:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1945,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -25484,14 +25967,24 @@
         {
           "town": "下營鄉",
           "name": "陳賜",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "馮隆誠",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/%E4%B8%8B%E7%87%9F%E5%8D%80"
+          "source_url": "https://zh.wikipedia.org/wiki/%E4%B8%8B%E7%87%9F%E5%8D%80",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：臺南縣下營鄉，2號陳賜，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:台南县:regional:下营乡:2",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1938,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -25507,14 +26000,24 @@
         {
           "town": "後壁鄉",
           "name": "葉宣煌",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "王發達",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/%E5%BE%8C%E5%A3%81%E5%8D%80"
+          "source_url": "https://zh.wikipedia.org/wiki/%E5%BE%8C%E5%A3%81%E5%8D%80",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：臺南縣後壁鄉，1號葉宣煌，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:台南县:regional:后壁乡:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1953,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -25530,14 +26033,24 @@
         {
           "town": "大內鄉",
           "name": "楊炳勳",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "陳炳煌",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/%E5%A4%A7%E5%85%A7%E5%8D%80"
+          "source_url": "https://zh.wikipedia.org/wiki/%E5%A4%A7%E5%85%A7%E5%8D%80",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：臺南縣大內鄉，1號楊炳勳，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:台南县:regional:大内乡:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1950,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -25553,14 +26066,24 @@
         {
           "town": "東山鄉",
           "name": "黃明山",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "吳逢麟",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E5%8D%80_(%E8%87%BA%E5%8D%97%E5%B8%82)"
+          "source_url": "https://zh.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E5%8D%80_(%E8%87%BA%E5%8D%97%E5%B8%82)",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：臺南縣東山鄉，3號黃明山，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:台南县:regional:东山乡:3",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1943,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -25599,14 +26122,24 @@
         {
           "town": "七股鄉",
           "name": "陳啟明",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": null,
           "incumbent_method": null,
           "previous_term_holder": null,
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://tucheng.kenlab.org/encyclopedia/qigu/"
+          "source_url": "https://tucheng.kenlab.org/encyclopedia/qigu/",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：臺南縣七股鄉，2號陳啟明，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:台南县:regional:七股乡:2",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1948,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -25714,14 +26247,24 @@
         {
           "town": "線西鄉",
           "name": "黃正義",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "黃榮吉",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://www.mingtong.com.tw/hsienhsi/27.htm"
+          "source_url": "https://www.mingtong.com.tw/hsienhsi/27.htm",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：彰化縣線西鄉，1號黃正義，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:彰化县:regional:线西乡:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1939,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -25760,14 +26303,24 @@
         {
           "town": "福興鄉",
           "name": "林進興",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "林聖哲",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/%E7%A6%8F%E8%88%88%E9%84%89_(%E5%8F%B0%E7%81%A3)"
+          "source_url": "https://zh.wikipedia.org/wiki/%E7%A6%8F%E8%88%88%E9%84%89_(%E5%8F%B0%E7%81%A3)",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：彰化縣福興鄉，1號林進興，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:彰化县:regional:福兴乡:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1956,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -25783,14 +26336,24 @@
         {
           "town": "大村鄉",
           "name": "賴錫卿",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "賴宗炘",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/%E5%A4%A7%E6%9D%91%E9%84%89_(%E5%8F%B0%E7%81%A3)"
+          "source_url": "https://zh.wikipedia.org/wiki/%E5%A4%A7%E6%9D%91%E9%84%89_(%E5%8F%B0%E7%81%A3)",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：彰化縣大村鄉，2號賴錫卿，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:彰化县:regional:大村乡:2",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1952,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -25806,14 +26369,24 @@
         {
           "town": "北門鄉",
           "name": "洪登科",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "洪鑾聲",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/%E5%8C%97%E9%96%80%E5%8D%80%E5%8D%80%E9%95%B7"
+          "source_url": "https://zh.wikipedia.org/wiki/%E5%8C%97%E9%96%80%E5%8D%80%E5%8D%80%E9%95%B7",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：臺南縣北門鄉，2號洪登科，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:台南县:regional:北门乡:2",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1950,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -25829,14 +26402,24 @@
         {
           "town": "玉井鄉",
           "name": "鐘明憲",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "王石龍",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/%E7%8E%89%E4%BA%95%E5%8D%80"
+          "source_url": "https://zh.wikipedia.org/wiki/%E7%8E%89%E4%BA%95%E5%8D%80",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：臺南縣玉井鄉，2號鐘明憲，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:台南县:regional:玉井乡:2",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1940,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -25852,14 +26435,24 @@
         {
           "town": "楠西鄉",
           "name": "謝文長",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "郭日財",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/%E6%A5%A0%E8%A5%BF%E5%8D%80"
+          "source_url": "https://zh.wikipedia.org/wiki/%E6%A5%A0%E8%A5%BF%E5%8D%80",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：臺南縣楠西鄉，1號謝文長，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:台南县:regional:楠西乡:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1950,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -25971,7 +26564,7 @@
         {
           "town": "北斗鎮",
           "name": "洪參民",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "卓建國",
@@ -25979,7 +26572,17 @@
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/%E5%8C%97%E6%96%97%E9%8E%AE_(%E5%8F%B0%E7%81%A3)",
-          "corroboration_url": "https://blog.udn.com/article/article_print.jsp?f_ART_ID=2664658&uid=beidou"
+          "corroboration_url": "https://blog.udn.com/article/article_print.jsp?f_ART_ID=2664658&uid=beidou",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：彰化縣北斗鎮，2號洪參民，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:彰化县:regional:北斗镇:2",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1946,
+            "incumbent_at_election": true
+          }
         }
       ],
       "corroboration_url": "https://blog.udn.com/article/article_print.jsp?f_ART_ID=2664658&uid=beidou"
@@ -25996,14 +26599,24 @@
         {
           "town": "田尾鄉",
           "name": "鄭家吉",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "羅坤城",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/%E7%94%B0%E5%B0%BE%E9%84%89"
+          "source_url": "https://zh.wikipedia.org/wiki/%E7%94%B0%E5%B0%BE%E9%84%89",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：彰化縣田尾鄉，3號鄭家吉，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:彰化县:regional:田尾乡:3",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1943,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -26019,14 +26632,24 @@
         {
           "town": "潭子鄉",
           "name": "林森田",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": null,
           "incumbent_method": null,
           "previous_term_holder": null,
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/%E6%BD%AD%E5%AD%90%E5%8D%80%E5%8D%80%E9%95%B7"
+          "source_url": "https://zh.wikipedia.org/wiki/%E6%BD%AD%E5%AD%90%E5%8D%80%E5%8D%80%E9%95%B7",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：臺中縣潭子鄉，1號林森田，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:台中县:regional:潭子乡:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1938,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -26090,14 +26713,24 @@
         {
           "town": "石岡鄉",
           "name": "謝震穎",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "鍾報順",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://nhuir.nhu.edu.tw/retrieve/53640/104NHU00356007-003.pdf"
+          "source_url": "https://nhuir.nhu.edu.tw/retrieve/53640/104NHU00356007-003.pdf",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：臺中縣石岡鄉，2號謝震穎，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:台中县:regional:石冈乡:2",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1960,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -26113,14 +26746,24 @@
         {
           "town": "和平鄉",
           "name": "林文生",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "周吉德",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/%E5%92%8C%E5%B9%B3%E5%8D%80_(%E5%8F%B0%E7%81%A3)"
+          "source_url": "https://zh.wikipedia.org/wiki/%E5%92%8C%E5%B9%B3%E5%8D%80_(%E5%8F%B0%E7%81%A3)",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：臺中縣和平鄉，3號林文生，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:台中县:regional:和平乡:3",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1948,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
@@ -26308,14 +26951,24 @@
         {
           "town": "溪州鄉",
           "name": "曾俊",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": null,
           "incumbent_method": null,
           "previous_term_holder": null,
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/%E6%BA%AA%E5%B7%9E%E9%84%89"
+          "source_url": "https://zh.wikipedia.org/wiki/%E6%BA%AA%E5%B7%9E%E9%84%89",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "1998-01-24鄉鎮市長選舉：彰化縣溪州鄉，1號曾俊，性別男，現任欄為是；同縣、同鄉鎮市、同原始姓名唯一匹配。",
+          "gender_method": "cross_election_exact_identity_incumbent_1998",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-township:彰化县:regional:溪州乡:1",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1943,
+            "incumbent_at_election": true
+          }
         }
       ]
     },
