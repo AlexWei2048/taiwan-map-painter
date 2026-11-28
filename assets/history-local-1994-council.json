@@ -30395,6 +30395,27 @@
       "level": "county",
       "method": "official_yearbook_county_total_crosschecked_with_eight_constituencies",
       "limitations": "全縣合計，八選區有效票、候選人及當選人數完全相符；原表另列已領未投4票，不計入投票數。原表文字可讀，截圖介面未取得；不分攤至各選區，亦不據性別總數推定個人。"
+    },
+    {
+      "county": "臺南市",
+      "election_date": "1994-01-29",
+      "term": "第十三屆",
+      "registered_voters": 447584,
+      "ballots_cast": 323840,
+      "valid_votes": 319048,
+      "invalid_votes": 4792,
+      "candidate_count": 82,
+      "male_candidates": 68,
+      "female_candidates": 14,
+      "elected_count": 41,
+      "male_elected": 34,
+      "female_elected": 7,
+      "source_url": "https://w3fs.tainan.gov.tw/001/Upload/2/attachment/9370/108/99totalstat.pdf",
+      "source_locator": "99年臺南市統計要覽，第70期，表3-9，印刷頁3-22、3-23（PDF第125、126頁），第十三屆，資料來源本市選委會",
+      "level": "county",
+      "method": "official_yearbook_county_total_crosschecked_with_six_constituencies",
+      "limitations": "原表日期誤印83年2月29日，依中選會歷屆選舉說明保留1994-01-29。另列已領未投2票，不計入投票數。六選區有效票、候選人及當選人數完全一致，當選人性別亦一致；不分攤至各選區，不推定個別候選人性別。原表文字可讀，截圖介面未取得。",
+      "date_source_url": "https://web.cec.gov.tw/central/article/18789"
     }
   ],
   "independent_source_checks": [
