@@ -15199,6 +15199,19 @@
         ]
       ],
       "incumbent_sources": {
+        "5": {
+          "value": true,
+          "source_url": "https://ws.yunlin.gov.tw/001/Upload/609/ebook/ebook_366292/pdf/full.pdf",
+          "source_locator": "《口湖鄉志》政事篇，表3-2-23，本鄉歷屆當選縣議員名單，印刷頁3-45；第12及13屆均列王老榮、呂寶猜。",
+          "corroboration_url": "https://ws.yunlin.gov.tw/001/Upload/609/ebook/ebook_366282/pdf/full.pdf",
+          "election_date": "1994-01-29",
+          "method": "official_local_gazette_consecutive_term_roster",
+          "confidence": "official_term_roster_inference",
+          "limitation": "地方志連續兩屆當選名錄證據；非投票日逐日任免表；PDF文字可讀，頁面截圖未取得。",
+          "original_name": "呂寶猜",
+          "ballot_number": 5,
+          "votes": 6700
+        },
         "8": {
           "value": true,
           "source_url": "https://zh.wikipedia.org/wiki/%E9%9B%B2%E6%9E%97%E7%B8%A3%E8%AD%B0%E6%9C%83",
@@ -15210,6 +15223,19 @@
           "original_name": "陳國益",
           "ballot_number": 8,
           "votes": 7420
+        },
+        "9": {
+          "value": true,
+          "source_url": "https://ws.yunlin.gov.tw/001/Upload/609/ebook/ebook_366292/pdf/full.pdf",
+          "source_locator": "《口湖鄉志》政事篇，表3-2-23，本鄉歷屆當選縣議員名單，印刷頁3-45；第12及13屆均列王老榮、呂寶猜。",
+          "corroboration_url": "https://ws.yunlin.gov.tw/001/Upload/609/ebook/ebook_366282/pdf/full.pdf",
+          "election_date": "1994-01-29",
+          "method": "official_local_gazette_consecutive_term_roster",
+          "confidence": "official_term_roster_inference",
+          "limitation": "地方志連續兩屆當選名錄證據；非投票日逐日任免表；PDF文字可讀，頁面截圖未取得。",
+          "original_name": "王老榮",
+          "ballot_number": 9,
+          "votes": 7228
         }
       },
       "official_result_crosscheck": {
