@@ -13693,6 +13693,19 @@
           "votes": 5742,
           "corroboration_url": "https://zh.wikipedia.org/wiki/%E6%9D%8E%E6%9C%9D%E5%8D%BF"
         },
+        "15": {
+          "value": false,
+          "source_url": "https://web.cec.gov.tw/api/file/656acaf7-4635-467c-9e8f-243fc281619d.pdf",
+          "corroboration_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%89%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/098%E5%B9%B4/16%E5%8D%97%E6%8A%95%E7%B8%A3/%E5%8D%97%E6%8A%95%E7%B8%A3%E7%AC%AC1%E9%81%B8%E8%89%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "source_locator": "2009年第17屆第1選區公報第6號，履歷列名間鄉農會第九屆理事長、第十三及十五屆南投縣議員；已查官方檔案第1頁原圖，另一官方版本文字轉錄相符。",
+          "election_date": "1994-01-29",
+          "method": "later_official_candidate_biography_inferred_nonincumbent",
+          "confidence": "inferred_from_explicit_term_history",
+          "limitation": "依候選人自填之具體屆次履歷推定，非當屆逐日任免記錄；未列第12屆不等同獨立證明。",
+          "original_name": "吳正行",
+          "ballot_number": 15,
+          "votes": 4253
+        },
         "19": {
           "value": false,
           "source_url": "https://web.cec.gov.tw/api/file/656acaf7-4635-467c-9e8f-243fc281619d.pdf",
