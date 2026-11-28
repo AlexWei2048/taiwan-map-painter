@@ -14219,7 +14219,7 @@
           "彭百崇",
           3174,
           "民主進步黨",
-          "",
+          "男",
           false
         ],
         [
@@ -14335,6 +14335,21 @@
           "method": "official_historical_office_roster_exact_name_and_geographic_match",
           "original_name": "吳水來",
           "confidence": "cross_source_identity_match"
+        },
+        "7": {
+          "county": "南投縣",
+          "district": 5,
+          "number": 7,
+          "name": "彭百崇",
+          "votes": 3174,
+          "value": "男",
+          "source_url": "https://www.cahr.org.tw/wp-content/uploads/2018/07/2011%E5%8F%B0%E7%81%A3%E7%B6%93%E6%BF%9F%E4%BA%BA%E6%AC%8A%E8%AA%BF%E6%9F%A5%E5%A0%B1%E5%91%8A.pdf",
+          "corroboration_url": "https://tw.news.yahoo.com/%E7%B6%A0%E7%87%9F%E5%8D%97%E6%8A%953-1-%E4%B8%8A%E4%B8%96%E7%B4%80%E6%B0%91%E9%80%B2%E9%BB%A8%E7%A5%A8%E5%80%89-%E7%82%BA%E9%81%B8%E8%88%89%E6%81%A9%E6%80%A8%E6%B4%BE%E7%B3%BB%E6%B1%BA%E8%A3%82%E8%87%B3%E4%BB%8A%E7%84%A1%E8%A7%A3-093400740.html",
+          "additional_source_url": "https://web.cec.gov.tw/api/file/a4394409-e884-4a28-a159-cc6b171974bc.pdf",
+          "source_locator": "2011台灣經濟人權調查報告專家名單明列彭百崇、男、文化大學教授；南投地方政治史報導明載其為彭百顯弟弟及縣議員參選經歷；1996不分區國大公報列民進黨第14名彭百崇。公報原圖因大小限制未取得。",
+          "method": "documented_gender_and_local_election_biography",
+          "confidence": "cross_source_identity_match",
+          "original_name": "彭百崇"
         },
         "10": {
           "number": 10,
@@ -16174,7 +16189,7 @@
           "陳蕭素鍈",
           765,
           "民主進步黨",
-          "",
+          "女",
           false
         ],
         [
@@ -16234,6 +16249,21 @@
           "original_name": "陳日通",
           "value": "男",
           "secondary_source": "https://votetw.com/data/election/20141101V1E1?%E7%9C%81%E5%B8%82=10&%E7%B8%A3%E5%B8%82=010&%E9%84%89%E9%8E%AE%E5%B8%82%E5%8D%80=040"
+        },
+        "5": {
+          "county": "嘉義縣",
+          "district": 3,
+          "number": 5,
+          "name": "陳蕭素鍈",
+          "votes": 765,
+          "value": "女",
+          "source_url": "https://votetw.com/data/candidate?page=368",
+          "corroboration_url": "https://web.cec.gov.tw/api/file/48170f0b-fddd-46fc-807b-59a35742ee27.pdf",
+          "additional_source_url": "https://votetw.com/data/candidate/%E9%8D%BE%E5%BF%97%E6%88%90",
+          "source_locator": "2010年鄉鎮市民代表選舉候選人索引明載陳蕭素鍈女、1934年生；2006年嘉義縣梅山鄉第1選區官方開票表同名候選人，1994年第3選區含梅山鄉。2010索引可讀搜尋摘錄，個人頁未取得。",
+          "method": "cross_office_exact_rare_name_and_geographic_match",
+          "confidence": "cross_source_identity_match",
+          "original_name": "陳蕭素鍈"
         }
       },
       "incumbent_sources": {
