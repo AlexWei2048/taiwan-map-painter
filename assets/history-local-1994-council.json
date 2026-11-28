@@ -24945,7 +24945,7 @@
           "許義隆",
           2126,
           "中國國民黨",
-          "",
+          "男",
           false
         ],
         [
@@ -25002,6 +25002,15 @@
           "scope_1994": [
             "暖暖區"
           ]
+        },
+        "5": {
+          "source_url": "https://www.cna.com.tw/news/aloc/201908170152.aspx",
+          "corroboration_url": "https://www.mirrormedia.mg/external/mnews_20240417nm011",
+          "source_locator": "中央社確認許義隆為前基隆市議員及許效舜父親；鏡週刊報導其暖暖地方任職及國民黨背景。與1994暖暖區同名參選者對應。",
+          "method": "cross_source_local_biography",
+          "confidence": "cross_source_identity_match",
+          "original_name": "許義隆",
+          "value": "男"
         }
       },
       "incumbent_sources": {
@@ -25080,7 +25089,7 @@
           "李碧霞",
           1132,
           "無黨籍",
-          "",
+          "女",
           false
         ],
         [
@@ -25088,7 +25097,7 @@
           "李信志",
           1937,
           "民主進步黨",
-          "",
+          "男",
           false
         ],
         [
@@ -25141,6 +25150,24 @@
         ]
       ],
       "gender_sources": {
+        "6": {
+          "source_url": "https://www.peopo.org/news/809976",
+          "corroboration_url": "https://health.ltn.com.tw/article/breakingnews/5308518",
+          "source_locator": "仁愛區虹橋里長人物專訪明確提及曾參選市議員未當選；自由時報另確認其性別及長期仁愛區服務經歷。未取得1994公報。",
+          "method": "cross_source_local_biography",
+          "confidence": "cross_source_identity_match",
+          "original_name": "李碧霞",
+          "value": "女"
+        },
+        "7": {
+          "source_url": "https://vote.nccu.edu.tw/cec/vote3.asp?pass1=M9AA%3CI%3E%3A88888888iii%28%28",
+          "corroboration_url": "https://votetw.com/data/election/19941201J1F2?%E7%9C%81%E5%B8%82=01&%E7%B8%A3%E5%B8%82=017",
+          "source_locator": "1994年12月省議員選舉基隆市同名候選人性別M，得票16567；與同年1月市議員候選人同市唯一姓名匹配，推薦政黨不跨次改寫。",
+          "method": "same_year_cross_office_unique_name_county",
+          "confidence": "cross_source_identity_match",
+          "original_name": "李信志",
+          "value": "男"
+        },
         "11": {
           "method": "cross-election exact official name, county and overlapping historical geographic scope; reviewed district renumbering or township candidacy",
           "confidence": "cross_election_geography",
@@ -25634,7 +25661,7 @@
           "何忠輝",
           2347,
           "中國國民黨",
-          "",
+          "男",
           false
         ],
         [
@@ -25719,6 +25746,15 @@
         ]
       ],
       "gender_sources": {
+        "3": {
+          "source_url": "https://vote.nccu.edu.tw/cec/vote3.asp?pass1=M9AA%3CI%3E%3A88888888iii%28%28",
+          "corroboration_url": "https://votetw.com/data/election/19941201J1F2?%E7%9C%81%E5%B8%82=01&%E7%B8%A3%E5%B8%82=017&%E9%84%89%E9%8E%AE%E5%B8%82%E5%8D%80=007",
+          "source_locator": "1994年12月省議員選舉基隆市同名候選人性別M，得票2295；與同年1月信義區市議員候選人同市唯一姓名匹配。",
+          "method": "same_year_cross_office_unique_name_county",
+          "confidence": "cross_source_identity_match",
+          "original_name": "何忠輝",
+          "value": "男"
+        },
         "5": {
           "method": "cross-election exact official name, county and overlapping historical geographic scope; reviewed district renumbering or township candidacy",
           "confidence": "cross_election_geography",
