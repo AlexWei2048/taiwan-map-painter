@@ -5367,12 +5367,16 @@
         {
           "town": "龍井鄉",
           "name": "劉瑞龍",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": true,
           "incumbent_method": "official_township_gazette_consecutive_terms",
           "ballot_number": null,
           "party_recommendation": null,
-          "votes": null
+          "votes": null,
+          "gender_source_url": "https://www.gvm.com.tw/article/11590",
+          "gender_source_locator": "2007年遠見報導明確稱龍井鄉劉淑蘭之先生為曾任鄉民代表的劉瑞龍；2005年官方新聞確認同名者為龍井前鄉長。",
+          "gender_method": "documented_office_biography_crosscheck",
+          "gender_corroboration_url": "https://www.president.gov.tw/NEWS/9133"
         }
       ]
     },
@@ -7231,12 +7235,16 @@
           "incumbent_at_election": true,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "柯啟川",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/%E9%9C%A7%E8%87%BA%E9%84%89",
-          "corroboration_url": "https://digitalarchive.cultural.pthg.gov.tw/muse_download/58e33572b4a91213d50575cc01f00131?download=1"
+          "corroboration_url": "https://digitalarchive.cultural.pthg.gov.tw/muse_download/58e33572b4a91213d50575cc01f00131?download=1",
+          "gender_source_url": "https://student.hlc.edu.tw/hualien/action/file/3809/20201022133433351.pdf",
+          "gender_source_locator": "東華大學學位論文印刷頁72–73兩次明稱柯啟川先生擔任霧台鄉長；屏東縣志1994年8月19日大事紀確認其在任。論文原頁截圖請求失敗，文字可讀。",
+          "gender_method": "documented_office_biography_crosscheck",
+          "gender_corroboration_url": "https://digitalarchive.cultural.pthg.gov.tw/muse_download/58e33572b4a91213d50575cc01f00131?download=1"
         }
       ]
     },
@@ -7256,12 +7264,16 @@
           "incumbent_at_election": true,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "馮寶成",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/%E7%91%AA%E5%AE%B6%E9%84%89",
-          "corroboration_url": "https://digitalarchive.cultural.pthg.gov.tw/muse_download/58e33572b4a91213d50575cc01f00131?download=1"
+          "corroboration_url": "https://digitalarchive.cultural.pthg.gov.tw/muse_download/58e33572b4a91213d50575cc01f00131?download=1",
+          "gender_source_url": "https://web.cec.gov.tw/api/file/c84f2ed2-5cdb-434c-ad88-847941e3e579.pdf",
+          "gender_source_locator": "1996年3月23日選舉公報印刷頁3，山地原住民候選人5號，性別男；已核對PDF第1頁原始影像。臺大學位論文附錄訪談名冊明載同名者曾任瑪家鄉長及國大代表。",
+          "gender_method": "documented_office_biography_crosscheck",
+          "gender_corroboration_url": "https://tdr.lib.ntu.edu.tw/retrieve/66ffee23-6a99-4f35-9753-f00147793899/ntu-113-1.pdf"
         }
       ]
     },
@@ -9862,14 +9874,18 @@
         {
           "town": "左鎮鄉",
           "name": "楊子祥",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": true,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "楊子祥",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/左鎮區"
+          "source_url": "https://zh.wikipedia.org/wiki/左鎮區",
+          "gender_source_url": "https://www.jamyang.org.tw/care/care_006_020.html",
+          "gender_source_locator": "蔣揚慈善基金會活動紀錄明稱前鄉長楊子祥先生；成功大學2020年報導確認其為左鎮前鄉長。",
+          "gender_method": "documented_office_biography_crosscheck",
+          "gender_corroboration_url": "https://news-secr.ncku.edu.tw/p/405-1037-207368%2Cc5934.php"
         }
       ]
     },
@@ -9939,14 +9955,18 @@
         {
           "town": "林邊鄉",
           "name": "林正一",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": true,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "林正一",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/林邊鄉"
+          "source_url": "https://zh.wikipedia.org/wiki/林邊鄉",
+          "gender_source_url": "https://liu226688.pixnet.net/blog/posts/9557053171",
+          "gender_source_locator": "地方文史田野筆記稱林望三之孫林正一曾任林邊鄉長；另一地方文史文章亦確認前鄉長林正一與林望三古厝關係。屬二手家族文史資料，非官方性別欄。",
+          "gender_method": "secondary_genealogy_crosscheck",
+          "gender_corroboration_url": "https://apextraveller.com/xuite-117810782/"
         }
       ]
     },
