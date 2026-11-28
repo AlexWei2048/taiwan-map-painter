@@ -13574,6 +13574,31 @@
         }
       },
       "incumbent_sources": {
+        "6": {
+          "value": true,
+          "source_url": "https://web.cec.gov.tw/api/file/656acaf7-4635-467c-9e8f-243fc281619d.pdf",
+          "source_locator": "2009南投第17屆第1選區公報2號，原件第1頁履歷列第11、12、14、15屆議員。",
+          "evidence": "2009南投第17屆第1選區公報2號，原件第1頁履歷列第11、12、14、15屆議員。",
+          "election_date": "1994-01-29",
+          "method": "later_official_candidate_biography_documented_prior_term",
+          "confidence": "documented_prior_term",
+          "original_name": "曾芳春",
+          "ballot_number": 6,
+          "votes": 5511
+        },
+        "9": {
+          "value": true,
+          "source_url": "https://web.cec.gov.tw/api/file/656acaf7-4635-467c-9e8f-243fc281619d.pdf",
+          "source_locator": "2009南投第17屆第1選區公報3號，原件第1頁列第12至16屆議員；2018公報亦列第12至18屆。",
+          "evidence": "2009南投第17屆第1選區公報3號，原件第1頁列第12至16屆議員；2018公報亦列第12至18屆。",
+          "election_date": "1994-01-29",
+          "method": "later_official_candidate_biography_documented_prior_term",
+          "confidence": "documented_prior_term",
+          "original_name": "莊文斌",
+          "ballot_number": 9,
+          "votes": 6139,
+          "secondary_source": "https://eebulletin.cec.gov.tw/107/11%E5%8D%97%E6%8A%95%E7%B8%A3/02%E7%B8%A3%E8%AD%B0%E5%93%A1/%E5%8D%97%E6%8A%95%E7%B8%A3%E7%AC%AC%E4%B8%80%E9%81%B8%E5%8D%80%E8%AD%B0%E5%93%A1.pdf"
+        },
         "11": {
           "value": false,
           "source_url": "https://n.yam.com/Article/20121201019329",
@@ -13586,6 +13611,18 @@
           "ballot_number": 11,
           "votes": 5742,
           "corroboration_url": "https://zh.wikipedia.org/wiki/%E6%9D%8E%E6%9C%9D%E5%8D%BF"
+        },
+        "19": {
+          "value": false,
+          "source_url": "https://web.cec.gov.tw/api/file/656acaf7-4635-467c-9e8f-243fc281619d.pdf",
+          "source_locator": "2009南投第17屆第1選區公報10號，原件第1頁列市代表、第13、14、15、16屆議員，未列第12屆；按具體任期履歷推定非現任，非1994任免名冊。",
+          "evidence": "2009南投第17屆第1選區公報10號，原件第1頁列市代表、第13、14、15、16屆議員，未列第12屆；按具體任期履歷推定非現任，非1994任免名冊。",
+          "election_date": "1994-01-29",
+          "method": "later_official_candidate_biography_inferred_nonincumbent",
+          "confidence": "inferred_from_explicit_term_history",
+          "original_name": "李添興",
+          "ballot_number": 19,
+          "votes": 6156
         }
       }
     },
@@ -25017,6 +25054,31 @@
           "original_name": "張芳麗",
           "ballot_number": 1,
           "votes": 3502
+        },
+        "3": {
+          "value": false,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/098%E5%B9%B4/08%E5%9F%BA%E9%9A%86%E5%B8%82/%E5%9F%BA%E9%9A%86%E5%B8%82%E7%AC%AC3%E9%81%B8%E8%89%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "source_locator": "2009基隆第17屆第3選區公報5號履歷列第13、14、15、16屆市議員，依所列任期推定非現任，未見1994原始任免名冊；公報文字可讀，截圖未取得。",
+          "evidence": "2009基隆第17屆第3選區公報5號履歷列第13、14、15、16屆市議員，依所列任期推定非現任，未見1994原始任免名冊；公報文字可讀，截圖未取得。",
+          "election_date": "1994-01-29",
+          "method": "later_official_candidate_biography_inferred_nonincumbent",
+          "confidence": "inferred_from_explicit_term_history",
+          "original_name": "莊榮欽",
+          "ballot_number": 3,
+          "votes": 3918
+        },
+        "11": {
+          "value": true,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/098%E5%B9%B4/08%E5%9F%BA%E9%9A%86%E5%B8%82/%E5%9F%BA%E9%9A%86%E5%B8%82%E7%AC%AC3%E9%81%B8%E8%89%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "source_locator": "2009基隆第17屆第3選區公報3號履歷列第11、12、14屆議員；2012年訃聞及1993年鳥會會訊交叉印證。公報文字可讀，截圖未取得。",
+          "evidence": "2009基隆第17屆第3選區公報3號履歷列第11、12、14屆議員；2012年訃聞及1993年鳥會會訊交叉印證。公報文字可讀，截圖未取得。",
+          "election_date": "1994-01-29",
+          "method": "later_official_candidate_biography_documented_prior_term",
+          "confidence": "documented_prior_term",
+          "original_name": "曾水源",
+          "ballot_number": 11,
+          "votes": 2436,
+          "secondary_source": "https://tw.news.yahoo.com/%E6%9B%BE%E6%B0%B4%E6%BA%90%E7%97%85%E9%80%9D-%E7%B8%BD%E7%B5%B1%E6%82%BC%E7%A5%AD-151458058.html"
         }
       }
     },
@@ -25562,7 +25624,21 @@
           "男",
           true
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "2": {
+          "value": true,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/098%E5%B9%B4/08%E5%9F%BA%E9%9A%86%E5%B8%82/%E5%9F%BA%E9%9A%86%E5%B8%82%E7%AC%AC3%E9%81%B8%E8%89%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "source_locator": "2009基隆第17屆第8選區公報1號履歷列第11、12、13、14、16屆議員；公報文字可讀，截圖未取得。",
+          "evidence": "2009基隆第17屆第8選區公報1號履歷列第11、12、13、14、16屆議員；公報文字可讀，截圖未取得。",
+          "election_date": "1994-01-29",
+          "method": "later_official_candidate_biography_documented_prior_term",
+          "confidence": "documented_prior_term",
+          "original_name": "馬賢生",
+          "ballot_number": 2,
+          "votes": 820
+        }
+      }
     },
     {
       "county": "新竹市",
