@@ -1718,6 +1718,19 @@
           "ballot_number": 5,
           "votes": 10596
         },
+        "13": {
+          "value": false,
+          "source_url": "https://eebulletin.cec.gov.tw/103/03%E6%96%B0%E5%8C%97%E5%B8%82/%E6%9D%91%E9%87%8C%E9%95%B7/%E4%B8%89%E9%87%8D%E5%8D%80/%E4%B8%89%E9%87%8D%E5%8D%80%E7%A6%8F%E5%BE%B7%E3%80%81%E7%A6%8F%E6%B0%91%E3%80%81%E9%81%8E%E7%94%B0%E3%80%81%E9%8C%A6%E7%94%B0%E3%80%81%E9%87%8D%E6%98%8E%E3%80%81%E5%85%89%E7%94%B0%E9%87%8C%E9%87%8C%E9%95%B7.pdf",
+          "corroboration_url": "https://elections.olc.tw/candidates/index/54d9c664-62f0-4e03-bcbf-6b30acb5b862",
+          "source_locator": "2014年過田里里長公報2號履歷列第13屆台北縣議員，與第12屆既存名錄未匹配及1998年第5選區參選記錄交叉核對；原PDF文字可讀，截圖失敗。",
+          "election_date": "1994-01-29",
+          "method": "biographical_term_history_and_prior_roster_crosscheck",
+          "confidence": "crosschecked_inferred",
+          "limitation": "依公開履歷及前屆名冊交叉推定；非逐日任免記錄，未將其他名冊未匹配者直接判定為非現任。",
+          "original_name": "朱永惠",
+          "ballot_number": 13,
+          "votes": 14065
+        },
         "17": {
           "value": true,
           "source_url": "https://httpchanblogspotcom.blogspot.com/2010/12/blog-post.html?m=0",
@@ -1782,6 +1795,19 @@
           "original_name": "陳幸進",
           "ballot_number": 23,
           "votes": 14533
+        },
+        "24": {
+          "value": false,
+          "source_url": "https://councilorwatch.tw/councillor/10/10",
+          "corroboration_url": "https://elections.olc.tw/candidates/view/53c68fa5-36ac-49fc-978e-0f15acb5b862",
+          "source_locator": "履歷列第14、15、16屆台北縣議員，1994年三重市民代表；2014候選人資料亦列市民代表經歷。與第12屆既存名錄未匹配及1998年第5選區首次當選資料交叉核對。",
+          "election_date": "1994-01-29",
+          "method": "biographical_term_history_and_prior_roster_crosscheck",
+          "confidence": "crosschecked_inferred",
+          "limitation": "依公開履歷及前屆名冊交叉推定；非逐日任免記錄，未將其他名冊未匹配者直接判定為非現任。",
+          "original_name": "鄭金隆",
+          "ballot_number": 24,
+          "votes": 10269
         },
         "25": {
           "value": true,
@@ -2523,6 +2549,19 @@
           "original_name": "許再恩",
           "ballot_number": 7,
           "votes": 18636
+        },
+        "8": {
+          "value": false,
+          "source_url": "https://city.udn.com/54532/2227239?cate_no=0&f_ORDER_BY=&pno=1&tpno=42",
+          "corroboration_url": "https://news.pts.org.tw/article/76973",
+          "source_locator": "聯合報2007年報導明載當選第13屆台北縣議員才開始從政；與第12屆既存名錄及公視報導相符。",
+          "election_date": "1994-01-29",
+          "method": "biographical_term_history_and_prior_roster_crosscheck",
+          "confidence": "crosschecked_inferred",
+          "limitation": "依公開履歷及前屆名冊交叉推定；非逐日任免記錄，未將其他名冊未匹配者直接判定為非現任。",
+          "original_name": "吳善九",
+          "ballot_number": 8,
+          "votes": 18363
         },
         "9": {
           "value": true,
