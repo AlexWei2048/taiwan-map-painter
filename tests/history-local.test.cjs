@@ -149,12 +149,16 @@ test('1998 council legal women quotas use the pre-1999 five-seat threshold, with
  assert.equal(contests[0].reserved_seats,null,'original snapshots remain immutable');
 });
 
-test('The partial 1994 township archive reconciles all 89 contests across eight counties',()=>{
+test('The partial 1994 township archive reconciles all 90 contests across eight counties',()=>{
  const shard=data(1994);
  const election=shard.elections.find(e=>e.office==='township');
  assert.equal(election.coverage,'partial');
  assert.deepEqual(election.counties,['台北县','高雄县','新竹县','连江县','台东县','云林县','宜兰县','花莲县']);
- assert.equal(shard.contests.filter(c=>c.election_id===election.election_id).length,89);
+ const townshipContests=shard.contests.filter(c=>c.election_id===election.election_id);
+ assert.equal(townshipContests.length,90);
+ assert.equal(new Set(townshipContests.map(c=>c.contest_id)).size,90);
+ assert.equal(townshipContests.flatMap(c=>contestants(shard,c)).length,209);
+ assert.deepEqual(Object.fromEntries(election.counties.map(county=>[county,townshipContests.filter(c=>c.county_name===county).length])),{'台北县':29,'高雄县':27,'新竹县':13,'连江县':4,'台东县':2,'云林县':2,'宜兰县':12,'花莲县':1});
  const geometry=Local.geometry(shard,map,reference,String,Core.mergePaths,Presidential.modernCounty,Presidential.baseTown);
  for(const [county,count,candidates,totals] of [
   ['台北县',29,81,[1989086,1239640,1200839,38801]],
