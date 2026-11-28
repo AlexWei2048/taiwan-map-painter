@@ -331,16 +331,14 @@
       "complete": true,
       "roster": 53,
       "confirmed_true": 38,
-      "confirmed_false": 87,
-      "ambiguous": [
-        "陳明礎"
-      ],
+      "confirmed_false": 88,
+      "ambiguous": [],
       "unverified": 0,
       "source_url": "https://sp.kcc.gov.tw/parliament/index.asp?p4n=2&pn=4",
       "secondary_source": "https://www.kcc.gov.tw/Member_HistoryList.aspx?n=122&s=13&sms=0",
       "departure_names": [],
       "method": "Same county exact unique official name; missing from complete roster only; near-name and incomplete roster nonmatches remain unknown. Term roster is historical evidence, not a dated attendance list.",
-      "disambiguated_nonmatches": 6
+      "disambiguated_nonmatches": 7
     },
     {
       "county": "彰化縣",
@@ -19090,6 +19088,18 @@
           "roster_term": "1990-03-01/1994-02-28",
           "election_date": "1994-01-29",
           "roster_name": null
+        },
+        "9": {
+          "value": false,
+          "source_url": "https://sp.kcc.gov.tw/parliament/index.asp?p4n=2&pn=4",
+          "secondary_source": "https://web.cec.gov.tw/api/file/76759c27-9c79-446a-9cd1-f8f50e658e06.pdf",
+          "corroboration_url": "https://govtw.org/candidate/%E9%99%B3%E6%98%8E%E7%9C%8B",
+          "method": "official_prior_term_roster_disambiguation",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "near_name": "陳明看",
+          "evidence": "第十二屆名冊列陳明看，第十三、十四屆列陳明礎。1994-01-29陳明看為阿蓮鄉長2號候選人（8843票當選），陳明礎為林園、大寮第2選區議員9號候選人（5634票當選），同日不同公職，非同一人。",
+          "limitation": "前屆名冊非逐日遞補紀錄，依現有完整名冊與同日選舉清冊判定。"
         },
         "10": {
           "value": false,
