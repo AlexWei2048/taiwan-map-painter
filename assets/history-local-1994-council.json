@@ -1411,6 +1411,19 @@
           "ballot_number": 5,
           "votes": 10338
         },
+        "8": {
+          "value": false,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%89%89%E5%85%AC%E5%A0%B1/05%E7%9B%B4%E8%BD%84%E5%B8%82%E8%AD%B0%E5%93%A1/103%E5%B9%B4/02%E6%96%B0%E5%8C%97%E5%B8%82/%E6%96%B0%E5%8C%97%E5%B8%82%E7%AC%AC7%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "corroboration_url": "https://zh.wikipedia.org/wiki/陳世榮_(議員)",
+          "source_locator": "2014年第7選區8號，履歷列台北縣第13–15屆議員，自述從政20年；PDF公開文字可讀，截圖請求失敗。",
+          "election_date": "1994-01-29",
+          "method": "biographical_first_term_and_prior_roster_crosscheck",
+          "confidence": "crosschecked_inferred",
+          "limitation": "依後屆履歷、首次任職年份及既有第12屆名冊轉錄交叉推定；非逐日任免紀錄，不將其他名冊未匹配者一律判為非現任。",
+          "original_name": "陳世榮",
+          "ballot_number": 8,
+          "votes": 10439
+        },
         "12": {
           "value": true,
           "source_url": "https://httpchanblogspotcom.blogspot.com/2010/12/blog-post.html?m=0",
@@ -2446,6 +2459,19 @@
         ]
       ],
       "incumbent_sources": {
+        "1": {
+          "value": false,
+          "source_url": "https://election.ltn.com.tw/2016/legislator/candidate/2/75",
+          "corroboration_url": "https://v3-lb.mirrormedia.mg/story/20261115inv005",
+          "source_locator": "2016年候選人履歷列1994年起任臺北縣第13–16屆議員；另有2026年報導明載1994年起連任。",
+          "election_date": "1994-01-29",
+          "method": "biographical_first_term_and_prior_roster_crosscheck",
+          "confidence": "crosschecked_inferred",
+          "limitation": "依後屆履歷、首次任職年份及既有第12屆名冊轉錄交叉推定；非逐日任免紀錄，不將其他名冊未匹配者一律判為非現任。",
+          "original_name": "陳永福",
+          "ballot_number": 1,
+          "votes": 17374
+        },
         "2": {
           "value": true,
           "source_url": "https://httpchanblogspotcom.blogspot.com/2010/12/blog-post.html?m=0",
