@@ -25621,6 +25621,19 @@
           "original_name": "鍾淑英",
           "ballot_number": 15,
           "votes": 3132
+        },
+        "17": {
+          "value": true,
+          "source_url": "https://ctinews.com/news/items/Q8n8DD4lno",
+          "source_locator": "2019年10月議會歷屆議員回娘家報導明載第3至7屆議員；議會官方沿革第3屆1990-03-01、第4屆1994-03-01就職。",
+          "corroboration_url": "https://www.hsinchu-cc.gov.tw/TC/page.aspx?mid=24",
+          "election_date": "1994-01-29",
+          "method": "documented_consecutive_term_biography",
+          "confidence": "biographical_inference",
+          "original_name": "余泉霖",
+          "ballot_number": 17,
+          "votes": 4448,
+          "limitation": "任期履歷推定，非投票日逐日任免名冊。"
         }
       }
     },
@@ -26088,6 +26101,19 @@
           "original_name": "王明魁",
           "ballot_number": 5,
           "votes": 4377
+        },
+        "6": {
+          "value": false,
+          "source_url": "https://web.cec.gov.tw/api/file/3abd1248-569e-49f5-ba9b-455ad77fea4d.pdf",
+          "source_locator": "2009-10-06新竹市選委會候選人登記資料第五選區，履歷列第4至7屆議員；同年選舉公報第10號候選人履歷同樣列第4至7屆。據此推定1994年第4屆選舉前非議員。PDF可讀文字，影像擷取失敗。",
+          "corroboration_url": "https://web.cec.gov.tw/api/file/59832bed-4a85-47a6-8333-470043e5ea26.pdf",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "original_name": "林漢淇",
+          "ballot_number": 6,
+          "votes": 3247,
+          "limitation": "任期履歷推定，非投票日逐日任免名冊。"
         }
       }
     },
