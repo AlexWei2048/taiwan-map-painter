@@ -1365,5 +1365,47 @@
         "document_title": "連江縣議會諮詢代表簡歷"
       }
     }
+  },
+  "雲林縣:2": {
+    "by_ballot": {
+      "1": {
+        "gender": "女"
+      }
+    },
+    "gender_sources": {
+      "1": {
+        "source_url": "https://www.ly.gov.tw/Pages/List.aspx?nodeid=946",
+        "corroboration_url": "https://votetw.com/data/candidate/%E4%BE%AF%E6%83%A0%E4%BB%99",
+        "source_locator": "官方民代履歷明載女性、雲林縣第十二及十三屆縣議員；同年省議員資料亦記女性。前屆任職推定，非逐日任免紀錄。",
+        "method": "official_career_biography",
+        "confidence": "official_career_biography",
+        "original_name": "侯惠仙",
+        "ballot_number": 1,
+        "votes": 5891,
+        "value": "女",
+        "previous_value": "男"
+      }
+    }
+  },
+  "基隆市:4": {
+    "by_ballot": {
+      "2": {
+        "gender": "男"
+      }
+    },
+    "gender_sources": {
+      "2": {
+        "source_url": "https://votetw.com/data/election/19941201J1F2?%E7%9C%81%E5%B8%82=01&%E7%B8%A3%E5%B8%82=017&%E9%84%89%E9%8E%AE%E5%B8%82%E5%8D%80=004",
+        "corroboration_url": "https://tm.ncl.edu.tw/article?u=017_087_0000838181",
+        "source_locator": "同年12月基隆市省議員第8號同名候選人為男性，得票965；國家圖書館新聞索引確認同名參選。與1月同市唯一姓名匹配，非當屆原始公報。",
+        "method": "same_year_cross_office_identity",
+        "confidence": "same_year_cross_office_identity",
+        "original_name": "吳寬曉",
+        "ballot_number": 2,
+        "votes": 115,
+        "value": "男",
+        "previous_value": ""
+      }
+    }
   }
 }

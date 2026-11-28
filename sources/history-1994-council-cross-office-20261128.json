@@ -1,0 +1,67 @@
+{
+  "baseline": "d70185296267c181a972ab849e999b8c970a2a7d",
+  "records": [
+    {
+      "county": "雲林縣",
+      "district": 2,
+      "ballot": 1,
+      "name": "侯惠仙",
+      "votes": 5891,
+      "gender": "女",
+      "inc": true,
+      "url": "https://www.ly.gov.tw/Pages/List.aspx?nodeid=946",
+      "secondary": "https://votetw.com/data/candidate/%E4%BE%AF%E6%83%A0%E4%BB%99",
+      "locator": "官方民代履歷明載女性、雲林縣第十二及十三屆縣議員；同年省議員資料亦記女性。前屆任職推定，非逐日任免紀錄。",
+      "confidence": "official_career_biography"
+    },
+    {
+      "county": "基隆市",
+      "district": 2,
+      "ballot": 4,
+      "name": "王翔鐘",
+      "votes": 3115,
+      "inc": true,
+      "url": "https://urban.klcg.gov.tw/UrbanDesign/Committees/MemberList",
+      "locator": "基隆市都市設計審議會委員履歷列第9至15屆市議員；第12屆涵蓋1994年1月29日。公開搜尋索引可讀，原頁正文擷取不可用。",
+      "confidence": "official_career_biography_indexed"
+    },
+    {
+      "county": "基隆市",
+      "district": 4,
+      "ballot": 2,
+      "name": "吳寬曉",
+      "votes": 115,
+      "gender": "男",
+      "url": "https://votetw.com/data/election/19941201J1F2?%E7%9C%81%E5%B8%82=01&%E7%B8%A3%E5%B8%82=017&%E9%84%89%E9%8E%AE%E5%B8%82%E5%8D%80=004",
+      "secondary": "https://tm.ncl.edu.tw/article?u=017_087_0000838181",
+      "locator": "同年12月基隆市省議員第8號同名候選人為男性，得票965；國家圖書館新聞索引確認同名參選。與1月同市唯一姓名匹配，非當屆原始公報。",
+      "confidence": "same_year_cross_office_identity"
+    }
+  ],
+  "changes": [
+    [
+      "侯惠仙",
+      "gender",
+      "男",
+      "女"
+    ],
+    [
+      "侯惠仙",
+      "incumbent",
+      null,
+      true
+    ],
+    [
+      "王翔鐘",
+      "incumbent",
+      null,
+      true
+    ],
+    [
+      "吳寬曉",
+      "gender",
+      "",
+      "男"
+    ]
+  ]
+}
