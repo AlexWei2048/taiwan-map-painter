@@ -21244,14 +21244,19 @@
           "town": "富里鄉",
           "name": "蘇孝信",
           "gender": "男",
-          "incumbent_at_election": null,
+          "incumbent_at_election": false,
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://eebulletin.cec.gov.tw/103/16%E8%8A%B1%E8%93%AE%E7%B8%A3/%E7%B8%A3%E8%AD%B0%E5%93%A1/%E8%8A%B1%E8%93%AE%E7%B8%A3%E7%AC%AC04%E3%80%8105%E3%80%8106%E9%81%B8%E8%88%89%E5%8D%80%20.pdf",
           "source_locator": "中選會2014年花蓮縣第4、5、6選區議員公報，蘇孝信第1號經歷「富里鄉第12、13屆鄉長」，同表性別「男」。",
           "method": "cec_official_later_candidate_biography",
-          "evidence_notes": "證明曾擔任1994第12屆富里鄉長和性別，沒有1994個人得票、號次、推薦政黨；1994選舉時現任身分尚待官方第11屆任期名錄核查。"
+          "evidence_notes": "證明曾擔任1994第12屆富里鄉長和性別，沒有1994個人得票、號次、推薦政黨；1994選舉時現任身分尚待官方第11屆任期名錄核查。",
+          "previous_term_holder": "賴振東",
+          "incumbent_method": "secondary_term_roster_crosscheck",
+          "incumbent_source_url": "https://zh.wikipedia.org/wiki/富里鄉",
+          "incumbent_source_locator": "歷任鄉長表第10、11屆賴振東、第12、13屆蘇孝信；1998同鄉選舉資料蘇孝信現任當選，原有2014公報經歷亦列第12、13屆。2023中央社報導稱一屆，與公報及1998資料不一致，保留此差異。1994原始名冊未取得。",
+          "incumbent_corroboration_url": "https://votetw.com/data/candidate/蘇孝信"
         }
       ]
     },
@@ -24182,9 +24187,9 @@
         {
           "town": "元長鄉",
           "name": "李文勝",
-          "incumbent_at_election": null,
-          "incumbent_method": "unresolved_election_day_status",
-          "previous_term_holder": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "secondary_term_roster_crosscheck",
+          "previous_term_holder": "吳明吉",
           "gender": "男",
           "votes": null,
           "ballot_number": null,
@@ -24199,7 +24204,10 @@
             "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
             "birth_year": 1963,
             "incumbent_at_election": true
-          }
+          },
+          "incumbent_source_url": "https://zh.wikipedia.org/wiki/元長鄉",
+          "incumbent_source_locator": "二手任期表列第10、11屆吳明吉，第12、13屆李文勝；日友文學刊物封面介紹亦明列李文勝第12、13屆（文字可讀、PDF截圖取得失敗），1998同鄉當選記錄另見TaiwanVotes。",
+          "incumbent_corroboration_url": "https://www.sunnyfriend.com.tw/CorporateSocialResponsibility/potatoMagazine/download/56/bird_13.pdf"
         }
       ]
     },
@@ -24240,9 +24248,9 @@
         {
           "town": "屏東市",
           "name": "黃清漢",
-          "incumbent_at_election": null,
-          "incumbent_method": "unresolved_election_day_status",
-          "previous_term_holder": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "judicial_term_dates_crosscheck",
+          "previous_term_holder": "容滋浩",
           "gender": "男",
           "votes": null,
           "ballot_number": null,
@@ -24251,7 +24259,10 @@
           "gender_source_url": "https://tcmb.culture.tw/zh-tw/detail?id=602045&indexCode=Culture_Place",
           "gender_source_locator": "国家文化记忆库明确称1996年在任屏东市长黄清汉为先生；1998年屏东县第一选区同名候选人资料列男。",
           "gender_corroboration_url": "https://votetw.com/data/candidate/%E9%BB%83%E6%B8%85%E6%BC%A2",
-          "gender_method": "historical_office_biography_crosscheck"
+          "gender_method": "historical_office_biography_crosscheck",
+          "incumbent_source_url": "https://lawplayer.com/valuable-judgment/646b3d3cc3e2a9cc78b30cf3",
+          "incumbent_source_locator": "高雄高分院86年度上易字第3352號判決明載容滋浩1986-03-01至1994-02-28任屏東市長，涵蓋1994-01-29投票日；歷任市長表列黃清漢1994-03-01起任。",
+          "incumbent_corroboration_url": "https://zh.wikipedia.org/wiki/屏東市市長"
         }
       ]
     },
@@ -24647,15 +24658,18 @@
         {
           "town": "南州鄉",
           "name": "林建成",
-          "incumbent_at_election": null,
-          "incumbent_method": "unresolved_election_day_status",
-          "previous_term_holder": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "secondary_term_roster_crosscheck",
+          "previous_term_holder": "林春富",
           "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/%E5%8D%97%E5%B7%9E%E9%84%89",
-          "corroboration_url": "https://www.judicial.gov.tw/tw/cp-2046-309849-0f675-1.html"
+          "corroboration_url": "https://www.judicial.gov.tw/tw/cp-2046-309849-0f675-1.html",
+          "incumbent_source_url": "https://zh.wikipedia.org/wiki/南州鄉",
+          "incumbent_source_locator": "二手歷屆鄉長表第10、11屆林春富（1990-03-01至1994-02-28），第12、13屆林建成；TaiwanVotes同鄉1998當選記錄交叉核對，未取得1994原始公報。",
+          "incumbent_corroboration_url": "https://taiwanvotes.tw/候選人/?n=林建成"
         }
       ]
     },
@@ -24796,9 +24810,9 @@
         {
           "town": "三地門鄉",
           "name": "謝榮祥",
-          "incumbent_at_election": null,
-          "incumbent_method": "unresolved_election_day_status",
-          "previous_term_holder": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "secondary_term_roster_crosscheck",
+          "previous_term_holder": "賴定常",
           "gender": "男",
           "votes": null,
           "ballot_number": null,
@@ -24814,7 +24828,10 @@
             "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
             "birth_year": 1950,
             "incumbent_at_election": true
-          }
+          },
+          "incumbent_source_url": "https://zh.wikipedia.org/wiki/三地門鄉",
+          "incumbent_source_locator": "二手任期表第10、11屆賴定常、第12、13屆謝榮祥；1998同鄉候選人資料為現任並當選，聯合報2026-06報導其任兩屆共八年。未見1994原始公報。",
+          "incumbent_corroboration_url": "https://udn.com/news/amp/story/124652/9541312"
         }
       ]
     },
