@@ -1136,6 +1136,19 @@
         ]
       ],
       "incumbent_sources": {
+        "1": {
+          "value": false,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/05%E7%9B%B4%E8%BD%84%E5%B8%82%E8%AD%B0%E5%93%A1/099%E5%B9%B4/02%E6%96%B0%E5%8C%97%E5%B8%82/%E6%96%B0%E5%8C%97%E5%B8%82%E7%AC%AC6%E9%81%B8%E8%89%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "secondary_source": "https://n.yam.com/Article/20121201019483",
+          "source_locator": "2010年新北市第6選區選舉公報第1頁2號洪一平，經歷列永和市第四屆市民代表及臺北縣第十三屆縣議員，原頁影像已核；2012年新聞記載由市民代表起家、1994年當選第13屆議員；前屆次級名錄無該名。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "limitation": "非逐日任免名冊；依履歷及前屆名錄交叉推定。",
+          "original_name": "洪一平",
+          "ballot_number": 1,
+          "votes": 13378
+        },
         "5": {
           "value": false,
           "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/05%E7%9B%B4%E8%BD%84%E5%B8%82%E8%AD%B0%E5%93%A1/099%E5%B9%B4/02%E6%96%B0%E5%8C%97%E5%B8%82/%E6%96%B0%E5%8C%97%E5%B8%82%E7%AC%AC6%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
