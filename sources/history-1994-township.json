@@ -6016,12 +6016,15 @@
           "incumbent_at_election": true,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "林惠敏",
-          "gender": null,
+          "gender": "女",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/玉里鎮",
-          "corroboration_url": "https://books.masterhsingyun.org/ArticleDetail/artcle2380"
+          "corroboration_url": "https://books.masterhsingyun.org/ArticleDetail/artcle2380",
+          "gender_source_url": "https://vod.tfai.org.tw/Video/7322",
+          "gender_source_locator": "國家電影及視聽文化中心影片逐字稿明列玉里鎮長林惠敏／女；同期地方職務與既有來源相符。",
+          "gender_method": "documented_office_biography_crosscheck"
         }
       ]
     },
