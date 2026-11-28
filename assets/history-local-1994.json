@@ -22392,7 +22392,12 @@
         {
           "town": "平鎮市",
           "name": "莊玉光",
-          "incumbent_at_election": true
+          "incumbent_at_election": true,
+          "gender": "男",
+          "gender_source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/05%E7%9B%B4%E8%BD%84%E5%B8%82%E8%AD%B0%E5%93%A1/103%E5%B9%B4/03%E6%A1%83%E5%9C%92%E5%B8%82/%E6%A1%83%E5%9C%92%E5%B8%82%E7%AC%AC8%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "gender_source_locator": "2014年桃園第8區公報11號，性別男、曾任平鎮第1及2屆市長；PDF文字可讀，截圖請求超時。",
+          "gender_method": "documented_office_biography_crosscheck",
+          "gender_corroboration_url": "https://www.pingzhen.tycg.gov.tw/cp.aspx?n=7196"
         }
       ]
     },
@@ -22671,7 +22676,12 @@
         {
           "town": "泰安鄉",
           "name": "黃見德",
-          "incumbent_at_election": true
+          "incumbent_at_election": true,
+          "gender": "男",
+          "gender_source_url": "https://vocus.cc/article/5baf2229fd89780001fe3bfc",
+          "gender_source_locator": "公開專訪明載黃見德與兩名弟弟為三兄弟、曾任兩屆泰安鄉長；農糧署產銷履歷網站自述擔任泰安鄉長六年多。",
+          "gender_method": "documented_office_biography_crosscheck",
+          "gender_corroboration_url": "https://qrc.afa.gov.tw/blog/0901001837"
         }
       ],
       "other_candidates": [
@@ -23116,7 +23126,7 @@
         {
           "town": "沙鹿鎮",
           "name": "陳孟森",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": true,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "陳孟森",
@@ -23125,7 +23135,11 @@
           "party_recommendation": null,
           "source_url": "https://www.shalu.taichung.gov.tw/981075/981076/981078/1023421",
           "corroboration_url": "https://www.shalu.taichung.gov.tw/1364583/post",
-          "evidence_notes": "83年1月鎮志序署名鎮長陳孟森；公所表部分引用維基與鎮志，兩種材料的獨立性有限。"
+          "evidence_notes": "83年1月鎮志序署名鎮長陳孟森；公所表部分引用維基與鎮志，兩種材料的獨立性有限。",
+          "gender_source_url": "https://ivod.ly.gov.tw/Demand/Speech/90290",
+          "gender_source_locator": "議事紀錄明稱陳孟森先生為沙鹿鎮長；沙鹿鎮志記載1994年1月在任及出生年。",
+          "gender_method": "documented_office_biography_crosscheck",
+          "gender_corroboration_url": "https://www.shalu.taichung.gov.tw/981075/981104/1364463/1364464/1364583"
         }
       ]
     },
@@ -23449,12 +23463,15 @@
           "incumbent_at_election": true,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "李繼生",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://web.cec.gov.tw/api/file/c729e26b-88ba-4db5-a9bb-824895ebae47.pdf",
-          "corroboration_url": "https://www.cw.com.tw/article/5104476"
+          "corroboration_url": "https://www.cw.com.tw/article/5104476",
+          "gender_source_url": "https://web.cec.gov.tw/api/file/c729e26b-88ba-4db5-a9bb-824895ebae47.pdf",
+          "gender_source_locator": "2012年臺南市選舉實錄不分區候選人第13號列男，履歷明載兩屆秀林鄉長。文字表格可讀，封面影像已取，未核對該表原頁。",
+          "gender_method": "documented_office_biography_crosscheck"
         }
       ]
     },
@@ -25296,14 +25313,18 @@
         {
           "town": "六腳鄉",
           "name": "楊再興",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": true,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "楊再興",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/六腳鄉"
+          "source_url": "https://zh.wikipedia.org/wiki/六腳鄉",
+          "gender_source_url": "https://lib.ylccb.gov.tw/wSite/public/Attachment/f1659514672686.pdf",
+          "gender_source_locator": "地方文化出版品記載1995年親見鄉長楊再興先生；1998及2002同地議員候選人快照均列男。PDF文字可讀，未核對原頁。",
+          "gender_method": "documented_office_biography_crosscheck",
+          "gender_corroboration_url": "https://zh.wikipedia.org/wiki/%E5%85%AD%E8%85%B3%E9%84%89"
         }
       ]
     },
@@ -25435,7 +25456,7 @@
         {
           "town": "水上鄉",
           "name": "林崑山",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": true,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "林崑山",
@@ -25443,7 +25464,11 @@
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/水上鄉",
-          "corroboration_url": "https://wikis.pro/水上鄉"
+          "corroboration_url": "https://wikis.pro/水上鄉",
+          "gender_source_url": "https://udn.com/news/story/7326/9108412",
+          "gender_source_locator": "2025年報導確認林琨山原名崑山及為水上鄉長林緗亭之父；另一報導明載曾任第11、12屆鄉長。",
+          "gender_method": "documented_office_biography_crosscheck",
+          "gender_corroboration_url": "https://tw.news.yahoo.com/%E5%98%89%E7%B8%A3%E5%89%8D%E6%B0%B4%E4%B8%8A%E9%84%89%E9%95%B7%E6%9E%97%E7%90%A8%E5%B1%B1%E7%97%85%E9%80%9D-%E5%A5%B3%E5%85%92%E6%9E%97%E7%B7%97%E4%BA%AD%E6%89%BF%E7%88%B6%E5%BF%97%E6%9C%8D%E5%8B%99%E9%84%89%E8%A6%AA-104841261.html"
         }
       ],
       "corroboration_url": "https://wikis.pro/水上鄉"
@@ -26388,14 +26413,21 @@
         {
           "town": "西港鄉",
           "name": "卓華民",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "謝英雄",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/%E8%A5%BF%E6%B8%AF%E5%8D%80"
+          "source_url": "https://zh.wikipedia.org/wiki/%E8%A5%BF%E6%B8%AF%E5%8D%80",
+          "gender_source_url": "https://lawbot.tw/judgment/TPSM_94_%E5%8F%B0%E4%B8%8A_3171_20050616",
+          "gender_source_locator": "公開裁判轉錄明載83至84年度前西港鄉長卓華民；1998年同縣第4選區涵蓋西港鄉，候選人8號同名且性別男；屬跨職位身份比對。",
+          "gender_method": "documented_office_biography_crosscheck",
+          "gender_corroboration_url": "https://github.com/AlexWei2048/taiwan-map-painter/blob/main/assets/history-local-1998.json",
+          "gender_snapshot_year": 1998,
+          "gender_snapshot_blob": "c48d770280f510f24869cc3ca72f2f878215abdc",
+          "gender_snapshot_candidate_id": "1998-council:台南县:regional:第4选举区:8"
         }
       ]
     },
@@ -27273,14 +27305,18 @@
         {
           "town": "埔心鄉",
           "name": "張榮昌",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": true,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "張榮昌",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/埔心鄉"
+          "source_url": "https://zh.wikipedia.org/wiki/埔心鄉",
+          "gender_source_url": "https://www.chcc.gov.tw/form/Details.aspx?Parser=2%2C4%2C34%2C%2C%2C%2C35",
+          "gender_source_locator": "議會歷屆名錄明載埔心鄉張榮昌男；地方文化資料明稱前鄉長張榮昌先生。",
+          "gender_method": "documented_office_biography_crosscheck",
+          "gender_corroboration_url": "https://trfc.tw/temple/TWN008164"
         }
       ]
     },
