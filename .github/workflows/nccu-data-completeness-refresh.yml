@@ -2,7 +2,7 @@ name: Refresh historical data completeness after verified backfills
 on:
   push:
     branches: [main]
-    paths: ['.github/workflows/nccu-data-completeness-refresh.yml', 'assets/history-local-2018.json', 'history-legislative-party.js', 'assets/history-local-1994-council.json', 'assets/history-local-1994.json', 'sources/history-1994-township.json']
+    paths: ['.github/workflows/nccu-data-completeness-refresh.yml', 'assets/history-local-2018.json', 'history-legislative-party.js', 'assets/history-local-1994-council.json', 'assets/history-local-1994.json', 'sources/history-1994-township.json', 'tests/history-*.test.cjs', 'test-history-legislative-party.cjs', 'scripts/audit_data_completeness*.cjs']
   workflow_dispatch:
 permissions:
   contents: write
