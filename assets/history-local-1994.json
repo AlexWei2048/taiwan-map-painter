@@ -24179,11 +24179,15 @@
           "incumbent_at_election": null,
           "incumbent_method": "unresolved_election_day_status",
           "previous_term_holder": null,
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/屏東市市長"
+          "source_url": "https://zh.wikipedia.org/wiki/屏東市市長",
+          "gender_source_url": "https://tcmb.culture.tw/zh-tw/detail?id=602045&indexCode=Culture_Place",
+          "gender_source_locator": "国家文化记忆库明确称1996年在任屏东市长黄清汉为先生；1998年屏东县第一选区同名候选人资料列男。",
+          "gender_corroboration_url": "https://votetw.com/data/candidate/%E9%BB%83%E6%B8%85%E6%BC%A2",
+          "gender_method": "historical_office_biography_crosscheck"
         }
       ]
     },
@@ -25869,14 +25873,18 @@
         {
           "town": "善化鎮",
           "name": "林碧華",
-          "gender": null,
+          "gender": "女",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "王章",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/%E5%96%84%E5%8C%96%E5%8D%80%E5%8D%80%E9%95%B7"
+          "source_url": "https://zh.wikipedia.org/wiki/%E5%96%84%E5%8C%96%E5%8D%80%E5%8D%80%E9%95%B7",
+          "gender_source_url": "https://vote.nccu.edu.tw/cec/vote3.asp?pass1=O9AA%408%3E%3A99888888iii%28%28",
+          "gender_source_locator": "政大1998年台南县第七选区（善化、安定）4号林碧华性别F；台北市法規查询所载1997年判决确认同名者任善化镇长，另94年度台上字第1176号判决明确其1994–1998年镇长任期及女性身份。",
+          "gender_corroboration_url": "https://lawplayer.com/valuable-judgment/646b3578c3e2a9cc78b22004",
+          "gender_method": "historical_office_biography_crosscheck"
         }
       ]
     },
