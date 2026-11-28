@@ -13380,6 +13380,22 @@
           "election_date": "1994-01-29",
           "roster_name": null
         },
+        "11": {
+          "value": true,
+          "source_url": "https://www.chcc.gov.tw/form/Details.aspx?Parser=2,4,34,,,,36",
+          "secondary_source": "https://www.chcg.gov.tw/TSO/getFile.aspx?did=40941&dir=erlin&file=1&file_id=370424&type=3",
+          "additional_source": "https://zh.wikipedia.org/wiki/2002%E5%B9%B4%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E9%84%89%E9%8E%AE%E5%B8%82%E9%95%B7%E9%81%B8%E8%88%89",
+          "method": "official_prior_term_roster_variant_name_geography_crosscheck",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "roster_name": "傳黎興",
+          "original_name": "傅黎興",
+          "ballot_number": 11,
+          "votes": 6846,
+          "source_locator": "第十二屆名錄列傳黎興、男、二林鎮；二林鎮公所廟宇檔案記83年前一年傳黎興以議員身分出席；2002年二林鎮長資料為傅黎興，同縣同地且後續職位吻合。保留1994候選姓名，不改成名錄異體。",
+          "confidence": "provisional_variant_identity_prior_term",
+          "limitation": "依名錄及地理、同期職務交叉推定；未核投票日逐日任免紀錄。"
+        },
         "12": {
           "value": false,
           "source_url": "https://www.chcc.gov.tw/form/Details.aspx?Parser=2,4,34,,,,36",

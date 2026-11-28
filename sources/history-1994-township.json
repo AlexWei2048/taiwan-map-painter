@@ -9101,14 +9101,20 @@
         {
           "town": "伸港鄉",
           "name": "蔡居男",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": true,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "蔡居男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://www.newton.com.tw/wiki/%E4%BC%B8%E6%B8%AF%E9%84%89/2785618"
+          "source_url": "https://www.newton.com.tw/wiki/%E4%BC%B8%E6%B8%AF%E9%84%89/2785618",
+          "gender_source_url": "https://www.chcc.gov.tw/form/Details.aspx?Parser=2,4,34,,,,34",
+          "gender_source_locator": "彰化縣議會第十屆議員名錄，蔡居男，男，出生地欄作伸港巷；另以1994年鄉長任職及1998年司法公報確認同地前鄉長身分。",
+          "gender_method": "cross_office_official_roster_identity",
+          "gender_evidence_tier": "cross_office_identity_inference",
+          "gender_corroboration_url": "https://www.president.gov.tw/Page/294/33637?SearchBy=%E4%BF%AE%E6%AD%A3%E6%A7%8D%E7%A0%B2%E5%BD%88%E8%97%A5%E5%88%80%E6%A2%B0%E7%AE%A1%E5%88%B6%E6%A2%9D%E4%BE%8B",
+          "gender_additional_source_url": "https://lawbot.tw/judgment/AAAB_86_%E6%98%93_2881_19980831_1"
         }
       ]
     },
