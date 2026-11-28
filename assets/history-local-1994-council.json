@@ -30034,6 +30034,46 @@
         "status": "bibliographic_reference_only_primary_pages_not_obtained"
       },
       "decision_note": "保留可逐人復算之既有轉錄，學術論文之匯總比例留作異常比對；不能視為原始票表已核驗。"
+    },
+    {
+      "scope": "1994-01-29 county and city council elections, excluding separately held Taipei and Kaohsiung municipal elections",
+      "election_date": "1994-01-29",
+      "office": "council",
+      "status": "aggregate_elected_count_matches_candidate_count_differs_by_one",
+      "source_url": "https://ws.dgbas.gov.tw/001/Upload/463/relfile/11160/229664/ch16.pdf",
+      "source_locator": "114年統計年鑑，表16-5，印刷頁366，第十三屆；PDF第6頁圖像與文字均核對。資料來源：中央選舉委員會。",
+      "published": {
+        "registered_voters": 10874671,
+        "candidate_count": 1868,
+        "elected_count": 883,
+        "turnout_pct": 73.09
+      },
+      "repository_count_with_kinmen_aggregate": {
+        "candidates": 1869,
+        "elected": 883
+      },
+      "repository_expected_seats": 884,
+      "limitation": "候選人總數差1人；已知當選人合計與年鑑一致，但預設席次884與實際當選883不可混同。金門只有部分逐人資料，未定位候選人差異前不刪除任何候選人，不更改預設席次或逐區票數。",
+      "adoption_policy": "retain_existing_returns_pending_district_level_reconciliation"
+    },
+    {
+      "county": "彰化縣",
+      "office": "council",
+      "election_date": "1994-01-29",
+      "status": "official_elected_gender_totals_match",
+      "source_url": "https://ctrl.chcg.gov.tw/files/102%E5%B9%B4%E5%BD%B0%E5%8C%96%E7%B8%A3%E6%80%A7%E5%88%A5%E5%9C%96%E5%83%8F_16_1081217_2025.pdf",
+      "source_locator": "102年彰化縣性別圖像，彰化縣歷屆縣議員選舉兩性當選人數及性別結構，第十三屆，印刷頁32；來源為縣統計年報。",
+      "published": {
+        "elected_count": 54,
+        "male_elected": 43,
+        "female_elected": 11
+      },
+      "repository": {
+        "elected_count": 54,
+        "male_elected": 43,
+        "female_elected": 11
+      },
+      "limitation": "僅核對當選者總數與性別合計，不代表逐人身分或選區票數已獨立確認。原表文字可讀。"
     }
   ]
 }
