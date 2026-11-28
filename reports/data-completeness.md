@@ -1,24 +1,24 @@
 # 数据完整性审计
 
-数据基准：`72a7716fcb495c97dafe7c4a417ad12da15dcc85`。行数为任务记录数，非缺失候选人总数。
+数据基准：`96c6daac724c4dc737294592ed736fcfe2f52c8d`。行数为任务记录数，非缺失候选人总数。
 
 ## 状态
 
 - unverified: 5
 - partial: 16
-- missing: 1039
+- missing: 1037
 - not_applicable: 6
 - not_yet_available: 1
 
 ## 字段
 
-- incumbent_at_election: 860
-- gender: 144
+- incumbent_at_election: 857
+- gender: 142
 - ballots_cast: 100
 - invalid_votes: 100
 - registered_voters: 87
 - candidate_results: 14
-- ballot_number: 7
+- ballot_number: 8
 - district_scope: 4
 - historical_boundary: 3
 - regional_town_candidate_transposition: 1
@@ -35,7 +35,7 @@
 | 1994 | council | regional | 159 | 1945 | {} |
 | 1994 | council | indigenous | 2 | 13 | {} |
 | 1994 | mayor | regional | 2 | 9 | {} |
-| 1994 | township | regional | 89 | 208 | {} |
+| 1994 | township | regional | 90 | 209 | {} |
 | 1994 | council | plains | 13 | 66 | {} |
 | 1994 | council | mountain | 23 | 57 | {} |
 | 1997 | mayor | regional | 23 | 80 | {} |
