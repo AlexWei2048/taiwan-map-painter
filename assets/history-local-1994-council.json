@@ -791,6 +791,19 @@
           "evidence": "official biography: 12th, 13th, 14th county council member",
           "election_date": "1994-01-29"
         },
+        "15": {
+          "value": false,
+          "source_url": "https://www.ptt.cc/bbs/TSU/M.1254200987.A.C6F.html",
+          "secondary_source": "https://httpchanblogspotcom.blogspot.com/2010/12/blog-post.html?m=0",
+          "source_locator": "候選人履歷與台北縣議會第十二屆（1990-03-01至1994-02-28）任期名錄互核",
+          "election_date": "1994-01-29",
+          "method": "career_history_crosscheck",
+          "evidence": "2009年台聯提名資料轉載列第十三、十五、十六屆縣議員經歷；第十二屆名錄無此人。",
+          "confidence": "secondary_career_crosscheck",
+          "original_name": "蕭貫譽",
+          "ballot_number": 15,
+          "votes": 10246
+        },
         "16": {
           "value": true,
           "source_url": "https://httpchanblogspotcom.blogspot.com/2010/12/blog-post.html?m=0",
@@ -836,6 +849,19 @@
           "original_name": "黃瑞璨",
           "ballot_number": 23,
           "votes": 13578
+        },
+        "25": {
+          "value": false,
+          "source_url": "https://www.tufs.ac.jp/ts/personal/ogasawara/analysis/taibeixinbei2010.pdf",
+          "secondary_source": "https://httpchanblogspotcom.blogspot.com/2010/12/blog-post.html?m=0",
+          "source_locator": "候選人履歷與台北縣議會第十二屆（1990-03-01至1994-02-28）任期名錄互核",
+          "election_date": "1994-01-29",
+          "method": "career_history_crosscheck",
+          "evidence": "小笠原欣幸2010年台北、新北市長選舉研究記載其於1994年當選省議員後開始政治生涯；第十二屆縣議員名錄無此人。",
+          "confidence": "secondary_career_crosscheck",
+          "original_name": "周錫瑋",
+          "ballot_number": 25,
+          "votes": 7671
         }
       }
     },
@@ -978,6 +1004,19 @@
           "original_name": "邱垂益",
           "ballot_number": 6,
           "votes": 13855
+        },
+        "8": {
+          "value": false,
+          "source_url": "https://www.nownews.com/news/6252085",
+          "secondary_source": "https://httpchanblogspotcom.blogspot.com/2010/12/blog-post.html?m=0",
+          "source_locator": "候選人履歷與台北縣議會第十二屆（1990-03-01至1994-02-28）任期名錄互核",
+          "election_date": "1994-01-29",
+          "method": "career_history_crosscheck",
+          "evidence": "2023年人物報導記載1993年由教師轉入政界，1994年當選台北縣議員，僅任一屆；第十二屆名錄無此人。",
+          "confidence": "secondary_career_crosscheck",
+          "original_name": "鍾小平",
+          "ballot_number": 8,
+          "votes": 17622
         },
         "10": {
           "value": true,
@@ -1647,6 +1686,19 @@
           "ballot_number": 1,
           "votes": 16302
         },
+        "3": {
+          "value": false,
+          "source_url": "https://neww.tw/tsai-mingtang/",
+          "secondary_source": "https://httpchanblogspotcom.blogspot.com/2010/12/blog-post.html?m=0",
+          "source_locator": "候選人履歷與台北縣議會第十二屆（1990-03-01至1994-02-28）任期名錄互核",
+          "election_date": "1994-01-29",
+          "method": "career_history_crosscheck",
+          "evidence": "人物履歷記載1994年至2022年間擔任四屆台北縣議員、兩屆新北市議員；第十二屆名錄無此人。",
+          "confidence": "secondary_career_crosscheck",
+          "original_name": "蔡明堂",
+          "ballot_number": 3,
+          "votes": 17550
+        },
         "5": {
           "value": true,
           "source_url": "https://httpchanblogspotcom.blogspot.com/2010/12/blog-post.html?m=0",
@@ -1724,6 +1776,19 @@
           "original_name": "陳幸進",
           "ballot_number": 23,
           "votes": 14533
+        },
+        "25": {
+          "value": true,
+          "source_url": "https://news.tvbs.com.tw/politics/1958447",
+          "secondary_source": "https://httpchanblogspotcom.blogspot.com/2010/12/blog-post.html?m=0",
+          "source_locator": "候選人履歷與台北縣議會第十二屆（1990-03-01至1994-02-28）任期名錄互核",
+          "election_date": "1994-01-29",
+          "method": "career_history_name_variant_crosscheck",
+          "evidence": "TVBS人物報導記載柯玟伶連任第九至十三屆台北縣議員，三重蘆洲地區與第五選區相符；第十二屆及第十三屆名錄亦作柯玟伶，1994結果姓名作柯玫伶。保留原始姓名。",
+          "confidence": "secondary_career_crosscheck",
+          "original_name": "柯玫伶",
+          "ballot_number": 25,
+          "votes": 6943
         },
         "26": {
           "value": true,
