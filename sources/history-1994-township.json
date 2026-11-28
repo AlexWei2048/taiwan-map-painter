@@ -6814,9 +6814,9 @@
         {
           "town": "九如鄉",
           "name": "許世裕",
-          "incumbent_at_election": null,
-          "incumbent_method": "unresolved_election_day_status",
-          "previous_term_holder": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "secondary_term_roster_crosscheck",
+          "previous_term_holder": "楊泰春",
           "gender": "男",
           "votes": null,
           "ballot_number": null,
@@ -6831,7 +6831,10 @@
             "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
             "birth_year": 1955,
             "incumbent_at_election": true
-          }
+          },
+          "incumbent_source_url": "https://votetw.com/wiki/%E5%B1%8F%E6%9D%B1%E7%B8%A3%E4%B9%9D%E5%A6%82%E9%84%89",
+          "incumbent_source_locator": "歷屆鄉長名冊：楊泰春第10、11屆；許世裕第12、13屆。政大1998選舉資料核對同選區許世裕為現任、楊泰春非現任；1994身份依二手任期表判定。",
+          "incumbent_corroboration_url": "https://vote.nccu.edu.tw/cec/vote3.asp?pass1=P9AA%408%3E%3A9%3B888888iii%28%28"
         }
       ]
     },
@@ -8417,9 +8420,9 @@
           "town": "學甲鎮",
           "name": "李育全",
           "gender": "男",
-          "incumbent_at_election": null,
-          "incumbent_method": null,
-          "previous_term_holder": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "secondary_term_roster_crosscheck",
+          "previous_term_holder": "陳石定",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
@@ -8433,7 +8436,10 @@
             "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
             "birth_year": 1958,
             "incumbent_at_election": true
-          }
+          },
+          "incumbent_source_url": "https://zh.wikipedia.org/wiki/%E5%AD%B8%E7%94%B2%E5%8D%80",
+          "incumbent_source_locator": "歷任首長表：陳石定任期1990-03-01至1994-02-28；李育全為下一任。二手任期表，未取得1994原始選舉公報。",
+          "incumbent_corroboration_url": "https://tucheng.kenlab.org/wiki/xuejia-district-office/"
         }
       ]
     },
