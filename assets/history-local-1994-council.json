@@ -14578,6 +14578,20 @@
         }
       },
       "incumbent_sources": {
+        "4": {
+          "value": true,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/094%E5%B9%B4/17%E9%9B%B2%E6%9E%97%E7%B8%A3/%E9%9B%B2%E6%9E%97%E7%B8%A3%E7%AC%AC2%E9%81%B8%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "source_locator": "2005年第16屆第2選區公報5號鐘俊興：經歷明列第12、14、15屆縣議員；姓名異體與同縣同選區、政黨及後屆參選紀錄相符。",
+          "election_date": "1994-01-29",
+          "method": "official_bulletin_previous_term_variant_name",
+          "confidence": "documented_term_history",
+          "original_name": "鍾俊興",
+          "ballot_number": 4,
+          "votes": 6418,
+          "limitation": "候選人自填履歷刊於官方公報；並非當屆逐日任免名冊。PDF文字可讀，截圖未取得。",
+          "corroboration_url": "https://votetw.com/data/candidate/%E6%9E%97%E6%85%A7%E5%A6%82",
+          "roster_name": "鐘俊興"
+        },
         "5": {
           "value": true,
           "source_url": "https://gukeng.yunlin.gov.tw/cp.aspx?n=4743",
@@ -14588,6 +14602,18 @@
           "ballot_number": 5,
           "votes": 6970,
           "limitation": "任期履歷非投票日逐日任免資料。"
+        },
+        "10": {
+          "value": true,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/094%E5%B9%B4/17%E9%9B%B2%E6%9E%97%E7%B8%A3/%E9%9B%B2%E6%9E%97%E7%B8%A3%E7%AC%AC2%E9%81%B8%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "source_locator": "2005年第16屆第2選區公報1號：經歷明列第12、13、14、15屆雲林縣議員。",
+          "election_date": "1994-01-29",
+          "method": "official_bulletin_documented_previous_term",
+          "confidence": "documented_term_history",
+          "original_name": "林再添",
+          "ballot_number": 10,
+          "votes": 6126,
+          "limitation": "候選人自填履歷刊於官方公報；並非當屆逐日任免名冊。PDF文字可讀，截圖未取得。"
         }
       }
     },
@@ -14774,6 +14800,18 @@
           "votes": 6864,
           "corroboration_url": "https://votetw.com/data/candidate/%E6%B2%88%E5%AE%97%E9%9A%86"
         },
+        "4": {
+          "value": false,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/098%E5%B9%B4/17%E9%9B%B2%E6%9E%97%E7%B8%A3/%E9%9B%B2%E6%9E%97%E7%B8%A3%E7%AC%AC3%E9%81%B8%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "source_locator": "2009年第17屆第3選區公報5號：列第14屆鄉民代表會副主席及第13至16屆縣議員，推定1994年首次當選時非同職現任。",
+          "election_date": "1994-01-29",
+          "method": "official_bulletin_prior_other_office_inference",
+          "confidence": "biographical_inference",
+          "original_name": "謝翠蓮",
+          "ballot_number": 4,
+          "votes": 5264,
+          "limitation": "候選人自填履歷刊於官方公報；並非當屆逐日任免名冊。PDF文字可讀，截圖未取得。"
+        },
         "10": {
           "value": true,
           "source_url": "https://zh.wikipedia.org/wiki/張榮味",
@@ -14784,6 +14822,18 @@
           "ballot_number": 10,
           "votes": 9860,
           "secondary_source": "https://www.president.gov.tw/NEWS/21336"
+        },
+        "17": {
+          "value": false,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/098%E5%B9%B4/17%E9%9B%B2%E6%9E%97%E7%B8%A3/%E9%9B%B2%E6%9E%97%E7%B8%A3%E7%AC%AC3%E9%81%B8%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "source_locator": "2009年第17屆第3選區公報2號：列虎尾鎮第13、14屆鎮民代表及縣議員第13、15、16屆，推定1994年首次當選時非同職現任。",
+          "election_date": "1994-01-29",
+          "method": "official_bulletin_prior_other_office_inference",
+          "confidence": "biographical_inference",
+          "original_name": "陳瑞雄",
+          "ballot_number": 17,
+          "votes": 5230,
+          "limitation": "候選人自填履歷刊於官方公報；並非當屆逐日任免名冊。PDF文字可讀，截圖未取得。"
         }
       },
       "gender_sources": {
