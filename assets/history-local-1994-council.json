@@ -28927,6 +28927,19 @@
           "votes": 4505,
           "additional_source": "https://tncc.digital.th.gov.tw/display.php?code=135251pQHmV"
         },
+        "8": {
+          "value": false,
+          "source_url": "https://www.ly.gov.tw/Pages/List.aspx?nodeid=1291",
+          "source_locator": "官方民代履歷列臺南市第13屆市議員；2008年本人自述1994年由大學教師轉投入市議員選舉。",
+          "corroboration_url": "https://blog.udn.com/karl6406/1996719",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "original_name": "錢林慧君",
+          "ballot_number": 8,
+          "votes": 6284,
+          "limitation": "履歷推定，未取得前屆完整任免名冊，不等同投票日直接證明。"
+        },
         "9": {
           "value": true,
           "source_url": "https://tm.ncl.edu.tw/article?u=017_008_0000275667",
@@ -29284,6 +29297,18 @@
         ]
       ],
       "incumbent_sources": {
+        "1": {
+          "value": false,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/05%E7%9B%B4%E8%BD%84%E5%B8%82%E8%AD%B0%E5%93%A1/103%E5%B9%B4/05%E8%87%BA%E5%8D%97%E5%B8%82/%E8%87%BA%E5%8D%97%E5%B8%82%E7%AC%AC10%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "source_locator": "2014年公報第10選區1號履歷列原臺南市第13、14、16屆議員；已核對原頁影像。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "original_name": "劉益昌",
+          "ballot_number": 1,
+          "votes": 5898,
+          "limitation": "履歷推定，未取得前屆完整任免名冊，不等同投票日直接證明。"
+        },
         "2": {
           "value": true,
           "source_url": "https://tm.ncl.edu.tw/article?u=017_008_0000275667",
@@ -29447,6 +29472,30 @@
         }
       },
       "incumbent_sources": {
+        "2": {
+          "value": false,
+          "source_url": "https://web.cec.gov.tw/api/file/1ec6f04d-2036-4520-ac91-f2dbbff740b4.pdf",
+          "source_locator": "2010年臺南市第1屆議員第13選區2號公報列原臺南市第13屆議員、安平區里長及當時市議員；文字可讀，影像擷取失敗。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "original_name": "馬崇喜",
+          "ballot_number": 2,
+          "votes": 2459,
+          "limitation": "履歷推定，未取得前屆完整任免名冊，不等同投票日直接證明。"
+        },
+        "3": {
+          "value": false,
+          "source_url": "https://web.cec.gov.tw/api/file/1ec6f04d-2036-4520-ac91-f2dbbff740b4.pdf",
+          "source_locator": "同公報第13選區4號履歷列原臺南市第13、14、15屆議員；文字可讀，影像擷取失敗。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "original_name": "翁朝正",
+          "ballot_number": 3,
+          "votes": 3499,
+          "limitation": "履歷推定，未取得前屆完整任免名冊，不等同投票日直接證明。"
+        },
         "5": {
           "value": false,
           "source_url": "https://councilorwatch.tw/councillor/10/282",
