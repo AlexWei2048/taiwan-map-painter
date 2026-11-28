@@ -28511,6 +28511,31 @@
         }
       },
       "incumbent_sources": {
+        "2": {
+          "value": true,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/094%E5%B9%B4/20%E8%87%BA%E5%8D%97%E5%B8%82/%E8%87%BA%E5%8D%97%E5%B8%82%E7%AC%AC1%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "source_locator": "2005年臺南市第1選區公報1號，履歷列第10至15屆議員，已核對公報原頁影像。",
+          "election_date": "1994-01-29",
+          "method": "documented_consecutive_term_biography",
+          "confidence": "published_election_bulletin",
+          "original_name": "蔣明東",
+          "ballot_number": 2,
+          "votes": 5929,
+          "limitation": "公開任期履歷推定，非投票日逐日任免名冊；非現任分類仍待前屆完整名冊交叉核實。"
+        },
+        "7": {
+          "value": false,
+          "source_url": "https://www.taiwantimes.com.tw/app-container/app-content/new/new-content-detail?blogId=blog-b605cdb4-ebee-4792-a948-0d31b110bb8e&currentCategory=2",
+          "source_locator": "2024年本人受訪回述1994年任醫師第三年投入議員選舉，當選第13、14屆；2005年公報確認同名同區醫師身分。",
+          "corroboration_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/094%E5%B9%B4/20%E8%87%BA%E5%8D%97%E5%B8%82/%E8%87%BA%E5%8D%97%E5%B8%82%E7%AC%AC1%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "original_name": "林易煌",
+          "ballot_number": 7,
+          "votes": 5880,
+          "limitation": "公開任期履歷推定，非投票日逐日任免名冊；非現任分類仍待前屆完整名冊交叉核實。"
+        },
         "10": {
           "value": true,
           "source_url": "https://tm.ncl.edu.tw/article?u=017_008_0000275667",
@@ -28679,6 +28704,18 @@
           "ballot_number": 3,
           "votes": 2048
         },
+        "4": {
+          "value": false,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/05%E7%9B%B4%E8%BD%84%E5%B8%82%E8%AD%B0%E5%93%A1/099%E5%B9%B4/04%E8%87%BA%E5%8D%97%E5%B8%82/%E8%87%BA%E5%8D%97%E5%B8%82%E7%AC%AC15%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "source_locator": "2010年第15選區4號公報履歷明列原臺南市第13至16屆議員及兩里里長，推定第13屆選舉前非同職現任；文字可讀，影像請求失敗。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "original_name": "郭和元",
+          "ballot_number": 4,
+          "votes": 4520,
+          "limitation": "公開任期履歷推定，非投票日逐日任免名冊；非現任分類仍待前屆完整名冊交叉核實。"
+        },
         "5": {
           "value": false,
           "source_url": "https://www.tncc.gov.tw/2019/tnccp2/ccp_02a.asp?CName=%E7%8E%8B%E5%AE%B6%E8%B2%9E&mainid=%7B65EAFA87-8955-443B-8346-9CCE931BA05E%7D",
@@ -28728,6 +28765,18 @@
           "ballot_number": 8,
           "votes": 8391,
           "additional_source": "https://tncc.digital.th.gov.tw/display.php?code=135251pQHmV"
+        },
+        "9": {
+          "value": false,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/05%E7%9B%B4%E8%BD%84%E5%B8%82%E8%AD%B0%E5%93%A1/099%E5%B9%B4/04%E8%87%BA%E5%8D%97%E5%B8%82/%E8%87%BA%E5%8D%97%E5%B8%82%E7%AC%AC15%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "source_locator": "2010年第15選區3號公報履歷列原臺南市第13至15屆議員及當時第16屆任職；推定第13屆選舉前非同職現任。文字可讀，影像請求失敗。",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "original_name": "葉俊良",
+          "ballot_number": 9,
+          "votes": 8622,
+          "limitation": "公開任期履歷推定，非投票日逐日任免名冊；非現任分類仍待前屆完整名冊交叉核實。"
         }
       }
     },
@@ -29079,6 +29128,19 @@
           "original_name": "江秋香",
           "ballot_number": 2,
           "votes": 4014
+        },
+        "3": {
+          "value": false,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/05%E7%9B%B4%E8%BD%84%E5%B8%82%E8%AD%B0%E5%93%A1/099%E5%B9%B4/04%E8%87%BA%E5%8D%97%E5%B8%82/%E8%87%BA%E5%8D%97%E5%B8%82%E7%AC%AC11%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "source_locator": "2010年第11選區1號公報履歷列原臺南市第13屆議員、第14至16屆議長；推定第13屆選舉前非同職現任。文字可讀，影像請求失敗。",
+          "corroboration_url": "https://journal.th.gov.tw/intro.php?council=tncc",
+          "election_date": "1994-01-29",
+          "method": "inferred_from_biographical_first_council_term",
+          "confidence": "biographical_inference",
+          "original_name": "黃郁文",
+          "ballot_number": 3,
+          "votes": 4754,
+          "limitation": "公開任期履歷推定，非投票日逐日任免名冊；非現任分類仍待前屆完整名冊交叉核實。"
         },
         "6": {
           "value": false,
