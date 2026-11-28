@@ -15211,6 +15211,38 @@
           "ballot_number": 8,
           "votes": 7420
         }
+      },
+      "official_result_crosscheck": {
+        "source_url": "https://www.president.gov.tw/Page/294/33930",
+        "source_locator": "釋字第442號附件：臺灣高等法院臺南分院83年度選上字第1號判決，理由四及六至十",
+        "announcement_date": "1994-02-05",
+        "announcement_number": "83省選一字第248號",
+        "candidate_count": 10,
+        "seats": 7,
+        "verified_candidates": [
+          {
+            "ballot_number": 4,
+            "name": "許振明",
+            "original_votes": 6448,
+            "original_elected": false
+          },
+          {
+            "ballot_number": 10,
+            "name": "徐忠徹",
+            "original_votes": 6449,
+            "original_elected": true
+          }
+        ],
+        "post_election_judgment": {
+          "date": "1994-12-30",
+          "first_instance_date": "1994-08-31",
+          "candidate_4_judicial_votes": 6450,
+          "candidate_10_judicial_votes": 6449,
+          "candidate_10_election_invalidated": true,
+          "whole_election_invalidated": false,
+          "appeals_dismissed": true
+        },
+        "policy": "原始當選公告與事後司法判決分列，不改寫投票日歷史結果；未取得遞補或補選公告，不推定接任者。"
       }
     },
     {
@@ -16623,7 +16655,7 @@
           "梁英偉",
           965,
           "中國國民黨",
-          "",
+          "男",
           false
         ]
       ],
@@ -16650,6 +16682,20 @@
           "ballot_number": 2,
           "votes": 965,
           "limitation": "前屆名錄非逐日任免紀錄；未匹配只代表依所存名錄推定非現任，名錄原網頁本輪未能重新載入。"
+        }
+      },
+      "gender_sources": {
+        "2": {
+          "method": "cross-election exact name and same county indigenous locality; inferred identity from two official records",
+          "confidence": "corroborated_identity_inference",
+          "years": [
+            2010,
+            2014
+          ],
+          "source_url": "https://web.cec.gov.tw/api/file/34366dad-04e3-410a-af07-d7536b65855a.pdf",
+          "source_locator": "第7頁，阿里山鄉樂野村梁英偉，男",
+          "secondary_source": "https://eebulletin.cec.gov.tw/103/13%E5%98%89%E7%BE%A9%E7%B8%A3/%E9%84%89%E9%8E%AE%E5%B8%82%E6%B0%91%E4%BB%A3%E8%A1%A8/%E9%98%BF%E9%87%8C%E5%B1%B1%E9%84%89%E6%B0%91%E4%BB%A3%E8%A1%A8%E7%AC%AC2%E9%81%B8%E5%8D%80.pdf",
+          "limitation": "同名、同縣山地選區，兩屆官方資料一致；未取得1994年原始登記表，屬跨屆身分推定；PDF文字可讀但截圖未取得。"
         }
       }
     },
@@ -29467,6 +29513,30 @@
         "female_elected"
       ],
       "limitations": "其他欄位來自倉庫既有五選區的合計，非官方表獨立提供；官方表文字可讀、截圖未取得。不得將市級資料分攤至選區。"
+    }
+  ],
+  "independent_source_checks": [
+    {
+      "county": "澎湖縣",
+      "election_date": "1994-01-29",
+      "office": "council",
+      "status": "unresolved_party_aggregate_discrepancy",
+      "source_url": "https://jestw.nccu.edu.tw/uploads/paper/tw/11-2%E8%94%A1%E6%98%8E%E6%83%A0.pdf",
+      "source_locator": "蔡明惠（2004），《民主轉型中的澎湖地方政治生態》，表6；引用1994年澎湖縣選舉實錄",
+      "published_party_vote_pct": {
+        "中國國民黨": 65.44,
+        "民主進步黨": 6.63,
+        "新黨": 0.81,
+        "無黨籍及其他": 27.12
+      },
+      "repository_votes": {
+        "無黨籍": 19881,
+        "中國國民黨": 21784,
+        "新黨": 1232,
+        "民主進步黨": 2832
+      },
+      "repository_total": 45729,
+      "limitation": "兩者政黨票比例不一致，可能口徑不同或來源轉錄差異；未取得當屆原始逐人票表，不改寫任何候選人政黨或得票。PDF表格文字可讀，目標頁截圖未取得。"
     }
   ]
 }
