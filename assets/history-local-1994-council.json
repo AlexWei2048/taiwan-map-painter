@@ -14139,6 +14139,18 @@
           "votes": 4689,
           "corroboration_url": "https://www.nownews.com/amp/news/6530339"
         },
+        "9": {
+          "value": true,
+          "source_url": "https://www.president.gov.tw/NEWS/21336",
+          "source_locator": "1993-02-13官方新聞列南投縣議會議長余武龍。",
+          "election_date": "1994-01-29",
+          "method": "contemporaneous_official_office_record",
+          "confidence": "official_prior_year_office_inference",
+          "limitation": "依公開任期或前屆在職資料推定，非投票日逐日任免名冊；涉及PDF時，公開文字可讀而頁面影像未取得。",
+          "original_name": "余武龍",
+          "ballot_number": 9,
+          "votes": 5395
+        },
         "15": {
           "value": true,
           "source_url": "https://election.ltn.com.tw/2016/legislator/candidate/696/157",
@@ -21848,7 +21860,21 @@
           "男",
           true
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "3": {
+          "value": true,
+          "source_url": "https://www.president.gov.tw/NEWS/21336",
+          "source_locator": "1993-02-13官方新聞列臺東縣議會議長李忠憲。",
+          "election_date": "1994-01-29",
+          "method": "contemporaneous_official_office_record",
+          "confidence": "official_prior_year_office_inference",
+          "limitation": "依公開任期或前屆在職資料推定，非投票日逐日任免名冊；涉及PDF時，公開文字可讀而頁面影像未取得。",
+          "original_name": "李忠憲",
+          "ballot_number": 3,
+          "votes": 4827
+        }
+      }
     },
     {
       "county": "臺東縣",
@@ -22623,6 +22649,19 @@
         ]
       ],
       "incumbent_sources": {
+        "2": {
+          "value": true,
+          "source_url": "https://www.ntl.edu.tw/public/ntl/4216/%E8%8E%8A%E5%98%89%E5%BC%B7%E5%85%A8%E6%96%87.pdf",
+          "source_locator": "研究引1991-11-29《中國時報》14版及花蓮縣議會第十二屆第四次定期大會暨第八次臨時大會議事錄，記載花蓮縣議員林仁德。非同名臺中市議長。",
+          "election_date": "1994-01-29",
+          "method": "historical_research_contemporaneous_press_and_council_reference",
+          "confidence": "corroborated_prior_term_inference",
+          "limitation": "依公開任期或前屆在職資料推定，非投票日逐日任免名冊；涉及PDF時，公開文字可讀而頁面影像未取得。",
+          "original_name": "林仁德",
+          "ballot_number": 2,
+          "votes": 2145,
+          "corroboration_url": "https://vote.nccu.edu.tw/cec/vote3.asp?pass1=K9AA%3EI8888888888iii%28%28"
+        },
         "8": {
           "value": false,
           "source_url": "https://web.cec.gov.tw/api/file/ef36ce58-e531-48a9-9a7d-1ef7d7d68e38.pdf",
@@ -22872,6 +22911,19 @@
           "original_name": "田智宣",
           "ballot_number": 5,
           "votes": 4296
+        },
+        "10": {
+          "value": false,
+          "source_url": "https://cloud.hakka.gov.tw/Attachment/1/842313544171.pdf",
+          "source_locator": "附錄一，印刷頁163，引《吉安鄉志》(2002)頁220–221：第11屆吉安鄉長徐永滿任期1990-03-01至1994年3月，涵蓋1994-01-29投票日。",
+          "election_date": "1994-01-29",
+          "method": "documented_concurrent_other_office",
+          "confidence": "historical_term_roster_inference",
+          "limitation": "依公開任期或前屆在職資料推定，非投票日逐日任免名冊；涉及PDF時，公開文字可讀而頁面影像未取得。",
+          "original_name": "徐永滿",
+          "ballot_number": 10,
+          "votes": 4465,
+          "corroboration_url": "https://tcdata.tzuchi-org.tw/asset/detail/20231205-171302307-6696?keyword=%E6%9D%8E%E6%98%8E%E4%BA%AE"
         }
       }
     },
