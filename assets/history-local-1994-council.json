@@ -24461,6 +24461,19 @@
           "original_name": "許財利",
           "ballot_number": 3,
           "votes": 4156
+        },
+        "5": {
+          "value": true,
+          "source_url": "https://www.dali.taichung.gov.tw/media/852951/2022%E8%B3%87%E6%B7%B1%E7%B8%BE%E5%84%AA%E6%9D%91%E9%87%8C%E9%95%B7%E5%8F%8A%E6%B0%91%E6%84%8F%E4%BB%A3%E8%A1%A8%E8%A1%A8%E6%8F%9A%E5%B0%88%E8%BC%AF.pdf",
+          "source_locator": "111年資深績優村里長及地方民意代表表揚專輯，印刷頁17，履歷明載基隆市第12至14屆議員。PDF文字可讀，原頁影像請求失敗。",
+          "corroboration_url": "https://councilorwatch.tw/councillor/10/495",
+          "election_date": "1994-01-29",
+          "method": "documented_consecutive_term_biography",
+          "confidence": "institutional_biography",
+          "original_name": "蘇仁和",
+          "ballot_number": 5,
+          "votes": 2916,
+          "limitation": "按公開任期履歷推定，非投票日逐日任免名冊。"
         }
       },
       "gender_sources": {
@@ -25165,6 +25178,20 @@
           "scope_1994": [
             "安樂區"
           ]
+        }
+      },
+      "incumbent_sources": {
+        "7": {
+          "value": true,
+          "source_url": "https://www.idn.com.tw/news/news_content.aspx?artid=20091126df001",
+          "source_locator": "2009-11-26自立晚報報導，列杜卻曾任基隆市第11屆市議員、第12屆副議長、第13屆市議員；姓名却/卻為簡繁異體，與1994候選姓名、同縣市及連續屆次吻合。",
+          "election_date": "1994-01-29",
+          "method": "documented_consecutive_term_biography",
+          "confidence": "published_biographical_record",
+          "original_name": "杜却",
+          "ballot_number": 7,
+          "votes": 3532,
+          "limitation": "按公開任期履歷推定，非投票日逐日任免名冊。"
         }
       }
     },
