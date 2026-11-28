@@ -3458,7 +3458,14 @@
           "name": "李毅強",
           "gender": "男",
           "party_membership": "中國國民黨",
-          "votes": 25
+          "votes": 25,
+          "incumbent_at_election": false,
+          "previous_term_holder": "楊瑞大",
+          "incumbent_method": "official_local_gazette_and_first_elected_term_crosscheck",
+          "incumbent_source_url": "https://cabkc.kinmen.gov.tw/uploads/files/202304/4afadd7b-a30a-4270-9ebc-63fab7403a88.pdf",
+          "incumbent_source_locator": "金門縣志烏坵鄉政沿革記載楊瑞大民國45–83年任鄉長，83年1月首次民選；金門日報2006-12報導李毅強曾任第四、五屆鄉長。縣府2023公告亦確認1994-01-29為第四屆、首次民選鄉長選舉。依任期記載交叉判定，非逐日任免紀錄。",
+          "incumbent_corroboration_url": "https://www.kinmen.gov.tw/News_Content2.aspx?n=98E3CA7358C89100&s=66462212BE9095F4&sms=BF7D6D478B935644",
+          "incumbent_additional_source_url": "https://www.kmdn.gov.tw/1117/1271/1272/137546/?cprint=pt"
         }
       ],
       "source_sha256": "e98c5c1fff9cfca4352b4a32cb6d1a82ade588efd512b092f564b6a8a0dbe909",
@@ -10057,14 +10064,17 @@
           "town": "東河鄉",
           "name": "邱一郎",
           "gender": "男",
-          "incumbent_at_election": null,
-          "incumbent_method": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "official_statistical_yearbook_consecutive_election_crosscheck",
           "previous_term_holder": "葉隆雄",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://www.donghe.gov.tw/home/attachments/article/592/103%E5%B9%B4%E6%9D%B1%E6%B2%B3%E9%84%89%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1.pdf",
-          "corroboration_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/094%E5%B9%B4/24%E8%87%BA%E6%9D%B1%E7%B8%A3/%E8%87%BA%E6%9D%B1%E7%B8%A3%E7%AC%AC3%E3%80%819%E3%80%8110%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf"
+          "corroboration_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/094%E5%B9%B4/24%E8%87%BA%E6%9D%B1%E7%B8%A3/%E8%87%BA%E6%9D%B1%E7%B8%A3%E7%AC%AC3%E3%80%819%E3%80%8110%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "incumbent_source_url": "https://www.donghe.gov.tw/home/attachments/article/2671/110%E5%B9%B4%E6%9D%B1%E6%B2%B3%E9%84%89%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1.pdf",
+          "incumbent_source_locator": "東河鄉110年統計年報表3-6，印刷頁44–45：1990-01-20第11屆葉隆雄唯一候選人當選；1994-01-29第12屆邱一郎當選；2005議員公報履歷載第12、13屆。依相鄰任期資料判定，非逐日任免紀錄；PDF文字可讀，截圖未取得。",
+          "incumbent_corroboration_url": "https://votetw.com/data/candidate/邱一郎"
         }
       ],
       "corroboration_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/094%E5%B9%B4/24%E8%87%BA%E6%9D%B1%E7%B8%A3/%E8%87%BA%E6%9D%B1%E7%B8%A3%E7%AC%AC3%E3%80%819%E3%80%8110%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf"
