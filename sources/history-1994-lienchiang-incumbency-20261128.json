@@ -1,0 +1,69 @@
+{
+  "year": 1994,
+  "county": "連江縣",
+  "roster": [
+    "陳振清",
+    "劉美官",
+    "葉世福",
+    "陳瑄健",
+    "李金梅",
+    "陳書平",
+    "劉家國",
+    "曹以雄",
+    "陳寶官",
+    "陳貴忠",
+    "林日福",
+    "陳兆鎮"
+  ],
+  "source_url": "https://www.mtcc.gov.tw/ch/content/7231?mcid=108570",
+  "secondary_source": "https://client.matsu.idv.tw/gov/council/meeting/LS_0102.pdf",
+  "chronology_source": "https://www.mtcc.gov.tw/ch/content/7228",
+  "limitations": "Original PDF page screenshot unavailable; indexed seating chart and official biography page agree on 12 seats, with minor OCR name variants. No dated election-day roster; preserve ambiguous 陳書建.",
+  "records": [
+    {
+      "county": "連江縣",
+      "district": 1,
+      "ballot_number": 3,
+      "name": "林貽祥",
+      "votes": 244,
+      "value": false,
+      "source_url": "https://www.mtcc.gov.tw/ch/content/7231?mcid=108570"
+    },
+    {
+      "county": "連江縣",
+      "district": 2,
+      "ballot_number": 1,
+      "name": "陳鵬舉",
+      "votes": 108,
+      "value": false,
+      "source_url": "https://www.mtcc.gov.tw/ch/content/7231?mcid=108570"
+    },
+    {
+      "county": "連江縣",
+      "district": 2,
+      "ballot_number": 4,
+      "name": "陳功漢",
+      "votes": 196,
+      "value": false,
+      "source_url": "https://www.mtcc.gov.tw/ch/content/7231?mcid=108570"
+    },
+    {
+      "county": "連江縣",
+      "district": 4,
+      "ballot_number": 1,
+      "name": "陳鳳儀",
+      "votes": 104,
+      "value": false,
+      "source_url": "https://www.mtcc.gov.tw/ch/content/7231?mcid=108570"
+    },
+    {
+      "county": "連江縣",
+      "district": 4,
+      "ballot_number": 2,
+      "name": "陳杭輝",
+      "votes": 192,
+      "value": false,
+      "source_url": "https://www.mtcc.gov.tw/ch/content/7231?mcid=108570"
+    }
+  ]
+}
