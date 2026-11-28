@@ -14942,6 +14942,19 @@
           "votes": 5264,
           "limitation": "候選人自填履歷刊於官方公報；並非當屆逐日任免名冊。PDF文字可讀，截圖未取得。"
         },
+        "6": {
+          "value": true,
+          "source_url": "https://ctinews.com/news/items/D0xdKjz6aY",
+          "secondary_source": "https://video.udn.com/news/1278331",
+          "source_locator": "2025報導明載1982年首次當選議員、1998年當選議長，2023聯合報報導歷任七屆縣議員並於2009年後交棒；1982至2009期間共七屆，涵蓋1990年第12屆。依連續任期交叉推定，非1994投票日逐日任免表。",
+          "evidence": "2025報導明載1982年首次當選議員、1998年當選議長，2023聯合報報導歷任七屆縣議員並於2009年後交棒；1982至2009期間共七屆，涵蓋1990年第12屆。依連續任期交叉推定，非1994投票日逐日任免表。",
+          "election_date": "1994-01-29",
+          "method": "crosschecked_consecutive_term_history",
+          "confidence": "crosschecked_inferred",
+          "original_name": "陳清秀",
+          "ballot_number": 6,
+          "votes": 5367
+        },
         "10": {
           "value": true,
           "source_url": "https://zh.wikipedia.org/wiki/張榮味",
@@ -21984,7 +21997,22 @@
           "男",
           false
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "16": {
+          "value": false,
+          "source_url": "https://eebulletin.cec.gov.tw/103/17%E8%87%BA%E6%9D%B1%E7%B8%A3/%E7%B8%A3%E8%AD%B0%E5%93%A1/%E8%87%BA%E6%9D%B1%E7%B8%A3%E7%AC%AC1%E3%80%818%E3%80%8115%E9%81%B8%E8%89%89%E5%8D%80.pdf",
+          "secondary_source": "https://votetw.com/data/candidate/陳國民",
+          "source_locator": "2014年第1選區16號履歷明列第13至17屆縣議員及台東市民代表；1998同區候選資料確認現任。依所列任期推定1994非現任，未見第12屆完整名冊。",
+          "evidence": "2014年第1選區16號履歷明列第13至17屆縣議員及台東市民代表；1998同區候選資料確認現任。依所列任期推定1994非現任，未見第12屆完整名冊。",
+          "election_date": "1994-01-29",
+          "method": "official_biography_term_history_inference",
+          "confidence": "crosschecked_inferred",
+          "original_name": "黃秋",
+          "ballot_number": 16,
+          "votes": 3034
+        }
+      }
     },
     {
       "county": "臺東縣",
@@ -22171,7 +22199,22 @@
           "男",
           true
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "3": {
+          "value": false,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%89%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/098%E5%B9%B4/24%E8%87%BA%E6%9D%B1%E7%B8%A3/%E8%87%BA%E6%9D%B1%E7%B8%A3%E7%AC%AC4%E3%80%818%E3%80%8111%E9%81%B8%E8%89%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "secondary_source": "https://votetw.com/data/candidate/李振源",
+          "source_locator": "2009年第4選區5號履歷明列第13至16屆縣議員；1998同縣同區候選資料確認現任。依任期履歷推定1994非現任，未見第12屆完整名冊。",
+          "evidence": "2009年第4選區5號履歷明列第13至16屆縣議員；1998同縣同區候選資料確認現任。依任期履歷推定1994非現任，未見第12屆完整名冊。",
+          "election_date": "1994-01-29",
+          "method": "official_biography_term_history_inference",
+          "confidence": "crosschecked_inferred",
+          "original_name": "李振源",
+          "ballot_number": 3,
+          "votes": 2998
+        }
+      }
     },
     {
       "county": "臺東縣",
@@ -22345,7 +22388,22 @@
           "男",
           false
         ]
-      ]
+      ],
+      "incumbent_sources": {
+        "4": {
+          "value": false,
+          "source_url": "https://beinan-council.gov.tw/%E4%BB%A3%E8%A1%A8%E7%B0%A1%E4%BB%8B/%E6%AD%B7%E4%BB%BB%E4%BB%A3%E8%A1%A8/",
+          "secondary_source": "https://eebulletin.cec.gov.tw/103/17%E8%87%BA%E6%9D%B1%E7%B8%A3/%E7%B8%A3%E8%AD%B0%E5%93%A1/%E8%87%BA%E6%9D%B1%E7%B8%A3%E7%AC%AC1%E3%80%818%E3%80%8115%E9%81%B8%E8%89%89%E5%8D%80.pdf",
+          "source_locator": "卑南鄉民代表會第14屆名冊列江堅壽，任期1990-08-01至1994-07-31；2014公報明列第13至16屆鄉民代表及第15至17屆縣議員。交叉核對推定1994非現任縣議員。",
+          "evidence": "卑南鄉民代表會第14屆名冊列江堅壽，任期1990-08-01至1994-07-31；2014公報明列第13至16屆鄉民代表及第15至17屆縣議員。交叉核對推定1994非現任縣議員。",
+          "election_date": "1994-01-29",
+          "method": "official_biography_term_history_inference",
+          "confidence": "crosschecked_inferred",
+          "original_name": "江堅壽",
+          "ballot_number": 4,
+          "votes": 1351
+        }
+      }
     },
     {
       "county": "臺東縣",
