@@ -16638,7 +16638,7 @@
           "陳素英",
           478,
           "民主進步黨",
-          "",
+          "女",
           false
         ],
         [
@@ -16848,6 +16848,18 @@
         }
       },
       "gender_sources": {
+        "4": {
+          "value": "女",
+          "method": "cross_election_exact_name_and_locality_inference",
+          "confidence": "inferred_identity_match",
+          "source_url": "https://vote.nccu.edu.tw/cec/vote3.asp?pass1=K9AA%3EI8888888888iii%28%28",
+          "corroboration_url": "https://vote.nccu.edu.tw/cec/vote31.asp?pass1=K9AA%3EI%3E%3A988%3A8%3C8888",
+          "source_locator": "1996-03-23第三屆國大代表嘉義縣第2選區4號，陳素英，F，1936年生；朴子市1197票、六腳鄉322票、東石鄉261票，合計1780／2764票，與1994年第4選區的三個鄉鎮市一致。",
+          "original_name": "陳素英",
+          "ballot_number": 4,
+          "votes": 478,
+          "limitation": "同名、時間及地區高度吻合，為跨屆身份推定；1996年無黨籍與1994年民進黨推薦不同，未取得1994年公報出生年月日，不能視為直接證明，保留原政黨。"
+        },
         "9": {
           "source_url": "https://vote.nccu.edu.tw/cec/vote3.asp?pass1=K9AA%3EI8888888888iii%28%28",
           "method": "cross_election_same_county_name_party",
