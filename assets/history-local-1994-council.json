@@ -7969,7 +7969,7 @@
           "蘇永琳",
           1363,
           "中國國民黨",
-          "",
+          "男",
           false
         ],
         [
@@ -8103,6 +8103,16 @@
           "election_date": "1994-01-29",
           "roster_name": "黃木桂"
         }
+      },
+      "gender_sources": {
+        "6": {
+          "method": "cross_election_locality_and_official_roster_identity_inference",
+          "confidence": "inferred_identity_match",
+          "source_url": "https://web.cec.gov.tw/mlec/article/19621",
+          "corroboration_url": "https://www.ttcm.gov.tw/hot_309790.html",
+          "evidence": "2002年通霄鎮第一選區當選代表名冊列蘇永琳、男、中國國民黨；通霄鎮民代表會歷屆名錄第14屆亦列同名代表，與1994年選區範圍及黨籍相符。",
+          "limitation": "同名、地緣與任職履歷交叉匹配；未取得1994原始公報或出生資料直接證明同一人。"
+        }
       }
     },
     {
@@ -8144,7 +8154,7 @@
           "林石金",
           3538,
           "無黨籍",
-          "",
+          "男",
           false
         ],
         [
@@ -8368,6 +8378,14 @@
         }
       },
       "gender_sources": {
+        "3": {
+          "method": "cross_election_locality_and_official_roster_identity_inference",
+          "confidence": "inferred_identity_match",
+          "source_url": "https://eebulletin.cec.gov.tw/107/09%E8%8B%97%E6%A0%97%E7%B8%A3/04%E9%84%89%E9%8E%AE%E5%B8%82%E6%B0%91%E4%BB%A3%E8%A1%A8/09%E5%BE%8C%E9%BE%8D%E9%8E%AE.pdf",
+          "corroboration_url": "https://votetw.com/data/election/20181101F2D2?%E7%9C%81%E5%B8%82=10&%E7%B8%A3%E5%B8%82=005",
+          "evidence": "2018後龍鎮代表公報列林石金、男，履歷明列第13–16屆鎮民代表；2018結果列無黨籍，同1994年選區地緣與黨籍相符。PDF文字可讀，截圖請求失敗。",
+          "limitation": "同名、地緣與任職履歷交叉匹配；未取得1994原始公報或出生資料直接證明同一人。"
+        },
         "5": {
           "method": "cross-election unique exact official name, same historical county and geographic council district, consistent documented gender",
           "years": [
@@ -12555,7 +12573,7 @@
           "謝盧味",
           2594,
           "民主進步黨",
-          "",
+          "女",
           false
         ],
         [
@@ -12707,6 +12725,14 @@
         }
       },
       "gender_sources": {
+        "1": {
+          "method": "cross_election_locality_and_official_roster_identity_inference",
+          "confidence": "inferred_identity_match",
+          "source_url": "https://ctrl.chcg.gov.tw/files/8_20230504163109483_109%E5%B9%B4%E5%BA%A6%E7%A4%BE%E5%8D%80%E7%99%BC%E5%B1%95%E5%8D%94%E6%9C%83%E5%8F%8A%E6%B4%BB%E5%8B%95%E4%B8%AD%E5%BF%83%E6%95%B8%E4%B8%80%E8%A6%BD%E8%A1%A8_2025.pdf",
+          "corroboration_url": "https://files.chcg.gov.tw/files/111_1050412_%E5%BD%B0%E5%8C%96%E7%B8%A3%E5%9F%94%E5%BF%83%E9%84%89%E6%B0%91%E4%BB%A3%E8%A1%A8%E6%9C%83%E6%AD%B7%E5%B1%86%E4%BB%A3%E8%A1%A8%E5%90%8D%E9%8C%84.pdf",
+          "evidence": "彰化縣109年度社區發展協會表第298列埔心鄉義民社區謝盧味、女；埔心鄉民代表會第14屆（1990–1994）名錄亦列義民謝盧味，與1994議員第5選區地緣吻合。兩PDF文字可讀，截圖請求失敗。",
+          "limitation": "同名、地緣與任職履歷交叉匹配；未取得1994原始公報或出生資料直接證明同一人。"
+        },
         "5": {
           "method": "cross-election exact official name, same county/electorate/district, unique per county, consistent gender",
           "years": [
