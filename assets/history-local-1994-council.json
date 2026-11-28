@@ -14179,7 +14179,7 @@
           "吳水來",
           2525,
           "中國國民黨",
-          "",
+          "男",
           false
         ],
         [
@@ -14243,7 +14243,7 @@
           "莊顏金鶯",
           3350,
           "中國國民黨",
-          "",
+          "女",
           false
         ],
         [
@@ -14321,6 +14321,33 @@
           "evidence": "第12屆南投縣議員1990–1994、第13屆1994–1996；官方履歷證實兩屆縣議員。",
           "election_date": "1994-01-29",
           "confidence": "term_biography"
+        }
+      },
+      "gender_sources": {
+        "2": {
+          "number": 2,
+          "name": "吳水來",
+          "votes": 2525,
+          "value": "男",
+          "source_url": "https://www.guoshing.gov.tw/gstc/TownshipCouncilManagementSystem/tcms/representative-list/history-detail/13",
+          "corroboration_url": "https://www.gstc.gov.tw/4-2-1.asp?gbid=12",
+          "source_locator": "國姓鄉民代表會第十二屆歷任代表表，主席吳水來，性別男，1986年3月1日因當選議員辭去主席；1994年南投縣第5選區涵蓋國姓鄉。",
+          "method": "official_historical_office_roster_exact_name_and_geographic_match",
+          "original_name": "吳水來",
+          "confidence": "cross_source_identity_match"
+        },
+        "10": {
+          "number": 10,
+          "name": "莊顏金鶯",
+          "votes": 3350,
+          "value": "女",
+          "source_url": "https://web.cec.gov.tw/api/file/1d9acebf-88a1-4039-915f-1566858ff4ec.pdf",
+          "corroboration_url": "https://www.uho.com.tw/%5C/article-24918.html",
+          "additional_source_url": "https://epaper.vac.gov.tw/zh-tw/L/1648%7C6/1/Publish.htm",
+          "source_locator": "南投縣選委會第315次會議紀錄印刷頁3以女性代詞稱莊顏金鶯；埔里分院捐贈報導明載同名人士為前縣議員。PDF文字可讀，截圖介面未取得。",
+          "method": "official_meeting_minutes_and_local_former_councillor_biography",
+          "original_name": "莊顏金鶯",
+          "confidence": "cross_source_identity_match"
         }
       }
     },
