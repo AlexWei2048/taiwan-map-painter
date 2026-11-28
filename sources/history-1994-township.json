@@ -3636,14 +3636,20 @@
           "town": "花蓮市",
           "name": "陳清水",
           "gender": "男",
-          "incumbent_at_election": null,
+          "incumbent_at_election": false,
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://web.cec.gov.tw/api/file/aa7a7df8-b730-4f28-bd83-d2ff1d8ec042.pdf",
           "source_locator": "中選會2009年花蓮市第16屆市長選舉公報，陳清水第2號學經歷「花蓮市第十二屆市長」；同表性別「男」。",
           "method": "cec_official_later_candidate_biography",
-          "evidence_notes": "只核實第12屆市長任職和性別。該公告為2009年資料，性別可跨屆同人延用；2009推薦政黨不是1994推薦政黨。未取得1994原始票表。"
+          "evidence_notes": "只核實第12屆市長任職和性別。該公告為2009年資料，性別可跨屆同人延用；2009推薦政黨不是1994推薦政黨。未取得1994原始票表。",
+          "incumbent_method": "secondary_term_roster_official_biography_crosscheck",
+          "previous_term_holder": "魏木村",
+          "incumbent_source_url": "https://zh.wikipedia.org/wiki/花蓮市",
+          "incumbent_source_locator": "歷任市長第10、11屆魏木村，第12屆陳清水；2009年官方公報確認第12屆市長。",
+          "incumbent_limitation": "依相鄰任期、公開履歷或前次當選記錄核對，並非逐日任免證明；若有代理、停職或補選資料須再核。",
+          "incumbent_corroboration_url": "https://web.cec.gov.tw/api/file/aa7a7df8-b730-4f28-bd83-d2ff1d8ec042.pdf"
         },
         {
           "town": "吉安鄉",
@@ -4224,13 +4230,17 @@
           "town": "莿桐鄉",
           "name": "陳振恭",
           "gender": null,
-          "incumbent_at_election": null,
-          "incumbent_method": null,
-          "previous_term_holder": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "official_election_summary_secondary_term_roster",
+          "previous_term_holder": "陳振恭",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://ws.yunlin.gov.tw/Download.ashx?n=6I6%2F5qGQ6YSJMTAz5bm057Wx6KiI5bm05aCxLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNTE0L3JlbGZpbGUvMTY0MzQvMzQyMTM0L2IyYTJmYzdhLWY5ZmYtNDVkZi05MzEyLWQwY2I2M2RlYTBiOC5wZGY%3D"
+          "source_url": "https://ws.yunlin.gov.tw/Download.ashx?n=6I6%2F5qGQ6YSJMTAz5bm057Wx6KiI5bm05aCxLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNTE0L3JlbGZpbGUvMTY0MzQvMzQyMTM0L2IyYTJmYzdhLWY5ZmYtNDVkZi05MzEyLWQwY2I2M2RlYTBiOC5wZGY%3D",
+          "incumbent_source_url": "https://ws.yunlin.gov.tw/Download.ashx?n=6I6%2F5qGQ6YSJMTA05bm057Wx6KiI5bm05aCxLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNTE0L3JlbGZpbGUvMTY0MzQvMzQyMTM0LzI5ZmQ3MGJiLWY5MzItNDg4Yi1iMDEyLTNjY2FhMTcwOTkxZS5wZGY%3D",
+          "incumbent_source_locator": "既有公所統計年報第11、12屆當選人同名；歷任首長表兩屆均列陳振恭。",
+          "incumbent_limitation": "依相鄰任期、公開履歷或前次當選記錄核對，並非逐日任免證明；若有代理、停職或補選資料須再核。",
+          "incumbent_corroboration_url": "https://zh.wikipedia.org/wiki/莿桐鄉"
         }
       ],
       "supplementary_verification": {
@@ -4364,13 +4374,17 @@
           "town": "西螺鎮",
           "name": "林中禮",
           "gender": "男",
-          "incumbent_at_election": null,
-          "incumbent_method": null,
-          "previous_term_holder": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "official_election_summary_secondary_term_roster",
+          "previous_term_holder": "程錦崙",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://www.hsilo.gov.tw/class1/%E7%B5%B1%E8%A8%88%E5%B0%88%E5%8D%80/02_%E9%9B%B2%E6%9E%97%E7%B8%A3%E8%A5%BF%E8%9E%BA%E9%8E%AE%E5%85%AC%E6%89%80%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1/%E9%9B%B2%E6%9E%97%E7%B8%A3%E8%A5%BF%E8%9E%BA%E9%8E%AE111%E5%B9%B4%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1%20%281130918%E4%BF%AE%E6%AD%A3%29.pdf"
+          "source_url": "https://www.hsilo.gov.tw/class1/%E7%B5%B1%E8%A8%88%E5%B0%88%E5%8D%80/02_%E9%9B%B2%E6%9E%97%E7%B8%A3%E8%A5%BF%E8%9E%BA%E9%8E%AE%E5%85%AC%E6%89%80%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1/%E9%9B%B2%E6%9E%97%E7%B8%A3%E8%A5%BF%E8%9E%BA%E9%8E%AE111%E5%B9%B4%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1%20%281130918%E4%BF%AE%E6%AD%A3%29.pdf",
+          "incumbent_source_url": "https://www.hsilo.gov.tw/class1/%E7%B5%B1%E8%A8%88%E5%B0%88%E5%8D%80/02_%E9%9B%B2%E6%9E%97%E7%B8%A3%E8%A5%BF%E8%9E%BA%E9%8E%AE%E5%85%AC%E6%89%80%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1/%E9%9B%B2%E6%9E%97%E7%B8%A3%E8%A5%BF%E8%9E%BA%E9%8E%AE111%E5%B9%B4%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1%20%281130918%E4%BF%AE%E6%AD%A3%29.pdf",
+          "incumbent_source_locator": "既有公所統計年報前屆當選程錦崙，歷任首長表第10、11屆程錦崙、第12屆林中禮。",
+          "incumbent_limitation": "依相鄰任期、公開履歷或前次當選記錄核對，並非逐日任免證明；若有代理、停職或補選資料須再核。",
+          "incumbent_corroboration_url": "https://zh.wikipedia.org/wiki/西螺鎮"
         }
       ],
       "supplementary_verification": {
@@ -4392,7 +4406,11 @@
           "incumbent_source_locator": "《重溯清水鎮志》大事紀1994-03-01記載吳金生連任第12屆鎮長",
           "votes": 22567,
           "votes_source_url": "https://www.taichung.gov.tw/media/270401/551110255171.pdf",
-          "votes_source_locator": "《重溯清水鎮志》表4-1-9「戰後清水鎮歷任鎮長」，第十二屆吳金生22,567票；第十一屆20,218票不可混用。表中第十二屆代表政黨空白；頁面截圖取得失敗。"
+          "votes_source_locator": "《重溯清水鎮志》表4-1-9「戰後清水鎮歷任鎮長」，第十二屆吳金生22,567票；第十一屆20,218票不可混用。表中第十二屆代表政黨空白；頁面截圖取得失敗。",
+          "gender": "男",
+          "gender_source_url": "https://www2.cshs.tc.edu.tw/ischool/publish_page/38/?cid=517",
+          "gender_source_locator": "清水高中傑出校友表明列吳金生、男、曾任清水鎮鎮長。",
+          "gender_method": "official_school_alumni_gender_table"
         }
       ],
       "source_sha256": "920ce0ae324eecba0f71f457da5f6a4a455e7960edf217c3122b8a0c93855e69"
@@ -4479,7 +4497,13 @@
             "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
             "birth_year": 1952,
             "incumbent_at_election": true
-          }
+          },
+          "incumbent_at_election": false,
+          "incumbent_method": "official_successive_term_roster",
+          "previous_term_holder": "洪樹聰",
+          "incumbent_source_url": "https://www.chcg.gov.tw/TSO/erlin/07other/main.aspx?main_id=1346",
+          "incumbent_source_locator": "公所官方表第11屆洪樹聰任至1994-03-01，第12屆洪仁欽自當日就任。",
+          "incumbent_limitation": "依相鄰任期、公開履歷或前次當選記錄核對，並非逐日任免證明；若有代理、停職或補選資料須再核。"
         }
       ]
     },
@@ -4830,7 +4854,14 @@
         {
           "town": "芬園鄉",
           "name": "洪慶章",
-          "gender": "男"
+          "gender": "男",
+          "incumbent_at_election": false,
+          "incumbent_method": "secondary_term_roster_official_biography_crosscheck",
+          "previous_term_holder": "李耀東",
+          "incumbent_source_url": "https://zh.wikipedia.org/wiki/芬園鄉",
+          "incumbent_source_locator": "歷任首長第10、11屆李耀東，第12屆洪慶章；官方公報載第12屆起任。",
+          "incumbent_limitation": "依相鄰任期、公開履歷或前次當選記錄核對，並非逐日任免證明；若有代理、停職或補選資料須再核。",
+          "incumbent_corroboration_url": "https://web.cec.gov.tw/api/file/8fa41f91-c505-44b4-9c5b-2638fccc5726.pdf"
         }
       ]
     },
@@ -6253,13 +6284,16 @@
           "incumbent_at_election": null,
           "incumbent_method": "unresolved_election_day_status",
           "previous_term_holder": null,
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/%E8%87%BA%E6%9D%B1%E5%B8%82",
           "corroboration_url": "https://lawbot.tw/judgment/AAAB_83_%E5%9C%8B_2_19941219_1",
-          "winner_status": "provisional_term_roster_inference"
+          "winner_status": "provisional_term_roster_inference",
+          "gender_source_url": "https://web.cec.gov.tw/api/file/ae5ca3f9-0e0e-45f8-8dc4-60eb1758035a.pdf",
+          "gender_source_locator": "台東縣選委會委員名冊明列李輝芳（男），曾任台東市市長；原PDF文字可讀，截圖失敗。",
+          "gender_method": "official_election_commission_biography"
         }
       ]
     },
@@ -7320,15 +7354,19 @@
         {
           "town": "花壇鄉",
           "name": "唐鎮林",
-          "incumbent_at_election": null,
-          "incumbent_method": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "official_later_candidate_biography_inference",
           "previous_term_holder": null,
           "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://web.cec.gov.tw/api/file/fc013024-106e-4395-844f-af5777354458.pdf",
-          "corroboration_url": "https://www.chcc.gov.tw/form/Details.aspx?Parser=2%2C4%2C34%2C%2C%2C41"
+          "corroboration_url": "https://www.chcc.gov.tw/form/Details.aspx?Parser=2%2C4%2C34%2C%2C%2C41",
+          "incumbent_source_url": "https://web.cec.gov.tw/api/file/fc013024-106e-4395-844f-af5777354458.pdf",
+          "incumbent_source_locator": "2009年公報載第11、12屆縣議員及第12、13屆花壇鄉長；依相鄰任期推定，未取得逐日任免紀錄。",
+          "incumbent_limitation": "依相鄰任期、公開履歷或前次當選記錄核對，並非逐日任免證明；若有代理、停職或補選資料須再核。",
+          "incumbent_corroboration_url": "https://zh.wikipedia.org/wiki/花壇鄉"
         }
       ],
       "corroboration_url": "https://www.chcc.gov.tw/form/Details.aspx?Parser=2%2C4%2C34%2C%2C%2C41"
@@ -7883,14 +7921,18 @@
           "town": "溪口鄉",
           "name": "劉邦詩",
           "gender": "男",
-          "incumbent_at_election": null,
-          "incumbent_method": null,
-          "previous_term_holder": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "secondary_career_and_term_roster_crosscheck",
+          "previous_term_holder": "王春",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/溪口鄉_(台灣)",
-          "corroboration_url": "https://paper.udn.com/udnpaper/PID0001/220414/web/"
+          "corroboration_url": "https://paper.udn.com/udnpaper/PID0001/220414/web/",
+          "incumbent_source_url": "https://paper.udn.com/udnpaper/PID0001/220414/web/",
+          "incumbent_source_locator": "2012年聯合報回顧1990年當選縣議員後轉任溪口鄉長；歷任首長第10、11屆王春、第12屆劉邦詩。",
+          "incumbent_limitation": "依相鄰任期、公開履歷或前次當選記錄核對，並非逐日任免證明；若有代理、停職或補選資料須再核。",
+          "incumbent_corroboration_url": "https://zh.wikipedia.org/wiki/溪口鄉_(台灣)"
         }
       ],
       "corroboration_url": "https://paper.udn.com/udnpaper/PID0001/220414/web/"
@@ -8334,8 +8376,8 @@
           "town": "梧棲鎮",
           "name": "尤碧鈴",
           "gender": "女",
-          "incumbent_at_election": null,
-          "incumbent_method": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "official_council_biography_inference",
           "previous_term_holder": null,
           "votes": null,
           "ballot_number": null,
@@ -8350,7 +8392,10 @@
             "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
             "birth_year": 1950,
             "incumbent_at_election": true
-          }
+          },
+          "incumbent_source_url": "https://www.tccc.gov.tw/ebook/no03/files/basic-html/page48.html",
+          "incumbent_source_locator": "台中縣議會回顧專輯第48頁，經歷列梧棲鎮第12、13屆鎮長；依任期履歷推定。",
+          "incumbent_limitation": "依相鄰任期、公開履歷或前次當選記錄核對，並非逐日任免證明；若有代理、停職或補選資料須再核。"
         }
       ]
     },
@@ -8446,13 +8491,16 @@
           "town": "和美鎮",
           "name": "陳添發",
           "gender": null,
-          "incumbent_at_election": null,
-          "incumbent_method": null,
-          "previous_term_holder": null,
+          "incumbent_at_election": true,
+          "incumbent_method": "secondary_term_roster_inference",
+          "previous_term_holder": "陳添發",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/%E5%92%8C%E7%BE%8E%E9%8E%AE"
+          "source_url": "https://zh.wikipedia.org/wiki/%E5%92%8C%E7%BE%8E%E9%8E%AE",
+          "incumbent_source_url": "https://zh.wikipedia.org/wiki/和美鎮",
+          "incumbent_source_locator": "歷任首長表第11、12屆均明列陳添發及1990–1998連續任期。",
+          "incumbent_limitation": "依相鄰任期、公開履歷或前次當選記錄核對，並非逐日任免證明；若有代理、停職或補選資料須再核。"
         }
       ]
     },
@@ -8680,8 +8728,8 @@
           "town": "七股鄉",
           "name": "陳啟明",
           "gender": "男",
-          "incumbent_at_election": null,
-          "incumbent_method": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "secondary_local_history_career_crosscheck",
           "previous_term_holder": null,
           "votes": null,
           "ballot_number": null,
@@ -8696,7 +8744,11 @@
             "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
             "birth_year": 1948,
             "incumbent_at_election": true
-          }
+          },
+          "incumbent_source_url": "https://tucheng.kenlab.org/encyclopedia/qigu/",
+          "incumbent_source_locator": "地方研究轉引《七股鄉志》第524頁，第12、13屆陳啟明；新聞亦明載其兩任八年。",
+          "incumbent_limitation": "依相鄰任期、公開履歷或前次當選記錄核對，並非逐日任免證明；若有代理、停職或補選資料須再核。",
+          "incumbent_corroboration_url": "https://a2011.pori.hk/tw04/private/newsclips/20040320_585_TW.htm"
         }
       ]
     },
@@ -9190,9 +9242,9 @@
           "town": "潭子鄉",
           "name": "林森田",
           "gender": "男",
-          "incumbent_at_election": null,
-          "incumbent_method": null,
-          "previous_term_holder": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "secondary_term_roster_crosscheck",
+          "previous_term_holder": "戴勝雄",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
@@ -9206,7 +9258,11 @@
             "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
             "birth_year": 1938,
             "incumbent_at_election": true
-          }
+          },
+          "incumbent_source_url": "https://zh.wikipedia.org/wiki/潭子區區長",
+          "incumbent_source_locator": "歷任首長第10、11屆戴勝雄，第12屆林森田；1998年同鄉候選人資料列林森田為現任。",
+          "incumbent_limitation": "依相鄰任期、公開履歷或前次當選記錄核對，並非逐日任免證明；若有代理、停職或補選資料須再核。",
+          "incumbent_corroboration_url": "https://votetw.com/data/candidate/何秋炎"
         }
       ]
     },
