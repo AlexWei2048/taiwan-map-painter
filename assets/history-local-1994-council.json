@@ -14705,7 +14705,7 @@
           "張春連",
           3347,
           "中國國民黨",
-          "",
+          "女",
           false
         ],
         [
@@ -14780,6 +14780,16 @@
           "original_name": "陳文山",
           "value": "男",
           "confidence": "cross_election_geographic_match"
+        },
+        "6": {
+          "source_url": "https://time.udn.com/udntime/story/122833/7650014",
+          "corroboration_url": "https://tcmb.culture.tw/zh-tw/detail?id=301412&indexCode=Culture_Event",
+          "additional_source_url": "https://huwei.yunlin.gov.tw/News_Content.aspx?n=20509&s=455912",
+          "source_locator": "聯合報報時光歷史報導明載雲林縣議員張春連為蕭瑞徵母親；國家文化記憶庫確認同名縣議員身分，虎尾鎮公所第六屆代表名冊列斗南鎮蕭張春連。1994年第2選區涵蓋斗南鎮。",
+          "method": "documented_family_relationship_and_local_office_identity",
+          "confidence": "cross_source_identity_match",
+          "original_name": "張春連",
+          "value": "女"
         },
         "7": {
           "method": "cross-election exact official name, same county/electorate/district, unique per county, consistent gender",
@@ -30583,6 +30593,32 @@
         "female_elected": 11
       },
       "limitation": "僅核對當選者總數與性別合計，不代表逐人身分或選區票數已獨立確認。原表文字可讀。"
+    },
+    {
+      "office": "council",
+      "election_date": "1994-01-29",
+      "scope": "23 counties/cities excluding December direct-municipality elections",
+      "status": "official_aggregate_conflict_retained",
+      "source_url": "https://ws.dgbas.gov.tw/001/Upload/463/relfile/11160/229664/ch16.pdf",
+      "source_locator": "114年統計年鑑表16-5，印刷頁366，第十三屆，已核對PDF頁面影像",
+      "corroboration_url": "https://ws.moi.gov.tw/Download.ashx?icon=.pdf&n=MTA05bm05YWn5pS%2F57Wx6KiI5bm05aCx6Zu75a2Q5pu4LnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvT2xkRmlsZS9zaXRlX25vZGVfZmlsZS82NTA5LzEwNOW5tOWFp%2BaUv%2Be1seioiOW5tOWgsembu%2BWtkOabuC5wZGY%3D",
+      "conflicting_source_url": "https://web.cec.gov.tw/central/article/18789",
+      "published": {
+        "registered_voters": 10874671,
+        "candidate_count": 1868,
+        "elected_count": 883,
+        "turnout_pct": 73.09
+      },
+      "repository": {
+        "complete_district_candidates": 1807,
+        "kinmen_formal_candidates": 62,
+        "combined_candidate_count": 1869,
+        "complete_district_elected": 867,
+        "kinmen_elected": 16,
+        "combined_elected": 883,
+        "expected_seats": 884
+      },
+      "limitation": "統計年鑑及104年內政統計年報均列883當選、1868候選；中選會歷次選舉摘要稱884當選。倉庫已知867加金門16等於883；候選人1807加金門62等於1869，與年鑑差1。尚無原始總清冊解釋差異，不更改expected_seats、不新增虛構候選人，不以四捨五入投票率反推投票人數。"
     }
   ]
 }
