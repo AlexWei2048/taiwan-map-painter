@@ -14118,6 +14118,34 @@
           "value": "男",
           "secondary_source": "https://www.ly.gov.tw/Pages/List.aspx?nodeid=975"
         }
+      },
+      "incumbent_sources": {
+        "2": {
+          "value": false,
+          "source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "secondary_source": "https://vote.nccu.edu.tw/cec/vote3.asp?pass1=J9AA%40I8888888888iii%28%28",
+          "legal_source_url": "https://www.president.gov.tw/Page/294/37037",
+          "source_locator": "1998年立法委員選舉政大資料亦載1969年，女。1994、1998同縣竹山鎮鹿谷鄉選區，1998現任。",
+          "evidence": "1989年2月3日修正選罷法第31條：候選人須年滿23歲；1990-01-20上屆例行選舉不具年齡資格。1998年立法委員選舉政大資料亦載1969年，女。1994、1998同縣竹山鎮鹿谷鄉選區，1998現任。",
+          "election_date": "1994-01-29",
+          "method": "cross_election_identity_age_eligibility_exclusion",
+          "confidence": "provisional_age_inference",
+          "limitation": "僅排除1990年例行選舉當選，未獨立取得1990–1994補選或遞補名冊，不視為投票日直接證據。",
+          "source_record": {
+            "year": 1998,
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "candidacy_id": "1998-council:南投县:regional:第4选举区:3",
+            "birth_year": 1969,
+            "district": "第4選舉區",
+            "scope_names": [
+              "竹山镇",
+              "鹿谷乡"
+            ]
+          },
+          "original_name": "楊靜華",
+          "ballot_number": 2,
+          "votes": 7793
+        }
       }
     },
     {
@@ -17901,6 +17929,34 @@
         ]
       ],
       "incumbent_sources": {
+        "5": {
+          "value": false,
+          "source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "secondary_source": "https://votetw.com/data/candidate/洪德昆",
+          "legal_source_url": "https://www.president.gov.tw/Page/294/37037",
+          "source_locator": "1998政大資料載1968，2002政大載1967，2010候選資料載1967-11-09；兩種口徑均在1990-01-20未滿23歲。1994、1998同縣同區同名男性當選，1998現任。",
+          "evidence": "1989年2月3日修正選罷法第31條：候選人須年滿23歲；1990-01-20上屆例行選舉不具年齡資格。1998政大資料載1968，2002政大載1967，2010候選資料載1967-11-09；兩種口徑均在1990-01-20未滿23歲。1994、1998同縣同區同名男性當選，1998現任。",
+          "election_date": "1994-01-29",
+          "method": "cross_election_identity_age_eligibility_exclusion",
+          "confidence": "provisional_age_inference",
+          "limitation": "僅排除1990年例行選舉當選，未獨立取得1990–1994補選或遞補名冊，不視為投票日直接證據。",
+          "source_record": {
+            "year": 1998,
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "candidacy_id": "1998-council:台南县:regional:第9选举区:8",
+            "birth_year": 1968,
+            "district": "第9選舉區",
+            "scope_names": [
+              "仁德乡",
+              "关庙乡",
+              "归仁乡",
+              "龙崎乡"
+            ]
+          },
+          "original_name": "洪德昆",
+          "ballot_number": 5,
+          "votes": 7191
+        },
         "10": {
           "value": true,
           "source_url": "https://w3fs.tainan.gov.tw/001/Upload/47/attachment/8983/4718/52-91%E6%A9%9F%E9%97%9C%E5%9C%98%E9%AB%94.pdf",
@@ -25327,6 +25383,33 @@
           "scope_1994": [
             "中山區"
           ]
+        }
+      },
+      "incumbent_sources": {
+        "3": {
+          "value": false,
+          "source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "secondary_source": "https://votetw.com/data/candidate/許箸宏",
+          "legal_source_url": "https://www.president.gov.tw/Page/294/37037",
+          "source_locator": "1998官方主檔載1968年，TaiwanVotes衍生資料載1969年；兩者均未達1990年參選年齡。1994第5區與1998第4區範圍均為中山區，同名男性。",
+          "evidence": "1989年2月3日修正選罷法第31條：候選人須年滿23歲；1990-01-20上屆例行選舉不具年齡資格。1998官方主檔載1968年，TaiwanVotes衍生資料載1969年；兩者均未達1990年參選年齡。1994第5區與1998第4區範圍均為中山區，同名男性。",
+          "election_date": "1994-01-29",
+          "method": "cross_election_identity_age_eligibility_exclusion",
+          "confidence": "provisional_age_inference",
+          "limitation": "僅排除1990年例行選舉當選，未獨立取得1990–1994補選或遞補名冊，不視為投票日直接證據。",
+          "source_record": {
+            "year": 1998,
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "candidacy_id": "1998-council:基隆市:regional:第4选举区:5",
+            "birth_year": 1968,
+            "district": "第4選舉區",
+            "scope_names": [
+              "中山区"
+            ]
+          },
+          "original_name": "許箸宏",
+          "ballot_number": 3,
+          "votes": 1411
         }
       }
     },

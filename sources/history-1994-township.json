@@ -7570,12 +7570,23 @@
           "incumbent_at_election": true,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "鄭景濃",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://wikis.tw/鹽埔鄉",
-          "corroboration_url": "https://zh.wikipedia.org/wiki/鹽埔鄉"
+          "corroboration_url": "https://zh.wikipedia.org/wiki/鹽埔鄉",
+          "gender_method": "cross_office_exact_name_local_scope_inference",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_corroboration_url": "https://votetw.com/data/candidate/林耀堂",
+          "gender_source_locator": "1998年屏東縣第2選區19號鄭景濃，男，1947年生，當選；選區涵蓋鹽埔鄉，與1994鹽埔鄉長同縣同原始姓名唯一匹配；非當屆原始性別欄，跨職位推定。",
+          "gender_source_record": {
+            "year": 1998,
+            "candidacy_id": "1998-council:屏东县:regional:第2选举区:19",
+            "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+            "birth_year": 1947
+          },
+          "gender_confidence": "cross_office_provisional_identity_match"
         }
       ],
       "corroboration_url": "https://zh.wikipedia.org/wiki/鹽埔鄉"
