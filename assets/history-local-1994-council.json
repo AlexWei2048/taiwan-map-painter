@@ -15208,7 +15208,7 @@
           "許振明",
           6448,
           "無黨籍",
-          "",
+          "男",
           false
         ],
         [
@@ -15385,6 +15385,23 @@
           ],
           "lottery_result": null,
           "limitation": "尚未取得實際抽籤紀錄或最終重新公告；保留1994年2月5日原始公告口徑，不將後續司法票數混入全區原始有效票統計。"
+        }
+      },
+      "gender_sources": {
+        "4": {
+          "method": "cross_election_exact_name_and_locality_inference",
+          "confidence": "inferred_identity_match",
+          "years": [
+            1998
+          ],
+          "candidacy_ids": [
+            "1998-township:云林县:regional:水林乡:3"
+          ],
+          "source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "corroboration_url": "https://votetw.com/data/candidate/%E9%99%B3%E5%8A%8D%E6%9D%BE",
+          "source_blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
+          "evidence": "1998水林鄉長3號許振明，男，無黨籍，5788票；同縣同姓名唯一匹配，鄉鎮在1994年第6選區範圍內，政黨推薦一致。",
+          "limitation": "跨職位同名與地區匹配，未取得1994年公報或出生資料核對。"
         }
       }
     },
@@ -25239,7 +25256,7 @@
           "黃元良",
           1226,
           "中國國民黨",
-          "",
+          "男",
           false
         ],
         [
@@ -25296,6 +25313,21 @@
           "scope_1994": [
             "信義區"
           ]
+        },
+        "12": {
+          "method": "cross_election_exact_name_and_locality_inference",
+          "confidence": "inferred_identity_match",
+          "years": [
+            2018
+          ],
+          "candidacy_ids": [
+            "2018-council:基隆市:regional:第2选举区:7"
+          ],
+          "source_url": "https://web.cec.gov.tw/api/file/6aa17009-66a9-4e0b-a137-a5efe6483178.pdf",
+          "corroboration_url": "https://election.ltn.com.tw/2018/news/New/paper/1241572",
+          "source_blob_sha": "5fb5c2c95b5a0d18f226a75b072e21582c8087aa",
+          "evidence": "2018基隆市議員第2選區（信義區）7號黃元良，男，3150票；官方統計表縣表1-2第1頁影像核對。同市同姓名唯一匹配，行政區均為信義區，1965年生。",
+          "limitation": "跨24年同名同地區推定，政黨推薦不同，未取得1994年出生資料及公報，仍非完全身份確證。"
         }
       }
     },
