@@ -23192,7 +23192,7 @@
         {
           "town": "豐原市",
           "name": "陳欽隆",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "王阿脾",
@@ -23201,7 +23201,11 @@
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/豐原區區長",
           "corroboration_url": "https://www.spbook.com.tw/product.php?C1=10&C2=30&C3=0&sid=O_U102807029",
-          "evidence_notes": "陳彥斌《在威權的天空下：台中篇》書介明載1994當選豐原市長；未核原始推薦政黨，不使用任內或後屆黨籍。"
+          "evidence_notes": "陳彥斌《在威權的天空下：台中篇》書介明載1994當選豐原市長；未核原始推薦政黨，不使用任內或後屆黨籍。",
+          "gender_source_url": "https://votetw.com/data/candidate/%E9%99%B3%E6%AC%BD%E9%9A%86",
+          "gender_source_locator": "1998年區域民代候選人資料列男；倉庫1997年台中縣長候選人2號亦列男，2015年地方報導確認為前豐原市長及第二屆國大代表，另1997年縣長選舉研究列同名無黨籍候選人。",
+          "gender_corroboration_url": "https://tc-news.shop2000.com.tw/news/211116",
+          "gender_method": "documented_office_biography_crosscheck"
         }
       ]
     },
@@ -23420,9 +23424,13 @@
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "gender": null,
+          "gender": "男",
           "source_url": "https://zh.wikipedia.org/wiki/七美鄉_(台灣)",
-          "corroboration_url": "https://penghu.info/OB3A00ACB8E76C6C7C3E"
+          "corroboration_url": "https://penghu.info/OB3A00ACB8E76C6C7C3E",
+          "gender_source_url": "https://news.tnn.tw/news.html?c=2&id=103952",
+          "gender_source_locator": "2016年地方芳草人物報導明稱七美鄉許福存先生；臺大校友雙月刊明載同名者曾任七美鄉長、戶政事務所主任。",
+          "gender_corroboration_url": "https://ntualumnibm.ntu.edu.tw/bm.bimonthly.article/detail/sn/2378",
+          "gender_method": "documented_office_biography_crosscheck"
         }
       ]
     },
@@ -25302,14 +25310,18 @@
         {
           "town": "新港鄉",
           "name": "鄭友信",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": true,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "鄭友信",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/新港鄉"
+          "source_url": "https://zh.wikipedia.org/wiki/新港鄉",
+          "gender_source_url": "https://www.hkfce.org.tw/uploads/images/2024%E6%AD%B7%E5%B1%86%E8%91%A3%E4%BA%8B%E7%B0%A1%E4%BB%8B%281%29.pdf",
+          "gender_source_locator": "新港文教基金會歷屆董事簡介明列性別男、第11、12屆新港鄉長；PDF文字表可讀，截圖請求失敗。",
+          "gender_corroboration_url": "https://www.hkfce.org.tw/tw/magazine/111%E5%B9%B42%E6%9C%88%E6%9C%83%E8%A8%8A/312%E6%9C%9F%E6%96%B0%E6%B8%AF%E9%84%89%E8%88%87%E9%A3%9B%E9%A9%92%E5%B8%82%E7%B7%A0%E7%B5%90%E5%91%A8%E5%B9%B4%E6%85%B6-%E8%A6%8B%E8%AD%89%E5%B6%84%E6%96%B0%E9%96%8B%E5%A7%8B",
+          "gender_method": "documented_office_biography_crosscheck"
         }
       ]
     },
