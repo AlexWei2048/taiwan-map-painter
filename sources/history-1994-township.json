@@ -4690,7 +4690,14 @@
         {
           "town": "湖西鄉",
           "name": "吳明浩",
-          "incumbent_at_election": true
+          "incumbent_at_election": true,
+          "gender": "男",
+          "gender_source_url": "https://www.phcouncil.gov.tw/meet2.php?no=M24090018",
+          "gender_source_locator": "議會官方介紹明載吳明浩曾任湖西鄉長及縣議員；1998年同鄉議員候選人性別男。",
+          "gender_method": "historical_office_biography_and_cec_candidate_crosscheck",
+          "gender_snapshot_year": 1998,
+          "gender_snapshot_blob": "c48d770280f510f24869cc3ca72f2f878215abdc",
+          "gender_snapshot_candidate_id": "1998-council:澎湖县:regional:第2选举区:1"
         }
       ]
     },
@@ -5306,7 +5313,7 @@
         {
           "town": "鹿谷鄉",
           "name": "林民政",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": true,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "林民政",
@@ -5315,7 +5322,13 @@
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/鹿谷鄉鄉長",
           "corroboration_url": "https://zh.wikipedia.org/wiki/鹿谷鄉",
-          "evidence_notes": "鹿谷乡长任期表记载1992-10-30补选就任并续任1994-03-01起第12届，1994当届参选时属于前届任期；同一百科页面重定向、非独立二次证据"
+          "evidence_notes": "鹿谷乡长任期表记载1992-10-30补选就任并续任1994-03-01起第12届，1994当届参选时属于前届任期；同一百科页面重定向、非独立二次证据",
+          "gender_source_url": "https://icac.news/news/%E5%89%B5%E5%8D%97%E6%8A%95%E7%B8%A3%E8%AD%B0%E5%93%A1%E9%AB%98%E7%A5%A8%E7%B4%80%E9%8C%84-%E5%89%8D%E9%B9%BF%E8%B0%B7%E9%84%89%E9%95%B7%E6%9E%97%E6%B0%91%E6%94%BF%E7%97%85%E9%80%9D-%E5%90%84%E7%95%8C%E7%B7%AC%E6%87%B7%E5%A5%89%E7%8D%BB%E7%B2%BE%E7%A5%9E-20260621101851",
+          "gender_source_locator": "報導明載鹿谷鄉長轉任議員；1998、2002、2005年同地議員資料性別及出生年一致。",
+          "gender_method": "historical_office_biography_and_cec_candidate_crosscheck",
+          "gender_snapshot_year": 1998,
+          "gender_snapshot_blob": "c48d770280f510f24869cc3ca72f2f878215abdc",
+          "gender_snapshot_candidate_id": "1998-council:南投县:regional:第4选举区:6"
         },
         {
           "town": "仁愛鄉",
@@ -5556,7 +5569,7 @@
         {
           "town": "東勢鎮",
           "name": "楊明諭",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": true,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "楊明諭",
@@ -5565,7 +5578,13 @@
           "party_recommendation": null,
           "source_url": "https://www.lienho.org.tw/foundation/ppl_16.asp",
           "corroboration_url": "https://zh.wikipedia.org/wiki/東勢區區長",
-          "evidence_notes": "任期表列1990-03-01至1998-02-28；另見苗栗縣政府公開履歷 https://www.miaoli.gov.tw/bidding/News_Content.aspx?n=1094&s=420087 。"
+          "evidence_notes": "任期表列1990-03-01至1998-02-28；另見苗栗縣政府公開履歷 https://www.miaoli.gov.tw/bidding/News_Content.aspx?n=1094&s=420087 。",
+          "gender_source_url": "https://www.taiwanjc.org.tw/area/74",
+          "gender_source_locator": "東勢青商會歷史記載楊明諭先生；苗栗縣政府公開履歷亦記東勢鎮公所經歷；1998同地議員名冊明載男。",
+          "gender_method": "historical_office_biography_and_cec_candidate_crosscheck",
+          "gender_snapshot_year": 1998,
+          "gender_snapshot_blob": "c48d770280f510f24869cc3ca72f2f878215abdc",
+          "gender_snapshot_candidate_id": "1998-council:台中县:regional:第3选举区:2"
         }
       ]
     },
@@ -7277,11 +7296,17 @@
           "incumbent_at_election": true,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "李清標",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/%E6%98%A5%E6%97%A5%E9%84%89"
+          "source_url": "https://zh.wikipedia.org/wiki/%E6%98%A5%E6%97%A5%E9%84%89",
+          "gender_source_url": "https://www1.ihp.sinica.edu.tw/storage/publish2L/95-3-3%20%E9%99%B3%E5%85%89%E7%A5%96%E7%AD%89.pdf",
+          "gender_source_locator": "中研院史語所論文註31記其兩任春日鄉長；1998同地議員名冊明載男。另國家檔案案號MDAwNTY2NzY4NQ%3D%3D列其春日鄉事務。",
+          "gender_method": "historical_office_biography_and_cec_candidate_crosscheck",
+          "gender_snapshot_year": 1998,
+          "gender_snapshot_blob": "c48d770280f510f24869cc3ca72f2f878215abdc",
+          "gender_snapshot_candidate_id": "1998-council:屏东县:mountain:第13选举区:1"
         }
       ]
     },
@@ -7746,14 +7771,20 @@
         {
           "town": "東石鄉",
           "name": "蔡炳欽",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "李流宋",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/東石鄉"
+          "source_url": "https://zh.wikipedia.org/wiki/東石鄉",
+          "gender_source_url": "https://www.wra.gov.tw/epaper/Article_Detail.aspx?n=30173&s=1541",
+          "gender_source_locator": "水利署官方文章確認1990年代東石鄉長蔡炳欽；2002同縣同地理選區議員名冊性別男；屬跨職位身份比對。",
+          "gender_method": "historical_office_biography_and_cec_candidate_crosscheck",
+          "gender_snapshot_year": 2002,
+          "gender_snapshot_blob": "b403e21132fb4cb8caeaea03170e8cf208cc08f7",
+          "gender_snapshot_candidate_id": "2002-council:嘉义县:regional:第4选举区:5"
         }
       ]
     },
@@ -8077,7 +8108,7 @@
         {
           "town": "阿里山鄉",
           "name": "石信忠",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": true,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "石信忠",
@@ -8085,7 +8116,13 @@
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/阿里山鄉",
-          "corroboration_url": "https://www.president.gov.tw/NEWS/22784"
+          "corroboration_url": "https://www.president.gov.tw/NEWS/22784",
+          "gender_source_url": "https://eebulletin.cec.gov.tw/111/13%E5%98%89%E7%BE%A9%E7%B8%A3/05%E6%9D%91%E9%87%8C%E9%95%B7/%E9%98%BF%E9%87%8C%E5%B1%B1%E9%84%89%E7%AC%AC2%E9%81%B8%E8%88%89%E5%8D%80%E6%9D%91%E9%95%B7.pdf",
+          "gender_source_locator": "2022年阿里山鄉民代表第2區3號公報原頁明載男、第11及12屆鄉長；與1998議員名冊出生年一致。",
+          "gender_method": "historical_office_biography_and_cec_candidate_crosscheck",
+          "gender_snapshot_year": 1998,
+          "gender_snapshot_blob": "c48d770280f510f24869cc3ca72f2f878215abdc",
+          "gender_snapshot_candidate_id": "1998-council:嘉义县:mountain:第7选举区:2"
         }
       ],
       "corroboration_url": "https://www.president.gov.tw/NEWS/22784"
@@ -8360,14 +8397,20 @@
         {
           "town": "外埔鄉",
           "name": "姚應龍",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": true,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "姚應龍",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://www.taichung.gov.tw/media/268294/472514495371.pdf"
+          "source_url": "https://www.taichung.gov.tw/media/268294/472514495371.pdf",
+          "gender_source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/05%E7%9B%B4%E8%BD%84%E5%B8%82%E8%AD%B0%E5%93%A1/099%E5%B9%B4/03%E8%87%BA%E4%B8%AD%E5%B8%82/%E8%87%BA%E4%B8%AD%E5%B8%82%E7%AC%AC15%2C16%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "gender_source_locator": "2010年公報10號明載男、外埔第11、12屆鄉長。文字可讀，截圖未取得。",
+          "gender_method": "historical_office_biography_and_cec_candidate_crosscheck",
+          "gender_snapshot_year": 1998,
+          "gender_snapshot_blob": "c48d770280f510f24869cc3ca72f2f878215abdc",
+          "gender_snapshot_candidate_id": "1998-council:台中县:regional:第4选举区:11"
         }
       ]
     },
@@ -9570,14 +9613,20 @@
         {
           "town": "芳苑鄉",
           "name": "陳諸讚",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": true,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "陳諸讚",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/%E8%8A%B3%E8%8B%91%E9%84%89"
+          "source_url": "https://zh.wikipedia.org/wiki/%E8%8A%B3%E8%8B%91%E9%84%89",
+          "gender_source_url": "https://www.nuu.edu.tw/var/file/0/1000/img/337/275907167.pdf",
+          "gender_source_locator": "聯合大學校友專訪明載1990及1994兩任芳苑鄉長、1998轉任議員；1998、2002名冊性別及出生年一致。文字可讀，截圖未取得。",
+          "gender_method": "historical_office_biography_and_cec_candidate_crosscheck",
+          "gender_snapshot_year": 1998,
+          "gender_snapshot_blob": "c48d770280f510f24869cc3ca72f2f878215abdc",
+          "gender_snapshot_candidate_id": "1998-council:彰化县:regional:第8选举区:1"
         }
       ]
     },
@@ -9800,7 +9849,7 @@
         {
           "town": "新社鄉",
           "name": "陳萬通",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": true,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "陳萬通",
@@ -9808,7 +9857,13 @@
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/新社區",
-          "corroboration_url": "https://www.culture.taichung.gov.tw/media/1235570/%E6%96%87%E5%8C%96%E8%87%BA%E4%B8%ADno59_%E6%95%B4%E6%9C%AC_%E7%B4%B0%E5%B0%8F_%E8%B7%A8%E9%A0%81.pdf"
+          "corroboration_url": "https://www.culture.taichung.gov.tw/media/1235570/%E6%96%87%E5%8C%96%E8%87%BA%E4%B8%ADno59_%E6%95%B4%E6%9C%AC_%E7%B4%B0%E5%B0%8F_%E8%B7%A8%E9%A0%81.pdf",
+          "gender_source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/05%E7%9B%B4%E8%BD%84%E5%B8%82%E8%AD%B0%E5%93%A1/099%E5%B9%B4/03%E8%87%BA%E4%B8%AD%E5%B8%82/%E8%87%BA%E4%B8%AD%E5%B8%82%E7%AC%AC14%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "gender_source_locator": "2010年公報第14區2號明載男、新社第11、12屆鄉長；2002、2005名冊亦一致。公報可讀文字。",
+          "gender_method": "historical_office_biography_and_cec_candidate_crosscheck",
+          "gender_snapshot_year": 2002,
+          "gender_snapshot_blob": "b403e21132fb4cb8caeaea03170e8cf208cc08f7",
+          "gender_snapshot_candidate_id": "2002-council:台中县:regional:第3选举区:4"
         }
       ],
       "corroboration_url": "https://www.culture.taichung.gov.tw/media/1235570/%E6%96%87%E5%8C%96%E8%87%BA%E4%B8%ADno59_%E6%95%B4%E6%9C%AC_%E7%B4%B0%E5%B0%8F_%E8%B7%A8%E9%A0%81.pdf"
