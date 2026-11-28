@@ -23843,7 +23843,9 @@
           "confidence": "secondary_roster",
           "original_name": "許永春",
           "ballot_number": 3,
-          "votes": 1114
+          "votes": 1114,
+          "official_corroboration_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/094%E5%B9%B4/27%E6%BE%8E%E6%B9%96%E7%B8%A3/%E6%BE%8E%E6%B9%96%E7%B8%A3%E7%AC%AC4%E3%80%815%E3%80%816%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "official_corroboration_locator": "2005年澎湖縣議員選舉公報，第2頁，許永春經歷列第十二屆澎湖縣議員；PDF文字核對，頁面影像尚未取得。"
         },
         "4": {
           "value": true,
@@ -29536,7 +29538,17 @@
         "民主進步黨": 2832
       },
       "repository_total": 45729,
-      "limitation": "兩者政黨票比例不一致，可能口徑不同或來源轉錄差異；未取得當屆原始逐人票表，不改寫任何候選人政黨或得票。PDF表格文字可讀，目標頁截圖未取得。"
+      "limitation": "兩者政黨票比例不一致，可能口徑不同或來源轉錄差異；未取得當屆原始逐人票表，不改寫任何候選人政黨或得票。PDF表格文字可讀，目標頁截圖未取得。",
+      "adoption_policy": "retain_candidate_level_transcription_pending_primary_image",
+      "primary_publication": {
+        "title": "臺灣省澎湖縣第十三屆縣議員、第十二屆鄉長、第五屆馬公市長選舉選舉實錄",
+        "publisher": "澎湖縣選舉委員會",
+        "published": "1994-04",
+        "gpn": "027292830025",
+        "candidate_table_pages": "192–194、198–201",
+        "status": "bibliographic_reference_only_primary_pages_not_obtained"
+      },
+      "decision_note": "保留可逐人復算之既有轉錄，學術論文之匯總比例留作異常比對；不能視為原始票表已核驗。"
     }
   ]
 }
