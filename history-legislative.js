@@ -454,6 +454,8 @@
    const [gender,incumbent]=details;
    candidate.gender=candidate.gender??gender;
    candidate.incumbent_at_election=candidate.incumbent_at_election??incumbent;
+   const birthYear=metadata.birthYears?.[candidate.candidacy_id];
+   if(Number.isInteger(birthYear))candidate.birth_year=candidate.birth_year??birthYear;
    const contest=contests.get(candidate.contest_id);
    const identity=key(contest.electorate,contest.district_name,candidate.candidate_name,candidate.ballot_number);
    profiles.set(identity,profiles.has(identity)?null:candidate);

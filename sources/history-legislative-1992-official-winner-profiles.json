@@ -1,0 +1,148 @@
+{
+  "year": 1992,
+  "source_url": "https://web.cec.gov.tw/api/file/76da0087-8fd9-4052-8924-aba139ae8b97.pdf",
+  "source_locator": "选举区候选人名单及当选人名册（扫描原件）",
+  "method": "民国出生年加1911；逐条匹配当选人姓名、号次与票数。仅录入出生年份，不改变原始姓名、票数、政党或当选标记。",
+  "records": [
+    {
+      "candidacy_id": "legislative:1992:regional:高雄市:高雄市第一选区:06:李庆雄",
+      "name": "李庆雄",
+      "votes": 94323,
+      "birth_year": 1938,
+      "gender": "男"
+    },
+    {
+      "candidacy_id": "legislative:1992:regional:高雄市:高雄市第一选区:12:林寿山",
+      "name": "林寿山",
+      "votes": 51231,
+      "birth_year": 1953,
+      "gender": "男"
+    },
+    {
+      "candidacy_id": "legislative:1992:regional:高雄市:高雄市第一选区:02:黄昭顺",
+      "name": "黄昭顺",
+      "votes": 43111,
+      "birth_year": 1953,
+      "gender": "女"
+    },
+    {
+      "candidacy_id": "legislative:1992:regional:高雄市:高雄市第一选区:05:李必贤",
+      "name": "李必贤",
+      "votes": 41529,
+      "birth_year": 1947,
+      "gender": "男"
+    },
+    {
+      "candidacy_id": "legislative:1992:regional:高雄市:高雄市第一选区:10:朱星羽",
+      "name": "朱星羽",
+      "votes": 41421,
+      "birth_year": 1956,
+      "gender": "男"
+    },
+    {
+      "candidacy_id": "legislative:1992:regional:高雄市:高雄市第一选区:14:陈哲男",
+      "name": "陈哲男",
+      "votes": 33027,
+      "birth_year": 1941,
+      "gender": "男"
+    },
+    {
+      "candidacy_id": "legislative:1992:regional:高雄市:高雄市第二选区:11:黄昭辉",
+      "name": "黄昭辉",
+      "votes": 58094,
+      "birth_year": 1946,
+      "gender": "男"
+    },
+    {
+      "candidacy_id": "legislative:1992:regional:高雄市:高雄市第二选区:08:郭金生",
+      "name": "郭金生",
+      "votes": 40809,
+      "birth_year": 1953,
+      "gender": "男"
+    },
+    {
+      "candidacy_id": "legislative:1992:regional:高雄市:高雄市第二选区:05:陈光复",
+      "name": "陈光复",
+      "votes": 38234,
+      "birth_year": 1955,
+      "gender": "男"
+    },
+    {
+      "candidacy_id": "legislative:1992:regional:高雄市:高雄市第二选区:04:陈建平",
+      "name": "陈建平",
+      "votes": 37844,
+      "birth_year": 1960,
+      "gender": "男"
+    },
+    {
+      "candidacy_id": "legislative:1992:regional:高雄市:高雄市第二选区:01:王天竞",
+      "name": "王天竞",
+      "votes": 33060,
+      "birth_year": 1947,
+      "gender": "男"
+    },
+    {
+      "candidacy_id": "legislative:1992:regional:高雄市:高雄市第二选区:02:吴德美",
+      "name": "吴德美",
+      "votes": 32456,
+      "birth_year": 1947,
+      "gender": "女"
+    },
+    {
+      "candidacy_id": "legislative:1992:regional:金门县:金门县:01:陈清宝",
+      "name": "陈清宝",
+      "votes": 10926,
+      "birth_year": 1955,
+      "gender": "男"
+    },
+    {
+      "candidacy_id": "legislative:1992:regional:连江县:连江县:02:曹尔忠",
+      "name": "曹尔忠",
+      "votes": 1648,
+      "birth_year": 1954,
+      "gender": "男"
+    },
+    {
+      "candidacy_id": "legislative:1992:mountain:全部地区（含金门、马祖）:台闽地区:01:蔡贵聪",
+      "name": "蔡贵聪",
+      "votes": 10638,
+      "birth_year": 1952,
+      "gender": "男"
+    },
+    {
+      "candidacy_id": "legislative:1992:mountain:全部地区（含金门、马祖）:台闽地区:09:高天来",
+      "name": "高天来",
+      "votes": 13291,
+      "birth_year": 1951,
+      "gender": "男"
+    },
+    {
+      "candidacy_id": "legislative:1992:mountain:全部地区（含金门、马祖）:台闽地区:02:华加志",
+      "name": "华加志",
+      "votes": 16784,
+      "birth_year": 1936,
+      "gender": "男"
+    },
+    {
+      "candidacy_id": "legislative:1992:plains:全部地区（含金门、马祖）:台闽地区:02:蔡中涵",
+      "name": "蔡中涵",
+      "votes": 7056,
+      "birth_year": 1943,
+      "gender": "男"
+    },
+    {
+      "candidacy_id": "legislative:1992:plains:全部地区（含金门、马祖）:台闽地区:04:庄金生",
+      "name": "庄金生",
+      "votes": 8500,
+      "birth_year": 1941,
+      "gender": "男"
+    },
+    {
+      "candidacy_id": "legislative:1992:plains:全部地区（含金门、马祖）:台闽地区:08:高巍和",
+      "name": "高巍和",
+      "votes": 10227,
+      "birth_year": 1943,
+      "gender": "男"
+    }
+  ]
+}
