@@ -16247,7 +16247,7 @@
           "侯慶昌",
           4110,
           "民主進步黨",
-          "",
+          "男",
           false
         ],
         [
@@ -16414,6 +16414,14 @@
           "ballot_number": 12,
           "votes": 5529,
           "evidence": "嘉義縣議會第十二屆議員官方名冊37人，與第十三屆候選人同縣唯一繁體姓名精確對應；任期涵蓋投票日，個別離職、遞補仍待核"
+        }
+      },
+      "gender_sources": {
+        "9": {
+          "source_url": "https://vote.nccu.edu.tw/cec/vote3.asp?pass1=K9AA%3EI8888888888iii%28%28",
+          "method": "cross_election_same_county_name_party",
+          "evidence": "1996年第三屆國民大會代表選舉嘉義縣第二選區，侯慶昌、M、1953年、民主進步黨；同縣同名同黨交叉核對。非1994年原始公報。",
+          "checked_on": "2026-11-28"
         }
       }
     },
