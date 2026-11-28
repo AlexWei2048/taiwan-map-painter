@@ -21560,11 +21560,25 @@
           "source_locator": "龍潭區歷任首長表：林忠正1993-04-01補選接任第11屆、1994-03-01就任第12屆；曾任內停職、有代理鄉長，1994投票日是否正式在任仍需核。",
           "evidence_type": "secondary_historical_roster_with_substitution_complexity",
           "confidence": "provisional_secondary_requires_official_term_roster",
-          "gender": null,
+          "gender": "男",
           "term_note": "曾因案停職並由張仲穎代理，不對投票當日現任屬性下結論。",
           "votes": null,
           "party_recommendation": null,
-          "ballot_number": null
+          "ballot_number": null,
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "2002年同縣同鄉鎮市長選舉同名候選人唯一匹配，性別一致，並與既有歷任首長紀錄比對；非1994年原始公報。",
+          "gender_method": "cross_election_exact_identity_later_township",
+          "gender_evidence_tier": "cross_election_identity_inference",
+          "gender_source_records": [
+            {
+              "year": 2002,
+              "candidacy_id": "2002-township:桃园县:regional:龙潭乡:1",
+              "blob_sha": "b403e21132fb4cb8caeaea03170e8cf208cc08f7",
+              "birth_year": 1951,
+              "gender": "男"
+            }
+          ],
+          "gender_corroboration_url": "https://natnews.com.tw/news/news-44169.html"
         },
         {
           "town": "復興鄉",
@@ -23249,9 +23263,23 @@
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "gender": null,
+          "gender": "男",
           "source_url": "https://zh.wikipedia.org/wiki/西嶼鄉",
-          "corroboration_url": "https://penghu.info/OBAC204951159436D07D"
+          "corroboration_url": "https://penghu.info/OBAC204951159436D07D",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "2002年同縣同鄉鎮市長選舉同名候選人唯一匹配，性別一致，並與既有歷任首長紀錄比對；非1994年原始公報。",
+          "gender_method": "cross_election_exact_identity_later_township",
+          "gender_evidence_tier": "cross_election_identity_inference",
+          "gender_source_records": [
+            {
+              "year": 2002,
+              "candidacy_id": "2002-township:澎湖县:regional:西屿乡:1",
+              "blob_sha": "b403e21132fb4cb8caeaea03170e8cf208cc08f7",
+              "birth_year": 1953,
+              "gender": "男"
+            }
+          ],
+          "gender_corroboration_url": "https://votetw.com/data/candidate/%E5%91%82%E6%AD%A3%E9%BB%A8"
         }
       ]
     },
@@ -23415,11 +23443,39 @@
           "incumbent_at_election": true,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "許榮盛",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://kmfinance.kinmen.gov.tw/news.aspx?Create=1&PageSize=20&n=55FDE4EAE7CDA1E6&page=20760&sms=4FEFD09995C4BB81"
+          "source_url": "https://kmfinance.kinmen.gov.tw/news.aspx?Create=1&PageSize=20&n=55FDE4EAE7CDA1E6&page=20760&sms=4FEFD09995C4BB81",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "2002、2005、2009年同縣同鄉鎮市長選舉同名候選人唯一匹配，性別一致，並與既有歷任首長紀錄比對；非1994年原始公報。",
+          "gender_method": "cross_election_exact_identity_later_township",
+          "gender_evidence_tier": "cross_election_identity_inference",
+          "gender_source_records": [
+            {
+              "year": 2002,
+              "candidacy_id": "2002-township:花莲县:regional:瑞穗乡:2",
+              "blob_sha": "b403e21132fb4cb8caeaea03170e8cf208cc08f7",
+              "birth_year": 1947,
+              "gender": "男"
+            },
+            {
+              "year": 2005,
+              "candidacy_id": "2005-township:花莲县:regional:瑞穗乡:2",
+              "blob_sha": "4c86be7e87201f5334503a177874580bc9040bc5",
+              "birth_year": 1946,
+              "gender": "男"
+            },
+            {
+              "year": 2009,
+              "candidacy_id": "2009-township:花莲县:regional:瑞穗乡:2",
+              "blob_sha": "6a21144cf2028bcea8183e9e75f920e99cc189c3",
+              "birth_year": 1946,
+              "gender": "男"
+            }
+          ],
+          "gender_corroboration_url": "https://kmfinance.kinmen.gov.tw/news.aspx?Create=1&PageSize=20&n=55FDE4EAE7CDA1E6&page=20216&sms=4FEFD09995C4BB81"
         }
       ]
     },
@@ -24388,11 +24444,25 @@
           "incumbent_at_election": false,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "王龍興",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/崁頂鄉"
+          "source_url": "https://zh.wikipedia.org/wiki/崁頂鄉",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "2014年同縣同鄉鎮市長選舉同名候選人唯一匹配，性別一致，並與既有歷任首長紀錄比對；非1994年原始公報。",
+          "gender_method": "cross_election_exact_identity_later_township",
+          "gender_evidence_tier": "cross_election_identity_inference",
+          "gender_source_records": [
+            {
+              "year": 2014,
+              "candidacy_id": "2014-township:屏东县:regional:崁顶乡:1",
+              "blob_sha": "e6f1d273d46e6866decce523174726a0a6669430",
+              "birth_year": 1962,
+              "gender": "男"
+            }
+          ],
+          "gender_corroboration_url": "https://reader.turnnewsapp.com/ctl/20181024/B27AA12/Q1RMXzIwMTgxMDI0X0ExMl8x0/share"
         }
       ]
     },
@@ -24936,12 +25006,26 @@
           "incumbent_at_election": true,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "曾文昌",
-          "gender": null,
+          "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://wikis.tw/新埤鄉",
-          "corroboration_url": "https://zh.wikipedia.org/wiki/新埤鄉"
+          "corroboration_url": "https://zh.wikipedia.org/wiki/新埤鄉",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "2002年同縣同鄉鎮市長選舉同名候選人唯一匹配，性別一致，並與既有歷任首長紀錄比對；非1994年原始公報。",
+          "gender_method": "cross_election_exact_identity_later_township",
+          "gender_evidence_tier": "cross_election_identity_inference",
+          "gender_source_records": [
+            {
+              "year": 2002,
+              "candidacy_id": "2002-township:屏东县:regional:新埤乡:3",
+              "blob_sha": "b403e21132fb4cb8caeaea03170e8cf208cc08f7",
+              "birth_year": 1942,
+              "gender": "男"
+            }
+          ],
+          "gender_corroboration_url": "https://taiwanvotes.tw/%E5%80%99%E9%81%B8%E4%BA%BA/?n=%E6%9B%BE%E6%96%87%E6%98%8C"
         }
       ],
       "corroboration_url": "https://zh.wikipedia.org/wiki/新埤鄉"
@@ -25201,14 +25285,28 @@
         {
           "town": "鹿草鄉",
           "name": "蔡遜章",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": true,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "蔡遜章",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://zh.wikipedia.org/wiki/鹿草鄉"
+          "source_url": "https://zh.wikipedia.org/wiki/鹿草鄉",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "2002年同縣同鄉鎮市長選舉同名候選人唯一匹配，性別一致，並與既有歷任首長紀錄比對；非1994年原始公報。",
+          "gender_method": "cross_election_exact_identity_later_township",
+          "gender_evidence_tier": "cross_election_identity_inference",
+          "gender_source_records": [
+            {
+              "year": 2002,
+              "candidacy_id": "2002-township:嘉义县:regional:鹿草乡:1",
+              "blob_sha": "b403e21132fb4cb8caeaea03170e8cf208cc08f7",
+              "birth_year": 1955,
+              "gender": "男"
+            }
+          ],
+          "gender_corroboration_url": "https://lawbot.tw/judgment/AAAB_85_%E4%B8%8A%E8%A8%B4_573_19961219_1"
         }
       ]
     },
@@ -25392,7 +25490,7 @@
         {
           "town": "中埔鄉",
           "name": "鄭炳琨",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": true,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "鄭炳琨",
@@ -25400,7 +25498,21 @@
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/中埔鄉",
-          "corroboration_url": "https://www.peopo.org/news/377559"
+          "corroboration_url": "https://www.peopo.org/news/377559",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "2002年同縣同鄉鎮市長選舉同名候選人唯一匹配，性別一致，並與既有歷任首長紀錄比對；非1994年原始公報。",
+          "gender_method": "cross_election_exact_identity_later_township",
+          "gender_evidence_tier": "cross_election_identity_inference",
+          "gender_source_records": [
+            {
+              "year": 2002,
+              "candidacy_id": "2002-township:嘉义县:regional:中埔乡:1",
+              "blob_sha": "b403e21132fb4cb8caeaea03170e8cf208cc08f7",
+              "birth_year": 1950,
+              "gender": "男"
+            }
+          ],
+          "gender_corroboration_url": "https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%9F%94%E9%84%89"
         }
       ],
       "corroboration_url": "https://www.peopo.org/news/377559"
@@ -26827,7 +26939,7 @@
         {
           "town": "神岡鄉",
           "name": "劉八郎",
-          "gender": null,
+          "gender": "男",
           "incumbent_at_election": true,
           "incumbent_method": "historical_successive_term_roster_inference",
           "previous_term_holder": "劉八郎",
@@ -26835,7 +26947,28 @@
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://news.ebc.net.tw/news/politics/530248",
-          "corroboration_url": "https://zh.wikipedia.org/wiki/%E7%A5%9E%E5%B2%A1%E5%8D%80%E5%8D%80%E9%95%B7"
+          "corroboration_url": "https://zh.wikipedia.org/wiki/%E7%A5%9E%E5%B2%A1%E5%8D%80%E5%8D%80%E9%95%B7",
+          "gender_source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "gender_source_locator": "2002、2005年同縣同鄉鎮市長選舉同名候選人唯一匹配，性別一致，並與既有歷任首長紀錄比對；非1994年原始公報。",
+          "gender_method": "cross_election_exact_identity_later_township",
+          "gender_evidence_tier": "cross_election_identity_inference",
+          "gender_source_records": [
+            {
+              "year": 2002,
+              "candidacy_id": "2002-township:台中县:regional:神冈乡:3",
+              "blob_sha": "b403e21132fb4cb8caeaea03170e8cf208cc08f7",
+              "birth_year": 1942,
+              "gender": "男"
+            },
+            {
+              "year": 2005,
+              "candidacy_id": "2005-township:台中县:regional:神冈乡:4",
+              "blob_sha": "4c86be7e87201f5334503a177874580bc9040bc5",
+              "birth_year": 1941,
+              "gender": "男"
+            }
+          ],
+          "gender_corroboration_url": "https://news.ebc.net.tw/news/politics/530248"
         }
       ],
       "corroboration_url": "https://zh.wikipedia.org/wiki/%E7%A5%9E%E5%B2%A1%E5%8D%80%E5%8D%80%E9%95%B7"
