@@ -21053,6 +21053,19 @@
           "original_name": "吳亮慶",
           "ballot_number": 1,
           "votes": 8340
+        },
+        "3": {
+          "value": true,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%89%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/115%E5%B9%B4/13%E5%B1%8F%E6%9D%B1%E7%B8%A3/%E8%AD%B0%E5%93%A1--%E7%AC%AC%E4%BA%8C%E9%81%B8%E8%89%89%E5%8D%80.pdf",
+          "secondary_source": "https://www.cdns.com.tw/articles/1479794",
+          "source_locator": "2026年第2選區5號，經歷明列第9、10、12–20屆縣議員；PDF文字可讀，原頁截圖因檔案過大未取得。",
+          "election_date": "1994-01-29",
+          "method": "official_biography_consecutive_term_crosscheck",
+          "confidence": "biographical_term_inference",
+          "limitation": "候選人自填履歷明確列連續兩屆；依任期推定選舉時在任，尚未取得逐日任免紀錄。",
+          "original_name": "何春美",
+          "ballot_number": 3,
+          "votes": 5934
         }
       }
     },
@@ -21251,16 +21264,29 @@
       ],
       "incumbent_sources": {
         "2": {
-          "value": false,
+          "value": null,
           "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/094%E5%B9%B4/23%E5%B1%8F%E6%9D%B1%E7%B8%A3/%E5%B1%8F%E6%9D%B1%E7%B8%A3%E7%AC%AC3%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
           "source_locator": "2005年第三選區20號，履歷列萬巒鄉長及第13至15屆縣議員。",
           "election_date": "1994-01-29",
-          "method": "inferred_from_biographical_first_council_term",
-          "confidence": "biographical_inference",
-          "limitation": "公報履歷為候選人自填；非逐日任免名冊。PDF公開文字可讀，原頁截圖未取得。",
+          "method": "conflicting_official_bulletin_biographies",
+          "confidence": "conflicting_biographies_unresolved",
+          "limitation": "2005年公報僅列第13至15屆；2009年公報第3選區9號明列第11至16屆，已核原頁影像。兩者範圍不同，撤回原非現任推定；待1990年當選名冊或1990–1994任職紀錄。",
           "original_name": "曾勳任",
           "ballot_number": 2,
-          "votes": 6694
+          "votes": 6694,
+          "conflicting_source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%89%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/098%E5%B9%B4/23%E5%B1%8F%E6%9D%B1%E7%B8%A3/%E5%B1%8F%E6%9D%B1%E7%B8%A3%E7%AC%AC3%E9%81%B8%E8%89%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "previous_inference": {
+            "value": false,
+            "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/094%E5%B9%B4/23%E5%B1%8F%E6%9D%B1%E7%B8%A3/%E5%B1%8F%E6%9D%B1%E7%B8%A3%E7%AC%AC3%E9%81%B8%E8%88%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+            "source_locator": "2005年第三選區20號，履歷列萬巒鄉長及第13至15屆縣議員。",
+            "election_date": "1994-01-29",
+            "method": "inferred_from_biographical_first_council_term",
+            "confidence": "biographical_inference",
+            "limitation": "公報履歷為候選人自填；非逐日任免名冊。PDF公開文字可讀，原頁截圖未取得。",
+            "original_name": "曾勳任",
+            "ballot_number": 2,
+            "votes": 6694
+          }
         },
         "12": {
           "value": false,
@@ -21273,6 +21299,19 @@
           "original_name": "潘長成",
           "ballot_number": 12,
           "votes": 6932
+        },
+        "14": {
+          "value": true,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%89%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/098%E5%B9%B4/23%E5%B1%8F%E6%9D%B1%E7%B8%A3/%E5%B1%8F%E6%9D%B1%E7%B8%A3%E7%AC%AC3%E9%81%B8%E8%89%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "secondary_source": "https://www.cna.com.tw/news/aloc/201708100056.aspx",
+          "source_locator": "2009年第3選區1號，明列第12、13屆縣議員；已核對第1頁原圖。",
+          "election_date": "1994-01-29",
+          "method": "official_biography_consecutive_term_crosscheck",
+          "confidence": "biographical_term_inference",
+          "limitation": "候選人自填履歷明確列連續兩屆；依任期推定選舉時在任，尚未取得逐日任免紀錄。",
+          "original_name": "賴耀熙",
+          "ballot_number": 14,
+          "votes": 5874
         }
       }
     },
@@ -22393,6 +22432,19 @@
           "original_name": "李振源",
           "ballot_number": 3,
           "votes": 2998
+        },
+        "5": {
+          "value": true,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%89%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/098%E5%B9%B4/24%E8%87%BA%E6%9D%B1%E7%B8%A3/%E8%87%BA%E6%9D%B1%E7%B8%A3%E7%AC%AC4%E3%80%818%E3%80%8111%E9%81%B8%E8%89%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "secondary_source": "https://votetw.com/data/candidate/葉寶山",
+          "source_locator": "2009年第4選區2號，經歷明列第12、13屆縣議員；PDF文字可讀，原頁截圖未取得。",
+          "election_date": "1994-01-29",
+          "method": "official_biography_consecutive_term_crosscheck",
+          "confidence": "biographical_term_inference",
+          "limitation": "候選人自填履歷明確列連續兩屆；依任期推定選舉時在任，尚未取得逐日任免紀錄。",
+          "original_name": "葉寶山",
+          "ballot_number": 5,
+          "votes": 2746
         }
       }
     },
