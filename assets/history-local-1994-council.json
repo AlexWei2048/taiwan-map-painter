@@ -29064,7 +29064,7 @@
           "曾俊仁",
           1213,
           "無黨籍",
-          "",
+          "男",
           false
         ],
         [
@@ -29187,6 +29187,22 @@
           "votes": 8622,
           "limitation": "公開任期履歷推定，非投票日逐日任免名冊；非現任分類仍待前屆完整名冊交叉核實。"
         }
+      },
+      "gender_sources": {
+        "10": {
+          "district": 2,
+          "number": 10,
+          "name": "曾俊仁",
+          "votes": 1213,
+          "source_url": "https://web.cec.gov.tw/api/file/884cf9ee-f2cd-493a-9751-8f7c9c12ec9f.pdf",
+          "corroboration_url": "https://tcmb.culture.tw/zh-tw/detail?id=615034&indexCode=Culture_Object",
+          "additional_source_url": "https://video.udn.com/news/1247342",
+          "source_locator": "2014年臺南市仙草里里長選舉公報第1頁2號明載男；文化記憶庫記載1994年南區同名無黨籍參選人；2022年聯合影音報導連結其早年臺南政治活動。",
+          "method": "same-city historical candidacy and later official public office bulletin, corroborated career history",
+          "confidence": "cross_election_biographical_match",
+          "value": "男",
+          "original_name": "曾俊仁"
+        }
       }
     },
     {
@@ -29227,7 +29243,7 @@
           "蔡三福",
           2088,
           "",
-          "",
+          "男",
           false
         ],
         [
@@ -29360,6 +29376,21 @@
           "original_name": "邱文明",
           "ballot_number": 9,
           "votes": 5047
+        }
+      },
+      "gender_sources": {
+        "3": {
+          "district": 3,
+          "number": 3,
+          "name": "蔡三福",
+          "votes": 2088,
+          "source_url": "https://collections.nmth.gov.tw/CollectionContent.aspx?a=132&rno=2006.002.1285",
+          "corroboration_url": "https://news.nextapple.com/politics/20221103/355B6EBD71B54960CF49BE32EF5CFD30",
+          "source_locator": "臺灣歷史博物館藏品2006.002.1285明載1994年臺南市議員候選人蔡三福後任謝龍介競選總幹事；2022年具名同職務新聞以男性代詞稱之。",
+          "method": "museum documented candidacy and corroborated later biographical reporting",
+          "confidence": "cross_source_biographical_match",
+          "value": "男",
+          "original_name": "蔡三福"
         }
       }
     },
