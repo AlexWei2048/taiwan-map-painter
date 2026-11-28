@@ -14716,6 +14716,20 @@
           "value": "男",
           "confidence": "cross_election_geographic_match"
         }
+      },
+      "incumbent_sources": {
+        "11": {
+          "value": true,
+          "source_url": "https://bulletin.cec.gov.tw/01%E9%81%B8%E8%88%89%E5%85%AC%E5%A0%B1/06%E7%B8%A3%E5%B8%82%E8%AD%B0%E5%93%A1/098%E5%B9%B4/17%E9%9B%B2%E6%9E%97%E7%B8%A3/%E9%9B%B2%E6%9E%97%E7%B8%A3%E7%AC%AC1%E9%81%B8%E8%89%89%E5%8D%80%E8%AD%B0%E5%93%A1.pdf",
+          "source_locator": "2009年第17屆第1選區3號蔡玉霜，經歷明列第9、11、12、13、14、15、16屆縣議員。",
+          "election_date": "1994-01-29",
+          "method": "official_bulletin_documented_previous_term",
+          "confidence": "documented_term_history",
+          "limitation": "候選人自填履歷刊於官方公報，並非投票日逐日任免紀錄；PDF文字可讀，原頁截圖未取得。",
+          "original_name": "蔡玉霜",
+          "ballot_number": 11,
+          "votes": 5119
+        }
       }
     },
     {
