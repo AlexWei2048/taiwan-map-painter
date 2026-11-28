@@ -15449,7 +15449,7 @@
           "張孟崇",
           1322,
           "民主進步黨",
-          "",
+          "男",
           false
         ],
         [
@@ -15714,6 +15714,13 @@
         }
       },
       "gender_sources": {
+        "2": {
+          "source_url": "https://db.cec.gov.tw/ElecTable/Election/ElecTickets?areaCode=00&cityCode=020&dataLevel=A&dataType=tickets&deptCode=000&legisId=T1&liCode=0000&prvCode=01&subjectId=T2&themeId=8178fcf3d7aabd51203614f208b75031&typeId=ELC",
+          "corroboration_url": "https://www.ftvnews.com.tw/news/detail/2025919w0417",
+          "method": "cross_election_name_party_regional_biography",
+          "evidence": "2002年嘉義市第1選區10號張孟崇，男、民主進步黨；民視2025年報導其曾任民進黨嘉義縣黨部執行長，支持跨縣市同名同黨身份匹配；非1994年原始公報。",
+          "checked_on": "2026-11-28"
+        },
         "12": {
           "method": "cross-election exact historical county and unique name, documented gender",
           "source_url": "https://votetw.com/data/candidate/%E6%9E%97%E5%9C%8B%E6%85%B6",
@@ -25711,6 +25718,19 @@
           "original_name": "徐信芳",
           "ballot_number": 4,
           "votes": 3117
+        },
+        "6": {
+          "value": true,
+          "source_url": "https://eebulletin.cec.gov.tw/103/22%E6%96%B0%E7%AB%B9%E5%B8%82/%E5%B8%82%E8%AD%B0%E5%93%A1/%E6%96%B0%E7%AB%B9%E5%B8%82%E7%AC%AC2%E9%81%B8%E8%88%89%E5%8D%80.pdf",
+          "source_locator": "2014年第9屆市議員第2選區公報1號宋金海，履歷列第3至7屆市議員；PDF文字可讀，影像請求失敗。",
+          "corroboration_url": "https://www.hsinchu-cc.gov.tw/TC/page.aspx?mid=24",
+          "election_date": "1994-01-29",
+          "method": "documented_consecutive_term_biography",
+          "confidence": "published_election_bulletin",
+          "original_name": "宋金海",
+          "ballot_number": 6,
+          "votes": 3878,
+          "limitation": "任期履歷推定，非投票日逐日任免名冊。"
         }
       }
     },
