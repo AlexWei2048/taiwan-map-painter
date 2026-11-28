@@ -15268,7 +15268,62 @@
           "whole_election_invalidated": false,
           "appeals_dismissed": true
         },
-        "policy": "原始當選公告與事後司法判決分列，不改寫投票日歷史結果；未取得遞補或補選公告，不推定接任者。"
+        "policy": "原始當選公告、1994年判決及1995–1997年重行審定分列，不改寫投票日歷史結果；已核補行公告，最終抽籤結果仍待查。",
+        "later_proceedings": {
+          "sources": [
+            {
+              "url": "https://web.cec.gov.tw/api/file/b33f1b06-4b9f-4116-ae33-b66189ebccb4.pdf",
+              "locator": "第229次會議第五案，印刷頁61–65",
+              "verification": "公開PDF文字；截圖未取得"
+            },
+            {
+              "url": "https://web.cec.gov.tw/api/file/50fc1045-b9f0-422c-98e3-3f8799a81add.pdf",
+              "locator": "第233次會議第五案，印刷頁108–114",
+              "verification": "PDF文字與頁108、111影像核對"
+            }
+          ],
+          "events": [
+            {
+              "date": "1995-03-18",
+              "type": "cec_interpretation",
+              "reference": "84中選一字第57339號",
+              "note": "按確定判決重新審定並公告"
+            },
+            {
+              "date": "1995-04-21",
+              "type": "reannouncement",
+              "name": "許振明",
+              "elected": true
+            },
+            {
+              "date": "1997-04-30",
+              "type": "final_judgment_and_removal",
+              "name": "許振明",
+              "elected": false,
+              "note": "後續勘驗其餘73個投票所後，兩人得票相同；許振明當選無效確定並自該日解除職務。"
+            },
+            {
+              "date": "1997-09-06",
+              "type": "cec_interpretation",
+              "reference": "86中選一字第72944號",
+              "note": "依第231次會議決議，同票以抽籤決定當選名額並重新公告。第233次會議維持此函處理。"
+            }
+          ],
+          "judicial_recount": [
+            {
+              "ballot_number": 4,
+              "name": "許振明",
+              "votes": 6448
+            },
+            {
+              "ballot_number": 10,
+              "name": "徐忠徹",
+              "votes": 6448
+            }
+          ],
+          "lottery_result": null,
+          "limitation": "尚未取得實際抽籤紀錄或最終重新公告；保留1994年2月5日原始公告口徑，不將後續司法票數混入全區原始有效票統計。"
+        }
       }
     },
     {
