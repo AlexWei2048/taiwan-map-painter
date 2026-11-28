@@ -2865,13 +2865,13 @@
         "turnout_pct_using_printed_voters": 63.3,
         "decision": "兩版年報記載相同；保留原表選舉人數11,627及票數7,360／6,719／641，依票數計算投票率63.30%，原表印列69.26%與四項統計不一致，保留差異供查核，不採用印列比率。"
       },
-      "contest_count": 1,
-      "candidate_count": 1,
+      "contest_count": 2,
+      "candidate_count": 2,
       "profile_totals": [
-        11627,
-        7360,
-        6719,
-        641
+        25847,
+        18000,
+        16587,
+        1413
       ],
       "districts": [
         {
@@ -2896,6 +2896,34 @@
             "name": "柯清雄",
             "source_url": "https://www.baojhong.gov.tw/df_ufiles/115/112%E5%B9%B4%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1.pdf",
             "source_locator": "112年褒忠鄉統計年報表3-6，44–45頁，第11、12屆當選人均柯清雄，1994年單一候選人6719有效票；按連續任期認定，非逐日任職證明。",
+            "confidence": "official_consecutive_elections"
+          }
+        },
+        {
+          "town": "林內鄉",
+          "profile": [
+            14220,
+            10640,
+            9868,
+            772
+          ],
+          "candidates": [
+            [
+              null,
+              "鄭文煌",
+              null,
+              "男",
+              9868,
+              true
+            ]
+          ],
+          "results_url": "https://ws.yunlin.gov.tw/Download.ashx?n=MTEz5bm057Wx6KiI5bm05aCxLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNTA4L3JlbGZpbGUvMTI2NDIvNzA0Ny9iNjY5Zjg0MS1kMGMyLTRjYTEtYjYwNC0zNzk0MzZmYzlkMzkucGRm",
+          "profile_url": "https://ws.yunlin.gov.tw/Download.ashx?n=MTEz5bm057Wx6KiI5bm05aCxLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNTA4L3JlbGZpbGUvMTI2NDIvNzA0Ny9iNjY5Zjg0MS1kMGMyLTRjYTEtYjYwNC0zNzk0MzZmYzlkMzkucGRm",
+          "source_locator": "113年林內鄉統計年報表3-6，第11、12屆，印刷頁44–45（PDF第71–72頁）；第12屆1名男性候選人，9,868有效票，當選鄭文煌，故其得票等於全部有效票。公開文字表格已核對，頁面截圖未取得；號次、推薦政黨未載。",
+          "incumbency_at_election": {
+            "name": "鄭文煌",
+            "source_url": "https://ws.yunlin.gov.tw/Download.ashx?n=MTEz5bm057Wx6KiI5bm05aCxLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNTA4L3JlbGZpbGUvMTI2NDIvNzA0Ny9iNjY5Zjg0MS1kMGMyLTRjYTEtYjYwNC0zNzk0MzZmYzlkMzkucGRm",
+            "source_locator": "表3-6第11、12屆當選人均鄭文煌；與既有歷任鄉長任期表相符。非逐日任免證明。",
             "confidence": "official_consecutive_elections"
           }
         }
@@ -4566,9 +4594,16 @@
         {
           "town": "林內鄉",
           "name": "鄭文煌",
-          "incumbent_at_election": true
+          "incumbent_at_election": true,
+          "gender": "男",
+          "votes": 9868,
+          "ballot_number": null,
+          "party_recommendation": null
         }
-      ]
+      ],
+      "promoted_to_complete_returns": true,
+      "promotion_source_url": "https://ws.yunlin.gov.tw/Download.ashx?n=MTEz5bm057Wx6KiI5bm05aCxLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNTA4L3JlbGZpbGUvMTI2NDIvNzA0Ny9iNjY5Zjg0MS1kMGMyLTRjYTEtYjYwNC0zNzk0MzZmYzlkMzkucGRm",
+      "promotion_source_locator": "113年林內鄉統計年報表3-6，第11、12屆，印刷頁44–45（PDF第71–72頁）；第12屆1名男性候選人，9,868有效票，當選鄭文煌，故其得票等於全部有效票。公開文字表格已核對，頁面截圖未取得；號次、推薦政黨未載。"
     },
     {
       "county": "苗栗縣",

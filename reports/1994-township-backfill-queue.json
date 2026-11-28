@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "checked": "2026-11-27",
+  "checked": "2026-11-28",
   "reference_status": "provisional_expected_districts_pending_original_1994_notice",
   "base_archive": "sources/history-1994-township.json",
-  "base_archive_blob": "2190c10cc4d2485b7228e293bf9a13fb415e23d8",
+  "base_archive_blob": "070f9d0667f3081d81ee71425a958945698d0737",
   "expected": 319,
-  "with_candidate_returns": 89,
-  "missing_complete_candidate_returns": 230,
+  "with_candidate_returns": 90,
+  "missing_complete_candidate_returns": 229,
   "batches": [
     {
       "batch": 1,
-      "count": 51,
+      "count": 50,
       "counties": [
         "花蓮縣",
         "臺東縣",
@@ -65,6 +65,12 @@
       "url": "https://ethesys.lis.nsysu.edu.tw/ETD-db/ETD-search-c/view_etd?URN=etd-0902102-183649",
       "locator": "學位論文泰武鄉政治參與研究，表4-4歷屆鄉長候選人政黨屬性（頁122）；引用1994年屏東縣第12屆鄉鎮市長選政誌要",
       "status": "fulltext_download_timeout_original_table_not_obtained"
+    },
+    {
+      "county": "雲林縣",
+      "url": "https://ws.yunlin.gov.tw/Download.ashx?n=MTEz5bm057Wx6KiI5bm05aCxLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNTA4L3JlbGZpbGUvMTI2NDIvNzA0Ny9iNjY5Zjg0MS1kMGMyLTRjYTEtYjYwNC0zNzk0MzZmYzlkMzkucGRm",
+      "locator": "林內鄉統計年報表3-6，第12屆",
+      "status": "verified_single_candidate_returns_ballot_number_and_party_unknown"
     }
   ],
   "tasks": [
@@ -2311,30 +2317,6 @@
       ],
       "partial_archive_indices": [
         13
-      ],
-      "required": [
-        "complete_candidate_roster",
-        "individual_votes",
-        "ballot_numbers",
-        "party_recommendation",
-        "gender",
-        "incumbency_at_election",
-        "elected_status",
-        "district_turnout_profile"
-      ],
-      "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
-    },
-    {
-      "county": "雲林縣",
-      "town": "林內鄉",
-      "year": 1994,
-      "office": "township",
-      "status": "missing_complete_candidate_returns",
-      "known": [
-        "winner_record"
-      ],
-      "partial_archive_indices": [
-        24
       ],
       "required": [
         "complete_candidate_roster",
@@ -5284,5 +5266,6 @@
       ],
       "note": "逐字段复核；required为验收字段，不表示每个字段均缺失。"
     }
-  ]
+  ],
+  "base_archive_note": "base_archive_blob is the pre-promotion source blob; Linnei promotion is included in this commit."
 }

@@ -2373,6 +2373,28 @@
       "invalid_votes": 457,
       "source_url": "https://www.guangfu.gov.tw/cp.aspx?n=1220",
       "profile_source": "https://document.hccc.gov.tw/records/files/03/4-%E7%B8%A3%E8%AA%8C%E6%94%BF%E4%BA%8B%E7%AF%87.pdf#page=66"
+    },
+    {
+      "contest_id": "1994-township:云林县:regional:林内乡",
+      "election_id": "1994-township",
+      "county_id": "云林县",
+      "county_name": "云林县",
+      "county_name_official": "雲林縣",
+      "district_id": "1994-township:云林县:regional:林内乡",
+      "district_name": "林内乡",
+      "district_name_official": "林內鄉",
+      "electorate": "regional",
+      "election_date": "1994-01-29",
+      "valid_votes": 9868,
+      "seats": 1,
+      "reserved_seats": 0,
+      "scope_names": [],
+      "district_number": 0,
+      "registered_voters": 14220,
+      "ballots_cast": 10640,
+      "invalid_votes": 772,
+      "source_url": "https://ws.yunlin.gov.tw/Download.ashx?n=MTEz5bm057Wx6KiI5bm05aCxLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNTA4L3JlbGZpbGUvMTI2NDIvNzA0Ny9iNjY5Zjg0MS1kMGMyLTRjYTEtYjYwNC0zNzk0MzZmYzlkMzkucGRm",
+      "profile_source": "https://ws.yunlin.gov.tw/Download.ashx?n=MTEz5bm057Wx6KiI5bm05aCxLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNTA4L3JlbGZpbGUvMTI2NDIvNzA0Ny9iNjY5Zjg0MS1kMGMyLTRjYTEtYjYwNC0zNzk0MzZmYzlkMzkucGRm"
     }
   ],
   "candidacies": [
@@ -11243,6 +11265,28 @@
       "vote_share": 100,
       "elected_official": true,
       "elected_mark": "*"
+    },
+    {
+      "candidacy_id": "1994-township:云林县:regional:林内乡:",
+      "contest_id": "1994-township:云林县:regional:林内乡",
+      "ballot_number": "",
+      "candidate_name": "郑文煌",
+      "candidate_name_official": "鄭文煌",
+      "gender": "男",
+      "incumbent_at_election": true,
+      "party_name": "政党资料缺失",
+      "party_name_official": null,
+      "votes": 9868,
+      "vote_share": 100,
+      "elected_official": true,
+      "elected_mark": "*",
+      "incumbent_source": {
+        "name": "鄭文煌",
+        "source_url": "https://ws.yunlin.gov.tw/Download.ashx?n=MTEz5bm057Wx6KiI5bm05aCxLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNTA4L3JlbGZpbGUvMTI2NDIvNzA0Ny9iNjY5Zjg0MS1kMGMyLTRjYTEtYjYwNC0zNzk0MzZmYzlkMzkucGRm",
+        "source_locator": "表3-6第11、12屆當選人均鄭文煌；與既有歷任鄉長任期表相符。非逐日任免證明。",
+        "confidence": "official_consecutive_elections",
+        "value": true
+      }
     }
   ],
   "rows": [
@@ -20749,6 +20793,22 @@
       "electedMark": "*",
       "level": "town",
       "town": "光复乡"
+    },
+    {
+      "type": "township",
+      "electorate": "regional",
+      "county": "云林县",
+      "name": "郑文煌",
+      "district": "",
+      "number": "",
+      "party": "政党资料缺失",
+      "gender": "男",
+      "incumbent": true,
+      "votes": 9868,
+      "elected": true,
+      "electedMark": "*",
+      "level": "town",
+      "town": "林内乡"
     }
   ],
   "townProfiles": [
@@ -22139,9 +22199,16 @@
         {
           "town": "林內鄉",
           "name": "鄭文煌",
-          "incumbent_at_election": true
+          "incumbent_at_election": true,
+          "gender": "男",
+          "votes": 9868,
+          "ballot_number": null,
+          "party_recommendation": null
         }
-      ]
+      ],
+      "promoted_to_complete_returns": true,
+      "promotion_source_url": "https://ws.yunlin.gov.tw/Download.ashx?n=MTEz5bm057Wx6KiI5bm05aCxLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNTA4L3JlbGZpbGUvMTI2NDIvNzA0Ny9iNjY5Zjg0MS1kMGMyLTRjYTEtYjYwNC0zNzk0MzZmYzlkMzkucGRm",
+      "promotion_source_locator": "113年林內鄉統計年報表3-6，第11、12屆，印刷頁44–45（PDF第71–72頁）；第12屆1名男性候選人，9,868有效票，當選鄭文煌，故其得票等於全部有效票。公開文字表格已核對，頁面截圖未取得；號次、推薦政黨未載。"
     },
     {
       "county": "苗栗縣",
