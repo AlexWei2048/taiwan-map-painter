@@ -4329,13 +4329,16 @@
           "town": "斗南鎮",
           "name": "簡錦全",
           "gender": "男",
-          "incumbent_at_election": null,
-          "incumbent_method": null,
-          "previous_term_holder": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "historical_term_roster_crosscheck",
+          "previous_term_holder": "張勝雄",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
-          "source_url": "https://ws.yunlin.gov.tw/Download.ashx?icon=.pdf&n=MTA05bm057Wx6KiI5bm05aCxLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNTA0L3JlbGZpbGUvMTQzNjIvMjk2OTEwLzc2ZDVjODM2LTQ5MmMtNDE2Yy04MWFmLTk2OTI5MDQyYThkMC5wZGY%3D"
+          "source_url": "https://ws.yunlin.gov.tw/Download.ashx?icon=.pdf&n=MTA05bm057Wx6KiI5bm05aCxLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvNTA0L3JlbGZpbGUvMTQzNjIvMjk2OTEwLzc2ZDVjODM2LTQ5MmMtNDE2Yy04MWFmLTk2OTI5MDQyYThkMC5wZGY%3D",
+          "incumbent_source_url": "https://trfc.tw/temple/TWN006977",
+          "incumbent_source_locator": "地方廟史記載張勝雄民國79年3月任第11屆鎮長，簡錦全為後任；斗南鎮統計年報104年表3-6列兩屆當選人。原年報文字可讀，截圖未取得。",
+          "incumbent_corroboration_url": "https://zh.wikipedia.org/wiki/斗南鎮"
         }
       ],
       "supplementary_verification": {
@@ -4927,7 +4930,11 @@
         {
           "town": "苗栗市",
           "name": "郭豐煊",
-          "incumbent_at_election": true
+          "incumbent_at_election": true,
+          "gender": "男",
+          "gender_method": "historical_named_official_title",
+          "gender_source_url": "https://city.mlcart.org/showcase?act=performance&r=RUZaTUxpbHRxMkFXVGFxQXNvVEoyUEVZWEwzUkx4dEx5Zy8yN1JRMmRlYWlya1ZiQ0E%3D&y=111",
+          "gender_source_locator": "苗栗縣城市美學資料明稱民國86年苗栗市長郭豐煊先生；與同地同任期名冊一致。非原選舉公報性別欄。"
         }
       ]
     },
@@ -6502,9 +6509,9 @@
         {
           "town": "崙背鄉",
           "name": "李合同",
-          "incumbent_at_election": null,
-          "incumbent_method": "unresolved_election_day_status",
-          "previous_term_holder": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "secondary_term_roster_crosscheck",
+          "previous_term_holder": "林明和",
           "gender": "男",
           "votes": null,
           "ballot_number": null,
@@ -6520,7 +6527,10 @@
             "blob_sha": "c48d770280f510f24869cc3ca72f2f878215abdc",
             "birth_year": 1958,
             "incumbent_at_election": true
-          }
+          },
+          "incumbent_source_url": "https://wikis.tw/崙背鄉",
+          "incumbent_source_locator": "二手任期表明列林明和第10、11屆，李合同第12、13屆；2018年自由時報記載李合同任第12、13屆，1998年同鄉候選記錄為現任。未取得1994選舉日原始名冊。",
+          "incumbent_corroboration_url": "https://election.ltn.com.tw/2018/news/New/breakingnews/2539676"
         }
       ]
     },
@@ -6537,15 +6547,18 @@
         {
           "town": "麥寮鄉",
           "name": "許茂雄",
-          "incumbent_at_election": null,
-          "incumbent_method": "unresolved_election_day_status",
-          "previous_term_holder": null,
+          "incumbent_at_election": false,
+          "incumbent_method": "secondary_term_roster_crosscheck",
+          "previous_term_holder": "林松村",
           "gender": "男",
           "votes": null,
           "ballot_number": null,
           "party_recommendation": null,
           "source_url": "https://zh.wikipedia.org/wiki/麥寮鄉",
-          "corroboration_url": "https://votetw.com/data/candidate/許茂雄"
+          "corroboration_url": "https://votetw.com/data/candidate/許茂雄",
+          "incumbent_source_url": "https://zh.wikipedia.org/wiki/麥寮鄉",
+          "incumbent_source_locator": "歷任首長表林松村第10、11屆，許茂雄第12、13屆；1998同鄉候選表許茂雄現任、林松村非現任。1994身份依二手任期表，非原始公報核實。",
+          "incumbent_corroboration_url": "https://votetw.com/data/candidate/許茂雄"
         }
       ]
     },
