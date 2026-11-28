@@ -30344,6 +30344,26 @@
         "female_elected"
       ],
       "limitations": "其他欄位來自倉庫既有五選區的合計，非官方表獨立提供；官方表文字可讀、截圖未取得。不得將市級資料分攤至選區。"
+    },
+    {
+      "county": "彰化縣",
+      "election_date": "1994-01-29",
+      "term": "第十三屆",
+      "registered_voters": 808327,
+      "ballots_cast": 646504,
+      "valid_votes": 632982,
+      "invalid_votes": 13522,
+      "candidate_count": 109,
+      "male_candidates": 91,
+      "female_candidates": 18,
+      "elected_count": 54,
+      "male_elected": 43,
+      "female_elected": 11,
+      "source_url": "https://ctrl.chcg.gov.tw/files/101%E5%B9%B4%E5%BA%A6%E5%BD%B0%E5%8C%96%E7%B8%A3%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1_16_1081217_2025.pdf",
+      "source_locator": "101年彰化縣統計年報，表3-9，印刷頁120–121，83/01/29第十三屆，資料來源彰化縣選委會",
+      "level": "county",
+      "method": "official_yearbook_county_total_crosschecked_with_eight_constituencies",
+      "limitations": "全縣合計，八選區有效票、候選人及當選人數完全相符；原表另列已領未投4票，不計入投票數。原表文字可讀，截圖介面未取得；不分攤至各選區，亦不據性別總數推定個人。"
     }
   ],
   "independent_source_checks": [
