@@ -331,21 +331,16 @@
       "complete": true,
       "roster": 53,
       "confirmed_true": 38,
-      "confirmed_false": 81,
+      "confirmed_false": 87,
       "ambiguous": [
-        "江吉添",
-        "楊鴻明",
-        "陳明礎",
-        "張簡朝祥",
-        "張美麗",
-        "陳振福",
-        "李玉章"
+        "陳明礎"
       ],
       "unverified": 0,
       "source_url": "https://sp.kcc.gov.tw/parliament/index.asp?p4n=2&pn=4",
       "secondary_source": "https://www.kcc.gov.tw/Member_HistoryList.aspx?n=122&s=13&sms=0",
       "departure_names": [],
-      "method": "Same county exact unique official name; missing from complete roster only; near-name and incomplete roster nonmatches remain unknown. Term roster is historical evidence, not a dated attendance list."
+      "method": "Same county exact unique official name; missing from complete roster only; near-name and incomplete roster nonmatches remain unknown. Term roster is historical evidence, not a dated attendance list.",
+      "disambiguated_nonmatches": 6
     },
     {
       "county": "彰化縣",
@@ -18462,6 +18457,17 @@
           "election_date": "1994-01-29",
           "roster_name": null
         },
+        "7": {
+          "value": false,
+          "source_url": "https://sp.kcc.gov.tw/parliament/index.asp?p4n=2&pn=4",
+          "secondary_source": "https://web.cec.gov.tw/api/file/76759c27-9c79-446a-9cd1-f8f50e658e06.pdf",
+          "method": "official_prior_term_roster_disambiguation",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "near_name": "江吉源",
+          "evidence": "1994年同日鄉鎮市長選舉鳳山市第3號候選人為江吉源，與縣議員候選人江吉添分屬不同公職；前屆名冊載江吉源而非江吉添。",
+          "limitation": "依完整前屆名冊及獨立身分證據判定；未另取得投票日逐日遞補紀錄。"
+        },
         "8": {
           "value": true,
           "source_url": "https://sp.kcc.gov.tw/parliament/index.asp?p4n=2&pn=4",
@@ -18479,6 +18485,17 @@
           "roster_term": "1990-03-01/1994-02-28",
           "election_date": "1994-01-29",
           "roster_name": null
+        },
+        "10": {
+          "value": false,
+          "source_url": "https://sp.kcc.gov.tw/parliament/index.asp?p4n=2&pn=4",
+          "secondary_source": "https://web.cec.gov.tw/api/file/ed28cb00-ced1-4fe4-abf6-0e7c37fee85d.pdf",
+          "method": "official_prior_term_roster_disambiguation",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "near_name": "吳鴻鳴、楊章明",
+          "evidence": "1994年縣議員第2區12號吳鴻鳴、第3區8號楊章明均獨立參選，非第1區10號楊鴻明。",
+          "limitation": "依完整前屆名冊及獨立身分證據判定；未另取得投票日逐日遞補紀錄。"
         },
         "11": {
           "value": false,
@@ -19146,6 +19163,28 @@
           "election_date": "1994-01-29",
           "roster_name": null
         },
+        "18": {
+          "value": false,
+          "source_url": "https://sp.kcc.gov.tw/parliament/index.asp?p4n=2&pn=4",
+          "secondary_source": "https://web.cec.gov.tw/api/file/ed28cb00-ced1-4fe4-abf6-0e7c37fee85d.pdf",
+          "method": "official_prior_term_roster_disambiguation",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "near_name": "張簡朝雄",
+          "evidence": "1994年第1區23號張簡朝雄與第2區18號張簡朝祥分別參選。",
+          "limitation": "依完整前屆名冊及獨立身分證據判定；未另取得投票日逐日遞補紀錄。"
+        },
+        "19": {
+          "value": false,
+          "source_url": "https://sp.kcc.gov.tw/parliament/index.asp?p4n=2&pn=4",
+          "secondary_source": "https://web.cec.gov.tw/api/file/ed28cb00-ced1-4fe4-abf6-0e7c37fee85d.pdf",
+          "method": "official_prior_term_roster_disambiguation",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "near_name": "張美瑤",
+          "evidence": "1994年第1區24號張美瑤與第2區19號張美麗分別參選且均當選。",
+          "limitation": "依完整前屆名冊及獨立身分證據判定；未另取得投票日逐日遞補紀錄。"
+        },
         "20": {
           "value": true,
           "source_url": "https://sp.kcc.gov.tw/parliament/index.asp?p4n=2&pn=4",
@@ -19675,6 +19714,17 @@
           "roster_term": "1990-03-01/1994-02-28",
           "election_date": "1994-01-29",
           "roster_name": "宋萬春"
+        },
+        "4": {
+          "value": false,
+          "source_url": "https://sp.kcc.gov.tw/parliament/index.asp?p4n=2&pn=4",
+          "secondary_source": "https://www.kcc.gov.tw/Member_HistoryList.aspx?n=122&s=12&sms=0",
+          "method": "official_prior_term_roster_disambiguation",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "near_name": "陳振勝",
+          "evidence": "官方第十一屆名冊同時列陳振福及陳振勝，為不同議員；第十二屆名冊只列陳振勝。",
+          "limitation": "依完整前屆名冊及獨立身分證據判定；未另取得投票日逐日遞補紀錄。"
         },
         "5": {
           "value": false,
@@ -20286,6 +20336,17 @@
         ]
       ],
       "incumbent_sources": {
+        "1": {
+          "value": false,
+          "source_url": "https://sp.kcc.gov.tw/parliament/index.asp?p4n=2&pn=4",
+          "secondary_source": "https://web.cec.gov.tw/api/file/ed28cb00-ced1-4fe4-abf6-0e7c37fee85d.pdf",
+          "method": "official_prior_term_roster_disambiguation",
+          "roster_term": "1990-03-01/1994-02-28",
+          "election_date": "1994-01-29",
+          "near_name": "李憲章",
+          "evidence": "1994年第7區8號李憲章與第10區1號李玉章分別參選。",
+          "limitation": "依完整前屆名冊及獨立身分證據判定；未另取得投票日逐日遞補紀錄。"
+        },
         "2": {
           "value": true,
           "source_url": "https://sp.kcc.gov.tw/parliament/index.asp?p4n=2&pn=4",
