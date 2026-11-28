@@ -13564,7 +13564,7 @@
           "吳瑞耀",
           4128,
           "中國國民黨",
-          "",
+          "男",
           false
         ],
         [
@@ -13663,6 +13663,20 @@
           "original_name": "廖宜綠",
           "value": "男",
           "confidence": "cross_election_geographic_match"
+        },
+        "4": {
+          "method": "cross-election exact official name, same county/electorate and equivalent district scope; provisional identity inference",
+          "years": [
+            2014
+          ],
+          "candidacy_ids": [
+            "2014-council:南投县:regional:第2选举区:16"
+          ],
+          "source_url": "https://data.cec.gov.tw/選舉資料庫/votedata.zip",
+          "source_blob_sha": "e6f1d273d46e6866decce523174726a0a6669430",
+          "corroboration_url": "https://votetw.com/data/candidate/%E5%90%B3%E7%91%9E%E8%80%80",
+          "birth_year": 1950,
+          "limitation": "相隔20年，非1994年原始公報；同名同選區且出生年合理，仍待原始履歷確認。"
         },
         "5": {
           "method": "cross-election exact official name, county and overlapping historical geographic scope; reviewed district renumbering or township candidacy",
