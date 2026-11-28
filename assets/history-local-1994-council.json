@@ -13795,6 +13795,16 @@
             "2005-council:南投县:regional:第2选举区:9"
           ]
         }
+      },
+      "incumbent_sources": {
+        "3": {
+          "value": false,
+          "source_url": "https://www.nantou.gov.tw/ebook/pages/ebook_131.pdf",
+          "secondary_source": "https://votetw.com/data/candidate/%E9%99%B3%E6%9C%88%E8%8B%B1",
+          "method": "documented_office_biography_crosscheck",
+          "election_date": "1994-01-29",
+          "source_locator": "《南投報導》第37期，2006年2月，印刷頁25，陳月英鄉長自述及經歷：縣議員第13至15屆，鄉民代表第12屆及第13屆主席。第13屆縣議員於1994年選出，故依其公職履歷判定當屆並非同職現任。原PDF文字可讀，截圖請求未成功。"
+        }
       }
     },
     {
